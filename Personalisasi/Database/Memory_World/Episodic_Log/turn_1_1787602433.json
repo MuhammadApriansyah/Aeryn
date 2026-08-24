@@ -1,0 +1,1 @@
+{"event_id":"turn_1_1787602433","event_type":"EPISODIC","payload":{"role": "user", "text": "run terminal ls /nonexistent_dir_xyz_test"},"timestamp":1787602433,"ttl":604800}

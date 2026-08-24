@@ -1,0 +1,29 @@
+{
+ "goal": "web_search tentang teori relativitas dan tuliskan analisis filosofis mengerdukannya",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Cari informasi tentang teori relativitas menggunakan web_search",
+   "tool_hint": "web_search",
+   "done_when": "hasil pencarian tersedia"
+  },
+  {
+   "step": 1,
+   "desc": "Baca dan rangkum temuan utama teori relativitas",
+   "tool_hint": "none",
+   "done_when": "ringkasan teori relativitas selesai"
+  },
+  {
+   "step": 2,
+   "desc": "Tulis analisis filosofis mengenai dampak dan implikasi teori relativitas",
+   "tool_hint": "none",
+   "done_when": "analisis filosofis selesai"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

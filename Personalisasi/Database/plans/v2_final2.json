@@ -1,0 +1,22 @@
+{
+ "goal": "fs_read /etc/hostname baca /proc/nonexistent_xyz2",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Read the contents of /etc/hostname",
+   "tool_hint": "fs_read",
+   "done_when": "file content retrieved"
+  },
+  {
+   "step": 1,
+   "desc": "Read the contents of /proc/nonexistent_xyz2",
+   "tool_hint": "fs_read",
+   "done_when": "file content retrieved"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

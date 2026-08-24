@@ -1,0 +1,1 @@
+{"event_id":"turn_1_1787602732","event_type":"EPISODIC","payload":{"role": "user", "text": "fs_read /etc/hostname fs_read /proc/nonexistent_final"},"timestamp":1787602732,"ttl":604800}

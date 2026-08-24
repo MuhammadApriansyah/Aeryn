@@ -17,6 +17,7 @@ Port default 3010. Jalankan: ./venv-proot/bin/python scripts/aeryn_daemon.py
 from __future__ import annotations
 
 import json
+import os
 import sys
 import time
 import urllib.error
@@ -197,6 +198,41 @@ class AgentRunReq(BaseModel):
     critic: bool = False  # V27.6: critic pass sebelum jawaban final (goal kompleks)
 
 
+@app.get("/mentor")
+def mentor_panel(last_n: int = 10):
+    """V29.3 — panel mentor mini: gabungan reflection digest + tool status
+    + strategi terbaru, siap dikonsumsi CLI/web.
+
+    Output: {success_rate, active_strategies, recommendations, tool_status,
+             last_run}
+    """
+    digest = REFLECT.digest(last_n=last_n)
+    # Strategi aktif: yang masih < 48h & tag GOAL_SAM
+    strategies = []
+    try:
+        path = REFLECT.path
+        if os.path.exists(path):
+            with open(path, encoding="utf-8") as f:
+                for line in f:
+                    r = json.loads(line)
+                    if r.get("strategy") and "GOAL_SAM" in r["strategy"]:
+                        strategies.append({"goal": r["goal"][:100],
+                                           "strategy": r["strategy"],
+                                           "ts": r.get("ts")})
+    except (OSError, ValueError):
+        pass
+    return {
+        "success_rate": digest.get("success_rate"),
+        "runs": digest.get("runs"),
+        "active_strategies": strategies[:5],
+        "recommendations": digest.get("top_recommendations", [])[:3],
+        "findings": digest.get("top_findings", [])[:3],
+        "tool_status": {name: {"status": t["status"], "success": t["success"],
+                               "fail": t["fail"]}
+                        for name, t in TOOLS.tools.items()},
+    }
+
+
 @app.get("/tools")
 def list_tools():
     return {name: {"tier": t["tier"], "status": t["status"],
@@ -289,6 +325,12 @@ def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
     past = MEMORY.recall(req.goal)
     system_prompt += MEMORY.prompt_block(past)
 
+    # V29.2 — inject strategi dari refleksi goal serupa
+    strat = REFLECT.find_recent_strategy(req.goal)
+    if strat:
+        system_prompt += (
+            "\n\n## Strategi dari refleksi sebelumnya (ikuti bila relevan)\n"
+            f"{strat}\n")
     from aeryn_core.emotion_tone import tone_directive
     system_prompt += tone_directive(LAST_TENSOR.get(req.session_id, {}))
     return system_prompt, plan
@@ -318,11 +360,14 @@ def _run_steps(req: AgentRunReq):
         def _finish(answer=None, error=None, timed_out=False, iterations=0,
                     truncated=False):
             """Satu pintu keluar: record episode + refleksi."""
+            # V29.2: refleksi dulu (berisi strategy), lalu record episode
+            reflection = REFLECT.reflect(req.goal, plan, trace, answer=answer,
+                                         error=error, timed_out=timed_out,
+                                         truncated=truncated)
             MEMORY.record(req.session_id, req.goal,
                           plan.get("source", "unknown"), trace,
-                          answer=answer, error=error, timed_out=timed_out)
-            reflection = REFLECT.reflect(req.goal, plan, trace, answer=answer,
-                                         error=error, timed_out=timed_out)
+                          answer=answer, error=error, timed_out=timed_out,
+                          strategy=reflection.get("strategy"))
             out = {"answer": answer, "trace": trace,
                    "iterations": iterations}
             if error:

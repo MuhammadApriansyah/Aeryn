@@ -16,6 +16,32 @@ from collections import Counter
 
 REFLECTION_DIR = os.path.expanduser(
     "~/aeryn-core-agent/Personalisasi/Database/reflections")
+MAX_INJECT = 3          # berapa refleksi yang diinject per run
+STOPWORDS = frozenset(
+    "yang untuk dengan dari ke di dan atau the a an of to in on for and or "
+    "sebutkan jalankan kerjakan lakukan berurutan satu tool per giliran "
+    "jawab ringkas hasilnya langkah coba".split())
+
+
+def _tokens(text: str) -> set:
+    return {w for w in re.findall(r"[a-z0-9_.-]+", text.lower())
+            if len(w) > 2 and w not in STOPWORDS}
+
+
+def goal_tokens(goal: str) -> set:
+    return _tokens(goal)
+
+
+def _fuzzy_match(a: str, b: str) -> bool:
+    """Kesamaan lemah: 40% token overlap (atau minimal 2 token sama).
+    Cukup longgar agar goal-serupa tersajikan strategi."""
+    ta, tb = _tokens(a), _tokens(b)
+    if not ta or not tb:
+        return False
+    inter = ta & tb
+    if len(inter) >= 2:          # 2+ token sama = serupa cukup
+        return True
+    return len(inter) / max(len(ta | tb), 1) >= 0.4
 
 
 class PostRunReflection:
@@ -28,7 +54,7 @@ class PostRunReflection:
 
     def reflect(self, goal: str, plan: dict, trace: list,
                 answer: str = None, error: str = None,
-                timed_out: bool = False) -> dict:
+                timed_out: bool = False, truncated: bool = False) -> dict:
         """Analisis satu run → catatan refleksi terstruktur."""
         findings = []
         recommendations = []
@@ -83,6 +109,9 @@ class PostRunReflection:
             "ts": time.time(), "goal": goal[:200],
             "ok": answer is not None,
             "findings": findings, "recommendations": recommendations,
+            "strategy": self._build_strategy(goal, plan, trace, ok=answer is not None,
+                                            timed_out=timed_out, truncated=truncated,
+                                            error=error),
             "stats": {"subgoals": n_subgoals, "tool_calls": n_tool_steps,
                       "errors": len(error_steps)},
         }
@@ -108,6 +137,71 @@ class PostRunReflection:
                         f"beruntun — butuh lebih banyak shadow run")
         return ""
 
+    # ---- V29.2: strategi eksekutif -------------------------------
+    def _build_strategy(self, goal: str, plan: dict, trace: list,
+                        ok: bool = False, timed_out: bool = False,
+                        truncated: bool = False, error: str = None) -> str:
+        """Deterministik: hasilkan instruksi eksekutif singkat untuk run
+        berikutnya — tanpa LLM.
+
+        Tag GOAL_SAM = goal mirip (strategi reusable); GOAL_NEW = goal baru.
+        """
+        tips = []
+        tool_calls = [t for t in trace if t.get("type") == "tool"]
+        fails_by = Counter(t.get("name", "?") for t in tool_calls
+                           if "error" in (t.get("result_digest") or "").lower())
+        n_sub = len((plan or {}).get("subgoals", []))
+        n_calls = len(tool_calls)
+        # V29.2 — deteksi gagal: ok=False padahal ada tool call (atau error/timeout/truncated)
+        if not ok and (fails_by or n_calls or timed_out or truncated or error):
+            tips.append(f"run gagal: {n_calls} tool call tak memuaskan — "
+                        "validasi argumen/path lebih ketat atau heuristic plan")
+        if n_sub and n_calls > n_sub * 2:
+            tips.append(f"boros tool: {n_calls}/{n_sub} — pakai heuristic plan "
+                        "langsung, hemati iterasi")
+        for fn, n in fails_by.items():
+            if n >= 2:
+                tips.append(f"tool '{fn}' gagal {n}x — validasi argumen/path lebih ketat "
+                            "atau turunkan ke shadow")
+        if timed_out:
+            tips.append("wall-budget habis — pecah goal lebih kecil, naikkan "
+                        "max_wall_seconds, atau turunkan max_tokens")
+        if error and "429" in error:
+            tips.append("rate-limit → gunakan provider lebih cepat (Groq) atau "
+                        "turunkan temperature")
+        if truncated and n_calls:
+            tips.append(f"run terpotong pada iterasi ke-{n_calls} — eksekusi "
+                        "terlalu lama, turunkan max_iterations atau pecah goal")
+        if not tips and ok and not truncated:
+            return ""
+        tag = "GOAL_SAM" if (n_sub or not ok) and not ok else "GOAL_NEW"
+        return f"{tag}: " + "; ".join(tips) if tips else ""
+
+    def find_recent_strategy(self, goal: str, max_age_h: float = 48.0) -> str:
+        """Strategi dari refleksi goal serupa yang belum lama —
+        dipakai oleh _run_steps sebelum run baru."""
+        if not os.path.exists(self.path):
+            return ""
+        now = time.time()
+        qtokens = goal_tokens(goal)
+        best = None
+        with open(self.path, encoding="utf-8") as f:
+            for line in f:
+                try:
+                    r = json.loads(line)
+                except ValueError:
+                    continue
+                if not r.get("strategy"):
+                    continue
+                if (now - r.get("ts", now)) / 3600 > max_age_h:
+                    continue
+                overlap = len(qtokens & set(r.get("goal_tokens", [])))
+                if overlap == 0 and not _fuzzy_match(goal, r.get("goal", "")):
+                    continue
+                if best is None or r["ts"] > best[0]:
+                    best = (r["ts"], r.get("strategy"))
+        return best[1] if best else ""
+
     def digest(self, last_n: int = 20) -> dict:
         """Ringkasan N refleksi terakhir — bahan meta-review V27.3."""
         try:
@@ -123,4 +217,9 @@ class PostRunReflection:
             "runs": len(refs), "success_rate": round(ok / max(1, len(refs)), 2),
             "top_findings": all_findings.most_common(5),
             "top_recommendations": all_recs.most_common(5),
+            # V29.2 — ekspose strategi yang pernah tergenerate
+            "strategies": [
+                {"goal": r["goal"][:120], "strategy": r.get("strategy", ""),
+                 "ts": r.get("ts")}
+                for r in refs if r.get("strategy")][-20:],
         }

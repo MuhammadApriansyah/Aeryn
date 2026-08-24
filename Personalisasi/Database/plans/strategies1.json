@@ -1,0 +1,15 @@
+{
+ "goal": "fs_read /nonexistent/path_xyz xyz test",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Attempt to read file at /nonexistent/path_xyz",
+   "tool_hint": "fs_read",
+   "done_when": "file read successfully or error returned"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

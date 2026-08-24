@@ -34,8 +34,9 @@ class EpisodicMemory:
 
     def record(self, session_id: str, goal: str, plan_source: str,
                trace: list, answer: str = None, error: str = None,
-               timed_out: bool = False) -> dict:
-        """Simpan episode setelah run selesai (sukses maupun gagal)."""
+               timed_out: bool = False, strategy: str = "") -> dict:
+        """Simpan episode setelah run selesai (sukses maupun gagal).
+        V29.2: strategy opsional dari refleksi — dipakai run berikutnya."""
         tools_used = [t.get("name") for t in trace if t.get("type") == "tool"]
         errors = [t for t in trace if t.get("type") == "error"]
         # Pelajaran heuristic — murah, deterministik
@@ -56,35 +57,19 @@ class EpisodicMemory:
             "plan_source": plan_source, "tools": tools_used,
             "ok": answer is not None, "error": (error or "")[:200],
             "lessons": lessons,
+            "strategy": strategy,
         }
         with open(self.path, "a", encoding="utf-8") as f:
             f.write(json.dumps(ep, ensure_ascii=False) + "\n")
         return ep
 
     def recall(self, goal: str, k: int = MAX_INJECT) -> list:
-        """Ambil k episode paling relevan (keyword overlap + recency)."""
-        if not os.path.exists(self.path):
-            return []
-        want = _tokens(goal)
-        scored = []
-        now = time.time()
-        try:
-            with open(self.path, encoding="utf-8") as f:
-                for line in f:
-                    try:
-                        ep = json.loads(line)
-                    except ValueError:
-                        continue
-                    overlap = len(want & set(ep.get("goal_tokens", [])))
-                    if overlap == 0:
-                        continue
-                    age_h = (now - ep.get("ts", now)) / 3600
-                    score = overlap / (1 + age_h / 24)  # decay harian lembut
-                    scored.append((score, ep))
-        except OSError:
-            return []
-        scored.sort(key=lambda x: -x[0])
-        return [ep for _, ep in scored[:k]]
+        """V29.1 — hybrid recall: TF-IDF semantic (dominan) + keyword overlap
+        (booster), decay recency harian. Fallback keyword-only saat korpus kecil."""
+        from aeryn_core.semantic_recall import SemanticRecall
+        if not hasattr(self, "_semantic"):
+            self._semantic = SemanticRecall(self.path)
+        return self._semantic.recall(goal, k)
 
     @staticmethod
     def prompt_block(episodes: list) -> str:

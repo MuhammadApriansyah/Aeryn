@@ -1,0 +1,22 @@
+{
+ "goal": "fs_read /etc/hostname fs_read /proc/nonexistent_final",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Read the contents of /etc/hostname",
+   "tool_hint": "fs_read",
+   "done_when": "file content returned"
+  },
+  {
+   "step": 1,
+   "desc": "Attempt to read the contents of /proc/nonexistent_final",
+   "tool_hint": "fs_read",
+   "done_when": "error or file content returned"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

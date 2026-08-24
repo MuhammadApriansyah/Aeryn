@@ -1,0 +1,1 @@
+{"event_id":"turn_1_1787602218","event_type":"EPISODIC","payload":{"role": "user", "text": "fs_read /nonexistent/path_xyz"},"timestamp":1787602218,"ttl":604800}
