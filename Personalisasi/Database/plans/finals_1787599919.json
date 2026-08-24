@@ -1,0 +1,15 @@
+{
+ "goal": "fs_read /home/sen/aeryn-core-agent/README.md jawab isi ringkas",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Read the content of /home/sen/aeryn-core-agent/README.md",
+   "tool_hint": "fs_read",
+   "done_when": "file content retrieved"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

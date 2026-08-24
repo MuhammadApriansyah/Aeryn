@@ -1,0 +1,1 @@
+/data/data/com.termux/files/home/aeryn-core-agent/target/debug/libaeryn_native.so: /data/data/com.termux/files/home/aeryn-core-agent/src/financial_ledger.rs /data/data/com.termux/files/home/aeryn-core-agent/src/lib.rs /data/data/com.termux/files/home/aeryn-core-agent/src/magic_progression.rs /data/data/com.termux/files/home/aeryn-core-agent/src/vector_engine.rs

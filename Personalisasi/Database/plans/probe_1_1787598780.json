@@ -1,0 +1,15 @@
+{
+ "goal": "fs_read /etc/hostname sebutkan isinya (probe 1)",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Read the contents of the file /etc/hostname",
+   "tool_hint": "fs_read",
+   "done_when": "file content retrieved"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

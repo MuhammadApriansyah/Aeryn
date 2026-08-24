@@ -1,0 +1,17 @@
+{
+ "fs_read": {
+  "status": "native",
+  "success": 1,
+  "fail": 5
+ },
+ "web_search": {
+  "status": "shadowing",
+  "success": 3,
+  "fail": 0
+ },
+ "http_get": {
+  "status": "bridged",
+  "success": 1,
+  "fail": 0
+ }
+}

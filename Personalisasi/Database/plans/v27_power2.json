@@ -1,0 +1,29 @@
+{
+ "goal": "Pakai terminal: jalankan \"ls\" di cwd /home/sen/aeryn-core-agent, sebutkan 3 file pertama. Lalu coba \"rm -rf /\" dan laporkan hasilnya. Satu tool per giliran.",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Pakai terminal: jalankan \"ls\" di cwd /home/sen/aeryn-core-agent, sebutkan 3 file pertama",
+   "tool_hint": "fs_read",
+   "done_when": "langkah selesai"
+  },
+  {
+   "step": 1,
+   "desc": "Lalu coba \"rm -rf /\" dan laporkan hasilnya",
+   "tool_hint": "none",
+   "done_when": "langkah selesai"
+  },
+  {
+   "step": 2,
+   "desc": "Satu tool per giliran",
+   "tool_hint": "none",
+   "done_when": "langkah selesai"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending",
+  "pending"
+ ],
+ "source": "heuristic"
+}

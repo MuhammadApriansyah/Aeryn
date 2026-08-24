@@ -1,0 +1,1 @@
+{"event_id":"28caa7e7-8a05-4c9c-8748-c2c8a446fd56","event_type":"SEMANTIC","semantic_description":"Process balance sheets, check accounting framework, audit double-entry ledger bookkeeping, calculate financial transaction logs.","payload_config":{"intended_event_class":"FINANCIAL_AUDIT","ledger_id":"MAIN_LEDGER_AERYN_2026"},"timestamp":1787484882}

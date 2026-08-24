@@ -1,0 +1,1 @@
+{"event_id":"turn_1_1787585430","event_type":"EPISODIC","payload":{"role": "user", "text": "Pakai terminal: jalankan \"ls\" di cwd /home/sen/aeryn-core-agent, sebutkan 3 file pertama. Lalu coba \"rm -rf /\" dan laporkan hasilnya. Satu tool per giliran."},"timestamp":1787585430,"ttl":604800}

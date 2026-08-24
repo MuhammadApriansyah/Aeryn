@@ -1,0 +1,29 @@
+{
+ "goal": "fs_read /home/sen/aeryn-core-agent/Cargo.toml lalu jawab nama paket dan versinya",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Baca file Cargo.toml",
+   "tool_hint": "fs_read",
+   "done_when": "berhasil membaca file"
+  },
+  {
+   "step": 1,
+   "desc": "Ekstrak informasi nama paket dan versi",
+   "tool_hint": "json_parse|regex_match",
+   "done_when": "dapat menemukan nama paket dan versi"
+  },
+  {
+   "step": 2,
+   "desc": "Cetak nama paket dan versi",
+   "tool_hint": "print",
+   "done_when": "nama paket dan versi telah dicetak"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

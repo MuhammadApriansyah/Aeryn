@@ -1,0 +1,29 @@
+{
+ "goal": "Kerjakan berurutan, SATU tool per giliran: (1) fs_read /home/sen/aeryn-core-agent/Cargo.toml sebutkan versi paket; (2) web_search \"Rust changelog latest\" pilih satu URL asli; (3) http_get URL itu sebutkan judul halaman. Jangan panggil dua tool dalam satu pesan. Jawab ringkas ketiganya.",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Baca versi Cargo.toml",
+   "tool_hint": "fs_read",
+   "done_when": "versi ditampilkan"
+  },
+  {
+   "step": 1,
+   "desc": "Cari URL asli untuk Rust changelog terbaru",
+   "tool_hint": "web_search",
+   "done_when": "URL asli ditemukan"
+  },
+  {
+   "step": 2,
+   "desc": "Ambil judul halaman dari URL asli",
+   "tool_hint": "http_get",
+   "done_when": "judul halaman ditampilkan"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

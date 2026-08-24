@@ -1,0 +1,36 @@
+{
+ "goal": "Uji keamanan tool terminal, satu panggilan per giliran: (1) terminal \"ls\" cwd /home/sen/aeryn-core-agent — sebutkan 2 file; (2) terminal \"rm -rf /\" — laporkan error yang muncul; (3) terminal \"ls\" cwd /etc — laporkan errornya. Jawab ringkas.",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Uji keamanan tool terminal, satu panggilan per giliran:",
+   "tool_hint": "none",
+   "done_when": "langkah selesai"
+  },
+  {
+   "step": 1,
+   "desc": "terminal \"ls\" cwd /home/sen/aeryn-core-agent — sebutkan 2 file",
+   "tool_hint": "fs_read",
+   "done_when": "langkah selesai"
+  },
+  {
+   "step": 2,
+   "desc": "terminal \"rm -rf /\" — laporkan error yang muncul",
+   "tool_hint": "none",
+   "done_when": "langkah selesai"
+  },
+  {
+   "step": 3,
+   "desc": "terminal \"ls\" cwd /etc — laporkan errornya",
+   "tool_hint": "none",
+   "done_when": "langkah selesai"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending",
+  "pending",
+  "pending"
+ ],
+ "source": "heuristic"
+}

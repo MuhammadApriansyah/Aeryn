@@ -1,0 +1,22 @@
+{
+ "goal": "fs_read /home/sen/aeryn-core-agent/Cargo.toml lalu jawab: nama paket dan versinya? Satu baris singkat.",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "fs_read /home/sen/aeryn-core-agent/Cargo.toml lalu jawab: nama paket dan versinya?",
+   "tool_hint": "fs_read",
+   "done_when": "langkah selesai"
+  },
+  {
+   "step": 1,
+   "desc": "Satu baris singkat",
+   "tool_hint": "none",
+   "done_when": "langkah selesai"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "heuristic"
+}

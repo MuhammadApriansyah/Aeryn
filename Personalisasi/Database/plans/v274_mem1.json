@@ -1,0 +1,15 @@
+{
+ "goal": "fs_read /home/sen/aeryn-core-agent/Cargo.toml sebutkan versi paketnya. Satu tool saja.",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Baca file Cargo.toml",
+   "tool_hint": "fs_read",
+   "done_when": "versi paket ditampilkan"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}
