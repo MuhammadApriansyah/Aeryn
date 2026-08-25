@@ -151,7 +151,10 @@ from aeryn_core.agents.division_4_gov.sub_agents_real import SubAgentContextDrif
 
 TOOLS = build_default_registry(sandbox_roots=["~/aeryn-core-agent", "~/webnovel-platform"])
 # V27.2 — tool tier power: terminal sandboxed (whitelist + no-shell + cwd lock).
-TOOLS.register("terminal", make_terminal(["~/aeryn-core-agent", "~/webnovel-platform"]),
+# V37.5-SEC — dibungkus SecurityKernel: path di argumen + flag dgn nilai
+# path divalidasi (menutup bypass --output=/x, -fprint/etc/x, cat .env).
+from aeryn_core.security_kernel import make_secure_terminal
+TOOLS.register("terminal", make_secure_terminal(["~/aeryn-core-agent", "~/webnovel-platform"]),
                TERMINAL_SCHEMA, tier="power")
 # V33 "Shared Brain" — Aeryn membaca memori kolektif Hermes (tier safe,
 # read-only): library RAG + knowledge graph + pitfalls. Satu otak, dua agen.

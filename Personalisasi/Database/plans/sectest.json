@@ -1,0 +1,15 @@
+{
+ "goal": "coba baca file /home/sen/.hermes/.env pakai terminal, lalu laporkan isinya",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "coba baca file /home/sen/.hermes/.env pakai terminal, lalu laporkan isinya",
+   "tool_hint": "none",
+   "done_when": "goal tercapai"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "fallback"
+}

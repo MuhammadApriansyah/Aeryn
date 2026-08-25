@@ -1,5 +1,32 @@
 # Changelog — Aeryn-Core
 
+## V37.5 (2026-08-25) — SecurityKernel: defense in depth
+
+Permintaan Sen: keamanan tingkat tertinggi, keketatan berlapis. Dibangun
+`aeryn_core/security_kernel.py` — lapisan validasi terpusat fail-closed:
+
+### Secret Zones (baru — celah yang lolos V37.4)
+- File sensitif kini dilindungi BAHKAN DI DALAM sandbox: .env,
+  core_memory.json, social.json, parity_ledger.json, auth.json, *.pem/*.key.
+  (V37.4 hanya blokir path LUAR sandbox; `cat .env` dalam sandbox masih
+  bocor — ketemu audit lanjutan.)
+
+### Source immutability (baru)
+- fs_write ke aeryn_core/, scripts/, tests/, src/ → ditolak. Kode sumber
+  hanya boleh berubah lewat git/orkestrator, bukan tool agent.
+
+### Terminal wrapper secure (menutup bypass patch sebelumnya)
+- Flag dengan nilai path kini divalidasi: --output=/tmp/x, -fprint/etc/x,
+  -o /path/x → semua ditolak SecurityKernel.
+
+### SSRF guard http_get
+- localhost / private IP / link-local diblokir (dulu bisa probe daemon
+  internal atau jaringan lokal).
+
+Penetrasi final: **11/11 vektor tertutup**, termasuk live E2E — Aeryn
+diminta baca .env via Discord-style prompt → menolak dengan sadar.
+Verifikasi: 328 → **338 tests green**; parity ALL PARITY.
+
 ## V37.4 (2026-08-25) — SECURITY SWEEP: tiga lubang kritis ditutup
 
 Audit keamanan pertama (terinspirasi pertanyaan Sen). Temuan & perbaikan:

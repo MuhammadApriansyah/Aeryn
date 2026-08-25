@@ -133,6 +133,20 @@ def _http_get(url: str, max_bytes: int = 200_000):
     # Dulu file:///etc/passwd kebaca via urlopen (SSRF lokal).
     if not url.lower().startswith(("http://", "https://")):
         return {"error": "hanya http/https yang diizinkan"}
+    # V37.5-SEC — blokir SSRF ke jaringan internal (localhost/private IP)
+    import re as _re
+    host_m = _re.match(r"[a-z]+://([^/:?#]+)", url, _re.I)
+    if host_m:
+        host = host_m.group(1).lower()
+        import ipaddress as _ip
+        try:
+            ip = _ip.ip_address(host)
+            if ip.is_private or ip.is_loopback or ip.is_link_local:
+                return {"error": "akses ke IP private/internal diblokir"}
+        except ValueError:
+            pass  # hostname biasa, bukan IP literal
+        if host in ("localhost",) or host.endswith(".local"):
+            return {"error": "akses ke localhost diblokir"}
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (aeryn-core)"})
     with urllib.request.urlopen(req, timeout=20) as r:
         return {"status": r.status, "content_type": r.headers.get("content-type", ""),
@@ -167,10 +181,17 @@ def _web_read(url: str):
 
 
 def make_fs_read(roots):
-    """File reader sandboxed — hanya path di bawah roots yang diizinkan."""
+    """File reader sandboxed — hanya path di bawah roots yang diizinkan.
+
+    V37.5-SEC — plus SecurityKernel: file sensitif (.env, memori pribadi,
+    state internal) dilindungi BAHKAN di dalam sandbox."""
+    from aeryn_core.security_kernel import check_path
     allowed = [Path(os.path.expanduser(r)).resolve() for r in roots]
 
     def fs_read(path: str, max_bytes: int = 50_000):
+        ok, reason = check_path(path, "read", roots)
+        if not ok:
+            raise PermissionError(reason)
         p = Path(os.path.expanduser(path)).resolve()
         if not any(p == root or root in p.parents for root in allowed):
             raise PermissionError(f"path outside sandbox roots: {p}")
@@ -184,10 +205,15 @@ def make_fs_write(sandbox_roots):
 
     Mode overwrite penuh; path di-expand dan divalidasi ke sandbox roots.
     Parent dir otomatis dibuat. Returns dict {path, bytes_written}.
+    V37.5-SEC — SecurityKernel: secret files + source dirs write-protected.
     """
+    from aeryn_core.security_kernel import check_path
     allowed = [Path(os.path.expanduser(r)).resolve() for r in sandbox_roots]
 
     def fs_write(path: str, content: str):
+        ok, reason = check_path(path, "write", sandbox_roots)
+        if not ok:
+            raise PermissionError(reason)
         p = Path(os.path.expanduser(path)).resolve()
         if not any(p == root or root in p.parents for root in allowed):
             raise PermissionError(f"path outside sandbox roots: {p}")
