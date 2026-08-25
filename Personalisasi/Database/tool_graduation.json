@@ -1,1 +1,57 @@
-{"graph_traverse": [true]}
+{
+ "web_search": {
+  "status": "native",
+  "success": 3,
+  "fail": 0
+ },
+ "http_get": {
+  "status": "bridged",
+  "success": 1,
+  "fail": 0
+ },
+ "web_read": {
+  "status": "bridged",
+  "success": 0,
+  "fail": 0
+ },
+ "fs_read": {
+  "status": "native",
+  "success": 13,
+  "fail": 5
+ },
+ "fs_write": {
+  "status": "bridged",
+  "success": 12,
+  "fail": 11
+ },
+ "terminal": {
+  "status": "bridged",
+  "success": 0,
+  "fail": 0
+ },
+ "memory_search": {
+  "status": "native",
+  "success": 124,
+  "fail": 0
+ },
+ "graph_traverse": {
+  "status": "shadowing",
+  "success": 56,
+  "fail": 0
+ },
+ "pitfall_search": {
+  "status": "shadowing",
+  "success": 56,
+  "fail": 0
+ },
+ "core_memory_edit": {
+  "status": "bridged",
+  "success": 9,
+  "fail": 0
+ },
+ "ask_hermes": {
+  "status": "bridged",
+  "success": 1,
+  "fail": 0
+ }
+}

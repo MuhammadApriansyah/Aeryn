@@ -1,5 +1,21 @@
 # Changelog — Aeryn-Core
 
+## V37.3 (2026-08-25) — Fine-tuning: anti-korupsi state graduation
+
+### Bug yang diperkenalkan V37.2, tertangkap sebelum meledak
+- ParityLedger & ToolGraduationRegistry ternyata berbagi SATU file
+  (tool_graduation.json) dengan FORMAT BERBEDA → saling menimpa.
+  Restart berikutnya akan membaca list bool sebagai status tool = korup.
+- Fix: ledger pindah ke parity_ledger.json (file terpisah).
+- Fix: `_load_state` kini memvalidasi bentuk entry (harus dict dengan
+  status:str, success:int, fail:int) — format asing ditolak diam-diam.
+- Registry state dipulihkan manual dari kondisi runtime terakhir.
+
+Pelajaran: dua subsistem jangan berbagi file state tanpa kontrak schema.
+
+Verifikasi: 319 → **322 tests green**; restart live → semua 11 status
+tool utuh; parity probe ALL PARITY.
+
 ## V37.2 (2026-08-25) — Fine-tuning tingkat lanjut
 
 ### Loop pembelajaran strategi ditutup

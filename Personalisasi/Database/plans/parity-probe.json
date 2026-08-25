@@ -3,7 +3,7 @@
  "subgoals": [
   {
    "step": 0,
-   "desc": "Menyapa pengguna dan menanyakan tujuan atau informasi yang dibutuhkan",
+   "desc": "Menyapa kembali pengguna dan menanyakan tujuan atau informasi yang dibutuhkan",
    "tool_hint": "none",
    "done_when": "Balasan sapaan ramah terkirim dan pengguna merespons dengan kebutuhan spesifik"
   }

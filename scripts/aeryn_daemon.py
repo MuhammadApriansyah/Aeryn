@@ -181,11 +181,13 @@ def _checker_ask_hermes(args, result):
     return isinstance(result, dict) and result.get("ok") is True
 
 GATE = ToolGovernanceGate(drift_shield=SubAgentContextDriftShield())
-# V37.2 — ledger persist: streak graduasi selamat dari restart PM2
-# (dulu in-memory → tool shadowing macet selamanya, tak pernah promote).
+# V37.2 — ledger persist: streak graduasi selamat dari restart PM2.
+# V37.3 FIX — file HARUS berbeda dari registry state (dulu sama-sama
+# tool_graduation.json dgn format beda → saling menimpa, status tool
+# bisa korup saat restart berikutnya).
 LEDGER = ParityLedger(
     TOOLS, path=os.path.expanduser(
-        "~/aeryn-core-agent/Personalisasi/Database/tool_graduation.json"))
+        "~/aeryn-core-agent/Personalisasi/Database/parity_ledger.json"))
 SHADOW = ShadowRunner(TOOLS, LEDGER)
 MEMORY = EpisodicMemory()  # V27.4 — memori episodik lintas-sesi
 REFLECT = PostRunReflection(registry=TOOLS, ledger=LEDGER)  # V27.5 — refleksi pasca-run

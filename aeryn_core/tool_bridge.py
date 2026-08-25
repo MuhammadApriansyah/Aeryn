@@ -25,8 +25,19 @@ class ToolGraduationRegistry:
         self._load_state()
 
     def _load_state(self):
+        """V37.3 — validasi bentuk entry: harus dict {status,success,fail}.
+
+        Dulu langsung dipercaya; file yang tertimpa format asing (mis.
+        list paritas) membuat status tool korup diam-diam."""
         try:
-            self.grad = json.loads(open(self.state_path).read())
+            raw = json.loads(open(self.state_path).read())
+            self.grad = {
+                name: st for name, st in raw.items()
+                if isinstance(st, dict)
+                and isinstance(st.get("status"), str)
+                and isinstance(st.get("success"), int)
+                and isinstance(st.get("fail"), int)
+            }
         except (OSError, ValueError):
             self.grad = {}
 
