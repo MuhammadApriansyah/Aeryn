@@ -74,6 +74,9 @@ class CoreMemory:
 
         Char-limit ditindaklanjuti: kalau melampaui limit, teks terlama
         dipangkas dari depan (append) atau dipotong (replace).
+        V38.4 — audit log append-only: setiap edit tercatat ke
+        <path>.audit.jsonl (ts, block, mode, chars, head) — memori inti
+        adalah aspek identitas; perubahan harus bisa ditelusuri.
         """
         self._ensure()
         if self._data is None:  # pragma: no cover — _ensure selalu set
@@ -95,6 +98,15 @@ class CoreMemory:
             new_val = (cur + "\n" + content)[-limit:]
         self._data[block] = {"value": new_val, "updated": time.time()}
         self._save()
+        # V38.4 — audit trail append-only (gagal tulis log ≠ gagal edit)
+        try:
+            with open(self.path + ".audit.jsonl", "a", encoding="utf-8") as af:
+                af.write(json.dumps({
+                    "ts": round(time.time(), 3), "block": block,
+                    "mode": mode, "chars": len(content),
+                    "head": content[:80]}, ensure_ascii=False) + "\n")
+        except OSError:
+            pass
         return {"ok": True, "block": block, "chars": len(new_val),
                 "limit": limit}
 

@@ -158,7 +158,26 @@ def _web_read(url: str):
 
     Melengkapi web_search: search kasih link, web_read baca isinya.
     Read-only, tanpa eksekusi konten.
+    V38.4-SEC — scheme guard + blokir SSRF internal (sama dengan http_get):
+    dulu web_read ke http://127.0.0.1:3010/* lolos validasi (gagal ekstraksi
+    saja) — prinsipnya, jangan sampai fetch internal sama sekali.
     """
+    if not url.lower().startswith(("http://", "https://")):
+        return {"error": "hanya http/https yang diizinkan", "url": url}
+    import re as _re
+    import ipaddress as _ip
+    host_m = _re.match(r"[a-z]+://([^/:?#]+)", url, _re.I)
+    if host_m:
+        host = host_m.group(1).lower()
+        try:
+            ip = _ip.ip_address(host)
+            if ip.is_private or ip.is_loopback or ip.is_link_local:
+                return {"error": "akses ke IP private/internal diblokir",
+                        "url": url}
+        except ValueError:
+            pass
+        if host in ("localhost",) or host.endswith(".local"):
+            return {"error": "akses ke localhost diblokir", "url": url}
     import trafilatura
     try:
         downloaded = trafilatura.fetch_url(url)

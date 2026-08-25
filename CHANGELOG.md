@@ -1,5 +1,33 @@
 # Changelog — Aeryn-Core
 
+## V38.4 (2026-08-25) — Fine-tuning: web_read SSRF, memori audit-trail, exfiltration guard
+
+### 1. web_read kini punya guard yang sama dengan http_get
+- Celah: scheme guard + blokir internal hanya ada di http_get;
+  web_read ke http://127.0.0.1:3010/* masih mencoba fetch.
+- Fix: scheme http(s) only + blokir localhost/private IP/link-local.
+
+### 2. Memori inti punya audit trail
+- Setiap core_memory_edit tercatat append-only ke <path>.audit.jsonl
+  (ts, block, mode, chars, head) — identitas agent harus bisa ditelusuri;
+  dulu edit replace bisa menghapus fakta tanpa jejak.
+
+### 3. ask_hermes anti-ekskfiltrasi
+- Task yang menyinggung marker sensitif (.env, auth.json, api_key,
+  token, secret, credential) ditolak SEBELUM spawn Hermes — jalur
+  delegasi tidak boleh jadi pintu belakang eksfiltrasi.
+
+Verifikasi: 361 → **366 tests green**; live web_read internal → diblokir.
+
+### 4. Stop-trying directive untuk penolakan keamanan
+- Temuan live: setelah tool ditolak (SSRF), model kecil MENGULANG percobaan
+  yang sama dengan tool lain sampai iterasi habis → answer=None.
+- Fix: pesan penolakan diakhiri "JANGAN coba cara serupa lagi — laporkan
+  ke user". Retest: model langsung melapor "akses dilarang kebijakan
+  keamanan" hanya dengan 2 panggilan, jawaban final ada.
+
+Verifikasi: 361 → **366 tests green**; ALL PARITY; live retest sukses.
+
 ## V38.3 (2026-08-25) — Fine-tuning menyeluruh: celah sub-agen & privacy
 
 Audit silang pasca-V38.2 menemukan 4 celah; semuanya ditutup:

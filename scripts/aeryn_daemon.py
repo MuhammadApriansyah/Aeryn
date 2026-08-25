@@ -952,6 +952,21 @@ def _run_steps(req: AgentRunReq):
                         try:
                             result = SHADOW.run_with_shadow(fn, args)
                             _maybe_auto_promote(fn)
+                            # V38.4 — penolakan keamanan (SSRF/permission/
+                            # governance) diakhiri instruksi stop-trying:
+                            # model kecil cenderung mengulang percobaan yang
+                            # sama sampai iterasi habis (silent-fail lama).
+                            res_str = json.dumps(result, ensure_ascii=False)
+                            if any(k in res_str for k in (
+                                    "diblokir", "diizinkan", "outside sandbox",
+                                    "governance denied", "PermissionError",
+                                    "dilindungi SecurityKernel")):
+                                if isinstance(result, dict) and "error" in result:
+                                    result["error"] = (
+                                        f"{result['error']} — JANGAN coba "
+                                        "cara/URL/path serupa lagi. Laporkan "
+                                        "ke user bahwa akses ini dilarang "
+                                        "kebijakan keamanan.")
                         except Exception as te:
                             result = {"error": f"tool {fn} failed: {type(te).__name__}: {te}"[:300]}
                 trace.append({"step": i, "type": "tool", "name": fn, "args": args,

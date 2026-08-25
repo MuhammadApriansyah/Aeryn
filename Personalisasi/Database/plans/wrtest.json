@@ -1,0 +1,22 @@
+{
+ "goal": "pakai web_read untuk baca http://127.0.0.1:3010/metrics",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Lakukan permintaan HTTP GET ke http://127.0.0.1:3010/metrics menggunakan web_read",
+   "tool_hint": "http_get",
+   "done_when": "Server merespons dengan status sukses dan body respons tidak kosong"
+  },
+  {
+   "step": 1,
+   "desc": "Verifikasi dan tampilkan isi metrik yang diterima dari endpoint /metrics",
+   "tool_hint": "none",
+   "done_when": "Konten metrik berhasil dibaca dan ditampilkan kepada pengguna"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

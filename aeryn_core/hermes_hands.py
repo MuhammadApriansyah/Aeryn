@@ -86,6 +86,16 @@ def ask_hermes(task: str, timeout_s: int = DEFAULT_TIMEOUT_S) -> dict:
                 "error": f"task terlalu pendek/kosong (min "
                          f"{MIN_TASK_CHARS} karakter)"}
 
+    # 1b. V38.4-SEC — task yang meminta Hermes membocorkan secrets ditolak
+    # (Hermes punya akses lebih luas; jangan jadi jalur eksfiltrasi).
+    low = task.lower()
+    for marker in (".env", "auth.json", "api_key", "apikey", "password",
+                   "token", "secret", "credential"):
+        if marker in low:
+            return {"ok": False,
+                    "error": f"task menyinggung '{marker}' — delegasi ke "
+                             f"Hermes untuk materi sensitif tidak diizinkan"}
+
     # 2. Cap harian — tolak TANPA spawn bila lewat
     cap = _check_and_bump_cap()
     if not cap["allowed"]:
