@@ -76,6 +76,27 @@ def looks_like_injection(content: str) -> bool:
     return any(m in low for m in _INJECTION_MARKERS)
 
 
+# V38.3 — redaksi instruksi-penimpa dari goal sebelum masuk SOP:
+# kalau goal mengandung frasa "ignore/abaikan aturan", potong dari situ.
+_INSTRUCTION_OVERRIDE_MARKERS = (
+    "ignore semua", "ignore all", "abaikan semua", "abaikan aturan",
+    "ignore previous", "abaikan instruksi", "lupakan aturan",
+    "system prompt:", "kamu sekarang adalah",
+)
+
+
+def sanitize_goal_for_sop(goal: str) -> str:
+    """Bersihkan goal dari percobaan menimpa SOP (fail-safe: potong)."""
+    text = str(goal)
+    low = text.lower()
+    cut = len(text)
+    for m in _INSTRUCTION_OVERRIDE_MARKERS:
+        idx = low.find(m)
+        if idx != -1:
+            cut = min(cut, idx)
+    return text[:cut].strip() or "(tugas tanpa deskripsi)"
+
+
 # ── E. Rotasi JSONL: cegah disk exhaustion ────────────────────────────
 def rotate_jsonl_if_large(path: str, max_bytes: int = 5_000_000,
                           keep_tail_lines: int = 2000) -> bool:

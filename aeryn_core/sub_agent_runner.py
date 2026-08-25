@@ -35,7 +35,10 @@ Melanggar SOP = hasil dibuang."""
 
 
 def build_sop(no: int, goal: str) -> str:
-    return SOP_TEMPLATE.format(no=no, goal=goal[:300],
+    # V38.3 — goal disanitasi dulu: instruksi penimpa SOP dipotong
+    from aeryn_core.production_guard import sanitize_goal_for_sop
+    safe_goal = sanitize_goal_for_sop(goal)
+    return SOP_TEMPLATE.format(no=no, goal=safe_goal[:300],
                                max_iter=SUB_MAX_ITERATIONS,
                                wall=SUB_WALL_SECONDS)
 
@@ -71,9 +74,16 @@ def spawn_subagents(goals: list, runner=None) -> dict:
                 # mempropagasikan alasan penolakan ke laporan induk
                 "error": "anti-rekursi: sub-agen tidak boleh "
                          "spawn sub-agen"}
+    # V38.3 — validasi tipe ketat: goals harus list of non-empty str
     if not isinstance(goals, list) or not goals:
         return {"error": "goals kosong"}
-    goals = [str(g)[:500] for g in goals][:MAX_SUBAGENTS_PER_RUN]
+    clean_goals = []
+    for g in goals:
+        if not isinstance(g, str) or not g.strip():
+            return {"error": f"goal tidak valid (harus string non-kosong): "
+                             f"{str(g)[:40]}"}
+        clean_goals.append(g)
+    goals = [str(g)[:500] for g in clean_goals][:MAX_SUBAGENTS_PER_RUN]
     if not callable(runner):
         return {"error": "runner belum tersedia"}
 

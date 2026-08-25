@@ -791,14 +791,23 @@ def _run_steps(req: AgentRunReq):
                 RUN_STATS["errors"] += 1
             if timed_out:
                 RUN_STATS["timeouts"] += 1
-            # V36 — event bus: publish kejadian akhir run (fail-soft)
+            # V38 — event bus: publish kejadian akhir run (fail-soft)
+            # V38.3 — goal_head direduksi (hash pendek + panjang saja):
+            # endpoint /events/recent tidak boleh jadi jalur mengintip
+            # isi percakapan user lain.
+            try:
+                import hashlib as _h
+                goal_sig = _h.sha256(req.goal.encode()).hexdigest()[:8]
+            except Exception:
+                goal_sig = "?"
             try:
                 from aeryn_core.event_bus import (EVENT_ERROR, EVENT_FINAL,
                                                   EVENT_TIMEOUT, BUS)
                 etype = (EVENT_TIMEOUT if timed_out else
                          EVENT_ERROR if error else EVENT_FINAL)
                 BUS.publish(etype, {"session_id": req.session_id,
-                                    "goal_head": req.goal[:80],
+                                    "goal_sig": goal_sig,
+                                    "goal_len": len(req.goal),
                                     "iterations": iterations})
             except Exception:
                 pass

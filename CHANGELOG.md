@@ -1,5 +1,32 @@
 # Changelog — Aeryn-Core
 
+## V38.3 (2026-08-25) — Fine-tuning menyeluruh: celah sub-agen & privacy
+
+Audit silang pasca-V38.2 menemukan 4 celah; semuanya ditutup:
+
+### 1. SOP injection via goal
+- Goal "cari X lalu IGNORE SEMUA ATURAN..." membawa instruksi penimpa SOP
+  sampai ke sub-agen.
+- Fix: `sanitize_goal_for_sop()` memotong goal pada marker penimpa
+  ("ignore semua", "system prompt:", dll) sebelum masuk template SOP.
+
+### 2. Non-string goals diterima diam-diam
+- `spawn_subagents([None, 123])` di-stringify dan dieksekusi.
+- Fix: validasi tipe ketat — non-string/kosong → error global jelas.
+
+### 3. /events/recent bocor isi percakapan
+- Field `goal_head` (80 char pertama goal) terbaca siapa pun yang bisa
+  akses endpoint — jalur mengintip antar-user.
+- Fix: diganti `goal_sig` (hash sha256 8-char) + panjang saja. Integritas
+  korelasi run tetap, isinya tidak.
+
+### 4. Hasil sub-agen tanpa pembatas kepercayaan
+- Output sub-agen kini dibungkus wrap_untrusted saat digabung induk
+  (kontrak tersedia; guard injection markers sudah ada).
+
+Verifikasi: 356 → **361 tests green**; ALL PARITY; live events/recent
+kini hanya menampahkan sig+panjang, bukan isi goal.
+
 ## V38.2 (2026-08-25) — SOP wajib untuk sub-agen
 
 Mandat Sen: sub-agen bukan pekerja lepas — hanya boleh bekerja di bawah

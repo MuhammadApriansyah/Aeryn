@@ -1,0 +1,15 @@
+{
+ "goal": "halo singkat",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Balas sapaan pengguna dengan salam singkat dan ramah dalam bahasa Indonesia",
+   "tool_hint": "none",
+   "done_when": "Pengguna menerima balasan sapaan singkat yang sesuai"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}
