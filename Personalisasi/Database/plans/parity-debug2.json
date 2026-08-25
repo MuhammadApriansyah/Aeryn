@@ -1,0 +1,50 @@
+{
+ "goal": "ingat ini: kucing oren suka tidur di keyboard",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Cari informasi tentang kucing oren",
+   "tool_hint": "web_search|none",
+   "done_when": "ditemukan informasi tentang kucing oren"
+  },
+  {
+   "step": 1,
+   "desc": "Cari informasi tentang perilaku kucing",
+   "tool_hint": "web_search|none",
+   "done_when": "ditemukan informasi tentang perilaku kucing"
+  },
+  {
+   "step": 2,
+   "desc": "Cari informasi tentang kucing yang suka tidur di keyboard",
+   "tool_hint": "web_search|none",
+   "done_when": "ditemukan informasi tentang kucing yang suka tidur di keyboard"
+  },
+  {
+   "step": 3,
+   "desc": "Simpan informasi tentang kucing oren suka tidur di keyboard",
+   "tool_hint": "fs_write|none",
+   "done_when": "informasi disimpan"
+  },
+  {
+   "step": 4,
+   "desc": "Periksa informasi yang disimpan",
+   "tool_hint": "fs_read|none",
+   "done_when": "informasi benar"
+  },
+  {
+   "step": 5,
+   "desc": "Simpan informasi sebagai catatan",
+   "tool_hint": "fs_write|none",
+   "done_when": "catatan dibuat"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending",
+  "pending",
+  "pending",
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

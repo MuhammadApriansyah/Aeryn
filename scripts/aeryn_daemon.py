@@ -558,6 +558,17 @@ def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
         system_prompt += CORE_MEM.render()
     except Exception:
         pass
+    # V34 — perintah tulis-memori eksplisit → routing deterministik:
+    # tanpa ini, LLM kadang memilih memory_search (baca) alih-alih
+    # core_memory_edit (tulis) — ketemu oleh parity_probe.
+    if _is_memory_write_command(req.goal):
+        system_prompt += (
+            "\n\n## PERINTAH PENYIMPANAN MEMORI\n"
+            "User menyuruhmu MENYIMPAN fakta. Gunakan tool `core_memory_edit` "
+            "(block sesuai isi: tentang user → 'human', tentang proyek/sistem "
+            "→ 'context'; mode 'append'). Itu satu-satunya tool yang perlu — "
+            "JANGAN memory_search/web_search dulu. Setelah menyimpan, "
+            "konfirmasi singkat saja.")
     plan = make_plan(MODEL_, req.goal, req.session_id)
     # V32 — skip planner untuk social queries
     if not _is_social_query(req.goal):
@@ -594,6 +605,13 @@ def _get_client(provider=None, model=None):
     request spesifik (bug global-MODEL leak V32)."""
     key = (provider or "", model or "")
     return _CLIENTS.setdefault(key, ModelClient(provider=provider, model=model))
+
+
+def _is_memory_write_command(goal: str) -> bool:
+    """V34 — perintah eksplisit menulis memori inti."""
+    return goal.lower().lstrip().startswith(
+        ("ingat ini", "ingat:", "catat ini", "catat:",
+         "remember this", "tolong ingat"))
 
 
 def _run_steps(req: AgentRunReq):
@@ -701,6 +719,25 @@ def _run_steps(req: AgentRunReq):
             # Guard single-call: satu tool-call per giliran.
             for ci, call in enumerate(calls):
                 fn = call["function"]["name"]
+                # V34 — memory-write enforcement: pada perintah "ingat ini:",
+                # tool selain core_memory_edit ditolak dengan pesan retry.
+                # Model kecil (Groq fallback) kerap mengabaikan instruksi
+                # prompt — ini ditegakkan di kode, bukan permintaan.
+                if (_is_memory_write_command(req.goal)
+                        and fn != "core_memory_edit"):
+                    result = {"error": (
+                        "PERINTAH INI WAJIB PAKAI core_memory_edit — tool "
+                        "lain tidak diizinkan. Panggil `core_memory_edit` "
+                        "dengan block yang sesuai dan mode 'append'.")}
+                    trace.append({"step": i, "type": "tool", "name": fn,
+                                  "args": {}, "result_digest": str(result)[:200]})
+                    messages.append({"role": "tool",
+                                     "tool_call_id": call.get("id", ""),
+                                     "content": json.dumps(result, ensure_ascii=False)})
+                    yield {"event": "tool", "data": {
+                        "step": i, "name": fn, "args": {},
+                        "digest": str(result)[:200]}}
+                    continue
                 # V33-T — json_repair: argumen rusak dari LLM tidak lagi
                 # menjatuhkan seluruh run; diperbaiki atau dikosongkan.
                 try:

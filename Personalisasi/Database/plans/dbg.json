@@ -1,0 +1,15 @@
+{
+ "goal": "ingat ini: probe-parity fakta uji",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "ingat ini: probe-parity fakta uji",
+   "tool_hint": "none",
+   "done_when": "goal tercapai"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "fallback"
+}

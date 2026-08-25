@@ -1,0 +1,29 @@
+{
+ "goal": "ingat ini: probe-parity fakta uji",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Cari definisi probe-parity",
+   "tool_hint": "web_search|none",
+   "done_when": "temukan definisi yang jelas"
+  },
+  {
+   "step": 1,
+   "desc": "Cari contoh uji probe-parity",
+   "tool_hint": "web_search|none",
+   "done_when": "temukan contoh yang relevan"
+  },
+  {
+   "step": 2,
+   "desc": "Cari fakta tentang uji probe-parity",
+   "tool_hint": "web_search|none",
+   "done_when": "temukan fakta yang akurat"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

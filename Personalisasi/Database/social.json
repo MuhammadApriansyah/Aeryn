@@ -142,6 +142,55 @@
    "fakta": [],
    "preferensi": {},
    "last_seen": 1787671927.9428165
+  },
+  "parity-probe": {
+   "nama": "parity-probe",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787672443.6453068
+  },
+  "limitcheck": {
+   "nama": "limitcheck",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787673343.6454022
+  },
+  "parity-debug": {
+   "nama": "parity-debug",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787673616.0931091
+  },
+  "parity-debug2": {
+   "nama": "parity-debug2",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787673934.4825377
+  },
+  "parity-seq-1": {
+   "nama": "parity-seq-1",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787673996.8989081
+  },
+  "parity-seq-2": {
+   "nama": "parity-seq-2",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787674052.9031186
+  },
+  "parity-seq-3": {
+   "nama": "parity-seq-3",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787674082.508487
   }
  },
  "channels": {
