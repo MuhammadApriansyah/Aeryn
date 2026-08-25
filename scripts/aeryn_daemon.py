@@ -887,7 +887,13 @@ def _run_steps(req: AgentRunReq):
                 if is_social and answer:
                     answer = _sanitize_social_answer(answer, req.goal)
 
-                if req.critic and answer and any(t["type"] == "tool" for t in trace):
+                # V39-F3 — critic pass OTOMATIS untuk run kompleks:
+                # >=3 panggilan tool = indikasi kompleksitas → judge menilai
+                # konsistensi jawaban vs hasil tool (dulu hanya manual flag).
+                tool_calls_count = sum(1 for t in trace if t["type"] == "tool")
+                auto_critic = req.critic or tool_calls_count >= 3
+
+                if auto_critic and answer and any(t["type"] == "tool" for t in trace):
                     from aeryn_core.critic_pass import make_critic
                     digests = [t.get("result_digest", "") for t in trace
                                if t["type"] == "tool"]
@@ -895,7 +901,8 @@ def _run_steps(req: AgentRunReq):
                     answer = c["answer"]
                     verdict = (c.get("critic") or {}).get("verdict", "?")
                     trace.append({"step": i, "type": "critic",
-                                  "verdict": verdict})
+                                  "verdict": verdict,
+                                  "auto": not req.critic})
                 out = _finish(answer=answer, iterations=i + 1)
                 yield {"event": "final", "data": out}
                 return

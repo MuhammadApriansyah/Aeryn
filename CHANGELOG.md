@@ -1,5 +1,37 @@
 # Changelog — Aeryn-Core
 
+## V39 (2026-08-25) — Metodologi fine-tuning + chaos + canary
+
+### Riset & dokumentasi
+- `fine-tuning-methodology.md` di library: 7 metode dari riset web
+  (self-improving agents, multiagent finetuning, experience learning,
+  failure taxonomy, OWASP LLM01, chaos engineering, memory canary)
+  dipetakan ke status adopsi + roadmap F1–F5.
+
+### F1 — Chaos harness (fault injection)
+- `scripts/chaos_harness.py`: sengaja merusak tool (timeout/server-error/
+  permission) saat run berjalan; ukur degradasi anggun.
+- **Hasil pertama: resilience 100%** — web_search gagal 2× tetap di-retry
+  model sampai berhasil; fs_read ditolak → baca jalan lain.
+
+### F2 — Memory canary
+- `memory_canary.py`: tanam fakta umpan bertanda [CANARY-xxx]; probe
+  mendeteksi INTEGRITAS (canary hilang) dan EKSFILTRASI (tag bocor ke
+  episode user).
+
+### F3 — Critic pass otomatis
+- Run dengan ≥3 tool call kini otomatis dinilai judge (konsistensi
+  jawaban vs hasil tool); trace menandai critic "auto".
+
+### F4+F5 — Injection sweep & weakness backlog di nightly
+- Korpus indirect injection OWASP-style diputar: deteksi marker +
+  jaminan semua konten dibungkus wrap_untrusted.
+- Goal yang gagal/habis iterasi dikluster jadi weakness backlog → masuk
+  digest core memory (data-driven backlog otomatis).
+
+Verifikasi: 366 → **377 tests green** (+11); nightly live dengan sweep;
+chaos resilience 100%.
+
 ## V38.5 (2026-08-25) — Social memory hygiene
 
 Audit menemukan social memory tercemar: 49 dari 55 "kenalan" adalah

@@ -304,6 +304,22 @@ def main():
     except Exception:
         pass
 
+    # V39-F4/F5 — injection sweep mingguan + weakness backlog
+    try:
+        from aeryn_core.injection_sweep import run_sweep, weakness_backlog
+        sweep = run_sweep()
+        backlog = weakness_backlog()
+        report["security_sweep"] = {
+            "indirect_injection": f"{sweep['detected']}/{sweep['total']} terdeteksi",
+            "all_wrapped": sweep["all_wrapped"]}
+        if backlog:
+            report["weakness_backlog"] = backlog
+            top = "; ".join(f"{b['cluster']} x{b['count']}"
+                            for b in backlog[:3])
+            summary = (summary or "") + f" | kelemahan: {top}"
+    except Exception:
+        pass
+
     # V35 INFRA-2 — tulis digest harian ke core memory Aeryn (block
     # 'context'): tiap pagi dia "bangun" tahu kondisi dirinya sendiri.
     # V37 — digest kini menyertakan bit organik organism-wide.

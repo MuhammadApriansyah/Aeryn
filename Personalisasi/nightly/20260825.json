@@ -1,20 +1,22 @@
 {
- "generated_at": "2026-08-25T21:17:54Z",
+ "generated_at": "2026-08-25T23:44:53Z",
  "window_hours": 24.0,
- "runs": 264,
- "errors": 43,
+ "runs": 299,
+ "errors": 46,
  "timeouts": 0,
- "success_rate_pct": 83.7,
- "unique_sessions": 45,
+ "success_rate_pct": 84.6,
+ "unique_sessions": 58,
  "top_tools": {
-  "web_search": 143,
-  "fs_read": 100,
+  "web_search": 162,
+  "fs_read": 91,
   "terminal": 69,
-  "http_get": 32,
-  "memory_search": 21
+  "http_get": 35,
+  "core_memory_edit": 27
  },
  "error_samples": [
-  "LLM provider HTTP 500 (semua model fallback habis)"
+  "LLM provider HTTP 500 (semua model fallback habis)",
+  "iterasi habis tanpa jawaban final (goal terlalu kompleks atau model berputar)",
+  "iterasi habis tanpa jawaban final (goal terlalu kompleks atau model berputar)"
  ],
  "lessons_sample": [
   "goal terjawab tanpa tool",
@@ -36,18 +38,18 @@
    "summary": "5/9 OK"
   },
   "library": {
-   "new_entries_24h": 34
+   "new_entries_24h": 36
   },
   "pitfalls": {
    "total": 8,
    "new_24h": 8
   },
   "hermes": {
-   "active_sessions_24h": 20,
+   "active_sessions_24h": 17,
    "recent_user_messages": [
-    "kalau begitu lakukan fine tuning secara menyeluruh ke setiap sudut dan cari cela",
-    "kelebihan yang tidak perlu adalah tombol cari pada bagian navbar. sedangkan fitu",
-    "artinya?"
+    "oke workflow selanjutnya apa?",
+    "jadi itu envionment dev nya sudah kamu install?",
+    "lanjut full-autonomous"
    ]
   }
  }
