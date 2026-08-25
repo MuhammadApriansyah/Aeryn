@@ -35,7 +35,12 @@ class ModelClient:
 
     @staticmethod
     def _load_hermes_env():
-        """Fallback: baca API key dari ~/.hermes/.env (secrets-only file)."""
+        """Fallback: baca API key dari ~/.hermes/.env + auth.json Hermes.
+
+        V34: NOUS pakai OAuth short-lived — agent_key di ~/.hermes/auth.json
+        di-refresh otomatis oleh Hermes, jadi dibaca FRESH setiap chain
+        dibangun (bukan di-cache ke env permanen).
+        """
         wanted = ("OPENROUTER_API_KEY", "NOUS_API_KEY", "NVIDIA_API_KEY",
                   "GROQ_API_KEY", "GEMINI_API_KEY")
         for cand in (os.path.expanduser("~/.hermes/.env"),):
@@ -53,6 +58,24 @@ class ModelClient:
                         os.environ["NOUS_API_KEY"] = val
             except OSError:
                 pass
+        # V34 — NOUS OAuth: ambil agent_key terkini dari auth.json Hermes.
+        # Selalu overwrite env supaya token rotasi ikut (key statis = mati
+        # besok pagi). Ini sumber paling valid: dipakai Hermes sendiri.
+        try:
+            import json as _json
+            auth_path = os.path.expanduser("~/.hermes/auth.json")
+            with open(auth_path) as f:
+                nous = _json.load(f)["providers"]["nous"]
+            ak = nous.get("agent_key") or ""
+            if ak:
+                os.environ["NOUS_API_KEY"] = ak
+                bu = nous.get("inference_base_url") or ""
+                if bu:
+                    os.environ.setdefault("NOUS_BASE_URL",
+                                          bu.rstrip("/") + "/v1"
+                                          if not bu.endswith("/v1") else bu)
+        except Exception:
+            pass  # auth.json tidak ada/rusak → jatuh ke key statis biasa
 
     def _endpoint_candidates(self):
         """Rantai (base_url, model, api_key_env) yang dicoba berurutan."""

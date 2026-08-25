@@ -4,17 +4,24 @@
   {
    "step": 0,
    "desc": "Cari definisi kata 'halo'",
-   "tool_hint": "web_search|none",
-   "done_when": "ditemukan definisi yang jelas"
+   "tool_hint": "web_search|http_get|fs_read|none",
+   "done_when": "hasil pencarian ada"
   },
   {
    "step": 1,
-   "desc": "Cari contoh penggunaan kata 'halo'",
-   "tool_hint": "web_search|none",
-   "done_when": "ditemukan contoh yang relevan"
+   "desc": "Identifikasi arti kata 'halo' dari hasil pencarian",
+   "tool_hint": "text_extraction|sentiment_analysis|none",
+   "done_when": "arti kata 'halo' ditemukan"
+  },
+  {
+   "step": 2,
+   "desc": "Periksa apakah kata 'halo' digunakan dalam konteks yang tepat",
+   "tool_hint": "text_analysis|contextual_check|none",
+   "done_when": "kata 'halo' digunakan dengan tepat"
   }
  ],
  "status": [
+  "pending",
   "pending",
   "pending"
  ],
