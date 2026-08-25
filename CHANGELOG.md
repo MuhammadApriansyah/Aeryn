@@ -1,5 +1,32 @@
 # Changelog — Aeryn-Core
 
+## V36 (2026-08-25) — Empat upgrade paralel (4 sub-agen)
+
+### LLM compaction riwayat sesi panjang (sub-agen 1)
+- `load_with_compaction()`: turn lama diringkas LLM (bukan lagi hanya
+  deterministik), cache per-sesi TTL 6 jam → hemat kuota, fallback aman.
+- Wiring daemon: callable diinjeksi, hanya aktif saat riwayat > budget.
+
+### Event bus internal ala OpenHands (sub-agen 2)
+- `aeryn_core/event_bus.py`: pub/sub thread-safe + ring buffer 500 event,
+  HealthWatchdog (error rate ≥40% → unhealthy).
+- Endpoint `GET /events/recent` + field `health_watchdog` di /metrics.
+
+### Credential health check (sub-agen 3)
+- `scripts/credential_health.py`: ping mini seluruh chain provider
+  (dedup kandidat, UA anti-Cloudflare, klasifikasi OK/RATE_LIMITED/AUTH_FAIL).
+- Live pertama: NOUS ox-alpha OK, Groq×2 OK, NVIDIA×2 OK, OpenRouter
+  free rate-limited. Hasil tersimpan Personalisasi/health/latest.json.
+
+### Discord thread parity + fix gateway (sub-agen 4)
+- TEMUAN PENTING: gateway versi ter-commit sejak V33 *broken* — NameError
+  di on_message tiap pesan non-social (variabel tak terdefinisi).
+- Fix: `resolve_session_id()` murni (dc_<user>_<thread/channel>) +
+  wiring on_message; gateway kini jalan sebagai PM2 "aeryn-gateway".
+
+Verifikasi: 226 → **281 tests green**; parity probe ALL PARITY; smoke live
+/metrics + events/recent + gateway login OK.
+
 ## V35 (2026-08-25) — Infrastruktur naik kelas
 
 ### INFRA-1: Riwayat multi-turn (`session_history.py`)
