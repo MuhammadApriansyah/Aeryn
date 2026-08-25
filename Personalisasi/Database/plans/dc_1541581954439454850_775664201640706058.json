@@ -1,0 +1,22 @@
+{
+ "goal": "gimana kabar",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Cari informasi terkait kabar terbaru",
+   "tool_hint": "web_search|http_get|fs_read|none",
+   "done_when": "menemukan artikel berita terbaru"
+  },
+  {
+   "step": 1,
+   "desc": "Baca artikel berita terbaru",
+   "tool_hint": "web_read|pdf_read|docx_read|none",
+   "done_when": "membaca isi artikel"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

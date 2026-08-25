@@ -6,6 +6,7 @@ Hermes), tiap tool punya metadata graduation + safety tier utk div4 governance.
 import json
 import os
 import re
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -75,18 +76,41 @@ class ToolGraduationRegistry:
 # ── Native tools fase 1 (aman, tanpa Hermes) ────────────────────────────
 
 def _web_search(query: str, max_results: int = 5):
-    """DuckDuckGo Lite — tanpa API key. Link dibungkus redirect uddg=."""
-    url = "https://lite.duckduckgo.com/lite/?q=" + urllib.request.quote(query)
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (aeryn-core)"})
+    """V33 — Bing scrape (DuckDuckGo diblok dari proot ini: SSL EOF/abort).
+
+    Bing return redirect link (bing.com/ck/a?...u=a1<base64>) — decode
+    base64 di param u untuk dapat URL asli.
+    """
+    url = ("https://www.bing.com/search?q=" +
+           urllib.parse.quote(query) + "&count=" + str(max_results + 2))
+    req = urllib.request.Request(url, headers={
+        "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                       "AppleWebKit/537.36 (KHTML, like Gecko) "
+                       "Chrome/120.0 Safari/537.36"),
+        "Accept-Language": "en-US,en;q=0.9,id;q=0.8",
+    })
     html = urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "replace")
     results = []
+    seen = set()
+    # setiap hasil: <h2 ...><a ... href="REDIRECT" ...>TITLE</a></h2>
     for m in re.finditer(
-            r'<a[^>]+href="([^"]*uddg%3D[^"]+|[^"]*uddg=[^"]+)"[^>]*>(.*?)</a>', html):
+            r'<h2[^>]*><a[^>]+href="(https://www\.bing\.com/ck/a\?[^"]+)"[^>]*>(.*?)</a>',
+            html, re.S):
         raw = m.group(1).replace("&amp;", "&")
-        qm = re.search(r"uddg(?:%3D|=)([^&]+)", raw)
-        target = urllib.request.unquote(qm.group(1)) if qm else raw
         text = re.sub(r"<[^>]+>", "", m.group(2)).strip()
-        if target.startswith("http"):
+        # URL asli ada di param u=a1<base64>
+        qm = re.search(r"[?&]u=a1([A-Za-z0-9+/=_-]+)", raw)
+        target = ""
+        if qm:
+            b64 = qm.group(1)
+            b64 += "=" * (-len(b64) % 4)  # padding
+            try:
+                import base64
+                target = base64.b64decode(b64).decode("utf-8", "replace")
+            except Exception:
+                target = ""
+        if target.startswith("http") and target not in seen:
+            seen.add(target)
             results.append({"title": text, "url": target})
         if len(results) >= max_results:
             break

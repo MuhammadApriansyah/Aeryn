@@ -1,5 +1,47 @@
 # Changelog — Aeryn-Core
 
+## V33 (2026-08-25) — Social Intelligence + Shared Brain
+
+### Deteksi Sosial (F1)
+- `_is_social_query()` ditulis ulang (daemon + social_generator): sinyal
+  teknis positif (library/api/cara kerja/apa itu/ekstensi file) menang
+  duluan; jalur sosial kini **wajib** sinyal relasional (greeting, pronoun,
+  smalltalk). Rule "pendek dari 40 char = otomatis sosial" DIHAPUS — itu
+  yang membuat pertanyaan knowledge pendek salah jalur.
+- 14 negative-case test baru: "apa itu react?", "kamu pake library apa buat
+  embedding?" → tool path, bukan social path.
+
+### Sanitizer Context-Aware (F2)
+- Prinsip baru via `_looks_machinelike()`: hanya output berbentuk mesin
+  (code block, tool-call shape, key:value >=2, JSON literal null/true/false,
+  prefix log `Error:`/`Warning:`) yang di-fallback.
+- Kata umum (error/sistem/none) dalam kalimat natural TIDAK lagi membuang
+  jawaban.
+
+### Model Client (F3)
+- Bug global-MODEL leak diperbaiki: client di-cache per-(provider,model)
+  via `_CLIENTS` dict. Request default tidak lagi tertimpa request
+  model-spesifik.
+
+### Web Search
+- Provider DuckDuckGo → **Bing scrape**: DDG diblok dari proot ini
+  (SSL UNEXPECTED_EOF / ConnectionAborted). Redirect `bing.com/ck/a`
+  param `u=a1<base64>` didekode jadi URL asli.
+
+### Verifikasi
+- Test suite 53 → **194 test**, semua hijau. Live smoke: social query
+  deterministic 1-iterasi, knowledge query lewat web_search dengan hasil
+  nyata (react.dev).
+
+## V33-Hygiene (2026-08-25) — Struktur
+
+- Import-graph audit AST dari semua entry point: 31 modul tak terjangkau.
+- Klasifikasi aman: **26 modul zero-importer + zero-test diarsipkan**
+  ke `_archive/v33-hygiene/` (git mv — restore mudah); **5 modul
+  ber-test DIPARKIR** (dynamic_schema, memory_consolidation,
+  memory_curator, multi_agent, verification_gate — fitur standby V30-V31).
+- Regression pasca-arsip: 194/194 tetap hijau.
+
 ## V28 (2026-08-24) — Ketahanan Operasional
 
 Naik versi setelah kemampuan (V27.4–27.7) dan ketahanan lengkap.

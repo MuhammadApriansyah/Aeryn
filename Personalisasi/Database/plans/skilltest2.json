@@ -1,0 +1,15 @@
+{
+ "goal": "fs_read config99.toml cek versi dependency",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Read config99.toml and parse its contents to extract the version of the dependency specified in the file",
+   "tool_hint": "fs_read",
+   "done_when": "dependency version extracted"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

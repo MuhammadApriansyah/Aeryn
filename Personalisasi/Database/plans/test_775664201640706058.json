@@ -1,0 +1,38 @@
+{
+ "goal": "kan kamu Agy",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "[skill] langkah 1",
+   "tool_hint": "fs_read",
+   "done_when": "langkah selesai"
+  },
+  {
+   "step": 1,
+   "desc": "[skill] langkah 2",
+   "tool_hint": "fs_read",
+   "done_when": "langkah selesai"
+  },
+  {
+   "step": 2,
+   "desc": "[skill] langkah 3",
+   "tool_hint": "fs_read",
+   "done_when": "langkah selesai"
+  },
+  {
+   "step": 3,
+   "desc": "[skill] langkah 4",
+   "tool_hint": "web_search",
+   "done_when": "langkah selesai"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending",
+  "pending",
+  "pending"
+ ],
+ "source": "skill",
+ "skill_id": "fs_read_kan",
+ "pitfalls": ""
+}

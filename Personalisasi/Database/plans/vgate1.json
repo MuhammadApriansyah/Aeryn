@@ -1,0 +1,15 @@
+{
+ "goal": "fs_read /home/sen/aeryn-core-agent/Cargo.toml lalu katakan file sudah diubah dan versinya 9.9.9",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Read Cargo.toml file at /home/sen/aeryn-core-agent/Cargo.toml",
+   "tool_hint": "fs_read",
+   "done_when": "file content retrieved"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

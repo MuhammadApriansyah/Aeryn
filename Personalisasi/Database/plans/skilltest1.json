@@ -1,0 +1,15 @@
+{
+ "goal": "fs_read config7.toml cek versi dependency",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Read the contents of config7.toml to inspect dependency versions",
+   "tool_hint": "fs_read",
+   "done_when": "file content retrieved"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

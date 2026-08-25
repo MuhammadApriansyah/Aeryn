@@ -1,0 +1,117 @@
+{
+ "people": {
+  "chan_1541581954439454850": {
+   "nama": "general",
+   "relasi": "",
+   "fakta": [
+    "ruang utama ngobrol & test di server Aeryn",
+    "channel #general"
+   ],
+   "preferensi": {},
+   "last_seen": 1787615749.1457636
+  },
+  "1541584201386696769": {
+   "nama": "1541584201386696769",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787615450.648612
+  },
+  "775664201640706058": {
+   "nama": "Sen",
+   "relasi": "kenalan di Discord",
+   "fakta": [
+    "Sen adalah majikan sekaligus pembuat Aeryn",
+    "Sen membangun Aeryn-Core (otaknya) & webnovel platform",
+    "Sen suka UI/UX rapi, dark mode, animasi cepat",
+    "Discord user: paisenmtvsky"
+   ],
+   "preferensi": {},
+   "last_seen": 1787654143.032992
+  },
+  "1": {
+   "nama": "1",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787621437.0826128
+  },
+  "test_775664201640706058": {
+   "nama": "test_775664201640706058",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787658847.2347572
+  },
+  "test_tool": {
+   "nama": "test_tool",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787658966.9112017
+  },
+  "smoke-v33": {
+   "nama": "smoke-v33",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787660994.0743861
+  },
+  "smoke-v33-knowledge": {
+   "nama": "smoke-v33-knowledge",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787661012.4520683
+  },
+  "smoke-v33b": {
+   "nama": "smoke-v33b",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787661319.1213975
+  },
+  "smoke-v33c": {
+   "nama": "smoke-v33c",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787661424.0470648
+  },
+  "smoke-v33d": {
+   "nama": "smoke-v33d",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787661428.9999223
+  },
+  "smoke-brain": {
+   "nama": "smoke-brain",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787665569.141064
+  },
+  "smoke-brain2": {
+   "nama": "smoke-brain2",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787665656.264562
+  }
+ },
+ "channels": {
+  "1541581954439454850": {
+   "nama": "1541581954439454850",
+   "peran": "",
+   "topik_terakhir": "",
+   "last_seen": 1787615071.0219955
+  },
+  "test": {
+   "nama": "test",
+   "peran": "",
+   "topik_terakhir": "",
+   "last_seen": 1787621437.0787294
+  }
+ }
+}

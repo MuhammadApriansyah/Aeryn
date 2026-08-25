@@ -5,13 +5,28 @@
   "fail": 5
  },
  "web_search": {
-  "status": "shadowing",
+  "status": "native",
   "success": 3,
   "fail": 0
  },
  "http_get": {
   "status": "bridged",
   "success": 1,
+  "fail": 0
+ },
+ "memory_search": {
+  "status": "shadowing",
+  "success": 9,
+  "fail": 0
+ },
+ "graph_traverse": {
+  "status": "shadowing",
+  "success": 5,
+  "fail": 0
+ },
+ "pitfall_search": {
+  "status": "shadowing",
+  "success": 5,
   "fail": 0
  }
 }

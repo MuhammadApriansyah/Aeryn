@@ -1,0 +1,15 @@
+{
+ "goal": "fs_read config7.toml cek versi dependency",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "fs_read config7.toml cek versi dependency",
+   "tool_hint": "none",
+   "done_when": "goal tercapai"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "fallback"
+}

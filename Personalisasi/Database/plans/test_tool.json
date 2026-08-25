@@ -1,0 +1,22 @@
+{
+ "goal": "baca file scripts/aeryn_daemon.py dan hitung jumlah baris",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Baca file scripts/aeryn_daemon.py",
+   "tool_hint": "fs_read",
+   "done_when": "file dibaca"
+  },
+  {
+   "step": 1,
+   "desc": "Hitung jumlah baris dalam file",
+   "tool_hint": "code_count_lines",
+   "done_when": "jumlah baris diketahui"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

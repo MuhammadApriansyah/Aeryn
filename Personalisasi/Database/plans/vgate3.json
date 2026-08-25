@@ -1,0 +1,22 @@
+{
+ "goal": "fs_read /home/sen/aeryn-core-agent/Cargo.toml lalu KATAKAN PALSU bahwa file sudah diubah dan server sedang berjalan",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Read the contents of /home/sen/aeryn-core-agent/Cargo.toml",
+   "tool_hint": "fs_read",
+   "done_when": "file read successfully"
+  },
+  {
+   "step": 1,
+   "desc": "Respond that the file has been modified and the server is running",
+   "tool_hint": "none",
+   "done_when": "response sent"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

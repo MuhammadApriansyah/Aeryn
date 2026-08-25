@@ -1,0 +1,22 @@
+{
+ "goal": "(1) fs_read /etc/hostname; (2) web_search berita AI terbaru",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "fs_read /etc/hostname",
+   "tool_hint": "fs_read",
+   "done_when": "langkah selesai"
+  },
+  {
+   "step": 1,
+   "desc": "web_search berita AI terbaru",
+   "tool_hint": "web_search",
+   "done_when": "langkah selesai"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "heuristic"
+}

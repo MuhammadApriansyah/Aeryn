@@ -1,0 +1,22 @@
+{
+ "goal": "halo",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Cari definisi kata 'halo'",
+   "tool_hint": "web_search|http_get|fs_read|none",
+   "done_when": "ditemukan definisi yang akurat"
+  },
+  {
+   "step": 1,
+   "desc": "Cari contoh penggunaan kata 'halo'",
+   "tool_hint": "web_search|http_get|fs_read|none",
+   "done_when": "ditemukan contoh yang relevan"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

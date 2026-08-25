@@ -1,0 +1,22 @@
+{
+ "goal": "panggil aku dengan namaku dong",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Ask user for their name",
+   "tool_hint": "none",
+   "done_when": "user provides a name"
+  },
+  {
+   "step": 1,
+   "desc": "Store the provided name and greet the user using that name",
+   "tool_hint": "none",
+   "done_when": "user is greeted with their name"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

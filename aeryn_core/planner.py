@@ -9,6 +9,13 @@ import os
 import urllib.request
 
 PLAN_DIR = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/plans")
+
+# V31.2 — SkillForge singleton untuk matcher (lazy-safe)
+try:
+    from aeryn_core.skill_forge import SkillForge as _SF
+    SKILL_FORGE = _SF()
+except Exception:
+    SKILL_FORGE = None
 MAX_SUBGOALS = 6
 
 PLANNER_PROMPT = """Kamu adalah modul perencana Aeryn. Uraikan goal pengguna menjadi \
@@ -55,8 +62,20 @@ def _heuristic_plan(goal: str) -> list:
 
 
 def make_plan(model_client, goal: str, session_id: str) -> dict:
-    """Heuristic-first untuk goal terstruktur (0 panggilan LLM); LLM hanya
-    untuk goal kabur; fallback trivial bila semua gagal."""
+    """Skill-first (V31.2): kalau ada skill cocok → plan instan 0 LLM.
+    Lalu heuristic-first untuk goal terstruktur; LLM hanya untuk goal kabur;
+    fallback trivial bila semua gagal."""
+    # V31.2 — skill match dulu (singleton bisa None kalau import gagal)
+    if SKILL_FORGE is not None:
+        try:
+            skill = SKILL_FORGE.match(goal)
+            if skill:
+                plan = SKILL_FORGE.plan_from_skill(skill)
+                _persist(session_id, plan)
+                return plan
+        except Exception as exc:
+            import sys
+            print(f"[planner] skill match gagal: {exc}", file=sys.stderr)
     if _looks_structured(goal):
         subgoals = _heuristic_plan(goal)
         if 1 < len(subgoals) <= MAX_SUBGOALS:

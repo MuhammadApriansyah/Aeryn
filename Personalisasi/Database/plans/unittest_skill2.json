@@ -1,0 +1,17 @@
+{
+ "goal": "fs_read /home/sen/aeryn-core-agent/Cargo.toml jawab nama paket & versi",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "[skill] langkah 1",
+   "tool_hint": "fs_read",
+   "done_when": "langkah selesai"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "skill",
+ "skill_id": "fs_read_versi",
+ "pitfalls": ""
+}

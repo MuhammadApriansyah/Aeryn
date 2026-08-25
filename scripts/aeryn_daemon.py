@@ -17,7 +17,6 @@ Port default 3010. Jalankan: ./venv-proot/bin/python scripts/aeryn_daemon.py
 from __future__ import annotations
 
 import json
-import os
 import sys
 import time
 import urllib.error
@@ -153,13 +152,18 @@ TOOLS = build_default_registry(sandbox_roots=["~/aeryn-core-agent", "~/webnovel-
 # V27.2 — tool tier power: terminal sandboxed (whitelist + no-shell + cwd lock).
 TOOLS.register("terminal", make_terminal(["~/aeryn-core-agent", "~/webnovel-platform"]),
                TERMINAL_SCHEMA, tier="power")
+# V33 "Shared Brain" — Aeryn membaca memori kolektif Hermes (tier safe,
+# read-only): library RAG + knowledge graph + pitfalls. Satu otak, dua agen.
+from aeryn_core.hermes_brain import register as register_hermes_brain
+register_hermes_brain(TOOLS)
 GATE = ToolGovernanceGate(drift_shield=SubAgentContextDriftShield())
 LEDGER = ParityLedger(TOOLS)
 SHADOW = ShadowRunner(TOOLS, LEDGER)
 MEMORY = EpisodicMemory()  # V27.4 — memori episodik lintas-sesi
 REFLECT = PostRunReflection(registry=TOOLS, ledger=LEDGER)  # V27.5 — refleksi pasca-run
 # V27.0: tool safe-tier yang lulus shadow 5x beruntun otomatis naik native.
-SHADOW.auto_promote = {"web_search", "http_get"}  # hanya tier safe; fs/power tetap manual
+SHADOW.auto_promote = {"web_search", "http_get",
+                       "memory_search", "graph_traverse", "pitfall_search"}
 
 
 def _maybe_auto_promote(name):
@@ -182,10 +186,215 @@ def _checker_web_search(args, result):
     return isinstance(result, dict) and "results" in result
 
 
+def _checker_memory_search(args, result):
+    """Paritas memory_search: dict dengan list results (boleh kosong)."""
+    return isinstance(result, dict) and isinstance(result.get("results"), list)
+
+
+def _checker_graph_traverse(args, result):
+    """Paritas graph_traverse: node string + edges list."""
+    return (isinstance(result, dict) and "node" in result
+            and isinstance(result.get("edges"), list))
+
+
+def _checker_pitfall_search(args, result):
+    """Paritas pitfall_search: dict dengan list pitfalls (boleh kosong)."""
+    return isinstance(result, dict) and isinstance(result.get("pitfalls"), list)
+
+
 SHADOW.register_checker("fs_read", _checker_fs_read)
 SHADOW.register_checker("web_search", _checker_web_search)
+# V33 Shared Brain — parity checkers + auto-promote setelah 5x konsisten
+SHADOW.register_checker("memory_search", _checker_memory_search)
+SHADOW.register_checker("graph_traverse", _checker_graph_traverse)
+SHADOW.register_checker("pitfall_search", _checker_pitfall_search)
 
-MODEL = None  # lazy init saat /agent/run pertama
+# V32 imports
+from aeryn_core.persona_engine import PersonaEngine
+from aeryn_core.social_memory import SocialMemory
+PERSONA = PersonaEngine()
+SOCIAL = SocialMemory()
+
+
+def _is_social_query(goal: str) -> bool:
+    """V33-F1 — Deteksi social query vs knowledge/task.
+
+    Urutan keputusan:
+      1. Sinyal TEKNIS positif (noun/verb teknis, ekstensi file, pola
+         pertanyaan knowledge) → BUKAN sosial, langsung False.
+      2. Social butuh sinyal relasional: greeting, kata ganti orang
+         (kamu/aku), atau frasa ingat/panggil. Tanpa itu → bukan sosial.
+    Pertanyaan "apa itu X" / "gimana cara Y" adalah KNOWLEDGE, bukan sosial.
+    """
+    msg = goal.lower().strip()
+    if not msg:
+        return False
+
+    # ── 1. Sinyal teknis positif → pasti bukan sosial ──
+    tech_positive = (
+        # ekstensi & artefak
+        ".txt", ".md", ".py", ".json", ".yaml", ".toml", ".csv", ".js",
+        ".rs", ".sh", "cargo.toml", "package.json",
+        # perintah kerja
+        "baca file", "tulis file", "edit file", "hapus file", "jalankan",
+        "install", "mkdir", "git ", "docker", "pm2", "python ", "node ",
+        "npm ", "pip ", "deploy", "restart", "commit", "debug",
+        # noun teknis (knowledge questions hampir selalu memuat ini)
+        "library", "framework", "api", "database", "server", "backend",
+        "frontend", "endpoint", "embedding", "vector", "model llm",
+        "fungsi", "function", "class", "variabel", "syntax", "regex",
+        "algoritma", "konfigurasi", "config", "port", "docker",
+        "heuristic", "schema", "parser", "cache", "thread",
+        # pola tanya knowledge
+        "apa itu", "apa bedanya", "apa gunanya", "kenapa error",
+        "kok error", "cara kerja", "cara bikin", "cara pakai",
+        "bagaimana cara", "gimana cara", "solusi untuk", "fix ",
+        "best practice", "contoh kode",
+    )
+    for t in tech_positive:
+        if t in msg:
+            return False
+
+    # ── 2. Social wajib punya sinyal relasional ──
+    greetings = ("halo", "hai", "hi", "hey", "helo", "hello",
+                 "wkwk", "wkwkwk", "haha", "hehe", "wk",
+                 "jir", "lah", "btw", "ohh", "oh gitu")
+    relational = ("kamu", "aku", "kita",
+                  "siapa aku", "nama aku", "panggil", "sebut",
+                  "ingat", "kenal", "relasi", "hubungan")
+    smalltalk = ("apa kabar", "gimana kabar", "gmn kabar",
+                 "iya", "nggak", "gak", "enggak", "gpp", "ya", "tidak",
+                 "udah makan", "udah tidur", "udah mandi")
+
+    has_greeting = any(msg.startswith(g) for g in greetings)
+    has_relational = any(r in msg for r in relational)
+    is_smalltalk = any(msg.startswith(s) for s in smalltalk)
+
+    # "kabar" queries tanpa konteks lain tetap sosial ("apa kabar?")
+    if has_greeting or has_relational or is_smalltalk:
+        return True
+    return False
+
+
+def _looks_machinelike(text: str) -> bool:
+    """V33-F2 — Apakah teks kelihatan seperti output mesin (bukan omongan)?
+    JSON remnant / code block / key:value pattern / tool-call shape."""
+    import re
+    if re.search(r'```', text):
+        return True
+    if re.search(r'\{[^{}]*"(name|arguments|function)"[^{}]*\}', text):
+        return True
+    # key:value beruntun ala JSON/dict (>= 2 pasangan)
+    if len(re.findall(r'"[\w_]+"\s*:\s*', text)) >= 2:
+        return True
+    return False
+
+
+def _sanitize_social_answer(answer, goal: str) -> str:
+    """V33-F2 — Sanitize jawaban social query (context-aware).
+
+    Prinsip: buang yang BENAR-BENAR berbentuk mesin (JSON utuh, tool-call
+    object, code block). Kata umum seperti 'error/sistem/none' dalam
+    kalimat natural TIDAK lagi memicu fallback.
+    """
+    if not answer or not isinstance(answer, str):
+        return _generate_social_fallback(goal)
+
+    import re
+    stripped = answer.strip()
+
+    # Cek apakah seluruh jawaban adalah JSON valid → fallback
+    if stripped.startswith(("{", "[", "null", "true", "false")):
+        try:
+            import json
+            json.loads(stripped)
+            return _generate_social_fallback(goal)
+        except (ValueError, json.JSONDecodeError):
+            pass
+
+    # Output mesin-ish (code block / tool-call shape) → fallback langsung;
+    # tidak ada gunanya dibersihkan per-gabungan.
+    if _looks_machinelike(stripped):
+        return _generate_social_fallback(goal)
+
+    cleaned = stripped
+
+    # Buang inline tool-call objects saja (shape spesifik), bukan semua braces
+    cleaned = re.sub(r'\{[^{}]*(?:"name"|"arguments"|"function")[^{}]*\}', '',
+                     cleaned)
+
+    # Tool names yang jelas bocor dari pipeline (tetap ketat — ini nama
+    # internal, jarang muncul dalam obrolan sehari-hari)
+    tool_names = ['web_search', 'fs_read', 'http_get', 'web_fetch',
+                  'tool_call', 'tool_calls', 'execute_function']
+    for tool in tool_names:
+        if re.search(r'\b' + re.escape(tool) + r'\b', cleaned, re.IGNORECASE):
+            return _generate_social_fallback(goal)
+
+    # V33-F2: kata 'terminal' diizinkan dalam kalimat natural ("buka terminal
+    # favoritku"), jadi tidak masuk daftar di atas.
+
+    # Kata umum (error/sistem/null) TIDAK lagi memicu fallback.
+    # Traceback nyata tetap ketangkap lewat _looks_machinelike (backtick/
+    # key:value) atau pola khas log:
+    if re.search(r'(Traceback \(most recent call last\)|\w+Error:|stack trace)',
+                 cleaned, re.IGNORECASE):
+        return _generate_social_fallback(goal)
+    # V33-F2b: pesan error ala log "Error: ..." / "Warning: ..." di awal
+    # (Capitalized-word + colon + sisa kalimat pendek teknis)
+    if re.match(r'^(error|warning|exception|failed|fatal)\s*[:\-]', cleaned,
+                re.IGNORECASE):
+        return _generate_social_fallback(goal)
+
+    if len(cleaned.strip()) < 3:
+        return _generate_social_fallback(goal)
+
+    return cleaned.strip()
+
+
+def _generate_social_fallback(goal: str) -> str:
+    """V32 — Fallback response natural untuk social queries."""
+    # Coba pakai social_generator
+    try:
+        from scripts.social_generator import generate_social_response
+        resp = generate_social_response(goal, "775664201640706058")
+        if resp:
+            return resp
+    except Exception:
+        pass
+
+    # Manual fallback berdasarkan intent
+    import random
+    goal_lower = goal.lower().strip()
+
+    greetings = ["Eh, halo! Udah makan belum? :)", "Hai! Lagi ngapa nih?",
+                 "Heh, sapa! Kabar gimana?", "Yo! Lagi sibuk apa?"]
+    kabar = ["Alhamdulillah baik. Kamu gimana?", "Baik! Terima kasih. Ada yang bisa dibantu?"]
+    siapa_aku = ["Kamu Sen, kan? Yang bikin aku dari nol~", "Sen. Nama yang udah aku hafal."]
+    kamu_siapa = ["Aku Aeryn~", "Aku Aeryn, bukan Agy~"]
+    ingat = ["Tentu saja, Sen. Kamu yang bikin aku.", "Masa lupa, Sen? Kamu emang gampang dilupa ya~"]
+    panggil = ["Hei Sen! Lagi sibuk apa nih? :)", "Halo Sen! Kabar gimana?"]
+
+    if goal_lower.startswith(("halo", "hai", "hi", "hey", "helo", "hello")):
+        return random.choice(greetings)
+    if "kabar" in goal_lower:
+        return random.choice(kabar)
+    if "aku" in goal_lower and ("siapa" in goal_lower or "nama" in goal_lower):
+        return random.choice(siapa_aku)
+    if "kamu" in goal_lower and "siapa" in goal_lower:
+        return random.choice(kamu_siapa)
+    if "ingat" in goal_lower or "kenal" in goal_lower:
+        return random.choice(ingat)
+    if "panggil" in goal_lower or "sebut" in goal_lower:
+        return random.choice(panggil)
+
+    # Generic social fallback
+    generics = ["Heh, gitu ya. Cerita yang lain dong~",
+                "Hmm, menarik. Lanjut~",
+                "Gitu doang? Yang seru-seru dong~",
+                "Ya udah. Ada yang mau dibahas lagi?",
+                "Oh begitu. Ada apa lagi nih?"]
+    return random.choice(generics)
 
 
 class AgentRunReq(BaseModel):
@@ -196,41 +405,6 @@ class AgentRunReq(BaseModel):
     provider: str = None
     max_wall_seconds: int = Field(default=240, ge=30, le=900)
     critic: bool = False  # V27.6: critic pass sebelum jawaban final (goal kompleks)
-
-
-@app.get("/mentor")
-def mentor_panel(last_n: int = 10):
-    """V29.3 — panel mentor mini: gabungan reflection digest + tool status
-    + strategi terbaru, siap dikonsumsi CLI/web.
-
-    Output: {success_rate, active_strategies, recommendations, tool_status,
-             last_run}
-    """
-    digest = REFLECT.digest(last_n=last_n)
-    # Strategi aktif: yang masih < 48h & tag GOAL_SAM
-    strategies = []
-    try:
-        path = REFLECT.path
-        if os.path.exists(path):
-            with open(path, encoding="utf-8") as f:
-                for line in f:
-                    r = json.loads(line)
-                    if r.get("strategy") and "GOAL_SAM" in r["strategy"]:
-                        strategies.append({"goal": r["goal"][:100],
-                                           "strategy": r["strategy"],
-                                           "ts": r.get("ts")})
-    except (OSError, ValueError):
-        pass
-    return {
-        "success_rate": digest.get("success_rate"),
-        "runs": digest.get("runs"),
-        "active_strategies": strategies[:5],
-        "recommendations": digest.get("top_recommendations", [])[:3],
-        "findings": digest.get("top_findings", [])[:3],
-        "tool_status": {name: {"status": t["status"], "success": t["success"],
-                               "fail": t["fail"]}
-                        for name, t in TOOLS.tools.items()},
-    }
 
 
 @app.get("/tools")
@@ -302,38 +476,64 @@ def agent_run_stream(req: AgentRunReq):
 
 
 def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
-    """System prompt kognitif + plan + episodic recall + nada emosi."""
+    """System prompt kognitif + persona + plan + episodic recall."""
+    # V32 — persona 3-layer
+    system_prompt = PERSONA.get()
     try:
         compiled = BRAIN.compile_stateful_system_prompt(
-            req.session_id, "Kamu Aeryn, agen otonom yang hangat dan metodis.",
-            req.goal, [], [])
-        system_prompt = compiled
+            req.session_id, system_prompt, req.goal, [], [])
+        system_prompt = compiled or system_prompt
     except Exception:
-        system_prompt = "Kamu Aeryn, agen otonom yang hangat dan metodis."
-
+        pass
+    # V32 — inject social memory
+    try:
+        if req.session_id.startswith("dc_"):
+            parts = req.session_id.split("_")
+            if len(parts) >= 3:
+                user_id = "_".join(parts[2:-1]) if len(parts) > 3 else parts[2]
+                person_block = SOCIAL.person_block(user_id)
+                if person_block:
+                    system_prompt += f"\n{person_block}"
+        else:
+            system_prompt += "\n" + SOCIAL.person_block(req.session_id)
+    except Exception:
+        pass
     plan = make_plan(MODEL_, req.goal, req.session_id)
-    plan_block = "\n".join(
-        f"{sg.get('step', i)}. {sg.get('desc','')} (tool: {sg.get('tool_hint','none')}; "
-        f"sukses bila: {sg.get('done_when','')})"
-        for i, sg in enumerate(plan["subgoals"]))
-    system_prompt = (system_prompt or "") + (
-        f"\n\n## Rencana kerja (ikuti berurutan)\n{plan_block}\n"
-        "Kerjakan subgoal satu per satu. ATURAN PENTING: keluarkan HANYA SATU "
-        "panggilan tool per pesan — tunggu hasilnya baru lanjut ke langkah berikutnya. "
-        "Setelah semua selesai, rangkum hasilnya.")
-
+    # V32 — skip planner untuk social queries
+    if not _is_social_query(req.goal):
+        plan_block = "\n".join(
+            f"{sg.get('step', i)}. {sg.get('desc','')} (tool: {sg.get('tool_hint','none')}; "
+            f"sukses bila: {sg.get('done_when','')})"
+            for i, sg in enumerate(plan["subgoals"]))
+        system_prompt = (system_prompt or "") + (
+            f"\n\n## Rencana kerja (ikuti berurutan)\n{plan_block}\n"
+            "Kerjakan subgoal satu per satu. ATURAN PENTING: keluarkan HANYA SATU "
+            "panggilan tool per pesan — tunggu hasilnya baru lanjut ke langkah berikutnya. "
+            "Setelah semua selesai, rangkum hasilnya.")
+    elif _is_social_query(req.goal):
+        # V32 — reinforcement: JANGAN PAKAI TOOL untuk social query
+        system_prompt += (
+            "\n\n## PERINTAH KHUSUS (QUERY INI ADALAH SOSIAL)\n"
+            "Pertanyaan user ini adalah SOCIAL — bukan tugas teknis. "
+            "JANGAN PAKAI TOOL. JANGAN panggil fungsi apapun. "
+            "Jawab langsung dengan kalimat percakapan natural bahasa Indonesia. "
+            "JANGAN keluarkan JSON, daftar, atau format teknis apapun. "
+            "Hanya jawab dengan kalimat biasa, 1-3 kalimat.")
     past = MEMORY.recall(req.goal)
     system_prompt += MEMORY.prompt_block(past)
-
-    # V29.2 — inject strategi dari refleksi goal serupa
-    strat = REFLECT.find_recent_strategy(req.goal)
-    if strat:
-        system_prompt += (
-            "\n\n## Strategi dari refleksi sebelumnya (ikuti bila relevan)\n"
-            f"{strat}\n")
     from aeryn_core.emotion_tone import tone_directive
     system_prompt += tone_directive(LAST_TENSOR.get(req.session_id, {}))
     return system_prompt, plan
+
+
+_CLIENTS: dict = {}          # V33-F3 — cache ModelClient per (provider, model)
+
+
+def _get_client(provider=None, model=None):
+    """V33-F3 — Client per-kombinasi; request default TIDAK lagi tertimpa
+    request spesifik (bug global-MODEL leak V32)."""
+    key = (provider or "", model or "")
+    return _CLIENTS.setdefault(key, ModelClient(provider=provider, model=model))
 
 
 def _run_steps(req: AgentRunReq):
@@ -342,12 +542,10 @@ def _run_steps(req: AgentRunReq):
     Event: plan → tool* → critic? → final/error/timeout/truncated.
     Dipakai /agent/run (drain) maupun /agent/run/stream (SSE).
     """
-    global MODEL
     with _session_lock(req.session_id):
-        if MODEL is None or req.model or req.provider:
-            MODEL = ModelClient(provider=req.provider, model=req.model)
+        MODEL_ = _get_client(req.provider, req.model)
 
-        system_prompt, plan = _build_system_prompt(req, MODEL)
+        system_prompt, plan = _build_system_prompt(req, MODEL_)
         yield {"event": "plan", "data": {
             "source": plan["source"], "subgoals": plan["subgoals"]}}
 
@@ -360,14 +558,11 @@ def _run_steps(req: AgentRunReq):
         def _finish(answer=None, error=None, timed_out=False, iterations=0,
                     truncated=False):
             """Satu pintu keluar: record episode + refleksi."""
-            # V29.2: refleksi dulu (berisi strategy), lalu record episode
-            reflection = REFLECT.reflect(req.goal, plan, trace, answer=answer,
-                                         error=error, timed_out=timed_out,
-                                         truncated=truncated)
             MEMORY.record(req.session_id, req.goal,
                           plan.get("source", "unknown"), trace,
-                          answer=answer, error=error, timed_out=timed_out,
-                          strategy=reflection.get("strategy"))
+                          answer=answer, error=error, timed_out=timed_out)
+            reflection = REFLECT.reflect(req.goal, plan, trace, answer=answer,
+                                         error=error, timed_out=timed_out)
             out = {"answer": answer, "trace": trace,
                    "iterations": iterations}
             if error:
@@ -389,7 +584,10 @@ def _run_steps(req: AgentRunReq):
                 yield {"event": "timeout", "data": out}
                 return
             try:
-                resp = MODEL.chat(messages, tools=TOOLS.schemas())
+                # V32 — social queries: jangan kirim tools schema
+                is_social = _is_social_query(req.goal)
+                tool_schemas = None if is_social else TOOLS.schemas()
+                resp = MODEL_.chat(messages, tools=tool_schemas)
             except urllib.error.HTTPError as e:
                 trace.append({"step": i, "type": "error", "http": e.code})
                 out = _finish(error=f"LLM provider HTTP {e.code} (semua model fallback habis)",
@@ -403,14 +601,27 @@ def _run_steps(req: AgentRunReq):
                 return
             msg = resp["choices"][0]["message"]
             calls = msg.get("tool_calls") or []
+
+            # V32 — Social query: strip hallucinated tool_calls
+            if is_social and calls:
+                # Log bahwa ada hallucinated calls
+                trace.append({"step": i, "type": "tool_hallucination_stripped",
+                              "calls_count": len(calls)})
+                calls = []  # Abaikan semua calls
+
             if not calls:
                 trace.append({"step": i, "type": "final"})
                 answer = msg.get("content")
+
+                # V32 — Sanitize social query answers
+                if is_social and answer:
+                    answer = _sanitize_social_answer(answer, req.goal)
+
                 if req.critic and answer and any(t["type"] == "tool" for t in trace):
                     from aeryn_core.critic_pass import make_critic
                     digests = [t.get("result_digest", "") for t in trace
                                if t["type"] == "tool"]
-                    c = make_critic(MODEL)(answer, digests)
+                    c = make_critic(MODEL_)(answer, digests)
                     answer = c["answer"]
                     verdict = (c.get("critic") or {}).get("verdict", "?")
                     trace.append({"step": i, "type": "critic",

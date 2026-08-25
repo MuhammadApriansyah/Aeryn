@@ -1,0 +1,22 @@
+{
+ "goal": "halo apa kabar?",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Cari definisi 'halo apa kabar'",
+   "tool_hint": "web_search|none",
+   "done_when": "temukan definisi yang jelas"
+  },
+  {
+   "step": 1,
+   "desc": "Cari cara mengucapkan 'halo apa kabar' dalam bahasa Indonesia",
+   "tool_hint": "web_search|none",
+   "done_when": "temukan contoh kalimat yang tepat"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}
