@@ -124,6 +124,13 @@ def _is_social_query(message: str) -> bool:
                        "remember this", "tolong ingat")):
         return False
 
+    # ── 0b. Self-inquiry → BUKAN sosial (V35, parity dengan daemon) ──
+    for s in ("performa", "performamu", "kondisimu", "memorimu",
+              "ingatanmu", "toolsmu", "tool kamu", "statistik",
+              "metrik", "metrics", "kamu pakai model", "versi berapa"):
+        if s in msg:
+            return False
+
     # ── 1. Tech indicators → NOT social (positif menang duluan) ──
     tech_indicators = [
         ".txt", ".md", ".py", ".json", ".yaml", ".toml", ".csv", ".js",

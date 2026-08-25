@@ -1,5 +1,31 @@
 # Changelog — Aeryn-Core
 
+## V35 (2026-08-25) — Infrastruktur naik kelas
+
+### INFRA-1: Riwayat multi-turn (`session_history.py`)
+- SEBELUMNYA AERYN AMNESIA TOTAL antar-pesan: messages=[system, goal]
+  fresh tiap run. Di Discord dia lupa obrolan 30 detik lalu.
+- Sekarang: riwayat per-sesi persist JSONL, injeksi ber-budget karakter
+  (default 6000), turn terbaru utuh, lama diringkas deterministik (tanpa LLM).
+- Sanitizer path anti-traversal; baris korup di-skip tanpa crash.
+- Interaksi bug baru ketemu parity probe: konfirmasi lama ("masih tercatat
+  kok") bikin model skip tool saat perintah tulis-memori → perintah tulis-
+  memori kini dikecualikan dari injeksi riwayat.
+
+### INFRA-2: Konsolidasi memori harian
+- nightly_reflection menulis digest ke core memory (idempoten via regex,
+  max 1 digest terbaru) → tiap pagi Aeryn "tahu kondisi dirinya".
+- Klasifikasi self-inquiry baru: "performamu", "ingatanmu", dst = knowledge,
+  bukan sosial (ketemu smoke live).
+
+### INFRA-3: Tool surface + ritual parity
+- `fs_write` (tier fs): sandboxed, anti-traversal, parent auto-create.
+- Checker + parity probe fs_write (roundtrip + uji escape /etc/passwd).
+- Probe verdict logic diperbaiki (expect_hit opsional; escape test terpisah).
+- E2E live: Aeryn menulis catatan harian sendiri, isinya sadar-diri.
+
+Verifikasi: 221 → 226 tests green; parity probe ALL PARITY.
+
 ## V34 (2026-08-25) — Core Memory + Temporal Validity
 
 Pola diadopsi dari riset arsitektur kelas dunia (Letta/MemGPT, Graphiti).

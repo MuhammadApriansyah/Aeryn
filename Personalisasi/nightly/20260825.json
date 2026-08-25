@@ -1,17 +1,17 @@
 {
- "generated_at": "2026-08-25T14:12:48Z",
+ "generated_at": "2026-08-25T17:01:25Z",
  "window_hours": 24.0,
- "runs": 201,
- "errors": 35,
+ "runs": 232,
+ "errors": 43,
  "timeouts": 0,
- "success_rate_pct": 82.6,
- "unique_sessions": 29,
+ "success_rate_pct": 81.5,
+ "unique_sessions": 42,
  "top_tools": {
-  "web_search": 132,
+  "web_search": 141,
   "fs_read": 108,
-  "terminal": 66,
+  "terminal": 69,
   "http_get": 32,
-  "response": 5
+  "memory_search": 20
  },
  "error_samples": [
   "LLM provider HTTP 500 (semua model fallback habis)"

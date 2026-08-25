@@ -15,6 +15,8 @@ Pemakaian:
 import argparse
 import json
 import os
+import re
+import sys
 import time
 from collections import Counter
 
@@ -112,6 +114,29 @@ def main():
     report = aggregate(args.since_hours * 3600)
     path = write_report(report)
     summary = handoff_summary(report)
+
+    # V35 INFRA-2 — tulis digest harian ke core memory Aeryn (block
+    # 'context'): tiap pagi dia "bangun" tahu kondisi dirinya sendiri.
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.dirname(
+            os.path.abspath(__file__))))
+        from aeryn_core.core_memory import CoreMemory
+        cm = CoreMemory()
+        digest = f"Refleksi {report['generated_at'][:10]}: "
+        if report["runs"]:
+            digest += (f"{report['runs']} run, "
+                       f"{report['success_rate_pct']}% sukses")
+            if report["top_tools"]:
+                tt = ", ".join(f"{k}x{v}" for k, v in
+                               list(report["top_tools"].items())[:3])
+                digest += f"; tool teratas: {tt}"
+        else:
+            digest += "tidak ada run"
+        cm.edit("context", "replace",
+                re.sub(r"\nRefleksi \d{4}-\d{2}-\d{2}:.*$", "",
+                       cm.raw()["context"]) + "\n" + digest)
+    except Exception as exc:
+        summary_note = f"(core-memory digest gagal: {exc})"
 
     if summary and not args.no_handoff and os.path.exists(HANDOFF):
         import subprocess

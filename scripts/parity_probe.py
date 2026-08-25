@@ -57,6 +57,25 @@ def probe_direct_tools():
         "ok": isinstance(r, dict) and bool(r.get("edges")),
         "expect_hit": any(e["target"] == "aeryn-core-v30-plus"
                           for e in r.get("edges", []))}
+    # V35 INFRA-3 — fs_write: roundtrip dalam sandbox + tolak path luar
+    import tempfile as _tf
+    with _tf.TemporaryDirectory() as td:
+        reg2 = build_default_registry(sandbox_roots=[td])
+        w = reg2.execute("fs_write", {
+            "path": f"{td}/probe/tulis.txt",
+            "content": "parity-probe fs_write"})
+        reread = reg2.execute("fs_read", {"path": f"{td}/probe/tulis.txt"})
+        escape_ok = False
+        esc = reg2.execute("fs_write", {
+            "path": "/etc/passwd", "content": "harusnya ditolak"})
+        # execute() menelan exception → tolakan berupa dict {"error": ..}
+        escape_ok = isinstance(esc, dict) and bool(esc.get("error"))
+        out["fs_write"] = {
+            "ok": (isinstance(w, dict) and w.get("ok") is True
+                   and isinstance(reread, dict)
+                   and "parity-probe" in str(reread.get("content", ""))
+                   and escape_ok),
+            "sandbox_escape_blocked": escape_ok}
     return out
 
 
@@ -160,11 +179,14 @@ def main():
     issues = []
     inconclusive = []
     for name, r in report["direct"].items():
-        if isinstance(r, dict) and not all(v for k, v in r.items()
-                                           if k != "expect_hit"):
-            issues.append(f"direct/{name}")
-        elif isinstance(r, dict) and not r.get("expect_hit"):
-            issues.append(f"direct/{name}/expect")
+        if isinstance(r, dict):
+            core = {k: v for k, v in r.items()
+                    if k not in ("expect_hit", "sandbox_escape_blocked")}
+            if not all(core.values()):
+                issues.append(f"direct/{name}")
+            elif ("expect_hit" in r
+                  and not r["expect_hit"] and core.get("ok")):
+                issues.append(f"direct/{name}/expect")
     if report["classification"].get("diverge"):
         issues.append(f"classification ({len(report['classification']['diverge'])} diverge)")
     for name, r in report["daemon"].items():

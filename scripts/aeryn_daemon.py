@@ -230,6 +230,15 @@ def _checker_core_memory_edit(args, result):
     return isinstance(result, dict) and result.get("ok") is True
 
 
+# V35 INFRA-3 — fs_write: sukses = dict ok:True + bytes_written > 0
+def _checker_fs_write(args, result):
+    return (isinstance(result, dict) and result.get("ok") is True
+            and result.get("bytes_written", 0) > 0)
+
+
+SHADOW.register_checker("fs_write", _checker_fs_write)
+
+
 SHADOW.register_checker("core_memory_edit", _checker_core_memory_edit)
 # V33 Shared Brain — parity checkers + auto-promote setelah 5x konsisten
 SHADOW.register_checker("memory_search", _checker_memory_search)
@@ -262,6 +271,17 @@ def _is_social_query(goal: str) -> bool:
     if msg.startswith(("ingat ini", "ingat:", "catat ini", "catat:",
                        "remember this", "tolong ingat")):
         return False
+
+    # ── 0b. Self-inquiry → BUKAN sosial (V35) ──
+    # Pertanyaan tentang kondisi/kerja internal agent butuh jalur knowledge
+    # ("kondisi performamu?", "cek ingatanmu") — ketemu smoke digest V35.
+    self_inquiry = (
+        "performa", "performamu", "kondisimu", "memorimu", "ingatanmu",
+        "toolsmu", "tool kamu", "statistik", "metrik", "metrics",
+        "kamu pakai model", "versi berapa")
+    for s in self_inquiry:
+        if s in msg:
+            return False
 
     # ── 1. Sinyal teknis positif → pasti bukan sosial ──
     tech_positive = (
@@ -629,6 +649,22 @@ def _run_steps(req: AgentRunReq):
 
         messages = [{"role": "system", "content": system_prompt},
                     {"role": "user", "content": req.goal}]
+        # V35 INFRA-1 — riwayat multi-turn: sisipkan antara system dan goal
+        # (sebelumnya amnesia total antar-pesan — ketemu audit infrastruktur).
+        # Pengecualian: perintah tulis-memori TANPA riwayat — konfirmasi lama
+        # ("masih tercatat kok") bikin model mengira fakta sudah tersimpan
+        # dan tidak memanggil core_memory_edit (ketemu parity_probe V35).
+        try:
+            from aeryn_core.session_history import load as _hist_load
+            hist = ([] if _is_memory_write_command(req.goal)
+                    else _hist_load(req.session_id))
+            if hist:
+                messages = ([{"role": "system", "content": system_prompt}] +
+                            hist +
+                            [{"role": "user", "content": req.goal}])
+                yield {"event": "history", "data": {"turns": len(hist)}}
+        except Exception:
+            pass
         trace = []
         import time as _time
         t_start = _time.time()
@@ -647,6 +683,14 @@ def _run_steps(req: AgentRunReq):
             MEMORY.record(req.session_id, req.goal,
                           plan.get("source", "unknown"), trace,
                           answer=answer, error=error, timed_out=timed_out)
+            # V35 INFRA-1 — simpan turn ke riwayat sesi (user + jawaban sukses)
+            try:
+                from aeryn_core.session_history import record as _hist_record
+                _hist_record(req.session_id, "user", req.goal)
+                if answer and not error and not timed_out:
+                    _hist_record(req.session_id, "assistant", answer)
+            except Exception:
+                pass
             reflection = REFLECT.reflect(req.goal, plan, trace, answer=answer,
                                          error=error, timed_out=timed_out)
             out = {"answer": answer, "trace": trace,

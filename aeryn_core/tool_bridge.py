@@ -164,6 +164,26 @@ def make_fs_read(roots):
     return fs_read
 
 
+def make_fs_write(sandbox_roots):
+    """V35 INFRA-3 — tulis file dalam sandbox (tier fs).
+
+    Mode overwrite penuh; path di-expand dan divalidasi ke sandbox roots.
+    Parent dir otomatis dibuat. Returns dict {path, bytes_written}.
+    """
+    allowed = [Path(os.path.expanduser(r)).resolve() for r in sandbox_roots]
+
+    def fs_write(path: str, content: str):
+        p = Path(os.path.expanduser(path)).resolve()
+        if not any(p == root or root in p.parents for root in allowed):
+            raise PermissionError(f"path outside sandbox roots: {p}")
+        p.parent.mkdir(parents=True, exist_ok=True)
+        data = content.encode("utf-8")
+        with open(p, "wb") as f:
+            f.write(data)
+        return {"ok": True, "path": str(p), "bytes_written": len(data)}
+    return fs_write
+
+
 def build_default_registry(sandbox_roots=None):
     reg = ToolGraduationRegistry()
     reg.register("web_search", _web_search, {
@@ -189,4 +209,12 @@ def build_default_registry(sandbox_roots=None):
             "description": "Baca file teks dalam sandbox folder yang diizinkan.",
             "parameters": {"type": "object", "properties": {
                 "path": {"type": "string"}}, "required": ["path"]}}}, TIER_FS)
+        reg.register("fs_write", make_fs_write(sandbox_roots), {
+            "type": "function", "function": {"name": "fs_write",
+            "description": ("Tulis/buat file teks di dalam sandbox folder "
+                            "yang diizinkan (overwrite penuh)."),
+            "parameters": {"type": "object", "properties": {
+                "path": {"type": "string"},
+                "content": {"type": "string"}},
+                "required": ["path", "content"]}}}, TIER_FS)
     return reg

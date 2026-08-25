@@ -1,0 +1,8 @@
+{
+ "goal": "kamu tau gak siapa aku? jawab singkat aja",
+ "subgoals": [],
+ "status": [],
+ "source": "skill",
+ "skill_id": "none_tau",
+ "pitfalls": ""
+}

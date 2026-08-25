@@ -198,6 +198,34 @@
    "fakta": [],
    "preferensi": {},
    "last_seen": 1787676153.910938
+  },
+  "e2e-hist": {
+   "nama": "e2e-hist",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787676962.755245
+  },
+  "digestcheck": {
+   "nama": "digestcheck",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787677332.5932004
+  },
+  "digestcheck2": {
+   "nama": "digestcheck2",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787677499.1925836
+  },
+  "fscheck": {
+   "nama": "fscheck",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787677898.610892
   }
  },
  "channels": {

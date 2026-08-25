@@ -3,26 +3,12 @@
  "subgoals": [
   {
    "step": 0,
-   "desc": "Cari definisi kata 'halo'",
-   "tool_hint": "web_search|http_get|fs_read|none",
-   "done_when": "hasil pencarian ada"
-  },
-  {
-   "step": 1,
-   "desc": "Identifikasi arti kata 'halo' dari hasil pencarian",
-   "tool_hint": "text_extraction|sentiment_analysis|none",
-   "done_when": "arti kata 'halo' ditemukan"
-  },
-  {
-   "step": 2,
-   "desc": "Periksa apakah kata 'halo' digunakan dalam konteks yang tepat",
-   "tool_hint": "text_analysis|contextual_check|none",
-   "done_when": "kata 'halo' digunakan dengan tepat"
+   "desc": "Balas sapaan pengguna dengan pesan ramah dan tanyakan tujuan atau bantuan yang dibutuhkan",
+   "tool_hint": "none",
+   "done_when": "Pengguna menerima balasan sapaan dan memberikan goal yang jelas"
   }
  ],
  "status": [
-  "pending",
-  "pending",
   "pending"
  ],
  "source": "llm"
