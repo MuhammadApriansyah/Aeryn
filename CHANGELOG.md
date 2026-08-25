@@ -1,5 +1,22 @@
 # Changelog — Aeryn-Core
 
+## V38.2 (2026-08-25) — SOP wajib untuk sub-agen
+
+Mandat Sen: sub-agen bukan pekerja lepas — hanya boleh bekerja di bawah
+SOP (Standard Operating Procedure).
+
+- `build_sop()`: tiap sub-agen WAJIB menerima SOP eksplisit berisi:
+  lingkup tugas, larangan keluar scope, larangan file sensitif,
+  batas langkah/waktu, dan FORMAT PELAPORAN wajib ("HASIL: ... | STATUS: ...").
+- Kepatuhan diverifikasi: jawaban tanpa format → ditolak sebagai
+  "melanggar format pelaporan SOP" (ok=False).
+- Runner signature baru: runner(sop, goal, session_id, ...) — daemon
+  mengirim SOP sebagai bagian dari goal sub-run.
+- Test V38.1 di-update ke kontrak baru; anti-rekursi tetap teruji.
+
+Verifikasi: 352 → **356 tests green**; live E2E 2 sub-agen paralel dengan
+SOP: ok=True, jawaban digabung rapi; ALL PARITY.
+
 ## V38.1 (2026-08-25) — Aeryn punya sub-agen sendiri
 
 Pola delegate_task Hermes diadaptasi ke skala Aeryn:
