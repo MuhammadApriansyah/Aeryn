@@ -73,7 +73,11 @@ class EpisodicMemory:
 
     @staticmethod
     def prompt_block(episodes: list) -> str:
-        """Bentuk blok injeksi system-prompt dari episode lama."""
+        """Bentuk blok injeksi system-prompt dari episode lama.
+
+        V37.2 — loop strategi ditutup: field `strategy` hasil refleksi
+        kini diinjeksi balik (dulu hanya disimpan, tak pernah dibaca).
+        """
         if not episodes:
             return ""
         lines = ["\n## Pengalaman relevan dari sesi sebelumnya"]
@@ -83,5 +87,8 @@ class EpisodicMemory:
             if ep.get("lessons"):
                 line += f" | pelajaran: {'; '.join(ep['lessons'][:2])}"
             lines.append(line)
+            # V37.2 — strategi terbukti/gagal dibawa balik ke kepala agent
+            if ep.get("strategy"):
+                lines.append(f"  strategi {ep['strategy'][:140]}")
         lines.append("Gunakan pengalaman ini agar tidak mengulang kesalahan.")
         return "\n".join(lines)

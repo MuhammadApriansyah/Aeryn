@@ -7,21 +7,50 @@ Ketika sebuah tool naik ke status `shadowing`, setiap panggilan:
 
 N kali paritas beruntun = kandidat graduation `native` (keputusan mentor).
 """
+import os
 import time
 
 
 class ParityLedger:
-    """Catatan paritas per tool — persist sederhana via registry state."""
+    """Catatan paritas per tool — persist sederhana via registry state.
 
-    def __init__(self, registry):
+    V37.2 — records kini OPSIONAL persist ke disk. Dulu in-memory murni:
+    tiap restart PM2 menghapus streak, sehingga tool shadowing tidak pernah
+    mencapai 5-paritas-beruntun dan macet selamanya di status shadowing.
+    """
+
+    def __init__(self, registry, path: str = None):
         self.registry = registry  # ToolGraduationRegistry
+        self.path = path          # JSON persist (opsional)
         self.records = {}         # name -> list[bool]
+        if path:
+            try:
+                import json as _json
+                with open(path) as f:
+                    raw = _json.load(f)
+                self.records = {k: [bool(x) for x in v[-15:]]
+                                for k, v in raw.items() if isinstance(v, list)}
+            except Exception:
+                self.records = {}  # korup/hilang → mulai segar
+
+    def _persist(self):
+        if not self.path:
+            return
+        try:
+            import json as _json
+            tmp = self.path + ".tmp"
+            with open(tmp, "w") as f:
+                _json.dump(self.records, f)
+            os.replace(tmp, self.path)
+        except OSError:
+            pass
 
     def record(self, tool_name: str, parity_ok: bool):
         seq = self.records.setdefault(tool_name, [])
         seq.append(parity_ok)
         if len(seq) > 30:
             self.records[tool_name] = seq[-15:]
+        self._persist()
         # N paritas beruntun terakhir
         need = 5
         recent = self.records[tool_name][-need:]

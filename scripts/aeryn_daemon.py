@@ -17,6 +17,7 @@ Port default 3010. Jalankan: ./venv-proot/bin/python scripts/aeryn_daemon.py
 from __future__ import annotations
 
 import json
+import os
 import sys
 import time
 import urllib.error
@@ -180,7 +181,11 @@ def _checker_ask_hermes(args, result):
     return isinstance(result, dict) and result.get("ok") is True
 
 GATE = ToolGovernanceGate(drift_shield=SubAgentContextDriftShield())
-LEDGER = ParityLedger(TOOLS)
+# V37.2 — ledger persist: streak graduasi selamat dari restart PM2
+# (dulu in-memory → tool shadowing macet selamanya, tak pernah promote).
+LEDGER = ParityLedger(
+    TOOLS, path=os.path.expanduser(
+        "~/aeryn-core-agent/Personalisasi/Database/tool_graduation.json"))
 SHADOW = ShadowRunner(TOOLS, LEDGER)
 MEMORY = EpisodicMemory()  # V27.4 — memori episodik lintas-sesi
 REFLECT = PostRunReflection(registry=TOOLS, ledger=LEDGER)  # V27.5 — refleksi pasca-run

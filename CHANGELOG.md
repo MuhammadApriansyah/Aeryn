@@ -1,5 +1,28 @@
 # Changelog — Aeryn-Core
 
+## V37.2 (2026-08-25) — Fine-tuning tingkat lanjut
+
+### Loop pembelajaran strategi ditutup
+- Temuan data: field `strategy` dari refleksi disimpan tapi TAK PERNAH
+  dibaca balik oleh kode manapun.
+- Fix: `prompt_block` kini menginjeksikan strategi terbukti/gagal ke
+  system prompt run berikutnya ("boros tool 5/2 — pakai heuristik").
+
+### Graduasi tool tidak lagi amnesia
+- Temuan data: ParityLedger in-memory murni — tiap restart PM2 mereset
+  streak, sehingga graph_traverse/pitfall_search macet selamanya di
+  status shadowing walai dipakai sukses puluhan kali.
+- Fix: ledger persist ke Personalisasi/Database/tool_graduation.json
+  (atomik tmp+replace, korup → mulai segar). Graduasi tetap harus
+  diperjuangkan 5-paritas-beruntun — sekarang akumulatif lintas restart.
+
+### Metrik jujur (dari V37.1, dilengkapi)
+- Analisis 260 episode: nightly melaporkan 82,7% padahal ada 43 gagal
+  diam-diam (answer=None tanpa error). Kini truncated = error eksplisit.
+
+Verifikasi: 315 → **319 tests green**; smoke identitas nol-tool;
+ledger persist terbukti lintas instance.
+
 ## V37 (2026-08-25) — Corpus Callosum: dua otak resmi tersambung
 
 ### P1 — Refleks kontinuitas lintas-otak

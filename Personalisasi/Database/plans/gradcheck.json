@@ -1,0 +1,29 @@
+{
+ "goal": "cek di graf pengetahuan: aeryn-core evolved jadi apa?",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Temukan sumber graf pengetahuan yang memuat entitas 'aeryn-core' (endpoint SPARQL/API atau file graf lokal)",
+   "tool_hint": "http_get",
+   "done_when": "Sumber graf pengetahuan teridentifikasi dan dapat diakses"
+  },
+  {
+   "step": 1,
+   "desc": "Query relasi evolusi/successor dari node 'aeryn-core' pada graf pengetahuan",
+   "tool_hint": "http_get",
+   "done_when": "Diperoleh entitas tujuan dari relasi 'evolved_to'/'successor' milik aeryn-core"
+  },
+  {
+   "step": 2,
+   "desc": "Validasi hasil query dan laporkan entitas hasil evolusi aeryn-core kepada pengguna",
+   "tool_hint": "none",
+   "done_when": "Jawaban akhir berisi nama entitas hasil evolusi aeryn-core dengan rujukan ke graf"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}
