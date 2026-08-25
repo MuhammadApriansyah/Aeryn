@@ -1,5 +1,23 @@
 # Changelog — Aeryn-Core
 
+## V38.1 (2026-08-25) — Aeryn punya sub-agen sendiri
+
+Pola delegate_task Hermes diadaptasi ke skala Aeryn:
+
+- `aeryn_core/sub_agent_runner.py`: tool `spawn_subagents` — pecah tugas
+  jadi 1-3 sub-tugas mandiri, dieksekusi PARALEL oleh run internal
+  (session_id terisolasi `sub_<jam>_<i>`, konteks bersih, budget ketat:
+  3 iterasi/90 detik).
+- Anti-rekursi fail-closed: sub-agen tidak boleh spawn sub-agen lagi
+  (thread-local flag DI DALAM worker — thread-local induk tidak mewarisi,
+  bug pertama ketemu test).
+- Cap 3 per run; error satu item tidak menjatuhkan lainnya.
+
+Bukti live: goal "teliti FastAPI & SQLite paralel" → 2 sub-agen jalan
+bersamaan → hasil digabung jadi ringkasan.
+
+Verifikasi: 346 → **352 tests green** (6 baru); ALL PARITY.
+
 ## V38 (2026-08-25) — Production hardening & audit menyeluruh
 
 Audit tingkat produksi (6 permukaan). Semua diperbaiki + regresi permanen:

@@ -1,0 +1,17 @@
+{
+ "goal": "apa itu database",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "[skill] langkah 1",
+   "tool_hint": "web_search",
+   "done_when": "langkah selesai"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "skill",
+ "skill_id": "web_search_itu",
+ "pitfalls": ""
+}

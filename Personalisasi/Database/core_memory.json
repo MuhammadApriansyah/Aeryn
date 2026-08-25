@@ -4,7 +4,7 @@
   "updated": 1787691208.8211439
  },
  "context": {
-  "value": "Proyek aktif: aeryn-core-agent (otak kognitif ini, port 3010, PM2 'aeryn-core'), webnovel-platform (Fastify+React, sesi lain yang pegang), Hermes agent (infra rumah: gateway WA/Discord, cron, library memori di /mnt/android).\nAeryn bagian dari keluarga sistem Sen — satu otak kolektif lewat hermes_brain tools.\nproyek nebula-dash menggunakan stack svelte+go\nprobe-parity uji = hasil web_search, fakta uji = hasil web_search\ningat ini: probe-parity fakta uji\nRefleksi 2026-08-25: 255 run, 82.7% sukses; tool teratas: web_searchx146, fs_readx107, terminalx69; lib+27; provider 5/9 OK; pitfall+8 (total 8); Hermes aktif 22 sesi\ningat ini: probe-parity fakta uji\nRefleksi 2026-08-25: 264 run, 83.7% sukses; tool teratas: web_searchx143, fs_readx100, terminalx69; lib+34; provider 5/9 OK; pitfall+8 (total 8); Hermes aktif 20 sesi\ningat ini: probe-parity fakta uji",
-  "updated": 1787693060.6395767
+  "value": "Proyek aktif: aeryn-core-agent (otak kognitif ini, port 3010, PM2 'aeryn-core'), webnovel-platform (Fastify+React, sesi lain yang pegang), Hermes agent (infra rumah: gateway WA/Discord, cron, library memori di /mnt/android).\nAeryn bagian dari keluarga sistem Sen — satu otak kolektif lewat hermes_brain tools.\nproyek nebula-dash menggunakan stack svelte+go\nprobe-parity uji = hasil web_search, fakta uji = hasil web_search\ningat ini: probe-parity fakta uji\nRefleksi 2026-08-25: 255 run, 82.7% sukses; tool teratas: web_searchx146, fs_readx107, terminalx69; lib+27; provider 5/9 OK; pitfall+8 (total 8); Hermes aktif 22 sesi\ningat ini: probe-parity fakta uji\nRefleksi 2026-08-25: 264 run, 83.7% sukses; tool teratas: web_searchx143, fs_readx100, terminalx69; lib+34; provider 5/9 OK; pitfall+8 (total 8); Hermes aktif 20 sesi\ningat ini: probe-parity fakta uji\ningat ini: probe-parity fakta uji",
+  "updated": 1787694636.5957625
  }
 }

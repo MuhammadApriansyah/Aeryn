@@ -284,6 +284,27 @@
    "fakta": [],
    "preferensi": {},
    "last_seen": 1787692679.2838433
+  },
+  "subagent-live": {
+   "nama": "subagent-live",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787694358.5834835
+  },
+  "sub_214611_0": {
+   "nama": "sub_214611_0",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787694372.003526
+  },
+  "sub_214611_1": {
+   "nama": "sub_214611_1",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787694372.030096
   }
  },
  "channels": {

@@ -173,6 +173,36 @@ def _core_memory_edit(block: str, mode: str = "append", content: str = ""):
 
 TOOLS.register("core_memory_edit", _core_memory_edit, CORE_MEMORY_SCHEMA,
                tier="safe")
+# V38.1 — spawn_subagents: Aeryn punya sub-agen sendiri (pola delegate_task
+# Hermes, skala kecil). Runner diinjeksi dari daemon (pipeline lengkap).
+from aeryn_core.sub_agent_runner import (SPAWN_SCHEMA, MAX_SUBAGENTS_PER_RUN,
+                                         SUB_MAX_ITERATIONS, SUB_WALL_SECONDS,
+                                         in_subagent, spawn_subagents)
+
+
+def _spawn_subagents(goals: list):
+    def _real_runner(goal, session_id, max_iterations, max_wall_seconds):
+        req = AgentRunReq(goal=goal, session_id=session_id,
+                          max_iterations=max_iterations,
+                          max_wall_seconds=max_wall_seconds)
+        events = list(_run_steps(req))
+        final = events[-1] if events else {}
+        data = final.get("data", {})
+        if isinstance(data, dict):
+            data["ok"] = (final.get("event") == "final") and bool(
+                data.get("answer"))
+        return data
+
+    return spawn_subagents(goals, runner=_real_runner)
+
+
+def _checker_spawn(args, result):
+    return isinstance(result, dict) and "results" in result
+
+
+TOOLS.register("spawn_subagents", _spawn_subagents, SPAWN_SCHEMA,
+               tier="safe")
+
 # V37 P2 — ask_hermes: tangan lintas-hemisfer. Aeryn bisa minta Hermes
 # (otak kiri) mengerjakan tugas berat via CLI one-shot. Cap harian di
 # modul; tier "safe" karena efeknya di luar sandbox tapi terbatas & dicatat.
@@ -257,6 +287,7 @@ def _checker_fs_write(args, result):
 
 
 SHADOW.register_checker("fs_write", _checker_fs_write)
+SHADOW.register_checker("spawn_subagents", _checker_spawn)
 SHADOW.register_checker("ask_hermes", _checker_ask_hermes)
 
 

@@ -1,0 +1,1 @@
+{"event_id":"turn_1_1787694372","event_type":"SEMANTIC","payload":{"role": "user", "text": "Jelaskan apa itu SQLite: definisi, karakteristik utama (serverless, file-based, ACID), perbedaannya dengan database client-server seperti PostgreSQL/MySQL, dan kapan biasanya dipakai. Jawab ringkas dalam bahasa Indonesia, 3-5 kalimat."},"timestamp":1787694372,"ttl":604800}
