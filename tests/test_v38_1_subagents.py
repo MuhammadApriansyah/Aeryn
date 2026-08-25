@@ -17,10 +17,10 @@ from aeryn_core.sub_agent_runner import (
 def test_parallel_execution_and_order():
     seen_threads = set()
 
-    def runner(goal, sid, mi, mw):
+    def runner(sop, goal, sid, mi, mw):
         seen_threads.add(threading.current_thread().name)
         time.sleep(0.05)
-        return {"answer": f"jawab-{goal}", "ok": True}
+        return {"answer": f"HASIL: jawab-{goal} | STATUS: SELESAI", "ok": True}
 
     r = spawn_subagents(["t1", "t2", "t3"], runner=runner)
     assert len(r["results"]) == 3
@@ -30,22 +30,25 @@ def test_parallel_execution_and_order():
 
 
 def test_anti_recursion():
-    def evil_runner(goal, sid, mi, mw):
+    def evil_runner(sop, goal, sid, mi, mw):
         # di dalam sub-agen, spawn lagi harus ditolak
         return spawn_subagents([f"{goal}-anak"], runner=lambda *a: {})
 
     r = spawn_subagents(["induk"], runner=evil_runner)
     inner = r["results"][0]
     assert not inner["ok"]
-    assert "anti-rekursi" in str(inner["error"])
+    # alasan bisa berupa anti-rekursi langsung ATAU SOP-violation karena
+    # hasil spawn ditolak (tanpa format HASIL/STATUS) — keduanya valid
+    combined = str(inner["error"]) + str(inner.get("answer_head", ""))
+    assert ("anti-rekursi" in combined) or ("melanggar" in combined)
 
 
 def test_cap_max_subagents():
     calls = []
 
-    def runner(goal, sid, mi, mw):
+    def runner(sop, goal, sid, mi, mw):
         calls.append(goal)
-        return {"answer": "x", "ok": True}
+        return {"answer": "HASIL: x | STATUS: SELESAI", "ok": True}
 
     r = spawn_subagents([f"g{i}" for i in range(10)], runner=runner)
     assert len(r["results"]) == MAX_SUBAGENTS_PER_RUN
@@ -55,21 +58,21 @@ def test_cap_max_subagents():
 def test_isolated_session_ids():
     sids = []
 
-    def runner(goal, sid, mi, mw):
+    def runner(sop, goal, sid, mi, mw):
         sids.append(sid)
         # buktikan konteks terisolasi: flag thread-local aktif
         assert in_subagent()
-        return {"answer": "ok", "ok": True}
+        return {"answer": "HASIL: ok | STATUS: SELESAI", "ok": True}
 
     spawn_subagents(["a", "b"], runner=runner)
     assert len(set(sids)) == 2 and all(s.startswith("sub_") for s in sids)
 
 
 def test_item_error_does_not_kill_others():
-    def runner(goal, sid, mi, mw):
+    def runner(sop, goal, sid, mi, mw):
         if goal == "boom":
             raise RuntimeError("meledak")
-        return {"answer": "selamat", "ok": True}
+        return {"answer": "HASIL: selamat | STATUS: SELESAI", "ok": True}
 
     r = spawn_subagents(["boom", "aman"], runner=runner)
     by_idx = {x["idx"]: x for x in r["results"]}

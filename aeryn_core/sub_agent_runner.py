@@ -21,6 +21,24 @@ MAX_SUBAGENTS_PER_RUN = 3
 SUB_MAX_ITERATIONS = 3
 SUB_WALL_SECONDS = 90
 
+# ── V38.2 — SOP: Standard Operating Procedure wajib untuk sub-agen ──
+# Sen: "harusnya hanya bekerja di bawah SOP saja" — benar. Sub-agen bukan
+# pekerja lepas yang bebas; dia WAJIB menerima SOP eksplisit dari induk,
+# dan hasil kerjanya dinilai kepatuhannya.
+SOP_TEMPLATE = """SOP #{no} — WAJIB DIIKUTI, TANPA PENGECUALIAN:
+1. Kerjakan HANYA tugas berikut: {goal}
+2. DILARANG keluar dari lingkup tugas itu (jangan file lain, jalan topik lain).
+3. Dilarang membuka/menulis file sensitif (.env, memori, auth) — diblokir SecurityKernel.
+4. Maksimal {max_iter} langkah & {wall}s — jika belum selesai, laporkan status terakhir.
+5. Lapor hasil dalam format: HASIL: <ringkasan> | STATUS: SELESAI/GAGAL.
+Melanggar SOP = hasil dibuang."""
+
+
+def build_sop(no: int, goal: str) -> str:
+    return SOP_TEMPLATE.format(no=no, goal=goal[:300],
+                               max_iter=SUB_MAX_ITERATIONS,
+                               wall=SUB_WALL_SECONDS)
+
 # Guard anti-rekursi: thread lokal menandai bahwa eksekusi saat ini sudah
 # di dalam sub-agen; di dalam sub-agen, tool spawn dilarang dipakai lagi.
 _tls = threading.local()
@@ -64,26 +82,32 @@ def spawn_subagents(goals: list, runner=None) -> dict:
     t0 = time.time()
 
     def _worker(idx_goal):
-        """Jalankan runner DI THREAD PEKERJA dengan penanda anti-rekursi.
+        """Jalankan runner DI THREAD PEKERJA dengan SOP + anti-rekursi.
 
         V38.1-fix: thread-local induk TIDAK mewarisi ke worker, jadi
-        penanda harus dipasang di dalam worker itu sendiri — kalau
-        runner memanggil spawn_subagents lagi dari thread yang sama,
-        in_subagent() = True → ditolak fail-closed."""
+        penanda dipasang di dalam worker itu sendiri.
+        V38.2-SOP: runner menerima (sop_text, goal, ...) — SOP wajib; dan
+        output worker diverifikasi kepatuhan SOP minimal."""
         i, g = idx_goal
         _tls.in_sub = True
+        sop = build_sop(i + 1, g)
         try:
-            r = runner(g, f"sub_{stamp}_{i}",
+            r = runner(sop, g, f"sub_{stamp}_{i}",
                        SUB_MAX_ITERATIONS, SUB_WALL_SECONDS)
             r = r or {}
             answer = str(r.get("answer") or "")
+            # Kepatuhan SOP minimal: harus ada penanda format laporan
+            compliant = ("HASIL:" in answer and "STATUS:" in answer)
             return {"idx": i, "goal": g[:120],
-                    "ok": r.get("ok", True) and bool(answer),
+                    "ok": r.get("ok", True) and bool(answer) and compliant,
                     "answer_head": answer[:300],
-                    "error": r.get("error")}
+                    "sop_compliant": compliant,
+                    "error": None if compliant else
+                             "melanggar format pelaporan SOP"}
         except Exception as exc:
             return {"idx": i, "goal": g[:120], "ok": False,
-                    "answer_head": "", "error": str(exc)[:150]}
+                    "answer_head": "", "sop_compliant": False,
+                    "error": str(exc)[:150]}
         finally:
             _tls.in_sub = False
 

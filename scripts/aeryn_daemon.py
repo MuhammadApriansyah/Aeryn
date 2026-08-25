@@ -181,8 +181,13 @@ from aeryn_core.sub_agent_runner import (SPAWN_SCHEMA, MAX_SUBAGENTS_PER_RUN,
 
 
 def _spawn_subagents(goals: list):
-    def _real_runner(goal, session_id, max_iterations, max_wall_seconds):
-        req = AgentRunReq(goal=goal, session_id=session_id,
+    def _real_runner(sop, goal, session_id, max_iterations, max_wall_seconds):
+        """Runner SOP-aware: goal dikirim = SOP lengkap + tugas.
+
+        Sub-agen menerima SOP sebagai bagian dari goal (system prompt
+        internal sudah berisi persona & aturan dasar; SOP mempersempit).
+        """
+        req = AgentRunReq(goal=sop, session_id=session_id,
                           max_iterations=max_iterations,
                           max_wall_seconds=max_wall_seconds)
         events = list(_run_steps(req))

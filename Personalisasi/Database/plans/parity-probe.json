@@ -3,9 +3,9 @@
  "subgoals": [
   {
    "step": 0,
-   "desc": "Balas sapaan pengguna dengan salam ramah dan tanyakan tujuan atau bantuan yang dibutuhkan",
+   "desc": "Balas sapaan pengguna dengan pesan ramah dan tanyakan apa yang bisa dibantu",
    "tool_hint": "none",
-   "done_when": "Pengguna menerima balasan sapaan dan diminta menyampaikan kebutuhan spesifik"
+   "done_when": "Pengguna menerima balasan sapaan dan memberikan tujuan atau pertanyaan lanjutan"
   }
  ],
  "status": [
