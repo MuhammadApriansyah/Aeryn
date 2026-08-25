@@ -76,6 +76,13 @@ def probe_direct_tools():
                    and "parity-probe" in str(reread.get("content", ""))
                    and escape_ok),
             "sandbox_escape_blocked": escape_ok}
+    # V37 P2 — ask_hermes: uji GUARD saja (murah, tanpa spawn hermes):
+    # task terlalu pendek harus ditolak sebelum subprocess dibuat.
+    from aeryn_core.hermes_hands import ask_hermes as _ah
+    short = _ah("pendek")
+    out["ask_hermes_guard"] = {
+        "ok": isinstance(short, dict) and short.get("ok") is False,
+        "rejects_short_task": "pendek" in str(short.get("error", ""))}
     return out
 
 

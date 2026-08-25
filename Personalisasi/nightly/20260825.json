@@ -1,17 +1,17 @@
 {
- "generated_at": "2026-08-25T17:01:25Z",
+ "generated_at": "2026-08-25T19:01:17Z",
  "window_hours": 24.0,
- "runs": 232,
- "errors": 43,
+ "runs": 255,
+ "errors": 44,
  "timeouts": 0,
- "success_rate_pct": 81.5,
- "unique_sessions": 42,
+ "success_rate_pct": 82.7,
+ "unique_sessions": 47,
  "top_tools": {
-  "web_search": 141,
-  "fs_read": 108,
+  "web_search": 146,
+  "fs_read": 107,
   "terminal": 69,
   "http_get": 32,
-  "memory_search": 20
+  "memory_search": 21
  },
  "error_samples": [
   "LLM provider HTTP 500 (semua model fallback habis)"
@@ -22,5 +22,33 @@
   "goal terjawab tanpa tool",
   "goal terjawab tanpa tool",
   "goal terjawab tanpa tool"
- ]
+ ],
+ "organism": {
+  "provider_health": {
+   "checked_at": "2026-08-25T17:58:22+00:00",
+   "total_providers": 9,
+   "ok": 5,
+   "by_status": {
+    "OK": 5,
+    "CLIENT_ERROR": 1,
+    "RATE_LIMITED": 3
+   },
+   "summary": "5/9 OK"
+  },
+  "library": {
+   "new_entries_24h": 27
+  },
+  "pitfalls": {
+   "total": 8,
+   "new_24h": 8
+  },
+  "hermes": {
+   "active_sessions_24h": 22,
+   "recent_user_messages": [
+    "tapi ada 1 hal yang mau gw tanyakan dulu. untuk sekarang berarti aeryn bukan seb",
+    "kalo udah. lapor pakai hermes send di whatsapp ya. gw mau baca komik dulu",
+    "gak ada error sih. tapi sedikit kelebihan yang sebenarnya tidak perlu. namun nan"
+   ]
+  }
+ }
 }

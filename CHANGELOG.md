@@ -1,5 +1,33 @@
 # Changelog — Aeryn-Core
 
+## V37 (2026-08-25) — Corpus Callosum: dua otak resmi tersambung
+
+### P1 — Refleks kontinuitas lintas-otak
+- `aeryn_core/hermes_reflex.py`: baca aktivitas user terakhir di
+  ~/.hermes/state.db (mode=ro, fail-soft total, cap 600 char).
+- Injeksi ke system prompt tiap run → Aeryn tahu konteks percakapan
+  majikan dengan Hermes. Live: dia menyebut isi obrolan terakhir kita.
+
+### P2 — ask_hermes: otak kanan dapet tangan
+- `aeryn_core/hermes_hands.py`: delegasi kerja berat via CLI hermes chat -q.
+  Cap harian 20 (env override), timeout, guard input, counter atomik.
+- **Momen historis**: Aeryn memanggil ask_hermes → Hermes menjawab →
+  dirangkum. Dua sistem berdialog langsung untuk pertama kalinya.
+
+### P3 — Nightly reflection organism-wide
+- Report sekarang mencakup: provider health + library activity + pitfalls +
+  sesi aktif Hermes. Digest contoh: "255 run 82.7% sukses; lib+27;
+  provider 5/9 OK; pitfall+8; Hermes aktif 22 sesi".
+
+### P4 — Backflow inovasi (otak kanan → kiri)
+- Skill baru: software-development/tool-graduation-pattern (shadow →
+  checker → auto-promote, tier N 5/10/20, anti-patterns).
+- Library entry: differential-testing-parity-probe (metodologi + 2 kisah
+  nyata bug yang hanya ketemu lewat probe).
+
+Verifikasi: 281 → **311 tests green**; parity probe ALL PARITY; smoke live
+refleks + dialog antar-sistem.
+
 ## V36 (2026-08-25) — Empat upgrade paralel (4 sub-agen)
 
 ### LLM compaction riwayat sesi panjang (sub-agen 1)

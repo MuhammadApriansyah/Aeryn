@@ -1,0 +1,22 @@
+{
+ "goal": "pakai tool ask_hermes untuk bertanya ke Hermes: apa fungsi utama hermes gateway? lalu rangkum jawabannya singkat",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "pakai tool ask_hermes untuk bertanya ke Hermes: apa fungsi utama hermes gateway?",
+   "tool_hint": "none",
+   "done_when": "langkah selesai"
+  },
+  {
+   "step": 1,
+   "desc": "lalu rangkum jawabannya singkat",
+   "tool_hint": "none",
+   "done_when": "langkah selesai"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "heuristic"
+}

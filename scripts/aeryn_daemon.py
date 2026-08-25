@@ -169,6 +169,16 @@ def _core_memory_edit(block: str, mode: str = "append", content: str = ""):
 
 TOOLS.register("core_memory_edit", _core_memory_edit, CORE_MEMORY_SCHEMA,
                tier="safe")
+# V37 P2 — ask_hermes: tangan lintas-hemisfer. Aeryn bisa minta Hermes
+# (otak kiri) mengerjakan tugas berat via CLI one-shot. Cap harian di
+# modul; tier "safe" karena efeknya di luar sandbox tapi terbatas & dicatat.
+from aeryn_core.hermes_hands import ask_hermes, ASK_HERMES_SCHEMA
+TOOLS.register("ask_hermes", ask_hermes, ASK_HERMES_SCHEMA, tier="safe")
+
+
+def _checker_ask_hermes(args, result):
+    return isinstance(result, dict) and result.get("ok") is True
+
 GATE = ToolGovernanceGate(drift_shield=SubAgentContextDriftShield())
 LEDGER = ParityLedger(TOOLS)
 SHADOW = ShadowRunner(TOOLS, LEDGER)
@@ -237,6 +247,7 @@ def _checker_fs_write(args, result):
 
 
 SHADOW.register_checker("fs_write", _checker_fs_write)
+SHADOW.register_checker("ask_hermes", _checker_ask_hermes)
 
 
 SHADOW.register_checker("core_memory_edit", _checker_core_memory_edit)
@@ -576,6 +587,15 @@ def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
     # V34 — inject core memory (selalu; ini "RAM" agent)
     try:
         system_prompt += CORE_MEM.render()
+    except Exception:
+        pass
+    # V37 P1 — refleks kontinuitas lintas-otak: Aeryn tahu apa yang baru
+    # dibicarakan majikan dengan Hermes (read-only, fail-soft).
+    try:
+        from aeryn_core.hermes_reflex import get_reflex_digest
+        reflex = get_reflex_digest()
+        if reflex:
+            system_prompt += f"\n{reflex}"
     except Exception:
         pass
     # V34 — perintah tulis-memori eksplisit → routing deterministik:

@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 """
-nightly_reflection.py — V33 Fase 2: agregasi harian episode Aeryn.
+nightly_reflection.py — V33 Fase 2 → V37: agregasi harian episode Aeryn,
+kini ORGANISM-WIDE (gabungan otak kiri Aeryn + organ Hermes sekitarnya).
 
 Deterministik, tanpa LLM. Membaca Personalisasi/Database/episodes/
 episodes.jsonl, mengagregasi aktivitas 24 jam terakhir (atau --since-hours),
-menulis laporan JSON ke nightly/, dan (opsional) menyalin ringkasan ke
-library Hermes via handoff CLI.
+menambahkan section `organism` (provider health, aktivitas library,
+pitfall count, aktivitas Hermes), menulis laporan JSON ke nightly/, menulis
+digest ke core memory Aeryn, dan (opsional) handoff ringkasan ke library.
+
+Semua pengambilan data organism bersifat FAIL-SOFT individual: satu sumber
+gagal tidak merusak laporan — field diganti "tidak tersedia".
 
 Pemakaian:
     python3 scripts/nightly_reflection.py                 # 24 jam terakhir
@@ -13,9 +18,11 @@ Pemakaian:
     python3 scripts/nightly_reflection.py --no-handoff    # tanpa sync library
 """
 import argparse
+import glob
 import json
 import os
 import re
+import sqlite3
 import sys
 import time
 from collections import Counter
@@ -24,6 +31,15 @@ EPISODES = os.path.expanduser(
     "~/aeryn-core-agent/Personalisasi/Database/episodes/episodes.jsonl")
 OUT_DIR = os.path.expanduser("~/aeryn-core-agent/Personalisasi/nightly")
 HANDOFF = os.path.expanduser("~/.hermes/scripts/handoff.py")
+
+# Sumber data organism-wide (dapat dioverride saat test via parameter fungsi)
+HEALTH_JSON = os.path.expanduser(
+    "~/aeryn-core-agent/Personalisasi/health/latest.json")
+LIBRARY_DIR = "/mnt/android/Ubuntu/hermes-memory-library"
+PITFALLS_DB = os.path.join(LIBRARY_DIR, "memory_graph.db")
+STATE_DB = os.path.expanduser("~/.hermes/state.db")
+
+UNAVAILABLE = "tidak tersedia"
 
 
 def aggregate(since_seconds: float) -> dict:
@@ -82,6 +98,144 @@ def aggregate(since_seconds: float) -> dict:
     }
 
 
+# ---------------------------------------------------------------------------
+# V37 — Section ORGANISM: refleksi gabungan otak kiri+kanan.
+# Tiap kolektor fail-soft individual dan murni-fungsi (path via parameter)
+# agar mudah dites dengan fixture tmp.
+# ---------------------------------------------------------------------------
+
+def provider_health(path: str = HEALTH_JSON) -> dict:
+    """Ringkasan health provider dari Personalisasi/health/latest.json."""
+    with open(path, encoding="utf-8") as f:
+        data = json.load(f)
+    results = data.get("results")
+    if not isinstance(results, dict) or not results:
+        raise ValueError("health.json tanpa results")
+    counts = Counter()
+    for entry in results.values():
+        if isinstance(entry, dict):
+            counts[str(entry.get("status", "UNKNOWN")).upper()] += 1
+    ok = counts.get("OK", 0)
+    total = sum(counts.values())
+    return {
+        "checked_at": data.get("generated_at"),
+        "total_providers": total,
+        "ok": ok,
+        "by_status": dict(counts),
+        "summary": f"{ok}/{total} OK",
+    }
+
+
+def library_activity(directory: str = LIBRARY_DIR,
+                     since_seconds: float = 86400.0) -> dict:
+    """Jumlah entri .md yang dimodifikasi <24 jam di library memory."""
+    if not os.path.isdir(directory):
+        raise FileNotFoundError(f"library dir tidak ada: {directory}")
+    cutoff = time.time() - since_seconds
+    recent = [p for p in glob.glob(os.path.join(directory, "**", "*.md"),
+                                   recursive=True)
+              if os.path.getmtime(p) >= cutoff]
+    return {"new_entries_24h": len(recent)}
+
+
+def pitfalls_count(db_path: str = PITFALLS_DB,
+                   since_seconds: float = 86400.0) -> dict:
+    """Total pitfall + yang ditambahkan 24 jam terakhir (baca DB langsung,
+    mode read-only — lebih murah & stabil daripada memanggil pitfalls.py)."""
+    con = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True, timeout=5)
+    try:
+        total = con.execute("SELECT COUNT(*) FROM pitfalls").fetchone()[0]
+        window = time.strftime("%Y-%m-%d %H:%M:%S",
+                               time.gmtime(time.time() - since_seconds))
+        # created_at disimpan UTC oleh SQLite default datetime('now')
+        recent = con.execute(
+            "SELECT COUNT(*) FROM pitfalls WHERE created_at >= ?",
+            (window,)).fetchone()[0]
+    finally:
+        con.close()
+    return {"total": total, "new_24h": recent}
+
+
+def hermes_activity(db_path: str = STATE_DB,
+                    since_seconds: float = 86400.0) -> dict:
+    """Aktivitas Hermes: jumlah sesi aktif <24 jam + 3 head pesan user
+    terakhir dari state.db (mode=ro)."""
+    con = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True, timeout=5)
+    try:
+        cutoff = time.time() - since_seconds
+        cols = {r[1] for r in con.execute("PRAGMA table_info(messages)")}
+        if not {"role", "timestamp", "content"} <= cols:
+            raise ValueError("skema messages tidak dikenal")
+        active = 0
+        try:
+            scols = {r[1] for r in con.execute("PRAGMA table_info(sessions)")}
+            if "last_activity_at" in scols:
+                active = con.execute(
+                    "SELECT COUNT(*) FROM sessions "
+                    "WHERE last_activity_at >= ?", (cutoff,)).fetchone()[0]
+        except sqlite3.Error:
+            pass
+        heads = []
+        for (content,) in con.execute(
+                "SELECT content FROM messages WHERE role='user' "
+                "ORDER BY id DESC LIMIT 3"):
+            head = " ".join(str(content).split())[:80]
+            heads.append(head)
+        return {"active_sessions_24h": active,
+                "recent_user_messages": heads}
+    finally:
+        con.close()
+
+
+def collect_organism(since_seconds: float = 86400.0,
+                     health_path: "str | None" = None,
+                     library_dir: "str | None" = None,
+                     pitfalls_db: "str | None" = None,
+                     state_db: "str | None" = None) -> dict:
+    """Kumpulkan semua sumber organism; satu kegagalan tidak menular."""
+    organism = {}
+    try:
+        organism["provider_health"] = provider_health(
+            health_path or HEALTH_JSON)
+    except Exception as exc:
+        organism["provider_health"] = {"status": UNAVAILABLE, "error": str(exc)}
+    try:
+        organism["library"] = library_activity(
+            library_dir or LIBRARY_DIR, since_seconds)
+    except Exception as exc:
+        organism["library"] = {"status": UNAVAILABLE, "error": str(exc)}
+    try:
+        organism["pitfalls"] = pitfalls_count(
+            pitfalls_db or PITFALLS_DB, since_seconds)
+    except Exception as exc:
+        organism["pitfalls"] = {"status": UNAVAILABLE, "error": str(exc)}
+    try:
+        organism["hermes"] = hermes_activity(state_db or STATE_DB,
+                                             since_seconds)
+    except Exception as exc:
+        organism["hermes"] = {"status": UNAVAILABLE, "error": str(exc)}
+    return organism
+
+
+def organism_digest_bits(organism: dict) -> list:
+    """Bit organik untuk digest core memory, mis. ['lib+3', 'provider 6/7 OK',
+    'pitfall+2', 'Hermes aktif 12 sesi'] — hanya bagian yang tersedia."""
+    bits = []
+    lib = organism.get("library", {})
+    if "new_entries_24h" in lib:
+        bits.append(f"lib+{lib['new_entries_24h']}")
+    ph = organism.get("provider_health", {})
+    if "summary" in ph:
+        bits.append(f"provider {ph['summary']}")
+    pf = organism.get("pitfalls", {})
+    if "new_24h" in pf:
+        bits.append(f"pitfall+{pf['new_24h']} (total {pf['total']})")
+    hm = organism.get("hermes", {})
+    if "active_sessions_24h" in hm:
+        bits.append(f"Hermes aktif {hm['active_sessions_24h']} sesi")
+    return bits
+
+
 def write_report(report: dict) -> str:
     os.makedirs(OUT_DIR, exist_ok=True)
     path = os.path.join(OUT_DIR, f"{time.strftime('%Y%m%d')}.json")
@@ -102,7 +256,30 @@ def handoff_summary(report: dict) -> str:
     if report["top_tools"]:
         tt = ", ".join(f"{k}x{v}" for k, v in list(report["top_tools"].items())[:3])
         parts.append(f"tools: {tt}")
+    org_bits = organism_digest_bits(report.get("organism", {}))
+    if org_bits:
+        parts.append("; ".join(org_bits))
     return ". ".join(parts)
+
+
+def core_memory_digest(report: dict) -> str:
+    """Satu baris digest organik untuk core memory, mis:
+    'Refleksi 2026-08-25: 232 run 81% sukses; lib+3; provider 6/7 OK;
+    pitfall+2 (total 8); Hermes aktif 12 sesi'"""
+    digest = f"Refleksi {report['generated_at'][:10]}: "
+    if report["runs"]:
+        digest += (f"{report['runs']} run, "
+                   f"{report['success_rate_pct']}% sukses")
+        if report["top_tools"]:
+            tt = ", ".join(f"{k}x{v}" for k, v in
+                           list(report["top_tools"].items())[:3])
+            digest += f"; tool teratas: {tt}"
+    else:
+        digest += "tidak ada run"
+    org_bits = organism_digest_bits(report.get("organism", {}))
+    if org_bits:
+        digest += "; " + "; ".join(org_bits)
+    return digest
 
 
 def main():
@@ -111,32 +288,28 @@ def main():
     ap.add_argument("--no-handoff", action="store_true")
     args = ap.parse_args()
 
-    report = aggregate(args.since_hours * 3600)
+    since_seconds = args.since_hours * 3600
+    report = aggregate(since_seconds)
+    report["organism"] = collect_organism(since_seconds)
     path = write_report(report)
     summary = handoff_summary(report)
 
     # V35 INFRA-2 — tulis digest harian ke core memory Aeryn (block
     # 'context'): tiap pagi dia "bangun" tahu kondisi dirinya sendiri.
+    # V37 — digest kini menyertakan bit organik organism-wide.
+    digest_note = None
     try:
         sys.path.insert(0, os.path.dirname(os.path.dirname(
             os.path.abspath(__file__))))
         from aeryn_core.core_memory import CoreMemory
         cm = CoreMemory()
-        digest = f"Refleksi {report['generated_at'][:10]}: "
-        if report["runs"]:
-            digest += (f"{report['runs']} run, "
-                       f"{report['success_rate_pct']}% sukses")
-            if report["top_tools"]:
-                tt = ", ".join(f"{k}x{v}" for k, v in
-                               list(report["top_tools"].items())[:3])
-                digest += f"; tool teratas: {tt}"
-        else:
-            digest += "tidak ada run"
+        digest = core_memory_digest(report)
         cm.edit("context", "replace",
-                re.sub(r"\nRefleksi \d{4}-\d{2}-\d{2}:.*$", "",
-                       cm.raw()["context"]) + "\n" + digest)
+                re.sub(r"\nRefleksi \d{4}-\d{2}-\d{2}:.*$",
+                       "", cm.raw()["context"]) + "\n" + digest)
+        digest_note = digest
     except Exception as exc:
-        summary_note = f"(core-memory digest gagal: {exc})"
+        digest_note = f"(core-memory digest gagal: {exc})"
 
     if summary and not args.no_handoff and os.path.exists(HANDOFF):
         import subprocess
@@ -146,7 +319,8 @@ def main():
 
     print(json.dumps({"report": path, "summary": summary or
                       ("tidak ada run dalam window (tetap dicatat, "
-                       "handoff dilewati)")}, ensure_ascii=False))
+                       "handoff dilewati)"), "digest": digest_note},
+                     ensure_ascii=False))
 
 
 if __name__ == "__main__":
