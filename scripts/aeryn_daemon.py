@@ -553,11 +553,19 @@ def _run_steps(req: AgentRunReq):
                     {"role": "user", "content": req.goal}]
         trace = []
         import time as _time
-        deadline = _time.time() + req.max_wall_seconds
+        t_start = _time.time()
+        deadline = t_start + req.max_wall_seconds
 
         def _finish(answer=None, error=None, timed_out=False, iterations=0,
                     truncated=False):
-            """Satu pintu keluar: record episode + refleksi."""
+            """Satu pintu keluar: record episode + refleksi + statistik."""
+            # V33 Fase 2 — observability
+            RUN_STATS["runs"] += 1
+            RUN_STATS["wall_seconds_total"] += round(_time.time() - t_start, 3)
+            if error:
+                RUN_STATS["errors"] += 1
+            if timed_out:
+                RUN_STATS["timeouts"] += 1
             MEMORY.record(req.session_id, req.goal,
                           plan.get("source", "unknown"), trace,
                           answer=answer, error=error, timed_out=timed_out)
@@ -661,6 +669,53 @@ def _run_steps(req: AgentRunReq):
 
         out = _finish(iterations=req.max_iterations, truncated=True)
         yield {"event": "truncated", "data": out}
+
+
+# ── V33 Fase 2 — observability & self-maintenance ────────────────────
+import os
+import threading
+
+RUN_STATS = {"runs": 0, "errors": 0, "timeouts": 0,
+             "wall_seconds_total": 0.0, "started_at": time.time()}
+
+
+@app.get("/metrics")
+def metrics():
+    """Satu endpoint untuk kesehatan operasional: statistik run + per-tool."""
+    tools = {name: {"tier": t["tier"], "status": t["status"],
+                    "success": t["success"], "fail": t["fail"]}
+             for name, t in TOOLS.tools.items()}
+    return {"uptime_s": int(time.time() - RUN_STATS["started_at"]),
+            "runs": {k: v for k, v in RUN_STATS.items() if k != "started_at"},
+            "tools": tools}
+
+
+_NIGHTLY_HOUR_UTC = 20   # 03:00 WIB = 20:00 UTC sebelumnya
+_NIGHTLY_MINUTE_UTC = 5  # offset kecil agar tidak bertepatan cron lain
+
+
+def _nightly_loop():
+    """Fire nightly_reflection sekali sehari pada jam lokal Sen."""
+    import datetime
+    import subprocess
+    script = os.path.expanduser(
+        "~/aeryn-core-agent/scripts/nightly_reflection.py")
+    while True:
+        now = datetime.datetime.utcnow()
+        target = now.replace(hour=_NIGHTLY_HOUR_UTC,
+                             minute=_NIGHTLY_MINUTE_UTC,
+                             second=0, microsecond=0)
+        if target <= now:
+            target += datetime.timedelta(days=1)
+        time.sleep(max(60.0, (target - now).total_seconds()))
+        try:
+            subprocess.run([sys.executable, script], timeout=600,
+                           capture_output=True, text=True)
+        except Exception as exc:  # jangan matikan daemon karena refleksi
+            print(f"[nightly] gagal: {exc}", flush=True)
+
+
+threading.Thread(target=_nightly_loop, daemon=True).start()
 
 
 if __name__ == "__main__":

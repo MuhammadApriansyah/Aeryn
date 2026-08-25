@@ -1,5 +1,16 @@
 # Changelog — Aeryn-Core
 
+## V33-Fase2 (2026-08-25) — Observability & Self-Maintenance
+
+- **`GET /metrics`** baru: uptime, statistik run (jumlah/error/timeout/wall
+  time) ter-instrument di `_finish()`, plus status/success/fail per-tool.
+- **`scripts/nightly_reflection.py`**: agregasi harian episode 24 jam —
+  deterministik tanpa LLM (runs, success rate, top tools, error samples,
+  pelajaran). Report JSON di `Personalisasi/nightly/YYYYMMDD.json`,
+  ringkasan otomatis ke library Hermes via handoff.
+- **Scheduler in-daemon**: thread daemon fire nightly tiap hari 03:00 WIB
+  (20:05 UTC), fail-soft — refleksi gagal tidak mematikan daemon.
+
 ## V33 (2026-08-25) — Social Intelligence + Shared Brain
 
 ### Deteksi Sosial (F1)

@@ -1,0 +1,29 @@
+{
+ "goal": "halo",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Cari definisi kata 'halo'",
+   "tool_hint": "web_search|none",
+   "done_when": "ditemukan definisi"
+  },
+  {
+   "step": 1,
+   "desc": "Cari contoh penggunaan kata 'halo'",
+   "tool_hint": "web_search|none",
+   "done_when": "ditemukan contoh"
+  },
+  {
+   "step": 2,
+   "desc": "Cari arti kata 'halo' dalam bahasa Indonesia",
+   "tool_hint": "dictionary|none",
+   "done_when": "ditemukan arti"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

@@ -16,17 +16,17 @@
  },
  "memory_search": {
   "status": "shadowing",
-  "success": 9,
+  "success": 12,
   "fail": 0
  },
  "graph_traverse": {
   "status": "shadowing",
-  "success": 5,
+  "success": 6,
   "fail": 0
  },
  "pitfall_search": {
   "status": "shadowing",
-  "success": 5,
+  "success": 6,
   "fail": 0
  }
 }

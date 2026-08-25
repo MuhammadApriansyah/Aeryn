@@ -1,0 +1,26 @@
+{
+ "generated_at": "2026-08-25T14:12:48Z",
+ "window_hours": 24.0,
+ "runs": 201,
+ "errors": 35,
+ "timeouts": 0,
+ "success_rate_pct": 82.6,
+ "unique_sessions": 29,
+ "top_tools": {
+  "web_search": 132,
+  "fs_read": 108,
+  "terminal": 66,
+  "http_get": 32,
+  "response": 5
+ },
+ "error_samples": [
+  "LLM provider HTTP 500 (semua model fallback habis)"
+ ],
+ "lessons_sample": [
+  "model cenderung multi-call: ingatkan satu tool per giliran lebih tegas",
+  "goal terjawab tanpa tool",
+  "goal terjawab tanpa tool",
+  "goal terjawab tanpa tool",
+  "goal terjawab tanpa tool"
+ ]
+}
