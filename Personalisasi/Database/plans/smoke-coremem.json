@@ -1,0 +1,29 @@
+{
+ "goal": "apa nama lengkap majikanmu dan apa yang kamu ingat tentang preferensi dia?",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Cari informasi tentang majikanmu",
+   "tool_hint": "web_search|none",
+   "done_when": "menemukan nama lengkap majikanmu"
+  },
+  {
+   "step": 1,
+   "desc": "Baca catatan tentang preferensi majikanmu",
+   "tool_hint": "fs_read|none",
+   "done_when": "menemukan preferensi yang relevan"
+  },
+  {
+   "step": 2,
+   "desc": "Periksa apakah preferensi majikanmu sudah sesuai dengan yang kamu ingat",
+   "tool_hint": "memory_check|none",
+   "done_when": "preferensi sesuai atau tidak sesuai"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

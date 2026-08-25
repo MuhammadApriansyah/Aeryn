@@ -1,0 +1,50 @@
+{
+ "goal": "ingat ini: proyek baru namanya nebula-dash, stack svelte+go",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Cari informasi tentang proyek nebula-dash",
+   "tool_hint": "web_search|none",
+   "done_when": "menemukan informasi tentang proyek nebula-dash"
+  },
+  {
+   "step": 1,
+   "desc": "Cari contoh proyek yang menggunakan stack svelte+go",
+   "tool_hint": "web_search|none",
+   "done_when": "menemukan contoh proyek yang menggunakan stack svelte+go"
+  },
+  {
+   "step": 2,
+   "desc": "Buat folder baru untuk proyek nebula-dash",
+   "tool_hint": "fs_create_dir|none",
+   "done_when": "folder baru dibuat"
+  },
+  {
+   "step": 3,
+   "desc": "Instal dependencies svelte dan go",
+   "tool_hint": "fs_read|npm_install|go_get|none",
+   "done_when": "dependencies terinstal"
+  },
+  {
+   "step": 4,
+   "desc": "Buat struktur folder untuk proyek nebula-dash",
+   "tool_hint": "fs_create_dir|none",
+   "done_when": "struktur folder selesai"
+  },
+  {
+   "step": 5,
+   "desc": "Mulai membuat kode untuk proyek nebula-dash",
+   "tool_hint": "fs_write|none",
+   "done_when": "kode awal dibuat"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending",
+  "pending",
+  "pending",
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

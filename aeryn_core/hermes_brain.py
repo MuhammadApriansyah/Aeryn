@@ -123,3 +123,17 @@ def register(registry):
     registry.register("graph_traverse", _graph_traverse, GRAPH_TRAVERSE_SCHEMA)
     registry.register("pitfall_search", _pitfall_search, PITFALL_SEARCH_SCHEMA)
     return registry
+
+
+CORE_MEMORY_SCHEMA = {
+    "type": "function", "function": {"name": "core_memory_edit",
+    "description": ("Edit memori intimu sendiri (selalu ada di konteks). "
+                    "block 'human' = fakta tentang user; block 'context' = "
+                    "fakta proyek/sistem. mode 'replace' timpa seluruh blok, "
+                    "'append' menambah di akhir. Panggil saat ada fakta baru "
+                    "yang penting untuk sesi berikutnya."),
+    "parameters": {"type": "object", "properties": {
+        "block": {"type": "string", "enum": ["human", "context"]},
+        "mode": {"type": "string", "enum": ["replace", "append"]},
+        "content": {"type": "string"}},
+        "required": ["block", "mode", "content"]}}}

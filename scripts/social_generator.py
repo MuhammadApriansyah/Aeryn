@@ -119,6 +119,11 @@ def _is_social_query(message: str) -> bool:
     if not msg:
         return False
 
+    # ── 0. Perintah eksplisit menulis memori → BUKAN sosial ──
+    if msg.startswith(("ingat ini", "ingat:", "catat ini", "catat:",
+                       "remember this", "tolong ingat")):
+        return False
+
     # ── 1. Tech indicators → NOT social (positif menang duluan) ──
     tech_indicators = [
         ".txt", ".md", ".py", ".json", ".yaml", ".toml", ".csv", ".js",

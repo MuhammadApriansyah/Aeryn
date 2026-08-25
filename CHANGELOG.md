@@ -1,5 +1,31 @@
 # Changelog — Aeryn-Core
 
+## V34 (2026-08-25) — Core Memory + Temporal Validity
+
+Pola diadopsi dari riset arsitektur kelas dunia (Letta/MemGPT, Graphiti).
+
+### Core Memory Blocks (Letta pattern)
+- `aeryn_core/core_memory.py`: blok `<human>`/`<context>` ber-char-limit
+  yang SELALU di-inject ke system prompt — "RAM" si agent.
+- Tool `core_memory_edit` (tier safe): Aeryn mengelola isi memorinya
+  sendiri via replace/append. Seed awal: profil Sen + konteks proyek.
+- Endpoint `/agent/remember` AKHIRNYA ADA — sebelumnya dipanggil discord
+  gateway tapi 404 diam-diam tertelan try/except (bug V32 lama).
+- Smoke E2E: Aeryn mengingat fakta lintas sesi & menambah fakta baru ke
+  blok context secara mandiri saat diberi perintah "ingat ini: ...".
+
+### Klasifikasi
+- Perintah tulis-memori ("ingat ini:", "catat:") tidak lagi masuk jalur
+  sosial — bug ketemu langsung di smoke test.
+
+### Temporal validity (Graphiti pattern, sisi Hermes)
+- `memory_library.py supersede <old> <new> --reason`: entry lama dapat
+  frontmatter `superseded_by/at/reason`, signal turun low, score ×0.25,
+  dan hasil search menampilkan tanda "⚠️ SUDAH DIGANTIKAN".
+- Entry aeryn-core lama sudah ditandai digantikan aeryn-core-v30-plus.
+
+Verifikasi: 220 → 221 test green; live smoke core-memory roundtrip.
+
 ## V33-T (2026-08-25) — Web Reading & Hardening
 
 - **Tool `web_read(url)`** via trafilatura: ekstraksi teks artikel bersih

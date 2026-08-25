@@ -1,0 +1,50 @@
+{
+ "goal": "ingat ini: proyek baru namanya nebula-dash, stack svelte+go",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Cari informasi tentang proyek nebula-dash",
+   "tool_hint": "web_search|http_get|fs_read|none",
+   "done_when": "temukan informasi tentang proyek nebula-dash"
+  },
+  {
+   "step": 1,
+   "desc": "Cari contoh proyek Svelte",
+   "tool_hint": "web_search|http_get|fs_read|none",
+   "done_when": "temukan contoh proyek Svelte yang berhasil"
+  },
+  {
+   "step": 2,
+   "desc": "Cari contoh proyek Go",
+   "tool_hint": "web_search|http_get|fs_read|none",
+   "done_when": "temukan contoh proyek Go yang berhasil"
+  },
+  {
+   "step": 3,
+   "desc": "Cari tutorial mengenai Svelte dan Go",
+   "tool_hint": "web_search|http_get|fs_read|none",
+   "done_when": "temukan tutorial yang menjelaskan bagaimana mengintegrasikan Svelte dan Go"
+  },
+  {
+   "step": 4,
+   "desc": "Buat struktur direktori untuk proyek nebula-dash",
+   "tool_hint": "fs_write|fs_create",
+   "done_when": "struktur direktori dibuat"
+  },
+  {
+   "step": 5,
+   "desc": "Buat file `main.go` untuk proyek nebula-dash",
+   "tool_hint": "fs_write|fs_create",
+   "done_when": "file `main.go` dibuat"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending",
+  "pending",
+  "pending",
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

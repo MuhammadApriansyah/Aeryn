@@ -112,6 +112,36 @@
    "fakta": [],
    "preferensi": {},
    "last_seen": 1787668251.7334054
+  },
+  "testuser42": {
+   "nama": "SenTest",
+   "relasi": "kenalan",
+   "fakta": [
+    "Suka kopi sambil ngoding malam"
+   ],
+   "preferensi": {},
+   "last_seen": 1787671764.3644297
+  },
+  "smoke-coremem": {
+   "nama": "smoke-coremem",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787671791.6237473
+  },
+  "smoke-coremem2": {
+   "nama": "smoke-coremem2",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787671797.0317714
+  },
+  "smoke-coremem3": {
+   "nama": "smoke-coremem3",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787671927.9428165
   }
  },
  "channels": {

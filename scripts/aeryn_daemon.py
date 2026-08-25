@@ -156,6 +156,19 @@ TOOLS.register("terminal", make_terminal(["~/aeryn-core-agent", "~/webnovel-plat
 # read-only): library RAG + knowledge graph + pitfalls. Satu otak, dua agen.
 from aeryn_core.hermes_brain import register as register_hermes_brain
 register_hermes_brain(TOOLS)
+# V34 — CoreMemory ala Letta: blok human/context selalu di prompt,
+# agent edit sendiri via tool core_memory_edit.
+from aeryn_core.core_memory import CoreMemory
+from aeryn_core.hermes_brain import CORE_MEMORY_SCHEMA
+CORE_MEM = CoreMemory()
+
+
+def _core_memory_edit(block: str, mode: str = "append", content: str = ""):
+    return CORE_MEM.edit(block, mode, content)
+
+
+TOOLS.register("core_memory_edit", _core_memory_edit, CORE_MEMORY_SCHEMA,
+               tier="safe")
 GATE = ToolGovernanceGate(drift_shield=SubAgentContextDriftShield())
 LEDGER = ParityLedger(TOOLS)
 SHADOW = ShadowRunner(TOOLS, LEDGER)
@@ -212,6 +225,12 @@ def _checker_pitfall_search(args, result):
 SHADOW.register_checker("fs_read", _checker_fs_read)
 SHADOW.register_checker("web_search", _checker_web_search)
 SHADOW.register_checker("web_read", _checker_web_read)
+# V34 — core_memory_edit: sukses = dict ok:True dari CoreMemory.edit
+def _checker_core_memory_edit(args, result):
+    return isinstance(result, dict) and result.get("ok") is True
+
+
+SHADOW.register_checker("core_memory_edit", _checker_core_memory_edit)
 # V33 Shared Brain — parity checkers + auto-promote setelah 5x konsisten
 SHADOW.register_checker("memory_search", _checker_memory_search)
 SHADOW.register_checker("graph_traverse", _checker_graph_traverse)
@@ -236,6 +255,12 @@ def _is_social_query(goal: str) -> bool:
     """
     msg = goal.lower().strip()
     if not msg:
+        return False
+
+    # ── 0. Perintah eksplisit menulis memori → BUKAN sosial ──
+    # "ingat ini: X", "catat: Y" adalah instruksi simpan fakta.
+    if msg.startswith(("ingat ini", "ingat:", "catat ini", "catat:",
+                       "remember this", "tolong ingat")):
         return False
 
     # ── 1. Sinyal teknis positif → pasti bukan sosial ──
@@ -451,6 +476,28 @@ def promote_tool(name: str, status: str):
     return {"tool": name, "status": status}
 
 
+class RememberReq(BaseModel):
+    session_id: str
+    fact: str
+    nama: str = ""
+    relation: str = ""
+
+
+@app.post("/agent/remember")
+def agent_remember(req: RememberReq):
+    """V34 — simpan fakta user ke social memory (dipakai discord gateway).
+
+    Sekalian dicatat ke core memory blok human (ringkas).
+    """
+    SOCIAL.add_fact(req.session_id, req.fact, req.nama or req.session_id)
+    if req.relation:
+        SOCIAL.set_relation(req.session_id, req.relation,
+                            req.nama or req.session_id)
+    CORE_MEM.edit("human", "append",
+                  f"{req.nama or req.session_id}: {req.fact}"[:200])
+    return {"ok": True}
+
+
 @app.post("/agent/run")
 def agent_run(req: AgentRunReq):
     """Loop LLM→tool→observasi dengan konteks kognitif aeryn di system prompt."""
@@ -504,6 +551,11 @@ def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
                     system_prompt += f"\n{person_block}"
         else:
             system_prompt += "\n" + SOCIAL.person_block(req.session_id)
+    except Exception:
+        pass
+    # V34 — inject core memory (selalu; ini "RAM" agent)
+    try:
+        system_prompt += CORE_MEM.render()
     except Exception:
         pass
     plan = make_plan(MODEL_, req.goal, req.session_id)
