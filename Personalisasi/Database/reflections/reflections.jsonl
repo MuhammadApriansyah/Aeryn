@@ -313,3 +313,5 @@
 {"ts": 1787699558.7438626, "goal": "baca file Cargo.toml di root proyek dan sebutkan nama paketnya", "ok": true, "findings": [], "recommendations": [], "strategy": "", "stats": {"subgoals": 2, "tool_calls": 1, "errors": 0}}
 {"ts": 1787701575.1428826, "goal": "ingat ini: probe-parity fakta uji", "ok": true, "findings": [], "recommendations": [], "strategy": "", "stats": {"subgoals": 1, "tool_calls": 1, "errors": 0}}
 {"ts": 1787701598.556611, "goal": "halo", "ok": true, "findings": ["plan meminta tool tapi model jawab langsung — kemungkinan halusinasi atau goal terlalu mudah"], "recommendations": [], "strategy": "", "stats": {"subgoals": 1, "tool_calls": 0, "errors": 0}}
+{"ts": 1787702164.4398875, "goal": "ingat ini: probe-parity fakta uji", "ok": true, "findings": [], "recommendations": [], "strategy": "", "stats": {"subgoals": 1, "tool_calls": 1, "errors": 0}}
+{"ts": 1787702176.684382, "goal": "halo", "ok": true, "findings": ["plan meminta tool tapi model jawab langsung — kemungkinan halusinasi atau goal terlalu mudah"], "recommendations": [], "strategy": "", "stats": {"subgoals": 1, "tool_calls": 0, "errors": 0}}

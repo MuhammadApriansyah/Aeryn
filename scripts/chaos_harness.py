@@ -130,4 +130,9 @@ def main():
 
 
 if __name__ == "__main__":
+    # V38.6 INTERLOCK — chaos harness merusak tool sengaja; wajib opt-in
+    if os.environ.get("AERYN_CHAOS_ALLOWED") != "1":
+        print("[chaos] DITOLAK: set AERYN_CHAOS_ALLOWED=1 untuk menjalankan "
+              "fault injection (jangan di produksi).")
+        sys.exit(1)
     main()

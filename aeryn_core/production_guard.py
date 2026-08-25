@@ -86,8 +86,19 @@ _INSTRUCTION_OVERRIDE_MARKERS = (
 
 
 def sanitize_goal_for_sop(goal: str) -> str:
-    """Bersihkan goal dari percobaan menimpa SOP (fail-safe: potong)."""
+    """Bersihkan goal dari percobaan menimpa SOP (fail-safe: potong).
+
+    V38.6 — normalisasi unicode dulu: homoglyph (і Cyrillic) dan
+    fullwidth (ＩＧＮＯＲＥ) dipetakan ke ASCII sebelum pencocokan marker,
+    supaya bypass visual tidak lolos."""
     text = str(goal)
+    # normalisasi NFKC: fullwidth → ASCII; lalu homoglyph umum → latin
+    import unicodedata as _ud
+    text = _ud.normalize("NFKC", text)
+    _HOMOGLYPHS = {"і": "i", "ѕ": "s", "а": "a", "е": "e", "о": "o",
+                   "р": "p", "х": "x", "с": "c", "у": "y", "ⅰ": "i",
+                   "０": "0", "１": "1"}
+    text = "".join(_HOMOGLYPHS.get(ch, ch) for ch in text)
     low = text.lower()
     cut = len(text)
     for m in _INSTRUCTION_OVERRIDE_MARKERS:

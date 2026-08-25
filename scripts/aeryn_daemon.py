@@ -518,8 +518,10 @@ class AgentRunReq(BaseModel):
 
 
 # V38 — rate limiter per-session di daemon (anti flood HTTP lokal/gateway)
+# V38.6 — + GLOBAL limiter: rotasi session_id tidak lagi mem-bypass
 from aeryn_core.production_guard import RateLimiter, validate_run_payload
 _RUN_LIMITER = RateLimiter(max_requests=20, window_seconds=60)
+_GLOBAL_LIMITER = RateLimiter(max_requests=120, window_seconds=60)
 
 
 @app.get("/tools")
@@ -596,6 +598,10 @@ def agent_run(req: AgentRunReq):
     if not _RUN_LIMITER.allow(req.session_id):
         raise HTTPException(status_code=429,
                             detail="rate limit: maks 20 run/menit per sesi")
+    if not _GLOBAL_LIMITER.allow("daemon"):
+        raise HTTPException(status_code=429,
+                            detail="rate limit global: server sibuk, coba "
+                                   "beberapa saat lagi")
     events = list(_run_steps(req))          # drain generator
     final = events[-1] if events else {}
     return final.get("data", {"error": "no events"})

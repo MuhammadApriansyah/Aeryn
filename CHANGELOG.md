@@ -1,5 +1,27 @@
 # Changelog — Aeryn-Core
 
+## V38.6 (2026-08-25) — Fine-tuning via 7 metode: 5 celah baru ditutup
+
+Menerapkan metodologi V39 secara penuh (probe per metode) → 5 temuan:
+
+1. **Unicode/homoglyph bypass SOP** — "іgnore" (і Cyrillic) dan
+   "ＩＧＮＯＲＥ" (fullwidth) lolos dari marker. Fix: normalisasi NFKC +
+   pemetaan homoglyph di sanitize_goal_for_sop.
+2. **Rate limit bypass via rotasi session_id** — limiter per-sesi bisa
+   dihindari dgn ganti ID. Fix: GLOBAL limiter 120 run/menit di daemon.
+3. **web_search query tak dibatasi** — query 5000 char dieksekusi.
+   Fix: cap 400 char.
+4. **chaos_harness tanpa interlock** — fault injection bisa jalan di
+   produksi tanpa sengaja! Fix: wajib env AERYN_CHAOS_ALLOWED=1.
+5. **social memory tanpa cap people** — pertumbuhan tak terbatas.
+   Fix: MAX_PEOPLE=500, evict last_seen terlama.
+
+Metode baru terkonfirmasi efektif: unicode-normalization testing,
+rate-limit bypass probe, resource-exhaustion audit, safety-interlock
+review, unbounded-growth check → ditambahkan ke methodology doc.
+
+Verifikasi: 377 → **383 tests green**; re-probe semua vektor tertutup.
+
 ## V39 (2026-08-25) — Metodologi fine-tuning + chaos + canary
 
 ### Riset & dokumentasi

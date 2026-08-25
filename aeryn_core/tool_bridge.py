@@ -91,7 +91,12 @@ def _web_search(query: str, max_results: int = 5):
 
     Bing return redirect link (bing.com/ck/a?...u=a1<base64>) — decode
     base64 di param u untuk dapat URL asli.
+    V38.6 — cap query 400 char (query ekstrem = biaya + hasil sampah).
     """
+    if not isinstance(query, str) or not query.strip():
+        return {"results": [], "note": "query kosong"}
+    if len(query) > 400:
+        return {"error": f"query terlalu panjang ({len(query)} > 400)"}
     url = ("https://www.bing.com/search?q=" +
            urllib.parse.quote(query) + "&count=" + str(max_results + 2))
     req = urllib.request.Request(url, headers={

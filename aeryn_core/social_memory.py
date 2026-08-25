@@ -35,6 +35,8 @@ MAX_FAKTA_PER_ORANG = 20
 
 
 class SocialMemory:
+    MAX_PEOPLE = 500  # V38.6 — cap kenalan (anti unbounded growth)
+
     def __init__(self, path: str = None):
         self.path = path or DEFAULT_PATH
         self._data = {"people": {}, "channels": {}}
@@ -92,7 +94,13 @@ class SocialMemory:
         return not any(m in low for m in cls._TEST_KEY_MARKERS)
 
     def touch_person(self, key: str, nama: str = "") -> dict:
-        p = self._data["people"].setdefault(
+        # V38.6 — cap jumlah people (anti unbounded growth)
+        people = self._data["people"]
+        if key not in people and len(people) >= self.MAX_PEOPLE:
+            # buang yang paling lama tidak terlihat
+            oldest = min(people, key=lambda k: people[k].get("last_seen", 0))
+            del people[oldest]
+        p = people.setdefault(
             key, {"nama": nama or key, "relasi": "", "fakta": [],
                   "preferensi": {}, "last_seen": 0})
         if nama and not p.get("nama"):
