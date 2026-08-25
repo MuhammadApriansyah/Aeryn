@@ -294,6 +294,16 @@ def main():
     path = write_report(report)
     summary = handoff_summary(report)
 
+    # V38 — rotasi data file besar (anti disk exhaustion) sebelum handoff
+    try:
+        from aeryn_core.production_guard import rotate_all_data_files
+        rot = rotate_all_data_files()
+        rotated = [k for k, v in rot.items() if v]
+        if rotated:
+            summary = (summary or "") + f" | rotasi: {','.join(rotated)}"
+    except Exception:
+        pass
+
     # V35 INFRA-2 — tulis digest harian ke core memory Aeryn (block
     # 'context'): tiap pagi dia "bangun" tahu kondisi dirinya sendiri.
     # V37 — digest kini menyertakan bit organik organism-wide.

@@ -1,14 +1,14 @@
 {
- "generated_at": "2026-08-25T20:05:41Z",
+ "generated_at": "2026-08-25T21:17:54Z",
  "window_hours": 24.0,
- "runs": 262,
- "errors": 44,
+ "runs": 264,
+ "errors": 43,
  "timeouts": 0,
- "success_rate_pct": 83.2,
- "unique_sessions": 49,
+ "success_rate_pct": 83.7,
+ "unique_sessions": 45,
  "top_tools": {
-  "web_search": 146,
-  "fs_read": 106,
+  "web_search": 143,
+  "fs_read": 100,
   "terminal": 69,
   "http_get": 32,
   "memory_search": 21
@@ -17,7 +17,7 @@
   "LLM provider HTTP 500 (semua model fallback habis)"
  ],
  "lessons_sample": [
-  "model cenderung multi-call: ingatkan satu tool per giliran lebih tegas",
+  "goal terjawab tanpa tool",
   "goal terjawab tanpa tool",
   "goal terjawab tanpa tool",
   "goal terjawab tanpa tool",
@@ -36,18 +36,18 @@
    "summary": "5/9 OK"
   },
   "library": {
-   "new_entries_24h": 29
+   "new_entries_24h": 34
   },
   "pitfalls": {
    "total": 8,
    "new_24h": 8
   },
   "hermes": {
-   "active_sessions_24h": 23,
+   "active_sessions_24h": 20,
    "recent_user_messages": [
-    "[Your active task list was preserved across context compression] - [>] 5. Fase 4",
-    "[System: Your previous tool call (write_file) was too large and the stream timed",
-    "oke sudah baik dan berjalan lancar. kamu dapat lanjut ke fase 4 dengan mode full"
+    "kalau begitu lakukan fine tuning secara menyeluruh ke setiap sudut dan cari cela",
+    "kelebihan yang tidak perlu adalah tombol cari pada bagian navbar. sedangkan fitu",
+    "artinya?"
    ]
   }
  }

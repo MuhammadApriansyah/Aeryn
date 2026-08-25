@@ -481,6 +481,11 @@ class AgentRunReq(BaseModel):
     critic: bool = False  # V27.6: critic pass sebelum jawaban final (goal kompleks)
 
 
+# V38 — rate limiter per-session di daemon (anti flood HTTP lokal/gateway)
+from aeryn_core.production_guard import RateLimiter, validate_run_payload
+_RUN_LIMITER = RateLimiter(max_requests=20, window_seconds=60)
+
+
 @app.get("/tools")
 def list_tools():
     return {name: {"tier": t["tier"], "status": t["status"],
@@ -542,6 +547,13 @@ def agent_remember(req: RememberReq):
 @app.post("/agent/run")
 def agent_run(req: AgentRunReq):
     """Loop LLM→tool→observasi dengan konteks kognitif aeryn di system prompt."""
+    # V38 — produksi guard: rate limit per-session + validasi payload
+    ok, reason = validate_run_payload(req.goal, req.session_id)
+    if not ok:
+        raise HTTPException(status_code=422, detail=reason)
+    if not _RUN_LIMITER.allow(req.session_id):
+        raise HTTPException(status_code=429,
+                            detail="rate limit: maks 20 run/menit per sesi")
     events = list(_run_steps(req))          # drain generator
     final = events[-1] if events else {}
     return final.get("data", {"error": "no events"})

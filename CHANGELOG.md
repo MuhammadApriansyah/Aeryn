@@ -1,5 +1,30 @@
 # Changelog — Aeryn-Core
 
+## V38 (2026-08-25) — Production hardening & audit menyeluruh
+
+Audit tingkat produksi (6 permukaan). Semua diperbaiki + regresi permanen:
+
+### Rate limiting berlapis
+- Daemon: maks 20 run/menit per sesi (HTTP 429 bila lewat).
+- Gateway Discord: 10 pesan/menit per user + balasan ramah.
+- Live: request ke-21 berturut → 429 ✅.
+
+### Input validation
+- goal ≤4000 char, session_id ≤64 char, wajib non-kosong (422).
+- Live: payload 4500 char → HTTP 422 ✅.
+
+### Disk exhaustion guard
+- `rotate_all_data_files()`: JSONL >5MB dirotasi (tail 2000 baris disimpan,
+  maks 3 arsip, sisanya dibuang). Terpasang di nightly reflection.
+
+### Injection awareness
+- Marker deteksi prompt-injection ("ignore previous instructions" dll)
+  + `wrap_untrusted()` pembatas konten eksternal untuk dipakai tool
+  berikutnya.
+
+Verifikasi: 338 → **346 tests green**; parity ALL PARITY; daemon+gateway
+restart sehat; nightly+rotasi jalan tanpa error.
+
 ## V37.5 (2026-08-25) — SecurityKernel: defense in depth
 
 Permintaan Sen: keamanan tingkat tertinggi, keketatan berlapis. Dibangun

@@ -29,6 +29,7 @@ from discord.ext import commands
 
 BASE_DIR = os.path.expanduser("~/aeryn-core-agent")
 sys.path.insert(0, BASE_DIR)
+sys.path.insert(0, os.path.join(BASE_DIR, "scripts"))  # V38 — utk production_guard
 
 
 def _env(key: str, default: str = "") -> str:
@@ -170,6 +171,18 @@ async def on_message(message: discord.Message):
             print(f"[aeryn-gw] TOLAK pesan dari user tak-diizinkan "
                   f"{message.author} ({author_id})", flush=True)
             return
+
+    # V38 — rate limit per-user (anti flood): 10 pesan/menit
+    global _GW_LIMITER
+    try:
+        _GW_LIMITER
+    except NameError:
+        from aeryn_core.production_guard import RateLimiter as _RL
+        _GW_LIMITER = _RL(max_requests=10, window_seconds=60)
+    if not _GW_LIMITER.allow(str(message.author.id)):
+        await message.reply("Eits, pelan-pelan~ maksimal 10 pesan/menit 😅",
+                            mention_author=False)
+        return
 
     # V36 — Parity Hermes: session per thread/reply.
     # Thread -> pakai id thread; channel/DM biasa (termasuk reply tanpa

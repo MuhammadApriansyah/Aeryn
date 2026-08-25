@@ -1,0 +1,15 @@
+{
+ "goal": "x",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Klarifikasi goal 'x' kepada pengguna karena tidak spesifik dan tidak dapat dieksekusi",
+   "tool_hint": "none",
+   "done_when": "Pengguna memberikan deskripsi goal yang jelas dan konkret"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}
