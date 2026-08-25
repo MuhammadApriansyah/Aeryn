@@ -159,6 +159,18 @@ async def on_message(message: discord.Message):
         await message.reply("Sebutkan goal-nya — misal: `baca Cargo.toml sebutkan versinya`")
         return
 
+    # V37.4-SEC — ALLOWLIST user: hanya majikan yang boleh memerintah Aeryn.
+    # Dulu SIAPA PUN di channel bisa mengeksekusi tool (termasuk terminal).
+    import os as _os
+    _allowed_env = _os.getenv("AERYN_DISCORD_ALLOWED_USERS", "").strip()
+    if _allowed_env:
+        allowed_ids = {u.strip() for u in _allowed_env.split(",") if u.strip()}
+        author_id = str(message.author.id)
+        if author_id not in allowed_ids:
+            print(f"[aeryn-gw] TOLAK pesan dari user tak-diizinkan "
+                  f"{message.author} ({author_id})", flush=True)
+            return
+
     # V36 — Parity Hermes: session per thread/reply.
     # Thread -> pakai id thread; channel/DM biasa (termasuk reply tanpa
     # thread) -> tetap id channel (perilaku non-thread dipertahankan).

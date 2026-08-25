@@ -32,8 +32,21 @@ DEFAULT_TIMEOUT = 15
 
 
 def make_terminal(sandbox_roots):
-    """Factory terminal tool — closure menyimpan roots yang diizinkan."""
-    allowed = [os.path.expanduser(r) for r in sandbox_roots]
+    """Factory terminal tool — closure menyimpan roots yang diizinkan.
+
+    V37.4-SEC — lapisan baru: SEMUA path di argumen divalidasi ke sandbox.
+    Dulu cwd terkunci tapi `cat /home/sen/.hermes/.env` lolos (bocor
+    secrets). Sekarang setiap token yang menyerupai path dicek.
+    """
+    allowed = [os.path.realpath(os.path.expanduser(r)) for r in sandbox_roots]
+
+    def _path_inside_sandbox(token: str) -> bool:
+        """True bila token adalah path & berada di dalam sandbox."""
+        if not token.startswith(("/", "~", "./", "../")) and "/" not in token:
+            return True  # nama file biasa, bukan path absolut
+        p = os.path.realpath(os.path.expanduser(token))
+        return any(p == root or p.startswith(root + os.sep)
+                   for root in allowed)
 
     def terminal(command: str, cwd: str = None):
         # 1. Parse command utama
@@ -51,6 +64,17 @@ def make_terminal(sandbox_roots):
         if bad:
             return {"error": f"karakter shell dilarang: {set(bad)} — "
                              f"satu command sederhana saja"}
+
+        # 2b. V37.4-SEC — anti path-traversal di ARGUMEN:
+        # setiap argumen yang menyerupai path absolut/relatif-naik
+        # wajib berada di dalam sandbox (dulu cat ~/.hermes/.env lolos!)
+        for tok in parts[1:]:
+            if tok.startswith("-"):
+                continue  # flag, bukan path
+            if not _path_inside_sandbox(tok):
+                return {"error": (
+                    f"path '{tok}' di luar sandbox — akses file hanya "
+                    f"boleh di dalam {allowed}")}
 
         # 3. cwd harus di dalam sandbox
         workdir = os.path.realpath(os.path.expanduser(cwd or allowed[0]))

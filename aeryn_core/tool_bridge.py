@@ -129,6 +129,10 @@ def _web_search(query: str, max_results: int = 5):
 
 
 def _http_get(url: str, max_bytes: int = 200_000):
+    # V37.4-SEC — hanya http(s); blokir file://, ftp://, data:, dsb.
+    # Dulu file:///etc/passwd kebaca via urlopen (SSRF lokal).
+    if not url.lower().startswith(("http://", "https://")):
+        return {"error": "hanya http/https yang diizinkan"}
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (aeryn-core)"})
     with urllib.request.urlopen(req, timeout=20) as r:
         return {"status": r.status, "content_type": r.headers.get("content-type", ""),

@@ -1,5 +1,29 @@
 # Changelog — Aeryn-Core
 
+## V37.4 (2026-08-25) — SECURITY SWEEP: tiga lubang kritis ditutup
+
+Audit keamanan pertama (terinspirasi pertanyaan Sen). Temuan & perbaikan:
+
+### 🔴 KRITIS 1: terminal tool bocor secrets
+- `cat /home/sen/.hermes/.env` BERTAHASIL membaca token Discord + API keys.
+  cwd terkunci, tapi path di ARGUMEN bebas keluar sandbox.
+- Fix: validasi SEMUA argumen menyerupai path → harus di dalam sandbox
+  (realpath, anti-traversal). File sandbox tetap terbaca normal.
+
+### 🔴 KRITIS 2: gateway tanpa allowlist user
+- Siapa pun di channel Discord bisa memerintah Aeryn eksekusi tool —
+  dikombinasikan dengan #1 = eksploitasi 1 pesan jadi pencurian token.
+- Fix: env AERYN_DISCORD_ALLOWED_USERS (id dipisah koma); pesan dari user
+  lain ditolak + dilog. Nilai diambil dari allowlist majikan.
+
+### 🟡 SEDANG 3: http_get menerima file:// (SSRF lokal)
+- `file:///etc/passwd` kebaca via urlopen.
+- Fix: hanya http/https yang diizinkan.
+
+Regresi keamanan permanen: tests/test_v37_4_security.py (9 test penetrasi).
+Verifikasi: 322 → **328 tests green**; re-penetration semua vektor TERTUTUP;
+gateway + daemon restart sehat; parity probe ALL PARITY.
+
 ## V37.3 (2026-08-25) — Fine-tuning: anti-korupsi state graduation
 
 ### Bug yang diperkenalkan V37.2, tertangkap sebelum meledak
