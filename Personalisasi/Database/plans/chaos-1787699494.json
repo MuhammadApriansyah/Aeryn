@@ -1,0 +1,22 @@
+{
+ "goal": "baca file Cargo.toml di root proyek dan sebutkan nama paketnya",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Baca isi file 'Cargo.toml' di direktori root proyek",
+   "tool_hint": "fs_read",
+   "done_when": "Konten Cargo.toml berhasil dimuat tanpa error"
+  },
+  {
+   "step": 1,
+   "desc": "Temukan bagian [package] dan ekstrak nilai field 'name', lalu laporkan nama paketnya",
+   "tool_hint": "none",
+   "done_when": "Nama paket dari Cargo.toml teridentifikasi dan disebutkan kepada pengguna"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

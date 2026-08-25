@@ -1,0 +1,41 @@
+{
+ "scenarios": [
+  {
+   "name": "web_search_timeout",
+   "tool": "web_search",
+   "mode": "timeout",
+   "graceful": true,
+   "answer_head": "Oke, hasil cariannya nggak nemu yang relevan, jadi aku jawab dari pengetahuan aja ya.\n\n**WebAssembly (Wasm)** itu format",
+   "error": "",
+   "tools_used": [
+    "web_search",
+    "web_search"
+   ]
+  },
+  {
+   "name": "web_search_server_error",
+   "tool": "web_search",
+   "mode": "server_error",
+   "graceful": true,
+   "answer_head": "Docker Compose adalah tool yang digunakan untuk mengelola aplikasi container dengan lebih mudah dan efisien.",
+   "error": "",
+   "tools_used": [
+    "web_search",
+    "web_search"
+   ]
+  },
+  {
+   "name": "fs_read_permission",
+   "tool": "fs_read",
+   "mode": "permission",
+   "graceful": true,
+   "answer_head": "Sudah kebaca. Nama paketnya **`aeryn_native`** — ada di bagian `[package]`, versi 0.1.0, edition 2021.\n\nBtw menarik, ini",
+   "error": "",
+   "tools_used": [
+    "fs_read"
+   ]
+  }
+ ],
+ "started": "2026-08-25T23:08:42Z",
+ "resilience_score": 100.0
+}

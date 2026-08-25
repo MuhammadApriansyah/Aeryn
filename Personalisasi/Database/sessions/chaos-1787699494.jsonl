@@ -1,0 +1,2 @@
+{"ts": 1787699558.74, "role": "user", "content": "baca file Cargo.toml di root proyek dan sebutkan nama paketnya"}
+{"ts": 1787699558.743, "role": "assistant", "content": "Sudah kebaca. Nama paketnya **`aeryn_native`** — ada di bagian `[package]`, versi 0.1.0, edition 2021.\n\nBtw menarik, ini proyek Rust dengan `pyo3` (extension-module) dan `cdylib`, jadi kayaknya native module buat dipanggil dari Python ya — cocok sama arsitektur aeryn-core-agent yang kamu bangun. Ada lagi yang mau dicek?"}
