@@ -1,5 +1,18 @@
 # Changelog — Aeryn-Core
 
+## V38.5 (2026-08-25) — Social memory hygiene
+
+Audit menemukan social memory tercemar: 49 dari 55 "kenalan" adalah
+session test/smoke/sub-agent (parity-probe, wrtest, smoke-v33, dst).
+
+- `is_persistent_person_key()`: hanya Discord snowflake ID (digit ≥15),
+  chan_*, atau nama biasa yang layak jadi kenalan permanen.
+- `/agent/remember` menolak key transient sebelum menyentuh memori.
+- Social.json dibersihkan: 55 → 5 entri sah (4 ID Discord + 1 channel).
+- Marker list mudah diperluas; test regresi 4 kasus.
+
+Verifikasi: 366 → **370 tests green**; ALL PARITY.
+
 ## V38.4 (2026-08-25) — Fine-tuning: web_read SSRF, memori audit-trail, exfiltration guard
 
 ### 1. web_read kini punya guard yang sama dengan http_get

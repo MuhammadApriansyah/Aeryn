@@ -71,6 +71,26 @@ class SocialMemory:
         self._reload_if_changed()
         return self._data["people"].get(key)
 
+    # V38.5 — hanya ID Discord nyata (digit panjang) yang layak jadi
+    # "kenalan" permanen. Session test/smoke/sub-agent mencemari social
+    # memory (ditemukan audit: 49 entri sampah dari 55).
+    _TEST_KEY_MARKERS = ("smoke", "test", "parity", "wrtest", "soptest",
+                         "sub_", "subagent", "v36", "digestcheck", "rltest",
+                         "sectest", "sigtest", "gradcheck", "handscheck",
+                         "fscheck", "e2e-", "modelcheck", "limitcheck",
+                         "reflexcheck", "captest", "v29", "vgate",
+                         "skilltest")
+
+    @classmethod
+    def is_persistent_person_key(cls, key: str) -> bool:
+        k = str(key)
+        if k.isdigit() and len(k) >= 15:
+            return True          # Discord snowflake ID
+        if k.startswith("chan_"):
+            return True          # channel memory
+        low = k.lower()
+        return not any(m in low for m in cls._TEST_KEY_MARKERS)
+
     def touch_person(self, key: str, nama: str = "") -> dict:
         p = self._data["people"].setdefault(
             key, {"nama": nama or key, "relasi": "", "fakta": [],

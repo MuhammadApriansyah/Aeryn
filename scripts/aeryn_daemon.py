@@ -570,7 +570,13 @@ def agent_remember(req: RememberReq):
     """V34 — simpan fakta user ke social memory (dipakai discord gateway).
 
     Sekalian dicatat ke core memory blok human (ringkas).
+    V38.5 — hanya key "persistent person" (Discord ID nyata / chan_) yang
+    disimpan; session test/smoke/sub-agent tidak lagi mencemari memori.
     """
+    if not SOCIAL.is_persistent_person_key(req.session_id):
+        return {"ok": False,
+                "error": "session test/transient tidak disimpan ke social "
+                         "memory (anti-pollution V38.5)"}
     SOCIAL.add_fact(req.session_id, req.fact, req.nama or req.session_id)
     if req.relation:
         SOCIAL.set_relation(req.session_id, req.relation,
