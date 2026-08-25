@@ -1,5 +1,18 @@
 # Changelog — Aeryn-Core
 
+## V33-T (2026-08-25) — Web Reading & Hardening
+
+- **Tool `web_read(url)`** via trafilatura: ekstraksi teks artikel bersih
+  dari halaman web (judul/author ikut). Melengkapi web_search — loop riset
+  lengkap: cari → baca → jawab. Tier safe, read-only, auto-promote.
+- **json_repair di jalur tool-call**: argumen JSON rusak dari LLM tidak lagi
+  menjatuhkan run — diperbaiki otomatis; kalau gagal total, model diminta
+  kirim ulang dengan pesan jelas.
+- Deps baru venv: trafilatura, json-repair (keduanya terverifikasi jalan
+  di ARM64 proot).
+- Verifikasi: 213 test green; live E2E "cari tahu apa itu react" →
+  web_search + web_read → jawaban akurat dari sumber.
+
 ## V33-Fase2 (2026-08-25) — Observability & Self-Maintenance
 
 - **`GET /metrics`** baru: uptime, statistik run (jumlah/error/timeout/wall

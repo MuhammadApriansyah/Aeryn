@@ -162,7 +162,7 @@ SHADOW = ShadowRunner(TOOLS, LEDGER)
 MEMORY = EpisodicMemory()  # V27.4 — memori episodik lintas-sesi
 REFLECT = PostRunReflection(registry=TOOLS, ledger=LEDGER)  # V27.5 — refleksi pasca-run
 # V27.0: tool safe-tier yang lulus shadow 5x beruntun otomatis naik native.
-SHADOW.auto_promote = {"web_search", "http_get",
+SHADOW.auto_promote = {"web_search", "http_get", "web_read",
                        "memory_search", "graph_traverse", "pitfall_search"}
 
 
@@ -186,6 +186,13 @@ def _checker_web_search(args, result):
     return isinstance(result, dict) and "results" in result
 
 
+def _checker_web_read(args, result):
+    """Paritas web_read: dict dengan text non-kosong, ATAU error terkontrol."""
+    if not isinstance(result, dict):
+        return False
+    return ("text" in result and bool(result.get("text"))) or "error" in result
+
+
 def _checker_memory_search(args, result):
     """Paritas memory_search: dict dengan list results (boleh kosong)."""
     return isinstance(result, dict) and isinstance(result.get("results"), list)
@@ -204,6 +211,7 @@ def _checker_pitfall_search(args, result):
 
 SHADOW.register_checker("fs_read", _checker_fs_read)
 SHADOW.register_checker("web_search", _checker_web_search)
+SHADOW.register_checker("web_read", _checker_web_read)
 # V33 Shared Brain — parity checkers + auto-promote setelah 5x konsisten
 SHADOW.register_checker("memory_search", _checker_memory_search)
 SHADOW.register_checker("graph_traverse", _checker_graph_traverse)
@@ -641,7 +649,27 @@ def _run_steps(req: AgentRunReq):
             # Guard single-call: satu tool-call per giliran.
             for ci, call in enumerate(calls):
                 fn = call["function"]["name"]
-                args = json.loads(call["function"]["arguments"] or "{}")
+                # V33-T — json_repair: argumen rusak dari LLM tidak lagi
+                # menjatuhkan seluruh run; diperbaiki atau dikosongkan.
+                try:
+                    raw_args = call["function"]["arguments"] or "{}"
+                    try:
+                        args = json.loads(raw_args)
+                    except (ValueError, TypeError):
+                        from json_repair import repair_json
+                        args = json.loads(repair_json(raw_args))
+                except Exception:
+                    args = {}
+                    result = {"error": "argumen tool tidak bisa diparse "
+                                       "(JSON rusak) — kirim ulang dengan JSON valid"}
+                    trace.append({"step": i, "type": "tool", "name": fn,
+                                  "args": {}, "result_digest": str(result)[:200]})
+                    messages.append({"role": "tool", "tool_call_id": call.get("id", ""),
+                                     "content": json.dumps(result, ensure_ascii=False)})
+                    yield {"event": "tool", "data": {
+                        "step": i, "name": fn, "args": {},
+                        "digest": str(result)[:200]}}
+                    continue
                 entry = TOOLS.tools.get(fn)
                 if ci > 0:
                     result = {"error": "MULTI-CALL DITOLAK: kirim ulang panggilan ini "

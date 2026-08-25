@@ -124,6 +124,33 @@ def _http_get(url: str, max_bytes: int = 200_000):
                 "body": r.read(max_bytes).decode("utf-8", "replace")}
 
 
+def _web_read(url: str):
+    """V33-T — Baca halaman web → teks artikel bersih (trafilatura).
+
+    Melengkapi web_search: search kasih link, web_read baca isinya.
+    Read-only, tanpa eksekusi konten.
+    """
+    import trafilatura
+    try:
+        downloaded = trafilatura.fetch_url(url)
+    except Exception as e:
+        return {"error": f"fetch gagal: {type(e).__name__}: {e}"[:200], "url": url}
+    if not downloaded:
+        return {"error": "halaman tidak bisa diambil", "url": url}
+    text = trafilatura.extract(downloaded) or ""
+    if not text.strip():
+        return {"error": "ekstraksi kosong (kemungkinan bukan halaman artikel)",
+                "url": url}
+    out = {"url": url, "text": text[:20000], "chars": len(text)}
+    meta = trafilatura.extract_metadata(downloaded)
+    if meta:
+        out["title"] = (getattr(meta, "title", "") or "")[:200]
+        author = getattr(meta, "author", "") or ""
+        if author:
+            out["author"] = author[:120]
+    return out
+
+
 def make_fs_read(roots):
     """File reader sandboxed — hanya path di bawah roots yang diizinkan."""
     allowed = [Path(os.path.expanduser(r)).resolve() for r in roots]
@@ -147,6 +174,13 @@ def build_default_registry(sandbox_roots=None):
     reg.register("http_get", _http_get, {
         "type": "function", "function": {"name": "http_get",
         "description": "GET sebuah URL, returns status+body text.",
+        "parameters": {"type": "object", "properties": {
+            "url": {"type": "string"}}, "required": ["url"]}}}, TIER_SAFE)
+    reg.register("web_read", _web_read, {
+        "type": "function", "function": {"name": "web_read",
+        "description": ("Baca halaman web dan ekstrak teks artikel utamanya "
+                        "(bersih, tanpa HTML). Pakai setelah web_search untuk "
+                        "membaca isi link yang relevan."),
         "parameters": {"type": "object", "properties": {
             "url": {"type": "string"}}, "required": ["url"]}}}, TIER_SAFE)
     if sandbox_roots:
