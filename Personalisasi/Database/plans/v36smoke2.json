@@ -1,0 +1,22 @@
+{
+ "goal": "tes singkat",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Konfirmasi sistem perencana aktif dengan menghasilkan rencana uji sederhana",
+   "tool_hint": "none",
+   "done_when": "Rencana JSON terbentuk dan valid"
+  },
+  {
+   "step": 1,
+   "desc": "Laporkan hasil tes singkat ke pengguna",
+   "tool_hint": "none",
+   "done_when": "Pengguna menerima konfirmasi bahwa tes berhasil"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

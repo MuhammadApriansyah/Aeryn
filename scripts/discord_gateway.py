@@ -54,6 +54,62 @@ def _lock(channel_id):
     return _channel_locks.setdefault(channel_id, threading.Lock())
 
 
+# ---------------------------------------------------------------------------
+# V36 — Parity Hermes: session_id per thread/reply Discord.
+#
+# Hermes menangani thread dengan session terpisah per thread; gateway lama
+# cenderung flat per channel sehingga riwayat dua thread tercampur.
+# Sejak V35 ada session_history per-session, jadi session_id yang benar
+# semakin penting.
+#
+# Fungsi murni (tanpa I/O discord.py) supaya mudah dites:
+#   resolve_session_id(user_id, channel_id, thread_id=None) -> str
+# ---------------------------------------------------------------------------
+
+def resolve_session_id(user_id, channel_id, thread_id=None) -> str:
+    """Session id turunan untuk pesan Discord.
+
+    - Kalau pesan berasal dari thread -> pakai id thread.
+    - Selain itu (termasuk DM / reply ke bot tanpa thread) -> pakai id channel.
+    Format: f"dc_{user_id}_{thread_or_channel_id}"
+    """
+    owner = thread_id if thread_id else channel_id
+    return f"dc_{user_id}_{owner}"
+
+
+def extract_thread_id(message) -> "int | None":
+    """Ambil id thread dari objek discord.Message (atau channel).
+
+    - message.thread ada (bot melihat konteks thread) -> id thread tsb.
+    - channel-nya sendiri bertipe public_thread/private_thread
+      (mis. pesan webhook atau on_raw) -> id channel itu.
+    - Selain itu (teks channel biasa, DM, dsb.) -> None.
+    Tidak melakukan I/O dan tidak butuh token — aman dipanggil dari test
+    dengan mock/duck-typed object.
+    """
+    thread = getattr(message, "thread", None)
+    if thread is not None and getattr(thread, "id", None):
+        return thread.id
+    ch = getattr(message, "channel", message)
+    try:
+        ctype = getattr(ch, "type", None)
+        if ctype in (discord.ChannelType.public_thread,
+                     discord.ChannelType.private_thread,
+                     discord.ChannelType.news_thread):
+            return ch.id
+    except Exception:
+        pass
+    return None
+
+
+def session_for_message(message) -> str:
+    """Pemetaan pesan -> session_id, dipakai on_message (murni, tanpa I/O)."""
+    return resolve_session_id(
+        str(getattr(message, "author").id),
+        str(message.channel.id),
+        extract_thread_id(message))
+
+
 def call_aeryn(goal: str, session_id: str, timeout_s: int = 120) -> dict:
     """POST ke daemon /agent/run — sinkron, dipanggil via to_thread."""
     payload = json.dumps({"goal": goal, "session_id": session_id,
@@ -103,13 +159,20 @@ async def on_message(message: discord.Message):
         await message.reply("Sebutkan goal-nya — misal: `baca Cargo.toml sebutkan versinya`")
         return
 
+    # V36 — Parity Hermes: session per thread/reply.
+    # Thread -> pakai id thread; channel/DM biasa (termasuk reply tanpa
+    # thread) -> tetap id channel (perilaku non-thread dipertahankan).
+    session_id = session_for_message(message)
+    lock = _lock(session_id)
+    print(f"[aeryn-gw] session={session_id}", flush=True)
+
     # V32 — Path terpisah untuk social queries (tanpa agent loop)
     import sys
     sys.path.insert(0, os.path.dirname(__file__))
     from social_generator import generate_social_response, _is_social_query
     if _is_social_query(goal):
         social_resp = generate_social_response(goal, str(message.author.id),
-                                               channel)
+                                               message.channel)
         if social_resp:
             for part in chunk(social_resp):
                 await message.reply(part[:2000], mention_author=False)

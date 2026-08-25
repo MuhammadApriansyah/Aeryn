@@ -1,0 +1,50 @@
+{
+ "goal": "halo, sehat kah kamu hari ini?",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Cari definisi 'halo' dan 'sehat' di kamus online",
+   "tool_hint": "web_search|none",
+   "done_when": "menemukan definisi yang sesuai"
+  },
+  {
+   "step": 1,
+   "desc": "Tanyakan status kesehatan saya kepada asisten virtual",
+   "tool_hint": "text_to_speech|none",
+   "done_when": "menerima jawaban yang jelas"
+  },
+  {
+   "step": 2,
+   "desc": "Periksa suhu tubuh saya menggunakan thermometer",
+   "tool_hint": "fs_read|none",
+   "done_when": "menerima hasil pengukuran suhu tubuh"
+  },
+  {
+   "step": 3,
+   "desc": "Periksa gejala-gejala penyakit saya",
+   "tool_hint": "fs_read|none",
+   "done_when": "menerima hasil pengamatan gejala"
+  },
+  {
+   "step": 4,
+   "desc": "Analisis hasil pengukuran suhu tubuh dan gejala-gejala penyakit",
+   "tool_hint": "math|none",
+   "done_when": "menerima hasil analisis"
+  },
+  {
+   "step": 5,
+   "desc": "Buat kesimpulan tentang status kesehatan saya",
+   "tool_hint": "text_to_speech|none",
+   "done_when": "menerima jawaban yang jelas"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending",
+  "pending",
+  "pending",
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

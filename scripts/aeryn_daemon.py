@@ -654,10 +654,28 @@ def _run_steps(req: AgentRunReq):
         # Pengecualian: perintah tulis-memori TANPA riwayat — konfirmasi lama
         # ("masih tercatat kok") bikin model mengira fakta sudah tersimpan
         # dan tidak memanggil core_memory_edit (ketemu parity_probe V35).
+        # V36 — kalau riwayat melebihi budget dan ada ringkasan LLM tercache,
+        # pakai load_with_compaction (ringkasan lebih kaya, hemat via cache).
         try:
-            from aeryn_core.session_history import load as _hist_load
-            hist = ([] if _is_memory_write_command(req.goal)
-                    else _hist_load(req.session_id))
+            from aeryn_core import session_history as _sh
+            if _is_memory_write_command(req.goal):
+                hist = []
+            else:
+                # V36 — sesi panjang (> budget) pakai kompaksi LLM tercache;
+                # callable diinjeksi dari sini (daemon), bukan dari modul.
+                def _llm_sum(text: str) -> str:
+                    resp = MODEL_.chat(
+                        [{"role": "system",
+                          "content": ("Ringkas percakapan berikut jadi "
+                                      "poin-poin padat bahasa Indonesia, "
+                                      "maks 120 kata, pertahankan fakta "
+                                      "penting (nama, keputusan, stack).")},
+                         {"role": "user", "content": text}],
+                        temperature=0.2, max_tokens=300)
+                    return str(resp["choices"][0]["message"].get("content")
+                               or "").strip()
+                hist = _sh.load_with_compaction(
+                    req.session_id, llm_summarize=_llm_sum)
             if hist:
                 messages = ([{"role": "system", "content": system_prompt}] +
                             hist +
@@ -680,6 +698,17 @@ def _run_steps(req: AgentRunReq):
                 RUN_STATS["errors"] += 1
             if timed_out:
                 RUN_STATS["timeouts"] += 1
+            # V36 — event bus: publish kejadian akhir run (fail-soft)
+            try:
+                from aeryn_core.event_bus import (EVENT_ERROR, EVENT_FINAL,
+                                                  EVENT_TIMEOUT, BUS)
+                etype = (EVENT_TIMEOUT if timed_out else
+                         EVENT_ERROR if error else EVENT_FINAL)
+                BUS.publish(etype, {"session_id": req.session_id,
+                                    "goal_head": req.goal[:80],
+                                    "iterations": iterations})
+            except Exception:
+                pass
             MEMORY.record(req.session_id, req.goal,
                           plan.get("source", "unknown"), trace,
                           answer=answer, error=error, timed_out=timed_out)
@@ -840,15 +869,35 @@ RUN_STATS = {"runs": 0, "errors": 0, "timeouts": 0,
              "wall_seconds_total": 0.0, "started_at": time.time()}
 
 
+@app.get("/events/recent")
+def events_recent(limit: int = 20, event_type: str = None):
+    """V36 — introspeksi event bus: kejadian run terakhir (final/error/timeout)."""
+    from aeryn_core.event_bus import BUS
+    return {"events": BUS.recent(event_type=event_type, limit=limit)}
+
+
 @app.get("/metrics")
 def metrics():
     """Satu endpoint untuk kesehatan operasional: statistik run + per-tool."""
     tools = {name: {"tier": t["tier"], "status": t["status"],
                     "success": t["success"], "fail": t["fail"]}
              for name, t in TOOLS.tools.items()}
-    return {"uptime_s": int(time.time() - RUN_STATS["started_at"]),
-            "runs": {k: v for k, v in RUN_STATS.items() if k != "started_at"},
-            "tools": tools}
+    out = {"uptime_s": int(time.time() - RUN_STATS["started_at"]),
+           "runs": {k: v for k, v in RUN_STATS.items() if k != "started_at"},
+           "tools": tools}
+    # V36 — health watchdog dari event bus (instance singleton per proses)
+    try:
+        from aeryn_core.event_bus import BUS, HealthWatchdog
+        global _WATCHDOG
+        try:
+            _WATCHDOG
+        except NameError:
+            _WATCHDOG = HealthWatchdog(BUS)
+        out["health_watchdog"] = {"unhealthy": _WATCHDOG.unhealthy(),
+                                  "error_rate": round(_WATCHDOG.error_rate(), 3)}
+    except Exception:
+        pass
+    return out
 
 
 _NIGHTLY_HOUR_UTC = 20   # 03:00 WIB = 20:00 UTC sebelumnya

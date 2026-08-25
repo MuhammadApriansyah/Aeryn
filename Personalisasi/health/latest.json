@@ -1,0 +1,50 @@
+{
+  "generated_at": "2026-08-25T17:58:22+00:00",
+  "results": {
+    "NOUS/stealth/ox-alpha": {
+      "status": "OK",
+      "latency_ms": 1923,
+      "checked_at": "2026-08-25T17:58:08+00:00"
+    },
+    "GEMINI/gemini-2.5-pro": {
+      "status": "CLIENT_ERROR",
+      "latency_ms": 370,
+      "checked_at": "2026-08-25T17:58:10+00:00"
+    },
+    "GROQ/openai/gpt-oss-20b": {
+      "status": "OK",
+      "latency_ms": 615,
+      "checked_at": "2026-08-25T17:58:12+00:00"
+    },
+    "GROQ/qwen/qwen3.6-27b": {
+      "status": "OK",
+      "latency_ms": 378,
+      "checked_at": "2026-08-25T17:58:13+00:00"
+    },
+    "OPENROUTER/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free": {
+      "status": "RATE_LIMITED",
+      "latency_ms": 706,
+      "checked_at": "2026-08-25T17:58:15+00:00"
+    },
+    "OPENROUTER/nvidia/nemotron-3-super-120b-a12b:free": {
+      "status": "RATE_LIMITED",
+      "latency_ms": 291,
+      "checked_at": "2026-08-25T17:58:16+00:00"
+    },
+    "OPENROUTER/poolside/laguna-s-2.1:free": {
+      "status": "RATE_LIMITED",
+      "latency_ms": 281,
+      "checked_at": "2026-08-25T17:58:18+00:00"
+    },
+    "NVIDIA/meta/llama-3.1-8b-instruct": {
+      "status": "OK",
+      "latency_ms": 602,
+      "checked_at": "2026-08-25T17:58:19+00:00"
+    },
+    "NVIDIA/nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+      "status": "OK",
+      "latency_ms": 841,
+      "checked_at": "2026-08-25T17:58:20+00:00"
+    }
+  }
+}
