@@ -654,6 +654,21 @@ def _is_memory_write_command(goal: str) -> bool:
          "remember this", "tolong ingat"))
 
 
+def _is_memory_lookup(goal: str) -> bool:
+    """V37.1 — pertanyaan identitas/relasi tentang majikan atau diri.
+
+    Semua data untuk menjawabnya SUDAH ada di prompt (person block +
+    core memory), jadi tools di-strip — mencegah kejadian aneh 'siapa
+    namaku?' dijawab dengan fs_read Cargo.toml.
+    """
+    msg = goal.lower().strip()
+    starts = ("siapa aku", "siapa namaku", "nama aku apa", "kamu tahu aku",
+              "kamu tau aku", "kita kenal", "kenal nggak", "kenal gak",
+              "ingat aku", "ingat gak", "masa lalu ku")
+    return msg.startswith(starts) or (
+        "namaku" in msg and "?" in msg)
+
+
 def _run_steps(req: AgentRunReq):
     """Generator inti agentic loop — yield event dict per langkah.
 
@@ -764,7 +779,10 @@ def _run_steps(req: AgentRunReq):
                 return
             try:
                 # V32 — social queries: jangan kirim tools schema
-                is_social = _is_social_query(req.goal)
+                # V37.1 — pertanyaan identitas juga: jawab dari memori di
+                # prompt, tanpa tools (cegah 'siapa namaku?' → fs_read!)
+                is_social = (_is_social_query(req.goal)
+                             or _is_memory_lookup(req.goal))
                 tool_schemas = None if is_social else TOOLS.schemas()
                 resp = MODEL_.chat(messages, tools=tool_schemas)
             except urllib.error.HTTPError as e:
@@ -877,7 +895,10 @@ def _run_steps(req: AgentRunReq):
                     "step": i, "name": fn, "args": args,
                     "digest": str(result)[:200]}}
 
-        out = _finish(iterations=req.max_iterations, truncated=True)
+        out = _finish(iterations=req.max_iterations,
+                      error="iterasi habis tanpa jawaban final "
+                            "(goal terlalu kompleks atau model berputar)",
+                      truncated=True)
         yield {"event": "truncated", "data": out}
 
 

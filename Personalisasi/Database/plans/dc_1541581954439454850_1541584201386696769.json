@@ -1,20 +1,27 @@
 {
- "goal": "panggil aku dengan namaku dong",
+ "goal": "siapa namaku, dan apa relasi kita?",
  "subgoals": [
   {
    "step": 0,
-   "desc": "Ask user for their name",
-   "tool_hint": "none",
-   "done_when": "user provides a name"
+   "desc": "Cari informasi tentang diri sendiri",
+   "tool_hint": "web_search|none",
+   "done_when": "menemukan nama saya"
   },
   {
    "step": 1,
-   "desc": "Store the provided name and greet the user using that name",
-   "tool_hint": "none",
-   "done_when": "user is greeted with their name"
+   "desc": "Cari informasi tentang relasi kita",
+   "tool_hint": "web_search|none",
+   "done_when": "menemukan relasi kita"
+  },
+  {
+   "step": 2,
+   "desc": "Hubungkan informasi tentang diri sendiri dan relasi kita",
+   "tool_hint": "logic|none",
+   "done_when": "menemukan relasi kita dengan saya"
   }
  ],
  "status": [
+  "pending",
   "pending",
   "pending"
  ],

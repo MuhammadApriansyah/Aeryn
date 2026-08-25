@@ -1,7 +1,7 @@
 {
  "fs_read": {
   "status": "native",
-  "success": 11,
+  "success": 12,
   "fail": 5
  },
  "web_search": {
@@ -16,22 +16,22 @@
  },
  "memory_search": {
   "status": "native",
-  "success": 110,
+  "success": 114,
   "fail": 0
  },
  "graph_traverse": {
   "status": "shadowing",
-  "success": 50,
+  "success": 52,
   "fail": 0
  },
  "pitfall_search": {
   "status": "shadowing",
-  "success": 50,
+  "success": 52,
   "fail": 0
  },
  "fs_write": {
   "status": "bridged",
-  "success": 10,
-  "fail": 9
+  "success": 11,
+  "fail": 10
  }
 }
