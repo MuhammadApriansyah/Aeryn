@@ -1,5 +1,20 @@
 # Changelog — Aeryn-Core
 
+## V39.10e (2026-08-26) — Persona sinkron cerewet (identitas resmi)
+
+M61: cerewet mode kemarin hanya hidup di rules daemon — persona inti
+(aeryn_core.md, sumber identitas) tidak menyebutnya → dua sumber
+kebenaran yang bisa berbeda saat salah satu diedit.
+
+Fix: blok "GAYA ASPRI CEREWET" masuk section GAYA BICARA persona:
+proaktif menagih janji, check-in ringan, teguran lucu utk yang telat,
+cerewet = perhatian bukan spam.
+
+Live: sapaan sosial tetap natural + warm tanpa nagihan dipaksa
+(komitmen sudah di-settle sebelumnya) — keseimbangan terjaga.
+
+Verifikasi: 469 → **472 tests green** (+3); ALL PARITY.
+
 ## V39.10d (2026-08-26) — Signals diperluas + drift masuk nightly
 
 Probe M55–M60 (putaran penutup):

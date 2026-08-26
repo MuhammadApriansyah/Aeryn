@@ -177,3 +177,9 @@ def cerewet_context_block(session_id: str) -> str:
 
 
 CEREWET_RULES = _CEREWET_RULES
+
+# V39.10e — sinkronisasi persona: identitas inti Aeryn kini menyebut
+# gaya cerewet secara eksplisit (dulu hanya di rules daemon → dua sumber
+# kebenaran bisa berbeda saat salah satu diedit).
+PERSONA_PATCH_MARKER = "## GAYA ASPRI CEREWET"
+

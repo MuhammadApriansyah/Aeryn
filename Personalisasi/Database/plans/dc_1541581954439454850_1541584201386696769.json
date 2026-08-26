@@ -1,15 +1,15 @@
 {
- "goal": "halo aeryn",
+ "goal": "halo lagi, cuma mau nyapa",
  "subgoals": [
   {
    "step": 0,
-   "desc": "Balas sapaan pengguna dan tanyakan tujuan atau bantuan yang dibutuhkan",
+   "desc": "halo lagi, cuma mau nyapa",
    "tool_hint": "none",
-   "done_when": "Pengguna merespons dengan goal konkret"
+   "done_when": "goal tercapai"
   }
  ],
  "status": [
   "pending"
  ],
- "source": "llm"
+ "source": "fallback"
 }
