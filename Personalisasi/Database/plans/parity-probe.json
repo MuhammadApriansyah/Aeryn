@@ -3,9 +3,9 @@
  "subgoals": [
   {
    "step": 0,
-   "desc": "Balas sapaan pengguna dan minta klarifikasi goal atau tugas spesifik yang ingin dikerjakan",
+   "desc": "Balas sapaan pengguna dengan pesan salam yang ramah dan tanyakan tujuan atau bantuan yang dibutuhkan",
    "tool_hint": "none",
-   "done_when": "Pengguna menyampaikan goal/tugas yang konkret untuk direncanakan"
+   "done_when": "Pengguna menerima balasan sapaan dan klarifikasi kebutuhan"
   }
  ],
  "status": [

@@ -1,5 +1,21 @@
 # Changelog — Aeryn-Core
 
+## V39.10d (2026-08-26) — Signals diperluas + drift masuk nightly
+
+Probe M55–M60 (putaran penutup):
+
+1. **False-negative kedua needs_research** — "gimana caranya bikin bot
+   discord" lolos tanpa riset. Fix: pola gimana caranya / bagaimana
+   cara / cara bikin / bikin bot / buat bot.
+2. **DriftGuard masuk nightly** — status integrasi Hermes dilaporkan
+   otomatis tiap pagi ("integrasi-Hermes OK/DRIFT!") — tidak perlu
+   ingat jalankan manual.
+3. Audit: web_search gagal tetap dihitung upaya riset (benar), verifier
+   factual-set lengkap ✅, event research_guard tercatat ✅.
+
+Verifikasi: 466 → **469 tests green** (+3); nightly live dengan
+integrasi-Hermes OK; ALL PARITY.
+
 ## V39.10c (2026-08-26) — Cost gate verifier + summary cap
 
 Putaran sebelum tidur (probe M50–M54):

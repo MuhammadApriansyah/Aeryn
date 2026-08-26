@@ -1,20 +1,20 @@
 {
- "generated_at": "2026-08-26T06:14:10Z",
+ "generated_at": "2026-08-26T12:48:18Z",
  "window_hours": 24.0,
- "runs": 250,
- "errors": 32,
+ "runs": 213,
+ "errors": 24,
  "timeouts": 0,
- "success_rate_pct": 87.2,
- "unique_sessions": 60,
+ "success_rate_pct": 88.7,
+ "unique_sessions": 53,
  "top_tools": {
-  "web_search": 102,
-  "fs_read": 43,
-  "core_memory_edit": 41,
-  "terminal": 33,
-  "memory_search": 22
+  "core_memory_edit": 58,
+  "web_search": 35,
+  "memory_search": 22,
+  "web_read": 8,
+  "http_get": 6
  },
  "error_samples": [
-  "LLM provider HTTP 500 (semua model fallback habis)",
+  "iterasi habis tanpa jawaban final (goal terlalu kompleks atau model berputar)",
   "iterasi habis tanpa jawaban final (goal terlalu kompleks atau model berputar)",
   "iterasi habis tanpa jawaban final (goal terlalu kompleks atau model berputar)"
  ],
@@ -38,18 +38,18 @@
    "summary": "5/9 OK"
   },
   "library": {
-   "new_entries_24h": 47
+   "new_entries_24h": 48
   },
   "pitfalls": {
    "total": 8,
-   "new_24h": 1
+   "new_24h": 0
   },
   "hermes": {
    "active_sessions_24h": 15,
    "recent_user_messages": [
-    "yakin? coba audit seluruh file atau kamu coba akses web nya. cek authprovider sa",
-    "fine tuning lqgi",
-    "fine tuning dong hehe"
+    "sekali lagi fine tuning coba",
+    "jangan lah gitu. cari dari web lagi coba yang banyak",
+    "tapi jalankan fine tuning sekali lagi"
    ]
   }
  }

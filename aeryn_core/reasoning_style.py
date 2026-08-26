@@ -22,6 +22,9 @@ RESEARCH_SIGNALS = (
     # V39.6c — tutorial/how-to juga butuh sumber (versi & command berubah)
     "cara install", "cara pakai", "how to", "tutorial", "setup ",
     "konfigurasi ", "migrasi ",
+    # V39.10d — pola umum lain: "gimana caranya", "bikin/membuat X"
+    "gimana caranya", "gimana cara", "bagaimana cara", "cara bikin",
+    "cara membuat", "bikin bot", "bikin web", "buat bot",
 )
 
 # Sinyal goal yang TIDAK perlu web (jawaban dari konteks/memori lokal)

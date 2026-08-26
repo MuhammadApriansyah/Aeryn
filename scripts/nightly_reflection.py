@@ -335,6 +335,22 @@ def main():
     except Exception:
         pass
 
+    # V39.10d — drift_guard masuk nightly: status integrasi Hermes
+    # terlapor otomatis tiap pagi (tidak perlu ingat jalankan manual)
+    try:
+        import subprocess
+        r = subprocess.run(
+            [sys.executable,
+             os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                          "drift_guard.py")],
+            capture_output=True, text=True, timeout=60)
+        drift_ok = (r.returncode == 0)
+        report["hermes_drift"] = {"ok": drift_ok}
+        summary = (summary or "") + (
+            f" | integrasi-Hermes {'OK' if drift_ok else 'DRIFT!'}")
+    except Exception as exc:
+        report["hermes_drift"] = {"ok": None, "error": str(exc)[:80]}
+
     # V39-F4/F5 — injection sweep mingguan + weakness backlog
     try:
         from aeryn_core.injection_sweep import run_sweep, weakness_backlog
