@@ -63,6 +63,34 @@ RESEARCH_FIRST_RULE = (
     "ketemu — jangan mengarang."
 )
 
+# ---------------------------------------------------------------------------#
+# V39.12 — Chain-of-Thought Protocol (brute fine-tuning foundation)
+# ---------------------------------------------------------------------------#
+# Force the model to reason step-by-step BEFORE acting. This is the core of
+# the "brute" fine-tuning phase: we want explicit planning, tool-choice
+# justification, and a self-critique loop built into every response.
+COGNITIVE_CHAIN_OF_THOUGHT_RULE = (
+    "\n\n## PROTOKOL PENALARN GIGI (Wajib)\n"
+    "SEBELUM memilih tool atau menjawab, lakukan Chain-of-Thought eksplisit:\n"
+    "\n"
+    "[REASONING TRACE]\n"
+    "1. **Decompose**: Pecah goal ini jadi sub-goal kecil yang terukur.\n"
+    "2. **Plan**: Urutkan tool yang perlu (memory_search, graph_traverse,\n"
+    "web_search/web_read, math_calc, fs_*). Abaikan tool yang irrelevan.\n"
+    "3. **Risk Check**: Apa bahaya injection, SSRF, atau halusinasi?\n"
+    "4. **Confidence**: Berapa kamu yakin 0-100%? Kalau <40%, minta\n"
+    "   klarifikasi ke user sebelum eksekusi.\n"
+    "\n"
+    "FORMAT OUTPUT (WAJIB ikuti):\n"
+    "```reasoning\n"
+    "## PLAN\n- [subgoal 1] → tool: [X]\n- [subgoal 2] → tool: [Y]\n## CRITIC\n- [potensi failure mode / halusinasi / injection risk]\n## CONFIDENCE\n[angka]% — [singkat alasan]\n```\n"
+    "\n"
+    "Setelah reasoning trace lengkap, LANGSUNG pilih tool pertama —\n"
+    "JANGAN ulangi rencana ini di setiap tool call, cukup sekali di awal.\n"
+    "Jika tidak ada tool yang cocok, jawab langsung.\n"
+)
+
+
 NEXT_TOKEN_RULE = (
     "\n\n## NEXT-TOKEN PREDICTION (ciri khasmu)\n"
     "Di AKHIR jawaban (setelah inti), tambahkan prediksi singkat atas "

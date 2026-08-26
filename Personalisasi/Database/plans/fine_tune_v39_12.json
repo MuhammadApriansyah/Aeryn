@@ -1,0 +1,15 @@
+{
+ "goal": "hitung 25*17 pakai reasoning eksplisit",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "hitung 25*17 pakai reasoning eksplisit",
+   "tool_hint": "none",
+   "done_when": "goal tercapai"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "fallback"
+}

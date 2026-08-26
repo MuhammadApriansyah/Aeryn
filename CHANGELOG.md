@@ -1,5 +1,49 @@
 # Changelog — Aeryn-Core
 
+## V39.12 (2026-08-26) — Reasoning Overhaul: CoT + Self-Refine Critic + Fine-Tuning Data v2
+
+Ringkasan aksi: dari "agent yang rajin" ke "agensi yang berpikir" — tiga fase upgrade penalaran.
+
+### 1. Chain-of-Thought (CoT) Injection (Phase 1)
+- Tambah `COGNITIVE_CHAIN_OF_THOUGHT_RULE` di `reasoning_style.py` (894 chars).
+- Inject ke system prompt via `aeryn_daemon.py` `_build_system_prompt` (line 745).
+- Paksa model output reasoning trace: PLAN → CRITIC → CONFIDENCE sebelum pilih tool.
+- Format: `## PLAN`, `## CRITIC`, `## CONFIDENCE` — deterministic, bukan doa.
+
+### 2. Self-Refine Critic Loop (Phase 2)
+- Modul baru `aeryn_core/critic_refine.py` (3.7 KB):
+  - `CRITIC_SOP` — audit-only SOP, berbeda dari SOP sub-task.
+  - `build_critic_sop(goal, answer, trace)` — konstruksi critic prompt.
+  - `run_critic(goal, answer, trace, runner)` → `{issues, confidence, summary}`.
+- Integrasi ke daemon `_finish()` (line 958-973):
+  - Critic dipanggil SEBELUM `out` dibentuk.
+  - Anti-recursion: goal dimulai `[CRITIC]` → skip critic.
+  - Critic failure tidak blok answer (fail-open aman).
+  - Output: `out["critic_findings"]` + `out["critic_confidence"]`.
+
+### 3. Fine-Tuning Dataset v2 (Phase 3)
+- Script baru `scripts/generate_finetune_v3912.py` — generate 19 samples:
+  - `cot_reasoning`: 7 samples (local math, greeting, research, memory write, graph, debug, commitment).
+  - `critic_pattern`: 4 samples (hallucination, marker leak, contradiction, pass).
+  - `persona_integration`: 5 samples (cerewet commitment, identity, proactive nudge, refuse dangerous, memory recall).
+  - `error_recovery`: 3 samples (all 429, timeout, tool failure).
+- Semua sample punya `sample_id` (SHA256 prefix 12 char), `generated_at` ISO timestamp.
+
+### 4. Tests
+- `tests/test_v39_12_critic_loop.py` — 7 test: SOP, build, parse, error handling.
+- `tests/test_v39_12_finetune_dataset.py` — 7 test: valid JSONL, type presence, ID format.
+- Total: **510 tests** (7 baru), 1 warning.
+
+### Files Modified
+- `aeryn_core/reasoning_style.py` — +28 lines (COGNITIVE_CHAIN_OF_THOUGHT_RULE)
+- `aeryn_core/critic_refine.py` — NEW (91 lines)
+- `scripts/aeryn_daemon.py` — +25 lines (_critic_runner + critic injection)
+- `scripts/generate_finetune_v3912.py` — NEW (240 lines)
+- `tests/test_v39_12_critic_loop.py` — NEW (105 lines)
+- `tests/test_v39_12_finetune_dataset.py` — NEW (85 lines)
+- `Personalisasi/Database/training/finetune_v3912_reasoning_critic_persona.jsonl` — NEW (19 samples)
+
+
 ## V39.11 (2026-08-26) — Circuit Breaker + Social Memory Hardening + Training Data
 
 Ringkasan aksi: 429/410/404 provider, leak fragment di social.json, test artifacts masuk ke memory.

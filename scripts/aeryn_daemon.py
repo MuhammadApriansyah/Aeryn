@@ -742,10 +742,13 @@ def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
     try:
         from aeryn_core.reasoning_style import (RESEARCH_FIRST_RULE,
                                                 NEXT_TOKEN_RULE,
+                                                COGNITIVE_CHAIN_OF_THOUGHT_RULE,
                                                 needs_research)
         if needs_research(req.goal):
             system_prompt += RESEARCH_FIRST_RULE
         system_prompt += NEXT_TOKEN_RULE
+        # V39.12 — inject explicit CoT reasoning protocol
+        system_prompt += COGNITIVE_CHAIN_OF_THOUGHT_RULE
     except Exception:
         pass
     # V39.7 — CEREWET MODE: nagih komitmen + gaya aspri proaktif
@@ -897,6 +900,19 @@ def _run_steps(req: AgentRunReq):
         t_start = _time.time()
         deadline = t_start + req.max_wall_seconds
 
+        def _critic_runner(sop, goal, session_id, max_iterations,
+                            max_wall_seconds):
+            """V39.12 — Critic sub-agent: lightweight run untuk audit jawaban."""
+            creq = AgentRunReq(goal=sop, session_id=session_id,
+                              max_iterations=max_iterations,
+                              max_wall_seconds=max_wall_seconds)
+            cevents = list(_run_steps(creq))
+            cfinal = cevents[-1] if cevents else {}
+            cdata = cfinal.get("data", {})
+            if isinstance(cdata, dict):
+                cdata["ok"] = cfinal.get("event") == "final"
+            return cdata
+
         def _finish(answer=None, error=None, timed_out=False, iterations=0,
                     truncated=False):
             """Satu pintu keluar: record episode + refleksi + statistik."""
@@ -940,8 +956,28 @@ def _run_steps(req: AgentRunReq):
                 pass
             reflection = REFLECT.reflect(req.goal, plan, trace, answer=answer,
                                          error=error, timed_out=timed_out)
+            # V39.12 — Self-Refine Critic Loop (Phase 2)
+            # Audit final answer for hallucinations, contradictions, leaks.
+            # Anti-recursion: jangan run critic kalau ini sudah run critic.
+            critic_result = {"ok": True, "issues": [], "confidence": 0}
+            if req.goal.startswith("[CRITIC]"):
+                # sub-agen critic jangan audit lagi — langsung return
+                pass
+            else:
+                try:
+                    from aeryn_core.critic_refine import run_critic
+                    critic_result = run_critic(
+                        goal=req.goal, answer=answer or "", trace=trace,
+                        runner=_critic_runner, max_iterations=1, wall_seconds=45)
+                except Exception as exc:
+                    # critic failure must NEVER block the answer
+                    critic_result = {"ok": False, "issues": [str(exc)[:80]],
+                                     "confidence": 0}
             out = {"answer": answer, "trace": trace,
                    "iterations": iterations}
+            if critic_result.get("issues"):
+                out["critic_findings"] = critic_result["issues"]
+            out["critic_confidence"] = critic_result.get("confidence", 0)
             if error:
                 out["error"] = error
             if timed_out:
