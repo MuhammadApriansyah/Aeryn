@@ -973,6 +973,31 @@ def _run_steps(req: AgentRunReq):
                     trace.append({"step": i, "type": "critic",
                                   "verdict": verdict,
                                   "auto": not req.critic})
+
+                # V39.5 — LLM-as-VERIFIER: gerbang kebenaran terakhir.
+                # Berbeda dari critic (subjektif bagus/buruk), verifier
+                # menilai benar/salah dgn rubrik ketat: klaim vs hasil tool,
+                # anti-halusinasi, anti-leak. Fail → jawaban diganti pesan
+                # aman + alasan (fail-closed, arahan jelas).
+                if answer and any(t["type"] == "tool" for t in trace):
+                    try:
+                        from aeryn_core.verifier import verify_answer
+                        v = verify_answer(MODEL_, answer, req.goal, trace)
+                        if not v["pass"]:
+                            answer = (
+                                "Maaf Sen, jawabanku belum lolos verifikasi "
+                                "internal (" + v["reason"][:120] + "). Supaya "
+                                "aman aku nggak kirim kesimpulan yang "
+                                "meragukan — mau aku coba lagi dengan cara "
+                                "lain?")
+                            trace.append({"step": i, "type": "verifier",
+                                          "pass": False,
+                                          "reason": v["reason"][:150]})
+                        else:
+                            trace.append({"step": i, "type": "verifier",
+                                          "pass": True, "via": v.get("via")})
+                    except Exception:
+                        pass  # verifier error ≠ blokir jawaban (degrade)
                 out = _finish(answer=answer, iterations=i + 1)
                 yield {"event": "final", "data": out}
                 return

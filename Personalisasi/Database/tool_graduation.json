@@ -1,28 +1,28 @@
 {
  "web_search": {
   "status": "native",
-  "success": 20,
+  "success": 24,
   "fail": 0
  },
  "http_get": {
   "status": "shadowing",
-  "success": 319,
+  "success": 351,
   "fail": 0
  },
  "web_read": {
   "status": "shadowing",
-  "success": 109,
+  "success": 129,
   "fail": 0
  },
  "fs_read": {
   "status": "native",
-  "success": 36,
-  "fail": 21
+  "success": 37,
+  "fail": 25
  },
  "fs_write": {
   "status": "bridged",
-  "success": 33,
-  "fail": 35
+  "success": 34,
+  "fail": 36
  },
  "terminal": {
   "status": "bridged",
@@ -31,17 +31,17 @@
  },
  "memory_search": {
   "status": "native",
-  "success": 257,
+  "success": 270,
   "fail": 0
  },
  "graph_traverse": {
   "status": "shadowing",
-  "success": 113,
+  "success": 118,
   "fail": 0
  },
  "pitfall_search": {
   "status": "shadowing",
-  "success": 113,
+  "success": 118,
   "fail": 0
  },
  "core_memory_edit": {

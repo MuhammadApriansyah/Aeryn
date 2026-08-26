@@ -3,12 +3,19 @@
  "subgoals": [
   {
    "step": 0,
-   "desc": "Balas sapaan pengguna dengan pesan salam ramah dan tawaran bantuan",
-   "tool_hint": "none",
-   "done_when": "Pengguna menerima balasan sapaan yang sesuai"
+   "desc": "Cari definisi kata 'halo'",
+   "tool_hint": "web_search|none",
+   "done_when": "hasil pencarian ada"
+  },
+  {
+   "step": 1,
+   "desc": "Tampilkan definisi kata 'halo'",
+   "tool_hint": "text_print|none",
+   "done_when": "definisi ditampilkan"
   }
  ],
  "status": [
+  "pending",
   "pending"
  ],
  "source": "llm"
