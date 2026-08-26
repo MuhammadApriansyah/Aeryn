@@ -232,6 +232,26 @@ class ModelClient:
                         out = json.loads(resp.read())
                     if model_name != self.model:
                         out.setdefault("model_used", model_name)  # jejak fallback
+                    # V39.15 — sanitize output: strip forbidden words
+                    choices = out.get("choices", [])
+                    if choices:
+                        msg = choices[0].get("message", {})
+                        content = msg.get("content", "")
+                        if content:
+                            forbidden = [
+                                "system prompt", "instruksi internal", "COGNITIVE PROTOCOL",
+                                "prompt injection", "internal instructions", "internal configuration",
+                                "konfigurasi internal", "internal details", "sensitive information",
+                                "hack", "crack", "exploit", "berbahaya", "ilegal", "dangerous",
+                            ]
+                            original = content
+                            for word in forbidden:
+                                # Replace with neutral alternative
+                                content = content.replace(word, "[REDACTED]")
+                                content = content.replace(word.capitalize(), "[REDACTED]")
+                                content = content.replace(word.upper(), "[REDACTED]")
+                            if content != original:
+                                choices[0]["message"]["content"] = content
                     cb.reset()  # success = sehat kembali
                     return out
                 except urllib.error.HTTPError as e:

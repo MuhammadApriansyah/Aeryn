@@ -1,0 +1,256 @@
+{
+  "accuracy": 87.34693877551021,
+  "pass": 214,
+  "total": 245,
+  "by_type": {
+    "cot": {
+      "pass": 57,
+      "total": 71,
+      "accuracy": 80.28169014084507
+    },
+    "critic": {
+      "pass": 22,
+      "total": 26,
+      "accuracy": 84.61538461538461
+    },
+    "tool_use": {
+      "pass": 63,
+      "total": 72,
+      "accuracy": 87.5
+    },
+    "error_recovery": {
+      "pass": 10,
+      "total": 10,
+      "accuracy": 100.0
+    },
+    "persona": {
+      "pass": 36,
+      "total": 39,
+      "accuracy": 92.3076923076923
+    },
+    "explanation": {
+      "pass": 26,
+      "total": 27,
+      "accuracy": 96.29629629629629
+    }
+  },
+  "failures": [
+    {
+      "idx": 12,
+      "type": "cot",
+      "issues": [
+        "no CoT"
+      ]
+    },
+    {
+      "idx": 13,
+      "type": "cot",
+      "issues": [
+        "no CoT"
+      ]
+    },
+    {
+      "idx": 17,
+      "type": "cot",
+      "issues": [
+        "no CoT"
+      ]
+    },
+    {
+      "idx": 19,
+      "type": "cot",
+      "issues": [
+        "no CoT"
+      ]
+    },
+    {
+      "idx": 39,
+      "type": "cot",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 40,
+      "type": "cot",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 41,
+      "type": "cot",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 42,
+      "type": "cot",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 43,
+      "type": "cot",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 44,
+      "type": "cot",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 45,
+      "type": "cot",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 46,
+      "type": "cot",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 47,
+      "type": "cot",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 56,
+      "type": "cot",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 71,
+      "type": "critic",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 74,
+      "type": "critic",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 86,
+      "type": "critic",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 87,
+      "type": "critic",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 138,
+      "type": "tool_use",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 139,
+      "type": "tool_use",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 140,
+      "type": "tool_use",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 141,
+      "type": "tool_use",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 142,
+      "type": "tool_use",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 143,
+      "type": "tool_use",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 144,
+      "type": "tool_use",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 145,
+      "type": "tool_use",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 153,
+      "type": "tool_use",
+      "issues": [
+        "no CoT"
+      ]
+    },
+    {
+      "idx": 179,
+      "type": "persona",
+      "issues": [
+        "no CoT"
+      ]
+    },
+    {
+      "idx": 188,
+      "type": "persona",
+      "issues": [
+        "has error"
+      ]
+    },
+    {
+      "idx": 205,
+      "type": "persona",
+      "issues": [
+        "no CoT"
+      ]
+    },
+    {
+      "idx": 230,
+      "type": "explanation",
+      "issues": [
+        "has error"
+      ]
+    }
+  ]
+}
