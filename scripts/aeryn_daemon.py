@@ -738,6 +738,16 @@ def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
             "→ 'context'; mode 'append'). Itu satu-satunya tool yang perlu — "
             "JANGAN memory_search/web_search dulu. Setelah menyimpan, "
             "konfirmasi singkat saja.")
+    # V39.6 — research-first reasoning + next-token prediction (Sen)
+    try:
+        from aeryn_core.reasoning_style import (RESEARCH_FIRST_RULE,
+                                                NEXT_TOKEN_RULE,
+                                                needs_research)
+        if needs_research(req.goal):
+            system_prompt += RESEARCH_FIRST_RULE
+        system_prompt += NEXT_TOKEN_RULE
+    except Exception:
+        pass
     plan = make_plan(MODEL_, req.goal, req.session_id)
     # V32 — skip planner untuk social queries
     if not _is_social_query(req.goal):
@@ -998,6 +1008,27 @@ def _run_steps(req: AgentRunReq):
                                           "pass": True, "via": v.get("via")})
                     except Exception:
                         pass  # verifier error ≠ blokir jawaban (degrade)
+
+                # V39.6b — RESEARCH GUARD (enforcement-di-kode): goal fakta
+                # tapi tidak pernah riset → jawaban ungrounded. Dua jalur:
+                # masih ada iterasi → paksa 1 riset; iterasi habis →
+                # disclaimer jujur di jawaban.
+                try:
+                    from aeryn_core.research_guard import (
+                        UNGROUNDED_DISCLAIMER, FORCED_RESEARCH_DIRECTIVE,
+                        is_ungrounded_factual)
+                    if is_ungrounded_factual(req.goal, trace):
+                        if i < req.max_iterations - 1 and not _is_social_query(req.goal):
+                            messages.append({"role": "user", "content":
+                                             FORCED_RESEARCH_DIRECTIVE})
+                            trace.append({"step": i, "type": "research_guard",
+                                          "action": "forced_research"})
+                            continue  # lanjut loop → model wajib riset
+                        answer += UNGROUNDED_DISCLAIMER
+                        trace.append({"step": i, "type": "research_guard",
+                                      "action": "disclaimer"})
+                except Exception:
+                    pass
                 out = _finish(answer=answer, iterations=i + 1)
                 yield {"event": "final", "data": out}
                 return

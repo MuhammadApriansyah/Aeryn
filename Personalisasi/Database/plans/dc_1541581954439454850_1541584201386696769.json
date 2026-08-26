@@ -1,17 +1,17 @@
 {
- "goal": "ingatkan aku 2 menit lagi untuk minum air",
+ "goal": "framework web backend paling populer sekarang apa? bandingkan singkat dong",
  "subgoals": [
   {
    "step": 0,
-   "desc": "Mulai timer tunggu selama 120 detik sejak permintaan pengguna",
-   "tool_hint": "none",
-   "done_when": "120 detik telah berlalu"
+   "desc": "Cari data terkini tentang framework web backend paling populer (misal dari Stack Overflow Survey, GitHub stars, atau ranking developer survey 2024-2025)",
+   "tool_hint": "web_search",
+   "done_when": "Diperoleh daftar 3-5 framework backend terpopuler beserta metrik popularitasnya"
   },
   {
    "step": 1,
-   "desc": "Kirim pesan pengingat ke pengguna: 'Waktunya minum air!'",
+   "desc": "Bandingkan singkat framework teratas: bahasa, kelebihan, kekurangan, dan use case utama masing-masing",
    "tool_hint": "none",
-   "done_when": "Pengingat minum air berhasil ditampilkan kepada pengguna"
+   "done_when": "Tersedia perbandingan ringkas yang menjawab pertanyaan pengguna"
   }
  ],
  "status": [
