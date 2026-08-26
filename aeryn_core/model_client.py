@@ -163,8 +163,14 @@ class ModelClient:
                 headers={
                     "Content-Type": "application/json",
                     "Authorization": f"Bearer {api_key}",
-                    # Cloudflare Groq memblok UA Python-urllib (error 1010)
-                    "User-Agent": "aeryn-core/27 (+https://github.com/sen/aeryn-core)",
+                    # V34 — Cloudflare Groq blok UA Python-urllib (1010).
+                    # V39.10b — Nous inference-api juga kini blok custom
+                    # UA (403 code 1010 → semua provider 404 di chain).
+                    # Pakai UA browser; identitas tetap di header X-Client.
+                    "User-Agent": "Mozilla/5.0 (X11; Linux aarch64) "
+                                  "AppleWebKit/537.36 Chrome/120.0 "
+                                  "Safari/537.36",
+                    "X-Client": "aeryn-core/39",
                 },
             )
             for attempt in range(3):  # retry dgn backoff utk 429/5xx

@@ -1,5 +1,18 @@
 # Changelog — Aeryn-Core
 
+## V39.10b (2026-08-26) — HOTFIX: Nous inference blok UA custom (403→404 chain)
+
+DriftGuard baru langsung membuktikan nilainya: parity probe mulai
+DIVERGENSI/INCONCLUSIVE acak. Akar: **Nous inference-api kini memblok
+User-Agent non-browser** (Cloudflare 403 code 1010 — pola sama dgn Groq
+di V34) → semua provider di fallback chain ikut 404.
+
+Fix: UA browser + identitas dipindah ke header X-Client.
+Verifikasi: probe 3× ALL PARITY beruntun; 462 tests green tetap.
+
+Pelajaran: drift bisa datang dari sisi PROVIDER juga, bukan cuma Hermes.
+DriftGuard + parity_probe = deteksi dini berlapis.
+
 ## V39.10 (2026-08-26) — DriftGuard: aman-update Hermes
 
 Pertanyaan Sen: "berarti gak update Hermes dong? atau bikin skrip?"
