@@ -749,6 +749,21 @@ def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
         system_prompt += NEXT_TOKEN_RULE
         # V39.12 — inject explicit CoT reasoning protocol
         system_prompt += COGNITIVE_CHAIN_OF_THOUGHT_RULE
+        # V39.16 — inject adapter behavior contract
+        try:
+            from aeryn_core.adapters import render_adapter_context
+            adapter_ctx = render_adapter_context(req.goal)
+            if adapter_ctx:
+                system_prompt += adapter_ctx
+        except Exception:
+            pass
+        # V39.16 — inject vault state
+        try:
+            from aeryn_core.vault import get_vault
+            vault_summary = get_vault().render_summary()
+            system_prompt += f"\n{vault_summary}"
+        except Exception:
+            pass
     except Exception:
         pass
     # V39.7 — CEREWET MODE: nagih komitmen + gaya aspri proaktif
