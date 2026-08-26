@@ -304,6 +304,34 @@ def main():
     except Exception:
         pass
 
+    # V39.9 — metrik fitur baru masuk nightly: verifier & cerewet
+    try:
+        import glob as _glob
+
+        def _count_ep(pred):
+            n = 0
+            for line in open(EPISODES) if os.path.exists(EPISODES) else []:
+                try:
+                    ep = json.loads(line)
+                except Exception:
+                    continue
+                tr = ep.get("trace") or []
+                if any(pred(t) for t in tr):
+                    n += 1
+            return n
+
+        v_fail = _count_ep(lambda t: t.get("type") == "verifier"
+                           and not t.get("pass"))
+        rg = _count_ep(lambda t: t.get("type") == "research_guard")
+        report["v39_features"] = {
+            "verifier_blocks": v_fail,
+            "research_guard_triggers": rg}
+        if v_fail or rg:
+            summary = (summary or "") + (
+                f" | verifier blokir {v_fail}, research-guard {rg}")
+    except Exception:
+        pass
+
     # V39-F4/F5 — injection sweep mingguan + weakness backlog
     try:
         from aeryn_core.injection_sweep import run_sweep, weakness_backlog

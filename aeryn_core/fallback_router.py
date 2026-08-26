@@ -131,6 +131,25 @@ FALLBACK_MAP = {
                  "+ - * / % // **). Perbaiki format ATAU hitung manual "
                  "langkah demi langkah.")},
     ],
+    # V39.9 — dua tool terbaru
+    "set_reminder": [
+        {"when": "rentang",
+         "say": ("Delay di luar rentang (10 menit s/d 7 hari). Tanyakan "
+                 "ke user mau diingatkan kapan, lalu hitung ulang delay.")},
+        {"when": "",
+         "say": ("Gagal memasang pengingat. Laporkan ke user bahwa "
+                 "reminder sedang tidak bisa dipasang.")},
+    ],
+    "image_understand": [
+        {"when": "dilindungi",
+         "say": ("File gambar dilindungi kebijakan — JANGAN coba path "
+                 "lain. Laporkan ke user.")},
+        {"when": "terlalu besar",
+         "say": ("Gambar melebihi 8MB. Minta user kompres/kecilkan dulu.")},
+        {"when": "",
+         "say": ("Gagal menganalisis gambar. Coba URL langsung ATAU "
+                 "laporkan bahwa gambar tidak bisa dibaca.")},
+    ],
 }
 
 # Directive default untuk tool yang tak terdaftar

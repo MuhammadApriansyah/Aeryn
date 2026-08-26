@@ -1,0 +1,56 @@
+{
+ "generated_at": "2026-08-26T06:14:10Z",
+ "window_hours": 24.0,
+ "runs": 250,
+ "errors": 32,
+ "timeouts": 0,
+ "success_rate_pct": 87.2,
+ "unique_sessions": 60,
+ "top_tools": {
+  "web_search": 102,
+  "fs_read": 43,
+  "core_memory_edit": 41,
+  "terminal": 33,
+  "memory_search": 22
+ },
+ "error_samples": [
+  "LLM provider HTTP 500 (semua model fallback habis)",
+  "iterasi habis tanpa jawaban final (goal terlalu kompleks atau model berputar)",
+  "iterasi habis tanpa jawaban final (goal terlalu kompleks atau model berputar)"
+ ],
+ "lessons_sample": [
+  "goal terjawab tanpa tool",
+  "goal terjawab tanpa tool",
+  "goal terjawab tanpa tool",
+  "goal terjawab tanpa tool",
+  "goal terjawab tanpa tool"
+ ],
+ "organism": {
+  "provider_health": {
+   "checked_at": "2026-08-25T17:58:22+00:00",
+   "total_providers": 9,
+   "ok": 5,
+   "by_status": {
+    "OK": 5,
+    "CLIENT_ERROR": 1,
+    "RATE_LIMITED": 3
+   },
+   "summary": "5/9 OK"
+  },
+  "library": {
+   "new_entries_24h": 47
+  },
+  "pitfalls": {
+   "total": 8,
+   "new_24h": 1
+  },
+  "hermes": {
+   "active_sessions_24h": 15,
+   "recent_user_messages": [
+    "yakin? coba audit seluruh file atau kamu coba akses web nya. cek authprovider sa",
+    "fine tuning lqgi",
+    "fine tuning dong hehe"
+   ]
+  }
+ }
+}

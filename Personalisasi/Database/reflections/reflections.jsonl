@@ -355,3 +355,5 @@
 {"ts": 1787723636.8752067, "goal": "udah kelar kok install dockernya", "ok": true, "findings": [], "recommendations": [], "strategy": "", "stats": {"subgoals": 2, "tool_calls": 2, "errors": 0}}
 {"ts": 1787723726.9237318, "goal": "ingat ini: probe-parity fakta uji", "ok": true, "findings": [], "recommendations": [], "strategy": "", "stats": {"subgoals": 1, "tool_calls": 1, "errors": 0}}
 {"ts": 1787723746.7255747, "goal": "halo", "ok": true, "findings": ["plan meminta tool tapi model jawab langsung — kemungkinan halusinasi atau goal terlalu mudah"], "recommendations": [], "strategy": "", "stats": {"subgoals": 1, "tool_calls": 0, "errors": 0}}
+{"ts": 1787724924.8714128, "goal": "ingat ini: probe-parity fakta uji", "ok": true, "findings": [], "recommendations": [], "strategy": "", "stats": {"subgoals": 1, "tool_calls": 1, "errors": 0}}
+{"ts": 1787725023.7431757, "goal": "halo", "ok": true, "findings": ["plan meminta tool tapi model jawab langsung — kemungkinan halusinasi atau goal terlalu mudah"], "recommendations": [], "strategy": "", "stats": {"subgoals": 1, "tool_calls": 0, "errors": 0}}

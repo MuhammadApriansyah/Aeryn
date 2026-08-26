@@ -1,5 +1,21 @@
 # Changelog — Aeryn-Core
 
+## V39.9 (2026-08-26) — Fallback map 16/16 + nightly metrik fitur baru
+
+Probe M34–M39 (audit kesehatan menyeluruh pasca-V39.8):
+
+1. **Fallback map kini 16/16 tool** — set_reminder & image_understand
+   punya arahan error (rentang delay / gambar >8MB / path dilindungi).
+   Kontrak "tidak ada error tanpa arahan" tertutup penuh lagi.
+2. **Nightly reflection kini melaporkan metrik V39** — jumlah jawaban
+   yang diblokir verifier + trigger research_guard masuk report &
+   summary. Kelemahan sistem terlihat otomatis tiap pagi.
+3. Audit sehat: episode recording ✅, session history by-design OK,
+   test suite runtime masih wajar, dokumentasi sinkron.
+
+Verifikasi: 447 → **451 tests green** (+4); nightly live dengan metrik
+baru; ALL PARITY.
+
 ## V39.8 (2026-08-26) — Polish cerewet: settle FIFO + injection guard
 
 Probe M29–M33 atas cerewet mode:
