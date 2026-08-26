@@ -1,5 +1,22 @@
 # Changelog — Aeryn-Core
 
+## V39.10c (2026-08-26) — Cost gate verifier + summary cap
+
+Putaran sebelum tidur (probe M50–M54):
+
+1. **Verifier cost gate** — dulu SETIAP run ber-tool membayar +1
+   panggilan LLM untuk verifikasi (~2x biaya run sederhana). Kini:
+   LLM verify hanya utk tool faktual (web/memory/ask_hermes) atau run
+   kompleks (>=3 tool). 1-2 tool lokal (fs_read/math/datetime) =
+   mechanical cukup.
+2. **Nightly summary cap 600 char** — error_samples panjang bisa
+   memakan slot core memory block.
+3. Audit hijau: drift_guard timeout ✅, Discord 2000-char potong ✅,
+   core memory blocks dalam limit ✅.
+
+Verifikasi: 462 → **466 tests green** (+4); test verifier lama diupdate
+sesuai kontrak baru.
+
 ## V39.10b (2026-08-26) — HOTFIX: Nous inference blok UA custom (403→404 chain)
 
 DriftGuard baru langsung membuktikan nilainya: parity probe mulai

@@ -259,7 +259,10 @@ def handoff_summary(report: dict) -> str:
     org_bits = organism_digest_bits(report.get("organism", {}))
     if org_bits:
         parts.append("; ".join(org_bits))
-    return ". ".join(parts)
+    # V39.10c — cap panjang summary: error_samples bisa panjang; core
+    # memory block punya char limit, jangan biarkan digest memakan slot
+    out = ". ".join(parts)
+    return out[:600]
 
 
 def core_memory_digest(report: dict) -> str:

@@ -51,8 +51,11 @@ def test_llm_verifier_pass():
 def test_llm_verifier_fail_on_contradiction():
     client = StubClient(
         '{"pass": false, "reason": "angka tidak cocok dgn hasil tool"}')
-    v = verify_answer(client, "hasilnya 42", "berapa 2+2?",
-                      [{"type": "tool", "name": "math_calc"}])
+    # V39.10c — math_calc = tool lokal → LLM verify di-skip; paksa deep
+    # dengan trace web_search agar jalur LLM teruji
+    trace = [{"type": "tool", "name": "web_search",
+              "result_digest": "..."}]
+    v = verify_answer(client, "hasilnya 42", "berapa 2+2?", trace)
     assert not v["pass"]
     # jawaban harus diganti pesan aman di daemon — di sini cukup cek reason
 
@@ -62,8 +65,9 @@ def test_llm_failure_degrades_gracefully():
         def chat(self, *a, **kw):
             raise RuntimeError("provider down")
 
-    v = verify_answer(Broken(), "jawaban normal", "goal",
-                      [{"type": "tool", "name": "fs_read"}])
+    trace = [{"type": "tool", "name": "web_search"},
+             {"type": "tool", "name": "web_read"}]
+    v = verify_answer(Broken(), "jawaban normal", "goal", trace)
     assert v["pass"] and v["via"] == "degraded"
 
 

@@ -117,4 +117,16 @@ def verify_answer(model_client, answer: str, goal: str, trace: list,
         # run sosial/sederhana tanpa tool → mechanical cukup
         return {"pass": True, "reason": "tanpa tool; mechanical lolos",
                 "via": "mechanical"}
+    # V39.10c — hemat biaya: LLM verify hanya untuk run yang klaimnya
+    # faktual (web/memory) ATAU kompleks (>=3 tool). 1-2 tool lokal
+    # (fs_read/math/datetime) = mechanical sudah memadai — dulu SETIAP
+    # run ber-tool membayar +1 panggilan LLM (~2x biaya run sederhana).
+    factual_tools = {"web_search", "web_read", "memory_search",
+                     "ask_hermes"}
+    tools = mech["tools_used"]
+    needs_deep = any(t in factual_tools for t in tools) or len(tools) >= 3
+    if not needs_deep:
+        return {"pass": True,
+                "reason": "tool lokal sederhana; mechanical lolos",
+                "via": "mechanical"}
     return verify_with_llm(model_client, answer, goal, trace)
