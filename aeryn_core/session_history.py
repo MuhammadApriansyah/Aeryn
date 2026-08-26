@@ -42,7 +42,7 @@ def record(sid, role, content):
     entry = {"ts": round(time.time(), 3), "role": role,
              "content": str(content)[:8000]}
     with _LOCK:
-        with open(_path(sid), "a") as f:
+        with open(_path(sid), "a", encoding="utf-8") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
@@ -54,7 +54,7 @@ def reset(sid):
 
 def turn_count(sid):
     try:
-        with open(_path(sid)) as f:
+        with open(_path(sid), encoding="utf-8") as f:
             return sum(1 for _ in f)
     except OSError:
         return 0
@@ -83,7 +83,7 @@ def _read_compact_cache(cp, now=None):
     if now is None:
         now = time.time()
     try:
-        with open(cp) as f:
+        with open(cp, encoding="utf-8") as f:
             c = json.load(f)
         ts = float(c.get("ts", 0))
         summary = c.get("summary")
@@ -121,7 +121,7 @@ def _llm_summary_cached(sid, old_turns, llm_summarize):
         return None
     try:
         os.makedirs(_DB_DIR, exist_ok=True)
-        with open(cp, "w") as f:
+        with open(cp, "w", encoding="utf-8") as f:
             json.dump({"ts": round(now, 3), "summary": summary},
                       f, ensure_ascii=False)
     except OSError:
@@ -172,7 +172,7 @@ def _load_turns(sid):
     Return list dict turn valid; file tidak ada → list kosong.
     """
     try:
-        with open(_path(sid)) as f:
+        with open(_path(sid), encoding="utf-8") as f:
             turns = []
             for l in f:
                 try:

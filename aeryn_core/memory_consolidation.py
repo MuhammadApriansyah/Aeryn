@@ -35,12 +35,12 @@ class MemoryConsolidator:
     # ---- io --------------------------------------------------------
     def _read_cursor(self) -> int:
         try:
-            return int(open(self.cursor_path).read().strip())
+            return int(open(self.cursor_path, encoding="utf-8").read().strip())
         except (OSError, ValueError):
             return 0
 
     def _write_cursor(self, n: int):
-        with open(self.cursor_path, "w") as f:
+        with open(self.cursor_path, "w", encoding="utf-8") as f:
             f.write(str(n))
 
     def _load_episodes(self) -> list:

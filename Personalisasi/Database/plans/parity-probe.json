@@ -3,19 +3,12 @@
  "subgoals": [
   {
    "step": 0,
-   "desc": "Cari definisi kata 'halo'",
-   "tool_hint": "web_search|http_get|fs_read|none",
-   "done_when": "ditemukan definisi yang jelas"
-  },
-  {
-   "step": 1,
-   "desc": "Cari contoh penggunaan kata 'halo'",
-   "tool_hint": "web_search|http_get|fs_read|none",
-   "done_when": "ditemukan contoh yang relevan"
+   "desc": "Menyapa pengguna dan menanyakan tujuan atau informasi yang dibutuhkan",
+   "tool_hint": "none",
+   "done_when": "Balasan sapaan ramah terkirim dan pengguna merespons dengan kebutuhan spesifik"
   }
  ],
  "status": [
-  "pending",
   "pending"
  ],
  "source": "llm"

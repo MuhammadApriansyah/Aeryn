@@ -1,5 +1,30 @@
 # Changelog — Aeryn-Core
 
+## V38.9h (2026-08-26) — FINE-TUNING REKURSIF LUAS (5 level)
+
+Audit penuh seluruh codebase, level demi level:
+
+### Level 1 — AST scan 40 modul aeryn_core
+- 38/40 bersih; 2 modul dengan open() tanpa encoding
+  (memory_consolidation, session_history) → semua dipatch utf-8.
+
+### Level 2 — AST scan 13 skrip scripts/
+- 10/10 bersih: nol bare-except, nol shell=True berisiko.
+
+### Level 3 — Data integrity sweep
+- Semua JSON/JSONL di Database ter-parse valid. Nol korupsi.
+
+### Level 4 — Import graph
+- Nol modul mati; semua modul aeryn_core terpakai.
+
+### Level 5 — Live E2E pipeline utuh
+- Social+cerewet parity ✅ ("...deploy webnovel-platform kamu di
+  Docker? 😊" — konteks nagihan nyambung)
+- math_calc live ✅ ("15% dari 240 ribu = 36 ribu")
+- next-token ➡️ tampil di kedua jalur ✅
+
+Verifikasi: **457 tests green** (encoding patch tanpa regresi).
+
 ## V38.9g (2026-08-26) — Commitments hygiene: pending cap per user
 
 M48 stress test menemukan: 5 thread × 20 janji pending → cap 50

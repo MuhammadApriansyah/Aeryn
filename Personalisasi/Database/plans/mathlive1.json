@@ -1,0 +1,15 @@
+{
+ "goal": "hitung 15% dari 240 ribu",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Hitung 15% dari 240.000 dengan operasi 240.000 × 0,15",
+   "tool_hint": "none",
+   "done_when": "Diperoleh hasil 36.000"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

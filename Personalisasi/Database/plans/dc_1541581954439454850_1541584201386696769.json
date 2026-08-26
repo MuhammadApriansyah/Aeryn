@@ -1,21 +1,14 @@
 {
- "goal": "udah kelar kok install dockernya",
+ "goal": "halo aeryn",
  "subgoals": [
   {
    "step": 0,
-   "desc": "Verifikasi hasil instalasi Docker dengan memeriksa keberadaan file konfigurasi/socket Docker (mis. /etc/docker/daemon.json atau /var/run/docker.sock)",
-   "tool_hint": "fs_read",
-   "done_when": "File/socket Docker ditemukan dan dapat dibaca"
-  },
-  {
-   "step": 1,
-   "desc": "Laporkan ke pengguna bahwa instalasi Docker telah selesai dan terverifikasi",
+   "desc": "Balas sapaan pengguna dan tanyakan tujuan atau bantuan yang dibutuhkan",
    "tool_hint": "none",
-   "done_when": "Konfirmasi status instalasi disampaikan"
+   "done_when": "Pengguna merespons dengan goal konkret"
   }
  ],
  "status": [
-  "pending",
   "pending"
  ],
  "source": "llm"
