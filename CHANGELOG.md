@@ -1,5 +1,20 @@
 # Changelog — Aeryn-Core
 
+## V38.9g (2026-08-26) — Commitments hygiene: pending cap per user
+
+M48 stress test menemukan: 5 thread × 20 janji pending → cap 50
+memotong SEMUA termasuk yang pending (pop(0) buang acak). User bisa
+kehilangan janji aktif diam-diam.
+
+Fix berlapis:
+1. `PENDING_CAP_PER_USER = 10` — lebih dari itu, janji TERLAMA di-
+   tandai "expired" (transparan, bukan hilang).
+2. Eviction global tetap prioritas non-pending dulu.
+3. Audit M46–M49 sehat: uid injection aman (nudge kosong), file korup
+   → auto-recover [], concurrent write tanpa exception (lock bekerja).
+
+Verifikasi: 454 → **457 tests green** (+3); ALL PARITY.
+
 ## V38.9f (2026-08-26) — Cerewet parity di jalur sosial
 
 M44 menemukan: nagihan komitmen HANYA jalan di jalur agent (daemon);

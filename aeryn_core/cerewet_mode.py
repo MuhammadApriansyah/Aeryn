@@ -27,6 +27,10 @@ MAX_COMMITMENTS = 50          # cap (lesson V38.6: unbounded = bug)
 NAG_COOLDOWN_S = 6 * 3600     # 1 komitmen = maks 1 nagihan / 6 jam
 STALE_HOURS = 48              # lewat ini = "telat", teguran naik level
 DEFAULT_REMIND_MIN = 120      # komitmen tanpa deadline → remind 2 jam
+PENDING_CAP_PER_USER = 10     # V39.9c: maks janji pending per user —
+                              # lebih dari itu user perlu realita, bukan
+                              # daftar panjang 😄 (FIFO terlama di-settle
+                              # otomatis jadi 'expired')
 
 # Pola janji bahasa Indonesia santai
 _COMMIT_PATTERNS = [
@@ -88,6 +92,15 @@ def add_commitment(session_id: str, text: str) -> dict | None:
             if (it["session_id"] == session_id and it["status"] == "pending"
                     and it["text"] == text[:160]):
                 return None
+        # V39.9c — pending cap per user: >10 janji belum kelar = yang
+        # terlama ditandai expired (bukan dibuang diam-diam)
+        same_user_pending = [i for i in items
+                             if i.get("session_id") == session_id
+                             and i.get("status") == "pending"]
+        if len(same_user_pending) >= PENDING_CAP_PER_USER:
+            oldest = min(same_user_pending,
+                         key=lambda i: i.get("created_ts", 0))
+            oldest["status"] = "expired"
         while len(items) >= MAX_COMMITMENTS:
             done = [i for i in items if i.get("status") != "pending"]
             if done:
