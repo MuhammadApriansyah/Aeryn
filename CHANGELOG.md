@@ -1,5 +1,18 @@
 # Changelog — Aeryn-Core
 
+## V38.9b (2026-08-25) — TOCTOU guard fs_write (O_NOFOLLOW)
+
+M16 eskalasi: celah race condition (check-then-use) di fs_write —
+symlink bisa di-swap SETELAH check_path lolos, SEBELUM open() →
+tulis ke file DI LUAR sandbox.
+
+Fix: open via parent dir_fd + O_NOFOLLOW — bila komponen akhir adalah
+symlink, kernel menolak (ELOOP). Verifikasi dengan simulasi swap
+(monkeypatch os.open): .env asli utuh, penulisan ditolak ELOOP.
+Penulisan normal + auto-create parent tetap jalan.
+
+Verifikasi: 412 → **415 tests green**.
+
 ## V38.9 (2026-08-25) — Fine-tuning M17: math_calc DoS ditutup
 
 Probe M17 (resource exhaustion) menemukan: `math_calc("9**9**9")`

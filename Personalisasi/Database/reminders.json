@@ -14,5 +14,13 @@
   "session_id": "",
   "status": "fired",
   "fired_at": 1787714688.1170309
+ },
+ {
+  "id": "r715406861",
+  "note": "uji",
+  "due_ts": 1787715466.8617945,
+  "session_id": "../../etc/evil",
+  "status": "fired",
+  "fired_at": 1787715482.476111
  }
 ]

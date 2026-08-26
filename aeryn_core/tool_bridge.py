@@ -242,10 +242,20 @@ def make_fs_write(sandbox_roots):
         if not any(p == root or root in p.parents for root in allowed):
             raise PermissionError(f"path outside sandbox roots: {p}")
         p.parent.mkdir(parents=True, exist_ok=True)
-        data = content.encode("utf-8")
-        with open(p, "wb") as f:
-            f.write(data)
-        return {"ok": True, "path": str(p), "bytes_written": len(data)}
+        # V38.9-SEC — TOCTOU guard: path sudah lolos kernel, tapi bisa
+        # jadi SYMLINK yang di-swap setelah check. O_NOFOLLOW = gagal
+        # bila komponen akhir adalah symlink (bukan mengikuti target).
+        parent_fd = os.open(str(p.parent), os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            fd = os.open(p.name,
+                         os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW,
+                         0o644, dir_fd=parent_fd)
+            with os.fdopen(fd, "wb") as f:
+                f.write(content.encode("utf-8"))
+            return {"ok": True, "path": str(p),
+                    "bytes_written": len(content.encode("utf-8"))}
+        finally:
+            os.close(parent_fd)
     return fs_write
 
 
