@@ -4,7 +4,8 @@
   "session_id": "dc_1541581954439454850_1541584201386696769",
   "text": "oke oke, nanti aku install dockernya deh di vps",
   "created_ts": 1787722726.5069985,
-  "last_nagged_ts": 0,
-  "status": "pending"
+  "last_nagged_ts": 1787723535.2007587,
+  "status": "done",
+  "done_ts": 1787723535.2046847
  }
 ]

@@ -130,18 +130,22 @@ def mark_nagged(cid: str):
 
 
 def settle_commitment(cid_prefix: str, session_id: str) -> bool:
-    """User menjawab 'udah' utk komitmen tertentu → tandai selesai."""
+    """Tandai komitmen pending TERLAMA di sesi ini selesai.
+    cid_prefix kosong = ambil yang paling tua (FIFO)."""
     with _LOCK:
         items = _load()
-        for it in items:
-            if (it.get("session_id") == session_id
-                    and it.get("status") == "pending"
-                    and str(it.get("id", "")).startswith(cid_prefix)):
-                it["status"] = "done"
-                it["done_ts"] = time.time()
-                _save(items)
-                return True
-    return False
+        candidates = [i for i in items
+                      if i.get("session_id") == session_id
+                      and i.get("status") == "pending"
+                      and (not cid_prefix
+                           or str(i.get("id", "")).startswith(cid_prefix))]
+        if not candidates:
+            return False
+        oldest = min(candidates, key=lambda i: i.get("created_ts", 0))
+        oldest["status"] = "done"
+        oldest["done_ts"] = time.time()
+        _save(items)
+        return True
 
 
 def cerewet_context_block(session_id: str) -> str:

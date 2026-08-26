@@ -1,48 +1,20 @@
 {
- "goal": "oke oke, nanti aku install dockernya deh di vps",
+ "goal": "udah kelar kok install dockernya",
  "subgoals": [
   {
    "step": 0,
-   "desc": "Cari panduan instalasi terbaru untuk aplikasi yang dimaksud pengguna",
-   "tool_hint": "web_search|http_get|fs_read|none",
-   "done_when": "Dokumentasi atau panduan instalasi resmi ditemukan"
+   "desc": "Verifikasi hasil instalasi Docker dengan memeriksa keberadaan file konfigurasi/socket Docker (mis. /etc/docker/daemon.json atau /var/run/docker.sock)",
+   "tool_hint": "fs_read",
+   "done_when": "File/socket Docker ditemukan dan dapat dibaca"
   },
   {
    "step": 1,
-   "desc": "Periksa spesifikasi dan sistem operasi VPS pengguna (distro, arsitektur, resource)",
-   "tool_hint": "fs_read|http_get|none",
-   "done_when": "Informasi OS VPS dan prasyarat sistem diketahui"
-  },
-  {
-   "step": 2,
-   "desc": "Siapkan VPS: update paket sistem dan install dependensi yang dibutuhkan",
-   "tool_hint": "fs_write|http_get|none",
-   "done_when": "Semua dependensi terpasang tanpa error"
-  },
-  {
-   "step": 3,
-   "desc": "Unduh dan install aplikasi sesuai panduan resmi",
-   "tool_hint": "http_get|fs_write|none",
-   "done_when": "Aplikasi berhasil terinstall di VPS"
-  },
-  {
-   "step": 4,
-   "desc": "Konfigurasi aplikasi: set environment variables, file konfigurasi, dan service (systemd/docker)",
-   "tool_hint": "fs_write|fs_read|none",
-   "done_when": "Konfigurasi selesai dan service dapat berjalan"
-  },
-  {
-   "step": 5,
-   "desc": "Verifikasi instalasi: jalankan service, cek status, dan tes akses dari luar",
-   "tool_hint": "http_get|fs_read|none",
-   "done_when": "Aplikasi berjalan normal dan dapat diakses"
+   "desc": "Laporkan ke pengguna bahwa instalasi Docker telah selesai dan terverifikasi",
+   "tool_hint": "none",
+   "done_when": "Konfirmasi status instalasi disampaikan"
   }
  ],
  "status": [
-  "pending",
-  "pending",
-  "pending",
-  "pending",
   "pending",
   "pending"
  ],

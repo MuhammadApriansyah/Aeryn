@@ -5,7 +5,7 @@
    "step": 0,
    "desc": "Balas sapaan pengguna dengan pesan ramah dan tanyakan apa yang bisa dibantu",
    "tool_hint": "none",
-   "done_when": "Pengguna menerima balasan sapaan"
+   "done_when": "Pengguna menerima balasan sapaan yang sesuai"
   }
  ],
  "status": [

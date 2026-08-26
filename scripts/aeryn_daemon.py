@@ -764,6 +764,20 @@ def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
             add_commitment(req.session_id, new_c)
     except Exception:
         pass
+    # V39.8 — CEREWET SETTLE: user menjawab komitmen dgn "udah/sudah
+    # selesai/done" → tandai selesai (jalur deterministik, bukan doa).
+    try:
+        from aeryn_core.cerewet_mode import settle_commitment
+        low = req.goal.lower().lstrip()
+        if low.startswith(("udah", "sudah", "sudahnya", "done", "kelar",
+                           "beres")):
+            if settle_commitment("", req.session_id):
+                system_prompt += (
+                    "\n\n## KOMITMEN BARU DISELESAIKAN\n"
+                    "User baru mengonfirmasi komitmennya SELESAI. Beri "
+                    "apresiasi singkat + cerewet soal hal berikutnya.")
+    except Exception:
+        pass
     plan = make_plan(MODEL_, req.goal, req.session_id)
     # V32 — skip planner untuk social queries
     if not _is_social_query(req.goal):

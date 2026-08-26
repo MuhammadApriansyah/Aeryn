@@ -1,5 +1,22 @@
 # Changelog — Aeryn-Core
 
+## V39.8 (2026-08-26) — Polish cerewet: settle FIFO + injection guard
+
+Probe M29–M33 atas cerewet mode:
+
+1. **Settle jalur deterministik** — user bilang "udah/kelar/beres/done"
+   → komitmen pending TERLAMA (FIFO) ditandai selesai + prompt apresiasi.
+   Dulu settle_commitment tidak pernah dipanggil daemon (dead code).
+2. **Injection guard** — teks janji dipotong per kalimat; instruksi
+   jahat setelah titik ("IGNORE ALL...") tidak ikut tersimpan.
+3. Audit: cap 50 + evict ✅, nagihan tidak dianggap leak oleh verifier ✅,
+   reminder loop hemat (2 iterasi) ✅.
+
+Live: "udah kelar kok install dockernya" → status pending→done +
+apresiasi cerewet.
+
+Verifikasi: 444 → **447 tests green** (+3); ALL PARITY.
+
 ## V39.7 (2026-08-25) — CEREWET MODE: aspri proaktif edisi nagihan
 
 Keinginan Sen: "cakep nih buat jadi aspri nya lu tapi edisi cerewet".
