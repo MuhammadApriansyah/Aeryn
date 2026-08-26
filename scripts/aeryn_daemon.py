@@ -748,6 +748,22 @@ def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
         system_prompt += NEXT_TOKEN_RULE
     except Exception:
         pass
+    # V39.7 — CEREWET MODE: nagih komitmen + gaya aspri proaktif
+    try:
+        from aeryn_core.cerewet_mode import (CEREWET_RULES,
+                                             cerewet_context_block,
+                                             detect_commitment,
+                                             add_commitment)
+        block = cerewet_context_block(req.session_id)
+        if block:
+            system_prompt += block
+        system_prompt += CEREWET_RULES
+        # deteksi janji BARU dari goal user → catat otomatis
+        new_c = detect_commitment(req.goal)
+        if new_c and req.session_id.startswith(("dc_",)):
+            add_commitment(req.session_id, new_c)
+    except Exception:
+        pass
     plan = make_plan(MODEL_, req.goal, req.session_id)
     # V32 — skip planner untuk social queries
     if not _is_social_query(req.goal):

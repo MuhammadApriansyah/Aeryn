@@ -1,20 +1,48 @@
 {
- "goal": "framework web backend paling populer sekarang apa? bandingkan singkat dong",
+ "goal": "oke oke, nanti aku install dockernya deh di vps",
  "subgoals": [
   {
    "step": 0,
-   "desc": "Cari data terkini tentang framework web backend paling populer (misal dari Stack Overflow Survey, GitHub stars, atau ranking developer survey 2024-2025)",
-   "tool_hint": "web_search",
-   "done_when": "Diperoleh daftar 3-5 framework backend terpopuler beserta metrik popularitasnya"
+   "desc": "Cari panduan instalasi terbaru untuk aplikasi yang dimaksud pengguna",
+   "tool_hint": "web_search|http_get|fs_read|none",
+   "done_when": "Dokumentasi atau panduan instalasi resmi ditemukan"
   },
   {
    "step": 1,
-   "desc": "Bandingkan singkat framework teratas: bahasa, kelebihan, kekurangan, dan use case utama masing-masing",
-   "tool_hint": "none",
-   "done_when": "Tersedia perbandingan ringkas yang menjawab pertanyaan pengguna"
+   "desc": "Periksa spesifikasi dan sistem operasi VPS pengguna (distro, arsitektur, resource)",
+   "tool_hint": "fs_read|http_get|none",
+   "done_when": "Informasi OS VPS dan prasyarat sistem diketahui"
+  },
+  {
+   "step": 2,
+   "desc": "Siapkan VPS: update paket sistem dan install dependensi yang dibutuhkan",
+   "tool_hint": "fs_write|http_get|none",
+   "done_when": "Semua dependensi terpasang tanpa error"
+  },
+  {
+   "step": 3,
+   "desc": "Unduh dan install aplikasi sesuai panduan resmi",
+   "tool_hint": "http_get|fs_write|none",
+   "done_when": "Aplikasi berhasil terinstall di VPS"
+  },
+  {
+   "step": 4,
+   "desc": "Konfigurasi aplikasi: set environment variables, file konfigurasi, dan service (systemd/docker)",
+   "tool_hint": "fs_write|fs_read|none",
+   "done_when": "Konfigurasi selesai dan service dapat berjalan"
+  },
+  {
+   "step": 5,
+   "desc": "Verifikasi instalasi: jalankan service, cek status, dan tes akses dari luar",
+   "tool_hint": "http_get|fs_read|none",
+   "done_when": "Aplikasi berjalan normal dan dapat diakses"
   }
  ],
  "status": [
+  "pending",
+  "pending",
+  "pending",
+  "pending",
   "pending",
   "pending"
  ],

@@ -1,5 +1,23 @@
 # Changelog — Aeryn-Core
 
+## V39.7 (2026-08-25) — CEREWET MODE: aspri proaktif edisi nagihan
+
+Keinginan Sen: "cakep nih buat jadi aspri nya lu tapi edisi cerewet".
+
+Perilaku baru Aeryn:
+1. **Deteksi komitmen** — pola "nanti aku/besok gue/ntar/akhir minggu/
+   lusa" dicatat otomatis ke commitments.json (cap 50, dedupe).
+2. **Nagihan saat chat berikutnya** — komitmen pending di-inject ke
+   system prompt → Aeryn membuka percakapan dengan menagih status.
+3. **Anti-spam** — cooldown 6 jam per komitmen, maks 2 per pesan.
+4. **Level teguran naik** — >48 jam = flag stale → pura-pura kesel lucu.
+5. Settle: user bilang udah → komitmen ditandai selesai.
+
+Live: "oke nanti aku install dockernya deh" → tercatat pending; chat
+berikutnya Aeryn menagih dgn gaya khas.
+
+Verifikasi: 436 → **444 tests green** (+8); ALL PARITY.
+
 ## V39.6c (2026-08-25) — Polish gen-3: research signals + audit guard
 
 Probe M24–M28 atas fitur reasoning baru:
