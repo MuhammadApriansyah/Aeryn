@@ -1,0 +1,15 @@
+{
+ "goal": "selamat pagi",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Sapa pengguna dengan ramah sebagai balasan atas sapaan 'selamat pagi'",
+   "tool_hint": "none",
+   "done_when": "Pengguna disapa dengan ramah dan sesuai konteks sapaan pagi hari."
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

@@ -1,0 +1,15 @@
+{
+ "goal": "oy",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Tidak ada goal yang jelas diberikan oleh pengguna. Goal 'oy' tidak dapat diuraikan menjadi subgoal yang bermakna.",
+   "tool_hint": "none",
+   "done_when": "Goal yang jelas dan spesifik diberikan oleh pengguna."
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

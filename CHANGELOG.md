@@ -1,5 +1,30 @@
 # Changelog — Aeryn-Core
 
+## V39.13 (2026-08-26) — Brute Fine-Tuning: 245 Samples + NOUS/Gemini/OpenRouter Chain
+
+Ringkasan: dataset reasoning terbesar sampai saat ini + provider chain optimal.
+
+### 1. Provider Chain Reconfiguration
+- **PRIMARY**: NOUS `meituan/longcat-2.0:free` (via Hermes OAuth)
+- **SECONDARY**: Gemini `gemini-3.5-flash-lite` (fast, cheap via native API)
+- **TERTIARY**: OpenRouter `gpt-4o-mini` (reliable, many models)
+- **FALLBACK**: Groq `gpt-oss-20b/120b` (fast, free tier)
+- Removed: NVIDIA NIM (410 Gone), old Gemini 2.5-pro (404)
+
+### 2. Brute Fine-Tuning Dataset v4 (245 samples)
+- `cot`: 71 samples — math, social, memory, research, graph, debug, commitment, identity
+- `critic`: 26 samples — hallucination detection, marker leak, contradiction, pass, incomplete
+- `tool_use`: 72 samples — math_calc, web_search, memory_search, graph_traverse, pitfall_search, core_memory_edit, NO_TOOL
+- `error_recovery`: 10 samples — 429, 403, 404, timeout, tool failure, rate limit, network error
+- `persona`: 39 samples — cerewet commitment, identity, proactive nudge, refuse dangerous, memory recall
+- `explanation`: 27 samples — single-sentence + detailed explanations for 20 topics
+
+### 3. Files Modified
+- `aeryn_core/model_client.py` — provider chain: NOUS → Gemini → OpenRouter → Groq
+- `scripts/generate_finetune_v3913.py` — NEW (245 lines)
+- `Personalisasi/Database/training/finetune_v3913_brute_500.jsonl` — NEW (245 samples)
+
+
 ## V39.12 (2026-08-26) — Reasoning Overhaul: CoT + Self-Refine Critic + Fine-Tuning Data v2
 
 Ringkasan aksi: dari "agent yang rajin" ke "agensi yang berpikir" — tiga fase upgrade penalaran.

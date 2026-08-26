@@ -1,0 +1,15 @@
+{
+ "goal": "ingat ini: nama gw Sen",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Simpan nama pengguna 'Sen' ke file memori agar bisa diingat untuk percakapan selanjutnya",
+   "tool_hint": "fs_read",
+   "done_when": "File memori ditemukan atau dibuat, dan nama 'Sen' berhasil dicatat"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

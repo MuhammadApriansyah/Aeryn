@@ -1,0 +1,15 @@
+{
+ "goal": "hitung 100/4",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Hitung 100 dibagi 4",
+   "tool_hint": "none",
+   "done_when": "Hasil 100/4 = 25"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

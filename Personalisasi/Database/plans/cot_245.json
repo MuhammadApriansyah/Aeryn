@@ -1,0 +1,16 @@
+{
+ "goal": "halo",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Balas sapaan pengguna dengan ramah dan tanyakan bagaimana bisa membantu hari ini",
+   "tool_hint": "none",
+   "done": false,
+   "done_when": "Pengguna mendapat balasan sapaan yang ramah dan terbuka untuk melanjutkan percakapan"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

@@ -1,0 +1,15 @@
+{
+ "goal": "halo",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Sapa pengguna dan tanyakan bagaimana bisa membantu hari ini",
+   "tool_hint": "none",
+   "done_when": "Pengguna merespons atau menyampaikan kebutuhan spesifiknya"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

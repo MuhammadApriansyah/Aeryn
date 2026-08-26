@@ -1,17 +1,17 @@
 {
- "generated_at": "2026-08-26T12:48:18Z",
+ "generated_at": "2026-08-26T20:05:00Z",
  "window_hours": 24.0,
- "runs": 213,
- "errors": 24,
+ "runs": 204,
+ "errors": 33,
  "timeouts": 0,
- "success_rate_pct": 88.7,
- "unique_sessions": 53,
+ "success_rate_pct": 83.8,
+ "unique_sessions": 45,
  "top_tools": {
-  "core_memory_edit": 58,
-  "web_search": 35,
-  "memory_search": 22,
-  "web_read": 8,
-  "http_get": 6
+  "core_memory_edit": 49,
+  "web_search": 32,
+  "web_read": 6,
+  "http_get": 6,
+  "spawn_subagents": 4
  },
  "error_samples": [
   "iterasi habis tanpa jawaban final (goal terlalu kompleks atau model berputar)",
@@ -38,18 +38,18 @@
    "summary": "5/9 OK"
   },
   "library": {
-   "new_entries_24h": 48
+   "new_entries_24h": 37
   },
   "pitfalls": {
-   "total": 8,
-   "new_24h": 0
+   "total": 11,
+   "new_24h": 3
   },
   "hermes": {
-   "active_sessions_24h": 15,
+   "active_sessions_24h": 4,
    "recent_user_messages": [
-    "sekali lagi fine tuning coba",
-    "jangan lah gitu. cari dari web lagi coba yang banyak",
-    "tapi jalankan fine tuning sekali lagi"
+    "yang gw brute fine tuning itu aeryn ya. bukan malah ke model jir",
+    "yang gw minta brute fine tuning ya. bukan malah ke model",
+    "[IMPORTANT: You are running as a scheduled cron job. DELIVERY: Your final respon"
    ]
   }
  }

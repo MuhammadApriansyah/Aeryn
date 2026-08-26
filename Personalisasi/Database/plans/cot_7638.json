@@ -1,0 +1,15 @@
+{
+ "goal": "hitung sqrt(144)",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Hitung akar kuadrat dari 144",
+   "tool_hint": "none",
+   "done_when": "Hasil sqrt(144) = 12"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

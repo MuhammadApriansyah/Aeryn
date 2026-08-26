@@ -1,0 +1,15 @@
+{
+ "goal": "oy",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Tidak ada goal yang jelas diberikan oleh pengguna",
+   "tool_hint": "none",
+   "done_when": "Menunggu klarifikasi goal dari pengguna"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

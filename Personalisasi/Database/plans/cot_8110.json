@@ -1,0 +1,15 @@
+{
+ "goal": "p",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Goal tidak jelas atau tidak lengkap. Memerlukan klarifikasi dari pengguna.",
+   "tool_hint": "none",
+   "done_when": "Pengguna memberikan goal yang spesifik dan jelas."
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

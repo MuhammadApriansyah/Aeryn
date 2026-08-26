@@ -1,0 +1,15 @@
+{
+ "goal": "hei",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Tidak ada goal spesifik yang diberikan oleh pengguna.",
+   "tool_hint": "none",
+   "done_when": "Menunggu instruksi lebih lanjut dari pengguna."
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

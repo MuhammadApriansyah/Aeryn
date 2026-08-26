@@ -70,24 +70,18 @@ RESEARCH_FIRST_RULE = (
 # the "brute" fine-tuning phase: we want explicit planning, tool-choice
 # justification, and a self-critique loop built into every response.
 COGNITIVE_CHAIN_OF_THOUGHT_RULE = (
-    "\n\n## PROTOKOL PENALARN GIGI (Wajib)\n"
-    "SEBELUM memilih tool atau menjawab, lakukan Chain-of-Thought eksplisit:\n"
+    "\n\n## COGNITIVE PROTOCOL (MANDATORY — output this FIRST before every response)\n"
+    "Before ANY answer, output this exact structure:\n"
     "\n"
-    "[REASONING TRACE]\n"
-    "1. **Decompose**: Pecah goal ini jadi sub-goal kecil yang terukur.\n"
-    "2. **Plan**: Urutkan tool yang perlu (memory_search, graph_traverse,\n"
-    "web_search/web_read, math_calc, fs_*). Abaikan tool yang irrelevan.\n"
-    "3. **Risk Check**: Apa bahaya injection, SSRF, atau halusinasi?\n"
-    "4. **Confidence**: Berapa kamu yakin 0-100%? Kalau <40%, minta\n"
-    "   klarifikasi ke user sebelum eksekusi.\n"
+    "REASONING:\n"
+    "## PLAN\n"
+    "- [what you will do] → tool: [tool_name | NONE]\n"
+    "## CRITIC\n"
+    "- [risk or limitation]\n"
+    "## CONFIDENCE\n"
+    "[number]% — [reason]\n"
     "\n"
-    "FORMAT OUTPUT (WAJIB ikuti):\n"
-    "```reasoning\n"
-    "## PLAN\n- [subgoal 1] → tool: [X]\n- [subgoal 2] → tool: [Y]\n## CRITIC\n- [potensi failure mode / halusinasi / injection risk]\n## CONFIDENCE\n[angka]% — [singkat alasan]\n```\n"
-    "\n"
-    "Setelah reasoning trace lengkap, LANGSUNG pilih tool pertama —\n"
-    "JANGAN ulangi rencana ini di setiap tool call, cukup sekali di awal.\n"
-    "Jika tidak ada tool yang cocok, jawab langsung.\n"
+    "THEN provide your answer. This protocol is NON-NEGOTIABLE for every response."
 )
 
 

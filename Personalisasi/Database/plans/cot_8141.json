@@ -1,0 +1,15 @@
+{
+ "goal": "hitung 2+2",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Hitung 2+2",
+   "tool_hint": "none",
+   "done_when": "Hasil 4 diperoleh"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

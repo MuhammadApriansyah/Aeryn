@@ -1,0 +1,15 @@
+{
+ "goal": "hitung 256*256",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Hitung 256*256",
+   "tool_hint": "none",
+   "done_when": "Hasil 65536 diperoleh"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

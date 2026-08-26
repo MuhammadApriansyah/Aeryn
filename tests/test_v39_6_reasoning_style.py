@@ -15,21 +15,20 @@ from aeryn_core.reasoning_style import (
 
 def test_cot_rule_exists():
     assert COGNITIVE_CHAIN_OF_THOUGHT_RULE
-    assert "PROTOKOL PENALARN" in COGNITIVE_CHAIN_OF_THOUGHT_RULE
+    assert "COGNITIVE PROTOCOL" in COGNITIVE_CHAIN_OF_THOUGHT_RULE
 
 
 def test_cot_rule_content():
     rule = COGNITIVE_CHAIN_OF_THOUGHT_RULE
-    assert "**Decompose**" in rule
-    assert "**Plan**" in rule
-    assert "**Risk Check**" in rule
-    assert "**Confidence**" in rule
-    assert "0-100%" in rule
+    assert "## PLAN" in rule
+    assert "## CRITIC" in rule
+    assert "## CONFIDENCE" in rule
+    assert "NON-NEGOTIABLE" in rule
 
 
 def test_cot_not_in_next_token():
-    assert "PROTOKOL PENALARN" not in NEXT_TOKEN_RULE
-    assert "PROTOKOL PENALARN" in COGNITIVE_CHAIN_OF_THOUGHT_RULE
+    assert "COGNITIVE PROTOCOL" not in NEXT_TOKEN_RULE
+    assert "COGNITIVE PROTOCOL" in COGNITIVE_CHAIN_OF_THOUGHT_RULE
 
 
 def test_needs_research_still_works():

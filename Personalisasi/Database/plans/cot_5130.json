@@ -1,0 +1,15 @@
+{
+ "goal": "hitung 15% dari 200",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Hitung 15% dari 200",
+   "tool_hint": "none",
+   "done_when": "Hasil perhitungan 15% × 200 = 30"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

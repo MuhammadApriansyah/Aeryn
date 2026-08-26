@@ -1,0 +1,15 @@
+{
+ "goal": "hitung 100/4",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Hitung 100 dibagi 4",
+   "tool_hint": "none",
+   "done_when": "Hasil perhitungan 100/4 = 25 diperoleh dan dikonfirmasi benar."
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

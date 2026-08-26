@@ -1,0 +1,15 @@
+{
+ "goal": "ingat ini: deadline webnovel 1 September",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "ingat ini: deadline webnovel 1 September",
+   "tool_hint": "none",
+   "done_when": "goal tercapai"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "fallback"
+}

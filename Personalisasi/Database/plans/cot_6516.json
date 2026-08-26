@@ -1,0 +1,15 @@
+{
+ "goal": "hitung fibonacci(10)",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Hitung fibonacci(10) secara langsung menggunakan rumus rekursif atau iteratif",
+   "tool_hint": "none",
+   "done_when": "Menghasilkan nilai fibonacci(10) = 55"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}

@@ -1,0 +1,15 @@
+{
+ "goal": "selamat malam",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Balas sapaan 'selamat malam' dengan ramah",
+   "tool_hint": "none",
+   "done_when": "Pesan balasan ramah telah dikirim ke pengguna"
+  }
+ ],
+ "status": [
+  "pending"
+ ],
+ "source": "llm"
+}
