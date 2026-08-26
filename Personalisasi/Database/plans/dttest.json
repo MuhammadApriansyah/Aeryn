@@ -1,0 +1,22 @@
+{
+ "goal": "sekarang hari apa dan jam berapa? jangan menebak, cek dulu",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Lakukan HTTP GET ke API waktu (misal https://timeapi.io/api/Time/current/zone?timeZone=Asia/Jakarta atau worldtimeapi.org) untuk mengambil tanggal, hari, dan jam saat ini secara live",
+   "tool_hint": "http_get",
+   "done_when": "Respons API berisi field datetime/dayOfWeek yang valid dan terbaru"
+  },
+  {
+   "step": 1,
+   "desc": "Ekstrak dan sampaikan hari serta jam dari respons API kepada pengguna tanpa menebak",
+   "tool_hint": "none",
+   "done_when": "Pengguna menerima jawaban hari dan jam sesuai data API"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

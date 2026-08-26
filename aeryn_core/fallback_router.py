@@ -90,6 +90,47 @@ FALLBACK_MAP = {
          "say": ("Spawn sub-agen gagal. Kerjakan sub-tugas BERURUTAN "
                  "sendiri (satu per satu), atau laporkan kendala.")},
     ],
+    # V39.2 — lengkapi sisa tool agar TIDAK ADA error tanpa arahan
+    "http_get": [
+        {"when": "diizinkan",
+         "say": ("Scheme/URL ditolak — JANGAN coba varian lain. Gunakan "
+                 "web_read untuk artikel ATAU laporkan ke user.")},
+        {"when": "",
+         "say": ("http_get gagal. Fallback: web_read (artikel), "
+                 "memory_search (pengetahuan lokal), ATAU laporkan.")},
+    ],
+    "memory_search": [
+        {"when": "",
+         "say": ("Memori kosong/tidak cocok. Lanjut jawab dengan "
+                 "pengetahuan umum ATAU tanyakan detail ke user.")},
+    ],
+    "graph_traverse": [
+        {"when": "",
+         "say": ("Node tidak ditemukan di graf. Coba memory_search, ATAU "
+                 "laporkan bahwa topik belum tercatat.")},
+    ],
+    "pitfall_search": [
+        {"when": "",
+         "say": ("Tidak ada pitfall terkait. Lanjutkan pendekatan normal "
+                 "dengan hati-hati.")},
+    ],
+    "core_memory_edit": [
+        {"when": "",
+         "say": ("Gagal menyimpan memori. Perbaiki block/mode sesuai schema "
+                 "(human|context, replace|append) lalu coba SEKALI lagi.")},
+    ],
+    # V39.2 — dua tool dasar
+    "datetime_now": [
+        {"when": "",
+         "say": ("Gagal membaca waktu. Gunakan estimasi dan NYATAKAN bahwa "
+                 "itu estimasi, ATAU laporkan kendala ke user.")},
+    ],
+    "math_calc": [
+        {"when": "",
+         "say": ("Ekspresi tidak valid untuk kalkulator aman (hanya angka "
+                 "+ - * / % // **). Perbaiki format ATAU hitung manual "
+                 "langkah demi langkah.")},
+    ],
 }
 
 # Directive default untuk tool yang tak terdaftar

@@ -1,5 +1,20 @@
 # Changelog — Aeryn-Core
 
+## V39.2 (2026-08-25) — Tool dasar dari analisa episode + fallback map 100%
+
+### Analisa data → 2 tool dasar
+- `datetime_now`: pertanyaan waktu/tanggal berulang tanpa sumber kebenaran
+  (model menebak = halusinasi tanggal). Kini: zona waktu IANA + nama hari
+  Indonesia. Live: "hari apa jam berapa?" → dijawab dari tool, bukan tebakan.
+- `math_calc`: kalkulasi aman via AST-whitelist (+ - * / % // **) — TANPA
+  eval bebas; __import__/open/exec ditolak.
+
+### Fallback map kini 100% (14/14 tool)
+- Kontrak V39.1 tuntas: tidak ada lagi tool yang bisa error tanpa arahan.
+- Test permanen menjaga: tool baru tanpa fallback map = test merah.
+
+Verifikasi: 398 → **402 tests green**; live datetime via tool ✅.
+
 ## V39.1 (2026-08-25) — FallbackRouter: dari menolak ke mengarahkan
 
 Filosofi baru dari Sen: memperbaiki celah terus-menerus tanpa ujung itu

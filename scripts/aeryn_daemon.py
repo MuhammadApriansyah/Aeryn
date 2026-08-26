@@ -213,6 +213,20 @@ def _checker_spawn(args, result):
 
 TOOLS.register("spawn_subagents", _spawn_subagents, SPAWN_SCHEMA,
                tier="safe")
+# V39.2 — dua tool dasar dari analisa episode: datetime (anti halusinasi
+# tanggal) + math_calc (kalkulasi aman via AST whitelist, tanpa eval).
+from aeryn_core.basic_tools import (datetime_now, math_calc,
+                                    DATETIME_SCHEMA, MATH_SCHEMA)
+TOOLS.register("datetime_now", datetime_now, DATETIME_SCHEMA, tier="safe")
+TOOLS.register("math_calc", math_calc, MATH_SCHEMA, tier="safe")
+
+
+def _checker_datetime(args, result):
+    return isinstance(result, dict) and result.get("ok") is True
+
+
+def _checker_math(args, result):
+    return isinstance(result, dict) and "result" in result
 
 # V37 P2 — ask_hermes: tangan lintas-hemisfer. Aeryn bisa minta Hermes
 # (otak kiri) mengerjakan tugas berat via CLI one-shot. Cap harian di
@@ -299,6 +313,8 @@ def _checker_fs_write(args, result):
 
 SHADOW.register_checker("fs_write", _checker_fs_write)
 SHADOW.register_checker("spawn_subagents", _checker_spawn)
+SHADOW.register_checker("datetime_now", _checker_datetime)
+SHADOW.register_checker("math_calc", _checker_math)
 SHADOW.register_checker("ask_hermes", _checker_ask_hermes)
 
 
@@ -1009,7 +1025,7 @@ def _run_steps(req: AgentRunReq):
                 # (filosofi Sen: jangan menambal tanpa ujung — arahkan).
                 try:
                     from aeryn_core.fallback_router import (
-                        get_fallback_directive)
+                                                        get_fallback_directive)
                     directive = get_fallback_directive(fn, result)
                     if directive and isinstance(result, dict):
                         result["error"] = f"{result.get('error', '')} {directive}"[:500]
