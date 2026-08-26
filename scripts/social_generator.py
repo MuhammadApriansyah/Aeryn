@@ -6,6 +6,7 @@ import json
 import os
 import random
 import re
+import time
 import urllib.request
 
 BASE_DIR = os.path.expanduser("~/aeryn-core-agent")
@@ -20,6 +21,47 @@ _GREETINGS = [
     "Wah, ada Sen! Udah makan belum? :)",
     "Yo! Lagi sibuk apa?",
 ]
+
+# V39.9b — CEREWET di jalur sosial: nagihan komitmen pending (parity
+# dgn daemon path). Maks 1 nagihan/pesan (anti-spam), cooldown dari DB.
+
+
+def _cerewet_social_nudge(user_id: str) -> str:
+    try:
+        from aeryn_core.cerewet_mode import (
+            cerewet_context_block, mark_nagged, _load as _cl)
+        uid = str(user_id)
+        sid = f"dc_{uid}" if not uid.startswith("dc_") else uid
+        block = cerewet_context_block(sid)
+        if not block:
+            # V38.9f — session_id komitmen dari daemon = "dc_<uid>_<chan>";
+            # cocokkan longgar: sesi apa pun milik uid ini.
+            pend = [i for i in _cl()
+                    if i.get("status") == "pending"
+                    and (f"_{uid}" in str(i.get("session_id", ""))
+                         or str(i.get("session_id", "")).startswith(
+                             f"dc_{uid}"))
+                    and time.time() - i.get("last_nagged_ts", 0)
+                    >= 6 * 3600]
+            if not pend:
+                return ""
+            p = dict(pend[0])
+            hours = (time.time() - p.get("created_ts", time.time())) / 3600
+            tone = ("TELAT nih! 😤 " if hours >= 48 else "")
+            mark_nagged(p["id"])
+            return f" Btw {tone}'{p['text']}' gimana ceritanya? 😏"
+        for line in block.splitlines():
+            if line.strip().startswith("- '"):
+                text = line.strip()[3:].split("'")[0]
+                for it in _cl():
+                    if it.get("text") == text and it.get(
+                            "session_id", "").endswith(str(user_id)):
+                        mark_nagged(it["id"])
+                return f" Btw, '{text}' gimana ceritanya? 😏"
+    except Exception:
+        pass
+    return ""
+
 
 _KNOWN_RESPONSES = {
     "kamu siapa": "Aku Aeryn.",
@@ -226,21 +268,22 @@ def generate_social_response(user_message: str, user_id: str,
                               channel: str = "") -> str:
     """Generate social response: rule-based + LLM fallback."""
     social_memory = load_social_memory(user_id)
-    
+
     # 1. Try deterministic response
     det = _deterministic_response(user_message, social_memory)
     if det:
-        return det
-    
+        # V39.9b — cerewet nudge menempel di jawaban deterministik
+        return det + _cerewet_social_nudge(user_id)
+
     # 2. Fallback random
     msg_lower = user_message.lower().strip()
     if len(msg_lower) < 30 and not _is_social_query(user_message):
         # Very short, likely social
-        return random.choice(_FALLBACK_SOCIAL)
-    
+        return random.choice(_FALLBACK_SOCIAL) + _cerewet_social_nudge(user_id)
+
     # 3. LLM fallback (jika message panjang / complex)
     # Tapi skip dulu karena quota habis — return fallback general
-    return random.choice(_FALLBACK_SOCIAL)
+    return random.choice(_FALLBACK_SOCIAL) + _cerewet_social_nudge(user_id)
 
 
 if __name__ == "__main__":

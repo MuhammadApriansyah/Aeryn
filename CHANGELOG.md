@@ -1,5 +1,21 @@
 # Changelog — Aeryn-Core
 
+## V38.9f (2026-08-26) — Cerewet parity di jalur sosial
+
+M44 menemukan: nagihan komitmen HANYA jalan di jalur agent (daemon);
+jalur sosial (social_generator, mayoritas chat santai) buta komitmen —
+Aeryn cerewet di jalur yang jarang dipakai, pasif di jalur utama.
+
+Fix: `_cerewet_social_nudge()` — jawaban sosial deterministik/fallback
+kini menempel nagihan bila ada komitmen pending milik user (longgar:
+cocokkan uid, bukan session exact; cooldown 6 jam tetap; stale >48 jam =
+tone "TELAT nih! 😤").
+
+Bug fix kecil: import time hilang saat refactor → test merah sebelum
+commit (test-first bekerja).
+
+Verifikasi: 451 → **454 tests green** (+3); gateway restart sehat.
+
 ## V39.9 (2026-08-26) — Fallback map 16/16 + nightly metrik fitur baru
 
 Probe M34–M39 (audit kesehatan menyeluruh pasca-V39.8):
