@@ -3,13 +3,13 @@
  "subgoals": [
   {
    "step": 0,
-   "desc": "halo",
+   "desc": "Kirim salam 'halo' kepada pengguna.",
    "tool_hint": "none",
-   "done_when": "goal tercapai"
+   "done_when": "Pengguna menerima salam."
   }
  ],
  "status": [
   "pending"
  ],
- "source": "fallback"
+ "source": "llm"
 }

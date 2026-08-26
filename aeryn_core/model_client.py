@@ -150,12 +150,23 @@ class ModelClient:
             return ""
 
         cands = []
-        # PRIMARY: OpenRouter (reliable, many models)
+        # PRIMARY: NOUS longcat (free, reliable via Hermes OAuth)
+        if key("NOUS_API_KEY"):
+            cands.append((os.getenv("NOUS_BASE_URL",
+                                     "https://inference-api.nousresearch.com/v1"),
+                           os.getenv("NOUS_MODEL", "meituan/longcat-2.0:free"),
+                           key("NOUS_API_KEY")))
+        # SECONDARY: Gemini 3.5 flash lite (fast, cheap)
+        if key("GEMINI_API_KEY"):
+            cands.append((os.getenv("GEMINI_BASE_URL",
+                                     "https://generativelanguage.googleapis.com/v1beta/openai/"),
+                           os.getenv("AERYN_GEMINI_MODEL", "gemini-3.5-flash-lite"),
+                           key("GEMINI_API_KEY")))
+        # TERTIARY: OpenRouter (many models)
         if key("OPENROUTER_API_KEY"):
             cands.append(("https://openrouter.ai/api/v1",
                            os.getenv("AERYN_OPENROUTER_MODEL", "openai/gpt-4o-mini"),
                            key("OPENROUTER_API_KEY")))
-            # fallback OR models
             for m in self.fallback_models:
                 cands.append(("https://openrouter.ai/api/v1", m,
                               key("OPENROUTER_API_KEY")))
@@ -166,14 +177,6 @@ class ModelClient:
                         "openai/gpt-oss-120b"]):
                 cands.append(("https://api.groq.com/openai/v1", gm,
                               key("GROQ_API_KEY")))
-        # FALLBACK: NVIDIA NIM (if available)
-        if key("NVIDIA_API_KEY"):
-            nv_first = os.getenv("AERYN_NVIDIA_MODEL")
-            nvs = ([nv_first] if nv_first else
-                   ["meta/llama-3.1-8b-instruct"])
-            for nm in nvs:
-                cands.append(("https://integrate.api.nvidia.com/v1", nm,
-                              key("NVIDIA_API_KEY")))
         return [(u, m, k) for u, m, k in cands if k]
 
     def chat(self, messages, tools=None, temperature=0.4, max_tokens=2048):
