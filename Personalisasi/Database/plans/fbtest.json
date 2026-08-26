@@ -1,0 +1,22 @@
+{
+ "goal": "pakai web_read baca http://127.0.0.1:3010/metrics lalu sebutkan isinya persis",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Ambil isi lengkap dari URL http://127.0.0.1:3010/metrics menggunakan web_read",
+   "tool_hint": "http_get",
+   "done_when": "Body respons /metrics berhasil diambil utuh tanpa error"
+  },
+  {
+   "step": 1,
+   "desc": "Kutip ulang isi respons secara verbatim (persis) kepada pengguna tanpa parafrase",
+   "tool_hint": "none",
+   "done_when": "Isi metrics ditampilkan sama persis dengan respons asli"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

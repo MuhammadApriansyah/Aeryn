@@ -1,5 +1,25 @@
 # Changelog — Aeryn-Core
 
+## V39.1 (2026-08-25) — FallbackRouter: dari menolak ke mengarahkan
+
+Filosofi baru dari Sen: memperbaiki celah terus-menerus tanpa ujung itu
+salah. Setiap kegagalan tool harus DIARAHKAN ke langkah berikutnya yang
+jelas — fallback tool alternatif, degradasi, atau lapor user dengan
+format tertentu. Model tidak dibiarkan bengong menebak.
+
+- `aeryn_core/fallback_router.py`: FALLBACK_MAP per-tool (rule "when"
+  → directive "say"); default directive utk tool tak terdaftar.
+- Wiring daemon: directive di-append ke hasil error sebelum dikirim
+  balik ke model — langkah berikutnya SELALU eksplisit.
+- Kunci keamanan terjaga: denial sensitif mengarahkan LAPOR + JANGAN
+  bypass (bukan petunjuk menembus).
+
+Live E2E: web_read ditolak SSRF guard → directive masuk → model langsung
+melaporkan pemblokiran + menawarkan jalan keluar dalam SATU jawaban
+(dulu: 3 iterasi putar-putar lalu answer=None).
+
+Verifikasi: 391 → **398 tests green**; ALL PARITY tetap.
+
 ## V38.8 (2026-08-25) — Privacy lintas-user: episodes & sessions
 
 Temuan M16 (cross-user privacy): fs_read bisa membaca

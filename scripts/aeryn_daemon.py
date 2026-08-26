@@ -1003,6 +1003,18 @@ def _run_steps(req: AgentRunReq):
                                         "kebijakan keamanan.")
                         except Exception as te:
                             result = {"error": f"tool {fn} failed: {type(te).__name__}: {te}"[:300]}
+                # V39.1 — FALLBACK ROUTER: setiap error tool DIARAHKAN,
+                # bukan cuma ditolak. Directive eksplisit di-append ke
+                # hasil agar langkah model berikutnya selalu jelas
+                # (filosofi Sen: jangan menambal tanpa ujung — arahkan).
+                try:
+                    from aeryn_core.fallback_router import (
+                        get_fallback_directive)
+                    directive = get_fallback_directive(fn, result)
+                    if directive and isinstance(result, dict):
+                        result["error"] = f"{result.get('error', '')} {directive}"[:500]
+                except Exception:
+                    pass
                 trace.append({"step": i, "type": "tool", "name": fn, "args": args,
                               "result_digest": str(result)[:200]})
                 messages.append({"role": "tool", "tool_call_id": call["id"],
