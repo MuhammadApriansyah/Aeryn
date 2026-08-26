@@ -4,8 +4,14 @@
    "nama": "general",
    "relasi": "",
    "fakta": [
-    "ruang utama ngobrol & test di server Aeryn",
-    "channel #general"
+    {
+     "text": "ruang utama ngobrol & test di server Aeryn",
+     "hash": "5ea6e322d054"
+    },
+    {
+     "text": "channel #general",
+     "hash": "4cdbf8556b1a"
+    }
    ],
    "preferensi": {},
    "last_seen": 1787615749.1457636
@@ -21,92 +27,37 @@
    "nama": "Sen",
    "relasi": "kenalan di Discord",
    "fakta": [
-    "Sen adalah majikan sekaligus pembuat Aeryn",
-    "Sen membangun Aeryn-Core (otaknya) & webnovel platform",
-    "Sen suka UI/UX rapi, dark mode, animasi cepat",
-    "Discord user: paisenmtvsky"
+    {
+     "text": "Sen adalah majikan sekaligus pembuat Aeryn",
+     "hash": "4d8ab8d1f6d7"
+    },
+    {
+     "text": "Sen membangun Aeryn-Core (otaknya) & webnovel platform",
+     "hash": "7e3ca65a5ee1"
+    },
+    {
+     "text": "Sen suka UI/UX rapi, dark mode, animasi cepat",
+     "hash": "2a11e2eed8fd"
+    },
+    {
+     "text": "Discord user: paisenmtvsky",
+     "hash": "d2cdd798c7e2"
+    }
    ],
    "preferensi": {},
    "last_seen": 1787654143.032992
-  },
-  "1": {
-   "nama": "1",
-   "relasi": "",
-   "fakta": [],
-   "preferensi": {},
-   "last_seen": 1787621437.0826128
   },
   "1541581954439454850": {
    "nama": "Misela.",
    "relasi": "kenalan di Discord",
    "fakta": [
-    "Discord user: paisenmtvsky"
+    {
+     "text": "Discord user: paisenmtvsky",
+     "hash": "d2cdd798c7e2"
+    }
    ],
    "preferensi": {},
-   "last_seen": 1787682300.5897424
-  },
-  "parity-probe": {
-   "nama": "parity-probe",
-   "relasi": "",
-   "fakta": [],
-   "preferensi": {},
-   "last_seen": 1787698812.0902097
-  },
-  "chaos-1787699324": {
-   "nama": "chaos-1787699324",
-   "relasi": "",
-   "fakta": [],
-   "preferensi": {},
-   "last_seen": 1787699324.984913
-  },
-  "chaos-1787699377": {
-   "nama": "chaos-1787699377",
-   "relasi": "",
-   "fakta": [],
-   "preferensi": {},
-   "last_seen": 1787699377.1085618
-  },
-  "chaos-1787699494": {
-   "nama": "chaos-1787699494",
-   "relasi": "",
-   "fakta": [],
-   "preferensi": {},
-   "last_seen": 1787699494.8155272
-  },
-  "fbtest": {
-   "nama": "fbtest",
-   "relasi": "",
-   "fakta": [],
-   "preferensi": {},
-   "last_seen": 1787705153.6525214
-  },
-  "dttest": {
-   "nama": "dttest",
-   "relasi": "",
-   "fakta": [],
-   "preferensi": {},
-   "last_seen": 1787708087.1620817
-  },
-  "reminder_default": {
-   "nama": "reminder_default",
-   "relasi": "",
-   "fakta": [],
-   "preferensi": {},
-   "last_seen": 1787713464.5683963
-  },
-  "../../etc/evil": {
-   "nama": "../../etc/evil",
-   "relasi": "",
-   "fakta": [],
-   "preferensi": {},
-   "last_seen": 1787715482.5561354
-  },
-  "mathlive1": {
-   "nama": "mathlive1",
-   "relasi": "",
-   "fakta": [],
-   "preferensi": {},
-   "last_seen": 1787729611.1720686
+   "last_seen": 1787751151.5334113
   }
  },
  "channels": {
@@ -115,12 +66,6 @@
    "peran": "",
    "topik_terakhir": "",
    "last_seen": 1787615071.0219955
-  },
-  "test": {
-   "nama": "test",
-   "peran": "",
-   "topik_terakhir": "",
-   "last_seen": 1787621437.0787294
   }
  }
 }

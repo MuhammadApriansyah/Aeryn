@@ -3,13 +3,13 @@
  "subgoals": [
   {
    "step": 0,
-   "desc": "Balas sapaan 'halo' dari pengguna dengan salam ramah dan tawaran bantuan",
+   "desc": "halo",
    "tool_hint": "none",
-   "done_when": "Pengguna menerima balasan sapaan"
+   "done_when": "goal tercapai"
   }
  ],
  "status": [
   "pending"
  ],
- "source": "llm"
+ "source": "fallback"
 }

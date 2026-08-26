@@ -1,22 +1,15 @@
 {
- "goal": "loh kok misela?",
+ "goal": "gada kok",
  "subgoals": [
   {
    "step": 0,
-   "desc": "Cari definisi misela di kamus online",
-   "tool_hint": "web_search|http_get|fs_read|none",
-   "done_when": "menemukan definisi misela"
-  },
-  {
-   "step": 1,
-   "desc": "Baca definisi misela yang ditemukan",
-   "tool_hint": "fs_read|http_get|web_search|none",
-   "done_when": "memahami definisi misela"
+   "desc": "gada kok",
+   "tool_hint": "none",
+   "done_when": "goal tercapai"
   }
  ],
  "status": [
-  "pending",
   "pending"
  ],
- "source": "llm"
+ "source": "fallback"
 }

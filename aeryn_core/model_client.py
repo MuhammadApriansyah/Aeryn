@@ -1,4 +1,4 @@
-"""ModelClient — Klien LLM OpenAI-compatible untuk agentic loop aeryn.
+"""ModelClient — Klien LLM Openai-compatible untuk agentic loop aeryn.
 
 Membaca kredensial dari env (OPENROUTER_API_KEY / NOUS_API_KEY) atau
 ~/.hermes/.env jika ada. Tidak menyimpan kredensial di kode.
@@ -9,13 +9,74 @@ import time
 import urllib.request
 
 
+class CircuitBreaker:
+    """Anti-429 adaptive backoff per provider.
+
+    V39.11 — tiap provider dapatnya CircuitBreaker; 429 berulang →
+    cooldown eksponen, beri jeda ke provider lain. Fresh per proses
+    (in-memory); state tidak persist — jadi per-restart selalu
+    'semangat baru'.
+
+    State: closed (normal) → open (cooldown) → half-open (test sekali)
+    """
+    def __init__(self, max_failures: int = 3, base_wait: float = 2.0,
+                 max_wait: int = 60):
+        self._max_failures = max_failures
+        self._base_wait = base_wait
+        self._max_wait = max_wait
+        self._fail_count = 0
+        self._fail_time = 0.0
+        self._last_wait = base_wait
+
+    def record_failure(self):
+        self._fail_count += 1
+        self._fail_time = time.time()
+        # exponential backoff
+        self._last_wait = min(self._base_wait * (2 ** (self._fail_count - 1)),
+                              self._max_wait)
+
+    def reset(self):
+        self._fail_count = 0
+        self._fail_time = 0.0
+        self._last_wait = self._base_wait
+
+    def is_opened(self) -> bool:
+        return self._fail_count >= self._max_failures
+
+    def retry_after(self) -> float:
+        return self._last_wait
+
+    def should_skip(self, now: float | None = None) -> bool:
+        """True bila dalam cooldown (bukan waktu half-open test)."""
+        if not self.is_opened():
+            return False
+        now = now or time.time()
+        if now - self._fail_time >= self._last_wait:
+            # masuk half-open: boleh coba sekali
+            return False
+        return True
+
+
+# V39.11 — global circuit breaker per provider key; persist lifetime
+# process saja (bukan tiap chain). Supaya 429 berulang = cooldown.
+_PROVIDER_CBS: dict[str, CircuitBreaker] = {}
+_CB_MAX_FAILURE = 3  # 429 berulang 3× = cooldown
+
+
+def _get_cb(base_url: str) -> CircuitBreaker:
+    if base_url not in _PROVIDER_CBS:
+        _PROVIDER_CBS[base_url] = CircuitBreaker(max_failures=_CB_MAX_FAILURE)
+    return _PROVIDER_CBS[base_url]
+
+
 class ModelClient:
     def __init__(self, provider: str = None, model: str = None, api_key: str = None):
         self.provider = provider or os.getenv("AERYN_LLM_PROVIDER", "openrouter")
         if self.provider == "gemini":
             self.base_url = os.getenv("GEMINI_BASE_URL",
                                       "https://generativelanguage.googleapis.com/v1beta/openai/")
-            self.model = model or os.getenv("AERYN_GEMINI_MODEL", "gemini-2.5-pro")
+            # V39.12a — gemini-2.5-pro DEPRECATED; pakai 2.0-flash (stable)
+            self.model = model or os.getenv("AERYN_GEMINI_MODEL", "gemini-2.0-flash")
             self.fallback_models = []
         elif self.provider == "openrouter":
             self.base_url = "https://openrouter.ai/api/v1"
@@ -156,6 +217,11 @@ class ModelClient:
                 "di env atau ~/.hermes/.env")
         last_err = None
         for base_url, model_name, api_key in candidates:
+            # V39.11 — check circuit breaker per provider
+            cb = _get_cb(base_url)
+            if cb.should_skip():
+                continue
+
             payload["model"] = model_name
             req = urllib.request.Request(
                 f"{base_url}/chat/completions",
@@ -173,28 +239,31 @@ class ModelClient:
                     "X-Client": "aeryn-core/39",
                 },
             )
-            for attempt in range(3):  # retry dgn backoff utk 429/5xx
+            # V39.11 — attempt dikurangi jadi 1: 429 = rotasi provider segera.
+            for attempt in range(1):
                 try:
                     with urllib.request.urlopen(req, timeout=75) as resp:
                         out = json.loads(resp.read())
                     if model_name != self.model:
                         out.setdefault("model_used", model_name)  # jejak fallback
+                    cb.reset()  # success = sehat kembali
                     return out
                 except urllib.error.HTTPError as e:
                     last_err = e
                     if e.code in (400, 401, 402, 403, 404):
                         break   # slug/endpoint invalid → kandidat berikutnya
                     if e.code == 429:
-                        # V28: rate limit → rotasi kandidat SEGERA tanpa
-                        # sleep (sleep 8s di sini bikin run menggantung;
-                        # kandidat berikutnya sudah cukup sebagai jeda).
+                        # V39.11 — record failure di circuit breaker
+                        cb.record_failure()
                         break
                     if e.code in (500, 502, 503):
-                        break   # provider ini bermasalah → kandidat berikutnya
+                        # provider bermasalah → hitung kegagalan juga
+                        cb.record_failure()
+                        break
                     raise
                 except (TimeoutError, OSError) as e:
-                    # Timeout baca/koneksi: provider lambat/hang → rotasi model
-                    # berikutnya SEGERA (dulu ini bikin seluruh run menggantung).
+                    # Timeout baca/koneksi: provider lambat/hang
+                    cb.record_failure()
                     last_err = e
                     break
-        raise last_err
+        raise last_err or RuntimeError("No candidates left (all skipped by drift/rate-limit)")

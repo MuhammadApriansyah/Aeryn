@@ -1,5 +1,41 @@
 # Changelog — Aeryn-Core
 
+## V39.11 (2026-08-26) — Circuit Breaker + Social Memory Hardening + Training Data
+
+Ringkasan aksi: 429/410/404 provider, leak fragment di social.json, test artifacts masuk ke memory.
+
+### 1. Circuit Breaker anti-429 spam (model_client.py)
+- Tambah class `CircuitBreaker` (closed → open → half-open) per provider.
+- Retry attempt turun dari 3 → **1**: 429 = rotasi provider segera, bukan retry 3x.
+- 429 berulang 3× → provider di-cooldown, skip sampai half-open.
+- Timeout/OSError juga record failure ke circuit breaker.
+
+### 2. Social memory sanitasi (social_memory.py)
+- `LEAK_PATTERNS` ganti ke **exact fragment** (`siaisenmtvsky`, `probe-parity`) — bukan substring. Username real (`paisenmtvsky`) tetap valid.
+- Key validation: traversal path (`../../etc/evil`), test artifacts (`chaos-*`, `fbtest`) **ditolak total** di `touch_person()`/`add_fact()`/`set_relation()`.
+- Fakta format dict `{text, hash}` — migrasi backward compatible.
+- `set_preference()` method baru — support preference loader di social_generator/cerewet.
+- `sanitize_database()` — audit + bersihin social.json (hapus traversal/test artifacts).
+- `get_preference()` / `get_facts()` getter baru.
+
+### 3. DriftGuard audit social.json (drift_guard.py)
+- Cek titik integrasi ke-6: social.json.
+- Block traversal key + test artifact markers.
+- Verify Sen tetap present.
+
+### 4. 429 monitor + downtime tracker (monitor_429.py)
+- Ping tiap provider tiap 5 menit (atau manual).
+- Laporan: 429 count, downtime, success rate per provider.
+- `--watch` / `--report` mode.
+
+### 5. Training data generator (scripts/generate_training_data.py)
+- Dataset 24 samples JSONL: leak filter, key filter, cerewet social, preference greeting.
+- Di `Personalisasi/Database/training/cerewet_leak_dataset_v3911.jsonl`.
+
+Verifikasi: 472 → **491 tests green** (+19)
+Parity: inconclusive (provider outage — NOUS free period ended, Gemini key expired, NVidia model 410 gone)
+Live: monitor_429 menunjukkan Groq gpt-oss-20b satu-satunya yang online (20% success rate saat ini)
+
 ## V39.10e (2026-08-26) — Persona sinkron cerewet (identitas resmi)
 
 M61: cerewet mode kemarin hanya hidup di rules daemon — persona inti

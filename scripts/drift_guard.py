@@ -14,6 +14,7 @@ Cek (murah, tanpa panggil LLM):
   [3] auth.json    : providers.nous.agent_key ADA + belum expired
   [4] INDEX library: ada + punya key format yang diharapkan
   [5] memory_library.py: fungsi inti masih ada (search/build/supersede)
+  [6] social.json : tidak ada test artifacts / traversal keys (V39.10f)
 Exit: 0 = OK, 1 = DRIFT (cetak detail titik pecah).
 """
 import json
@@ -28,6 +29,15 @@ STATE_DB = f"{HOME}/.hermes/state.db"
 AUTH = f"{HOME}/.hermes/auth.json"
 INDEX = "/mnt/android/Ubuntu/hermes-memory-library/INDEX.json"
 MEM_LIB = f"{HOME}/.hermes/scripts/memory_library.py"
+
+# V39.10f — social.json audit constants
+SOCIAL_PATH = os.path.join(
+    os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database"),
+    "social.json")
+FORBIDDEN_KEY_MARKERS = ("smoke", "test", "parity", "chaos-", "fbtest",
+                         "dttest", "mathlive", "reminder", "__test__",
+                         "probe")
+FORBIDDEN_KEY_PATTERNS = ("../", "../../", "\\", "/etc/")
 
 
 def check_state_db() -> tuple:
@@ -73,7 +83,6 @@ def check_auth() -> tuple:
         if not key_present:
             return False, "agent_key hilang dari auth.json"
         if expired:
-            # tidak fatal — Hermes auto-refresh, tapi patut diketahui
             return True, "OK (key expired, akan auto-refresh)"
         return True, "OK (key ada)"
     except (OSError, ValueError, KeyError) as e:
@@ -102,12 +111,47 @@ def check_memlib() -> tuple:
     return True, "OK"
 
 
+def check_social_memory() -> tuple:
+    """V39.10f — audit social.json: cegah test artifacts/traversal leak."""
+    if not os.path.exists(SOCIAL_PATH):
+        return True, "OK (social.json belum ada, akan dibuat otomatis)"
+    try:
+        data = json.load(open(SOCIAL_PATH))
+    except ValueError as e:
+        return False, f"social.json korup: {e}"
+    bad_people = []
+    people = data.get("people", {})
+    for key in people:
+        k = str(key)
+        if any(p in k for p in FORBIDDEN_KEY_PATTERNS):
+            return False, f"traversal key ditemukan: {k}"
+        kl = k.lower()
+        if any(m in kl for m in FORBIDDEN_KEY_MARKERS):
+            bad_people.append(k)
+    bad_channels = []
+    channels = data.get("channels", {})
+    for key in channels:
+        k = str(key)
+        if any(p in k for p in FORBIDDEN_KEY_PATTERNS):
+            return False, f"traversal key di channels: {k}"
+        kl = k.lower()
+        if any(m in kl for m in FORBIDDEN_KEY_MARKERS):
+            bad_channels.append(k)
+    if bad_people or bad_channels:
+        return False, (f"test artifacts: {len(bad_people)} people, "
+                       f"{len(bad_channels)} channels tersisa")
+    found_sen = any(p.get("nama") == "Sen" for p in people.values())
+    sen_ok = "Sen present" if found_sen else "Sen NOT found"
+    return True, f"OK ({len(people)} people, {sen_ok})"
+
+
 CHECKS = [
     ("state.db", check_state_db),
     ("hermes CLI", check_cli),
     ("auth agent_key", check_auth),
     ("library INDEX", check_index),
     ("memory_library API", check_memlib),
+    ("social_memory", check_social_memory),
 ]
 
 
