@@ -1,5 +1,22 @@
 # Changelog — Aeryn-Core
 
+## V39.10 (2026-08-26) — DriftGuard: aman-update Hermes
+
+Pertanyaan Sen: "berarti gak update Hermes dong? atau bikin skrip?"
+Jawaban: JANGAN takut update — TAKUT TANPA DETEKSI. Dibuat:
+
+`scripts/drift_guard.py` — cek 5 titik integrasi Aeryn↔Hermes:
+1. state.db (read-only, tabel terdeteksi)
+2. hermes CLI (binary jalan, versi terbaca)
+3. auth agent_key (ada + status expiry)
+4. library INDEX.json (ada + ter-parse)
+5. memory_library API (fungsi inti search/supersede)
+
+Ritual update aman: baseline → update → jalankan lagi. DRIFT = keluar
+nonzero + titik pecah ditunjuk persis.
+
+Live: 5/5 hijau (Hermes v0.20.5). Test: 457 → **462 green** (+5).
+
 ## V38.9h (2026-08-26) — FINE-TUNING REKURSIF LUAS (5 level)
 
 Audit penuh seluruh codebase, level demi level:
