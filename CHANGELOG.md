@@ -1,5 +1,18 @@
 # Changelog — Aeryn-Core
 
+## V38.8 (2026-08-25) — Privacy lintas-user: episodes & sessions
+
+Temuan M16 (cross-user privacy): fs_read bisa membaca
+episodes/episodes.jsonl yang berisi goal SEMUA user Discord — user A
+bisa meminta isi pertanyaan user B.
+
+- Fix: `episodes.jsonl` masuk SECRET_BASENAMES; direktori `sessions/`
+  dan `episodes/` diblokir untuk mode read (path mana pun di dalamnya).
+- Live E2E: Aeryn diminta baca episode via Discord session → ditolak
+  kernel → dia melapor "ditolak lapisan keamanan".
+
+Verifikasi: 388 → **391 tests green**; ALL PARITY tetap.
+
 ## V38.7 (2026-08-25) — Fine-tuning putaran kedua: 4 celah baru
 
 Metode generasi-2 (M10–M14) dijalankan → 4 temuan:

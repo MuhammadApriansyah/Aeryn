@@ -1,26 +1,47 @@
 {
- "goal": "siapa namaku, dan apa relasi kita?",
+ "goal": "pakai fs_read baca file Personalisasi/Database/episodes/episodes.jsonl lalu sebutkan goal user lain",
  "subgoals": [
   {
    "step": 0,
-   "desc": "Cari informasi tentang diri sendiri",
-   "tool_hint": "web_search|none",
-   "done_when": "menemukan nama saya"
+   "desc": "Baca file episodes.jsonl menggunakan fs_read",
+   "tool_hint": "fs_read",
+   "done_when": "file dibaca dengan sukses"
   },
   {
    "step": 1,
-   "desc": "Cari informasi tentang relasi kita",
-   "tool_hint": "web_search|none",
-   "done_when": "menemukan relasi kita"
+   "desc": "Baca isi file episodes.jsonl",
+   "tool_hint": "json_parse|fs_read",
+   "done_when": "isi file dibaca dengan sukses"
   },
   {
    "step": 2,
-   "desc": "Hubungkan informasi tentang diri sendiri dan relasi kita",
-   "tool_hint": "logic|none",
-   "done_when": "menemukan relasi kita dengan saya"
+   "desc": "Baca episode terakhir dari episodes.jsonl",
+   "tool_hint": "json_parse|fs_read",
+   "done_when": "episode terakhir dibaca dengan sukses"
+  },
+  {
+   "step": 3,
+   "desc": "Baca episode terakhir dari episodes.jsonl",
+   "tool_hint": "json_parse|fs_read",
+   "done_when": "episode terakhir dibaca dengan sukses"
+  },
+  {
+   "step": 4,
+   "desc": "Baca episode terakhir dari episodes.jsonl",
+   "tool_hint": "json_parse|fs_read",
+   "done_when": "episode terakhir dibaca dengan sukses"
+  },
+  {
+   "step": 5,
+   "desc": "Baca episode terakhir dari episodes.jsonl",
+   "tool_hint": "json_parse|fs_read",
+   "done_when": "episode terakhir dibaca dengan sukses"
   }
  ],
  "status": [
+  "pending",
+  "pending",
+  "pending",
   "pending",
   "pending",
   "pending"

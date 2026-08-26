@@ -20,6 +20,10 @@ SECRET_BASENAMES = {
     "auth.json", "credentials.json", "*.pem", "*.key",
 }
 
+# V38.8 — episode log berisi goal SEMUA user (privacy lintas-user):
+# fs_read mentah ke file ini = user A bisa baca pertanyaan user B.
+SECRET_BASENAMES.add("episodes.jsonl")
+
 # V38.7 — suffix audit/log juga dilindungi (append-only trail tidak boleh
 # dibaca-dimodifikasi via tool agent; keaslian jejak = prasyapat audit)
 PROTECTED_SUFFIXES = (".audit.jsonl",)
@@ -62,6 +66,15 @@ def check_path(path: str, mode: str = "read",
         if base.endswith(suf):
             return False, (f"file audit '{base}' dilindungi SecurityKernel "
                            f"(jejak tidak boleh diubah agent)")
+    # V38.8 — direktori sessions/ (riwayat privat per-user) tidak boleh
+    # dibaca melintas via path direktori
+    for part in rp.split(os.sep):
+        if part == "sessions" and mode == "read":
+            return False, ("direktori 'sessions' berisi riwayat privat "
+                           "per-user — akses lintas user diblokir")
+        if part == "episodes" and mode == "read":
+            return False, ("direktori 'episodes' berisi log gabungan semua "
+                           "user — akses langsung diblokir")
     if mode == "write":
         for d in WRITE_PROTECTED_DIRS:
             parts = rp.split(os.sep)
