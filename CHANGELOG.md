@@ -1,5 +1,28 @@
 # Changelog — Aeryn-Core
 
+## V39.6 (2026-08-25) — Research-first reasoning + next-token prediction
+
+Dua keinginan Sen soal gaya reasoning Aeryn, diimplementasikan:
+
+### 1. RESEARCH-FIRST (prompt + enforcement-di-kode)
+- `reasoning_style.needs_research()`: deteksi goal fakta (berapa/kapan/
+  terbaru/apa itu/bandingkan...) vs intent lokal (ingatkan/hitung/namaku).
+- Prompt rule: info kurang → RISET DULU (web_search→web_read), jangan
+  menebak; info cukup baru susun ulang jadi jawaban rapi.
+- `research_guard.py` (enforcement): goal fakta tapi TANPA tool riset →
+  paksa 1 iterasi riset eksplisit; iterasi habis → disclaimer jujur
+  "belum kucek sumber terkini".
+- Live: "framework backend paling populer sekarang" → web_search 2× →
+  jawaban ter-grounding data survei Stack Overflow ✅ (sebelumnya:
+  dijawab dari kepala tanpa sumber).
+
+### 2. NEXT-TOKEN PREDICTION (ciri khas Aeryn)
+- Rule prompt: akhir setiap jawaban wajib ada prediksi kelanjutan
+  '➡️ ...' — apa yang kemungkinan user tanya/butuh selanjutnya.
+- Live: '➡️ Mau kubantu milih framework yang pas buat kebutuhanmu?'
+
+Verifikasi: 427 → **432 tests green**; live kedua fitur tampil.
+
 ## V38.9b (2026-08-25) — TOCTOU guard fs_write (O_NOFOLLOW)
 
 M16 eskalasi: celah race condition (check-then-use) di fs_write —
