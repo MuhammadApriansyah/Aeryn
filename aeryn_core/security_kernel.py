@@ -20,6 +20,10 @@ SECRET_BASENAMES = {
     "auth.json", "credentials.json", "*.pem", "*.key",
 }
 
+# V38.7 — suffix audit/log juga dilindungi (append-only trail tidak boleh
+# dibaca-dimodifikasi via tool agent; keaslian jejak = prasyapat audit)
+PROTECTED_SUFFIXES = (".audit.jsonl",)
+
 SOURCE_SUFFIXES = (".py", ".js", ".ts", ".rs", ".toml", ".yaml", ".yml")
 
 # Sub-direktori source code (relatif ke sandbox root) yang tidak boleh
@@ -53,6 +57,11 @@ def check_path(path: str, mode: str = "read",
     for pat in SECRET_BASENAMES:
         if _basename_matches(base, pat):
             return False, f"file sensitif '{base}' dilindungi SecurityKernel"
+    # V38.7 — audit trail dilindungi (baca & tulis): jejak harus asli
+    for suf in PROTECTED_SUFFIXES:
+        if base.endswith(suf):
+            return False, (f"file audit '{base}' dilindungi SecurityKernel "
+                           f"(jejak tidak boleh diubah agent)")
     if mode == "write":
         for d in WRITE_PROTECTED_DIRS:
             parts = rp.split(os.sep)

@@ -132,6 +132,12 @@ def memory(session_id: str):
 
 @app.post("/session/{session_id}/reset")
 def reset_session(session_id: str):
+    """V38.7 — operasi destruktif: hanya sesi majikan/DC yang boleh reset.
+    Dulu SIAPA PUN dengan akses localhost bisa menghapus state afektif
+    sesi orang lain."""
+    if not _master_allowed(session_id):
+        raise HTTPException(status_code=403,
+                            detail="reset hanya untuk sesi majikan")
     LAST_TENSOR.pop(session_id, None)
     return {"reset": True, "session_id": session_id}
 
@@ -519,9 +525,18 @@ class AgentRunReq(BaseModel):
 
 # V38 — rate limiter per-session di daemon (anti flood HTTP lokal/gateway)
 # V38.6 — + GLOBAL limiter: rotasi session_id tidak lagi mem-bypass
+# V38.7 — reset endpoint kini juga butuh allowlist majikan (dulu siapa pun
+# yang bisa akses localhost bisa menghapus memori sesi orang lain)
 from aeryn_core.production_guard import RateLimiter, validate_run_payload
 _RUN_LIMITER = RateLimiter(max_requests=20, window_seconds=60)
 _GLOBAL_LIMITER = RateLimiter(max_requests=120, window_seconds=60)
+
+
+def _master_allowed(session_id: str) -> bool:
+    """V38.7 — operasi destruktif (reset) hanya untuk sesi majikan."""
+    from aeryn_core.social_memory import SocialMemory
+    return SocialMemory.is_persistent_person_key(session_id) or \
+        session_id.startswith("dc_")
 
 
 @app.get("/tools")

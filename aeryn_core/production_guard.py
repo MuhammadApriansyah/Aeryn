@@ -25,6 +25,12 @@ class RateLimiter:
     def allow(self, key: str) -> bool:
         now = time.time()
         with self._lock:
+            # V38.7 — anti memory leak: buang session yang sudah lama mati
+            if len(self._hits) > 1000:
+                stale = [k for k, q in self._hits.items()
+                         if not q or now - q[-1] > self.window]
+                for k in stale:
+                    del self._hits[k]
             q = self._hits[key]
             while q and now - q[0] > self.window:
                 q.popleft()

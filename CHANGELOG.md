@@ -1,5 +1,23 @@
 # Changelog — Aeryn-Core
 
+## V38.7 (2026-08-25) — Fine-tuning putaran kedua: 4 celah baru
+
+Metode generasi-2 (M10–M14) dijalankan → 4 temuan:
+
+1. **Injection marker vs homoglyph** — deteksi injection kini konsisten
+   setelah normalisasi unicode (test NFKC fullwidth).
+2. **RateLimiter memory leak** — 10k session unik = 10k entri abadi.
+   Fix: evict session stale saat internal dict > 1000.
+3. **Audit trail tidak dilindungi** — core_memory.json.audit.jsonl bisa
+   dibaca/ditimpa via fs tool (jejak harus asli!). Fix: PROTECTED_SUFFIXES
+   di SecurityKernel (.audit.jsonl = tolak read & write).
+4. **Reset endpoint tanpa otorisasi** — POST /session/{sid}/reset bisa
+   dipanggil siapa pun untuk hapus state afektif sesi lain.
+   Fix: _master_allowed() (sesi dc_*/Discord ID saja).
+
+Verifikasi: 383 → **388 tests green**; ALL PARITY tetap; live probe
+ulang semua vektor tertutup.
+
 ## V38.6 (2026-08-25) — Fine-tuning via 7 metode: 5 celah baru ditutup
 
 Menerapkan metodologi V39 secara penuh (probe per metode) → 5 temuan:
