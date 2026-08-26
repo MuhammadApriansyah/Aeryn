@@ -1,0 +1,22 @@
+{
+ "goal": "jelaskan chain of thought reasoning dan berikan contoh",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Jelaskan apa itu chain of thought reasoning.",
+   "tool_hint": "none",
+   "done_when": "penjelasan tentang chain of thought reasoning selesai"
+  },
+  {
+   "step": 1,
+   "desc": "Berikan contoh konkret dari chain of thought reasoning.",
+   "tool_hint": "none",
+   "done_when": "contoh konkret diberikan"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

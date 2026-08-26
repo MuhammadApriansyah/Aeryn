@@ -1,0 +1,29 @@
+{
+ "goal": "jelaskan chain of thought reasoning",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Cari definisi dan penjelasan tentang 'chain of thought reasoning' di internet.",
+   "tool_hint": "web_search",
+   "done_when": "Definisi dan penjelasan ditemukan."
+  },
+  {
+   "step": 1,
+   "desc": "Kumpulkan contoh-contoh penerapan 'chain of thought reasoning' dalam konteks yang berbeda.",
+   "tool_hint": "web_search",
+   "done_when": "Contoh-contoh terkumpul."
+  },
+  {
+   "step": 2,
+   "desc": "Rangkum informasi yang didapatkan dari langkah 0 dan 1 menjadi penjelasan yang jelas.",
+   "tool_hint": "none",
+   "done_when": "Penjelasan yang jelas dan ringkas selesai dibuat."
+  }
+ ],
+ "status": [
+  "pending",
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

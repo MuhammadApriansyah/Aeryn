@@ -150,46 +150,29 @@ class ModelClient:
             return ""
 
         cands = []
-        # PRIMARY: NOUS stealth/ox-alpha (paling reliable, instruction-following)
-        if key("NOUS_API_KEY"):
-            cands.append((os.getenv("NOUS_BASE_URL",
-                                     "https://inference-api.nousresearch.com/v1"),
-                           os.getenv("NOUS_MODEL", "stealth/ox-alpha"),
-                           key("NOUS_API_KEY")))
-        # FALLBACK: Gemini (untuk complex tasks)
-        if key("GEMINI_API_KEY"):
-            cands.append((os.getenv("GEMINI_BASE_URL",
-                                     "https://generativelanguage.googleapis.com/v1beta/openai/"),
-                           os.getenv("AERYN_GEMINI_MODEL", "gemini-2.5-pro"),
-                           key("GEMINI_API_KEY")))
-        # FALLBACK: OpenRouter + Groq chain
-        if self.provider == "openrouter":
-            if key("GROQ_API_KEY"):
-                for gm in (os.getenv("AERYN_GROQ_MODEL") or
-                           ["openai/gpt-oss-20b",
-                            "qwen/qwen3.6-27b"]):
-                    cands.append(("https://api.groq.com/openai/v1", gm,
-                                  key("GROQ_API_KEY")))
-            cands.append(("https://openrouter.ai/api/v1", self.model,
-                          key("OPENROUTER_API_KEY", "NOUS_API_KEY")))
+        # PRIMARY: OpenRouter (reliable, many models)
+        if key("OPENROUTER_API_KEY"):
+            cands.append(("https://openrouter.ai/api/v1",
+                           os.getenv("AERYN_OPENROUTER_MODEL", "openai/gpt-4o-mini"),
+                           key("OPENROUTER_API_KEY")))
+            # fallback OR models
             for m in self.fallback_models:
                 cands.append(("https://openrouter.ai/api/v1", m,
-                              key("OPENROUTER_API_KEY", "NOUS_API_KEY")))
-            # Fallback lintas-provider: NVIDIA NIM (key terpisah).
-            if key("NVIDIA_API_KEY"):
-                nv_first = os.getenv("AERYN_NVIDIA_MODEL")
-                nvs = ([nv_first] if nv_first else
-                       ["meta/llama-3.1-8b-instruct",
-                        "nvidia/llama-3.3-nemotron-super-49b-v1.5"])
-                for nm in nvs:
-                    cands.append(("https://integrate.api.nvidia.com/v1", nm,
-                                  key("NVIDIA_API_KEY")))
-        else:  # nous
-            cands.append((self.base_url, self.model, key("NOUS_API_KEY")))
-            if key("NVIDIA_API_KEY"):
-                cands.append(("https://integrate.api.nvidia.com/v1",
-                              os.getenv("AERYN_NVIDIA_MODEL",
-                                        "meta/llama-3.1-8b-instruct"),
+                              key("OPENROUTER_API_KEY")))
+        # FALLBACK: Groq (fast, free tier)
+        if key("GROQ_API_KEY"):
+            for gm in (os.getenv("AERYN_GROQ_MODEL") or
+                       ["openai/gpt-oss-20b",
+                        "openai/gpt-oss-120b"]):
+                cands.append(("https://api.groq.com/openai/v1", gm,
+                              key("GROQ_API_KEY")))
+        # FALLBACK: NVIDIA NIM (if available)
+        if key("NVIDIA_API_KEY"):
+            nv_first = os.getenv("AERYN_NVIDIA_MODEL")
+            nvs = ([nv_first] if nv_first else
+                   ["meta/llama-3.1-8b-instruct"])
+            for nm in nvs:
+                cands.append(("https://integrate.api.nvidia.com/v1", nm,
                               key("NVIDIA_API_KEY")))
         return [(u, m, k) for u, m, k in cands if k]
 

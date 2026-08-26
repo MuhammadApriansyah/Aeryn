@@ -960,7 +960,8 @@ def _run_steps(req: AgentRunReq):
             # Audit final answer for hallucinations, contradictions, leaks.
             # Anti-recursion: jangan run critic kalau ini sudah run critic.
             critic_result = {"ok": True, "issues": [], "confidence": 0}
-            if req.goal.startswith("[CRITIC]"):
+            is_critic = "CRITIC MODE" in (req.goal or "") or "[CRITIC]" in (req.goal or "")
+            if is_critic:
                 # sub-agen critic jangan audit lagi — langsung return
                 pass
             else:

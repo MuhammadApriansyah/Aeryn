@@ -1,4 +1,4 @@
-"""V39.12 — Fine-tuning dataset generator v2 (CoT + Critic + Persona).
+"""V39.12 — Fine-tuning dataset generator v3 (Reasoning + Tool Use + Error Recovery).
 Menghasilkan 200+ samples untuk training model reasoning Aeryn.
 Format JSONL, kompatibel dengan format sebelumnya.
 """
@@ -120,6 +120,18 @@ def build_cot_samples():
         "metadata": {"category": "commitment_track", "cerewet": True},
     })
 
+    # CoT explanation task
+    samples.append({
+        "type": "cot_reasoning",
+        "input": {"user_prompt": "jelaskan chain of thought reasoning"},
+        "output": {
+            "reasoning": "## PLAN\n- [subgoal: jelaskan konsep CoT] → respon langsung (knowledge lokal)\n## CRITIC\n- [risk: penjelasan terlalu teknis / tidak natural]\n## CONFIDENCE\n85% — konsep AI umum",
+            "tools_selected": [],
+            "final_answer": "Chain of Thought (CoT) adalah teknik di mana model AI menghasilkan langkah-langkah penalaran eksplisit sebelum memberikan jawaban final. Ini membuat proses berpikir model transparan dan bisa diaudit.",
+        },
+        "metadata": {"category": "explanation", "cot_steps": 2},
+    })
+
     return samples
 
 
@@ -196,6 +208,23 @@ def build_critic_pattern_samples():
             "revised_answer": "",
         },
         "metadata": {"audit_type": "pass", "severity": "none"},
+    })
+
+    # Verifier rejects incomplete answer
+    samples.append({
+        "type": "critic_pattern",
+        "input": {
+            "goal": "jelaskan CoT",
+            "answer": "CoT adalah teknik reasoning.",
+            "trace": [{"type": "tool", "name": "web_search", "result_digest": "CoT = Chain of Thought, teknik reasoning AI"}],
+        },
+        "output": {
+            "issues": ["jawaban terlalu pendek, tidak memadai untuk goal"],
+            "confidence": 30,
+            "summary": "jawaban tidak substantif",
+            "revised_answer": "CoT (Chain of Thought) adalah teknik di mana model AI menghasilkan langkah-langkah penalaran eksplisit sebelum jawaban final, meningkatkan transparansi dan akurasi.",
+        },
+        "metadata": {"audit_type": "incomplete_answer", "severity": "medium"},
     })
 
     return samples
@@ -283,7 +312,7 @@ def build_error_recovery_samples():
         "type": "error_recovery",
         "input": {"error_condition": "ALL_PROVIDERS_429"},
         "output": {
-            "response": "Maaf ya, semua provider LLM lagi kehabisan kuota (429). Aku tetap bisa bantu logika lokal — perhitungan, baca memory, atau cek fakta. Mau lanjut?",
+            "response": "Maaf ya, semua provider LLM lagi kehabisan kuota (429). Aku tetap bisa bantu dengan logika lokal — perhitungan, baca memory, atau cek fakta. Mau lanjut?",
             "allowed_tools": ["math_calc", "memory_search", "fs_read", "graph_traverse"],
         },
         "metadata": {"scenario": "provider_outage", "graceful": True},
@@ -315,6 +344,88 @@ def build_error_recovery_samples():
 
 
 # ═══════════════════════════════════════════════════════════════════
+# 5. TOOL USE SAMPLES — specific tool selection patterns
+# ═══════════════════════════════════════════════════════════════════
+def build_tool_use_samples():
+    """Samples untuk tool selection yang benar."""
+    samples = []
+
+    # math_calc for arithmetic
+    samples.append({
+        "type": "tool_use",
+        "input": {"user_prompt": "hitung 15% dari 2500000"},
+        "output": {
+            "tool": "math_calc",
+            "args": {"expression": "0.15 * 2500000"},
+            "reason": "aritmatika butuh kalkulasi pasti",
+        },
+        "metadata": {"tool": "math_calc", "deterministic": True},
+    })
+
+    # web_search for fresh info
+    samples.append({
+        "type": "tool_use",
+        "input": {"user_prompt": "berita terbaru tentang AI"},
+        "output": {
+            "tool": "web_search",
+            "args": {"query": "AI news today 2026"},
+            "reason": "info segar butuh internet",
+        },
+        "metadata": {"tool": "web_search", "needs_internet": True},
+    })
+
+    # memory_search for past context
+    samples.append({
+        "type": "tool_use",
+        "input": {"user_prompt": "apa yang kita bahas kemarin?"},
+        "output": {
+            "tool": "memory_search",
+            "args": {"query": "kemarin pembahasan", "top": 5},
+            "reason": "konteks lampau ada di library memory",
+        },
+        "metadata": {"tool": "memory_search", "local_only": True},
+    })
+
+    # graph_traverse for entity relations
+    samples.append({
+        "type": "tool_use",
+        "input": {"user_prompt": "apa hubungan aeryn dengan hermes?"},
+        "output": {
+            "tool": "graph_traverse",
+            "args": {"entity": "aeryn-core"},
+            "reason": "relasi antar-entitas ada di knowledge graph",
+        },
+        "metadata": {"tool": "graph_traverse", "local_only": True},
+    })
+
+    # pitfall_search for errors
+    samples.append({
+        "type": "tool_use",
+        "input": {"user_prompt": "error SSL EOF"},
+        "output": {
+            "tool": "pitfall_search",
+            "args": {"symptom": "SSL EOF"},
+            "reason": "error pernah dicatat — cek pitfall sebelum debug ulang",
+        },
+        "metadata": {"tool": "pitfall_search", "local_only": True},
+    })
+
+    # core_memory_edit for user facts
+    samples.append({
+        "type": "tool_use",
+        "input": {"user_prompt": "nama gw Sen"},
+        "output": {
+            "tool": "core_memory_edit",
+            "args": {"block": "human", "mode": "append", "content": "nama: Sen"},
+            "reason": "fakta tentang user → block human, append supaya tidak timpa",
+        },
+        "metadata": {"tool": "core_memory_edit", "write_operation": True},
+    })
+
+    return samples
+
+
+# ═══════════════════════════════════════════════════════════════════
 # MAIN
 # ═══════════════════════════════════════════════════════════════════
 def main():
@@ -323,6 +434,7 @@ def main():
     all_samples.extend(build_critic_pattern_samples())
     all_samples.extend(build_persona_integration_samples())
     all_samples.extend(build_error_recovery_samples())
+    all_samples.extend(build_tool_use_samples())
 
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         _write(all_samples, f)

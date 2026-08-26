@@ -65,6 +65,48 @@
    "fakta": [],
    "preferensi": {},
    "last_seen": 1787769210.6947403
+  },
+  "fine_tune_v39_12_new_chain": {
+   "nama": "fine_tune_v39_12_new_chain",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787771542.968905
+  },
+  "crit_000": {
+   "nama": "crit_000",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787771551.3429706
+  },
+  "simple_math": {
+   "nama": "simple_math",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787772389.9867914
+  },
+  "cot_explanation": {
+   "nama": "cot_explanation",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787772421.5819376
+  },
+  "cot_short": {
+   "nama": "cot_short",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787772441.9296982
+  },
+  "cot_trace_check": {
+   "nama": "cot_trace_check",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787772466.7473047
   }
  },
  "channels": {

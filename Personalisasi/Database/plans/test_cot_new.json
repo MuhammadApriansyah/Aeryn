@@ -1,0 +1,29 @@
+{
+ "goal": "jelaskan chain of thought",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Cari definisi 'chain of thought' di internet.",
+   "tool_hint": "web_search",
+   "done_when": "Definisi ditemukan"
+  },
+  {
+   "step": 1,
+   "desc": "Jelaskan konsep 'chain of thought' berdasarkan definisi yang ditemukan.",
+   "tool_hint": "none",
+   "done_when": "Penjelasan selesai"
+  },
+  {
+   "step": 2,
+   "desc": "Berikan contoh penerapan 'chain of thought' dalam konteks tertentu.",
+   "tool_hint": "none",
+   "done_when": "Contoh diberikan"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

@@ -1,0 +1,22 @@
+{
+ "goal": "jelaskan CoT",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Cari definisi dan penjelasan tentang CoT (Chain of Thought) di internet.",
+   "tool_hint": "web_search",
+   "done_when": "Definisi dan penjelasan CoT ditemukan."
+  },
+  {
+   "step": 1,
+   "desc": "Ringkas informasi yang ditemukan tentang CoT.",
+   "tool_hint": "none",
+   "done_when": "Informasi tentang CoT diringkas dengan jelas."
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}
