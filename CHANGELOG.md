@@ -1,5 +1,19 @@
 # Changelog — Aeryn-Core
 
+## V38.9 (2026-08-25) — Fine-tuning M17: math_calc DoS ditutup
+
+Probe M17 (resource exhaustion) menemukan: `math_calc("9**9**9")`
+MENGHANGKAN thread daemon >30 detik — komputasi bigint eksponensial
+tanpa guard. Satu tool call = DoS pada seluruh Aeryn.
+
+Fix berlapis di `_safe_eval`:
+- Depth guard maks 20 level nesting.
+- Operand guard: konstanta >10^12, eksponen >1000, hasil >10^18 → tolak.
+- Semua ditolak SEBELUM komputasi (<0.01s).
+
+Verifikasi: 408 → **412 tests green**; 9**9**9 kini ditolak instan;
+2**10 tetap jalan normal.
+
 ## V39.3 (2026-08-25) — Reminder internal + Image understanding
 
 ### set_reminder (pengingat internal)
