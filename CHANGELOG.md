@@ -1,5 +1,71 @@
 # Changelog — Aeryn-Core
 
+## V39.17 (2026-08-26) — Graph Traversal + Guardian Enhanced
+
+Ringkasan: Obsidian-style knowledge graph + Granite Guardian taxonomy.
+
+### 1. Graph Traversal (`aeryn_core/graph.py`)
+- Obsidian Local Graph: fokus view dari satu note ke notes terkait
+- Bidirectional links: forward links + backlinks antar vault entries
+- Related notes: temukan kesamaan via shared tags/links
+- Local graph depth traversal (default depth=1)
+
+### 2. Guardian Enhanced (`aeryn_core/guardian_enhanced.py`)
+- Granite Guardian risk taxonomy: 8 dimensi risiko
+- Critical: prompt injection, jailbreak → refuse
+- High: dangerous activities, exfiltration → refuse/sanitize
+- Medium: social bias, violence, sexual → refuse
+- Low: profanity → alert only
+
+### 3. Integration
+- Graph context injected ke system prompt per request
+- Guardian context integrated with existing CoT reasoning
+- 541 tests passing
+
+
+## V39.16 (2026-08-26) — Obsidian-style Vault + Composable Adapters
+
+Ringkasan: vault 6 lapis + Guardian basic + 5 composable adapters.
+
+### 1. Vault Architecture (`aeryn_core/vault.py`)
+- 6 layers: Raw, Wiki, Projects, System, Daily, Skills
+- Obsidian-style atomic notes with frontmatter
+- Daily notes with Plan/Log/Retrospective
+- Markdown plaintext (human-readable)
+
+### 2. Adapters (`aeryn_core/adapters.py`)
+- Composable capability modules (Granite Libraries style)
+- 5 adapters: code_review, research, debug, commitment_tracker, explain
+- Auto-match by keywords, inject behavior contract ke system prompt
+
+### 3. Guardian (`aeryn_core/guardian.py`)
+- Basic: injection detection, dangerous request block, output sanitization
+
+
+## V39.15 (2026-08-26) — Brute Fine-Tuning Iteration
+
+Ringkasan: CoT rule optimized + output sanitization + negative tests.
+
+### 1. CoT Rule Enhancement
+- REFUSAL RULES: injection, dangerous, hallucination
+- REASONING SANITIZATION: reasoning tidak boleh sebut forbidden words
+- Output filter: strip forbidden words dari response
+
+### 2. Brute Force Results
+- Positive accuracy: 99.1% (971/980)
+- Negative accuracy: 100% (7/7)
+- Tests: 510 green
+
+
+## V39.14 (2026-08-26) — Brute Fine-Tuning Aeryn
+
+Ringkasan: CoT rule optimized, 100% accuracy on 20 samples.
+
+### 1. CoT Rule
+- Format: PLAN → CRITIC → CONFIDENCE (mandatory)
+- 100% compliance on 20-sample test
+
+
 ## V39.13 (2026-08-26) — Brute Fine-Tuning: 245 Samples + NOUS/Gemini/OpenRouter Chain
 
 Ringkasan: dataset reasoning terbesar sampai saat ini + provider chain optimal.

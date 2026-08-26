@@ -764,6 +764,15 @@ def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
             system_prompt += f"\n{vault_summary}"
         except Exception:
             pass
+        # V39.17 — inject knowledge graph context
+        try:
+            from aeryn_core.graph import VaultGraph
+            graph = VaultGraph()
+            graph_summary = graph.render_graph_summary(req.goal, depth=1)
+            if graph_summary:
+                system_prompt += f"\n{graph_summary}"
+        except Exception:
+            pass
     except Exception:
         pass
     # V39.7 — CEREWET MODE: nagih komitmen + gaya aspri proaktif
