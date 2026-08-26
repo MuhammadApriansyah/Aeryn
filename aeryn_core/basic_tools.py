@@ -21,14 +21,34 @@ MATH_OPS = {ast.Add: operator.add, ast.Sub: operator.sub,
             ast.FloorDiv: operator.floordiv}
 
 
-def _safe_eval(node):
+def _safe_eval(node, _depth=0):
+    # V39.4-SEC — depth + operand guard: cegah DoS via ekspresi raksasa
+    # ("9**9**9" menggantung thread daemon >30s menghitung bigint raksasa)
+    if _depth > 20:
+        raise ValueError("ekspresi terlalu dalam (maks 20 level)")
     if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
-        return node.value
-    if isinstance(node, ast.BinOp) and type(node.op) in MATH_OPS:
-        return MATH_OPS[type(node.op)](_safe_eval(node.left),
-                                       _safe_eval(node.right))
+        v = node.value
+        if abs(v) > 10**12:
+            raise ValueError(f"angka terlalu besar: {v}")
+        return v
+    if isinstance(node, ast.BinOp):
+        op_type = type(node.op)
+        if op_type not in MATH_OPS:
+            raise ValueError("operator tidak diizinkan")
+        # pow dengan eksponen/radiks besar → tolak sebelum komputasi
+        if isinstance(node.op, ast.Pow):
+            left = _safe_eval(node.left, _depth + 1)
+            right = _safe_eval(node.right, _depth + 1)
+            if abs(right) > 1000 or abs(left) > 10**6:
+                raise ValueError("eksponen/radiks terlalu besar (maks b<1000)")
+            result = MATH_OPS[ast.Pow](left, right)
+            if abs(result) > 10**18:
+                raise ValueError("hasil terlalu besar (>10^18)")
+            return result
+        return MATH_OPS[op_type](_safe_eval(node.left, _depth + 1),
+                                 _safe_eval(node.right, _depth + 1))
     if isinstance(node, ast.UnaryOp) and type(node.op) in MATH_OPS:
-        return MATH_OPS[type(node.op)](_safe_eval(node.operand))
+        return MATH_OPS[type(node.op)](_safe_eval(node.operand, _depth + 1))
     raise ValueError(f"ekspresi tidak diizinkan: {ast.dump(node)[:60]}")
 
 
