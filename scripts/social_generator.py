@@ -131,6 +131,11 @@ def _is_social_query(message: str) -> bool:
         if s in msg:
             return False
 
+    # ── 0c. Reminder request → BUKAN sosial (V39.3, parity daemon) ──
+    if msg.startswith(("ingatkan", "remind", "pengingat")) or \
+            ("ingatkan" in msg and ("menit" in msg or "jam" in msg)):
+        return False
+
     # ── 1. Tech indicators → NOT social (positif menang duluan) ──
     tech_indicators = [
         ".txt", ".md", ".py", ".json", ".yaml", ".toml", ".csv", ".js",

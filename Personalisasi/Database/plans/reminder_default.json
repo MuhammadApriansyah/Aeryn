@@ -1,0 +1,22 @@
+{
+ "goal": "[PENGINGAT] [REMINDER] Waktunya minum air!",
+ "subgoals": [
+  {
+   "step": 0,
+   "desc": "Sampaikan pengingat kepada pengguna bahwa sekarang waktunya minum air",
+   "tool_hint": "none",
+   "done_when": "Pesan pengingat minum air tersampaikan ke pengguna"
+  },
+  {
+   "step": 1,
+   "desc": "Minta konfirmasi dari pengguna bahwa ia telah minum air dan catat waktu pemenuhan",
+   "tool_hint": "none",
+   "done_when": "Pengguna mengonfirmasi sudah minum air atau pengingat dicatat selesai"
+  }
+ ],
+ "status": [
+  "pending",
+  "pending"
+ ],
+ "source": "llm"
+}

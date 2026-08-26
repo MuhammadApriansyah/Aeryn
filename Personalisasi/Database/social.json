@@ -86,6 +86,13 @@
    "fakta": [],
    "preferensi": {},
    "last_seen": 1787708087.1620817
+  },
+  "reminder_default": {
+   "nama": "reminder_default",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787713464.5683963
   }
  },
  "channels": {

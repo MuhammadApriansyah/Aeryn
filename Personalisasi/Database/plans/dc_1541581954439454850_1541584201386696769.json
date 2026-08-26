@@ -1,48 +1,20 @@
 {
- "goal": "pakai fs_read baca file Personalisasi/Database/episodes/episodes.jsonl lalu sebutkan goal user lain",
+ "goal": "ingatkan aku 2 menit lagi untuk minum air",
  "subgoals": [
   {
    "step": 0,
-   "desc": "Baca file episodes.jsonl menggunakan fs_read",
-   "tool_hint": "fs_read",
-   "done_when": "file dibaca dengan sukses"
+   "desc": "Mulai timer tunggu selama 120 detik sejak permintaan pengguna",
+   "tool_hint": "none",
+   "done_when": "120 detik telah berlalu"
   },
   {
    "step": 1,
-   "desc": "Baca isi file episodes.jsonl",
-   "tool_hint": "json_parse|fs_read",
-   "done_when": "isi file dibaca dengan sukses"
-  },
-  {
-   "step": 2,
-   "desc": "Baca episode terakhir dari episodes.jsonl",
-   "tool_hint": "json_parse|fs_read",
-   "done_when": "episode terakhir dibaca dengan sukses"
-  },
-  {
-   "step": 3,
-   "desc": "Baca episode terakhir dari episodes.jsonl",
-   "tool_hint": "json_parse|fs_read",
-   "done_when": "episode terakhir dibaca dengan sukses"
-  },
-  {
-   "step": 4,
-   "desc": "Baca episode terakhir dari episodes.jsonl",
-   "tool_hint": "json_parse|fs_read",
-   "done_when": "episode terakhir dibaca dengan sukses"
-  },
-  {
-   "step": 5,
-   "desc": "Baca episode terakhir dari episodes.jsonl",
-   "tool_hint": "json_parse|fs_read",
-   "done_when": "episode terakhir dibaca dengan sukses"
+   "desc": "Kirim pesan pengingat ke pengguna: 'Waktunya minum air!'",
+   "tool_hint": "none",
+   "done_when": "Pengingat minum air berhasil ditampilkan kepada pengguna"
   }
  ],
  "status": [
-  "pending",
-  "pending",
-  "pending",
-  "pending",
   "pending",
   "pending"
  ],

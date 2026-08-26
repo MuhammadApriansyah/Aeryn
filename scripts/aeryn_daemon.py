@@ -219,6 +219,28 @@ from aeryn_core.basic_tools import (datetime_now, math_calc,
                                     DATETIME_SCHEMA, MATH_SCHEMA)
 TOOLS.register("datetime_now", datetime_now, DATETIME_SCHEMA, tier="safe")
 TOOLS.register("math_calc", math_calc, MATH_SCHEMA, tier="safe")
+# V39.3 — reminder internal + image understanding
+from aeryn_core.reminder import set_reminder, REMINDER_SCHEMA
+from aeryn_core.image_tools import image_understand, IMAGE_SCHEMA
+
+
+def _set_reminder(note: str, delay_minutes: float = 30):
+    # session_id induk dicatat agar pengingat tahu harus dilapor ke mana
+    return set_reminder(note, delay_minutes)
+
+
+def _checker_reminder(args, result):
+    return isinstance(result, dict) and result.get("ok") is True
+
+
+def _checker_image(args, result):
+    return isinstance(result, dict) and result.get("ok") is True and \
+        result.get("answer")
+
+
+TOOLS.register("set_reminder", _set_reminder, REMINDER_SCHEMA, tier="safe")
+TOOLS.register("image_understand", image_understand, IMAGE_SCHEMA,
+               tier="safe")
 
 
 def _checker_datetime(args, result):
@@ -361,6 +383,12 @@ def _is_social_query(goal: str) -> bool:
     for s in self_inquiry:
         if s in msg:
             return False
+
+    # ── 0c. Reminder request → BUKAN sosial (V39.3) ──
+    # "ingatkan aku X menit lagi" = perintah set_reminder, bukan obrolan.
+    if msg.startswith(("ingatkan", "remind", "pengingat")) or \
+            ("ingatkan" in msg and ("menit" in msg or "jam" in msg)):
+        return False
 
     # ── 1. Sinyal teknis positif → pasti bukan sosial ──
     tech_positive = (
@@ -794,7 +822,12 @@ def _run_steps(req: AgentRunReq):
         # pakai load_with_compaction (ringkasan lebih kaya, hemat via cache).
         try:
             from aeryn_core import session_history as _sh
-            if _is_memory_write_command(req.goal):
+            # V39.3 — reminder request juga dikecualikan dari riwayat:
+            # jawaban lama "nggak bisa kirim pesan duluan" (sebelum tool
+            # ada) bikin model meniru tanpa manggil set_reminder.
+            if (_is_memory_write_command(req.goal)
+                    or req.goal.lower().lstrip().startswith(
+                        ("ingatkan", "remind", "pengingat"))):
                 hist = []
             else:
                 # V36 — sesi panjang (> budget) pakai kompaksi LLM tercache;
@@ -1110,7 +1143,30 @@ def _nightly_loop():
             print(f"[nightly] gagal: {exc}", flush=True)
 
 
+def _reminder_loop():
+    """V39.3 — cek reminder jatuh tempo tiap 30 detik; jalankan sebagai run
+    kecil di session pemiliknya (laporan otomatis ke channel yang benar)."""
+    from aeryn_core.reminder import due_reminders
+    while True:
+        time.sleep(30)
+        try:
+            for r in due_reminders():
+                goal = f"[PENGINGAT] {r['note']}"
+                sid = r.get("session_id") or "reminder_default"
+                req = AgentRunReq(goal=goal, session_id=sid,
+                                  max_iterations=2, max_wall_seconds=90)
+                try:
+                    list(_run_steps(req))
+                    print(f"[aeryn] reminder fired: {r['note'][:60]}",
+                          flush=True)
+                except Exception as exc:
+                    print(f"[aeryn] reminder gagal: {exc}", flush=True)
+        except Exception as exc:
+            print(f"[aeryn] reminder loop: {exc}", flush=True)
+
+
 threading.Thread(target=_nightly_loop, daemon=True).start()
+threading.Thread(target=_reminder_loop, daemon=True).start()  # V39.3
 
 
 if __name__ == "__main__":

@@ -1,5 +1,29 @@
 # Changelog — Aeryn-Core
 
+## V39.3 (2026-08-25) — Reminder internal + Image understanding
+
+### set_reminder (pengingat internal)
+- Tool `set_reminder(note, delay_minutes)` — persist JSON, atomic pop,
+  cap 100 + evict fired, rentang 10 menit s/d 7 hari.
+- `_reminder_loop`: cek tiap 30 detik; jatuh tempo → dijalankan sebagai
+  run kecil di session pemiliknya (laporan otomatis ke channel asal).
+- Live: "ingatkan aku 2 menit lagi minum air" → reminder terpasang →
+  fired 2 menit kemudian → log "[aeryn] reminder fired".
+
+### image_understand (vision)
+- Kirim URL/path gambar ke model vision Nous (ox-alpha multimodal).
+- Guard: scheme/path sandbox (realpath), maks 8MB, marker sensitif.
+- Symlink escape → ditolak check_path.
+
+### Bug klasifikasi baru: reminder request dikira sosial
+- "ingatkan aku 2 menit lagi" masuk jalur sosial → tools di-strip →
+  Aeryn malah jawab "aku nggak bisa kirim pesan duluan".
+- Fix parity daemon+generator: prefix ingatkan/remind/pengingat = bukan
+  sosial; plus pengecualian riwayat (pola V37.2) supaya jawaban lama
+  tidak meniru.
+
+Verifikasi: 402 → **408 tests green**; live roundtrip reminder sukses.
+
 ## V39.2 (2026-08-25) — Tool dasar dari analisa episode + fallback map 100%
 
 ### Analisa data → 2 tool dasar
