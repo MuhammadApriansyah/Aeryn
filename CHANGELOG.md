@@ -1,5 +1,20 @@
 # Changelog — Aeryn-Core
 
+## V39.6c (2026-08-25) — Polish gen-3: research signals + audit guard
+
+Probe M24–M28 atas fitur reasoning baru:
+
+1. **False-negative needs_research** — "cara install docker" tidak
+   memicu riset padahal tutorial butuh sumber (versi/command berubah).
+   Fix: tambah sinyal cara install/cara pakai/how to/tutorial/setup/
+   konfigurasi/migrasi.
+2. **Audit research guard** — terbukti bounded: iterasi terakhir otomatis
+   jalur disclaimer (tidak ada infinite loop). Verifikasi kode + test.
+3. Verifier menerima ➡️ next-token hint (bukan leak marker) ✅.
+4. Verifier cap answer 2500 / digest 150 ✅ (biaya LLM terkendali).
+
+Verifikasi: 432 → **436 tests green**; ALL PARITY.
+
 ## V39.6 (2026-08-25) — Research-first reasoning + next-token prediction
 
 Dua keinginan Sen soal gaya reasoning Aeryn, diimplementasikan:

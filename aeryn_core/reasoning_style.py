@@ -19,6 +19,9 @@ RESEARCH_SIGNALS = (
     "terbaru", "terkini", "hari ini", "kemarin", "2025", "2026",
     "versi terakhir", "release", "rilis", "news", "berita",
     "apa itu", "jelaskan tentang", "bandingkan", "review",
+    # V39.6c — tutorial/how-to juga butuh sumber (versi & command berubah)
+    "cara install", "cara pakai", "how to", "tutorial", "setup ",
+    "konfigurasi ", "migrasi ",
 )
 
 # Sinyal goal yang TIDAK perlu web (jawaban dari konteks/memori lokal)
