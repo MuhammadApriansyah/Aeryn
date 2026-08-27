@@ -28,10 +28,6 @@
    "relasi": "kenalan di Discord",
    "fakta": [
     {
-     "text": "Sen adalah majikan sekaligus pembuat Aeryn",
-     "hash": "4d8ab8d1f6d7"
-    },
-    {
      "text": "Sen membangun Aeryn-Core (otaknya) & webnovel platform",
      "hash": "7e3ca65a5ee1"
     },
@@ -106,13 +102,17 @@
     {
      "text": "suka kopi 1787845012.220585",
      "hash": "e62b75117854"
+    },
+    {
+     "text": "suka kopi 1787845239.3958652",
+     "hash": "ad6101ddbe69"
     }
    ],
    "preferensi": {
     "bahasa": "id-casual",
     "tone": "cerewet"
    },
-   "last_seen": 1787845012.2389932
+   "last_seen": 1787845239.4042277
   },
   "1541581954439454850": {
    "nama": "Misela.",
