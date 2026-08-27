@@ -1,0 +1,42 @@
+{
+  "passed": 8,
+  "total": 9,
+  "results": [
+    {
+      "test": "shared_room_write",
+      "passed": true
+    },
+    {
+      "test": "cross_agent_recall",
+      "passed": true
+    },
+    {
+      "test": "entity_linking",
+      "passed": true
+    },
+    {
+      "test": "supersede_cross_agent",
+      "passed": true
+    },
+    {
+      "test": "current_version",
+      "passed": true
+    },
+    {
+      "test": "flag_deprecated",
+      "passed": true
+    },
+    {
+      "test": "concurrent_writes",
+      "passed": true
+    },
+    {
+      "test": "memory_isolation",
+      "passed": true
+    },
+    {
+      "test": "recall_precision",
+      "passed": false
+    }
+  ]
+}
