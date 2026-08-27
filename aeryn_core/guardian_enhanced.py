@@ -42,7 +42,8 @@ RISK_DIMENSIONS = [
         r"jailbreak|(\s|^)AIM(\s|$)",
         r"(\s|^)DAN(\s|$)",
         r"bypass\s+(filters?|restrictions?|safety|security)",
-        r"pretend\s+(you\s+have\s+no|there\s+are\s+no)\s+restrictions",
+        r"pretend\s+(you\s+have\s+no|there\s+are\s+no|you\s+are|to\s+be)",
+        r"pretend\s+(you\s+have\s+no|there\s+are\s+no)\s+(restrictions|safety|filters|limits)",
         r"act\s+as\s+(if\s+)?you\s+(have|are|can)",
         r"do\s+not\s+(follow|obey|listen\s+to|adhere\s+to)",
         r"disregard\s+(all|previous|above|prior)",
@@ -57,6 +58,7 @@ RISK_DIMENSIONS = [
     # High: Dangerous activities
     RiskDimension("dangerous", "high", [
         r"\b(hack|crack|exploit|inject|spoof|phish)\s+(into|the|a|server|database|wifi|network|orang|akun)",
+        r"\bhack\s+(akun|orang|server|database|wifi|network)",
         r"\b(create|make|build|buat|membuat|bikin)\s+(malware|virus|ransomware|trojan|backdoor|rootkit)",
         r"\b(steal|exfiltrate|extract|curi|mencuri)\s+(data|credentials|passwords|keys|tokens)",
         r"\b(bypass|circumvent)\s+(auth|security|firewall|captcha|rate\s*limit)",
