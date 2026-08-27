@@ -28,46 +28,6 @@
    "relasi": "kenalan di Discord",
    "fakta": [
     {
-     "text": "suka kopi 1787843294.1165414",
-     "hash": "04222ad63e8b"
-    },
-    {
-     "text": "suka kopi 1787843539.3993073",
-     "hash": "0d89baa0f5fc"
-    },
-    {
-     "text": "suka kopi 1787843914.018344",
-     "hash": "2e731792b72e"
-    },
-    {
-     "text": "suka kopi 1787844022.1903265",
-     "hash": "b98004a8cabb"
-    },
-    {
-     "text": "suka kopi 1787844074.9865868",
-     "hash": "1be375995e08"
-    },
-    {
-     "text": "suka kopi 1787844265.8738995",
-     "hash": "d29cdf7f68ea"
-    },
-    {
-     "text": "suka kopi 1787844492.0949066",
-     "hash": "33a8dfeccd2f"
-    },
-    {
-     "text": "suka kopi 1787844581.45667",
-     "hash": "f38b82c1bd56"
-    },
-    {
-     "text": "suka kopi 1787844626.2498062",
-     "hash": "8185f6cf3c76"
-    },
-    {
-     "text": "suka kopi 1787844854.096062",
-     "hash": "91627176073d"
-    },
-    {
      "text": "suka kopi 1787845012.220585",
      "hash": "e62b75117854"
     },
@@ -106,13 +66,63 @@
     {
      "text": "test message",
      "hash": "3f0a377ba0a4"
+    },
+    {
+     "text": "fact 0 about Sen",
+     "hash": "99fc416603fe",
+     "author": "aeryn"
+    },
+    {
+     "text": "fact 1 about Sen",
+     "hash": "359ba4cc9705",
+     "author": "aeryn"
+    },
+    {
+     "text": "fact 2 about Sen",
+     "hash": "0b71cf211221",
+     "author": "aeryn"
+    },
+    {
+     "text": "fact 3 about Sen",
+     "hash": "0e1d3bd75b6b",
+     "author": "aeryn"
+    },
+    {
+     "text": "fact 4 about Sen",
+     "hash": "fb72ddcc04e1",
+     "author": "aeryn"
+    },
+    {
+     "text": "sk-abc123",
+     "hash": "0a2f6ba7b3d4",
+     "author": "aeryn"
+    },
+    {
+     "text": "password=secret",
+     "hash": "ef9f9093ba99",
+     "author": "aeryn"
+    },
+    {
+     "text": "api_key=xyz",
+     "hash": "a912909133d7",
+     "author": "aeryn"
+    },
+    {
+     "text": "Bearer token123",
+     "hash": "c1e71d73e45d",
+     "author": "aeryn"
+    },
+    {
+     "text": "added by test",
+     "hash": "17db895ecca4",
+     "author": "test_agent"
     }
    ],
    "preferensi": {
     "bahasa": "id-casual",
     "tone": "cerewet"
    },
-   "last_seen": 1787848941.7890327
+   "last_seen": 1787854424.1672919
   },
   "1541581954439454850": {
    "nama": "Misela.",
@@ -455,10 +465,20 @@
     {
      "text": "suka Python",
      "hash": "680baac9f506"
+    },
+    {
+     "text": "added by test",
+     "hash": "17db895ecca4",
+     "author": "test_agent"
+    },
+    {
+     "text": "test fact",
+     "hash": "16c69f3c0ce6",
+     "author": "agent1"
     }
    ],
    "preferensi": {},
-   "last_seen": 1787842940.5965893
+   "last_seen": 1787854424.2684627
   },
   "987654321098765432": {
    "nama": "Bob",
@@ -478,6 +498,13 @@
    "fakta": [],
    "preferensi": {},
    "last_seen": 1787848940.304662
+  },
+  "   ": {
+   "nama": "   ",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787854424.174684
   }
  },
  "channels": {

@@ -101,6 +101,7 @@ RISK_DIMENSIONS = [
         r"\b(launch|perform|execute|jalankan|laksanakan|DDoS|DoS)\s*(DDoS|DoS|attack|exploit)?",
         r"\b(generate|create|membuat|buat)\s+(child|csam|exploit\s+code)",
         r"\b(weapon|bomb|drug|illegal)\s+(making|creation|synthesis|production|membuat|buat)",
+        r"\b(membuat|buat|cara\s+buat|bikin)\s+(bom|bahan\s+peledak|peledak|weapon|senjata|mesiu| dinamit)",
         r"\b(spoof|phish|social\s+engineering)\s*(email|identity|orang|akun)?",
         r"\bcrack\s+(password|orang|akun|wifi)",
         r"\bexploit\s+(vulnerability|kerentanan|bug)",

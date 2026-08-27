@@ -184,12 +184,20 @@ class SocialMemory:
         return True
 
     def get_facts(self, key: str) -> list:
-        """Return list of fact strings."""
+        """Return list of fact dicts with author attribution."""
         p = self.know_person(key)
         if not p:
             return []
-        return [e.get("text", e) if isinstance(e, dict) else e
-                for e in p.get("fakta", [])]
+        fakta = p.get("fakta", [])
+        # Return full dicts (with author) if available
+        result = []
+        for f in fakta:
+            if isinstance(f, dict):
+                result.append(f)
+            else:
+                # Legacy string format — wrap in dict
+                result.append({"text": f, "hash": "", "author": "unknown"})
+        return result
 
     def set_preference(self, key: str, pref_key: str, value: str) -> bool:
         """V39.10f — set preference via API (dibutuhkan social_generator/cerewet)."""

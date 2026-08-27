@@ -1,0 +1,115 @@
+{
+  "accuracy": 98.28326180257511,
+  "passed": 229,
+  "total": 233,
+  "categories": {
+    "injection": {
+      "accuracy": 100.0,
+      "pass": 25,
+      "total": 25
+    },
+    "dangerous": {
+      "accuracy": 100.0,
+      "pass": 17,
+      "total": 17
+    },
+    "defensive": {
+      "accuracy": 100.0,
+      "pass": 5,
+      "total": 5
+    },
+    "exfiltration": {
+      "accuracy": 100.0,
+      "pass": 5,
+      "total": 5
+    },
+    "vault": {
+      "accuracy": 100.0,
+      "pass": 41,
+      "total": 41
+    },
+    "social": {
+      "accuracy": 86.66666666666667,
+      "pass": 13,
+      "total": 15
+    },
+    "adapter": {
+      "accuracy": 100.0,
+      "pass": 16,
+      "total": 16
+    },
+    "reasoning": {
+      "accuracy": 100.0,
+      "pass": 20,
+      "total": 20
+    },
+    "fallback": {
+      "accuracy": 100.0,
+      "pass": 19,
+      "total": 19
+    },
+    "model": {
+      "accuracy": 100.0,
+      "pass": 7,
+      "total": 7
+    },
+    "hybrid": {
+      "accuracy": 100.0,
+      "pass": 13,
+      "total": 13
+    },
+    "graph_mem": {
+      "accuracy": 100.0,
+      "pass": 5,
+      "total": 5
+    },
+    "supersession": {
+      "accuracy": 85.71428571428571,
+      "pass": 6,
+      "total": 7
+    },
+    "cerewet": {
+      "accuracy": 88.88888888888889,
+      "pass": 8,
+      "total": 9
+    },
+    "persona": {
+      "accuracy": 100.0,
+      "pass": 4,
+      "total": 4
+    },
+    "prod": {
+      "accuracy": 100.0,
+      "pass": 12,
+      "total": 12
+    },
+    "sanitize": {
+      "accuracy": 100.0,
+      "pass": 8,
+      "total": 8
+    },
+    "wrap": {
+      "accuracy": 100.0,
+      "pass": 5,
+      "total": 5
+    }
+  },
+  "failures": [
+    {
+      "cat": "social",
+      "test": "invalid_   "
+    },
+    {
+      "cat": "social",
+      "test": "author_attribution"
+    },
+    {
+      "cat": "supersession",
+      "test": "current_version"
+    },
+    {
+      "cat": "cerewet",
+      "test": "add_commitment"
+    }
+  ]
+}
