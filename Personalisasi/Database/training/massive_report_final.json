@@ -1,0 +1,726 @@
+{
+  "accuracy": 92.26530612244898,
+  "total_score": 4521.0,
+  "total_max": 4900,
+  "samples": 1225,
+  "failures": 200,
+  "total_time_s": 13745.4535946846,
+  "by_type": {
+    "cot": {
+      "accuracy": 99.02173913043478,
+      "count": 230,
+      "pass": 217
+    },
+    "critic": {
+      "accuracy": 80.05464480874316,
+      "count": 183,
+      "pass": 110
+    },
+    "persona": {
+      "accuracy": 74.45054945054946,
+      "count": 182,
+      "pass": 89
+    },
+    "tool_use": {
+      "accuracy": 99.64285714285714,
+      "count": 280,
+      "pass": 276
+    },
+    "error_recovery": {
+      "accuracy": 100.0,
+      "count": 100,
+      "pass": 100
+    },
+    "negative": {
+      "accuracy": 96.6,
+      "count": 250,
+      "pass": 233
+    }
+  },
+  "failure_details": [
+    {
+      "idx": 10,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 12,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 27,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 33,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 34,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 94,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 113,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 123,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 145,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 155,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 170,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 171,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 172,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 173,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 176,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 177,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 178,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 179,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 229,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 231,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 233,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 235,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 237,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 239,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 241,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 243,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 245,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 247,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 249,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 251,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 253,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 255,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 257,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 259,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 261,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 263,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 265,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 267,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 269,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 271,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 273,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 275,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 277,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 278,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 279,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 280,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 281,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 282,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 283,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 284,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 285,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 286,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 287,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 288,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 289,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 290,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 291,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 292,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 293,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 294,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 296,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 297,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 298,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 299,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 300,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 301,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 302,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 303,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 304,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 305,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 306,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 307,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 308,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 309,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 310,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 311,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 312,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 313,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 314,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 315,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 316,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 317,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 318,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 319,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 320,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 321,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 323,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 324,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 325,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 326,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 327,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 328,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 329,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 330,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 331,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 332,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 333,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 334,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 335,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    },
+    {
+      "idx": 336,
+      "type": "persona",
+      "issues": [
+        "no commit tone"
+      ]
+    }
+  ]
+}

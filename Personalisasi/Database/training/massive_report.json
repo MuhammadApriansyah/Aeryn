@@ -1,0 +1,739 @@
+{
+  "accuracy": 42.367346938775505,
+  "total_score": 2076,
+  "total_max": 4900,
+  "samples": 1225,
+  "failures": 1025,
+  "by_type": {
+    "cot": {
+      "accuracy": 25.32608695652174,
+      "count": 230,
+      "pass": 0
+    },
+    "critic": {
+      "accuracy": 38.114754098360656,
+      "count": 183,
+      "pass": 0
+    },
+    "persona": {
+      "accuracy": 25.274725274725274,
+      "count": 182,
+      "pass": 0
+    },
+    "tool_use": {
+      "accuracy": 25.0,
+      "count": 280,
+      "pass": 0
+    },
+    "error_recovery": {
+      "accuracy": 50.0,
+      "count": 100,
+      "pass": 0
+    },
+    "negative": {
+      "accuracy": 90.0,
+      "count": 250,
+      "pass": 200
+    }
+  },
+  "failure_details": [
+    {
+      "idx": 0,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 1,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 2,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 3,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 4,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 6,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 5,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 8,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 7,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 9,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 10,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 11,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 12,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 13,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 15,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 14,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 16,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 17,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 18,
+      "type": "cot",
+      "issues": [
+        "partial"
+      ]
+    },
+    {
+      "idx": 19,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 20,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 21,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 23,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 22,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 26,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 27,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 24,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 28,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 29,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 25,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 30,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 31,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 33,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 32,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 34,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 35,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 36,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 37,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 38,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 39,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 40,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 41,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 42,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 43,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 44,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 45,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 46,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 47,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 49,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 48,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 50,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 51,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 52,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 54,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 55,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 56,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 57,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 53,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 58,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 60,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 59,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 61,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 62,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 63,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 64,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 66,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 65,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 67,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 68,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 70,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 69,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 71,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 72,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 73,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 74,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 75,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 77,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 78,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 79,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 80,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 81,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 76,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 82,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 84,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 83,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 86,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 85,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 87,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 88,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 89,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 90,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 92,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 91,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 93,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 94,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 96,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 95,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 97,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 98,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 99,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    }
+  ]
+}
