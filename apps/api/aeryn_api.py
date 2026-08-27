@@ -27,6 +27,7 @@ from aeryn_core.vault import AerynVault, VaultEntry, LAYER_WIKI
 from aeryn_core.social_memory import SocialMemory
 from aeryn_core.hybrid_search import get_search_engine
 from aeryn_core.persona_engine import load_persona
+from aeryn_core.shared_db import get_shared_db
 from aeryn_core.config import ensure_dirs
 
 app = FastAPI(title="Aeryn Daemon", version="39.64")
@@ -410,6 +411,88 @@ setInterval(loadStats, 30000); // refresh every 30s
 </script>
 </body>
 </html>"""
+
+
+# ── Shared DB Endpoints ─────────────────────────────────────────
+
+@app.get("/shared/reminders/due")
+async def get_due_reminders():
+    """Get all pending reminders that are due."""
+    db = get_shared_db()
+    reminders = db.get_due_reminders()
+    return {"reminders": reminders, "count": len(reminders)}
+
+
+@app.get("/shared/reminders")
+async def get_all_reminders():
+    """Get all reminders."""
+    db = get_shared_db()
+    reminders = db.get_all_reminders()
+    return {"reminders": reminders, "count": len(reminders)}
+
+
+@app.post("/shared/reminders/add")
+async def add_reminder(text: str, when: str, source: str = "n8n", target: str = "all"):
+    """Add a reminder."""
+    db = get_shared_db()
+    rid = db.add_reminder(text, when, source, target)
+    return {"id": rid, "status": "ok"}
+
+
+@app.post("/shared/reminders/mark-sent")
+async def mark_reminder_sent(reminder_id: str):
+    """Mark reminder as sent."""
+    db = get_shared_db()
+    db.mark_reminder_sent(reminder_id)
+    return {"status": "ok"}
+
+
+@app.get("/shared/tasks")
+async def get_pending_tasks():
+    """Get pending tasks."""
+    db = get_shared_db()
+    tasks = db.get_pending_tasks()
+    return {"tasks": tasks, "count": len(tasks)}
+
+
+@app.post("/shared/tasks/add")
+async def add_task(title: str, description: str = "", priority: int = 5):
+    """Add a task."""
+    db = get_shared_db()
+    tid = db.add_task(title, description, priority)
+    return {"id": tid, "status": "ok"}
+
+
+@app.post("/shared/tasks/update")
+async def update_task(task_id: str, status: str = None, progress: float = None, result: str = None, error: str = None):
+    """Update a task."""
+    db = get_shared_db()
+    db.update_task(task_id, status, progress, result, error)
+    return {"status": "ok"}
+
+
+@app.get("/shared/daily-log")
+async def get_daily_log():
+    """Get or create today's daily log."""
+    db = get_shared_db()
+    log = db.get_or_create_daily_log()
+    return log
+
+
+@app.post("/shared/daily-log/update")
+async def update_daily_log(date: str = None, **kwargs):
+    """Update daily log."""
+    db = get_shared_db()
+    db.update_daily_log(date, **kwargs)
+    return {"status": "ok"}
+
+
+@app.get("/shared/stats")
+async def get_stats():
+    """Get overall statistics."""
+    db = get_shared_db()
+    return db.get_stats()
+
 
 if __name__ == "__main__":
     import uvicorn

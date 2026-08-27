@@ -79,3 +79,17 @@
 2026-08-27 22:51:36: INFO:     127.0.0.1:47648 - "GET /dashboard/stats HTTP/1.1" 200 OK
 2026-08-27 22:52:05: INFO:     127.0.0.1:38154 - "GET /dashboard/stats HTTP/1.1" 200 OK
 2026-08-27 22:52:35: INFO:     127.0.0.1:40256 - "GET /dashboard/stats HTTP/1.1" 200 OK
+2026-08-27 22:53:09: INFO:     127.0.0.1:40760 - "GET /dashboard/stats HTTP/1.1" 200 OK
+2026-08-27 22:53:28: INFO:     127.0.0.1:42286 - "GET /health HTTP/1.1" 200 OK
+2026-08-27 22:53:35: INFO:     127.0.0.1:42290 - "GET /dashboard/stats HTTP/1.1" 200 OK
+2026-08-27 22:54:05: INFO:     127.0.0.1:60064 - "GET /dashboard/stats HTTP/1.1" 200 OK
+2026-08-27 22:55:04: INFO:     127.0.0.1:39782 - "GET /shared/stats HTTP/1.1" 404 Not Found
+2026-08-27 22:55:04: INFO:     127.0.0.1:39792 - "POST /shared/reminders/add?text=Test+reminder&when=2026-08-27T23:00:00 HTTP/1.1" 404 Not Found
+2026-08-27 22:55:04: INFO:     127.0.0.1:39800 - "GET /shared/reminders/due HTTP/1.1" 404 Not Found
+2026-08-27 22:55:06: INFO:     127.0.0.1:39808 - "GET /dashboard/stats HTTP/1.1" 200 OK
+2026-08-27 22:56:35: INFO:     127.0.0.1:41062 - "GET /shared/stats HTTP/1.1" 404 Not Found
+2026-08-27 22:59:28: INFO:     127.0.0.1:35778 - "GET /shared/stats HTTP/1.1" 200 OK
+2026-08-27 22:59:41: INFO:     127.0.0.1:44158 - "GET /shared/reminders/due HTTP/1.1" 200 OK
+2026-08-27 22:59:41: INFO:     127.0.0.1:44166 - "POST /shared/reminders/add?text=Check+server+health&when=2026-08-28T09:00:00&source=n8n HTTP/1.1" 200 OK
+2026-08-27 22:59:42: INFO:     127.0.0.1:44174 - "POST /run HTTP/1.1" 200 OK
+2026-08-27 22:59:42: INFO:     127.0.0.1:44190 - "GET /shared/stats HTTP/1.1" 200 OK
