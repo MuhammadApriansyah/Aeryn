@@ -28,10 +28,6 @@
    "relasi": "kenalan di Discord",
    "fakta": [
     {
-     "text": "suka React",
-     "hash": "06af0d08b295"
-    },
-    {
      "text": "deadline besok",
      "hash": "160cc1132b5e"
     },
@@ -106,13 +102,17 @@
     {
      "text": "suka kopi 1787847087.4979243",
      "hash": "d0cc8a547821"
+    },
+    {
+     "text": "suka integration test",
+     "hash": "115cfd1e4669"
     }
    ],
    "preferensi": {
     "bahasa": "id-casual",
     "tone": "cerewet"
    },
-   "last_seen": 1787847087.5075095
+   "last_seen": 1787848340.9382787
   },
   "1541581954439454850": {
    "nama": "Misela.",

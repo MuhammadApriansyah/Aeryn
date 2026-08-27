@@ -1,0 +1,145 @@
+{
+  "accuracy": 97.22222222222221,
+  "passed": 70,
+  "total": 72,
+  "categories": {
+    "pipe_research": {
+      "accuracy": 86.66666666666667,
+      "pass": 13,
+      "total": 15
+    },
+    "pipe_safe": {
+      "accuracy": 100.0,
+      "pass": 15,
+      "total": 15
+    },
+    "pipe_adapter": {
+      "accuracy": 100.0,
+      "pass": 5,
+      "total": 5
+    },
+    "fallback_web": {
+      "accuracy": 100.0,
+      "pass": 3,
+      "total": 3
+    },
+    "fallback_fs": {
+      "accuracy": 100.0,
+      "pass": 2,
+      "total": 2
+    },
+    "fallback_terminal": {
+      "accuracy": 100.0,
+      "pass": 1,
+      "total": 1
+    },
+    "fallback_ask": {
+      "accuracy": 100.0,
+      "pass": 1,
+      "total": 1
+    },
+    "fallback_set": {
+      "accuracy": 100.0,
+      "pass": 1,
+      "total": 1
+    },
+    "fallback_image": {
+      "accuracy": 100.0,
+      "pass": 1,
+      "total": 1
+    },
+    "fallback_math": {
+      "accuracy": 100.0,
+      "pass": 1,
+      "total": 1
+    },
+    "state_vault": {
+      "accuracy": 100.0,
+      "pass": 1,
+      "total": 1
+    },
+    "state_graph": {
+      "accuracy": 100.0,
+      "pass": 1,
+      "total": 1
+    },
+    "state_social": {
+      "accuracy": 100.0,
+      "pass": 1,
+      "total": 1
+    },
+    "state_safety": {
+      "accuracy": 100.0,
+      "pass": 1,
+      "total": 1
+    },
+    "state_compat": {
+      "accuracy": 100.0,
+      "pass": 1,
+      "total": 1
+    },
+    "state_path": {
+      "accuracy": 100.0,
+      "pass": 1,
+      "total": 1
+    },
+    "state_payload": {
+      "accuracy": 100.0,
+      "pass": 1,
+      "total": 1
+    },
+    "state_research": {
+      "accuracy": 100.0,
+      "pass": 1,
+      "total": 1
+    },
+    "state_adapter": {
+      "accuracy": 100.0,
+      "pass": 1,
+      "total": 1
+    },
+    "adapter_contract": {
+      "accuracy": 100.0,
+      "pass": 5,
+      "total": 5
+    },
+    "safety_dim": {
+      "accuracy": 100.0,
+      "pass": 5,
+      "total": 5
+    },
+    "next_token": {
+      "accuracy": 100.0,
+      "pass": 3,
+      "total": 3
+    },
+    "coherence_safe": {
+      "accuracy": 100.0,
+      "pass": 1,
+      "total": 1
+    },
+    "coherence_sanitize": {
+      "accuracy": 100.0,
+      "pass": 1,
+      "total": 1
+    },
+    "coherence_log": {
+      "accuracy": 100.0,
+      "pass": 2,
+      "total": 2
+    },
+    "coherence_dim": {
+      "accuracy": 100.0,
+      "pass": 1,
+      "total": 1
+    }
+  },
+  "failures": [
+    {
+      "test": "pipe_research_debug error SSL"
+    },
+    {
+      "test": "pipe_research_jelaskan konsep"
+    }
+  ]
+}
