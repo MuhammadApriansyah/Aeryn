@@ -201,12 +201,12 @@ class Guardian:
         
         # Redact secrets
         text = re.sub(r"sk-[a-zA-Z0-9]{32,}", "[REDACTED_API_KEY]", text)
-        text = re.sub(r"api[_-]?key\s*[:=]\s*[\"']?[a-zA-Z0-9]{16,}", "api_key: [REDACTED]", text, flags=re.I)
+        text = re.sub(r"api[_-]?key\s*[:=]\s*[\"']?[a-zA-Z0-9]{6,}", "api_key: [REDACTED]", text, flags=re.I)
         text = re.sub(r"password\s*[:=]\s*[\"']?[^\s\"']{8,}", "password: [REDACTED]", text, flags=re.I)
-        text = re.sub(r"Bearer\s+[a-zA-Z0-9._-]{16,}", "Bearer [REDACTED]", text)
-        text = re.sub(r"(?:access[_-]?)?token\s*[:=]\s*[\"']?[a-zA-Z0-9]{16,}", "token: [REDACTED]", text, flags=re.I)
-        text = re.sub(r"(?:client[_-]?)?secret\s*[:=]\s*[\"']?[a-zA-Z0-9]{16,}", "secret: [REDACTED]", text, flags=re.I)
-        text = re.sub(r"refresh[_-]?token\s*[:=]\s*[\"']?[a-zA-Z0-9]{16,}", "refresh_token: [REDACTED]", text, flags=re.I)
+        text = re.sub(r"Bearer\s+[a-zA-Z0-9._-]{6,}", "Bearer [REDACTED]", text)
+        text = re.sub(r"(?:access[_-]?)?token\s*[:=]\s*[\"']?[a-zA-Z0-9]{6,}", "token: [REDACTED]", text, flags=re.I)
+        text = re.sub(r"(?:client[_-]?)?secret\s*[:=]\s*[\"']?[a-zA-Z0-9]{6,}", "secret: [REDACTED]", text, flags=re.I)
+        text = re.sub(r"refresh[_-]?token\s*[:=]\s*[\"']?[a-zA-Z0-9]{6,}", "refresh_token: [REDACTED]", text, flags=re.I)
         text = re.sub(r"-----BEGIN\s+(?:RSA|OPENSSH|PRIVATE)\s+KEY-----[\s\S]*?-----END\s+(?:RSA|OPENSSH|PRIVATE)\s+KEY-----",
                        "[REDACTED_PRIVATE_KEY]", text, flags=re.I)
         # Also catch BEGIN RSA PRIVATE KEY without proper END

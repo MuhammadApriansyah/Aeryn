@@ -1,10 +1,10 @@
 ---
-title: G_C
+title: V3931 System
 tags: []
 links: []
 created: 2026-08-27T15:34:13
 updated: 2026-08-27T15:34:13
-hash: 0aac55f55282
+hash: d568c7c52ce8
 ---
 
-Links to [[G_D]].
+Content System
