@@ -98,7 +98,7 @@ DANGEROUS_PATTERNS = [
     r"(launch|perform|execute|jalankan|laksanakan|initiate)\s+(a\s+)?(DDoS|DoS)\s*(attack)?",
     r"(create|make|build|generate|write|develop)\s+(malware|virus|ransomware|trojan|worm|rootkit|keylogger|backdoor|exploit|spyware)",
     r"(malware|virus|ransomware|trojan|worm|rootkit|keylogger|backdoor|spyware|exploit)\s*(code|script|program)?",
-    r"(sql\s*injection|csrf|xss|ssrf|xxe|command\s*injection|path\s*traversal|directory\s*traversal)",
+    r"(sql\s*injection|csrf|xss|ssrf|xxe|command\s*injection|path\s*traversal)\s*(attack|exploit|payload|bypass|vulnerability|inject)",
     r"(hack|rob|break)\s+(a\s+)?(bank|store|house|system|server|website)",
     
     # Harm to self/others
@@ -197,9 +197,17 @@ class SafetyEngine:
                 return SafetyResult(safe=False, reason=f"injection pattern: {pattern.pattern[:40]}", action="refuse")
         
         # Layer 3: Dangerous intent detection
-        for pattern in self._dangerous_patterns:
-            if pattern.search(text) or pattern.search(normalized):
-                return SafetyResult(safe=False, reason=f"dangerous intent: {pattern.pattern[:40]}", action="refuse")
+        # Skip if defensive context (prevention/defense/secure)
+        is_defensive = any(w in normalized for w in [
+            "mencegah", "cegah", "hindari", "protect", "defend", "secure", 
+            "prevent", "avoid", "aman", "keamanan", "safety", "bertahan",
+            "melindung", "pencegahan", "mengamankan"
+        ])
+        
+        if not is_defensive:
+            for pattern in self._dangerous_patterns:
+                if pattern.search(text) or pattern.search(normalized):
+                    return SafetyResult(safe=False, reason=f"dangerous intent: {pattern.pattern[:40]}", action="refuse")
         
         # Layer 4: Token-level analysis (catch obfuscated)
         tokens = normalized.split()
