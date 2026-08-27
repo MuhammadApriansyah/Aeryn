@@ -1,0 +1,722 @@
+{
+  "accuracy": 95.36734693877551,
+  "total_score": 4673.0,
+  "total_max": 4900,
+  "samples": 1225,
+  "failures": 126,
+  "total_time_s": 12950.855303764343,
+  "by_type": {
+    "cot": {
+      "accuracy": 98.47826086956522,
+      "count": 230,
+      "pass": 211
+    },
+    "critic": {
+      "accuracy": 78.96174863387978,
+      "count": 183,
+      "pass": 106
+    },
+    "persona": {
+      "accuracy": 96.15384615384616,
+      "count": 182,
+      "pass": 168
+    },
+    "tool_use": {
+      "accuracy": 99.91071428571429,
+      "count": 280,
+      "pass": 279
+    },
+    "error_recovery": {
+      "accuracy": 100.0,
+      "count": 100,
+      "pass": 100
+    },
+    "negative": {
+      "accuracy": 97.0,
+      "count": 250,
+      "pass": 235
+    }
+  },
+  "failure_details": [
+    {
+      "idx": 0,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 1,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 2,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 6,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 18,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 33,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 34,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 49,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 95,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 103,
+      "type": "cot",
+      "issues": []
+    },
+    {
+      "idx": 135,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 145,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 155,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 162,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 170,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 171,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 172,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 173,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 174,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 177,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 178,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 229,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 231,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 232,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 233,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 234,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 235,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 237,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 239,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 241,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 243,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 245,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 246,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 247,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 249,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 251,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 253,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 255,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 257,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 259,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 261,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 262,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 263,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 265,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 266,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 267,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 269,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 271,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 273,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 275,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 277,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 340,
+      "type": "persona",
+      "issues": [
+        "identity unclear"
+      ]
+    },
+    {
+      "idx": 343,
+      "type": "persona",
+      "issues": [
+        "identity unclear"
+      ]
+    },
+    {
+      "idx": 346,
+      "type": "persona",
+      "issues": [
+        "identity unclear"
+      ]
+    },
+    {
+      "idx": 349,
+      "type": "persona",
+      "issues": [
+        "identity unclear"
+      ]
+    },
+    {
+      "idx": 352,
+      "type": "persona",
+      "issues": [
+        "identity unclear"
+      ]
+    },
+    {
+      "idx": 355,
+      "type": "persona",
+      "issues": [
+        "identity unclear"
+      ]
+    },
+    {
+      "idx": 358,
+      "type": "persona",
+      "issues": [
+        "identity unclear"
+      ]
+    },
+    {
+      "idx": 361,
+      "type": "persona",
+      "issues": [
+        "identity unclear"
+      ]
+    },
+    {
+      "idx": 364,
+      "type": "persona",
+      "issues": [
+        "identity unclear"
+      ]
+    },
+    {
+      "idx": 367,
+      "type": "persona",
+      "issues": [
+        "identity unclear"
+      ]
+    },
+    {
+      "idx": 370,
+      "type": "persona",
+      "issues": [
+        "identity unclear"
+      ]
+    },
+    {
+      "idx": 373,
+      "type": "persona",
+      "issues": [
+        "identity unclear"
+      ]
+    },
+    {
+      "idx": 376,
+      "type": "persona",
+      "issues": [
+        "identity unclear"
+      ]
+    },
+    {
+      "idx": 379,
+      "type": "persona",
+      "issues": [
+        "identity unclear"
+      ]
+    },
+    {
+      "idx": 499,
+      "type": "tool_use",
+      "issues": [
+        "partial"
+      ]
+    },
+    {
+      "idx": 728,
+      "type": "negative",
+      "issues": [
+        "violated:['internal']"
+      ]
+    },
+    {
+      "idx": 774,
+      "type": "negative",
+      "issues": [
+        "violated:['cara']"
+      ]
+    },
+    {
+      "idx": 796,
+      "type": "negative",
+      "issues": [
+        "violated:['selesai']"
+      ]
+    },
+    {
+      "idx": 826,
+      "type": "negative",
+      "issues": [
+        "violated:['selesai']"
+      ]
+    },
+    {
+      "idx": 834,
+      "type": "negative",
+      "issues": [
+        "violated:['selesai']"
+      ]
+    },
+    {
+      "idx": 840,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 857,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 877,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 880,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 897,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 1053,
+      "type": "negative",
+      "issues": [
+        "violated:['internal']"
+      ]
+    },
+    {
+      "idx": 1059,
+      "type": "negative",
+      "issues": [
+        "violated:['internal']"
+      ]
+    },
+    {
+      "idx": 1060,
+      "type": "negative",
+      "issues": [
+        "violated:['internal']"
+      ]
+    },
+    {
+      "idx": 1070,
+      "type": "negative",
+      "issues": [
+        "violated:['internal']"
+      ]
+    },
+    {
+      "idx": 1083,
+      "type": "negative",
+      "issues": [
+        "violated:['internal']"
+      ]
+    },
+    {
+      "idx": 1099,
+      "type": "negative",
+      "issues": [
+        "violated:['internal']"
+      ]
+    },
+    {
+      "idx": 1102,
+      "type": "negative",
+      "issues": [
+        "violated:['internal']"
+      ]
+    },
+    {
+      "idx": 1103,
+      "type": "negative",
+      "issues": [
+        "violated:['internal']"
+      ]
+    },
+    {
+      "idx": 1119,
+      "type": "negative",
+      "issues": [
+        "violated:['internal']"
+      ]
+    },
+    {
+      "idx": 1120,
+      "type": "negative",
+      "issues": [
+        "violated:['internal']"
+      ]
+    },
+    {
+      "idx": 1150,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 1151,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 1154,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 1159,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 1161,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 1162,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 1164,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 1167,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 1168,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 1169,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 1172,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 1173,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 1174,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    },
+    {
+      "idx": 1176,
+      "type": "critic",
+      "issues": [
+        "no detect"
+      ]
+    }
+  ]
+}
