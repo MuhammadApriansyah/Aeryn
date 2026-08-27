@@ -1,0 +1,42 @@
+2026-08-27 20:52:58: Traceback (most recent call last):
+2026-08-27 20:52:58:   File "/home/sen/aeryn-core-agent/apps/hermes_bridge/hermes_bridge.py", line 8, in <module>
+2026-08-27 20:52:58:     
+2026-08-27 20:52:58: import websockets
+2026-08-27 20:52:58: ModuleNotFoundError: No module named 'websockets'
+2026-08-27 20:52:58: Traceback (most recent call last):
+2026-08-27 20:52:58:   File "/home/sen/aeryn-core-agent/apps/hermes_bridge/hermes_bridge.py", line 8, in <module>
+2026-08-27 20:52:58:     import websockets
+2026-08-27 20:52:58: ModuleNotFoundError: No module named 'websockets'
+2026-08-27 20:52:59: Traceback (most recent call last):
+2026-08-27 20:52:59:   File "/home/sen/aeryn-core-agent/apps/hermes_bridge/hermes_bridge.py", line 8, in <module>
+2026-08-27 20:52:59:     import websockets
+2026-08-27 20:52:59: ModuleNotFoundError: No module named 'websockets'
+2026-08-27 20:52:59: Traceback (most recent call last):
+2026-08-27 20:52:59:   File "/home/sen/aeryn-core-agent/apps/hermes_bridge/hermes_bridge.py", line 8, in <module>
+2026-08-27 20:52:59:     import websockets
+2026-08-27 20:52:59: ModuleNotFoundError: No module named 'websockets'
+2026-08-27 20:52:59: Traceback (most recent call last):
+2026-08-27 20:52:59:   File "/home/sen/aeryn-core-agent/apps/hermes_bridge/hermes_bridge.py", line 8, in <module>
+2026-08-27 20:52:59:     import websockets
+2026-08-27 20:52:59: ModuleNotFoundError: No module named 'websockets'
+2026-08-27 20:53:00: Traceback (most recent call last):
+2026-08-27 20:53:00:   File "/home/sen/aeryn-core-agent/apps/hermes_bridge/hermes_bridge.py", line 8, in <module>
+2026-08-27 20:53:00:     import websockets
+2026-08-27 20:53:00: ModuleNotFoundError: No module named 'websockets'
+2026-08-27 20:53:00: Traceback (most recent call last):
+2026-08-27 20:53:00:   File "/home/sen/aeryn-core-agent/apps/hermes_bridge/hermes_bridge.py", line 8, in <module>
+2026-08-27 20:53:00:     
+2026-08-27 20:53:00: import websockets
+2026-08-27 20:53:00: ModuleNotFoundError: No module named 'websockets'
+2026-08-27 20:53:01: Traceback (most recent call last):
+2026-08-27 20:53:01:   File "/home/sen/aeryn-core-agent/apps/hermes_bridge/hermes_bridge.py", line 8, in <module>
+2026-08-27 20:53:01:     import websockets
+2026-08-27 20:53:01: ModuleNotFoundError: No module named 'websockets'
+2026-08-27 20:53:01: Traceback (most recent call last):
+2026-08-27 20:53:01:   File "/home/sen/aeryn-core-agent/apps/hermes_bridge/hermes_bridge.py", line 8, in <module>
+2026-08-27 20:53:01:     import websockets
+2026-08-27 20:53:01: ModuleNotFoundError: No module named 'websockets'
+2026-08-27 20:53:02: Traceback (most recent call last):
+2026-08-27 20:53:02:   File "/home/sen/aeryn-core-agent/apps/hermes_bridge/hermes_bridge.py", line 8, in <module>
+2026-08-27 20:53:02:     import websockets
+2026-08-27 20:53:02: ModuleNotFoundError: No module named 'websockets'
