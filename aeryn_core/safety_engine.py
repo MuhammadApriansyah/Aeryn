@@ -103,7 +103,14 @@ RISK_PATTERNS = [
     
     # Low: Profanity
     RiskPattern([
-        r"\b(f+u+c+k+|s+h+i+t+|a+s+s+h+o+l+e+|b+i+t+c+h+|d+a+m+n+|c+r+a+p+|f+a+g+|n+i+g+g+|c+u+n+t+)\b",
+        r"\b[f]+[u]+[c]+[k]+(ing|er|ed)?\b",
+        r"\b[s]+[h]+[i]+[t]+\b",
+        r"\b[a]+[s]+[s]+[h]+[o]+[l]+[e]+\b",
+        r"\b[b]+[i]+[t]+[c]+[h]+\b",
+        r"\b[d]+[a]+[m]+[n]+\b",
+        r"\b[f]+[a]+[g]+\b",
+        r"\b[n]+[i]+[g]+[g]+\b",
+        r"\b[c]+[u]+[n]+[t]+\b",
         r"\b(b+a+n+g+k+e+d+|b+e+n+c+e+r+|j+a+n+c+o+k+|a+j+i+n+g|a+n+j+i+n+g|k+e+r+a+s+|t+o+l+o+l+)\b",
     ], "low", "alert", "FALLBACK: Profanity detected. Maintain professional tone in response."),
 ]
@@ -195,7 +202,10 @@ class SafetyEngine:
             
             # Normal check
             if risk_pattern.check(text) or risk_pattern.check(normalized):
-                safe = risk_pattern.action != "refuse"
+                # Critical and high risk → refuse (safe=False)
+                # Medium risk → flag (safe=False, but can continue with caution)
+                # Low risk → alert (safe=True, just note it)
+                safe = risk_pattern.action == "alert"
                 return SafetyResult(
                     safe=safe,
                     reason=f"{risk_pattern.risk} risk: {risk_pattern.fallback}",
@@ -446,3 +456,29 @@ def make_secure_terminal(sandbox_roots=None):
 
 RISK_DIMENSIONS = []
 FALLBACK_MAP = {}
+
+# ── V39.16 Backward Compat ────────────────────────────────────────
+
+def detect_injection(text: str) -> Optional[SafetyResult]:
+    """V39.16 compat: detect injection. Returns None if safe."""
+    eng = get_safety_engine()
+    result = eng.check_input(text)
+    if not result.safe and result.risk == "critical":
+        return result
+    return None
+
+def detect_dangerous(text: str) -> Optional[SafetyResult]:
+    """V39.16 compat: detect dangerous. Returns None if safe."""
+    eng = get_safety_engine()
+    result = eng.check_input(text)
+    if not result.safe and result.risk in ("high", "critical"):
+        return result
+    return None
+
+def detect_exfiltration(text: str) -> Optional[SafetyResult]:
+    """V39.16 compat: detect secrets in output. Returns None if safe."""
+    eng = get_safety_engine()
+    result = eng.check_output(text)
+    if not result.safe:
+        return result
+    return None
