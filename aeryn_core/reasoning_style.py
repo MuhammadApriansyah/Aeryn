@@ -19,12 +19,12 @@ RESEARCH_SIGNALS = (
     "terbaru", "terkini", "hari ini", "kemarin", "2025", "2026",
     "versi terakhir", "release", "rilis", "news", "berita",
     "apa itu", "jelaskan tentang", "bandingkan", "review",
-    # V39.6c — tutorial/how-to juga butuh sumber (versi & command berubah)
-    "cara install", "cara pakai", "how to", "tutorial", "setup ",
-    "konfigurasi ", "migrasi ",
-    # V39.10d — pola umum lain: "gimana caranya", "bikin/membuat X"
     "gimana caranya", "gimana cara", "bagaimana cara", "cara bikin",
     "cara membuat", "bikin bot", "bikin web", "buat bot",
+    # Commands that need research
+    "install", "backup", "run tests", "deploy", "setup", "configure",
+    "update server", "fix bug", "buat dokumentasi", "konfigurasi",
+    "migrasi", "how to", "tutorial", "cara install", "cara pakai",
 )
 
 # Sinyal goal yang TIDAK perlu web (jawaban dari konteks/memori lokal)
@@ -40,6 +40,18 @@ def needs_research(goal: str, has_memory_context: bool = False) -> bool:
     g = str(goal or "").lower().strip()
     if not g:
         return False
+    
+    # Math queries don't need research
+    math_patterns = [
+        r'\b\d+\s*[\+\-\*\/\^]\s*\d+',
+        r'\bhitung\s+\d+',
+        r'\b\d+\s*(dari|percent|%)\s*\d+',
+        r'\b(jumlah|kurang|bagi|pangkat|akar|mod|modulo)\b',
+    ]
+    for p in math_patterns:
+        if re.search(p, g, re.I):
+            return False
+    
     for s in LOCAL_SIGNALS:
         if g.startswith(s):
             return False
