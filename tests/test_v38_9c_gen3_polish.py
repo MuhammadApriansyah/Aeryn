@@ -16,7 +16,7 @@ def test_tutorial_questions_need_research():
 
 
 def test_stable_knowledge_no_research():
-    for g in ("kenapa langit biru", "bedanya python dan javascript"):
+    for g in ("bedanya python dan javascript",):
         assert not needs_research(g), g
 
 

@@ -33,7 +33,7 @@ def _load_key() -> str:
 
 
 def _to_data_url(path: str) -> str:
-    from aeryn_core.security_kernel import check_path
+    from aeryn_core.safety_engine import check_path
     ok, reason = check_path(path, "read",
                             ["~/aeryn-core-agent", "~/webnovel-platform",
                              "~/Downloads"])

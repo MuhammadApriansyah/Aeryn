@@ -209,7 +209,7 @@ def make_fs_read(roots):
 
     V37.5-SEC — plus SecurityKernel: file sensitif (.env, memori pribadi,
     state internal) dilindungi BAHKAN di dalam sandbox."""
-    from aeryn_core.security_kernel import check_path
+    from aeryn_core.safety_engine import check_path
     allowed = [Path(os.path.expanduser(r)).resolve() for r in roots]
 
     def fs_read(path: str, max_bytes: int = 50_000):
@@ -231,7 +231,7 @@ def make_fs_write(sandbox_roots):
     Parent dir otomatis dibuat. Returns dict {path, bytes_written}.
     V37.5-SEC — SecurityKernel: secret files + source dirs write-protected.
     """
-    from aeryn_core.security_kernel import check_path
+    from aeryn_core.safety_engine import check_path
     allowed = [Path(os.path.expanduser(r)).resolve() for r in sandbox_roots]
 
     def fs_write(path: str, content: str):

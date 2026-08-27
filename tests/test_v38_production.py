@@ -9,7 +9,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.production_guard import (
+from aeryn_core.safety_engine import (
     RateLimiter, looks_like_injection, rotate_all_data_files,
     rotate_jsonl_if_large, validate_run_payload, wrap_untrusted)
 

@@ -299,7 +299,7 @@ def main():
 
     # V38 — rotasi data file besar (anti disk exhaustion) sebelum handoff
     try:
-        from aeryn_core.production_guard import rotate_all_data_files
+        from aeryn_core.safety_engine import rotate_all_data_files
         rot = rotate_all_data_files()
         rotated = [k for k, v in rot.items() if v]
         if rotated:

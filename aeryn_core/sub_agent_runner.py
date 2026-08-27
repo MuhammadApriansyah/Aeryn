@@ -36,7 +36,7 @@ Melanggar SOP = hasil dibuang."""
 
 def build_sop(no: int, goal: str) -> str:
     # V38.3 — goal disanitasi dulu: instruksi penimpa SOP dipotong
-    from aeryn_core.production_guard import sanitize_goal_for_sop
+    from aeryn_core.safety_engine import sanitize_goal_for_sop
     safe_goal = sanitize_goal_for_sop(goal)
     return SOP_TEMPLATE.format(no=no, goal=safe_goal[:300],
                                max_iter=SUB_MAX_ITERATIONS,

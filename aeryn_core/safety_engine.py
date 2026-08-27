@@ -444,3 +444,42 @@ def detect_exfiltration(text):
 def sanitize_output(text):
     eng = get_safety_engine()
     return eng.sanitize(text)
+
+
+def make_secure_terminal(sandbox_roots):
+    """Wrapper terminal: validasi path argumen + cwd via kernel."""
+    from aeryn_core.terminal_tool import make_terminal
+    inner = make_terminal(sandbox_roots)
+
+    def secure_terminal(command: str, cwd: str = None):
+        parts = command.strip().split()
+        tokens = parts[1:] if parts else []
+        i = 0
+        while i < len(tokens):
+            tok = tokens[i]
+            candidate = None
+            if "=" in tok and tok.startswith("-"):
+                candidate = tok.split("=", 1)[1]
+            elif tok.startswith("-") and not tok.startswith("--"):
+                if len(tok) > 2 and ("/" in tok):
+                    candidate = tok[2:] if not tok[2:].startswith("/") else tok[2:]
+                    if not candidate.startswith("/"):
+                        candidate = "/" + candidate
+                else:
+                    nxt = tokens[i + 1] if i + 1 < len(tokens) else ""
+                    if nxt and (nxt.startswith(("/", "~")) or "/" in nxt):
+                        candidate = nxt
+                        i += 1
+            elif not tok.startswith("-"):
+                candidate = tok
+            if candidate:
+                ok, reason = check_path(candidate, "read", sandbox_roots)
+                if not ok:
+                    return {"error": f"SafetyEngine: {reason}"}
+            i += 1
+        if cwd:
+            ok, reason = check_path(cwd, "read", sandbox_roots)
+            if not ok:
+                return {"error": f"SafetyEngine: {reason}"}
+        return inner(command, cwd)
+    return secure_terminal

@@ -10,7 +10,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.production_guard import (
+from aeryn_core.safety_engine import (
     looks_like_injection, sanitize_goal_for_sop, wrap_untrusted)
 from aeryn_core.sub_agent_runner import build_sop, spawn_subagents
 

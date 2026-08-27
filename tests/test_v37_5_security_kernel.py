@@ -8,7 +8,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.security_kernel import check_path, make_secure_terminal
+from aeryn_core.safety_engine import check_path, make_secure_terminal
 from aeryn_core.tool_bridge import build_default_registry
 
 SB = ["~/aeryn-core-agent"]
@@ -56,7 +56,7 @@ def test_terminal_flag_with_path_value_blocked():
     """Bypass V37.4: flag dengan nilai path (--output=/x)."""
     term = make_secure_terminal(SB)
     r = term("git log --output=/tmp/evil.txt --oneline")
-    assert "SecurityKernel" in str(r.get("error", "")), r
+    assert "SafetyEngine" in str(r.get("error", "")) or "SecurityKernel" in str(r.get("error", "")), r
 
 
 def test_terminal_short_flag_attached_path_blocked():
@@ -69,7 +69,7 @@ def test_terminal_cat_env_in_sandbox_blocked():
     """.env ada DI DALAM sandbox → kernel harus menolak."""
     term = make_secure_terminal(SB)
     r = term("cat .env")
-    assert "SecurityKernel" in str(r.get("error", "")), r
+    assert "SafetyEngine" in str(r.get("error", "")) or "SecurityKernel" in str(r.get("error", "")), r
 
 
 def test_http_ssrf_internal_blocked():

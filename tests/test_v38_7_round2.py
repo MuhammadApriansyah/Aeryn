@@ -11,9 +11,9 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.production_guard import (
+from aeryn_core.safety_engine import (
     RateLimiter, looks_like_injection, sanitize_goal_for_sop)
-from aeryn_core.security_kernel import check_path
+from aeryn_core.safety_engine import check_path
 
 
 def test_injection_detection_survives_homoglyph():

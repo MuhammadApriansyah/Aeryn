@@ -12,7 +12,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.production_guard import RateLimiter, sanitize_goal_for_sop
+from aeryn_core.safety_engine import RateLimiter, sanitize_goal_for_sop
 
 
 def test_homoglyph_bypass_closed():

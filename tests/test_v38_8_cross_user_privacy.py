@@ -4,7 +4,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.security_kernel import check_path
+from aeryn_core.safety_engine import check_path
 from aeryn_core.tool_bridge import build_default_registry
 
 
