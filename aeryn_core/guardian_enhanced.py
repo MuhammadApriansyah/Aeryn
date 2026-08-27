@@ -220,6 +220,9 @@ class Guardian:
         # Catch bare "PRIVATE KEY" alone
         text = re.sub(r"PRIVATE\s+KEY",
                        "[REDACTED_PRIVATE_KEY]", text, flags=re.I)
+        # Catch bare "PRIVATE KEY" alone
+        text = re.sub(r"PRIVATE\s+KEY",
+                       "[REDACTED_PRIVATE_KEY]", text, flags=re.I)
         
         return text
     
