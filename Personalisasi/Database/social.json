@@ -122,7 +122,7 @@
     "bahasa": "id-casual",
     "tone": "cerewet"
    },
-   "last_seen": 1787854424.1672919
+   "last_seen": 1787854902.8935838
   },
   "1541581954439454850": {
    "nama": "Misela.",
@@ -475,10 +475,20 @@
      "text": "test fact",
      "hash": "16c69f3c0ce6",
      "author": "agent1"
+    },
+    {
+     "text": "test_a8fa52",
+     "hash": "16409648789f",
+     "author": "agent_x"
+    },
+    {
+     "text": "added by test 5d6326a1",
+     "hash": "2a784c9bcefd",
+     "author": "test_agent"
     }
    ],
    "preferensi": {},
-   "last_seen": 1787854424.2684627
+   "last_seen": 1787854902.932112
   },
   "987654321098765432": {
    "nama": "Bob",

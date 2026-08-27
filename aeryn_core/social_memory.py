@@ -99,7 +99,7 @@ class SocialMemory:
     @classmethod
     def is_persistent_person_key(cls, key: str) -> bool:
         """V38.5 + V39.10f — cegah entry transient/di traversal key masuk memory."""
-        k = str(key)
+        k = str(key).strip()  # V39.50: strip whitespace
         if not k or len(k) < 1:
             return False
         # Block traversal / path injection keys

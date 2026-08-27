@@ -1,7 +1,7 @@
 {
-  "accuracy": 98.28326180257511,
-  "passed": 229,
-  "total": 233,
+  "accuracy": 100.0,
+  "passed": 232,
+  "total": 232,
   "categories": {
     "injection": {
       "accuracy": 100.0,
@@ -29,9 +29,9 @@
       "total": 41
     },
     "social": {
-      "accuracy": 86.66666666666667,
-      "pass": 13,
-      "total": 15
+      "accuracy": 100.0,
+      "pass": 14,
+      "total": 14
     },
     "adapter": {
       "accuracy": 100.0,
@@ -64,13 +64,13 @@
       "total": 5
     },
     "supersession": {
-      "accuracy": 85.71428571428571,
-      "pass": 6,
+      "accuracy": 100.0,
+      "pass": 7,
       "total": 7
     },
     "cerewet": {
-      "accuracy": 88.88888888888889,
-      "pass": 8,
+      "accuracy": 100.0,
+      "pass": 9,
       "total": 9
     },
     "persona": {
@@ -94,22 +94,5 @@
       "total": 5
     }
   },
-  "failures": [
-    {
-      "cat": "social",
-      "test": "invalid_   "
-    },
-    {
-      "cat": "social",
-      "test": "author_attribution"
-    },
-    {
-      "cat": "supersession",
-      "test": "current_version"
-    },
-    {
-      "cat": "cerewet",
-      "test": "add_commitment"
-    }
-  ]
+  "failures": []
 }
