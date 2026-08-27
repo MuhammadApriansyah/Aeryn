@@ -1,0 +1,54 @@
+{
+  "accuracy": 100.0,
+  "passed": 82,
+  "total": 82,
+  "time_s": 0.2165994644165039,
+  "categories": {
+    "cot": {
+      "accuracy": 100.0,
+      "pass": 7,
+      "total": 7
+    },
+    "research": {
+      "accuracy": 100.0,
+      "pass": 12,
+      "total": 12
+    },
+    "guardian": {
+      "accuracy": 100.0,
+      "pass": 21,
+      "total": 21
+    },
+    "adapter": {
+      "accuracy": 100.0,
+      "pass": 17,
+      "total": 17
+    },
+    "vault": {
+      "accuracy": 100.0,
+      "pass": 5,
+      "total": 5
+    },
+    "graph": {
+      "accuracy": 100.0,
+      "pass": 5,
+      "total": 5
+    },
+    "social": {
+      "accuracy": 100.0,
+      "pass": 9,
+      "total": 9
+    },
+    "next": {
+      "accuracy": 100.0,
+      "pass": 2,
+      "total": 2
+    },
+    "sanitize": {
+      "accuracy": 100.0,
+      "pass": 4,
+      "total": 4
+    }
+  },
+  "failures": []
+}
