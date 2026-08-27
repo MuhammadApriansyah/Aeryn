@@ -58,3 +58,7 @@
 2026-08-27 20:53:14: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3001): address already in use
 2026-08-27 20:53:14: INFO:     Waiting for application shutdown.
 2026-08-27 20:53:14: INFO:     Application shutdown complete.
+2026-08-27 21:07:31: INFO:     Started server process [31135]
+2026-08-27 21:07:31: INFO:     Waiting for application startup.
+2026-08-27 21:07:31: INFO:     Application startup complete.
+2026-08-27 21:07:31: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
