@@ -1,0 +1,55 @@
+{
+  "passed": 6,
+  "total": 7,
+  "results": [
+    {
+      "test": "concurrent_safety",
+      "passed": true,
+      "time": 0.109,
+      "ops": 54
+    },
+    {
+      "test": "race_social_memory",
+      "passed": false,
+      "time": 0.045,
+      "facts": 0,
+      "errors": 0
+    },
+    {
+      "test": "vault_writes_100",
+      "passed": true,
+      "time": 0.751,
+      "ops": 100,
+      "errors": 0
+    },
+    {
+      "test": "hybrid_search_50",
+      "passed": true,
+      "time": 17.621,
+      "ops": 50,
+      "errors": 0
+    },
+    {
+      "test": "memory_leak",
+      "passed": true,
+      "initial": 12641,
+      "final": 13241,
+      "growth": 600
+    },
+    {
+      "test": "graph_stress_100",
+      "passed": true,
+      "time": 7.382,
+      "nodes": 105,
+      "edges": 218
+    },
+    {
+      "test": "throughput_1000",
+      "passed": true,
+      "time": 100.437,
+      "ops": 1000,
+      "ops_per_sec": 10.0,
+      "errors": 0
+    }
+  ]
+}
