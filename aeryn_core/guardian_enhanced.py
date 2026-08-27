@@ -51,17 +51,24 @@ RISK_DIMENSIONS = [
         r"remove\s+(all|your|previous)",
         r"disable\s+(all|your|safety)",
         r"turn\s+off\s+(all|your|safety)",
+        r"pretend\s+(you\s+are|to\s+be)",
     ], action="refuse"),
     
     # High: Dangerous activities
     RiskDimension("dangerous", "high", [
-        r"\b(hack|crack|exploit|inject|spoof|phish)\s+(into|the|a|server|database|wifi|network|orang)",
+        r"\b(hack|crack|exploit|inject|spoof|phish)\s+(into|the|a|server|database|wifi|network|orang|akun)",
         r"\b(create|make|build|buat|membuat|bikin)\s+(malware|virus|ransomware|trojan|backdoor|rootkit)",
         r"\b(steal|exfiltrate|extract|curi|mencuri)\s+(data|credentials|passwords|keys|tokens)",
         r"\b(bypass|circumvent)\s+(auth|security|firewall|captcha|rate\s*limit)",
-        r"\b(launch|perform|execute|jalankan|laksanakan)\s+(DDoS|DoS|attack|exploit)",
+        r"\b(launch|perform|execute|jalankan|laksanakan|DDoS|DoS)\s*(DDoS|DoS|attack|exploit)?",
         r"\b(generate|create|membuat|buat)\s+(child|csam|exploit\s+code)",
         r"\b(weapon|bomb|drug|illegal)\s+(making|creation|synthesis|production|membuat|buat)",
+        r"\b(spoof|phish|social\s+engineering)\s*(email|identity|orang|akun)?",
+        r"\bcrack\s+(password|orang|akun|wifi)",
+        r"\bexploit\s+(vulnerability|kerentanan|bug)",
+        r"\binject\s*(sql|code|script)",
+        r"\bphishing\s*(email|orang|akun)?",
+        r"\bsocial\s+engineering\s*(orang|akun)?",
     ], action="refuse"),
     
     # High: Data exfiltration in output
@@ -198,7 +205,10 @@ class Guardian:
         text = re.sub(r"(?:access[_-]?)?token\s*[:=]\s*[\"']?[a-zA-Z0-9]{16,}", "token: [REDACTED]", text, flags=re.I)
         text = re.sub(r"(?:client[_-]?)?secret\s*[:=]\s*[\"']?[a-zA-Z0-9]{16,}", "secret: [REDACTED]", text, flags=re.I)
         text = re.sub(r"refresh[_-]?token\s*[:=]\s*[\"']?[a-zA-Z0-9]{16,}", "refresh_token: [REDACTED]", text, flags=re.I)
-        text = re.sub(r"-----BEGIN\s+(?:RSA|OPENSSH|PRIVATE)\s+KEY-----[\s\S]*?-----END\s+(?:RSA|OPENSSH|PRIVATE)\n\s*KEY-----",
+        text = re.sub(r"-----BEGIN\s+(?:RSA|OPENSSH|PRIVATE)\s+KEY-----[\s\S]*?-----END\s+(?:RSA|OPENSSH|PRIVATE)\s+KEY-----",
+                       "[REDACTED_PRIVATE_KEY]", text, flags=re.I)
+        # Also catch BEGIN RSA PRIVATE KEY without proper END
+        text = re.sub(r"-----BEGIN\s+(?:RSA|OPENSSH|PRIVATE)\s+KEY-----",
                        "[REDACTED_PRIVATE_KEY]", text, flags=re.I)
         
         return text

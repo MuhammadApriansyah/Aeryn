@@ -21,6 +21,8 @@ RESEARCH_SIGNALS = (
     "apa itu", "jelaskan tentang", "bandingkan", "review",
     "gimana caranya", "gimana cara", "bagaimana cara", "cara bikin",
     "cara membuat", "bikin bot", "bikin web", "buat bot",
+    # Wh-questions
+    "kenapa", "bagaimana", "mengapa", "kenapa terjadi", "bagaimana proses",
     # Commands that need research
     "install", "backup", "run tests", "deploy", "setup", "configure",
     "update server", "fix bug", "buat dokumentasi", "konfigurasi",
