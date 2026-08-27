@@ -1,0 +1,372 @@
+{
+  "accuracy": 32.5,
+  "total_score": 260,
+  "total_max": 800,
+  "samples": 200,
+  "failures": 200,
+  "total_time_s": 78.89490056037903,
+  "by_type": {
+    "cot": {
+      "accuracy": 25.0,
+      "count": 170,
+      "pass": 0
+    },
+    "critic": {
+      "accuracy": 75.0,
+      "count": 30,
+      "pass": 0
+    }
+  },
+  "failure_details": [
+    {
+      "idx": 0,
+      "type": "cot",
+      "issues": [
+        "short"
+      ]
+    },
+    {
+      "idx": 1,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 2,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 3,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 4,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 5,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 6,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 7,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 8,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 9,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 10,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 11,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 12,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 13,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 14,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 15,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 16,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 17,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 18,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 19,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 20,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 21,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 22,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 23,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 24,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 25,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 26,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 27,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 28,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 29,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 30,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 31,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 32,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 33,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 34,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 35,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 36,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 37,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 38,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 39,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 40,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 41,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 42,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 43,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 44,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 45,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 46,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 47,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 48,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    },
+    {
+      "idx": 49,
+      "type": "cot",
+      "issues": [
+        "error"
+      ]
+    }
+  ]
+}
