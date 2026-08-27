@@ -57,8 +57,9 @@ RISK_DIMENSIONS = [
     
     # High: Dangerous activities
     RiskDimension("dangerous", "high", [
-        r"\b(hack|crack|exploit|inject|spoof|phish)\s+(into|the|a|server|database|wifi|network|orang|akun)",
+        r"\b(hack|crack|exploit|inject|spoof|phish)\s+(into|the|a|ke|server|database|wifi|network|orang|akun)",
         r"\bhack\s+(akun|orang|server|database|wifi|network)",
+        r"\bhack\s+ke\s+(akun|orang|server|database|wifi|network)",
         r"\b(create|make|build|buat|membuat|bikin)\s+(malware|virus|ransomware|trojan|backdoor|rootkit)",
         r"\b(steal|exfiltrate|extract|curi|mencuri)\s+(data|credentials|passwords|keys|tokens)",
         r"\b(bypass|circumvent)\s+(auth|security|firewall|captcha|rate\s*limit)",
