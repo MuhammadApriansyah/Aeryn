@@ -146,17 +146,19 @@ class VaultGraph:
         
         return {"nodes": nodes, "edges": edges}
     
-    def find_related(self, title: str, max_results: int = 5) -> list:
-        """Find notes related via shared tags or direct links."""
+    def find_related(self, title: str, max_results: int = 10) -> list:
+        """Find notes related via shared tags, direct links, or path proximity."""
         title_lower = title.lower()
         
         # Find this note
         source_tags = set()
         source_links = set()
+        source_layer = ""
         for t, meta in self._index.items():
             if t.lower() == title_lower:
                 source_tags = set(meta.get("tags", []))
                 source_links = set(l.lower() for l in meta.get("links", []))
+                source_layer = meta.get("layer", "")
                 break
         
         scores = []
@@ -179,6 +181,10 @@ class VaultGraph:
             # Shared links (co-citation)
             shared_links = source_links & target_links
             score += len(shared_links)
+            
+            # Same layer bonus
+            if source_layer and meta.get("layer") == source_layer:
+                score += 1
             
             if score > 0:
                 scores.append((t, score, meta))

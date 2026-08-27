@@ -1,6 +1,6 @@
 {
-  "accuracy": 97.73755656108597,
-  "passed": 216,
+  "accuracy": 100.0,
+  "passed": 221,
   "total": 221,
   "categories": {
     "cot": {
@@ -24,8 +24,8 @@
       "total": 30
     },
     "sanitize": {
-      "accuracy": 94.73684210526315,
-      "pass": 18,
+      "accuracy": 100.0,
+      "pass": 19,
       "total": 19
     },
     "dim": {
@@ -49,8 +49,8 @@
       "total": 5
     },
     "match": {
-      "accuracy": 90.0,
-      "pass": 9,
+      "accuracy": 100.0,
+      "pass": 10,
       "total": 10
     },
     "ctx": {
@@ -59,13 +59,13 @@
       "total": 5
     },
     "vault": {
-      "accuracy": 92.3076923076923,
-      "pass": 12,
+      "accuracy": 100.0,
+      "pass": 13,
       "total": 13
     },
     "graph": {
-      "accuracy": 87.5,
-      "pass": 7,
+      "accuracy": 100.0,
+      "pass": 8,
       "total": 8
     },
     "social": {
@@ -94,26 +94,10 @@
       "total": 1
     },
     "int": {
-      "accuracy": 66.66666666666666,
-      "pass": 2,
+      "accuracy": 100.0,
+      "pass": 3,
       "total": 3
     }
   },
-  "failures": [
-    {
-      "test": "sanitize_BEGIN RSA PRIVATE KE"
-    },
-    {
-      "test": "match_code_review"
-    },
-    {
-      "test": "vault_search"
-    },
-    {
-      "test": "graph_related"
-    },
-    {
-      "test": "int_guardian_vault"
-    }
-  ]
+  "failures": []
 }

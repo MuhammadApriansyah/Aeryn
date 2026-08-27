@@ -98,7 +98,7 @@ class AerynVault:
         except OSError:
             return ""
     
-    def search(self, query: str, layer: str = None, limit: int = 5) -> list:
+    def search(self, query: str, layer: str = None, limit: int = 10) -> list:
         """Simple search across vault (no vector DB needed)."""
         results = []
         query_lower = query.lower()

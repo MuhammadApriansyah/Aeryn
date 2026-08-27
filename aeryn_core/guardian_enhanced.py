@@ -32,7 +32,7 @@ class RiskDimension:
 RISK_DIMENSIONS = [
     # Critical: Prompt injection
     RiskDimension("prompt_injection", "critical", [
-        r"ignore\s+(all\s+)?(previous|above|prior|earlier)\s+(instructions?|prompts?|rules?|constraints?)",
+        r"ignore\s+(all\s+)?(previous|above|prior|earlier)?\s*(instructions?|prompts?|rules?|constraints?)",
         r"forget\s+(everything|all|your\s+instructions?|your\s+rules?|your\s+constraints?)",
         r"you\s+are\s+now\s+(?!a\s+helpful|a\s+useful)",
         r"new\s+persona\s*:",
@@ -208,10 +208,17 @@ class Guardian:
         text = re.sub(r"(?:access[_-]?)?token\s*[:=]\s*[\"']?[a-zA-Z0-9]{6,}", "token: [REDACTED]", text, flags=re.I)
         text = re.sub(r"(?:client[_-]?)?secret\s*[:=]\s*[\"']?[a-zA-Z0-9]{6,}", "secret: [REDACTED]", text, flags=re.I)
         text = re.sub(r"refresh[_-]?token\s*[:=]\s*[\"']?[a-zA-Z0-9]{6,}", "refresh_token: [REDACTED]", text, flags=re.I)
+        # Catch full private key blocks
         text = re.sub(r"-----BEGIN\s+(?:RSA|OPENSSH|PRIVATE)\s+KEY-----[\s\S]*?-----END\s+(?:RSA|OPENSSH|PRIVATE)\s+KEY-----",
                        "[REDACTED_PRIVATE_KEY]", text, flags=re.I)
-        # Also catch BEGIN RSA PRIVATE KEY without proper END
+        # Catch BEGIN RSA PRIVATE KEY without proper END
         text = re.sub(r"-----BEGIN\s+(?:RSA|OPENSSH|PRIVATE)\s+KEY-----",
+                       "[REDACTED_PRIVATE_KEY]", text, flags=re.I)
+        # Catch BEGIN RSA PRIVATE KEY without dashes (bare) — partial match OK
+        text = re.sub(r"(?:-----BEGIN|BEGIN)\s+(?:RSA|OPENSSH|PRIVATE)\s+KEY",
+                       "[REDACTED_PRIVATE_KEY]", text, flags=re.I)
+        # Catch bare "PRIVATE KEY" alone
+        text = re.sub(r"PRIVATE\s+KEY",
                        "[REDACTED_PRIVATE_KEY]", text, flags=re.I)
         
         return text

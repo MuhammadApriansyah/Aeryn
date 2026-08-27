@@ -31,7 +31,7 @@ class Adapter:
 
 class CodeReviewAdapter(Adapter):
     name = "code_review"
-    triggers = ["review code", "code review", "tinjau kode", "periksa kode"]
+    triggers = ["review code", "code review", "tinjau kode", "periksa kode", "check code", "review"]
     description = "Code review: check security, quality, best practices"
     
     def execute(self, goal: str, context: dict) -> str:
