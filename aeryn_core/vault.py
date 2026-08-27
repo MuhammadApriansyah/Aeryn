@@ -37,12 +37,13 @@ def file_hash(text: str) -> str:
 
 class VaultEntry:
     """Single atomic knowledge entry."""
-    def __init__(self, layer: str, title: str, body: str, tags: list = None, links: list = None):
+    def __init__(self, layer: str, title: str, body: str, tags: list = None, links: list = None, author: str = "aeryn"):
         self.layer = layer
         self.title = title.strip()[:100]
         self.body = body.strip()
         self.tags = tags or []
         self.links = links or []
+        self.author = author  # V39.44: author attribution (multi-agent support)
         self.created = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())
         self.updated = self.created
         self.hash = file_hash(title + body[:200])
@@ -63,6 +64,7 @@ class VaultEntry:
         return (
             f"---\n"
             f"title: {self.title}\n"
+            f"author: {self.author}\n"
             f"tags: [{tags_str}]\n"
             f"links: [{links_str}]\n"
             f"created: {self.created}\n"

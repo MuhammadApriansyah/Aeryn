@@ -147,7 +147,7 @@ class SocialMemory:
         self._save()
         return p
 
-    def add_fact(self, key: str, fact: str, nama: str = "") -> bool:
+    def add_fact(self, key: str, fact: str, nama: str = "", author: str = "aeryn") -> bool:
         """Tambah fakta tentang orang. Return True jika fakta baru disimpan."""
         fact = fact.strip()[:200]
         if not fact:
@@ -169,7 +169,8 @@ class SocialMemory:
         fakta = p.get("fakta", [])
         if fakta and isinstance(fakta[0], str):
             fakta = [{"text": t, "hash": self._fact_hash(t)} for t in fakta]
-        fakta.append({"text": fact, "hash": self._fact_hash(fact)})
+        # V39.44: Add author attribution
+        fakta.append({"text": fact, "hash": self._fact_hash(fact), "author": author})
         p["fakta"] = fakta[-MAX_FAKTA_PER_ORANG:]
         self._save()
         return True

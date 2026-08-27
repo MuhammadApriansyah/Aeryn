@@ -179,23 +179,47 @@ class ModelClient:
                               key("GROQ_API_KEY")))
         return [(u, m, k) for u, m, k in cands if k]
 
-    def chat(self, messages, tools=None, temperature=0.4, max_tokens=2048):
+    def chat(self, messages, tools=None, temperature=0.4, max_tokens=2048, effort="medium"):
+        """
+        Chat with LLM.
+        
+        effort: "low", "medium", "high", "max" — controls reasoning depth.
+          - low: fast, minimal reasoning (simple queries)
+          - medium: balanced (default)
+          - high: deep reasoning (complex tasks)
+          - max: maximum reasoning (hard problems)
+        """
         payload = {"messages": messages, "temperature": temperature,
                    "max_tokens": max_tokens}
         # V32 — tools=None: jangan kirim key "tools" sama sekali
-        # (Gemini/Groq tetap akan panggil tool jika schema tersedia)
         if tools is not None:
             payload["tools"] = tools
-        # gpt-oss (Groq): reasoning default "medium" makan token & bikin
-        # content kosong di max_tokens kecil — turunkan ke "low".
+        
+        # V39.45: Map effort to provider-specific reasoning_effort
+        effort_map = {
+            "low": "low",
+            "medium": "medium", 
+            "high": "high",
+            "max": "max"
+        }
+        reasoning_effort = effort_map.get(effort, "medium")
+        
         candidates = self._endpoint_candidates()
         for base_url, model_name, _k in candidates:
-            # reasoning_effort hanya untuk Groq gpt-oss
+            # V39.45: Apply effort per provider
             if "gpt-oss" in model_name:
-                payload.setdefault("reasoning_effort", "low")
-            # Gemini tidak support reasoning_effort — hapus jika ada
-            elif "gemini" in model_name and "reasoning_effort" in payload:
-                del payload["reasoning_effort"]
+                # Groq gpt-oss: low/high only
+                payload["reasoning_effort"] = "low" if reasoning_effort == "low" else "high"
+            elif "gemini" in model_name:
+                # Gemini: reasoning_effort not supported, skip
+                if "reasoning_effort" in payload:
+                    del payload["reasoning_effort"]
+            elif "kimi" in model_name.lower() or "moonshot" in base_url.lower():
+                # Kimi K3: supports low/high/max
+                payload["reasoning_effort"] = reasoning_effort
+            else:
+                # OpenRouter and others: use standard
+                payload["reasoning_effort"] = reasoning_effort
             break
         if not candidates:
             raise RuntimeError(
