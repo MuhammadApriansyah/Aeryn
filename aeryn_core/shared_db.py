@@ -411,7 +411,42 @@ class SharedDB:
             finally:
                 conn.close()
     
-    # ── Stats ─────────────────────────────────────────────────────
+    def get_task_by_id(self, task_id: str) -> Optional[dict]:
+        """Get a task by ID."""
+        conn = sqlite3.connect(self.db_path)
+        try:
+            row = conn.execute("""
+                SELECT id, parent_id, title, description, status, priority, progress, result, error, created_at, updated_at, completed_at
+                FROM task_queue WHERE id = ?
+            """, (task_id,)).fetchone()
+            
+            if not row:
+                return None
+            
+            return {
+                "id": row[0], "parent_id": row[1], "title": row[2],
+                "description": row[3], "status": row[4], "priority": row[5],
+                "progress": row[6], "result": row[7], "error": row[8],
+                "created_at": row[9], "updated_at": row[10], "completed_at": row[11]
+            }
+        finally:
+            conn.close()
+    
+    def get_all_task_ids(self) -> List[dict]:
+        """Get all tasks."""
+        conn = sqlite3.connect(self.db_path)
+        try:
+            rows = conn.execute("""
+                SELECT id, parent_id, title, description, status, priority, progress
+                FROM task_queue ORDER BY created_at DESC LIMIT 100
+            """).fetchall()
+            return [
+                {"id": r[0], "parent_id": r[1], "title": r[2], "description": r[3],
+                 "status": r[4], "priority": r[5], "progress": r[6]}
+                for r in rows
+            ]
+        finally:
+            conn.close()
     
     def get_stats(self) -> dict:
         """Get overall statistics."""
