@@ -528,6 +528,38 @@
    ],
    "preferensi": {},
    "last_seen": 1787859397.423348
+  },
+  "unknown_user_xyz": {
+   "nama": "unknown_user_xyz",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787862193.2010062
+  },
+  "user_1": {
+   "nama": "user_1",
+   "relasi": "",
+   "fakta": [
+    {
+     "text": "Hello world",
+     "hash": "64ec88ca00b2",
+     "author": "aeryn"
+    },
+    {
+     "text": "Hello",
+     "hash": "185f8db32271",
+     "author": "aeryn"
+    }
+   ],
+   "preferensi": {},
+   "last_seen": 1787862193.3451202
+  },
+  "unknown_user": {
+   "nama": "unknown_user",
+   "relasi": "",
+   "fakta": [],
+   "preferensi": {},
+   "last_seen": 1787862193.3562677
   }
  },
  "channels": {
