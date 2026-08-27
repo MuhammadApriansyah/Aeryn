@@ -560,6 +560,29 @@
    "fakta": [],
    "preferensi": {},
    "last_seen": 1787862962.2896395
+  },
+  "default": {
+   "nama": "default",
+   "relasi": "",
+   "fakta": [
+    {
+     "text": "Sen suka Python",
+     "hash": "02d20e85cb5f",
+     "author": "aeryn"
+    },
+    {
+     "text": "Sen tinggal di Indonesia",
+     "hash": "e8a2049aa1f0",
+     "author": "aeryn"
+    },
+    {
+     "text": "Sen sedang bangun webnovel platform",
+     "hash": "30c730965687",
+     "author": "aeryn"
+    }
+   ],
+   "preferensi": {},
+   "last_seen": 1787866374.322132
   }
  },
  "channels": {

@@ -16,6 +16,10 @@ import json
 import uuid
 import time
 import subprocess
+import urllib.parse
+import urllib.request
+import urllib.error
+import re
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 
@@ -37,7 +41,7 @@ class ToolExecutor:
     """Execute tools requested by the LLM."""
     
     def __init__(self, sandbox_roots: list = None):
-        self.sandbox_roots = sandbox_roots or ["/tmp", os.path.expanduser("~/aeryn-core-agent")]
+        self.sandbox_roots = sandbox_roots if sandbox_roots is not None else ["/tmp", os.path.expanduser("~/aeryn-core-agent")]
         self._reminder_file = os.path.join(DATABASE_DIR, "reminders.jsonl")
     
     def execute(self, tool_name: str, params: dict) -> dict:
@@ -74,6 +78,7 @@ class ToolExecutor:
         
         # Use Hermes web_search tool if available
         try:
+            import urllib.parse
             import urllib.request
             # Simple search via DuckDuckGo or similar
             search_url = f"https://html.duckduckgo.com/html/?q={urllib.parse.quote(query)}"
@@ -277,9 +282,22 @@ class LLMRunner:
                     "trace": trace,
                 }
             
+            # Handle dict response (ModelClient returns OpenAI-compatible dict)
+            response_text = ""
+            if isinstance(response, dict):
+                # Extract actual content from OpenAI-compatible response
+                choices = response.get("choices", [])
+                if choices:
+                    message = choices[0].get("message", {})
+                    response_text = message.get("content", "")
+                if not response_text:
+                    response_text = str(response)
+            else:
+                response_text = str(response)
+            
             # Check if response is a tool call
             try:
-                tool_call = json.loads(response.strip())
+                tool_call = json.loads(response_text.strip())
                 if isinstance(tool_call, dict) and "tool" in tool_call:
                     tool_name = tool_call["tool"]
                     params = tool_call.get("params", {})
@@ -293,7 +311,7 @@ class LLMRunner:
                     })
                     
                     # Add tool result to messages
-                    messages.append({"role": "assistant", "content": response})
+                    messages.append({"role": "assistant", "content": response_text})
                     messages.append({
                         "role": "user",
                         "content": f"Tool result: {json.dumps(result, ensure_ascii=False)}",
@@ -305,7 +323,7 @@ class LLMRunner:
                 pass  # Not a tool call, it's a final response
             
             # Final response
-            clean = sanitize_output(response)
+            clean = sanitize_output(response_text)
             return {
                 "ok": True,
                 "response": clean,
