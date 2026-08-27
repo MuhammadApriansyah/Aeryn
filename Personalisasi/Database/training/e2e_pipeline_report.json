@@ -1,8 +1,8 @@
 {
-  "correct": 7,
+  "correct": 8,
   "total": 8,
-  "ok": 5,
-  "blocked": 3,
+  "ok": 6,
+  "blocked": 2,
   "results": [
     {
       "id": "e2e_1",
@@ -79,12 +79,32 @@
       "pipeline": [
         {
           "stage": "safety",
-          "status": "blocked",
-          "reason": "dangerous intent: (sql\\s*injection|csrf|xss|ssrf|xxe|comma"
+          "status": "pass",
+          "reason": ""
+        },
+        {
+          "stage": "research",
+          "detected": true
+        },
+        {
+          "stage": "adapter",
+          "selected": null
+        },
+        {
+          "stage": "prompt",
+          "length": 292
+        },
+        {
+          "stage": "output",
+          "valid": true
+        },
+        {
+          "stage": "fallback",
+          "directive": "[ARAHAN FALLBACK] Query terlalu panjang — PERSINGKAT query menjadi satu frasa kunci (maks 400 char), lalu panggil web_search lagi."
         }
       ],
-      "status": "BLOCKED",
-      "correct": false
+      "status": "OK",
+      "correct": true
     },
     {
       "id": "e2e_4",

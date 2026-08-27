@@ -1,0 +1,197 @@
+{
+  "summary": {
+    "total_files": 88,
+    "total_loc": 8975,
+    "test_files": 70,
+    "modules_without_tests": 8,
+    "overall_grade": "B+"
+  },
+  "critical": [
+    {
+      "id": "C1",
+      "issue": "Modules without dedicated tests",
+      "affected": [
+        "graph_memory",
+        "hybrid_search",
+        "orchestrator_v2",
+        "persona_engine",
+        "supersession",
+        "tool_governance",
+        "production_guard",
+        "orchestrator"
+      ],
+      "risk": "Untested code may have undetected bugs; regressions go unnoticed",
+      "effort": "Medium",
+      "fix": "Create test files for each module"
+    },
+    {
+      "id": "C2",
+      "issue": "Large files with many functions (>250 LOC)",
+      "affected": [
+        "safety_engine.py (474 LOC, 16 funcs)",
+        "hybrid_search.py (393 LOC, 1 func)",
+        "social_memory.py (309 LOC)",
+        "model_client.py (299 LOC)",
+        "tool_bridge.py (295 LOC)",
+        "graph_memory.py (289 LOC)",
+        "supersession.py (279 LOC)",
+        "orchestrator.py (258 LOC)"
+      ],
+      "risk": "Hard to maintain, high cognitive load, bug-prone",
+      "effort": "High",
+      "fix": "Refactor into smaller modules; extract helper functions"
+    },
+    {
+      "id": "C3",
+      "issue": "Inconsistent function signatures across modules",
+      "affected": [
+        "HybridSearchEngine.index_memory (5 params)",
+        "SocialMemory.add_fact (3 params vs 4 in some calls)",
+        "GraphMemory.add_memory_node (3-4 params)"
+      ],
+      "risk": "Runtime errors when calling with wrong arguments",
+      "effort": "Medium",
+      "fix": "Standardize function signatures; use **kwargs or dataclasses"
+    },
+    {
+      "id": "C4",
+      "issue": "Hardcoded config paths and values",
+      "affected": [
+        "~/aeryn-core-agent/Personalisasi/",
+        "~/.hermes/",
+        "DB paths",
+        "API endpoints"
+      ],
+      "risk": "Breaks on different environments; hard to configure",
+      "effort": "Low",
+      "fix": "Use environment variables or config module"
+    }
+  ],
+  "high": [
+    {
+      "id": "H1",
+      "issue": "Hybrid search is slow (405ms mean, 1045ms P95)",
+      "affected": [
+        "aeryn_core/hybrid_search.py"
+      ],
+      "risk": "Poor user experience at scale",
+      "effort": "Medium",
+      "fix": "Add caching; optimize TF-IDF; consider lazy loading"
+    },
+    {
+      "id": "H2",
+      "issue": "Vault search is slow (913ms mean, 1325ms P95)",
+      "affected": [
+        "aeryn_core/vault.py"
+      ],
+      "risk": "Slow memory retrieval",
+      "effort": "Medium",
+      "fix": "Add indexing; cache results; use FTS5"
+    },
+    {
+      "id": "H3",
+      "issue": "Inconsistent error handling patterns",
+      "affected": [
+        "Some modules return None, others raise, others return tuple"
+      ],
+      "risk": "Unhandled exceptions crash the agent",
+      "effort": "Medium",
+      "fix": "Standardize error handling: return Result tuple or raise specific exceptions"
+    },
+    {
+      "id": "H4",
+      "issue": "RateLimiter defined inside function (not reusable)",
+      "affected": [
+        "safety_engine.py RateLimiter"
+      ],
+      "risk": "Cannot share rate limiter state across modules",
+      "effort": "Low",
+      "fix": "Extract RateLimiter to separate module"
+    }
+  ],
+  "medium": [
+    {
+      "id": "M1",
+      "issue": "Duplicated logic: social_memory.py has 0 top-level functions (only class methods)",
+      "affected": [
+        "social_memory.py"
+      ],
+      "risk": "Cannot be used without instantiating class",
+      "effort": "Low",
+      "fix": "Add module-level convenience functions"
+    },
+    {
+      "id": "M2",
+      "issue": "DB connections opened/closed per operation",
+      "affected": [
+        "hybrid_search.py",
+        "graph_memory.py",
+        "supersession.py"
+      ],
+      "risk": "Performance overhead; potential for connection leaks",
+      "effort": "Medium",
+      "fix": "Use connection pooling or persistent connection"
+    },
+    {
+      "id": "M3",
+      "issue": "No type hints in some older modules",
+      "affected": [
+        "orchestrator.py",
+        "tool_bridge.py"
+      ],
+      "risk": "Harder to catch bugs with static analysis",
+      "effort": "Low",
+      "fix": "Add type hints"
+    },
+    {
+      "id": "M4",
+      "issue": "Singleton pattern uses global state",
+      "affected": [
+        "_engine, _graph, _manager, _cb_cache"
+      ],
+      "risk": "Hard to test; shared state across tests",
+      "effort": "Low",
+      "fix": "Use dependency injection or context managers"
+    },
+    {
+      "id": "M5",
+      "issue": "Backward compat functions may confuse maintainers",
+      "affected": [
+        "safety_engine.py has 10+ compat functions"
+      ],
+      "risk": "Dead code accumulates",
+      "effort": "Low",
+      "fix": "Remove unused compat functions"
+    }
+  ],
+  "low": [
+    {
+      "id": "L1",
+      "issue": "No __all__ exports defined",
+      "risk": "Unclear public API",
+      "effort": "Low",
+      "fix": "Define __all__ in each module"
+    },
+    {
+      "id": "L2",
+      "issue": "Inconsistent docstring styles",
+      "risk": "Harder to auto-generate docs",
+      "effort": "Low",
+      "fix": "Standardize to Google style"
+    },
+    {
+      "id": "L3",
+      "issue": "Magic numbers in code",
+      "risk": "Hard to tune without code changes",
+      "effort": "Low",
+      "fix": "Move to config module"
+    },
+    {
+      "id": "L4",
+      "issue": "print() statements instead of logging",
+      "risk": "Cannot control verbosity in production",
+      "effort": "Low",
+      "fix": "Replace with logging module"
+    }
+  ]
+}
