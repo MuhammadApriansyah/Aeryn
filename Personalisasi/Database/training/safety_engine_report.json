@@ -1,0 +1,83 @@
+{
+  "accuracy": 100.0,
+  "passed": 163,
+  "total": 163,
+  "categories": {
+    "dim": {
+      "accuracy": 100.0,
+      "pass": 7,
+      "total": 7
+    },
+    "severity": {
+      "accuracy": 100.0,
+      "pass": 7,
+      "total": 7
+    },
+    "action": {
+      "accuracy": 100.0,
+      "pass": 7,
+      "total": 7
+    },
+    "injection": {
+      "accuracy": 100.0,
+      "pass": 30,
+      "total": 30
+    },
+    "dangerous": {
+      "accuracy": 100.0,
+      "pass": 30,
+      "total": 30
+    },
+    "defensive": {
+      "accuracy": 100.0,
+      "pass": 10,
+      "total": 10
+    },
+    "exfil": {
+      "accuracy": 100.0,
+      "pass": 20,
+      "total": 20
+    },
+    "sanitize": {
+      "accuracy": 100.0,
+      "pass": 21,
+      "total": 21
+    },
+    "path": {
+      "accuracy": 100.0,
+      "pass": 8,
+      "total": 8
+    },
+    "rl": {
+      "accuracy": 100.0,
+      "pass": 5,
+      "total": 5
+    },
+    "payload": {
+      "accuracy": 100.0,
+      "pass": 4,
+      "total": 4
+    },
+    "looks": {
+      "accuracy": 100.0,
+      "pass": 3,
+      "total": 3
+    },
+    "wrap": {
+      "accuracy": 100.0,
+      "pass": 3,
+      "total": 3
+    },
+    "compat": {
+      "accuracy": 100.0,
+      "pass": 5,
+      "total": 5
+    },
+    "fallback": {
+      "accuracy": 100.0,
+      "pass": 3,
+      "total": 3
+    }
+  },
+  "failures": []
+}
