@@ -50,12 +50,21 @@
     {
      "text": "suka kopi 1787842498.8508816",
      "hash": "d1e6e7bffedf"
+    },
+    {
+     "text": "suka React",
+     "hash": "06af0d08b295"
+    },
+    {
+     "text": "deadline besok",
+     "hash": "160cc1132b5e"
     }
    ],
    "preferensi": {
-    "bahasa": "id-casual"
+    "bahasa": "id-casual",
+    "tone": "cerewet"
    },
-   "last_seen": 1787842498.8568223
+   "last_seen": 1787842940.6211233
   },
   "1541581954439454850": {
    "nama": "Misela.",
@@ -390,6 +399,30 @@
    "fakta": [],
    "preferensi": {},
    "last_seen": 1787776148.0962584
+  },
+  "123456789012345678": {
+   "nama": "Alice",
+   "relasi": "",
+   "fakta": [
+    {
+     "text": "suka Python",
+     "hash": "680baac9f506"
+    }
+   ],
+   "preferensi": {},
+   "last_seen": 1787842940.5965893
+  },
+  "987654321098765432": {
+   "nama": "Bob",
+   "relasi": "",
+   "fakta": [
+    {
+     "text": "suka Docker",
+     "hash": "fec21fed107c"
+    }
+   ],
+   "preferensi": {},
+   "last_seen": 1787842940.601214
   }
  },
  "channels": {
