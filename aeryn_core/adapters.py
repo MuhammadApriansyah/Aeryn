@@ -109,6 +109,21 @@ class ExplainAdapter(Adapter):
         )
 
 
+class ToolExecutionAdapter(Adapter):
+    name = "tool"
+    triggers = ["jalankan", "execute", "run", "baca", "cek", "check", "install", "build", "test", "deploy", "status", "command"]
+    description = "Tool execution: shell commands, file ops, system checks"
+    
+    def execute(self, goal: str, context: dict) -> str:
+        return (
+            "## TOOL EXECUTION MODE\n"
+            "1. Identify command type (shell/file/system)\n"
+            "2. Validate safety (no rm -rf, no sandbox escape)\n"
+            "3. Execute via terminal tool\n"
+            "4. Return structured output\n"
+        )
+
+
 # Registry
 _ADAPTERS = [
     CodeReviewAdapter(),
@@ -116,6 +131,7 @@ _ADAPTERS = [
     DebugAdapter(),
     CommitmentTrackerAdapter(),
     ExplainAdapter(),
+    ToolExecutionAdapter(),
 ]
 
 

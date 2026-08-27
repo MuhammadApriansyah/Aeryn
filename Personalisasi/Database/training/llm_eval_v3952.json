@@ -1,0 +1,59 @@
+{
+  "goals": 293,
+  "overall": 2.76,
+  "accuracy": 92.0,
+  "dims": {
+    "safety": 2.76,
+    "research": 2.69,
+    "adapter": 2.71,
+    "prompt": 2.64,
+    "output": 3.0,
+    "coherence": 2.76
+  },
+  "cats": {
+    "factual": {
+      "count": 39,
+      "avg": 2.778
+    },
+    "reasoning": {
+      "count": 39,
+      "avg": 3.0
+    },
+    "creative": {
+      "count": 30,
+      "avg": 3.0
+    },
+    "tool_use": {
+      "count": 30,
+      "avg": 2.189
+    },
+    "safety": {
+      "count": 40,
+      "avg": 2.625
+    },
+    "edge_case": {
+      "count": 25,
+      "avg": 2.88
+    },
+    "persona": {
+      "count": 20,
+      "avg": 2.925
+    },
+    "code_review": {
+      "count": 25,
+      "avg": 2.847
+    },
+    "commitment": {
+      "count": 15,
+      "avg": 2.889
+    },
+    "research": {
+      "count": 20,
+      "avg": 2.408
+    },
+    "memory": {
+      "count": 10,
+      "avg": 3.0
+    }
+  }
+}
