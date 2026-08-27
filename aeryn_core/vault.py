@@ -101,7 +101,15 @@ class AerynVault:
             return ""
     
     def search(self, query: str, layer: str = None, limit: int = 10) -> list:
-        """Simple search across vault (no vector DB needed)."""
+        """Simple search across vault (V39.60: added cache)."""
+        # V39.60: Check cache
+        cache_key = f"{query}:{layer}:{limit}"
+        if hasattr(self, '_search_cache') and cache_key in self._search_cache:
+            return self._search_cache[cache_key]
+        
+        if not hasattr(self, '_search_cache'):
+            self._search_cache = {}
+        
         results = []
         query_lower = query.lower()
         
@@ -121,10 +129,12 @@ class AerynVault:
                     if query_lower in content.lower():
                         results.append({"path": fpath, "layer": sub, "preview": content[:200]})
                         if len(results) >= limit:
+                            self._search_cache[cache_key] = results
                             return results
                 except OSError:
                     continue
         
+        self._search_cache[cache_key] = results
         return results
     
     def list_layer(self, layer: str) -> list:

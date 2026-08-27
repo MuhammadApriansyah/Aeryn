@@ -32,6 +32,9 @@ class HybridSearchEngine:
         self._init_db()
         self._idf = {}
         self._doc_count = 0
+        self._cache = {}  # V39.60: query cache
+        self._cache_ttl = 30  # seconds
+        self._cache_timestamps = {}
     
     def _init_db(self):
         """Initialize SQLite database with FTS5 and metadata tables."""
@@ -124,6 +127,13 @@ class HybridSearchEngine:
         Returns:
             List of results with score, memory_id, title, content
         """
+        # V39.60: Check cache
+        cache_key = f"{query}:{limit}:{fts_weight}:{tfidf_weight}:{aging_boost}"
+        now = time.time()
+        if cache_key in self._cache:
+            if now - self._cache_timestamps.get(cache_key, 0) < self._cache_ttl:
+                return self._cache[cache_key]
+        
         # FTS5 search
         fts_results = self._fts_search(query, limit * 3)
         
@@ -143,6 +153,10 @@ class HybridSearchEngine:
         
         # Update access counts
         self._update_access([r["memory_id"] for r in results])
+        
+        # V39.60: Store in cache
+        self._cache[cache_key] = results
+        self._cache_timestamps[cache_key] = now
         
         return results
     
