@@ -515,6 +515,19 @@
    "fakta": [],
    "preferensi": {},
    "last_seen": 1787854424.174684
+  },
+  "perf_user": {
+   "nama": "PerfUser",
+   "relasi": "",
+   "fakta": [
+    {
+     "text": "fact text",
+     "hash": "cc012dce8fbe",
+     "author": "aeryn"
+    }
+   ],
+   "preferensi": {},
+   "last_seen": 1787859397.423348
   }
  },
  "channels": {

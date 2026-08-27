@@ -1,0 +1,201 @@
+{
+  "results": {
+    "safety_safe": {
+      "min": 0.067,
+      "max": 0.621,
+      "mean": 0.075,
+      "median": 0.069,
+      "p95": 0.083,
+      "p99": 0.182,
+      "ops_per_sec": 13419.6
+    },
+    "safety_injection": {
+      "min": 0.02,
+      "max": 0.104,
+      "mean": 0.021,
+      "median": 0.02,
+      "p95": 0.021,
+      "p99": 0.039,
+      "ops_per_sec": 48002.3
+    },
+    "safety_dangerous": {
+      "min": 0.061,
+      "max": 0.129,
+      "mean": 0.063,
+      "median": 0.062,
+      "p95": 0.065,
+      "p99": 0.109,
+      "ops_per_sec": 15846.2
+    },
+    "safety_long": {
+      "min": 51.798,
+      "max": 54.612,
+      "mean": 52.25,
+      "median": 52.197,
+      "p95": 52.618,
+      "p99": 54.612,
+      "ops_per_sec": 19.1
+    },
+    "adapter_code": {
+      "min": 0.005,
+      "max": 0.047,
+      "mean": 0.005,
+      "median": 0.005,
+      "p95": 0.005,
+      "p99": 0.009,
+      "ops_per_sec": 188310.6
+    },
+    "adapter_research": {
+      "min": 0.01,
+      "max": 0.026,
+      "mean": 0.011,
+      "median": 0.01,
+      "p95": 0.011,
+      "p99": 0.012,
+      "ops_per_sec": 94897.8
+    },
+    "adapter_no_match": {
+      "min": 0.01,
+      "max": 0.036,
+      "mean": 0.01,
+      "median": 0.01,
+      "p95": 0.01,
+      "p99": 0.013,
+      "ops_per_sec": 99464.6
+    },
+    "research_yes": {
+      "min": 0.008,
+      "max": 0.611,
+      "mean": 0.012,
+      "median": 0.009,
+      "p95": 0.009,
+      "p99": 0.044,
+      "ops_per_sec": 83588.0
+    },
+    "research_no": {
+      "min": 0.009,
+      "max": 0.018,
+      "mean": 0.009,
+      "median": 0.009,
+      "p95": 0.009,
+      "p99": 0.01,
+      "ops_per_sec": 108736.4
+    },
+    "vault_write": {
+      "min": 0.285,
+      "max": 2.479,
+      "mean": 0.745,
+      "median": 0.477,
+      "p95": 2.323,
+      "p99": 2.479,
+      "ops_per_sec": 1343.0
+    },
+    "vault_read": {
+      "min": 0.325,
+      "max": 5.807,
+      "mean": 1.503,
+      "median": 0.728,
+      "p95": 4.477,
+      "p99": 5.807,
+      "ops_per_sec": 665.2
+    },
+    "vault_search": {
+      "min": 161.614,
+      "max": 1367.884,
+      "mean": 913.148,
+      "median": 945.471,
+      "p95": 1325.829,
+      "p99": 1367.884,
+      "ops_per_sec": 1.1
+    },
+    "hybrid_search": {
+      "min": 148.58,
+      "max": 1166.529,
+      "mean": 405.368,
+      "median": 310.065,
+      "p95": 1045.582,
+      "p99": 1166.529,
+      "ops_per_sec": 2.5
+    },
+    "graph_add_node": {
+      "min": 11.349,
+      "max": 76.01,
+      "mean": 40.713,
+      "median": 42.269,
+      "p95": 59.972,
+      "p99": 76.01,
+      "ops_per_sec": 24.6
+    },
+    "graph_neighbors": {
+      "min": 4.151,
+      "max": 33.574,
+      "mean": 20.614,
+      "median": 21.237,
+      "p95": 32.03,
+      "p99": 33.574,
+      "ops_per_sec": 48.5
+    },
+    "sanitize": {
+      "min": 2.634,
+      "max": 8.21,
+      "mean": 2.768,
+      "median": 2.662,
+      "p95": 2.918,
+      "p99": 8.21,
+      "ops_per_sec": 361.2
+    },
+    "path_safe": {
+      "min": 0.17,
+      "max": 2.876,
+      "mean": 0.61,
+      "median": 0.485,
+      "p95": 1.693,
+      "p99": 2.796,
+      "ops_per_sec": 1639.3
+    },
+    "path_blocked": {
+      "min": 0.001,
+      "max": 0.003,
+      "mean": 0.001,
+      "median": 0.001,
+      "p95": 0.001,
+      "p99": 0.001,
+      "ops_per_sec": 1215000.9
+    },
+    "social_touch": {
+      "min": 1.577,
+      "max": 9.2,
+      "mean": 2.698,
+      "median": 2.323,
+      "p95": 5.325,
+      "p99": 9.2,
+      "ops_per_sec": 370.6
+    },
+    "social_add_fact": {
+      "min": 1.567,
+      "max": 8.04,
+      "mean": 2.523,
+      "median": 2.208,
+      "p95": 4.576,
+      "p99": 8.04,
+      "ops_per_sec": 396.3
+    },
+    "social_get_facts": {
+      "min": 0.088,
+      "max": 3.065,
+      "mean": 0.162,
+      "median": 0.095,
+      "p95": 0.296,
+      "p99": 3.065,
+      "ops_per_sec": 6180.0
+    }
+  },
+  "scalability": {
+    "search_500_entries": {
+      "mean_ms": 1013.157,
+      "p95_ms": 1115.12
+    }
+  },
+  "threshold_passes": 6,
+  "threshold_total": 6
+}
