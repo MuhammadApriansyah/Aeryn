@@ -93,3 +93,12 @@
 2026-08-27 22:59:41: INFO:     127.0.0.1:44166 - "POST /shared/reminders/add?text=Check+server+health&when=2026-08-28T09:00:00&source=n8n HTTP/1.1" 200 OK
 2026-08-27 22:59:42: INFO:     127.0.0.1:44174 - "POST /run HTTP/1.1" 200 OK
 2026-08-27 22:59:42: INFO:     127.0.0.1:44190 - "GET /shared/stats HTTP/1.1" 200 OK
+2026-08-27 23:16:14: INFO:     127.0.0.1:60124 - "GET /dashboard/stats HTTP/1.1" 200 OK
+2026-08-27 23:16:14: INFO:     127.0.0.1:60136 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+2026-08-27 23:16:43: INFO:     127.0.0.1:43610 - "GET /dashboard/stats HTTP/1.1" 200 OK
+2026-08-27 23:34:40: INFO:     127.0.0.1:38980 - "GET /health HTTP/1.1" 200 OK
+2026-08-27 23:34:49: INFO:     127.0.0.1:56770 - "GET /guardrails/validate-input?text=hello HTTP/1.1" 405 Method Not Allowed
+2026-08-27 23:35:00: INFO:     127.0.0.1:34288 - "POST /guardrails/validate-input HTTP/1.1" 422 Unprocessable Entity
+2026-08-27 23:35:36: INFO:     127.0.0.1:42932 - "POST /guardrails/validate-input HTTP/1.1" 200 OK
+2026-08-27 23:35:52: INFO:     127.0.0.1:51416 - "POST /guardrails/validate-input HTTP/1.1" 200 OK
+2026-08-27 23:35:52: INFO:     127.0.0.1:51424 - "POST /sandbox/execute HTTP/1.1" 422 Unprocessable Entity

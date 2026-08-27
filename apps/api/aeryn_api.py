@@ -11,6 +11,7 @@ Endpoints matching hermes plugin expectations:
 import os
 import sys
 import time
+import json
 import uuid
 from typing import Optional
 
@@ -27,6 +28,10 @@ from aeryn_core.vault import AerynVault, VaultEntry, LAYER_WIKI
 from aeryn_core.social_memory import SocialMemory
 from aeryn_core.hybrid_search import get_search_engine
 from aeryn_core.persona_engine import load_persona
+from aeryn_core.guardrails import get_guardrails
+from aeryn_core.sandbox import get_secure_terminal
+from aeryn_core.memory_learning import get_memory_learner
+from aeryn_core.mcp_server import AerynToolHandler
 from aeryn_core.shared_db import get_shared_db
 from aeryn_core.config import ensure_dirs
 
@@ -492,6 +497,96 @@ async def get_stats():
     """Get overall statistics."""
     db = get_shared_db()
     return db.get_stats()
+
+
+# ── Guardrails Endpoints ────────────────────────────────────────
+
+@app.post("/guardrails/validate-input")
+async def validate_input(text: str = None, context: str = "general", body: dict = None):
+    """Validate input text."""
+    if body and not text:
+        text = body.get("text", "")
+        context = body.get("context", "general")
+    guardrails = get_guardrails()
+    result = guardrails.validate_input(text, context)
+    return {
+        "valid": result.valid,
+        "risk": result.risk,
+        "issues": result.issues,
+        "fallback": result.fallback
+    }
+
+
+@app.post("/guardrails/validate-output")
+async def validate_output(text: str = None, expected_format: str = "text", body: dict = None):
+    """Validate output text."""
+    if body and not text:
+        text = body.get("text", "")
+        expected_format = body.get("expected_format", "text")
+    guardrails = get_guardrails()
+    result = guardrails.validate_output(text, expected_format)
+    return {
+        "valid": result.valid,
+        "risk": result.risk,
+        "issues": result.issues,
+        "sanitized": result.sanitized,
+        "fallback": result.fallback
+    }
+
+
+# ── Sandbox Endpoints ───────────────────────────────────────────
+
+@app.post("/sandbox/execute")
+async def sandbox_execute(command: str, cwd: str = "/tmp"):
+    """Execute a command in the sandbox."""
+    terminal = get_secure_terminal()
+    return terminal.run(command, cwd)
+
+
+# ── Memory Learning Endpoints ───────────────────────────────────
+
+@app.post("/memory/learn")
+async def learn_from_interaction(user_id: str, user_message: str, bot_response: str = ""):
+    """Process an interaction and learn from it."""
+    learner = get_memory_learner()
+    result = learner.process_interaction(user_id, user_message, bot_response)
+    return result
+
+
+@app.get("/memory/user-context/{user_id}")
+async def get_user_context(user_id: str):
+    """Get full user context (profile + preferences + memory)."""
+    learner = get_memory_learner()
+    return learner.get_user_context(user_id)
+
+
+# ── n8n Workflow Endpoint ───────────────────────────────────────
+
+@app.post("/n8n/workflow/create")
+async def create_n8n_workflow(workflow_json: dict):
+    """Create a new n8n workflow via API."""
+    import urllib.request
+    
+    n8n_key = os.environ.get("N8N_API_KEY", "")
+    if not n8n_key:
+        return {"ok": False, "error": "N8N_API_KEY not set in env"}
+    
+    req = urllib.request.Request(
+        "http://127.0.0.1:5678/api/v1/workflows",
+        data=json.dumps(workflow_json).encode(),
+        headers={
+            "Content-Type": "application/json",
+            "X-N8N-API-KEY": n8n_key
+        },
+        method="POST"
+    )
+    
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            result = json.loads(resp.read().decode())
+            return {"ok": True, "workflow": result}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
 
 
 if __name__ == "__main__":
