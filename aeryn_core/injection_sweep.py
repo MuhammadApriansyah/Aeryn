@@ -13,7 +13,7 @@ from collections import Counter
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.production_guard import looks_like_injection, wrap_untrusted
+from aeryn_core.safety_engine import looks_like_injection, wrap_untrusted
 
 # Korpus uji: pola indirect injection nyata dari OWASP LLM01
 INDIRECT_SAMPLES = [

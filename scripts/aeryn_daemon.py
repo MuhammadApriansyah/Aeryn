@@ -159,7 +159,7 @@ TOOLS = build_default_registry(sandbox_roots=["~/aeryn-core-agent", "~/webnovel-
 # V27.2 — tool tier power: terminal sandboxed (whitelist + no-shell + cwd lock).
 # V37.5-SEC — dibungkus SecurityKernel: path di argumen + flag dgn nilai
 # path divalidasi (menutup bypass --output=/x, -fprint/etc/x, cat .env).
-from aeryn_core.security_kernel import make_secure_terminal
+from aeryn_core.safety_engine import make_secure_terminal
 TOOLS.register("terminal", make_secure_terminal(["~/aeryn-core-agent", "~/webnovel-platform"]),
                TERMINAL_SCHEMA, tier="power")
 # V33 "Shared Brain" — Aeryn membaca memori kolektif Hermes (tier safe,
@@ -571,7 +571,7 @@ class AgentRunReq(BaseModel):
 # V38.6 — + GLOBAL limiter: rotasi session_id tidak lagi mem-bypass
 # V38.7 — reset endpoint kini juga butuh allowlist majikan (dulu siapa pun
 # yang bisa akses localhost bisa menghapus memori sesi orang lain)
-from aeryn_core.production_guard import RateLimiter, validate_run_payload
+from aeryn_core.safety_engine import RateLimiter, validate_run_payload, make_secure_terminal
 _RUN_LIMITER = RateLimiter(max_requests=20, window_seconds=60)
 _GLOBAL_LIMITER = RateLimiter(max_requests=120, window_seconds=60)
 
