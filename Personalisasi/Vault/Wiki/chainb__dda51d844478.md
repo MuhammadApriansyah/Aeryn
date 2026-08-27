@@ -1,10 +1,10 @@
 ---
-title: Test Skills
+title: ChainB
 tags: []
 links: []
 created: 2026-08-27T15:05:11
 updated: 2026-08-27T15:05:11
-hash: 8a2529b95eb3
+hash: dda51d844478
 ---
 
-Content for Skills
+Links to [[ChainC]].
