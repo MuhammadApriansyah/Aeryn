@@ -149,95 +149,447 @@ DASHBOARD_HTML = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aeryn Dashboard</title>
+<title>Aeryn Dashboard — V40.54</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e0e0e0; min-height: 100vh; padding: 20px; }
-  h1 { font-size: 24px; margin-bottom: 8px; color: #00ff88; }
-  .subtitle { color: #666; margin-bottom: 24px; font-size: 14px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
-  .card { background: #12121a; border: 1px solid #222; border-radius: 12px; padding: 20px; }
-  .card h3 { font-size: 12px; text-transform: uppercase; color: #888; margin-bottom: 8px; }
-  .card .value { font-size: 28px; font-weight: bold; color: #00ff88; }
-  .card .sub { font-size: 12px; color: #666; margin-top: 4px; }
-  .section { background: #12121a; border: 1px solid #222; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
-  .section h2 { font-size: 16px; margin-bottom: 12px; color: #00ccff; }
-  .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
-  .online { background: #00ff88; box-shadow: 0 0 6px #00ff88; }
-  .offline { background: #ff4444; }
-  .refresh { float: right; background: #1a1a2e; border: 1px solid #333; color: #00ff88; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; }
-  .refresh:hover { background: #222; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #222; }
-  th { color: #888; font-weight: 600; }
-  .progress { height: 6px; background: #1a1a2e; border-radius: 3px; overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, #00ff88, #00ccff); transition: width 0.3s; }
+:root {
+  --bg: #09090b;
+  --bg-card: #18181b;
+  --bg-hover: #27272a;
+  --border: #27272a;
+  --text: #fafafa;
+  --text-muted: #a1a1aa;
+  --accent: #22d3ee;
+  --green: #4ade80;
+  --yellow: #facc15;
+  --red: #f87171;
+  --purple: #c084fc;
+  --orange: #fb923c;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 24px;
+  line-height: 1.5;
+}
+
+/* ── Header ──────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.header .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand .logo {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.brand h1 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.brand .version {
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-card);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.header .clock {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* ── Grid ────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.card .label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.card .value {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.card .unit {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+.card .detail {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ── Progress Bar ────────────────────────── */
+.progress-track {
+  height: 4px;
+  background: var(--bg);
+  border-radius: 2px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green), var(--accent));
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+.progress-fill.warn { background: linear-gradient(90deg, var(--yellow), var(--orange)); }
+.progress-fill.danger { background: linear-gradient(90deg, var(--orange), var(--red)); }
+
+/* ── Section ─────────────────────────────── */
+.section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.section h2 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Service Status ──────────────────────── */
+.service-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.service-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.dot.online { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.dot.offline { background: var(--red); }
+
+/* ── Table ───────────────────────────────── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+th {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+td { font-family: 'JetBrains Mono', monospace; }
+td:last-child { text-align: right; }
+
+tr:last-child td { border-bottom: none; }
+
+/* ── Endpoints ───────────────────────────── */
+.endpoint-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+.endpoint-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  border: 1px solid transparent;
+}
+
+.endpoint-chip:hover {
+  border-color: var(--accent);
+}
+
+.method {
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.method.get { background: rgba(74, 222, 128, 0.15); color: var(--green); }
+.method.post { background: rgba(34, 211, 238, 0.15); color: var(--accent); }
+.method.delete { background: rgba(248, 113, 113, 0.15); color: var(--red); }
+
+/* ── Live indicator ──────────────────────── */
+.live {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.live .pulse {
+  width: 6px;
+  height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── Footer ──────────────────────────────── */
+.footer {
+  text-align: center;
+  padding: 24px 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
 </style>
 </head>
 <body>
-<h1>🚀 Aeryn Dashboard</h1>
-<p class="subtitle">Real-time monitoring — v40.54</p>
 
-<button class="refresh" onclick="loadStats()">🔄 Refresh</button>
-
-<div class="grid" id="cards">
-  <div class="card"><h3>Memory</h3><div class="value" id="mem">--</div><div class="sub" id="mem-sub">--</div></div>
-  <div class="card"><h3>Disk Free</h3><div class="value" id="disk">--</div><div class="sub" id="disk-sub">-- used</div></div>
-  <div class="card"><h3>Process</h3><div class="value" id="proc-mem">--</div><div class="sub" id="uptime">-- uptime</div></div>
-  <div class="card"><h3>Requests</h3><div class="value" id="req-total">--</div><div class="sub" id="err-total">-- errors</div></div>
+<div class="header">
+  <div class="brand">
+    <div class="logo">✦</div>
+    <div>
+      <h1>Aeryn</h1>
+      <span class="version" id="version">v40.54</span>
+    </div>
+  </div>
+  <div class="live">
+    <div class="pulse"></div>
+    <span>LIVE</span>
+    <span class="clock" id="clock">--:--:--</span>
+  </div>
 </div>
 
+<!-- ── System Cards ────────────────────────── -->
+<div class="grid">
+  <div class="card">
+    <div class="label">🧠 Memory</div>
+    <div class="value" id="mem">--<span class="unit">MB</span></div>
+    <div class="detail" id="mem-detail">--% used</div>
+    <div class="progress-track"><div class="progress-fill" id="mem-bar" style="width:0%"></div></div>
+  </div>
+
+  <div class="card">
+    <div class="label">💾 Disk</div>
+    <div class="value" id="disk">--<span class="unit">GB</span></div>
+    <div class="detail" id="disk-detail">-- used</div>
+    <div class="progress-track"><div class="progress-fill" id="disk-bar" style="width:0%"></div></div>
+  </div>
+
+  <div class="card">
+    <div class="label">⚡ Process</div>
+    <div class="value" id="proc-mem">--<span class="unit">MB</span></div>
+    <div class="detail" id="uptime">-- uptime</div>
+  </div>
+
+  <div class="card">
+    <div class="label">📊 Requests</div>
+    <div class="value" id="req-total">--</div>
+    <div class="detail" id="err-detail">-- errors</div>
+  </div>
+</div>
+
+<!-- ── Services ────────────────────────────── -->
 <div class="section">
-  <h2>🧠 Aeryn Stats</h2>
+  <h2>🖥️ Services</h2>
+  <div class="service-list" id="services">
+    <div class="service-chip"><div class="dot online"></div><span>aeryn-api</span></div>
+    <div class="service-chip"><div class="dot online"></div><span>n8n</span></div>
+    <div class="service-chip"><div class="dot online"></div><span>webnovel-api</span></div>
+    <div class="service-chip"><div class="dot online"></div><span>webnovel-web</span></div>
+    <div class="service-chip"><div class="dot offline"></div><span>hermes-gw</span></div>
+  </div>
+</div>
+
+<!-- ── Aeryn Stats ─────────────────────────── -->
+<div class="section">
+  <h2>📈 Aeryn Metrics</h2>
   <table>
-    <tr><th>Metric</th><th>Value</th></tr>
-    <tr><td>Vault Entries</td><td id="vault-total">--</td></tr>
-    <tr><td>Search Documents</td><td id="search-docs">--</td></tr>
-    <tr><td>Social People</td><td id="social-ppl">--</td></tr>
-    <tr><td>Safety Engine</td><td><span class="status-dot online"></span>OK</td></tr>
+    <thead><tr><th>Metric</th><th style="text-align:right">Value</th></tr></thead>
+    <tbody>
+      <tr><td>Vault Entries</td><td id="vault-total">--</td></tr>
+      <tr><td>Search Documents</td><td id="search-docs">--</td></tr>
+      <tr><td>Social People</td><td id="social-ppl">--</td></tr>
+      <tr><td>Safety Engine</td><td style="color:var(--green)">● OK</td></tr>
+    </tbody>
   </table>
 </div>
 
+<!-- ── Vault Layers ────────────────────────── -->
 <div class="section">
   <h2>📁 Vault Layers</h2>
-  <table id="vault-table"><tr><th>Layer</th><th>Entries</th></tr></table>
+  <table>
+    <thead><tr><th>Layer</th><th style="text-align:right">Entries</th></tr></thead>
+    <tbody id="vault-table"><tr><td colspan="2" style="text-align:center;color:var(--text-muted)">...</td></tr></tbody>
+  </table>
+</div>
+
+<!-- ── Endpoints ───────────────────────────── -->
+<div class="section">
+  <h2>🔌 Quick Endpoints</h2>
+  <div class="endpoint-grid">
+    <div class="endpoint-chip"><span class="method get">GET</span>/health</div>
+    <div class="endpoint-chip"><span class="method get">GET</span>/search</div>
+    <div class="endpoint-chip"><span class="method post">POST</span>/run</div>
+    <div class="endpoint-chip"><span class="method post">POST</span>/compile</div>
+    <div class="endpoint-chip"><span class="method post">POST</span>/digest</div>
+    <div class="endpoint-chip"><span class="method get">GET</span>/agents</div>
+    <div class="endpoint-chip"><span class="method post">POST</span>/dream/synthesize</div>
+    <div class="endpoint-chip"><span class="method get">GET</span>/dashboard/stats</div>
+  </div>
+</div>
+
+<div class="footer">
+  Aeryn V40.54 — Built with ❤️ by Hermes + Aeryn
 </div>
 
 <script>
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('id-ID', { hour12: false });
+}
+
 async function loadStats() {
   try {
     const r = await fetch('/dashboard/stats');
     const d = await r.json();
-    
-    if (d.error) { document.body.innerHTML = '<h1>Error: '+d.error+'</h1>'; return; }
-    
+    if (d.error) return;
+
     const s = d.system, a = d.aeryn;
-    
-    document.getElementById('mem').textContent = s.memory_used_mb + ' MB';
-    document.getElementById('mem-sub').textContent = s.memory_percent + '% used';
-    document.getElementById('disk').textContent = s.disk_free_gb + ' GB';
-    document.getElementById('disk-sub').textContent = s.disk_percent + '% used';
-    document.getElementById('proc-mem').textContent = s.process_mem_mb + ' MB';
-    document.getElementById('uptime').textContent = Math.round(s.uptime_s / 60) + 'm uptime';
+
+    // Memory
+    document.getElementById('mem').innerHTML = s.memory_used_mb + '<span class="unit">MB</span>';
+    document.getElementById('mem-detail').textContent = s.memory_percent + '% of ' + s.memory_total_mb + ' MB';
+    const memBar = document.getElementById('mem-bar');
+    memBar.style.width = s.memory_percent + '%';
+    memBar.className = 'progress-fill' + (s.memory_percent > 85 ? ' warn' : '') + (s.memory_percent > 95 ? ' danger' : '');
+
+    // Disk
+    document.getElementById('disk').innerHTML = s.disk_free_gb + '<span class="unit">GB</span>';
+    document.getElementById('disk-detail').textContent = s.disk_percent + '% used';
+    const diskBar = document.getElementById('disk-bar');
+    diskBar.style.width = s.disk_percent + '%';
+    diskBar.className = 'progress-fill' + (s.disk_percent > 85 ? ' warn' : '') + (s.disk_percent > 95 ? ' danger' : '');
+
+    // Process
+    document.getElementById('proc-mem').innerHTML = s.process_mem_mb + '<span class="unit">MB</span>';
+    const hrs = Math.floor(s.uptime_s / 3600);
+    const mins = Math.floor((s.uptime_s % 3600) / 60);
+    document.getElementById('uptime').textContent = hrs + 'h ' + mins + 'm uptime';
+
+    // Requests
     document.getElementById('req-total').textContent = a.requests_total;
-    document.getElementById('err-total').textContent = a.errors_total + ' errors';
-    
+    document.getElementById('err-detail').textContent = a.errors_total + ' errors';
+
+    // Vault
     document.getElementById('vault-total').textContent = a.vault_total_entries;
     document.getElementById('search-docs').textContent = a.search_docs;
     document.getElementById('social-ppl').textContent = a.social_people;
-    
-    const table = document.getElementById('vault-table');
-    table.innerHTML = '<tr><th>Layer</th><th>Entries</th></tr>';
+
+    // Vault table
+    const tbody = document.getElementById('vault-table');
+    tbody.innerHTML = '';
     for (const [layer, count] of Object.entries(a.vault_layers)) {
-      table.innerHTML += '<tr><td>' + layer + '</td><td>' + count + '</td></tr>';
+      tbody.innerHTML += '<tr><td>' + layer + '</td><td>' + count + '</td></tr>';
     }
   } catch(e) {
-    document.body.innerHTML = '<h1>Connection failed: ' + e.message + '</h1>';
+    console.error('Stats load failed:', e);
   }
 }
 
+updateClock();
+setInterval(updateClock, 1000);
 loadStats();
-setInterval(loadStats, 30000);
+setInterval(loadStats, 15000);
 </script>
 </body>
 </html>"""
