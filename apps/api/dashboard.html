@@ -3,299 +3,751 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aeryn Dashboard — V41.0</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<title>Aeryn — Cognitive Agent Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #09090b; --bg-card: #18181b; --bg-hover: #27272a; --border: #27272a;
-  --text: #fafafa; --text-muted: #a1a1aa; --accent: #22d3ee; --accent2: #c084fc;
-  --green: #4ade80; --yellow: #facc15; --red: #f87171; --orange: #fb923c; --blue: #60a5fa;
+  --bg: #09090b;
+  --bg-elevated: #0c0c0e;
+  --bg-card: #18181b;
+  --bg-hover: #1f1f23;
+  --bg-active: #27272a;
+  --border: #1f1f23;
+  --border-active: #2e2e33;
+  --text: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --accent: #22d3ee;
+  --accent-soft: rgba(34, 211, 238, 0.1);
+  --accent-glow: rgba(34, 211, 238, 0.25);
+  --green: #4ade80;
+  --yellow: #facc15;
+  --red: #f87171;
+  --blue: #60a5fa;
+  --purple: #c084fc;
+  --orange: #fb923c;
+  --sidebar-w: 240px;
+  --sidebar-collapsed: 64px;
+  --header-h: 56px;
+  --radius: 10px;
+  --radius-sm: 6px;
 }
+
 body.light {
-  --bg: #fafafa; --bg-card: #ffffff; --bg-hover: #f4f4f5; --border: #e4e4e7;
-  --text: #18181b; --text-muted: #71717a;
+  --bg: #f8fafc;
+  --bg-elevated: #ffffff;
+  --bg-card: #ffffff;
+  --bg-hover: #f1f5f9;
+  --bg-active: #e2e8f0;
+  --border: #e2e8f0;
+  --border-active: #cbd5e1;
+  --text: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --accent-glow: rgba(34, 211, 238, 0.15);
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-/* Nav */
-.nav { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-.nav-left { display: flex; align-items: center; gap: 16px; }
-.nav h1 { font-size: 18px; }
-.nav-right { display: flex; align-items: center; gap: 12px; }
-.tabs { display: flex; gap: 4px; }
-.tab { padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text-muted); border: none; background: transparent; }
-.tab:hover { background: var(--bg-hover); color: var(--text); }
-.tab.active { background: var(--accent); color: var(--bg); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* Content */
-.content { padding: 24px; max-width: 1400px; margin: 0 auto; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Sidebar ──────────────────────────────── */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--bg-elevated);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s ease;
+  z-index: 100;
+}
+
+.sidebar.collapsed { width: var(--sidebar-collapsed); }
+
+.sidebar-header {
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.sidebar-brand {
+  font-weight: 700;
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar.collapsed .sidebar-brand { display: none; }
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 8px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.15s;
+  margin-bottom: 2px;
+  white-space: nowrap;
+}
+
+.nav-item:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.nav-item.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.sidebar.collapsed .nav-label { display: none; }
+
+.sidebar-footer {
+  padding: 12px 8px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Main Layout ──────────────────────────── */
+.main {
+  margin-left: var(--sidebar-w);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.3s ease;
+}
+
+.sidebar.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
+
+/* ── Top Bar ──────────────────────────────── */
+.topbar {
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  flex-shrink: 0;
+}
+
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+
+.hamburger {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 20px;
+  transition: all 0.15s;
+}
+
+.hamburger:hover { background: var(--bg-hover); color: var(--text); }
+
+.page-title { font-size: 16px; font-weight: 600; }
+
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+
+.connection {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: var(--bg-hover);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.connection-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s infinite;
+}
+
+.connection-dot.offline { background: var(--red); animation: none; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 16px;
+  transition: all 0.15s;
+}
+
+.icon-btn:hover { background: var(--bg-hover); color: var(--text); }
+
+/* ── Content Area ─────────────────────────── */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
 .page { display: none; }
 .page.active { display: block; }
 
-/* Cards */
-.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-.card-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+/* ── Cards ────────────────────────────────── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.card-title {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* ── Grid ─────────────────────────────────── */
 .grid { display: grid; gap: 16px; }
 .grid-4 { grid-template-columns: repeat(4, 1fr); }
 .grid-3 { grid-template-columns: repeat(3, 1fr); }
 .grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-21 { grid-template-columns: 2fr 1fr; }
 
-/* Stats */
-.stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-.stat-value { font-size: 28px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
-.stat-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-.stat-bar { height: 4px; background: var(--bg-hover); border-radius: 2px; margin-top: 8px; overflow: hidden; }
-.stat-bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s; }
+/* ── Stat Card ────────────────────────────── */
+.stat {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.stat-bar {
+  height: 3px;
+  background: var(--bg-hover);
+  border-radius: 2px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
 .stat-bar-fill.green { background: var(--green); }
 .stat-bar-fill.yellow { background: var(--yellow); }
 .stat-bar-fill.red { background: var(--red); }
+.stat-bar-fill.accent { background: var(--accent); }
 
-/* Buttons & Inputs */
-.btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; }
-.btn-primary { background: var(--accent); color: var(--bg); }
-.btn-primary:hover { background: #06b6d4; }
-.btn-secondary { background: var(--bg-hover); color: var(--text); }
+.stat-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 3px 0 0 3px;
+}
+
+.stat-accent.green { background: var(--green); }
+.stat-accent.yellow { background: var(--yellow); }
+.stat-accent.purple { background: var(--purple); }
+
+/* ── Badges ───────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.badge-green { background: rgba(74, 222, 128, 0.15); color: var(--green); }
+.badge-red { background: rgba(248, 113, 113, 0.15); color: var(--red); }
+.badge-yellow { background: rgba(250, 204, 21, 0.15); color: var(--yellow); }
+.badge-blue { background: rgba(96, 165, 250, 0.15); color: var(--blue); }
+.badge-purple { background: rgba(192, 132, 252, 0.15); color: var(--purple); }
+
+/* ── Buttons ──────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.btn-primary:hover { background: #06b6d4; transform: translateY(-1px); box-shadow: 0 4px 12px var(--accent-glow); }
+
+.btn-secondary {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.btn-secondary:hover { background: var(--bg-active); }
+
 .btn-sm { padding: 6px 12px; font-size: 12px; }
-.input { padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 14px; outline: none; width: 100%; }
+
+/* ── Inputs ───────────────────────────────── */
+.input {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s;
+  font-family: inherit;
+}
+
 .input:focus { border-color: var(--accent); }
 
-/* List */
-.list-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.input::placeholder { color: var(--text-muted); }
+
+textarea.input { resize: vertical; min-height: 60px; }
+
+/* ── List Item ────────────────────────────── */
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
 .list-item:last-child { border-bottom: none; }
-.badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
-.badge-green { background: rgba(74, 222, 128, 0.2); color: var(--green); }
-.badge-red { background: rgba(248, 113, 113, 0.2); color: var(--red); }
-.badge-yellow { background: rgba(250, 204, 21, 0.2); color: var(--yellow); }
-.badge-blue { background: rgba(96, 165, 250, 0.2); color: var(--blue); }
 
-/* Toast */
-.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; }
-.toast { padding: 12px 20px; border-radius: 8px; background: var(--bg-card); border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.4); animation: slideIn 0.3s; }
-@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+.list-item-title { font-size: 14px; font-weight: 500; }
+.list-item-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 
-/* Spinner */
-.live { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
-.pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
-@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+/* ── Progress ─────────────────────────────── */
+.progress {
+  height: 4px;
+  background: var(--bg-hover);
+  border-radius: 2px;
+  overflow: hidden;
+}
 
-/* Table */
-.table { width: 100%; border-collapse: collapse; }
-.table th, .table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; }
-.table th { color: var(--text-muted); font-weight: 600; }
+.progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
 
-/* Progress */
-.progress { height: 6px; background: var(--bg-hover); border-radius: 3px; overflow: hidden; }
-.progress-fill { height: 100%; border-radius: 3px; background: var(--accent); }
+/* ── Toast ────────────────────────────────── */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toast {
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  background: var(--bg-card);
+  border: 1px solid var(--border-active);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+  font-size: 14px;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* ── Scrollbar ────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-active); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ── Responsive ───────────────────────────── */
+@media (max-width: 900px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-21 { grid-template-columns: 1fr; }
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0 !important; }
+}
+
+@media (max-width: 600px) {
+  .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .content { padding: 16px; }
+}
 </style>
 </head>
 <body>
 
-<nav class="nav">
-  <div class="nav-left">
-    <h1>🧠 Aeryn</h1>
-    <span style="color:var(--text-muted);font-size:13px">v41.0</span>
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">🧠</div>
+    <span class="sidebar-brand">Aeryn</span>
   </div>
-  <div class="tabs">
-    <button class="tab active" onclick="showPage('overview')">Overview</button>
-    <button class="tab" onclick="showPage('chat')">Chat</button>
-    <button class="tab" onclick="showPage('notifications')">Notifications</button>
-    <button class="tab" onclick="showPage('tasks')">Tasks</button>
-    <button class="tab" onclick="showPage('memory')">Memory</button>
-    <button class="tab" onclick="showPage('tools')">Tools</button>
-    <button class="tab" onclick="showPage('platform')">Platform</button>
-    <button class="tab" onclick="showPage('security')">Security</button>
+  <nav class="sidebar-nav">
+    <div class="nav-item active" onclick="showPage('overview')">
+      <span class="nav-icon">📊</span>
+      <span class="nav-label">Overview</span>
+    </div>
+    <div class="nav-item" onclick="showPage('chat')">
+      <span class="nav-icon">💬</span>
+      <span class="nav-label">Chat</span>
+    </div>
+    <div class="nav-item" onclick="showPage('notifications')">
+      <span class="nav-icon">🔔</span>
+      <span class="nav-label">Notifications</span>
+    </div>
+    <div class="nav-item" onclick="showPage('tasks')">
+      <span class="nav-icon">✅</span>
+      <span class="nav-label">Tasks</span>
+    </div>
+    <div class="nav-item" onclick="showPage('memory')">
+      <span class="nav-icon">🧠</span>
+      <span class="nav-label">Memory</span>
+    </div>
+    <div class="nav-item" onclick="showPage('tools')">
+      <span class="nav-icon">⚡</span>
+      <span class="nav-label">Tools</span>
+    </div>
+    <div class="nav-item" onclick="showPage('platform')">
+      <span class="nav-icon">🏢</span>
+      <span class="nav-label">Platform</span>
+    </div>
+    <div class="nav-item" onclick="showPage('security')">
+      <span class="nav-icon">🛡️</span>
+      <span class="nav-label">Security</span>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="nav-item" onclick="toggleTheme()">
+      <span class="nav-icon" id="theme-icon">🌙</span>
+      <span class="nav-label">Theme</span>
+    </div>
   </div>
-  <div class="nav-right">
-    <div class="live"><div class="pulse" id="sse-dot"></div><span id="conn-status">LIVE</span></div>
-    <button class="btn btn-secondary btn-sm" onclick="toggleTheme()">Theme</button>
-  </div>
-</nav>
+</aside>
 
-<div class="content">
-
-<!-- OVERVIEW PAGE -->
-<div class="page active" id="page-overview">
-  <div class="grid grid-4" style="margin-bottom:24px">
-    <div class="stat">
-      <div class="stat-value" id="stat-mem">--</div>
-      <div class="stat-label">Memory Used</div>
-      <div class="stat-bar"><div class="stat-bar-fill green" id="bar-mem"></div></div>
+<!-- Main -->
+<main class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="hamburger" onclick="toggleSidebar()">☰</button>
+      <span class="page-title" id="page-title">Overview</span>
     </div>
-    <div class="stat">
-      <div class="stat-value" id="stat-disk">--</div>
-      <div class="stat-label">Disk Used</div>
-      <div class="stat-bar"><div class="stat-bar-fill yellow" id="bar-disk"></div></div>
-    </div>
-    <div class="stat">
-      <div class="stat-value" id="stat-vault">--</div>
-      <div class="stat-label">Vault Entries</div>
-    </div>
-    <div class="stat">
-      <div class="stat-value" id="stat-tasks">--</div>
-      <div class="stat-label">Active Tasks</div>
-    </div>
-  </div>
-  <div class="grid grid-2">
-    <div class="card">
-      <div class="card-title">📋 Daily Briefing</div>
-      <div id="briefing-content">Loading...</div>
-      <button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="generateBriefing()">Generate Morning Briefing</button>
-    </div>
-    <div class="card">
-      <div class="card-title">💡 Proactive Suggestions</div>
-      <div id="suggestions-list">Loading...</div>
-      <button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="generateSuggestions()">Generate</button>
-    </div>
-  </div>
-  <div class="grid grid-3" style="margin-top:16px">
-    <div class="card">
-      <div class="card-title">📊 System Performance</div>
-      <div id="perf-stats">Loading...</div>
-    </div>
-    <div class="card">
-      <div class="card-title">🔄 Background Queue</div>
-      <div id="queue-stats">Loading...</div>
-    </div>
-    <div class="card">
-      <div class="card-title">⚡ Uptime</div>
-      <div id="uptime-stats">Loading...</div>
-    </div>
-  </div>
-</div>
-
-<!-- CHAT PAGE -->
-<div class="page" id="page-chat">
-  <div class="card" style="height:calc(100vh - 200px); display:flex; flex-direction:column;">
-    <div class="card-title">💬 Chat with Aeryn</div>
-    <div id="chat-messages" style="flex:1; overflow-y:auto; padding:16px 0;"></div>
-    <div style="display:flex; gap:12px; padding-top:12px; border-top:1px solid var(--border);">
-      <input class="input" id="chat-input" placeholder="Type a message..." onkeypress="if(event.key==='Enter')sendChat()">
-      <button class="btn btn-primary" onclick="sendChat()">Send</button>
-    </div>
-  </div>
-</div>
-
-<!-- NOTIFICATIONS PAGE -->
-<div class="page" id="page-notifications">
-  <div class="grid grid-2">
-    <div class="card">
-      <div class="card-title">Create Notification</div>
-      <input class="input" id="notif-title" placeholder="Title" style="margin-bottom:8px">
-      <textarea class="input" id="notif-msg" placeholder="Message" rows="3" style="margin-bottom:8px"></textarea>
-      <select class="input" id="notif-priority" style="margin-bottom:8px">
-        <option value="low">Low</option>
-        <option value="normal">Normal</option>
-        <option value="high">High</option>
-        <option value="critical">Critical</option>
-      </select>
-      <button class="btn btn-primary" onclick="createNotification()">Create</button>
-    </div>
-    <div class="card">
-      <div class="card-title">Pending Notifications</div>
-      <div id="pending-notifs">Loading...</div>
-    </div>
-  </div>
-</div>
-
-<!-- TASKS PAGE -->
-<div class="page" id="page-tasks">
-  <div class="grid grid-2">
-    <div class="card">
-      <div class="card-title">Auto-Task from Text</div>
-      <textarea class="input" id="autotask-text" placeholder="e.g., I need to research AI frameworks and write a summary" rows="4" style="margin-bottom:8px"></textarea>
-      <button class="btn btn-primary" onclick="parseTasks()">Parse Tasks</button>
-      <div id="parsed-tasks" style="margin-top:12px"></div>
-    </div>
-    <div class="card">
-      <div class="card-title">Task Queue</div>
-      <div id="task-list">Loading...</div>
-    </div>
-  </div>
-</div>
-
-<!-- MEMORY PAGE -->
-<div class="page" id="page-memory">
-  <div class="card">
-    <div class="card-title">Semantic Search</div>
-    <input class="input" id="memory-search" placeholder="Search vault entries..." style="margin-bottom:12px" onkeyup="if(event.key==='Enter')searchMemory()">
-    <div id="memory-results"></div>
-  </div>
-  <div class="card" style="margin-top:16px">
-    <div class="card-title">Vault Entries</div>
-    <div id="vault-list">Loading...</div>
-  </div>
-</div>
-
-<!-- TOOLS PAGE -->
-<div class="page" id="page-tools">
-  <div class="grid grid-2">
-    <div class="card">
-      <div class="card-title">Available Tools</div>
-      <div id="tools-list">Loading...</div>
-    </div>
-    <div class="card">
-      <div class="card-title">Execute Tool</div>
-      <select class="input" id="tool-select" style="margin-bottom:8px"></select>
-      <textarea class="input" id="tool-params" placeholder='{"key": "value"}' rows="4" style="margin-bottom:8px"></textarea>
-      <button class="btn btn-primary" onclick="executeTool()">Execute</button>
-      <div id="tool-result" style="margin-top:12px"></div>
-    </div>
-  </div>
-</div>
-
-<!-- PLATFORM PAGE -->
-<div class="page" id="page-platform">
-  <div class="grid grid-3">
-    <div class="card">
-      <div class="card-title">API Keys</div>
-      <button class="btn btn-primary btn-sm" onclick="createApiKey()">Create Key</button>
-      <div id="api-keys-list" style="margin-top:12px">Loading...</div>
-    </div>
-    <div class="card">
-      <div class="card-title">Usage (30 days)</div>
-      <div id="usage-summary">Loading...</div>
-    </div>
-    <div class="card">
-      <div class="card-title">Secrets</div>
-      <div style="margin-bottom:8px">
-        <input class="input" id="secret-name" placeholder="Name" style="margin-bottom:4px">
-        <input class="input" id="secret-value" placeholder="Value" style="margin-bottom:4px">
-        <button class="btn btn-primary btn-sm" onclick="setSecret()">Store</button>
+    <div class="topbar-right">
+      <div class="connection">
+        <div class="connection-dot" id="conn-dot"></div>
+        <span id="conn-status">LIVE</span>
       </div>
-      <div id="secrets-list">Loading...</div>
+      <span style="font-size:12px;color:var(--text-muted)">v41.0</span>
     </div>
-  </div>
-</div>
+  </header>
 
-<!-- SECURITY PAGE -->
-<div class="page" id="page-security">
-  <div class="grid grid-2">
-    <div class="card">
-      <div class="card-title">🔒 Safety Check</div>
-      <input class="input" id="safety-text" placeholder="Text to check..." style="margin-bottom:8px">
-      <button class="btn btn-primary" onclick="checkSafety()">Check</button>
-      <div id="safety-result" style="margin-top:12px"></div>
-    </div>
-    <div class="card">
-      <div class="card-title">⚡ Circuit Breakers</div>
-      <div id="circuit-breakers">Loading...</div>
-    </div>
-  </div>
-</div>
+  <div class="content">
 
-</div>
+    <!-- OVERVIEW -->
+    <div class="page active" id="page-overview">
+      <div class="grid grid-4" style="margin-bottom:20px">
+        <div class="stat">
+          <div class="stat-accent accent"></div>
+          <div class="stat-value" id="stat-mem">--</div>
+          <div class="stat-label">Memory Used</div>
+          <div class="stat-bar"><div class="stat-bar-fill accent" id="bar-mem"></div></div>
+        </div>
+        <div class="stat">
+          <div class="stat-accent yellow"></div>
+          <div class="stat-value" id="stat-disk">--</div>
+          <div class="stat-label">Disk Used</div>
+          <div class="stat-bar"><div class="stat-bar-fill yellow" id="bar-disk"></div></div>
+        </div>
+        <div class="stat">
+          <div class="stat-accent green"></div>
+          <div class="stat-value" id="stat-vault">--</div>
+          <div class="stat-label">Vault Entries</div>
+        </div>
+        <div class="stat">
+          <div class="stat-accent purple"></div>
+          <div class="stat-value" id="stat-tasks">--</div>
+          <div class="stat-label">Active Tasks</div>
+        </div>
+      </div>
+
+      <div class="grid grid-21">
+        <div class="card">
+          <div class="card-title">📋 Daily Briefing</div>
+          <div id="briefing-content" style="font-size:14px;line-height:1.6">Loading...</div>
+          <button class="btn btn-primary btn-sm" style="margin-top:16px" onclick="generateBriefing()">Generate Morning Briefing</button>
+        </div>
+        <div class="card">
+          <div class="card-title">💡 Proactive Suggestions</div>
+          <div id="suggestions-list">Loading...</div>
+          <button class="btn btn-secondary btn-sm" style="margin-top:12px" onclick="generateSuggestions()">Refresh</button>
+        </div>
+      </div>
+
+      <div class="grid grid-3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-title">⚡ Performance</div>
+          <div id="perf-stats">Loading...</div>
+        </div>
+        <div class="card">
+          <div class="card-title">🔄 Task Queue</div>
+          <div id="queue-stats">Loading...</div>
+        </div>
+        <div class="card">
+          <div class="card-title">⏱️ Uptime</div>
+          <div id="uptime-stats">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="page" id="page-chat">
+      <div class="card" style="height:calc(100vh - 180px);display:flex;flex-direction:column">
+        <div class="card-title" style="margin-bottom:0;padding-bottom:12px;border-bottom:1px solid var(--border)">💬 Chat with Aeryn</div>
+        <div id="chat-messages" style="flex:1;overflow-y:auto;padding:16px 0;"></div>
+        <div style="display:flex;gap:12px;padding-top:12px;border-top:1px solid var(--border)">
+          <input class="input" id="chat-input" placeholder="Ask Aeryn anything..." onkeypress="if(event.key==='Enter')sendChat()">
+          <button class="btn btn-primary" onclick="sendChat()">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div class="page" id="page-notifications">
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-title">Create Notification</div>
+          <input class="input" id="notif-title" placeholder="Title" style="margin-bottom:8px">
+          <textarea class="input" id="notif-msg" placeholder="Message" rows="3" style="margin-bottom:8px"></textarea>
+          <select class="input" id="notif-priority" style="margin-bottom:12px">
+            <option value="low">Low</option>
+            <option value="normal" selected>Normal</option>
+            <option value="high">High</option>
+            <option value="critical">Critical</option>
+          </select>
+          <button class="btn btn-primary" onclick="createNotification()">Create</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Pending Notifications</div>
+          <div id="pending-notifs">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TASKS -->
+    <div class="page" id="page-tasks">
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-title">Auto-Task from Text</div>
+          <textarea class="input" id="autotask-text" placeholder="e.g., I need to research AI frameworks and write a summary" rows="4" style="margin-bottom:8px"></textarea>
+          <button class="btn btn-primary" onclick="parseTasks()">Parse Tasks</button>
+          <div id="parsed-tasks" style="margin-top:16px"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Task Queue</div>
+          <div id="task-list">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEMORY -->
+    <div class="page" id="page-memory">
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-title">Semantic Search</div>
+        <input class="input" id="memory-search" placeholder="Search vault entries..." onkeyup="if(event.key==='Enter')searchMemory()">
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-title">Search Results</div>
+        <div id="memory-results"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Vault Entries</div>
+        <div id="vault-list">Loading...</div>
+      </div>
+    </div>
+
+    <!-- TOOLS -->
+    <div class="page" id="page-tools">
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-title">Available Tools</div>
+          <div id="tools-list">Loading...</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Execute Tool</div>
+          <select class="input" id="tool-select" style="margin-bottom:8px"></select>
+          <textarea class="input" id="tool-params" placeholder='{"key": "value"}' rows="4" style="margin-bottom:8px"></textarea>
+          <button class="btn btn-primary" onclick="executeTool()">Execute</button>
+          <pre id="tool-result" style="margin-top:12px;background:var(--bg);padding:12px;border-radius:8px;font-size:12px;overflow-x:auto"></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLATFORM -->
+    <div class="page" id="page-platform">
+      <div class="grid grid-3">
+        <div class="card">
+          <div class="card-title">API Keys</div>
+          <button class="btn btn-primary btn-sm" onclick="createApiKey()">Create Key</button>
+          <div id="api-keys-list" style="margin-top:12px">Loading...</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Usage (30 days)</div>
+          <div id="usage-summary">Loading...</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Secrets</div>
+          <input class="input" id="secret-name" placeholder="Name" style="margin-bottom:4px">
+          <input class="input" id="secret-value" placeholder="Value" style="margin-bottom:8px">
+          <button class="btn btn-secondary btn-sm" onclick="setSecret()">Store</button>
+          <div id="secrets-list" style="margin-top:12px">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECURITY -->
+    <div class="page" id="page-security">
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-title">🔒 Safety Check</div>
+          <input class="input" id="safety-text" placeholder="Text to check..." style="margin-bottom:8px">
+          <button class="btn btn-primary" onclick="checkSafety()">Check</button>
+          <div id="safety-result" style="margin-top:12px"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">⚡ Circuit Breakers</div>
+          <div id="circuit-breakers">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
 
 <div class="toast-container" id="toast-container"></div>
 
 <script>
-let currentSessionId = 'dashboard_' + Date.now();
+let sid = 'dash_' + Date.now();
+let currentPage = 'overview';
+
+const pages = {
+  overview: 'Overview',
+  chat: 'Chat',
+  notifications: 'Notifications',
+  tasks: 'Tasks',
+  memory: 'Memory',
+  tools: 'Tools',
+  platform: 'Platform',
+  security: 'Security'
+};
 
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(t => t.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-  event.target.classList.add('active');
+  event.currentTarget.classList.add('active');
+  document.getElementById('page-title').textContent = pages[name];
+  currentPage = name;
+  
   if (name === 'notifications') loadNotifications();
   if (name === 'tasks') loadTasks();
   if (name === 'memory') loadMemory();
@@ -304,7 +756,7 @@ function showPage(name) {
   if (name === 'security') loadSecurity();
 }
 
-function toast(msg, type = 'info') {
+function toast(msg) {
   const el = document.createElement('div');
   el.className = 'toast';
   el.textContent = msg;
@@ -312,23 +764,31 @@ function toast(msg, type = 'info') {
   setTimeout(() => el.remove(), 3000);
 }
 
-// Overview
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('collapsed');
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  document.getElementById('theme-icon').textContent = document.body.classList.contains('light') ? '☀️' : '🌙';
+}
+
+// ── Overview ────────────────────────────────
 async function loadOverview() {
   try {
     const [stats, tasks] = await Promise.all([
       fetch('/dashboard/stats').then(r => r.json()),
       fetch('/shared/tasks/all').then(r => r.json())
     ]);
-    
     if (stats.system) {
       const m = stats.system.memory_percent || 0;
-      document.getElementById('stat-mem').textContent = Math.round(stats.system.memory_used_mb / 1024) + 'GB';
-      document.getElementById('stat-disk').textContent = Math.round(stats.system.disk_used_gb) + 'GB';
+      document.getElementById('stat-mem').textContent = (stats.system.memory_used_mb / 1024).toFixed(1) + 'GB';
+      document.getElementById('stat-disk').textContent = (stats.system.disk_used_gb || 0).toFixed(0) + 'GB';
       document.getElementById('bar-mem').style.width = m + '%';
-      document.getElementById('bar-mem').className = 'stat-bar-fill ' + (m > 90 ? 'red' : m > 70 ? 'yellow' : 'green');
+      document.getElementById('bar-mem').className = 'stat-bar-fill ' + (m > 90 ? 'red' : m > 70 ? 'yellow' : 'accent');
       document.getElementById('bar-disk').style.width = (stats.system.disk_percent || 0) + '%';
+      document.getElementById('bar-disk').className = 'stat-bar-fill ' + ((stats.system.disk_percent || 0) > 90 ? 'red' : (stats.system.disk_percent || 0) > 70 ? 'yellow' : 'accent');
     }
-    
     document.getElementById('stat-vault').textContent = (stats.vault?.total_entries || 0);
     document.getElementById('stat-tasks').textContent = tasks.count || 0;
   } catch (e) { console.error(e); }
@@ -337,187 +797,190 @@ async function loadOverview() {
 async function generateBriefing() {
   const res = await fetch('/briefing/morning', { method: 'POST' });
   const data = await res.json();
-  document.getElementById('briefing-content').innerHTML = '<pre style="white-space:pre-wrap;font-family:inherit">' + data.content + '</pre>';
+  document.getElementById('briefing-content').innerHTML = '<pre style="white-space:pre-wrap;font-family:inherit;margin:0">' + data.content + '</pre>';
 }
 
 async function generateSuggestions() {
   const res = await fetch('/proactive/generate', { method: 'POST' });
   const data = await res.json();
-  const html = data.suggestions.map(s => '<div class="list-item"><span>' + s.title + '</span><span class="badge badge-blue">' + s.type + '</span></div>').join('');
-  document.getElementById('suggestions-list').innerHTML = html || '<p style="color:var(--text-muted)">No suggestions</p>';
+  const html = data.suggestions.map(s => `<div class="list-item"><div><div class="list-item-title">${s.title}</div></div><span class="badge badge-blue">${s.type}</span></div>`).join('');
+  document.getElementById('suggestions-list').innerHTML = html || '<p style="color:var(--text-muted);font-size:14px">No suggestions</p>';
 }
 
-// Chat
+// ── Chat ────────────────────────────────────
 async function sendChat() {
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
   if (!text) return;
   const box = document.getElementById('chat-messages');
-  box.innerHTML += '<div style="margin:8px 0;text-align:right"><div style="background:var(--accent);color:var(--bg);padding:8px 12px;border-radius:12px;display:inline-block;max-width:70%">' + text + '</div></div>';
+  box.innerHTML += `<div style="display:flex;justify-content:flex-end;margin-bottom:12px"><div style="background:var(--accent);color:var(--bg);padding:10px 16px;border-radius:12px;max-width:70%;font-size:14px">${text}</div></div>`;
   input.value = '';
-  box.innerHTML += '<div style="margin:8px 0;color:var(--text-muted)">Thinking...</div>';
+  box.innerHTML += `<div style="color:var(--text-muted);font-size:13px;padding:8px 0">Thinking...</div>`;
   box.scrollTop = box.scrollHeight;
   try {
     const res = await fetch('/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ goal: text, session_id: currentSessionId })
+      body: JSON.stringify({ goal: text, session_id: sid })
     });
     const data = await res.json();
-    box.lastChild.remove();
-    box.innerHTML += '<div style="margin:8px 0"><div style="background:var(--bg-hover);padding:8px 12px;border-radius:12px;display:inline-block;max-width:70%">' + (data.response || JSON.stringify(data)) + '</div></div>';
+    box.lastElementChild.remove();
+    box.innerHTML += `<div style="margin-bottom:12px"><div style="background:var(--bg-hover);padding:10px 16px;border-radius:12px;max-width:70%;font-size:14px">${data.response || JSON.stringify(data)}</div></div>`;
   } catch (e) {
-    box.lastChild.remove();
-    box.innerHTML += '<div style="margin:8px 0;color:var(--red)">Error: ' + e.message + '</div>';
+    box.lastElementChild.remove();
+    box.innerHTML += `<div style="color:var(--red);margin-bottom:12px">Error: ${e.message}</div>`;
   }
   box.scrollTop = box.scrollHeight;
 }
 
-// Notifications
+// ── Notifications ───────────────────────────
 async function loadNotifications() {
   const res = await fetch('/notifications/pending');
   const data = await res.json();
-  const html = data.notifications.map(n => '<div class="list-item"><span>' + n.title + '</span><span class="badge badge-' + (n.priority === 'critical' ? 'red' : n.priority === 'high' ? 'yellow' : 'blue') + '">' + n.priority + '</span></div>').join('');
-  document.getElementById('pending-notifs').innerHTML = html || '<p style="color:var(--text-muted)">No pending notifications</p>';
+  const html = data.notifications.map(n => `<div class="list-item"><div><div class="list-item-title">${n.title}</div><div class="list-item-sub">${n.message}</div></div><span class="badge badge-${n.priority === 'critical' ? 'red' : n.priority === 'high' ? 'yellow' : 'blue'}">${n.priority}</span></div>`).join('');
+  document.getElementById('pending-notifs').innerHTML = html || '<p style="color:var(--text-muted);font-size:14px">No pending</p>';
 }
 
 async function createNotification() {
   const title = document.getElementById('notif-title').value;
   const msg = document.getElementById('notif-msg').value;
   const priority = document.getElementById('notif-priority').value;
-  await fetch('/notifications/create?user_id=dashboard&title=' + encodeURIComponent(title) + '&message=' + encodeURIComponent(msg) + '&priority=' + priority);
+  if (!title) return;
+  await fetch(`/notifications/create?user_id=dashboard&title=${encodeURIComponent(title)}&message=${encodeURIComponent(msg)}&priority=${priority}`);
   toast('Notification created');
+  document.getElementById('notif-title').value = '';
+  document.getElementById('notif-msg').value = '';
   loadNotifications();
 }
 
-// Tasks
+// ── Tasks ───────────────────────────────────
 async function loadTasks() {
   const res = await fetch('/shared/tasks/all');
   const data = await res.json();
-  const html = data.tasks.map(t => '<div class="list-item"><span>' + t.title + '</span><span class="badge badge-' + (t.status === 'completed' ? 'green' : t.status === 'in_progress' ? 'yellow' : 'blue') + '">' + t.status + '</span></div>').join('');
-  document.getElementById('task-list').innerHTML = html || '<p style="color:var(--text-muted)">No tasks</p>';
+  const html = data.tasks.map(t => `<div class="list-item"><div><div class="list-item-title">${t.title}</div></div><span class="badge badge-${t.status === 'completed' ? 'green' : t.status === 'in_progress' ? 'yellow' : 'blue'}">${t.status}</span></div>`).join('');
+  document.getElementById('task-list').innerHTML = html || '<p style="color:var(--text-muted);font-size:14px">No tasks</p>';
 }
 
 async function parseTasks() {
   const text = document.getElementById('autotask-text').value;
-  const res = await fetch('/auto-task/parse?user_id=dashboard&text=' + encodeURIComponent(text));
+  if (!text) return;
+  const res = await fetch(`/auto-task/parse?user_id=dashboard&text=${encodeURIComponent(text)}`);
   const data = await res.json();
-  const html = data.tasks.map(t => '<div class="list-item"><span>' + t.title + '</span><span class="badge badge-blue">parsed</span></div>').join('');
+  const html = data.tasks.map(t => `<div class="list-item"><div class="list-item-title">${t.title}</div><span class="badge badge-purple">parsed</span></div>`).join('');
   document.getElementById('parsed-tasks').innerHTML = html || '<p style="color:var(--text-muted)">No tasks found</p>';
 }
 
-// Memory
+// ── Memory ──────────────────────────────────
 async function loadMemory() {
   const res = await fetch('/vault/entries?page=1&per_page=20');
   const data = await res.json();
-  const html = data.entries.map(e => '<div class="list-item"><span>' + e.title + '</span><span class="badge badge-blue">' + e.layer + '</span></div>').join('');
-  document.getElementById('vault-list').innerHTML = html || '<p style="color:var(--text-muted)">No entries</p>';
+  const html = data.entries.map(e => `<div class="list-item"><div class="list-item-title">${e.title}</div><span class="badge badge-blue">${e.layer}</span></div>`).join('');
+  document.getElementById('vault-list').innerHTML = html || '<p style="color:var(--text-muted);font-size:14px">No entries</p>';
 }
 
 async function searchMemory() {
   const q = document.getElementById('memory-search').value;
-  const res = await fetch('/search/advanced?q=' + encodeURIComponent(q));
+  if (!q) return;
+  const res = await fetch(`/search/advanced?q=${encodeURIComponent(q)}`);
   const data = await res.json();
-  const html = data.results.map(r => '<div class="list-item"><span>' + r.title + '</span><span class="badge badge-blue">' + r.score.toFixed(2) + '</span></div>').join('');
-  document.getElementById('memory-results').innerHTML = html || '<p style="color:var(--text-muted)">No results</p>';
+  const html = data.results.map(r => `<div class="list-item"><div><div class="list-item-title">${r.title}</div><div class="list-item-sub">${r.content?.substring(0, 80)}...</div></div><span class="badge badge-purple">${r.score.toFixed(2)}</span></div>`).join('');
+  document.getElementById('memory-results').innerHTML = html || '<p style="color:var(--text-muted);font-size:14px">No results</p>';
 }
 
-// Tools
+// ── Tools ───────────────────────────────────
 async function loadTools() {
   const res = await fetch('/tools/list');
   const data = await res.json();
-  const html = data.tools.map(t => '<div class="list-item"><span>' + t + '</span></div>').join('');
-  document.getElementById('tools-list').innerHTML = html || '<p style="color:var(--text-muted)">No tools</p>';
-  document.getElementById('tool-select').innerHTML = data.tools.map(t => '<option>' + t + '</option>').join('');
+  document.getElementById('tools-list').innerHTML = data.tools.map(t => `<div class="list-item"><span class="list-item-title">${t}</span></div>`).join('');
+  document.getElementById('tool-select').innerHTML = data.tools.map(t => `<option>${t}</option>`).join('');
 }
 
 async function executeTool() {
   const tool = document.getElementById('tool-select').value;
   let params = {};
-  try { params = JSON.parse(document.getElementById('tool-params').value || '{}'); } catch(e) {}
+  try { params = JSON.parse(document.getElementById('tool-params').value || '{}'); } catch(e) { toast('Invalid JSON params'); return; }
   const res = await fetch('/tools/execute', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ tool, params })
   });
   const data = await res.json();
-  document.getElementById('tool-result').innerHTML = '<pre style="white-space:pre-wrap;font-family:monospace;font-size:12px;background:var(--bg);padding:12px;border-radius:8px">' + JSON.stringify(data, null, 2) + '</pre>';
+  document.getElementById('tool-result').textContent = JSON.stringify(data, null, 2);
 }
 
-// Platform
+// ── Platform ────────────────────────────────
 async function loadPlatform() {
   const [keys, usage, secrets] = await Promise.all([
     fetch('/api-keys/list?user_id=dashboard').then(r => r.json()),
     fetch('/usage/summary?user_id=dashboard').then(r => r.json()),
     fetch('/secrets/list?user_id=dashboard').then(r => r.json())
   ]);
-  
-  document.getElementById('api-keys-list').innerHTML = keys.keys.map(k => '<div class="list-item"><span>' + k.name + '</span><span class="badge badge-' + (k.is_active ? 'green' : 'red') + '">' + (k.is_active ? 'active' : 'revoked') + '</span></div>').join('') || 'No keys';
-  document.getElementById('usage-summary').innerHTML = '<p>Events: ' + usage.total_events + '</p><p>Cost: $' + usage.total_cost.toFixed(4) + '</p><p>Tokens: ' + (usage.total_tokens_input + usage.total_tokens_output) + '</p>';
-  document.getElementById('secrets-list').innerHTML = secrets.secrets.map(s => '<div class="list-item"><span>' + s.name + '</span></div>').join('') || 'No secrets';
+  document.getElementById('api-keys-list').innerHTML = keys.keys.map(k => `<div class="list-item"><div class="list-item-title">${k.name}</div><span class="badge badge-${k.is_active ? 'green' : 'red'}">${k.is_active ? 'active' : 'revoked'}</span></div>`).join('') || 'No keys';
+  document.getElementById('usage-summary').innerHTML = `<div style="font-size:28px;font-weight:700;font-family:'JetBrains Mono',monospace">${usage.total_events || 0}</div><div class="stat-label">Events</div><p style="margin-top:8px;font-size:13px">Cost: <strong>$${(usage.total_cost || 0).toFixed(4)}</strong></p><p style="font-size:13px">Tokens: <strong>${(usage.total_tokens_input || 0) + (usage.total_tokens_output || 0)}</strong></p>`;
+  document.getElementById('secrets-list').innerHTML = secrets.secrets.map(s => `<div class="list-item"><span class="list-item-title">${s.name}</span></div>`).join('') || 'No secrets';
 }
 
 async function createApiKey() {
   const name = prompt('Key name?');
   if (!name) return;
-  await fetch('/api-keys/create?user_id=dashboard&name=' + encodeURIComponent(name));
+  await fetch(`/api-keys/create?user_id=dashboard&name=${encodeURIComponent(name)}`);
+  toast('API key created');
   loadPlatform();
 }
 
 async function setSecret() {
   const name = document.getElementById('secret-name').value;
   const value = document.getElementById('secret-value').value;
-  await fetch('/secrets/set?user_id=dashboard&name=' + encodeURIComponent(name) + '&value=' + encodeURIComponent(value));
+  if (!name || !value) return;
+  await fetch(`/secrets/set?user_id=dashboard&name=${encodeURIComponent(name)}&value=${encodeURIComponent(value)}`);
   toast('Secret stored');
+  document.getElementById('secret-name').value = '';
+  document.getElementById('secret-value').value = '';
   loadPlatform();
 }
 
-// Security
+// ── Security ────────────────────────────────
 async function checkSafety() {
   const text = document.getElementById('safety-text').value;
+  if (!text) return;
   const res = await fetch('/guardrails/validate-input', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text, context: 'general' })
   });
   const data = await res.json();
-  document.getElementById('safety-result').innerHTML = '<span class="badge badge-' + (data.valid ? 'green' : 'red') + '">' + (data.valid ? 'SAFE' : 'UNSAFE') + '</span><br><br>Risk: ' + data.risk + '<br>Issues: ' + (data.issues.length ? data.issues.join(', ') : 'none');
+  document.getElementById('safety-result').innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span class="badge badge-${data.valid ? 'green' : 'red'}">${data.valid ? 'SAFE' : 'UNSAFE'}</span><span style="color:var(--text-muted);font-size:13px">Risk: ${data.risk}</span></div>${data.issues.length ? '<p style="font-size:13px;color:var(--text-muted)">Issues: ' + data.issues.join(', ') + '</p>' : ''}`;
 }
 
 async function loadSecurity() {
   const res = await fetch('/errors/recovery/circuit-breakers');
   const data = await res.json();
-  const html = data.circuit_breakers.map(c => '<div class="list-item"><span>' + c.name + '</span><span class="badge badge-' + (c.state === 'closed' ? 'green' : 'red') + '">' + c.state + '</span></div>').join('');
-  document.getElementById('circuit-breakers').innerHTML = html || '<p style="color:var(--text-muted)">No breakers</p>';
+  document.getElementById('circuit-breakers').innerHTML = data.circuit_breakers.map(c => `<div class="list-item"><span class="list-item-title">${c.name}</span><span class="badge badge-${c.state === 'closed' ? 'green' : c.state === 'open' ? 'red' : 'yellow'}">${c.state}</span></div>`).join('') || 'No breakers';
 }
 
-// SSE
+// ── SSE ─────────────────────────────────────
 function connectSSE() {
   const es = new EventSource('/dashboard/stream');
   es.onopen = () => {
-    document.getElementById('sse-dot').style.background = 'var(--green)';
+    document.getElementById('conn-dot').classList.remove('offline');
     document.getElementById('conn-status').textContent = 'LIVE';
   };
   es.onerror = () => {
-    document.getElementById('sse-dot').style.background = 'var(--red)';
-    document.getElementById('conn-status').textContent = 'RECONNECTING';
+    document.getElementById('conn-dot').classList.add('offline');
+    document.getElementById('conn-status').textContent = 'OFFLINE';
   };
   es.addEventListener('stats', (e) => {
     const d = JSON.parse(e.data);
     if (d.system) {
-      document.getElementById('stat-mem').textContent = Math.round(d.system.memory_used_mb / 1024) + 'GB';
-      document.getElementById('stat-disk').textContent = Math.round(d.system.disk_used_gb) + 'GB';
+      document.getElementById('stat-mem').textContent = (d.system.memory_used_mb / 1024).toFixed(1) + 'GB';
+      document.getElementById('stat-disk').textContent = (d.system.disk_used_gb || 0).toFixed(0) + 'GB';
     }
   });
 }
 
-// Theme
-function toggleTheme() {
-  document.body.classList.toggle('light');
-}
-
-// Init
+// ── Init ────────────────────────────────────
 loadOverview();
+generateSuggestions();
 connectSSE();
 setInterval(loadOverview, 15000);
 </script>
