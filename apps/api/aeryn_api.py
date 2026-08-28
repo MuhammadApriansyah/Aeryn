@@ -35,6 +35,12 @@ from aeryn_core.error_recovery import get_error_recovery, with_retry, with_fallb
 from aeryn_core.tool_runtime import get_tool_runtime
 from aeryn_core.background_queue import get_task_queue
 from aeryn_core.proactive_engine import get_proactive_engine
+from aeryn_core.proactive_v2 import get_daily_briefing, get_proactive_v2
+from aeryn_core.auto_task import get_auto_task
+from aeryn_core.context_manager import get_context_manager
+from aeryn_core.api_keys import get_api_key_manager
+from aeryn_core.usage_metering import get_usage_metering
+from aeryn_core.secrets_runtime import get_secrets_manager, get_plugin_runtime
 from aeryn_core.temporal_memory import get_temporal_memory
 from aeryn_core.self_improvement import get_self_improvement_engine
 from aeryn_core.skill_crystallization import get_skill_crystallizer
@@ -298,6 +304,91 @@ async def dashboard():
         content=DASHBOARD_HTML,
         media_type="text/html",
     )
+
+@app.get("/chat")
+async def web_chat():
+    """Serve web chat interface."""
+    return Response(
+        content=WEB_CHAT_HTML,
+        media_type="text/html",
+    )
+
+WEB_CHAT_HTML = """<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aeryn Chat</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: system-ui; background:#09090b; color:#fafafa; height:100vh; display:flex; flex-direction:column; }
+#header { padding:16px 24px; background:#18181b; border-bottom:1px solid #27272a; display:flex; align-items:center; gap:12px; }
+#header h1 { font-size:18px; }
+#status { width:8px; height:8px; border-radius:50%; background:#f87171; }
+#status.online { background:#4ade80; }
+#messages { flex:1; overflow-y:auto; padding:24px; display:flex; flex-direction:column; gap:16px; }
+.message { max-width:70%; padding:12px 16px; border-radius:12px; line-height:1.5; }
+.message.user { align-self:flex-end; background:#22d3ee; color:#09090b; }
+.message.assistant { align-self:flex-start; background:#27272a; }
+.message .role { font-size:11px; opacity:0.7; margin-bottom:4px; }
+#input-area { padding:16px 24px; background:#18181b; border-top:1px solid #27272a; display:flex; gap:12px; }
+#input { flex:1; padding:12px 16px; border:none; border-radius:8px; background:#27272a; color:#fafafa; font-size:14px; outline:none; }
+#send { padding:12px 24px; border:none; border-radius:8px; background:#22d3ee; color:#09090b; font-weight:600; cursor:pointer; }
+#send:hover { background:#06b6d4; }
+</style>
+</head>
+<body>
+<div id="header">
+    <div id="status"></div>
+    <h1>Aeryn Chat</h1>
+</div>
+<div id="messages"></div>
+<div id="input-area">
+    <input id="input" placeholder="Type a message..." autocomplete="off">
+    <button id="send" onclick="send()">Send</button>
+</div>
+<script>
+const messages = document.getElementById('messages');
+const input = document.getElementById('input');
+const status = document.getElementById('status');
+let sessionId = 'web_' + Date.now();
+
+function addMessage(role, content) {
+    const div = document.createElement('div');
+    div.className = 'message ' + role;
+    div.innerHTML = '<div class="role">' + role + '</div>' + content.replace(/\\n/g, '<br>');
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+}
+
+async function send() {
+    const text = input.value.trim();
+    if (!text) return;
+    addMessage('user', text);
+    input.value = '';
+    
+    try {
+        const res = await fetch('/chat', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({goal: text, session_id: sessionId})
+        });
+        const data = await res.json();
+        addMessage('assistant', data.response || JSON.stringify(data));
+    } catch(e) {
+        addMessage('assistant', 'Error: ' + e.message);
+    }
+}
+
+input.addEventListener('keypress', (e) => { if(e.key === 'Enter') send(); });
+
+// Check status
+fetch('/health').then(r => r.json()).then(d => {
+    if(d.status === 'healthy') status.className = 'online';
+}).catch(() => {});
+</script>
+</body>
+</html>"""
 
 # ── SSE + WebSocket Endpoints ─────────────────────────────────
 
@@ -2400,6 +2491,107 @@ async def mark_suggestion_read(suggestion_id: str):
     engine = get_proactive_engine()
     engine.mark_read(suggestion_id)
     return {"status": "ok"}
+
+# ── Phase 2 Endpoints ─────────────────────────
+
+@app.post("/briefing/morning")
+async def morning_briefing(user_id: str = "default"):
+    """Generate morning briefing."""
+    briefing = get_daily_briefing()
+    return briefing.generate_morning(user_id)
+
+@app.post("/briefing/evening")
+async def evening_briefing(user_id: str = "default"):
+    """Generate evening briefing."""
+    briefing = get_daily_briefing()
+    return briefing.generate_evening(user_id)
+
+@app.post("/auto-task/parse")
+async def parse_tasks(user_id: str, text: str):
+    """Parse natural language into tasks."""
+    auto_task = get_auto_task()
+    tasks = auto_task.parse(user_id, text)
+    return {"tasks": tasks, "count": len(tasks)}
+
+@app.get("/proactive/v2/patterns")
+async def detect_patterns(user_id: str = "default"):
+    """Detect usage patterns."""
+    engine = get_proactive_v2()
+    return {"patterns": engine.detect_patterns(user_id)}
+
+@app.get("/proactive/v2/anomalies")
+async def detect_anomalies(user_id: str = "default"):
+    """Detect anomalies."""
+    engine = get_proactive_v2()
+    return {"anomalies": engine.detect_anomalies(user_id)}
+
+# ── Phase 3 Endpoints ─────────────────────────
+
+@app.post("/api-keys/create")
+async def create_api_key(user_id: str, name: str, permissions: list = None):
+    """Create new API key."""
+    manager = get_api_key_manager()
+    return manager.create(user_id, name, permissions)
+
+@app.get("/api-keys/list")
+async def list_api_keys(user_id: str):
+    """List user's API keys."""
+    manager = get_api_key_manager()
+    return {"keys": manager.list_keys(user_id)}
+
+@app.post("/api-keys/revoke")
+async def revoke_api_key(key_id: str):
+    """Revoke an API key."""
+    manager = get_api_key_manager()
+    return {"success": manager.revoke(key_id)}
+
+@app.get("/usage/summary")
+async def usage_summary(user_id: str = None, days: int = 30):
+    """Get usage summary."""
+    metering = get_usage_metering()
+    return metering.get_summary(user_id, days)
+
+@app.post("/usage/track")
+async def track_usage(user_id: str, event_type: str, endpoint: str = None,
+                      tokens_input: int = 0, tokens_output: int = 0, cost: float = 0.0):
+    """Track a usage event."""
+    metering = get_usage_metering()
+    metering.track(user_id, event_type, endpoint, tokens_input, tokens_output, cost)
+    return {"status": "tracked"}
+
+# ── Secrets & Plugins ─────────────────────────
+
+@app.post("/secrets/set")
+async def set_secret(user_id: str, name: str, value: str, description: str = None):
+    """Store a secret."""
+    sm = get_secrets_manager()
+    sm.set(user_id, name, value, description)
+    return {"status": "stored"}
+
+@app.get("/secrets/get")
+async def get_secret(user_id: str, name: str):
+    """Get a secret."""
+    sm = get_secrets_manager()
+    value = sm.get(user_id, name)
+    return {"value": value} if value else {"error": "Not found"}
+
+@app.get("/secrets/list")
+async def list_secrets(user_id: str):
+    """List user's secrets."""
+    sm = get_secrets_manager()
+    return {"secrets": sm.list(user_id)}
+
+@app.get("/plugins/list")
+async def list_plugins():
+    """List installed plugins."""
+    rt = get_plugin_runtime()
+    return {"plugins": rt.list_plugins()}
+
+@app.post("/plugins/run")
+async def run_plugin(plugin_name: str, action: str, params: dict = None):
+    """Run a plugin."""
+    rt = get_plugin_runtime()
+    return rt.run_plugin(plugin_name, action, params)
 
 @app.get("/shared/daily-log")
 async def get_daily_log():
