@@ -65,16 +65,14 @@ class ToolRuntime:
     
     async def _fs_read(self, params: Dict) -> ToolResult:
         path = params.get("path", "")
+        
+        # Security: validate path
+        from aeryn_core.security_hardening import validate_path, SAFE_READ_DIRS
+        if not validate_path(path, SAFE_READ_DIRS):
+            return ToolResult(ok=False, error="Access denied: path outside safe directories", tool="fs_read")
+        
         if not os.path.exists(path):
             return ToolResult(ok=False, error=f"File not found: {path}", tool="fs_read")
-        
-        # Security: only allow reading from safe directories
-        allowed = [
-            os.path.expanduser("~/aeryn-core-agent"),
-            "/tmp",
-        ]
-        if not any(path.startswith(a) for a in allowed):
-            return ToolResult(ok=False, error="Access denied", tool="fs_read")
         
         try:
             with open(path, encoding="utf-8", errors="replace") as f:
@@ -87,12 +85,10 @@ class ToolRuntime:
         path = params.get("path", "")
         content = params.get("content", "")
         
-        allowed = [
-            os.path.expanduser("~/aeryn-core-agent"),
-            "/tmp",
-        ]
-        if not any(path.startswith(a) for a in allowed):
-            return ToolResult(ok=False, error="Access denied", tool="fs_write")
+        # Security: validate path
+        from aeryn_core.security_hardening import validate_path, SAFE_WRITE_DIRS
+        if not validate_path(path, SAFE_WRITE_DIRS):
+            return ToolResult(ok=False, error="Access denied: path outside safe directories", tool="fs_write")
         
         try:
             os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -124,15 +120,16 @@ class ToolRuntime:
         command = params.get("command", "")
         timeout = params.get("timeout", 30)
         
-        # Security: block dangerous commands
-        blocked = ["rm -rf /", "mkfs", "dd if=", ":(){:|:&};:"]
-        for b in blocked:
-            if b in command:
-                return ToolResult(ok=False, error=f"Blocked: {b}", tool="terminal")
+        # Security: validate command
+        from aeryn_core.security_hardening import sanitize_command
+        safe, msg = sanitize_command(command)
+        if not safe:
+            return ToolResult(ok=False, error=f"Blocked: {msg}", tool="terminal")
         
         try:
-            proc = await asyncio.create_subprocess_shell(
-                command,
+            # Use sh -c for simple commands (safer than shell=True)
+            proc = await asyncio.create_subprocess_exec(
+                "sh", "-c", command,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
                 cwd=os.path.expanduser("~/aeryn-core-agent"),
