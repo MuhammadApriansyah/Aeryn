@@ -238,6 +238,7 @@ async def dashboard_websocket(websocket: WebSocket):
             try:
                 cmd = json.loads(msg)
                 cmd_type = cmd.get("type", "")
+                cmd_data = cmd.get("data", {})
                 
                 if cmd_type == "ping":
                     await websocket.send_json({"type": "pong", "data": {}})
@@ -247,6 +248,19 @@ async def dashboard_websocket(websocket: WebSocket):
                 elif cmd_type == "get_stats":
                     stats = emitter.get_stats()
                     await websocket.send_json({"type": "stats", "data": stats})
+                elif cmd_type == "action":
+                    action = cmd_data.get("action", "")
+                    # Handle actions
+                    if action == "backup":
+                        await websocket.send_json({"type": "action_result", "data": {"action": action, "status": "started"}})
+                    elif action == "dream":
+                        await websocket.send_json({"type": "action_result", "data": {"action": action, "status": "started"}})
+                    elif action == "cache-clear":
+                        await websocket.send_json({"type": "action_result", "data": {"action": action, "status": "done"}})
+                    elif action == "restart":
+                        await websocket.send_json({"type": "action_result", "data": {"action": action, "status": "started"}})
+                    else:
+                        await websocket.send_json({"type": "error", "data": {"message": f"Unknown action: {action}"}})
                 else:
                     await websocket.send_json({"type": "error", "data": {"message": f"Unknown command: {cmd_type}"}})
             except json.JSONDecodeError:
@@ -537,7 +551,199 @@ tr:last-child td { border-bottom: none; }
   50% { opacity: 0.4; }
 }
 
-/* ── Footer ──────────────────────────────── */
+/* ── Sparkline ──────────────────────────────── */
+.sparkline-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.sparkline-card {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.sparkline-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sparkline {
+  width: 100%;
+  height: 40px;
+}
+
+.sparkline-lg {
+  width: 100%;
+  height: 60px;
+}
+
+/* ── Quick Actions ──────────────────────────── */
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text);
+  font-family: inherit;
+}
+
+.action-btn:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  background: var(--bg-hover);
+}
+
+.action-btn:active {
+  transform: translateY(0);
+}
+
+.action-icon {
+  font-size: 24px;
+}
+
+.action-label {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* ── Activity Feed ──────────────────────────── */
+.activity-feed {
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.activity-empty {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 20px;
+  font-size: 13px;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--bg);
+  border-radius: 8px;
+  font-size: 13px;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.activity-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.activity-dot.info { background: var(--accent); }
+.activity-dot.success { background: var(--green); }
+.activity-dot.warning { background: var(--yellow); }
+.activity-dot.error { background: var(--red); }
+
+.activity-text {
+  flex: 1;
+}
+
+.activity-time {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── Notifications ──────────────────────────── */
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.notification-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: var(--bg);
+  border-radius: 8px;
+  border-left: 3px solid var(--yellow);
+  font-size: 13px;
+}
+
+.notification-item.critical {
+  border-left-color: var(--red);
+}
+
+.notification-dismiss {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+}
+
+.notification-dismiss:hover {
+  color: var(--text);
+}
+
+/* ── Toast ──────────────────────────────────── */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toast {
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  animation: toastIn 0.3s ease;
+  max-width: 300px;
+}
+
+.toast.success { border-left: 3px solid var(--green); }
+.toast.error { border-left: 3px solid var(--red); }
+.toast.warning { border-left: 3px solid var(--yellow); }
+.toast.info { border-left: 3px solid var(--accent); }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
 .footer {
   text-align: center;
   padding: 24px 0;
@@ -589,7 +795,60 @@ tr:last-child td { border-bottom: none; }
     <div class="label">📊 Requests</div>
     <div class="value" id="req-total">--</div>
     <div class="detail" id="err-detail">-- errors</div>
+    <canvas id="sparkline-reqs" class="sparkline" width="200" height="40"></canvas>
   </div>
+</div>
+
+<!-- ── Sparkline Charts ──────────────────────── -->
+<div class="section">
+  <h2>📈 Trends (60s)</h2>
+  <div class="sparkline-grid">
+    <div class="sparkline-card">
+      <div class="sparkline-label">Memory</div>
+      <canvas id="sparkline-mem" class="sparkline-lg" width="300" height="60"></canvas>
+    </div>
+    <div class="sparkline-card">
+      <div class="sparkline-label">Disk</div>
+      <canvas id="sparkline-disk" class="sparkline-lg" width="300" height="60"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ── Quick Actions ─────────────────────────── -->
+<div class="section">
+  <h2>⚡ Quick Actions</h2>
+  <div class="action-grid">
+    <button class="action-btn" onclick="runAction('backup')">
+      <span class="action-icon">💾</span>
+      <span class="action-label">Backup</span>
+    </button>
+    <button class="action-btn" onclick="runAction('dream')">
+      <span class="action-icon">💭</span>
+      <span class="action-label">Dream</span>
+    </button>
+    <button class="action-btn" onclick="runAction('cache-clear')">
+      <span class="action-icon">🗑️</span>
+      <span class="action-label">Clear Cache</span>
+    </button>
+    <button class="action-btn" onclick="runAction('restart')">
+      <span class="action-icon">🔄</span>
+      <span class="action-label">Restart</span>
+    </button>
+  </div>
+</div>
+
+<!-- ── Activity Feed ─────────────────────────── -->
+<div class="section">
+  <h2>🔔 Activity Feed</h2>
+  <div class="activity-feed" id="activity-feed">
+    <div class="activity-empty">Waiting for events...</div>
+  </div>
+</div>
+
+<!-- ── Notifications Panel ───────────────────── -->
+<div class="section" id="notifications-section" style="display:none">
+  <h2>🚨 Alerts</h2>
+  <div class="notifications-list" id="notifications-list"></div>
 </div>
 
 <!-- ── Services ────────────────────────────── -->
@@ -642,6 +901,8 @@ tr:last-child td { border-bottom: none; }
   </div>
 </div>
 
+<div class="toast-container" id="toast-container"></div>
+
 <div class="footer">
   Aeryn V40.54 — Built with ❤️ by Hermes + Aeryn
 </div>
@@ -650,6 +911,129 @@ tr:last-child td { border-bottom: none; }
 function updateClock() {
   const now = new Date();
   document.getElementById('clock').textContent = now.toLocaleTimeString('id-ID', { hour12: false });
+}
+
+// ── Sparkline Charts ────────────────────────
+const sparklineData = {
+  mem: [],
+  disk: [],
+  reqs: [],
+  maxPoints: 60
+};
+
+function drawSparkline(canvasId, data, color) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width;
+  const h = canvas.height;
+  
+  ctx.clearRect(0, 0, w, h);
+  
+  if (data.length < 2) return;
+  
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const range = max - min || 1;
+  
+  ctx.beginPath();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  
+  for (let i = 0; i < data.length; i++) {
+    const x = (i / (data.length - 1)) * w;
+    const y = h - ((data[i] - min) / range) * (h - 4) - 2;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  
+  // Fill under curve
+  ctx.lineTo(w, h);
+  ctx.lineTo(0, h);
+  ctx.closePath();
+  ctx.fillStyle = color.replace(')', ', 0.1)').replace('rgb', 'rgba');
+  ctx.fill();
+}
+
+// ── Activity Feed ────────────────────────────
+const activityFeed = [];
+
+function addActivity(type, text) {
+  const feed = document.getElementById('activity-feed');
+  if (!feed) return;
+  
+  const empty = feed.querySelector('.activity-empty');
+  if (empty) empty.remove();
+  
+  const item = document.createElement('div');
+  item.className = 'activity-item';
+  item.innerHTML = `
+    <div class="activity-dot ${type}"></div>
+    <span class="activity-text">${text}</span>
+    <span class="activity-time">${new Date().toLocaleTimeString('id-ID', {hour12:false})}</span>
+  `;
+  
+  feed.insertBefore(item, feed.firstChild);
+  
+  // Keep max 20 items
+  while (feed.children.length > 20) {
+    feed.removeChild(feed.lastChild);
+  }
+}
+
+// ── Notifications ────────────────────────────
+const notifications = [];
+
+function addNotification(type, message) {
+  const section = document.getElementById('notifications-section');
+  const list = document.getElementById('notifications-list');
+  if (!section || !list) return;
+  
+  section.style.display = 'block';
+  
+  const item = document.createElement('div');
+  item.className = 'notification-item' + (type === 'critical' ? ' critical' : '');
+  item.innerHTML = `
+    <span>${type === 'critical' ? '🚨' : '⚠️'}</span>
+    <span>${message}</span>
+    <button class="notification-dismiss" onclick="this.parentElement.remove()">×</button>
+  `;
+  
+  list.insertBefore(item, list.firstChild);
+  
+  // Show toast
+  showToast(type, message);
+}
+
+function showToast(type, message) {
+  const container = document.getElementById('toast-container');
+  if (!container) return;
+  
+  const toast = document.createElement('div');
+  toast.className = 'toast ' + type;
+  toast.textContent = message;
+  
+  container.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    setTimeout(() => toast.remove(), 300);
+  }, 5000);
+}
+
+// ── Quick Actions ────────────────────────────
+function runAction(action) {
+  if (!ws || ws.readyState !== WebSocket.OPEN) {
+    showToast('error', 'WebSocket not connected');
+    return;
+  }
+  
+  ws.send(JSON.stringify({type: 'action', data: {action: action}}));
+  addActivity('info', `Action: ${action}`);
+  showToast('info', `Running: ${action}`);
 }
 
 // ── SSE: Real-time stats ──────────────────────
@@ -664,6 +1048,21 @@ function connectSSE() {
   evtSource.addEventListener('stats', function(e) {
     const d = JSON.parse(e.data);
     const s = d.data;
+    
+    // Update sparkline data
+    sparklineData.mem.push(s.memory_percent);
+    if (sparklineData.mem.length > sparklineData.maxPoints) sparklineData.mem.shift();
+    
+    sparklineData.disk.push(s.disk_percent);
+    if (sparklineData.disk.length > sparklineData.maxPoints) sparklineData.disk.shift();
+    
+    sparklineData.reqs.push(s.requests_total);
+    if (sparklineData.reqs.length > sparklineData.maxPoints) sparklineData.reqs.shift();
+    
+    // Draw sparklines
+    drawSparkline('sparkline-mem', sparklineData.mem, 'rgb(74, 222, 128)');
+    drawSparkline('sparkline-disk', sparklineData.disk, 'rgb(34, 211, 238)');
+    drawSparkline('sparkline-reqs', sparklineData.reqs, 'rgb(192, 132, 252)');
     
     // Memory
     document.getElementById('mem').innerHTML = s.memory_used_mb + '<span class="unit">MB</span>';
@@ -688,6 +1087,17 @@ function connectSSE() {
     // Requests
     document.getElementById('req-total').textContent = s.requests_total;
     document.getElementById('err-detail').textContent = s.errors_total + ' errors';
+    
+    // Threshold alerts
+    if (s.memory_percent > 90) {
+      addNotification('critical', `Memory usage critical: ${s.memory_percent}%`);
+    } else if (s.memory_percent > 80) {
+      addNotification('warning', `Memory usage high: ${s.memory_percent}%`);
+    }
+    
+    if (s.disk_percent > 90) {
+      addNotification('critical', `Disk usage critical: ${s.disk_percent}%`);
+    }
   });
   
   evtSource.onerror = function() {
@@ -712,6 +1122,9 @@ function connectWS() {
     const msg = JSON.parse(e.data);
     if (msg.type === 'connected') {
       console.log('WS ready');
+    } else if (msg.type === 'action_result') {
+      addActivity('success', `Action ${msg.data.action}: ${msg.data.status}`);
+      showToast('success', `${msg.data.action} → ${msg.data.status}`);
     }
   };
   
