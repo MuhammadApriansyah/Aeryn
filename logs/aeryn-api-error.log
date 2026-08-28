@@ -1,905 +1,541 @@
-2026-08-27 20:52:59: INFO:     Started server process [18055]
-2026-08-27 20:52:59: INFO:     Waiting for application startup.
-2026-08-27 20:52:59: INFO:     Application startup complete.
-2026-08-27 20:52:59: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3001): address already in use
-2026-08-27 20:52:59: INFO:     Waiting for application shutdown.
-2026-08-27 20:52:59: INFO:     Application shutdown complete.
-2026-08-27 20:53:02: INFO:     Started server process [18093]
-2026-08-27 20:53:02: INFO:     Waiting for application startup.
-2026-08-27 20:53:02: INFO:     Application startup complete.
-2026-08-27 20:53:02: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3001): address already in use
-2026-08-27 20:53:02: INFO:     Waiting for application shutdown.
-2026-08-27 20:53:02: INFO:     Application shutdown complete.
-2026-08-27 20:53:03: INFO:     Started server process [18140]
-2026-08-27 20:53:03: INFO:     Waiting for application startup.
-2026-08-27 20:53:03: INFO:     Application startup complete.
-2026-08-27 20:53:03: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3001): address already in use
-2026-08-27 20:53:03: INFO:     Waiting for application shutdown.
-2026-08-27 20:53:03: INFO:     Application shutdown complete.
-2026-08-27 20:53:05: INFO:     Started server process [18152]
-2026-08-27 20:53:05: INFO:     Waiting for application startup.
-2026-08-27 20:53:05: INFO:     Application startup complete.
-2026-08-27 20:53:05: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3001): address already in use
-2026-08-27 20:53:05: INFO:     Waiting for application shutdown.
-2026-08-27 20:53:05: INFO:     Application shutdown complete.
-2026-08-27 20:53:06: INFO:     Started server process [18156]
-2026-08-27 20:53:06: INFO:     Waiting for application startup.
-2026-08-27 20:53:06: INFO:     Application startup complete.
-2026-08-27 20:53:06: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3001): address already in use
-2026-08-27 20:53:06: INFO:     Waiting for application shutdown.
-2026-08-27 20:53:06: INFO:     Application shutdown complete.
-2026-08-27 20:53:08: INFO:     Started server process [18159]
-2026-08-27 20:53:08: INFO:     Waiting for application startup.
-2026-08-27 20:53:08: INFO:     Application startup complete.
-2026-08-27 20:53:08: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3001): address already in use
-2026-08-27 20:53:08: INFO:     Waiting for application shutdown.
-2026-08-27 20:53:08: INFO:     Application shutdown complete.
-2026-08-27 20:53:09: INFO:     Started server process [18162]
-2026-08-27 20:53:09: INFO:     Waiting for application startup.
-2026-08-27 20:53:09: INFO:     Application startup complete.
-2026-08-27 20:53:09: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3001): address already in use
-2026-08-27 20:53:09: INFO:     Waiting for application shutdown.
-2026-08-27 20:53:09: INFO:     Application shutdown complete.
-2026-08-27 20:53:11: INFO:     Started server process [18165]
-2026-08-27 20:53:11: INFO:     Waiting for application startup.
-2026-08-27 20:53:11: INFO:     Application startup complete.
-2026-08-27 20:53:11: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3001): address already in use
-2026-08-27 20:53:11: INFO:     Waiting for application shutdown.
-2026-08-27 20:53:11: INFO:     Application shutdown complete.
-2026-08-27 20:53:12: INFO:     Started server process [18187]
-2026-08-27 20:53:12: INFO:     Waiting for application startup.
-2026-08-27 20:53:12: INFO:     Application startup complete.
-2026-08-27 20:53:12: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3001): address already in use
-2026-08-27 20:53:12: INFO:     Waiting for application shutdown.
-2026-08-27 20:53:12: INFO:     Application shutdown complete.
-2026-08-27 20:53:14: INFO:     Started server process [18191]
-2026-08-27 20:53:14: INFO:     Waiting for application startup.
-2026-08-27 20:53:14: INFO:     Application startup complete.
-2026-08-27 20:53:14: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3001): address already in use
-2026-08-27 20:53:14: INFO:     Waiting for application shutdown.
-2026-08-27 20:53:14: INFO:     Application shutdown complete.
-2026-08-27 21:07:31: INFO:     Started server process [31135]
-2026-08-27 21:07:31: INFO:     Waiting for application startup.
-2026-08-27 21:07:31: INFO:     Application startup complete.
-2026-08-27 21:07:31: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-27 21:58:48: INFO:     Shutting down
-2026-08-27 21:58:48: INFO:     Waiting for application shutdown.
-2026-08-27 21:58:48: INFO:     Application shutdown complete.
-2026-08-27 21:58:48: INFO:     Finished server process [31135]
-2026-08-27 21:58:52: INFO:     Started server process [25257]
-2026-08-27 21:58:52: INFO:     Waiting for application startup.
-2026-08-27 21:58:52: INFO:     Application startup complete.
-2026-08-27 21:58:52: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-27 21:59:09: INFO:     Shutting down
-2026-08-27 21:59:09: INFO:     Waiting for application shutdown.
-2026-08-27 21:59:09: INFO:     Application shutdown complete.
-2026-08-27 21:59:09: INFO:     Finished server process [25257]
-2026-08-27 21:59:11: INFO:     Started server process [25469]
-2026-08-27 21:59:11: INFO:     Waiting for application startup.
-2026-08-27 21:59:11: INFO:     Application startup complete.
-2026-08-27 21:59:11: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-27 22:00:51: INFO:     Shutting down
-2026-08-27 22:00:51: INFO:     Waiting for application shutdown.
-2026-08-27 22:00:51: INFO:     Application shutdown complete.
-2026-08-27 22:00:51: INFO:     Finished server process [25469]
-2026-08-27 22:00:55: INFO:     Started server process [27914]
-2026-08-27 22:00:55: INFO:     Waiting for application startup.
-2026-08-27 22:00:55: INFO:     Application startup complete.
-2026-08-27 22:00:55: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-27 22:14:31: INFO:     Shutting down
-2026-08-27 22:14:31: INFO:     Waiting for application shutdown.
-2026-08-27 22:14:31: INFO:     Application shutdown complete.
-2026-08-27 22:14:31: INFO:     Finished server process [27914]
-2026-08-27 22:14:34: INFO:     Started server process [9178]
-2026-08-27 22:14:34: INFO:     Waiting for application startup.
-2026-08-27 22:14:34: INFO:     Application startup complete.
-2026-08-27 22:14:34: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-27 22:55:00: INFO:     Shutting down
-2026-08-27 22:55:00: INFO:     Waiting for application shutdown.
-2026-08-27 22:55:00: INFO:     Application shutdown complete.
-2026-08-27 22:55:00: INFO:     Finished server process [9178]
-2026-08-27 22:55:03: INFO:     Started server process [10237]
-2026-08-27 22:55:03: INFO:     Waiting for application startup.
-2026-08-27 22:55:03: INFO:     Application startup complete.
-2026-08-27 22:55:03: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-27 22:55:45: INFO:     Shutting down
-2026-08-27 22:55:45: INFO:     Waiting for application shutdown.
-2026-08-27 22:55:45: INFO:     Application shutdown complete.
-2026-08-27 22:55:45: INFO:     Finished server process [10237]
-2026-08-27 22:55:55: INFO:     Started server process [13282]
-2026-08-27 22:55:55: INFO:     Waiting for application startup.
-2026-08-27 22:55:55: INFO:     Application startup complete.
-2026-08-27 22:55:55: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-27 22:59:05: INFO:     Shutting down
-2026-08-27 22:59:05: INFO:     Waiting for application shutdown.
-2026-08-27 22:59:05: INFO:     Application shutdown complete.
-2026-08-27 22:59:05: INFO:     Finished server process [13282]
-2026-08-27 22:59:16: INFO:     Started server process [18526]
-2026-08-27 22:59:16: INFO:     Waiting for application startup.
-2026-08-27 22:59:16: INFO:     Application startup complete.
-2026-08-27 22:59:16: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-27 23:34:15: INFO:     Shutting down
-2026-08-27 23:34:15: INFO:     Waiting for application shutdown.
-2026-08-27 23:34:15: INFO:     Application shutdown complete.
-2026-08-27 23:34:15: INFO:     Finished server process [18526]
-2026-08-27 23:34:20: INFO:     Started server process [24955]
-2026-08-27 23:34:20: INFO:     Waiting for application startup.
-2026-08-27 23:34:20: INFO:     Application startup complete.
-2026-08-27 23:34:20: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-27 23:35:32: INFO:     Shutting down
-2026-08-27 23:35:33: INFO:     Waiting for application shutdown.
-2026-08-27 23:35:33: INFO:     Application shutdown complete.
-2026-08-27 23:35:33: INFO:     Finished server process [24955]
-2026-08-27 23:35:35: INFO:     Started server process [25551]
-2026-08-27 23:35:35: INFO:     Waiting for application startup.
-2026-08-27 23:35:35: INFO:     Application startup complete.
-2026-08-27 23:35:35: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-28 00:19:58: INFO:     Shutting down
-2026-08-28 00:19:58: INFO:     Waiting for application shutdown.
-2026-08-28 00:19:58: INFO:     Application shutdown complete.
-2026-08-28 00:19:58: INFO:     Finished server process [25551]
-2026-08-28 00:20:01: INFO:     Started server process [27861]
-2026-08-28 00:20:01: INFO:     Waiting for application startup.
-2026-08-28 00:20:01: INFO:     Application startup complete.
-2026-08-28 00:20:01: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-28 00:32:30: INFO:     Shutting down
-2026-08-28 00:32:30: INFO:     Waiting for application shutdown.
-2026-08-28 00:32:30: INFO:     Application shutdown complete.
-2026-08-28 00:32:30: INFO:     Finished server process [27861]
-2026-08-28 00:32:34: INFO:     Started server process [4868]
-2026-08-28 00:32:34: INFO:     Waiting for application startup.
-2026-08-28 00:32:34: INFO:     Application startup complete.
-2026-08-28 00:32:34: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-28 00:35:37: INFO:     Shutting down
-2026-08-28 00:35:37: INFO:     Waiting for application shutdown.
-2026-08-28 00:35:37: INFO:     Application shutdown complete.
-2026-08-28 00:35:37: INFO:     Finished server process [4868]
-2026-08-28 00:35:41: INFO:     Started server process [7577]
-2026-08-28 00:35:41: INFO:     Waiting for application startup.
-2026-08-28 00:35:41: INFO:     Application startup complete.
-2026-08-28 00:35:41: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-28 00:58:01: INFO:     Shutting down
-2026-08-28 00:58:01: INFO:     Waiting for application shutdown.
-2026-08-28 00:58:01: INFO:     Application shutdown complete.
-2026-08-28 00:58:01: INFO:     Finished server process [7577]
-2026-08-28 00:58:05: INFO:     Started server process [16678]
-2026-08-28 00:58:05: INFO:     Waiting for application startup.
-2026-08-28 00:58:05: INFO:     Application startup complete.
-2026-08-28 00:58:05: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-28 01:11:00: INFO:     Shutting down
-2026-08-28 01:11:00: INFO:     Waiting for application shutdown.
-2026-08-28 01:11:00: INFO:     Application shutdown complete.
-2026-08-28 01:11:00: INFO:     Finished server process [16678]
-2026-08-28 01:11:00:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
-2026-08-28 01:11:00:     manager = get_plugin_manager()
-2026-08-28 01:11:00: IndentationError: unexpected indent
-2026-08-28 01:11:00:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
-2026-08-28 01:11:00:     manager = get_plugin_manager()
-2026-08-28 01:11:00: IndentationError: unexpected indent
-2026-08-28 01:11:00:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
-2026-08-28 01:11:00:     manager = get_plugin_manager()
-2026-08-28 01:11:00: IndentationError: unexpected indent
-2026-08-28 01:11:01:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
-2026-08-28 01:11:01:     manager = get_plugin_manager()
-2026-08-28 01:11:01: IndentationError: unexpected indent
-2026-08-28 01:11:01:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
-2026-08-28 01:11:01:     manager = get_plugin_manager()
-2026-08-28 01:11:01: IndentationError: unexpected indent
-2026-08-28 01:11:01:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
-2026-08-28 01:11:01:     manager = get_plugin_manager()
-2026-08-28 01:11:01: IndentationError: unexpected indent
-2026-08-28 01:11:01:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
-2026-08-28 01:11:01:     manager = get_plugin_manager()
-2026-08-28 01:11:01: IndentationError: unexpected indent
-2026-08-28 01:11:01:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
-2026-08-28 01:11:01:     manager = get_plugin_manager()
-2026-08-28 01:11:01: IndentationError: unexpected indent
-2026-08-28 01:11:01:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
-2026-08-28 01:11:01:     manager = get_plugin_manager()
-2026-08-28 01:11:01: IndentationError: unexpected indent
-2026-08-28 01:11:01:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
-2026-08-28 01:11:01:     manager = get_plugin_manager()
-2026-08-28 01:11:01: IndentationError: unexpected indent
-2026-08-28 01:14:17: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:17: You can install "python-multipart" with: 
-2026-08-28 01:14:17: 
-2026-08-28 01:14:17: pip install python-multipart
-2026-08-28 01:14:17: 
-2026-08-28 01:14:17: Traceback (most recent call last):
-2026-08-28 01:14:17:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
-2026-08-28 01:14:17:     @app.post("/planning/tasks/{task_id}/decompose")
-2026-08-28 01:14:17: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
-2026-08-28 01:14:17:     self.add_api_route(
-2026-08-28 01:14:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
-2026-08-28 01:14:17:     route = route_class(
-2026-08-28 01:14:17:             ^^^^^^^^^^^^
-2026-08-28 01:14:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
-2026-08-28 01:14:17:     self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
-2026-08-28 01:14:17:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
-2026-08-28 01:14:17:     param_details = analyze_param(
-2026-08-28 01:14:17:                     ^^^^^^^^^^^^^^
-2026-08-28 01:14:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
-2026-08-28 01:14:17:     ensure_multipart_is_installed()
-2026-08-28 01:14:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
-2026-08-28 01:14:17:     raise RuntimeError(multipart_not_installed_error) from None
-2026-08-28 01:14:17: RuntimeError: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:17: You can install "python-multipart" with: 
-2026-08-28 01:14:17: 
-2026-08-28 01:14:17: pip install python-multipart
-2026-08-28 01:14:17: 
-2026-08-28 01:14:18: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:18: You can install "python-multipart" with: 
-2026-08-28 01:14:18: 
-2026-08-28 01:14:18: pip install python-multipart
-2026-08-28 01:14:18: 
-2026-08-28 01:14:18: Traceback (most recent call last):
-2026-08-28 01:14:18:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
-2026-08-28 01:14:18:     @app.post("/planning/tasks/{task_id}/decompose")
-2026-08-28 01:14:18:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:18:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
-2026-08-28 01:14:18:     self.add_api_route(
-2026-08-28 01:14:18:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
-2026-08-28 01:14:18:     route = route_class(
-2026-08-28 01:14:18:             ^^^^^^^^^^^^
-2026-08-28 01:14:18:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
-2026-08-28 01:14:18:     self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
-2026-08-28 01:14:18:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:18:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
-2026-08-28 01:14:18:     param_details = analyze_param(
-2026-08-28 01:14:18:                     ^^^^^^^^^^^^^^
-2026-08-28 01:14:18:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
-2026-08-28 01:14:18:     ensure_multipart_is_installed()
-2026-08-28 01:14:18:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
-2026-08-28 01:14:18:     raise RuntimeError(multipart_not_installed_error) from None
-2026-08-28 01:14:18: RuntimeError: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:18: You can install "python-multipart" with: 
-2026-08-28 01:14:18: 
-2026-08-28 01:14:18: pip install python-multipart
-2026-08-28 01:14:18: 
-2026-08-28 01:14:20: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:20: You can install "python-multipart" with: 
-2026-08-28 01:14:20: 
-2026-08-28 01:14:20: pip install python-multipart
-2026-08-28 01:14:20: 
-2026-08-28 01:14:20: Traceback (most recent call last):
-2026-08-28 01:14:20:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
-2026-08-28 01:14:20:     @app.post("/planning/tasks/{task_id}/decompose")
-2026-08-28 01:14:20:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:20:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
-2026-08-28 01:14:20:     self.add_api_route(
-2026-08-28 01:14:20:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
-2026-08-28 01:14:20:     route = route_class(
-2026-08-28 01:14:20:             ^^^^^^^^^^^^
-2026-08-28 01:14:20:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
-2026-08-28 01:14:20:     self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
-2026-08-28 01:14:20:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:20:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
-2026-08-28 01:14:20:     param_details = analyze_param(
-2026-08-28 01:14:20:                     ^^^^^^^^^^^^^^
-2026-08-28 01:14:20:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
-2026-08-28 01:14:20:     ensure_multipart_is_installed()
-2026-08-28 01:14:20:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
-2026-08-28 01:14:20:     raise RuntimeError(multipart_not_installed_error) from None
-2026-08-28 01:14:20: RuntimeError: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:20: You can install "python-multipart" with: 
-2026-08-28 01:14:20: 
-2026-08-28 01:14:20: pip install python-multipart
-2026-08-28 01:14:20: 
-2026-08-28 01:14:22: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:22: You can install "python-multipart" with: 
-2026-08-28 01:14:22: 
-2026-08-28 01:14:22: pip install python-multipart
-2026-08-28 01:14:22: 
-2026-08-28 01:14:22: Traceback (most recent call last):
-2026-08-28 01:14:22:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
-2026-08-28 01:14:22:     
-2026-08-28 01:14:22: @app.post("/planning/tasks/{task_id}/decompose")
-2026-08-28 01:14:22:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:22:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
-2026-08-28 01:14:22:     
-2026-08-28 01:14:22: self.add_api_route(
-2026-08-28 01:14:22:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
-2026-08-28 01:14:22:     
-2026-08-28 01:14:22: route = route_class(
-2026-08-28 01:14:22: 
-2026-08-28 01:14:22:             ^^^^^^^^^^^^
-2026-08-28 01:14:22:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
-2026-08-28 01:14:22:     self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
-2026-08-28 01:14:22:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:22:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
-2026-08-28 01:14:22:     param_details = analyze_param(
-2026-08-28 01:14:22: ^^^
-2026-08-28 01:14:22:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
-2026-08-28 01:14:22:     ensure_multipart_is_installed()
-2026-08-28 01:14:22:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
-2026-08-28 01:14:22:     raise RuntimeError(multipart_not_installed_error) from None
-2026-08-28 01:14:22: RuntimeError
-2026-08-28 01:14:22: : Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:22: You can install "python-multipart" with: 
-2026-08-28 01:14:22: 
-2026-08-28 01:14:22: pip install python-multipart
-2026-08-28 01:14:22: 
-2026-08-28 01:14:23: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:23: You can install "python-multipart" with: 
-2026-08-28 01:14:23: 
-2026-08-28 01:14:23: pip install python-multipart
-2026-08-28 01:14:23: 
-2026-08-28 01:14:23: Traceback (most recent call last):
-2026-08-28 01:14:23:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
-2026-08-28 01:14:23:     @app.post("/planning/tasks/{task_id}/decompose")
-2026-08-28 01:14:23:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:23:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
-2026-08-28 01:14:23:     self.add_api_route(
-2026-08-28 01:14:23:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
-2026-08-28 01:14:23:     route = route_class(
-2026-08-28 01:14:23:             ^^^^^^^^^^^^
-2026-08-28 01:14:23:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
-2026-08-28 01:14:23:     self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
-2026-08-28 01:14:23:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:23:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
-2026-08-28 01:14:23:     param_details = analyze_param(
-2026-08-28 01:14:23:   ^^^^^^^^^^^^^^
-2026-08-28 01:14:23:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
-2026-08-28 01:14:23:     ensure_multipart_is_installed()
-2026-08-28 01:14:23:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
-2026-08-28 01:14:23:     raise RuntimeError(multipart_not_installed_error) from None
-2026-08-28 01:14:23: RuntimeError: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:23: You can install "python-multipart" with: 
-2026-08-28 01:14:23: 
-2026-08-28 01:14:23: pip install python-multipart
-2026-08-28 01:14:23: 
-2026-08-28 01:14:25: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:25: You can install "python-multipart" with: 
-2026-08-28 01:14:25: 
-2026-08-28 01:14:25: pip install python-multipart
-2026-08-28 01:14:25: 
-2026-08-28 01:14:25: Traceback (most recent call last):
-2026-08-28 01:14:25:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
-2026-08-28 01:14:25:     
-2026-08-28 01:14:25: @app.post("/planning/tasks/{task_id}/decompose")
-2026-08-28 01:14:25:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
-2026-08-28 01:14:25:     self.add_api_route(
-2026-08-28 01:14:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
-2026-08-28 01:14:25:     route = route_class(
-2026-08-28 01:14:25:             ^^^^^^^^^^^^
-2026-08-28 01:14:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
-2026-08-28 01:14:25:     self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
-2026-08-28 01:14:25:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
-2026-08-28 01:14:25:     param_details = analyze_param(
-2026-08-28 01:14:25:                     ^^^^^^^^^^^^^^
-2026-08-28 01:14:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
-2026-08-28 01:14:25:     ensure_multipart_is_installed()
-2026-08-28 01:14:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
-2026-08-28 01:14:25:     raise RuntimeError(multipart_not_installed_error) from None
-2026-08-28 01:14:25: RuntimeError: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:25: You can install "python-multipart" with: 
-2026-08-28 01:14:25: 
-2026-08-28 01:14:25: pip install python-multipart
-2026-08-28 01:14:25: 
-2026-08-28 01:14:27: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:27: You can install "python-multipart" with: 
-2026-08-28 01:14:27: 
-2026-08-28 01:14:27: pip install python-multipart
-2026-08-28 01:14:27: 
-2026-08-28 01:14:27: Traceback (most recent call last):
-2026-08-28 01:14:27:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
-2026-08-28 01:14:27:     @app.post("/planning/tasks/{task_id}/decompose")
-2026-08-28 01:14:27:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:27:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
-2026-08-28 01:14:27:     self.add_api_route(
-2026-08-28 01:14:27:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
-2026-08-28 01:14:27:     route = route_class(
-2026-08-28 01:14:27:             ^^^^^^^^^^^^
-2026-08-28 01:14:27:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
-2026-08-28 01:14:27:     
-2026-08-28 01:14:27: self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
-2026-08-28 01:14:27:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:27:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
-2026-08-28 01:14:27:     param_details = analyze_param(
-2026-08-28 01:14:27:                     ^^^^^^^^^^^^^^
-2026-08-28 01:14:27:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
-2026-08-28 01:14:27:     ensure_multipart_is_installed()
-2026-08-28 01:14:27:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
-2026-08-28 01:14:27:     raise RuntimeError(multipart_not_installed_error) from None
-2026-08-28 01:14:27: RuntimeError: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:27: You can install "python-multipart" with: 
-2026-08-28 01:14:27: 
-2026-08-28 01:14:27: pip install python-multipart
-2026-08-28 01:14:27: 
-2026-08-28 01:14:28: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:28: You can install "python-multipart" with: 
-2026-08-28 01:14:28: 
-2026-08-28 01:14:28: pip install python-multipart
-2026-08-28 01:14:28: 
-2026-08-28 01:14:28: Traceback (most recent call last):
-2026-08-28 01:14:28:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
-2026-08-28 01:14:28:     @app.post("/planning/tasks/{task_id}/decompose")
-2026-08-28 01:14:28:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
-2026-08-28 01:14:28:     self.add_api_route(
-2026-08-28 01:14:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
-2026-08-28 01:14:28:     route = route_class(
-2026-08-28 01:14:28:             ^^^^^^^^^^^^
-2026-08-28 01:14:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
-2026-08-28 01:14:28:     
-2026-08-28 01:14:28: self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
-2026-08-28 01:14:28:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
-2026-08-28 01:14:28:     param_details = analyze_param(
-2026-08-28 01:14:28:                     ^^^^^^^^^^^^^^
-2026-08-28 01:14:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
-2026-08-28 01:14:28:     ensure_multipart_is_installed()
-2026-08-28 01:14:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
-2026-08-28 01:14:28:     raise RuntimeError(multipart_not_installed_error) from None
-2026-08-28 01:14:28: RuntimeError: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:28: You can install "python-multipart" with: 
-2026-08-28 01:14:28: 
-2026-08-28 01:14:28: pip install python-multipart
-2026-08-28 01:14:28: 
-2026-08-28 01:14:30: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:30: You can install "python-multipart" with: 
-2026-08-28 01:14:30: 
-2026-08-28 01:14:30: pip install python-multipart
-2026-08-28 01:14:30: 
-2026-08-28 01:14:30: Traceback (most recent call last):
-2026-08-28 01:14:30:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
-2026-08-28 01:14:30:     @app.post("/planning/tasks/{task_id}/decompose")
-2026-08-28 01:14:30:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
-2026-08-28 01:14:30:     self.add_api_route(
-2026-08-28 01:14:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
-2026-08-28 01:14:30:     route = route_class(
-2026-08-28 01:14:30: ^^^^^^^^^
-2026-08-28 01:14:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
-2026-08-28 01:14:30:     self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
-2026-08-28 01:14:30:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
-2026-08-28 01:14:30:     param_details = analyze_param(
-2026-08-28 01:14:30:                     ^^^^^^^^^^^^^^
-2026-08-28 01:14:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
-2026-08-28 01:14:30:     ensure_multipart_is_installed()
-2026-08-28 01:14:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
-2026-08-28 01:14:30:     raise RuntimeError(multipart_not_installed_error) from None
-2026-08-28 01:14:30: RuntimeError: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:30: You can install "python-multipart" with: 
-2026-08-28 01:14:30: 
-2026-08-28 01:14:30: pip install python-multipart
-2026-08-28 01:14:30: 
-2026-08-28 01:14:31: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:31: You can install "python-multipart" with: 
-2026-08-28 01:14:31: 
-2026-08-28 01:14:31: pip install python-multipart
-2026-08-28 01:14:31: 
-2026-08-28 01:14:31: Traceback (most recent call last):
-2026-08-28 01:14:31:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
-2026-08-28 01:14:31:     
-2026-08-28 01:14:31: @app.post("/planning/tasks/{task_id}/decompose")
-2026-08-28 01:14:31:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
-2026-08-28 01:14:31:     self.add_api_route(
-2026-08-28 01:14:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
-2026-08-28 01:14:31:     route = route_class(
-2026-08-28 01:14:31: ^^^^^^^
-2026-08-28 01:14:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
-2026-08-28 01:14:31:     self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
-2026-08-28 01:14:31:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 01:14:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
-2026-08-28 01:14:31:     param_details = analyze_param(
-2026-08-28 01:14:31: ^^^^^^
-2026-08-28 01:14:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
-2026-08-28 01:14:31:     ensure_multipart_is_installed()
-2026-08-28 01:14:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
-2026-08-28 01:14:31:     raise RuntimeError(multipart_not_installed_error) from None
-2026-08-28 01:14:31: RuntimeError: Form data requires "python-multipart" to be installed. 
-2026-08-28 01:14:31: You can install "python-multipart" with: 
-2026-08-28 01:14:31: 
-2026-08-28 01:14:31: pip install python-multipart
-2026-08-28 01:14:31: 
-2026-08-28 01:15:16: INFO:     Started server process [24960]
-2026-08-28 01:15:16: INFO:     Waiting for application startup.
-2026-08-28 01:15:16: INFO:     Application startup complete.
-2026-08-28 01:15:16: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-28 01:27:52: INFO:     Shutting down
-2026-08-28 01:27:52: INFO:     Waiting for application shutdown.
-2026-08-28 01:27:52: INFO:     Application shutdown complete.
-2026-08-28 01:27:52: INFO:     Finished server process [24960]
-2026-08-28 01:27:57: INFO:     Started server process [4784]
-2026-08-28 01:27:57: INFO:     Waiting for application startup.
-2026-08-28 01:27:57: INFO:     Application startup complete.
-2026-08-28 01:27:57: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-28 01:29:59: INFO:     Shutting down
-2026-08-28 01:29:59: INFO:     Waiting for application shutdown.
-2026-08-28 01:29:59: INFO:     Application shutdown complete.
-2026-08-28 01:29:59: INFO:     Finished server process [4784]
-2026-08-28 01:30:03: INFO:     Started server process [5960]
-2026-08-28 01:30:03: INFO:     Waiting for application startup.
-2026-08-28 01:30:03: INFO:     Application startup complete.
-2026-08-28 01:30:03: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-28 02:42:00: INFO:     Shutting down
-2026-08-28 02:42:00: INFO:     Waiting for application shutdown.
-2026-08-28 02:42:00: INFO:     Application shutdown complete.
-2026-08-28 02:42:00: INFO:     Finished server process [5960]
-2026-08-28 02:42:01:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:42:01:     sync = get_cloud_sync()
-2026-08-28 02:42:01: IndentationError: unexpected indent
-2026-08-28 02:42:05:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:42:05:     sync = get_cloud_sync()
-2026-08-28 02:42:05: IndentationError: unexpected indent
-2026-08-28 02:42:09:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:42:09:     sync = get_cloud_sync()
-2026-08-28 02:42:09: IndentationError: unexpected indent
-2026-08-28 02:42:13:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:42:13:     sync = get_cloud_sync()
-2026-08-28 02:42:13: IndentationError: unexpected indent
-2026-08-28 02:42:17:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:42:17:     sync = get_cloud_sync()
-2026-08-28 02:42:17: IndentationError: unexpected indent
-2026-08-28 02:42:21:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:42:21:     sync = get_cloud_sync()
-2026-08-28 02:42:21: IndentationError: unexpected indent
-2026-08-28 02:42:25:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:42:25:     sync = get_cloud_sync()
-2026-08-28 02:42:25: IndentationError: unexpected indent
-2026-08-28 02:42:30:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:42:30:     sync = get_cloud_sync()
-2026-08-28 02:42:30: IndentationError: unexpected indent
-2026-08-28 02:42:34:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:42:34:     sync = get_cloud_sync()
-2026-08-28 02:42:34: IndentationError: unexpected indent
-2026-08-28 02:42:38:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:42:38:     sync = get_cloud_sync()
-2026-08-28 02:42:38: IndentationError: unexpected indent
-2026-08-28 02:42:42:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:42:42:     sync = get_cloud_sync()
-2026-08-28 02:42:42: IndentationError: unexpected indent
-2026-08-28 02:42:46:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:42:46:     sync = get_cloud_sync()
-2026-08-28 02:42:46: IndentationError: unexpected indent
-2026-08-28 02:42:50:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:42:50:     sync = get_cloud_sync()
-2026-08-28 02:42:50: IndentationError: unexpected indent
-2026-08-28 02:42:54:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:42:54:     sync = get_cloud_sync()
-2026-08-28 02:42:54: IndentationError: unexpected indent
-2026-08-28 02:42:59:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:42:59:     sync = get_cloud_sync()
-2026-08-28 02:42:59: IndentationError: unexpected indent
-2026-08-28 02:43:03:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:43:03:     sync = get_cloud_sync()
-2026-08-28 02:43:03: IndentationError: unexpected indent
-2026-08-28 02:43:07:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:43:07:     sync = get_cloud_sync()
-2026-08-28 02:43:07: IndentationError: unexpected indent
-2026-08-28 02:43:11:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:43:11:     sync = get_cloud_sync()
-2026-08-28 02:43:11: IndentationError: unexpected indent
-2026-08-28 02:43:15:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:43:15:     sync = get_cloud_sync()
-2026-08-28 02:43:15: IndentationError: unexpected indent
-2026-08-28 02:43:19:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
-2026-08-28 02:43:19:     sync = get_cloud_sync()
-2026-08-28 02:43:19: IndentationError: unexpected indent
-2026-08-28 02:44:56: INFO:     Started server process [19726]
-2026-08-28 02:44:56: INFO:     Waiting for application startup.
-2026-08-28 02:44:56: INFO:     Application startup complete.
-2026-08-28 02:44:56: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-28 02:45:28: ERROR:    Exception in ASGI application
-2026-08-28 02:45:28:   + Exception Group Traceback (most recent call last):
-2026-08-28 02:45:28:   |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_utils.py", line 76, in collapse_excgroups
-2026-08-28 02:45:28:   |     yield
-2026-08-28 02:45:28:   |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 186, in __call__
-2026-08-28 02:45:28:   |     async with anyio.create_task_group() as task_group:
-2026-08-28 02:45:28:   |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/anyio/_backends/_asyncio.py", line 815, in __aexit__
-2026-08-28 02:45:28:   |     raise BaseExceptionGroup(
-2026-08-28 02:45:28:   | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
-2026-08-28 02:45:28:   +-+---------------- 1 ----------------
-2026-08-28 02:45:28:     | Traceback (most recent call last):
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/uvicorn/protocols/http/h11_impl.py", line 416, in run_asgi
-2026-08-28 02:45:28:     |     result = await app(  # type: ignore[func-returns-value]
-2026-08-28 02:45:28:     |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 63, in __call__
-2026-08-28 02:45:28:     |     return await self.app(scope, receive, send)
-2026-08-28 02:45:28:     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 1054, in __call__
-2026-08-28 02:45:28:     |     await super().__call__(scope, receive, send)
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/applications.py", line 113, in __call__
-2026-08-28 02:45:28:     |     await self.middleware_stack(scope, receive, send)
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/errors.py", line 187, in __call__
-2026-08-28 02:45:28:     |     raise exc
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/errors.py", line 165, in __call__
-2026-08-28 02:45:28:     |     await self.app(scope, receive, _send)
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 185, in __call__
-2026-08-28 02:45:28:     |     with collapse_excgroups():
-2026-08-28 02:45:28:     |   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/contextlib.py", line 158, in __exit__
-2026-08-28 02:45:28:     |     self.gen.throw(typ, value, traceback)
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_utils.py", line 82, in collapse_excgroups
-2026-08-28 02:45:28:     |     raise exc
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 187, in __call__
-2026-08-28 02:45:28:     |     response = await self.dispatch_func(request, call_next)
-2026-08-28 02:45:28:     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 55, in track_requests
-2026-08-28 02:45:28:     |     response = await call_next(request)
-2026-08-28 02:45:28:     |                ^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 163, in call_next
-2026-08-28 02:45:28:     |     raise app_exc
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 149, in coro
-2026-08-28 02:45:28:     |     await self.app(scope, receive_or_disconnect, send_no_error)
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
-2026-08-28 02:45:28:     |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-2026-08-28 02:45:28:     |     raise exc
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-2026-08-28 02:45:28:     |     await app(scope, receive, sender)
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 715, in __call__
-2026-08-28 02:45:28:     |     await self.middleware_stack(scope, receive, send)
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 735, in app
-2026-08-28 02:45:28:     |     await route.handle(scope, receive, send)
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 288, in handle
-2026-08-28 02:45:28:     |     await self.app(scope, receive, send)
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 76, in app
-2026-08-28 02:45:28:     |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-2026-08-28 02:45:28:     |     raise exc
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-2026-08-28 02:45:28:     |     await app(scope, receive, sender)
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 73, in app
-2026-08-28 02:45:28:     |     response = await f(request)
-2026-08-28 02:45:28:     |                ^^^^^^^^^^^^^^^^
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 301, in app
-2026-08-28 02:45:28:     |     raw_response = await run_endpoint_function(
-2026-08-28 02:45:28:     |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
-2026-08-28 02:45:28:     |     return await dependant.call(**values)
-2026-08-28 02:45:28:     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 525, in telegram_commands
-2026-08-28 02:45:28:     |     return {"commands": bot.get_commands()}
-2026-08-28 02:45:28:     |                         ^^^^^^^^^^^^^^^^
-2026-08-28 02:45:28:     | AttributeError: 'TelegramBot' object has no attribute 'get_commands'
-2026-08-28 02:45:28:     +------------------------------------
-2026-08-28 02:45:28: 
-2026-08-28 02:45:28: During handling of the above exception, another exception occurred:
-2026-08-28 02:45:28: 
-2026-08-28 02:45:28: Traceback (most recent call last):
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/uvicorn/protocols/http/h11_impl.py", line 416, in run_asgi
-2026-08-28 02:45:28:     result = await app(  # type: ignore[func-returns-value]
-2026-08-28 02:45:28:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 63, in __call__
-2026-08-28 02:45:28:     return await self.app(scope, receive, send)
-2026-08-28 02:45:28:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 1054, in __call__
-2026-08-28 02:45:28:     await super().__call__(scope, receive, send)
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/applications.py", line 113, in __call__
-2026-08-28 02:45:28:     await self.middleware_stack(scope, receive, send)
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/errors.py", line 187, in __call__
-2026-08-28 02:45:28:     raise exc
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/errors.py", line 165, in __call__
-2026-08-28 02:45:28:     await self.app(scope, receive, _send)
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 185, in __call__
-2026-08-28 02:45:28:     with collapse_excgroups():
-2026-08-28 02:45:28:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/contextlib.py", line 158, in __exit__
-2026-08-28 02:45:28:     self.gen.throw(typ, value, traceback)
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_utils.py", line 82, in collapse_excgroups
-2026-08-28 02:45:28:     raise exc
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 187, in __call__
-2026-08-28 02:45:28:     response = await self.dispatch_func(request, call_next)
-2026-08-28 02:45:28:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 55, in track_requests
-2026-08-28 02:45:28:     response = await call_next(request)
-2026-08-28 02:45:28:                ^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 163, in call_next
-2026-08-28 02:45:28:     raise app_exc
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 149, in coro
-2026-08-28 02:45:28:     await self.app(scope, receive_or_disconnect, send_no_error)
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
-2026-08-28 02:45:28:     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-2026-08-28 02:45:28:     raise exc
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-2026-08-28 02:45:28:     await app(scope, receive, sender)
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 715, in __call__
-2026-08-28 02:45:28:     await self.middleware_stack(scope, receive, send)
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 735, in app
-2026-08-28 02:45:28:     await route.handle(scope, receive, send)
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 288, in handle
-2026-08-28 02:45:28:     await self.app(scope, receive, send)
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 76, in app
-2026-08-28 02:45:28:     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-2026-08-28 02:45:28:     raise exc
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-2026-08-28 02:45:28:     await app(scope, receive, sender)
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 73, in app
-2026-08-28 02:45:28:     response = await f(request)
-2026-08-28 02:45:28:                ^^^^^^^^^^^^^^^^
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 301, in app
-2026-08-28 02:45:28:     raw_response = await run_endpoint_function(
-2026-08-28 02:45:28:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
-2026-08-28 02:45:28:     return await dependant.call(**values)
-2026-08-28 02:45:28:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 525, in telegram_commands
-2026-08-28 02:45:28:     return {"commands": bot.get_commands()}
-2026-08-28 02:45:28:                         ^^^^^^^^^^^^^^^^
-2026-08-28 02:45:28: AttributeError: 'TelegramBot' object has no attribute 'get_commands'
-2026-08-28 02:45:41: ERROR:    Exception in ASGI application
-2026-08-28 02:45:41:   + Exception Group Traceback (most recent call last):
-2026-08-28 02:45:41:   |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_utils.py", line 76, in collapse_excgroups
-2026-08-28 02:45:41:   |     yield
-2026-08-28 02:45:41:   |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 186, in __call__
-2026-08-28 02:45:41:   |     async with anyio.create_task_group() as task_group:
-2026-08-28 02:45:41:   |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/anyio/_backends/_asyncio.py", line 815, in __aexit__
-2026-08-28 02:45:41:   |     raise BaseExceptionGroup(
-2026-08-28 02:45:41:   | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
-2026-08-28 02:45:41:   +-+---------------- 1 ----------------
-2026-08-28 02:45:41:     | Traceback (most recent call last):
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/uvicorn/protocols/http/h11_impl.py", line 416, in run_asgi
-2026-08-28 02:45:41:     |     result = await app(  # type: ignore[func-returns-value]
-2026-08-28 02:45:41:     |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 63, in __call__
-2026-08-28 02:45:41:     |     return await self.app(scope, receive, send)
-2026-08-28 02:45:41:     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 1054, in __call__
-2026-08-28 02:45:41:     |     await super().__call__(scope, receive, send)
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/applications.py", line 113, in __call__
-2026-08-28 02:45:41:     |     await self.middleware_stack(scope, receive, send)
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/errors.py", line 187, in __call__
-2026-08-28 02:45:41:     |     raise exc
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/errors.py", line 165, in __call__
-2026-08-28 02:45:41:     |     await self.app(scope, receive, _send)
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 185, in __call__
-2026-08-28 02:45:41:     |     with collapse_excgroups():
-2026-08-28 02:45:41:     |   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/contextlib.py", line 158, in __exit__
-2026-08-28 02:45:41:     |     self.gen.throw(typ, value, traceback)
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_utils.py", line 82, in collapse_excgroups
-2026-08-28 02:45:41:     |     raise exc
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 187, in __call__
-2026-08-28 02:45:41:     |     response = await self.dispatch_func(request, call_next)
-2026-08-28 02:45:41:     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 55, in track_requests
-2026-08-28 02:45:41:     |     response = await call_next(request)
-2026-08-28 02:45:41:     |                ^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 163, in call_next
-2026-08-28 02:45:41:     |     raise app_exc
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 149, in coro
-2026-08-28 02:45:41:     |     await self.app(scope, receive_or_disconnect, send_no_error)
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
-2026-08-28 02:45:41:     |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-2026-08-28 02:45:41:     |     raise exc
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-2026-08-28 02:45:41:     |     await app(scope, receive, sender)
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 715, in __call__
-2026-08-28 02:45:41:     |     await self.middleware_stack(scope, receive, send)
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 735, in app
-2026-08-28 02:45:41:     |     await route.handle(scope, receive, send)
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 288, in handle
-2026-08-28 02:45:41:     |     await self.app(scope, receive, send)
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 76, in app
-2026-08-28 02:45:41:     |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-2026-08-28 02:45:41:     |     raise exc
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-2026-08-28 02:45:41:     |     await app(scope, receive, sender)
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 73, in app
-2026-08-28 02:45:41:     |     response = await f(request)
-2026-08-28 02:45:41:     |                ^^^^^^^^^^^^^^^^
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 301, in app
-2026-08-28 02:45:41:     |     raw_response = await run_endpoint_function(
-2026-08-28 02:45:41:     |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
-2026-08-28 02:45:41:     |     return await dependant.call(**values)
-2026-08-28 02:45:41:     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 525, in telegram_commands
-2026-08-28 02:45:41:     |     return {"commands": bot.get_commands()}
-2026-08-28 02:45:41:     |                         ^^^^^^^^^^^^^^^^
-2026-08-28 02:45:41:     | AttributeError: 'TelegramBot' object has no attribute 'get_commands'
-2026-08-28 02:45:41:     +------------------------------------
-2026-08-28 02:45:41: 
-2026-08-28 02:45:41: During handling of the above exception, another exception occurred:
-2026-08-28 02:45:41: 
-2026-08-28 02:45:41: Traceback (most recent call last):
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/uvicorn/protocols/http/h11_impl.py", line 416, in run_asgi
-2026-08-28 02:45:41:     result = await app(  # type: ignore[func-returns-value]
-2026-08-28 02:45:41:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 63, in __call__
-2026-08-28 02:45:41:     return await self.app(scope, receive, send)
-2026-08-28 02:45:41:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 1054, in __call__
-2026-08-28 02:45:41:     await super().__call__(scope, receive, send)
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/applications.py", line 113, in __call__
-2026-08-28 02:45:41:     await self.middleware_stack(scope, receive, send)
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/errors.py", line 187, in __call__
-2026-08-28 02:45:41:     raise exc
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/errors.py", line 165, in __call__
-2026-08-28 02:45:41:     await self.app(scope, receive, _send)
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 185, in __call__
-2026-08-28 02:45:41:     with collapse_excgroups():
-2026-08-28 02:45:41:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/contextlib.py", line 158, in __exit__
-2026-08-28 02:45:41:     self.gen.throw(typ, value, traceback)
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_utils.py", line 82, in collapse_excgroups
-2026-08-28 02:45:41:     raise exc
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 187, in __call__
-2026-08-28 02:45:41:     response = await self.dispatch_func(request, call_next)
-2026-08-28 02:45:41:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 55, in track_requests
-2026-08-28 02:45:41:     response = await call_next(request)
-2026-08-28 02:45:41:                ^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 163, in call_next
-2026-08-28 02:45:41:     raise app_exc
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 149, in coro
-2026-08-28 02:45:41:     await self.app(scope, receive_or_disconnect, send_no_error)
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
-2026-08-28 02:45:41:     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-2026-08-28 02:45:41:     raise exc
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-2026-08-28 02:45:41:     await app(scope, receive, sender)
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 715, in __call__
-2026-08-28 02:45:41:     await self.middleware_stack(scope, receive, send)
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 735, in app
-2026-08-28 02:45:41:     await route.handle(scope, receive, send)
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 288, in handle
-2026-08-28 02:45:41:     await self.app(scope, receive, send)
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 76, in app
-2026-08-28 02:45:41:     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-2026-08-28 02:45:41:     raise exc
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-2026-08-28 02:45:41:     await app(scope, receive, sender)
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 73, in app
-2026-08-28 02:45:41:     response = await f(request)
-2026-08-28 02:45:41:                ^^^^^^^^^^^^^^^^
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 301, in app
-2026-08-28 02:45:41:     raw_response = await run_endpoint_function(
-2026-08-28 02:45:41:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
-2026-08-28 02:45:41:     return await dependant.call(**values)
-2026-08-28 02:45:41:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 525, in telegram_commands
-2026-08-28 02:45:41:     return {"commands": bot.get_commands()}
-2026-08-28 02:45:41:                         ^^^^^^^^^^^^^^^^
-2026-08-28 02:45:41: AttributeError: 'TelegramBot' object has no attribute 'get_commands'
-2026-08-28 02:47:48: INFO:     Shutting down
-2026-08-28 02:47:48: INFO:     Waiting for application shutdown.
-2026-08-28 02:47:48: INFO:     Application shutdown complete.
-2026-08-28 02:47:48: INFO:     Finished server process [19726]
-2026-08-28 02:47:50: INFO:     Started server process [22579]
-2026-08-28 02:47:50: INFO:     Waiting for application startup.
-2026-08-28 02:47:50: INFO:     Application startup complete.
-2026-08-28 02:47:50: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-28 11:12:20: INFO:     Shutting down
-2026-08-28 11:12:20: INFO:     Waiting for application shutdown.
-2026-08-28 11:12:20: INFO:     Application shutdown complete.
-2026-08-28 11:12:20: INFO:     Finished server process [22579]
-2026-08-28 11:12:25: INFO:     Started server process [13737]
-2026-08-28 11:12:25: INFO:     Waiting for application startup.
-2026-08-28 11:12:25: INFO:     Application startup complete.
-2026-08-28 11:12:25: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-28 11:13:27: INFO:     Shutting down
-2026-08-28 11:13:27: INFO:     Waiting for application shutdown.
-2026-08-28 11:13:27: INFO:     Application shutdown complete.
-2026-08-28 11:13:27: INFO:     Finished server process [13737]
-2026-08-28 11:13:30: INFO:     Started server process [13960]
-2026-08-28 11:13:30: INFO:     Waiting for application startup.
-2026-08-28 11:13:30: INFO:     Application startup complete.
-2026-08-28 11:13:30: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-28 11:44:39: INFO:     Shutting down
-2026-08-28 11:44:39: INFO:     Waiting for application shutdown.
-2026-08-28 11:44:39: INFO:     Application shutdown complete.
-2026-08-28 11:44:39: INFO:     Finished server process [13960]
-2026-08-28 11:44:42: INFO:     Started server process [21215]
-2026-08-28 11:44:42: INFO:     Waiting for application startup.
-2026-08-28 11:44:42: INFO:     Application startup complete.
-2026-08-28 11:44:42: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
-2026-08-28 11:55:39: INFO:     Shutting down
-2026-08-28 11:55:39: INFO:     Waiting for application shutdown.
-2026-08-28 11:55:39: INFO:     Application shutdown complete.
-2026-08-28 11:55:39: INFO:     Finished server process [21215]
-2026-08-28 11:55:44: INFO:     Started server process [18545]
-2026-08-28 11:55:44: INFO:     Waiting for application startup.
-2026-08-28 11:55:44: INFO:     Application startup complete.
-2026-08-28 11:55:44: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-28 12:50:51: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:50:51:   from fastapi.exception_handlers import (
+2026-08-28 12:50:51: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:50:51:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:50:52: Traceback (most recent call last):
+2026-08-28 12:50:52:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:50:52:     
+2026-08-28 12:50:52: app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:50:52:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:50:52:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:50:52:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:50:52:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:50:52:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:50:52:     super().__init__(
+2026-08-28 12:50:52: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:50:57: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:50:57:   from fastapi.exception_handlers import (
+2026-08-28 12:50:57: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:50:57:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:50:57: Traceback (most recent call last):
+2026-08-28 12:50:57:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:50:57:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:50:57:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:50:57:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:50:57:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:50:57:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:50:57:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:50:57:     super().__init__(
+2026-08-28 12:50:57: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:51:02: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:02:   from fastapi.exception_handlers import (
+2026-08-28 12:51:02: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:02:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:51:02: Traceback (most recent call last):
+2026-08-28 12:51:02:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:51:02:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:51:02:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:02:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:51:02:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:51:02:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:02:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:51:02:     super().__init__(
+2026-08-28 12:51:02: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:51:07: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:07:   from fastapi.exception_handlers import (
+2026-08-28 12:51:07: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:07:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:51:07: Traceback (most recent call last):
+2026-08-28 12:51:07:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:51:07:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:51:07:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:51:07:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:51:07:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:51:07:     super().__init__(
+2026-08-28 12:51:07: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:51:16: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:16:   from fastapi.exception_handlers import (
+2026-08-28 12:51:16: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:16:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:51:16: Traceback (most recent call last):
+2026-08-28 12:51:16:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:51:16:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:51:16:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:16:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:51:16:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:51:16:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:16:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:51:16:     super().__init__(
+2026-08-28 12:51:16: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:51:21: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:21:   from fastapi.exception_handlers import (
+2026-08-28 12:51:21: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:21:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:51:21: Traceback (most recent call last):
+2026-08-28 12:51:21:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:51:21:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:51:21:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:51:21:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:51:21:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:51:21:     super().__init__(
+2026-08-28 12:51:21: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:51:26: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:26:   from fastapi.exception_handlers import (
+2026-08-28 12:51:26: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:26:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:51:26: Traceback (most recent call last):
+2026-08-28 12:51:26:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:51:26:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:51:26:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:26:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:51:26:     
+2026-08-28 12:51:26: ] = webhooks or routing.APIRouter()
+2026-08-28 12:51:26:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:26:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:51:26:     super().__init__(
+2026-08-28 12:51:26: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:51:31: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:31:   from fastapi.exception_handlers import (
+2026-08-28 12:51:31: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:31:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:51:32: Traceback (most recent call last):
+2026-08-28 12:51:32:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:51:32:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:51:32:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:32:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:51:32:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:51:32:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:32:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:51:32:     super().__init__(
+2026-08-28 12:51:32: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:51:37: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:37:   from fastapi.exception_handlers import (
+2026-08-28 12:51:37: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:37:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:51:37: Traceback (most recent call last):
+2026-08-28 12:51:37:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:51:37:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:51:37:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:37:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:51:37:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:51:37:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:37:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:51:37:     super().__init__(
+2026-08-28 12:51:37: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:51:42: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:42:   from fastapi.exception_handlers import (
+2026-08-28 12:51:42: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:42:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:51:42: Traceback (most recent call last):
+2026-08-28 12:51:42:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:51:42:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:51:42:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:42:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:51:42:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:51:42:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:42:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:51:42:     super().__init__(
+2026-08-28 12:51:42: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:51:47: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:47:   from fastapi.exception_handlers import (
+2026-08-28 12:51:47: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:47:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:51:47: Traceback (most recent call last):
+2026-08-28 12:51:47:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:51:47:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:51:47:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:47:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:51:47:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:51:47:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:47:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:51:47:     super().__init__(
+2026-08-28 12:51:47: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:51:52: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:52:   from fastapi.exception_handlers import (
+2026-08-28 12:51:52: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:52:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:51:52: Traceback (most recent call last):
+2026-08-28 12:51:52:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:51:52:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:51:52:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:52:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:51:52:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:51:52:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:52:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:51:52:     super().__init__(
+2026-08-28 12:51:52: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:51:57: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:57:   from fastapi.exception_handlers import (
+2026-08-28 12:51:57: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:51:57:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:51:57: Traceback (most recent call last):
+2026-08-28 12:51:57:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:51:57:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:51:57:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:57:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:51:57:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:51:57:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:51:57:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:51:57:     super().__init__(
+2026-08-28 12:51:57: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:52:02: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:52:02:   from fastapi.exception_handlers import (
+2026-08-28 12:52:02: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:52:02:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:52:02: Traceback (most recent call last):
+2026-08-28 12:52:02:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:52:02:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:52:02:    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:52:02:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:52:02:     
+2026-08-28 12:52:02: ] = webhooks or routing.APIRouter()
+2026-08-28 12:52:02:        
+2026-08-28 12:52:02:             
+2026-08-28 12:52:02:  ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:52:02:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:52:02:     
+2026-08-28 12:52:02: super().__init__(
+2026-08-28 12:52:02: : Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:52:07: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:52:07:   from fastapi.exception_handlers import (
+2026-08-28 12:52:08: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:52:08:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:52:08: Traceback (most recent call last):
+2026-08-28 12:52:08:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:52:08:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:52:08:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:52:08:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:52:08:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:52:08:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:52:08:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:52:08:     super().__init__(
+2026-08-28 12:52:08: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:52:13: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:52:13:   from fastapi.exception_handlers import (
+2026-08-28 12:52:13: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:52:13:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:52:13: Traceback (most recent call last):
+2026-08-28 12:52:13:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:52:13:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:52:13:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:52:13:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:52:13:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:52:13:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:52:13:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:52:13:     super().__init__(
+2026-08-28 12:52:13: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:52:18: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:52:18:   from fastapi.exception_handlers import (
+2026-08-28 12:52:18: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:52:18:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:52:18: Traceback (most recent call last):
+2026-08-28 12:52:18:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:52:18:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:52:18:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:52:18:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:52:18:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:52:18:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:52:18:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:52:18:     super().__init__(
+2026-08-28 12:52:18: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:52:23: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:52:23:   from fastapi.exception_handlers import (
+2026-08-28 12:52:23: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:52:23:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:52:23: Traceback (most recent call last):
+2026-08-28 12:52:23:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:52:23:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:52:23:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:52:23:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:52:23:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:52:23:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:52:23:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:52:23:     super().__init__(
+2026-08-28 12:52:23: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:52:28: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:52:28:   from fastapi.exception_handlers import (
+2026-08-28 12:52:28: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:52:28:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:52:28: Traceback (most recent call last):
+2026-08-28 12:52:28:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:52:28:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:52:28:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:52:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:52:28:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:52:28:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:52:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:52:28:     super().__init__(
+2026-08-28 12:52:28: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:52:33: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:18: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:52:33:   from fastapi.exception_handlers import (
+2026-08-28 12:52:33: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py:30: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+2026-08-28 12:52:33:   from fastapi.openapi.utils import get_openapi
+2026-08-28 12:52:33: Traceback (most recent call last):
+2026-08-28 12:52:33:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 46, in <module>
+2026-08-28 12:52:33:     app = FastAPI(title="Aeryn Daemon", version="40.55")
+2026-08-28 12:52:33:           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:52:33:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 896, in __init__
+2026-08-28 12:52:33:     ] = webhooks or routing.APIRouter()
+2026-08-28 12:52:33:                     ^^^^^^^^^^^^^^^^^^^
+2026-08-28 12:52:33:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 837, in __init__
+2026-08-28 12:52:33:     super().__init__(
+2026-08-28 12:52:33: TypeError: Router.__init__() got an unexpected keyword argument 'on_startup'
+2026-08-28 12:52:58: /home/sen/aeryn-core-agent/apps/api/aeryn_api.py:48: DeprecationWarning: 
+2026-08-28 12:52:58:         on_event is deprecated, use lifespan event handlers instead.
+2026-08-28 12:52:58: 
+2026-08-28 12:52:58:         Read more about it in the
+2026-08-28 12:52:58:         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+2026-08-28 12:52:58:         
+2026-08-28 12:52:58:   @app.on_event("startup")
+2026-08-28 12:52:59: INFO:     Started server process [19555]
+2026-08-28 12:52:59: INFO:     Waiting for application startup.
+2026-08-28 12:52:59: ERROR:    Traceback (most recent call last):
+2026-08-28 12:52:59:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 648, in lifespan
+2026-08-28 12:52:59:     async with self.lifespan_context(app) as maybe_state:
+2026-08-28 12:52:59:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 265, in __aenter__
+2026-08-28 12:52:59:     await self._router._startup()
+2026-08-28 12:52:59:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 6375, in _startup
+2026-08-28 12:52:59:     await handler()
+2026-08-28 12:52:59:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 51, in start_background_tasks
+2026-08-28 12:52:59:     task = asyncio.create_task(broadcast_loop())
+2026-08-28 12:52:59:            ^^^^^^^
+2026-08-28 12:52:59: NameError: name 'asyncio' is not defined
+2026-08-28 12:52:59: 
+2026-08-28 12:52:59: ERROR:    Application startup failed. Exiting.
+2026-08-28 12:53:04: /home/sen/aeryn-core-agent/apps/api/aeryn_api.py:48: DeprecationWarning: 
+2026-08-28 12:53:04:         on_event is deprecated, use lifespan event handlers instead.
+2026-08-28 12:53:04: 
+2026-08-28 12:53:04:         Read more about it in the
+2026-08-28 12:53:04:         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+2026-08-28 12:53:04:         
+2026-08-28 12:53:04:   @app.on_event("startup")
+2026-08-28 12:53:05: INFO:     Started server process [19568]
+2026-08-28 12:53:05: INFO:     Waiting for application startup.
+2026-08-28 12:53:05: ERROR:    Traceback (most recent call last):
+2026-08-28 12:53:05:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 648, in lifespan
+2026-08-28 12:53:05:     async with self.lifespan_context(app) as maybe_state:
+2026-08-28 12:53:05:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 265, in __aenter__
+2026-08-28 12:53:05:     await self._router._startup()
+2026-08-28 12:53:05:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 6375, in _startup
+2026-08-28 12:53:05:     await handler()
+2026-08-28 12:53:05:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 51, in start_background_tasks
+2026-08-28 12:53:05:     task = asyncio.create_task(broadcast_loop())
+2026-08-28 12:53:05:            ^^^^^^^
+2026-08-28 12:53:05: NameError: name 'asyncio' is not defined
+2026-08-28 12:53:05: 
+2026-08-28 12:53:05: ERROR:    Application startup failed. Exiting.
+2026-08-28 12:53:10: /home/sen/aeryn-core-agent/apps/api/aeryn_api.py:48: DeprecationWarning: 
+2026-08-28 12:53:10:         on_event is deprecated, use lifespan event handlers instead.
+2026-08-28 12:53:10: 
+2026-08-28 12:53:10:         Read more about it in the
+2026-08-28 12:53:10:         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+2026-08-28 12:53:10:         
+2026-08-28 12:53:10:   @app.on_event("startup")
+2026-08-28 12:53:10: INFO:     Started server process [19578]
+2026-08-28 12:53:10: INFO:     Waiting for application startup.
+2026-08-28 12:53:10: ERROR:    Traceback (most recent call last):
+2026-08-28 12:53:10:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 648, in lifespan
+2026-08-28 12:53:10:     async with self.lifespan_context(app) as maybe_state:
+2026-08-28 12:53:10:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 265, in __aenter__
+2026-08-28 12:53:10:     await self._router._startup()
+2026-08-28 12:53:10:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 6375, in _startup
+2026-08-28 12:53:10:     await handler()
+2026-08-28 12:53:10:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 51, in start_background_tasks
+2026-08-28 12:53:10:     task = asyncio.create_task(broadcast_loop())
+2026-08-28 12:53:10:            ^^^^^^^
+2026-08-28 12:53:10: NameError: name 'asyncio' is not defined
+2026-08-28 12:53:10: 
+2026-08-28 12:53:10: ERROR:    Application startup failed. Exiting.
+2026-08-28 12:53:15: /home/sen/aeryn-core-agent/apps/api/aeryn_api.py:48: DeprecationWarning: 
+2026-08-28 12:53:15:         on_event is deprecated, use lifespan event handlers instead.
+2026-08-28 12:53:15: 
+2026-08-28 12:53:15:         Read more about it in the
+2026-08-28 12:53:15:         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+2026-08-28 12:53:15:         
+2026-08-28 12:53:15:   @app.on_event("startup")
+2026-08-28 12:53:16: INFO:     Started server process [19591]
+2026-08-28 12:53:16: INFO:     Waiting for application startup.
+2026-08-28 12:53:16: ERROR:    Traceback (most recent call last):
+2026-08-28 12:53:16:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 648, in lifespan
+2026-08-28 12:53:16:     async with self.lifespan_context(app) as maybe_state:
+2026-08-28 12:53:16:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 265, in __aenter__
+2026-08-28 12:53:16:     await self._router._startup()
+2026-08-28 12:53:16:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 6375, in _startup
+2026-08-28 12:53:16:     await handler()
+2026-08-28 12:53:16:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 51, in start_background_tasks
+2026-08-28 12:53:16:     task = asyncio.create_task(broadcast_loop())
+2026-08-28 12:53:16:            ^^^^^^^
+2026-08-28 12:53:16: NameError: name 'asyncio' is not defined
+2026-08-28 12:53:16: 
+2026-08-28 12:53:16: ERROR:    Application startup failed. Exiting.
+2026-08-28 12:53:21: /home/sen/aeryn-core-agent/apps/api/aeryn_api.py:48: DeprecationWarning: 
+2026-08-28 12:53:21:         on_event is deprecated, use lifespan event handlers instead.
+2026-08-28 12:53:21: 
+2026-08-28 12:53:21:         Read more about it in the
+2026-08-28 12:53:21:         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+2026-08-28 12:53:21:         
+2026-08-28 12:53:21:   @app.on_event("startup")
+2026-08-28 12:53:21: INFO:     Started server process [19606]
+2026-08-28 12:53:21: INFO:     Waiting for application startup.
+2026-08-28 12:53:21: ERROR:    Traceback (most recent call last):
+2026-08-28 12:53:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 648, in lifespan
+2026-08-28 12:53:21:     async with self.lifespan_context(app) as maybe_state:
+2026-08-28 12:53:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 265, in __aenter__
+2026-08-28 12:53:21:     await self._router._startup()
+2026-08-28 12:53:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 6375, in _startup
+2026-08-28 12:53:21:     await handler()
+2026-08-28 12:53:21:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 51, in start_background_tasks
+2026-08-28 12:53:21:     task = asyncio.create_task(broadcast_loop())
+2026-08-28 12:53:21:            ^^^^^^^
+2026-08-28 12:53:21: NameError: name 'asyncio' is not defined
+2026-08-28 12:53:21: 
+2026-08-28 12:53:21: ERROR:    Application startup failed. Exiting.
+2026-08-28 12:53:26: /home/sen/aeryn-core-agent/apps/api/aeryn_api.py:48: DeprecationWarning: 
+2026-08-28 12:53:26:         on_event is deprecated, use lifespan event handlers instead.
+2026-08-28 12:53:26: 
+2026-08-28 12:53:26:         Read more about it in the
+2026-08-28 12:53:26:         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+2026-08-28 12:53:26:         
+2026-08-28 12:53:26:   @app.on_event("startup")
+2026-08-28 12:53:27: INFO:     Started server process [19632]
+2026-08-28 12:53:27: INFO:     Waiting for application startup.
+2026-08-28 12:53:27: ERROR:    Traceback (most recent call last):
+2026-08-28 12:53:27:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 648, in lifespan
+2026-08-28 12:53:27:     async with self.lifespan_context(app) as maybe_state:
+2026-08-28 12:53:27:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 265, in __aenter__
+2026-08-28 12:53:27:     await self._router._startup()
+2026-08-28 12:53:27:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 6375, in _startup
+2026-08-28 12:53:27:     await handler()
+2026-08-28 12:53:27:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 51, in start_background_tasks
+2026-08-28 12:53:27:     task = asyncio.create_task(broadcast_loop())
+2026-08-28 12:53:27:            ^^^^^^^
+2026-08-28 12:53:27: NameError: name 'asyncio' is not defined
+2026-08-28 12:53:27: 
+2026-08-28 12:53:27: ERROR:    Application startup failed. Exiting.
+2026-08-28 12:53:32: /home/sen/aeryn-core-agent/apps/api/aeryn_api.py:48: DeprecationWarning: 
+2026-08-28 12:53:32:         on_event is deprecated, use lifespan event handlers instead.
+2026-08-28 12:53:32: 
+2026-08-28 12:53:32:         Read more about it in the
+2026-08-28 12:53:32:         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+2026-08-28 12:53:32:         
+2026-08-28 12:53:32:   @app.on_event("startup")
+2026-08-28 12:53:32: INFO:     Started server process [19641]
+2026-08-28 12:53:32: INFO:     Waiting for application startup.
+2026-08-28 12:53:32: ERROR:    Traceback (most recent call last):
+2026-08-28 12:53:32:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 648, in lifespan
+2026-08-28 12:53:32:     async with self.lifespan_context(app) as maybe_state:
+2026-08-28 12:53:32:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 265, in __aenter__
+2026-08-28 12:53:32:     await self._router._startup()
+2026-08-28 12:53:32:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 6375, in _startup
+2026-08-28 12:53:32:     await handler()
+2026-08-28 12:53:32:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 51, in start_background_tasks
+2026-08-28 12:53:32:     task = asyncio.create_task(broadcast_loop())
+2026-08-28 12:53:32:            ^^^^^^^
+2026-08-28 12:53:32: NameError: name 'asyncio' is not defined
+2026-08-28 12:53:32: 
+2026-08-28 12:53:32: ERROR:    Application startup failed. Exiting.
+2026-08-28 12:53:37: /home/sen/aeryn-core-agent/apps/api/aeryn_api.py:48: DeprecationWarning: 
+2026-08-28 12:53:37:         on_event is deprecated, use lifespan event handlers instead.
+2026-08-28 12:53:37: 
+2026-08-28 12:53:37:         Read more about it in the
+2026-08-28 12:53:37:         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+2026-08-28 12:53:37:         
+2026-08-28 12:53:37:   @app.on_event("startup")
+2026-08-28 12:53:38: INFO:     Started server process [19648]
+2026-08-28 12:53:38: INFO:     Waiting for application startup.
+2026-08-28 12:53:38: ERROR:    Traceback (most recent call last):
+2026-08-28 12:53:38:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 648, in lifespan
+2026-08-28 12:53:38:     async with self.lifespan_context(app) as maybe_state:
+2026-08-28 12:53:38:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 265, in __aenter__
+2026-08-28 12:53:38:     await self._router._startup()
+2026-08-28 12:53:38:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 6375, in _startup
+2026-08-28 12:53:38:     await handler()
+2026-08-28 12:53:38:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 51, in start_background_tasks
+2026-08-28 12:53:38:     task = asyncio.create_task(broadcast_loop())
+2026-08-28 12:53:38:            ^^^^^^^
+2026-08-28 12:53:38: NameError: name 'asyncio' is not defined
+2026-08-28 12:53:38: 
+2026-08-28 12:53:38: ERROR:    Application startup failed. Exiting.
+2026-08-28 12:53:43: /home/sen/aeryn-core-agent/apps/api/aeryn_api.py:48: DeprecationWarning: 
+2026-08-28 12:53:43:         on_event is deprecated, use lifespan event handlers instead.
+2026-08-28 12:53:43: 
+2026-08-28 12:53:43:         Read more about it in the
+2026-08-28 12:53:43:         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+2026-08-28 12:53:43:         
+2026-08-28 12:53:43:   @app.on_event("startup")
+2026-08-28 12:53:43: INFO:     Started server process [19702]
+2026-08-28 12:53:43: INFO:     Waiting for application startup.
+2026-08-28 12:53:43: INFO:     Application startup complete.
+2026-08-28 12:53:43: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-28 12:53:51: INFO:     Shutting down
+2026-08-28 12:53:51: INFO:     Waiting for application shutdown.
+2026-08-28 12:53:51: INFO:     Application shutdown complete.
+2026-08-28 12:53:51: INFO:     Finished server process [19702]
+2026-08-28 12:53:52: /home/sen/aeryn-core-agent/apps/api/aeryn_api.py:48: DeprecationWarning: 
+2026-08-28 12:53:52:         on_event is deprecated, use lifespan event handlers instead.
+2026-08-28 12:53:52: 
+2026-08-28 12:53:52:         Read more about it in the
+2026-08-28 12:53:52:         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+2026-08-28 12:53:52:         
+2026-08-28 12:53:52:   @app.on_event("startup")
+2026-08-28 12:53:53: INFO:     Started server process [19767]
+2026-08-28 12:53:53: INFO:     Waiting for application startup.
+2026-08-28 12:53:53: INFO:     Application startup complete.
+2026-08-28 12:53:53: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-28 12:54:44: INFO:     127.0.0.1:45866 - "WebSocket /ws/dashboard" 403
+2026-08-28 12:54:44: INFO:     connection rejected (403 Forbidden)
+2026-08-28 12:55:54: INFO:     Shutting down
+2026-08-28 12:55:54: INFO:     Waiting for application shutdown.
+2026-08-28 12:55:54: INFO:     Application shutdown complete.
+2026-08-28 12:55:54: INFO:     Finished server process [19767]
+2026-08-28 12:55:57: /home/sen/aeryn-core-agent/apps/api/aeryn_api.py:48: DeprecationWarning: 
+2026-08-28 12:55:57:         on_event is deprecated, use lifespan event handlers instead.
+2026-08-28 12:55:57: 
+2026-08-28 12:55:57:         Read more about it in the
+2026-08-28 12:55:57:         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+2026-08-28 12:55:57:         
+2026-08-28 12:55:57:   @app.on_event("startup")
+2026-08-28 12:55:58: INFO:     Started server process [21726]
+2026-08-28 12:55:58: INFO:     Waiting for application startup.
+2026-08-28 12:55:58: INFO:     Application startup complete.
+2026-08-28 12:55:58: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-28 12:56:18: INFO:     127.0.0.1:45366 - "WebSocket /ws/dashboard" 403
+2026-08-28 12:56:18: INFO:     connection rejected (403 Forbidden)
+2026-08-28 12:57:23: INFO:     Shutting down
+2026-08-28 12:57:23: INFO:     Waiting for application shutdown.
+2026-08-28 12:57:23: INFO:     Application shutdown complete.
+2026-08-28 12:57:23: INFO:     Finished server process [21726]
+2026-08-28 12:57:27: /home/sen/aeryn-core-agent/apps/api/aeryn_api.py:49: DeprecationWarning: 
+2026-08-28 12:57:27:         on_event is deprecated, use lifespan event handlers instead.
+2026-08-28 12:57:27: 
+2026-08-28 12:57:27:         Read more about it in the
+2026-08-28 12:57:27:         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+2026-08-28 12:57:27:         
+2026-08-28 12:57:27:   @app.on_event("startup")
+2026-08-28 12:57:28: INFO:     Started server process [26437]
+2026-08-28 12:57:28: INFO:     Waiting for application startup.
+2026-08-28 12:57:28: INFO:     Application startup complete.
+2026-08-28 12:57:28: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-28 12:59:13: INFO:     Shutting down
+2026-08-28 12:59:13: INFO:     Waiting for application shutdown.
+2026-08-28 12:59:13: INFO:     Application shutdown complete.
+2026-08-28 12:59:13: INFO:     Finished server process [26437]
+2026-08-28 12:59:15: /home/sen/aeryn-core-agent/apps/api/aeryn_api.py:48: DeprecationWarning: 
+2026-08-28 12:59:15:         on_event is deprecated, use lifespan event handlers instead.
+2026-08-28 12:59:15: 
+2026-08-28 12:59:15:         Read more about it in the
+2026-08-28 12:59:15:         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+2026-08-28 12:59:15:         
+2026-08-28 12:59:15:   @app.on_event("startup")
+2026-08-28 12:59:15: INFO:     Started server process [27333]
+2026-08-28 12:59:15: INFO:     Waiting for application startup.
+2026-08-28 12:59:15: INFO:     Application startup complete.
+2026-08-28 12:59:15: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-28 12:59:26: INFO:     127.0.0.1:39210 - "WebSocket /ws/dashboard" [accepted]
+2026-08-28 12:59:26: INFO:     connection open
+2026-08-28 12:59:37: INFO:     127.0.0.1:56394 - "WebSocket /ws/dashboard" [accepted]
+2026-08-28 12:59:37: INFO:     connection open

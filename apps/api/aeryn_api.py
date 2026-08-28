@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """V40.44 — Aeryn Daemon :3010 — Full Feature Set."""
 
-import os, sys, time, json, uuid, sqlite3
+import os, sys, time, json, uuid, sqlite3, asyncio
 from typing import Optional
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
 from aeryn_core.safety_engine import get_safety_engine, sanitize_output
@@ -40,8 +40,61 @@ from aeryn_core.calendar_integration import get_calendar
 from aeryn_core.github_integration import get_github
 from aeryn_core.data_encryption import get_encryption
 from aeryn_core.auth_manager import get_auth
+from aeryn_core.realtime import get_emitter
 
-app = FastAPI(title="Aeryn Daemon", version="40.52")
+
+app = FastAPI(title="Aeryn Daemon", version="40.55")
+
+@app.on_event("startup")
+async def start_background_tasks():
+    """Start background stats broadcaster."""
+    task = asyncio.create_task(broadcast_loop())
+
+async def broadcast_loop():
+    """Broadcast system stats every 5 seconds."""
+    while True:
+        await asyncio.sleep(5)
+        emitter = get_emitter()
+        try:
+            mem_total = mem_available = 0
+            try:
+                with open("/proc/meminfo") as f:
+                    for line in f:
+                        if line.startswith("MemTotal:"):
+                            mem_total = int(line.split()[1])
+                        elif line.startswith("MemAvailable:"):
+                            mem_available = int(line.split()[1])
+            except Exception:
+                pass
+            mem_used_mb = round((mem_total - mem_available) / 1024, 1) if mem_total else 0
+            mem_total_mb = round(mem_total / 1024, 1) if mem_total else 0
+            mem_pct = round(mem_used_mb / mem_total_mb * 100, 1) if mem_total_mb else 0
+            import shutil
+            disk = shutil.disk_usage("/")
+            disk_free_gb = round(disk.free / (1024**3), 2)
+            disk_pct = round((disk.total - disk.free) / disk.total * 100, 1)
+            process_mem = 0
+            try:
+                with open("/proc/self/status") as f:
+                    for line in f:
+                        if line.startswith("VmRSS:"):
+                            process_mem = int(line.split()[1]) / 1024
+                            break
+            except Exception:
+                pass
+            await emitter.broadcast("stats", {
+                "memory_used_mb": mem_used_mb,
+                "memory_total_mb": mem_total_mb,
+                "memory_percent": mem_pct,
+                "disk_free_gb": disk_free_gb,
+                "disk_percent": disk_pct,
+                "process_mem_mb": round(process_mem, 1),
+                "uptime_s": round(time.time() - _start_time, 0),
+                "requests_total": _request_count,
+                "errors_total": _error_count,
+            })
+        except Exception:
+            pass
 
 _start_time = time.time()
 _request_count = 0
@@ -144,12 +197,73 @@ async def dashboard():
         media_type="text/html",
     )
 
+# ── SSE + WebSocket Endpoints ─────────────────────────────────
+
+from sse_starlette.sse import EventSourceResponse
+
+@app.get("/dashboard/stream")
+async def dashboard_stream():
+    """SSE endpoint for real-time dashboard updates."""
+    emitter = get_emitter()
+    queue = asyncio.Queue()
+    client_id = f"dashboard_{id(queue)}_{int(time.time())}"
+    emitter.register_sse(client_id, queue)
+    
+    async def event_generator():
+        try:
+            while True:
+                event = await asyncio.wait_for(queue.get(), timeout=30.0)
+                yield {"event": event["type"], "data": json.dumps(event)}
+        except asyncio.TimeoutError:
+            yield {"event": "ping", "data": json.dumps({"timestamp": time.time()})}
+        finally:
+            emitter.unregister_sse(client_id)
+    
+    return EventSourceResponse(event_generator())
+
+
+@app.websocket("/ws/dashboard")
+async def dashboard_websocket(websocket: WebSocket):
+    """WebSocket endpoint for two-way dashboard commands."""
+    emitter = get_emitter()
+    client_id = f"ws_{int(time.time())}"
+    emitter.register_ws(client_id, websocket)
+    
+    try:
+        await websocket.accept()
+        await websocket.send_json({"type": "connected", "data": {}})
+        
+        while True:
+            msg = await websocket.receive_text()
+            try:
+                cmd = json.loads(msg)
+                cmd_type = cmd.get("type", "")
+                
+                if cmd_type == "ping":
+                    await websocket.send_json({"type": "pong", "data": {}})
+                elif cmd_type == "get_history":
+                    history = emitter.get_history(50)
+                    await websocket.send_json({"type": "history", "data": history})
+                elif cmd_type == "get_stats":
+                    stats = emitter.get_stats()
+                    await websocket.send_json({"type": "stats", "data": stats})
+                else:
+                    await websocket.send_json({"type": "error", "data": {"message": f"Unknown command: {cmd_type}"}})
+            except json.JSONDecodeError:
+                await websocket.send_json({"type": "error", "data": {"message": "Invalid JSON"}})
+    except WebSocketDisconnect:
+        pass
+    except Exception:
+        pass
+    finally:
+        emitter.unregister_ws(client_id)
+
 DASHBOARD_HTML = """<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aeryn Dashboard — V40.54</title>
+<title>Aeryn Dashboard — V40.55</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -443,8 +557,8 @@ tr:last-child td { border-bottom: none; }
     </div>
   </div>
   <div class="live">
-    <div class="pulse"></div>
-    <span>LIVE</span>
+    <div class="pulse" id="sse-dot"></div>
+    <span id="conn-status">LIVE</span>
     <span class="clock" id="clock">--:--:--</span>
   </div>
 </div>
@@ -538,14 +652,19 @@ function updateClock() {
   document.getElementById('clock').textContent = now.toLocaleTimeString('id-ID', { hour12: false });
 }
 
-async function loadStats() {
-  try {
-    const r = await fetch('/dashboard/stats');
-    const d = await r.json();
-    if (d.error) return;
-
-    const s = d.system, a = d.aeryn;
-
+// ── SSE: Real-time stats ──────────────────────
+function connectSSE() {
+  const evtSource = new EventSource('/dashboard/stream');
+  
+  evtSource.onopen = function() {
+    document.getElementById('sse-dot').style.background = 'var(--green)';
+    document.getElementById('conn-status').textContent = 'LIVE';
+  };
+  
+  evtSource.addEventListener('stats', function(e) {
+    const d = JSON.parse(e.data);
+    const s = d.data;
+    
     // Memory
     document.getElementById('mem').innerHTML = s.memory_used_mb + '<span class="unit">MB</span>';
     document.getElementById('mem-detail').textContent = s.memory_percent + '% of ' + s.memory_total_mb + ' MB';
@@ -567,29 +686,69 @@ async function loadStats() {
     document.getElementById('uptime').textContent = hrs + 'h ' + mins + 'm uptime';
 
     // Requests
-    document.getElementById('req-total').textContent = a.requests_total;
-    document.getElementById('err-detail').textContent = a.errors_total + ' errors';
+    document.getElementById('req-total').textContent = s.requests_total;
+    document.getElementById('err-detail').textContent = s.errors_total + ' errors';
+  });
+  
+  evtSource.onerror = function() {
+    document.getElementById('sse-dot').style.background = 'var(--red)';
+    document.getElementById('conn-status').textContent = 'RECONNECTING';
+    evtSource.close();
+    setTimeout(connectSSE, 3000);
+  };
+}
 
-    // Vault
+// ── WebSocket: Commands ───────────────────────
+let ws = null;
+
+function connectWS() {
+  ws = new WebSocket('ws://' + window.location.host + '/ws/dashboard');
+  
+  ws.onopen = function() {
+    console.log('WS connected');
+  };
+  
+  ws.onmessage = function(e) {
+    const msg = JSON.parse(e.data);
+    if (msg.type === 'connected') {
+      console.log('WS ready');
+    }
+  };
+  
+  ws.onclose = function() {
+    console.log('WS disconnected, reconnecting...');
+    setTimeout(connectWS, 3000);
+  };
+}
+
+// ── Fetch vault data (one-time) ────────────────
+async function loadVaultData() {
+  try {
+    const r = await fetch('/dashboard/stats');
+    const d = await r.json();
+    if (d.error) return;
+    
+    const a = d.aeryn;
     document.getElementById('vault-total').textContent = a.vault_total_entries;
     document.getElementById('search-docs').textContent = a.search_docs;
     document.getElementById('social-ppl').textContent = a.social_people;
 
-    // Vault table
     const tbody = document.getElementById('vault-table');
     tbody.innerHTML = '';
     for (const [layer, count] of Object.entries(a.vault_layers)) {
       tbody.innerHTML += '<tr><td>' + layer + '</td><td>' + count + '</td></tr>';
     }
   } catch(e) {
-    console.error('Stats load failed:', e);
+    console.error('Vault load failed:', e);
   }
 }
 
 updateClock();
 setInterval(updateClock, 1000);
-loadStats();
-setInterval(loadStats, 15000);
+connectSSE();
+connectWS();
+loadVaultData();
+setInterval(loadVaultData, 60000); // Refresh vault data every 60s
 </script>
 </body>
 </html>"""
