@@ -29,6 +29,12 @@ from aeryn_core.owasp_security import get_owasp_security
 from aeryn_core.plugin_system import get_plugin_manager
 from aeryn_core.long_horizon import get_long_horizon_planner, TaskPriority
 from aeryn_core.llm_client import get_mode_router, AerynLLMClient
+from aeryn_core.notification_system import get_notification_manager, get_scheduler, Notification
+from aeryn_core.semantic_indexer import get_semantic_indexer
+from aeryn_core.error_recovery import get_error_recovery, with_retry, with_fallback, with_circuit_breaker
+from aeryn_core.tool_runtime import get_tool_runtime
+from aeryn_core.background_queue import get_task_queue
+from aeryn_core.proactive_engine import get_proactive_engine
 from aeryn_core.temporal_memory import get_temporal_memory
 from aeryn_core.self_improvement import get_self_improvement_engine
 from aeryn_core.skill_crystallization import get_skill_crystallizer
@@ -50,8 +56,12 @@ from contextlib import asynccontextmanager
 async def app_lifespan(app):
     """Manage background tasks."""
     task = asyncio.create_task(broadcast_loop())
+    scheduler_task = asyncio.create_task(get_scheduler().start())
+    queue_task = asyncio.create_task(get_task_queue().start())
     yield
     task.cancel()
+    scheduler_task.cancel()
+    queue_task.cancel()
 
 app = FastAPI(title="Aeryn Daemon", version="41.0")
 
@@ -2247,6 +2257,148 @@ async def add_task(title: str, description: str = "", priority: int = 5):
 async def update_task(task_id: str, status: str = None, progress: float = None, result: str = None, error: str = None):
     db = get_shared_db()
     db.update_task(task_id, status, progress, result, error)
+    return {"status": "ok"}
+
+# ── Notification Endpoints ─────────────────────
+
+@app.post("/notifications/create")
+async def create_notification(user_id: str, title: str, message: str,
+                               scheduled_for: str = None, priority: str = "normal",
+                               channel: str = "all", metadata: dict = None):
+    manager = get_notification_manager()
+    notif = Notification(user_id=user_id, title=title, message=message,
+                         scheduled_for=scheduled_for, priority=priority,
+                         channel=channel, metadata=metadata)
+    nid = manager.create(notif)
+    return {"id": nid, "status": "created"}
+
+@app.get("/notifications/due")
+async def get_due_notifications(user_id: str = None, limit: int = 10):
+    manager = get_notification_manager()
+    return {"notifications": manager.get_due(user_id, limit)}
+
+@app.get("/notifications/pending")
+async def get_pending_notifications(user_id: str = None):
+    manager = get_notification_manager()
+    return {"notifications": manager.get_pending(user_id)}
+
+@app.post("/notifications/cancel")
+async def cancel_notification(notification_id: str):
+    manager = get_notification_manager()
+    success = manager.cancel(notification_id)
+    return {"success": success}
+
+@app.post("/search/index")
+async def index_vault(force: bool = False):
+    """Index all vault entries into semantic search."""
+    indexer = get_semantic_indexer()
+    result = indexer.index_vault(force=force)
+    return result
+
+@app.get("/search/advanced")
+async def advanced_search(q: str, limit: int = 10):
+    """Semantic search across indexed documents."""
+    indexer = get_semantic_indexer()
+    results = indexer.search(q, limit=limit)
+    return {"query": q, "results": results, "count": len(results)}
+
+@app.get("/search/stats")
+async def search_stats():
+    """Get semantic search statistics."""
+    indexer = get_semantic_indexer()
+    return indexer.get_stats()
+
+# ── Error Recovery Endpoints ──────────────────
+
+@app.get("/errors/recovery/stats")
+async def error_recovery_stats():
+    """Get error recovery statistics."""
+    recovery = get_error_recovery()
+    return recovery.get_stats()
+
+@app.get("/errors/recovery/log")
+async def error_log(limit: int = 50):
+    """Get recent error log."""
+    recovery = get_error_recovery()
+    return {"errors": recovery.get_error_log(limit)}
+
+@app.get("/errors/recovery/circuit-breakers")
+async def circuit_breaker_states():
+    """Get circuit breaker states."""
+    recovery = get_error_recovery()
+    return {"circuit_breakers": recovery.get_circuit_breaker_states()}
+
+# ── Tool Runtime Endpoints ────────────────────
+
+@app.get("/tools/list")
+async def list_tools():
+    """List available tools."""
+    runtime = get_tool_runtime()
+    return {"tools": runtime.list_tools()}
+
+@app.post("/tools/execute")
+async def execute_tool(tool: str, params: dict = None):
+    """Execute a tool natively."""
+    runtime = get_tool_runtime()
+    result = await runtime.execute(tool, params or {})
+    return result.to_dict()
+
+# ── Background Task Queue Endpoints ───────────
+
+@app.post("/queue/submit")
+async def submit_task(name: str, tool: str, params: dict = None):
+    """Submit a task to the background queue."""
+    queue = get_task_queue()
+    runtime = get_tool_runtime()
+    
+    async def task_wrapper():
+        return await runtime.execute(tool, params or {})
+    
+    task_id = await queue.submit(name, task_wrapper)
+    return {"task_id": task_id, "status": "submitted"}
+
+@app.get("/queue/task/{task_id}")
+async def get_task_status(task_id: str):
+    """Get task status."""
+    queue = get_task_queue()
+    task = queue.get_task(task_id)
+    return task or {"error": "Task not found"}
+
+@app.get("/queue/tasks")
+async def list_queue_tasks():
+    """List all tasks."""
+    queue = get_task_queue()
+    return {"tasks": queue.get_all_tasks()}
+
+@app.get("/queue/stats")
+async def queue_stats():
+    """Get queue statistics."""
+    queue = get_task_queue()
+    return {
+        "pending": queue.get_pending_count(),
+        "running": queue.get_running_count(),
+    }
+
+# ── Proactive Engine Endpoints ────────────────
+
+@app.get("/proactive/suggestions")
+async def get_suggestions(user_id: str = "default"):
+    """Get proactive suggestions."""
+    engine = get_proactive_engine()
+    return {"suggestions": engine.get_unread(user_id)}
+
+@app.post("/proactive/generate")
+async def generate_suggestions(user_id: str = "default"):
+    """Generate new suggestions."""
+    engine = get_proactive_engine()
+    suggestions = engine.generate_all(user_id)
+    return {"suggestions": suggestions}
+
+@app.post("/proactive/mark-read")
+async def mark_suggestion_read(suggestion_id: str):
+    """Mark suggestion as read."""
+    engine = get_proactive_engine()
+    engine.mark_read(suggestion_id)
     return {"status": "ok"}
 
 @app.get("/shared/daily-log")
