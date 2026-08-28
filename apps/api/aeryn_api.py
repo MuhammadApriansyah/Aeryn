@@ -43,12 +43,16 @@ from aeryn_core.auth_manager import get_auth
 from aeryn_core.realtime import get_emitter
 
 
-app = FastAPI(title="Aeryn Daemon", version="40.55")
+from contextlib import asynccontextmanager
 
-@app.on_event("startup")
-async def start_background_tasks():
-    """Start background stats broadcaster."""
+@asynccontextmanager
+async def app_lifespan(app):
+    """Manage background tasks."""
     task = asyncio.create_task(broadcast_loop())
+    yield
+    task.cancel()
+
+app = FastAPI(title="Aeryn Daemon", version="40.55", lifespan=app_lifespan)
 
 async def broadcast_loop():
     """Broadcast system stats every 5 seconds."""
@@ -744,6 +748,16 @@ tr:last-child td { border-bottom: none; }
   from { opacity: 0; transform: translateX(100%); }
   to { opacity: 1; transform: translateX(0); }
 }
+/* ── Light Theme ───────────────────────────── */
+body.light {
+  --bg: #fafafa;
+  --bg-card: #ffffff;
+  --bg-hover: #f4f4f5;
+  --border: #e4e4e7;
+  --text: #18181b;
+  --text-muted: #71717a;
+}
+
 .footer {
   text-align: center;
   padding: 24px 0;
@@ -851,7 +865,40 @@ tr:last-child td { border-bottom: none; }
   <div class="notifications-list" id="notifications-list"></div>
 </div>
 
-<!-- ── Services ────────────────────────────── -->
+<!-- ── Task Queue Monitor ─────────────────────── -->
+<div class="section" id="task-monitor-section">
+  <h2>📋 Task Queue <span class="task-count" id="task-count">0</span></h2>
+  <div class="task-list" id="task-list">
+    <div class="task-empty">No pending tasks</div>
+  </div>
+</div>
+
+<!-- ── Memory Browser ────────────────────────── -->
+<div class="section" id="memory-browser-section">
+  <h2>🧠 Memory Browser</h2>
+  <div class="search-box">
+    <input type="text" id="memory-search" placeholder="Search memories..." autocomplete="off">
+    <div class="search-results" id="search-results"></div>
+  </div>
+  <div class="memory-table-wrap">
+    <table class="memory-table">
+      <thead><tr><th>Title</th><th>Layer</th><th>Tags</th><th></th></tr></thead>
+      <tbody id="memory-table-body"></tbody>
+    </table>
+  </div>
+  <div class="pagination" id="memory-pagination"></div>
+</div>
+
+<!-- ── Memory Detail Modal ───────────────────── -->
+<div class="modal-overlay" id="memory-modal" style="display:none">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Memory Detail</h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
 <div class="section">
   <h2>🖥️ Services</h2>
   <div class="service-list" id="services">
@@ -1226,6 +1273,42 @@ async def get_pending_tasks():
     db = get_shared_db()
     tasks = db.get_pending_tasks()
     return {"tasks": tasks, "count": len(tasks)}
+
+@app.get("/shared/tasks/all")
+async def get_all_tasks():
+    db = get_shared_db()
+    tasks = db.get_all_tasks()
+    return {"tasks": tasks, "count": len(tasks)}
+
+@app.get("/vault/entries")
+async def get_vault_entries(layer: str = None, page: int = 1, per_page: int = 10):
+    """Get vault entries with pagination."""
+    vault = AerynVault()
+    entries = vault.list_entries(layer=layer, limit=per_page, offset=(page - 1) * per_page)
+    total = vault.count_entries(layer)
+    return {
+        "entries": entries,
+        "total": total,
+        "page": page,
+        "per_page": per_page,
+        "total_pages": (total + per_page - 1) // per_page,
+    }
+
+@app.get("/vault/entry/{entry_id}")
+async def get_vault_entry(entry_id: str):
+    """Get single vault entry."""
+    vault = AerynVault()
+    entry = vault.get_entry(entry_id)
+    if not entry:
+        raise HTTPException(status_code=404, detail="Entry not found")
+    return entry
+
+@app.get("/vault/search")
+async def search_vault(q: str, limit: int = 10):
+    """Search vault entries."""
+    vault = AerynVault()
+    results = vault.search(q, limit=limit)
+    return {"results": results, "count": len(results)}
 
 @app.post("/shared/tasks/add")
 async def add_task(title: str, description: str = "", priority: int = 5):

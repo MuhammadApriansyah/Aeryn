@@ -36,3 +36,13 @@
 2026-08-28 13:06:37: INFO:     127.0.0.1:52516 - "GET /dashboard/stats HTTP/1.1" 200 OK
 2026-08-28 13:06:38: INFO:     127.0.0.1:52516 - "GET /dashboard HTTP/1.1" 200 OK
 2026-08-28 13:06:38: INFO:     127.0.0.1:52516 - "GET /dashboard/stats HTTP/1.1" 200 OK
+2026-08-28 13:34:27: INFO:     127.0.0.1:52692 - "GET /dashboard/stats HTTP/1.1" 200 OK
+2026-08-28 13:34:27: INFO:     127.0.0.1:52706 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+2026-08-28 13:34:28: INFO:     127.0.0.1:52706 - "GET /dashboard HTTP/1.1" 200 OK
+2026-08-28 13:34:28: INFO:     127.0.0.1:52706 - "GET /dashboard/stats HTTP/1.1" 200 OK
+2026-08-28 13:34:37: INFO:     127.0.0.1:52710 - "GET /dashboard HTTP/1.1" 200 OK
+2026-08-28 13:34:37: INFO:     127.0.0.1:52710 - "GET /dashboard/stats HTTP/1.1" 200 OK
+2026-08-28 13:34:49: INFO:     127.0.0.1:52716 - "GET /dashboard HTTP/1.1" 200 OK
+2026-08-28 13:34:49: INFO:     127.0.0.1:52716 - "GET /dashboard/stats HTTP/1.1" 200 OK
+2026-08-28 13:34:55: INFO:     127.0.0.1:47168 - "GET /dashboard HTTP/1.1" 200 OK
+2026-08-28 13:34:55: INFO:     127.0.0.1:47168 - "GET /dashboard/stats HTTP/1.1" 200 OK
