@@ -54,7 +54,7 @@ class _SQLiteStore:
         return c
 
 
-class _ConversationStore(_SQLiteStore):
+class ConversationStore(_SQLiteStore):
     def __init__(self): super().__init__("conversations.db")
     def _init(self):
         super()._init()
@@ -65,23 +65,23 @@ class _ConversationStore(_SQLiteStore):
             metadata TEXT DEFAULT '{}', created_at TEXT DEFAULT (datetime('now')))""")
         c.execute("CREATE INDEX IF NOT EXISTS idx_conv_session ON conversations(session_id)")
         c.commit(); c.close()
-    def add_msg(self, sid, role, content, reasoning=""):
+    def add_message(self, sid, role, content, reasoning=""):
         c = self.conn()
         c.execute("INSERT INTO conversations (session_id, role, content, reasoning) VALUES (?,?,?,?)", (sid, role, content, reasoning))
         c.commit(); c.close()
-    def get_history(self, sid, limit=50):
+    def history(self, sid, limit=50):
         c = self.conn()
         rows = c.execute("SELECT role, content, reasoning, created_at FROM conversations WHERE session_id=? ORDER BY id ASC LIMIT ?", (sid, limit)).fetchall()
         c.close()
         return [dict(r) for r in rows]
-    def get_sessions(self, limit=50):
+    def sessions(self, limit=50):
         c = self.conn()
         rows = c.execute("SELECT session_id, COUNT(*) as messages, MAX(created_at) as last_active FROM conversations GROUP BY session_id ORDER BY last_active DESC LIMIT ?", (limit,)).fetchall()
         c.close()
         return [dict(r) for r in rows]
 
 
-class _ReasoningStore(_SQLiteStore):
+class ReasoningStore(_SQLiteStore):
     def __init__(self): super().__init__("reasoning.db")
     def _init(self):
         super()._init()
@@ -106,7 +106,7 @@ class AerynLLMClient:
     def __init__(self):
         self._request_count = 0
         self._error_count = 0
-        self._reasoning = _ReasoningStore()
+        self._reasoning_store = ReasoningStore()
 
     async def chat(self, messages, session_id="default", model=None, temperature=0.7, max_tokens=4000, tools=None):
         steps = []
@@ -118,23 +118,23 @@ class AerynLLMClient:
         user_msg = next((m["content"] for m in reversed(messages) if m["role"] == "user"), "")
         safety = eng.check_input(user_msg)
         steps.append({"step": n, "description": "Safety check", "detail": f"Risk: {safety.risk}"})
-        self._reasoning.add_step(session_id, n, "Safety check", f"Risk: {safety.risk}")
+        self._reasoning_store.add_step(session_id, n, "Safety check", f"Risk: {safety.risk}")
 
         if not safety.safe:
             return {"content": "Message blocked by safety filter", "reasoning": steps, "provider": "none", "model": "none", "tokens": 0}
 
         n += 1
         steps.append({"step": n, "description": "Build prompt", "detail": f"Messages: {len(messages)}"})
-        self._reasoning.add_step(session_id, n, "Build prompt", f"Total: {len(messages)}")
+        self._reasoning_store.add_step(session_id, n, "Build prompt", f"Total: {len(messages)}")
 
         n += 1
         prov = _FALLBACK_CHAIN[0] if _FALLBACK_CHAIN else "none"
         steps.append({"step": n, "description": "Provider selection", "detail": prov})
-        self._reasoning.add_step(session_id, n, "Provider selection", prov)
+        self._reasoning_store.add_step(session_id, n, "Provider selection", prov)
 
         n += 1
         steps.append({"step": n, "description": "Send request", "detail": f"Sending to {prov}..."})
-        self._reasoning.add_step(session_id, n, "Send request", prov)
+        self._reasoning_store.add_step(session_id, n, "Send request", prov)
 
         if not _FALLBACK_CHAIN:
             return {"content": "No LLM providers available.", "reasoning": steps, "provider": "none", "model": "none", "tokens": 0}
@@ -149,14 +149,14 @@ class AerynLLMClient:
                 self._request_count += 1
                 n += 1
                 steps.append({"step": n, "description": "Response received", "detail": f"Tokens: {result['tokens']}"})
-                self._reasoning.add_step(session_id, n, "Response received", f"Tokens: {result['tokens']}")
+                self._reasoning_store.add_step(session_id, n, "Response received", f"Tokens: {result['tokens']}")
                 result["reasoning"] = steps
                 return result
             except Exception as e:
                 self._error_count += 1
                 n += 1
                 steps.append({"step": n, "description": "Provider error", "detail": f"{prov_name}: {str(e)[:80]}"})
-                self._reasoning.add_step(session_id, n, "Provider error", str(e)[:80])
+                self._reasoning_store.add_step(session_id, n, "Provider error", str(e)[:80])
                 if attempt < len(_FALLBACK_CHAIN) - 1:
                     await asyncio.sleep(1)
                     continue
@@ -185,11 +185,14 @@ class SessionManager:
         self.max_history = max_hist
         self.messages: List[Dict[str, str]] = []
         self.title = ""
+        self._conv_store = ConversationStore()
 
-    def add_message(self, role, content):
+    def add_message(self, role, content, reasoning=""):
         self.messages.append({"role": role, "content": content})
         if len(self.messages) > self.max_history:
             self.messages.pop(0)
+        # Persist to SQLite
+        self._conv_store.add_message(self.session_id, role, content, reasoning)
 
     def get_context_window(self):
         return self.messages.copy()
@@ -197,19 +200,19 @@ class SessionManager:
 
 class ConversationMemory:
     def __init__(self):
-        self._conv_store = _ConversationStore()
+        self._conv_store = ConversationStore()
 
     def add_message(self, sid, role, content, reasoning=""):
-        self._conv_store.add_msg(sid, role, content, reasoning)
+        self._conv_store.add_message(sid, role, content, reasoning)
 
     def store(self, sid, role, content, reasoning=""):
-        self._conv_store.add_msg(sid, role, content, reasoning)
+        self._conv_store.add_message(sid, role, content, reasoning)
 
     def get_history(self, sid, limit=50):
-        return self._conv_store.get_history(sid, limit)
+        return self._conv_store.history(sid, limit)
 
     def get_sessions(self, limit=50):
-        return self._conv_store.get_sessions(limit)
+        return self._conv_store.sessions(limit)
 
 
 class ModeRouter:

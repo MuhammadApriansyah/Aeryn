@@ -76,48 +76,127 @@ from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 async def broadcast_loop():
-    """Broadcast system stats every 5 seconds."""
+    """Broadcast 15 data types every 5 seconds."""
     while True:
         await asyncio.sleep(5)
         emitter = get_emitter()
         try:
+            # Get memory stats
+            with open("/proc/meminfo") as f:
+                lines = f.readlines()
             mem_total = mem_available = 0
-            try:
-                with open("/proc/meminfo") as f:
-                    for line in f:
-                        if line.startswith("MemTotal:"):
-                            mem_total = int(line.split()[1])
-                        elif line.startswith("MemAvailable:"):
-                            mem_available = int(line.split()[1])
-            except Exception:
-                pass
+            for line in lines:
+                if line.startswith("MemTotal:"):
+                    mem_total = int(line.split()[1])
+                elif line.startswith("MemAvailable:"):
+                    mem_available = int(line.split()[1])
             mem_used_mb = round((mem_total - mem_available) / 1024, 1) if mem_total else 0
             mem_total_mb = round(mem_total / 1024, 1) if mem_total else 0
             mem_pct = round(mem_used_mb / mem_total_mb * 100, 1) if mem_total_mb else 0
-            import shutil
-            disk = shutil.disk_usage("/")
-            disk_free_gb = round(disk.free / (1024**3), 2)
-            disk_pct = round((disk.total - disk.free) / disk.total * 100, 1)
-            process_mem = 0
+
             try:
-                with open("/proc/self/status") as f:
-                    for line in f:
-                        if line.startswith("VmRSS:"):
-                            process_mem = int(line.split()[1]) / 1024
-                            break
+                import shutil
+                disk = shutil.disk_usage("/")
+                disk_free_gb = round(disk.free / (1024**3), 2)
+                disk_pct = round((disk.total - disk.free) / disk.total * 100, 1)
             except Exception:
-                pass
+                disk_free_gb = 0
+                disk_pct = 0
+
+            # 1. Stats
             await emitter.broadcast("stats", {
-                "memory_used_mb": mem_used_mb,
-                "memory_total_mb": mem_total_mb,
-                "memory_percent": mem_pct,
-                "disk_free_gb": disk_free_gb,
-                "disk_percent": disk_pct,
-                "process_mem_mb": round(process_mem, 1),
-                "uptime_s": round(time.time() - _start_time, 0),
-                "requests_total": _request_count,
-                "errors_total": _error_count,
+                "memory_used_mb": mem_used_mb, "memory_total_mb": mem_total_mb,
+                "memory_percent": mem_pct, "disk_free_gb": disk_free_gb, "disk_percent": disk_pct,
+                "uptime_s": round(time.time() - _start_time, 0)
             })
+            # 2. Tasks
+            try:
+                from aeryn_core.shared_db import get_shared_db
+                db = get_shared_db()
+                tasks = db.get_all_tasks()
+                await emitter.broadcast("tasks", {"tasks": tasks, "count": len(tasks)})
+            except Exception:
+                await emitter.broadcast("tasks", {"tasks": [], "count": 0})
+            # 3. Notifications
+            try:
+                notif_mgr = get_notification_manager()
+                notifs = notif_mgr.get_pending()
+                await emitter.broadcast("notifications", {"notifications": notifs})
+            except Exception:
+                await emitter.broadcast("notifications", {"notifications": []})
+            # 4. Vault
+            try:
+                vault = AerynVault()
+                entries = vault.list_entries(limit=20)
+                counts = vault.count_entries()
+                await emitter.broadcast("vault", {"entries": entries, "total_entries": sum(counts.values())})
+            except Exception:
+                await emitter.broadcast("vault", {"entries": [], "total_entries": 0})
+            # 5. Tools
+            try:
+                rt = get_tool_runtime()
+                await emitter.broadcast("tools", {"tools": rt.list_tools()})
+            except Exception:
+                await emitter.broadcast("tools", {"tools": []})
+            # 6. Performance
+            await emitter.broadcast("performance", {
+                "cpu_percent": 0, "memory_percent": mem_pct,
+                "memory_used_mb": mem_used_mb, "memory_total_mb": mem_total_mb,
+                "disk_percent": disk_pct, "disk_free_gb": disk_free_gb
+            })
+            # 7. Uptime
+            await emitter.broadcast("uptime", {
+                "uptime": str(round(time.time() - _start_time, 0)) + "s",
+                "uptime_s": round(time.time() - _start_time, 0)
+            })
+            # 8. Queue
+            try:
+                queue = get_task_queue()
+                await emitter.broadcast("queue", {"pending": queue.get_pending_count(), "running": queue.get_running_count()})
+            except Exception:
+                await emitter.broadcast("queue", {"pending": 0, "running": 0})
+            # 9. API Keys
+            try:
+                km = get_api_key_manager()
+                await emitter.broadcast("api_keys", {"keys": km.list_keys("dashboard")})
+            except Exception:
+                await emitter.broadcast("api_keys", {"keys": []})
+            # 10. Usage
+            try:
+                um = get_usage_metering()
+                await emitter.broadcast("usage", um.get_summary("dashboard"))
+            except Exception:
+                await emitter.broadcast("usage", {"total_events": 0, "total_cost": 0})
+            # 11. Secrets
+            try:
+                sm = get_secrets_manager()
+                await emitter.broadcast("secrets", {"secrets": sm.list("dashboard")})
+            except Exception:
+                await emitter.broadcast("secrets", {"secrets": []})
+            # 12. Circuit Breakers
+            try:
+                recovery = get_error_recovery()
+                await emitter.broadcast("circuit_breakers", {"circuit_breakers": recovery.get_circuit_breaker_states()})
+            except Exception:
+                await emitter.broadcast("circuit_breakers", {"circuit_breakers": []})
+            # 13. Briefing
+            try:
+                briefing = get_daily_briefing()
+                await emitter.broadcast("briefing", briefing.generate_morning("dashboard"))
+            except Exception:
+                await emitter.broadcast("briefing", {"content": "Error generating briefing"})
+            # 14. Suggestions
+            try:
+                engine = get_proactive_v2()
+                await emitter.broadcast("suggestions", {"suggestions": engine.detect_patterns("dashboard")})
+            except Exception:
+                await emitter.broadcast("suggestions", {"suggestions": []})
+            # 15. Constitutional
+            try:
+                cai = get_constitutional_ai()
+                await emitter.broadcast("constitutional", {"principles": cai.get_principles()})
+            except Exception:
+                await emitter.broadcast("constitutional", {"principles": []})
         except Exception:
             pass
 
@@ -259,7 +338,7 @@ async def chat(req: RunRequest):
         return await run(req)
     
     # Get or create session
-    session = router.get_or_create_session(req.session_id)
+    session = router.sessions.get_or_create(req.session_id)
     
     # Safety check
     eng = get_safety_engine()
@@ -280,9 +359,10 @@ async def chat(req: RunRequest):
     try:
         result = await router.llm.chat(messages)
         response = result["content"]
-        
+        reasoning = result.get("reasoning", [])
+
         # Store response
-        session.add_message("assistant", response)
+        session.add_message("assistant", response, json.dumps(reasoning))
         router.memory.store(req.session_id, "assistant", response)
         
         return {
@@ -294,38 +374,6 @@ async def chat(req: RunRequest):
         }
     except Exception as e:
         return {"status": "error", "error": str(e)}
-
-
-
-# ── Monitoring Endpoints ──────────────────────
-
-@app.get("/api/monitoring/sessions")
-async def monitoring_sessions():
-    try:
-        router = get_mode_router()
-        sessions = router.memory.get_sessions()
-        return {"sessions": sessions}
-    except Exception as e:
-        return {"sessions": [], "error": str(e)}
-
-@app.get("/api/monitoring/history")
-async def monitoring_history(session_id: str, limit: int = 50):
-    try:
-        router = get_mode_router()
-        history = router.memory.get_history(session_id, limit)
-        return {"session_id": session_id, "history": history}
-    except Exception as e:
-        return {"session_id": session_id, "history": [], "error": str(e)}
-
-@app.get("/api/monitoring/stats")
-async def monitoring_stats():
-    try:
-        router = get_mode_router()
-        llm = router.llm
-        return {"total_requests": llm._request_count, "total_errors": llm._error_count,
-                "active_sessions": len(router.sessions), "mode": router.mode}
-    except Exception as e:
-        return {"error": str(e)}
 
 @app.get("/search")
 async def search(q: str, limit: int = 10):
@@ -486,10 +534,12 @@ async def dashboard_websocket(websocket: WebSocket):
                             messages = [{"role": "system", "content": persona}] + session.get_context_window()
                             result = await router.llm.chat(messages, sid)
                             response = result["content"]
-                            session.add_message("assistant", response)
-                            router.memory.store(sid, "assistant", response)
+                            session.add_message("assistant", response, json.dumps(result.get("reasoning", [])))
+                            router.memory.add_message(sid, "assistant", response)
                             reasoning = result.get("reasoning", [])
                             await websocket.send_json({"type": "chat_response", "data": {"response": response, "session_id": sid, "reasoning": reasoning}})
+                            # Small delay to ensure chat_response is received before broadcast
+                            await asyncio.sleep(0.5)
                     except Exception as e:
                         await websocket.send_json({"type": "error", "data": {"message": str(e)}})
                 elif cmd_type == "parse_tasks":
@@ -508,6 +558,7 @@ async def dashboard_websocket(websocket: WebSocket):
                         await websocket.send_json({"type": "error", "data": {"message": str(e)}})
                 elif cmd_type == "create_notification":
                     try:
+                        from aeryn_core.notification_system import Notification
                         mgr = get_notification_manager()
                         notif = Notification(user_id=cmd_data.get("user_id", "default"), title=cmd_data.get("title", ""), message=cmd_data.get("message", ""), priority=cmd_data.get("priority", "normal"))
                         nid = mgr.create(notif)
@@ -3156,6 +3207,65 @@ async def delete_collection(collection: str):
     vdb = get_vector_db()
     vdb.delete_collection(collection)
     return {"status": "deleted"}
+
+
+# ── Monitoring Endpoints ──────────────────────
+
+@app.get("/api/monitoring/sessions")
+async def monitoring_sessions():
+    """Get all chat sessions."""
+    try:
+        from pathlib import Path
+        import sqlite3
+        db_path = Path("Personalisasi/Database/conversations.db")
+        if not db_path.exists():
+            return {"sessions": []}
+        conn = sqlite3.connect(db_path)
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            "SELECT session_id, COUNT(*) as messages, MAX(created_at) as last_active "
+            "FROM conversations GROUP BY session_id ORDER BY last_active DESC LIMIT 50"
+        ).fetchall()
+        conn.close()
+        return {"sessions": [dict(r) for r in rows]}
+    except Exception as e:
+        return {"sessions": [], "error": str(e)}
+
+@app.get("/api/monitoring/history")
+async def monitoring_history(session_id: str, limit: int = 50):
+    """Get conversation history for a session."""
+    try:
+        from pathlib import Path
+        import sqlite3
+        db_path = Path("Personalisasi/Database/conversations.db")
+        if not db_path.exists():
+            return {"session_id": session_id, "history": []}
+        conn = sqlite3.connect(db_path)
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            "SELECT role, content, reasoning, created_at FROM conversations "
+            "WHERE session_id = ? ORDER BY id ASC LIMIT ?",
+            (session_id, limit)
+        ).fetchall()
+        conn.close()
+        return {"session_id": session_id, "history": [dict(r) for r in rows]}
+    except Exception as e:
+        return {"session_id": session_id, "history": [], "error": str(e)}
+
+@app.get("/api/monitoring/stats")
+async def monitoring_stats():
+    """Get monitoring statistics."""
+    try:
+        router = get_mode_router()
+        llm = router.llm
+        return {
+            "total_requests": llm._request_count,
+            "total_errors": llm._error_count,
+            "active_sessions": len(router.sessions),
+            "mode": router.mode,
+        }
+    except Exception as e:
+        return {"error": str(e)}
 
 if __name__ == "__main__":
     import uvicorn
