@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aeryn Dashboard — V41.0</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #09090b; --bg-card: #18181b; --bg-hover: #27272a; --border: #27272a;
+  --text: #fafafa; --text-muted: #a1a1aa; --accent: #22d3ee; --accent2: #c084fc;
+  --green: #4ade80; --yellow: #facc15; --red: #f87171; --orange: #fb923c; --blue: #60a5fa;
+}
+body.light {
+  --bg: #fafafa; --bg-card: #ffffff; --bg-hover: #f4f4f5; --border: #e4e4e7;
+  --text: #18181b; --text-muted: #71717a;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* Nav */
+.nav { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.nav-left { display: flex; align-items: center; gap: 16px; }
+.nav h1 { font-size: 18px; }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.tabs { display: flex; gap: 4px; }
+.tab { padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text-muted); border: none; background: transparent; }
+.tab:hover { background: var(--bg-hover); color: var(--text); }
+.tab.active { background: var(--accent); color: var(--bg); }
+
+/* Content */
+.content { padding: 24px; max-width: 1400px; margin: 0 auto; }
+.page { display: none; }
+.page.active { display: block; }
+
+/* Cards */
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.card-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+.grid { display: grid; gap: 16px; }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+
+/* Stats */
+.stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.stat-value { font-size: 28px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+.stat-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+.stat-bar { height: 4px; background: var(--bg-hover); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+.stat-bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s; }
+.stat-bar-fill.green { background: var(--green); }
+.stat-bar-fill.yellow { background: var(--yellow); }
+.stat-bar-fill.red { background: var(--red); }
+
+/* Buttons & Inputs */
+.btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; }
+.btn-primary { background: var(--accent); color: var(--bg); }
+.btn-primary:hover { background: #06b6d4; }
+.btn-secondary { background: var(--bg-hover); color: var(--text); }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+.input { padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 14px; outline: none; width: 100%; }
+.input:focus { border-color: var(--accent); }
+
+/* List */
+.list-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.list-item:last-child { border-bottom: none; }
+.badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+.badge-green { background: rgba(74, 222, 128, 0.2); color: var(--green); }
+.badge-red { background: rgba(248, 113, 113, 0.2); color: var(--red); }
+.badge-yellow { background: rgba(250, 204, 21, 0.2); color: var(--yellow); }
+.badge-blue { background: rgba(96, 165, 250, 0.2); color: var(--blue); }
+
+/* Toast */
+.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; }
+.toast { padding: 12px 20px; border-radius: 8px; background: var(--bg-card); border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.4); animation: slideIn 0.3s; }
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* Spinner */
+.live { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+.pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+/* Table */
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; }
+.table th { color: var(--text-muted); font-weight: 600; }
+
+/* Progress */
+.progress { height: 6px; background: var(--bg-hover); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; background: var(--accent); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-left">
+    <h1>🧠 Aeryn</h1>
+    <span style="color:var(--text-muted);font-size:13px">v41.0</span>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="showPage('overview')">Overview</button>
+    <button class="tab" onclick="showPage('chat')">Chat</button>
+    <button class="tab" onclick="showPage('notifications')">Notifications</button>
+    <button class="tab" onclick="showPage('tasks')">Tasks</button>
+    <button class="tab" onclick="showPage('memory')">Memory</button>
+    <button class="tab" onclick="showPage('tools')">Tools</button>
+    <button class="tab" onclick="showPage('platform')">Platform</button>
+    <button class="tab" onclick="showPage('security')">Security</button>
+  </div>
+  <div class="nav-right">
+    <div class="live"><div class="pulse" id="sse-dot"></div><span id="conn-status">LIVE</span></div>
+    <button class="btn btn-secondary btn-sm" onclick="toggleTheme()">Theme</button>
+  </div>
+</nav>
+
+<div class="content">
+
+<!-- OVERVIEW PAGE -->
+<div class="page active" id="page-overview">
+  <div class="grid grid-4" style="margin-bottom:24px">
+    <div class="stat">
+      <div class="stat-value" id="stat-mem">--</div>
+      <div class="stat-label">Memory Used</div>
+      <div class="stat-bar"><div class="stat-bar-fill green" id="bar-mem"></div></div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="stat-disk">--</div>
+      <div class="stat-label">Disk Used</div>
+      <div class="stat-bar"><div class="stat-bar-fill yellow" id="bar-disk"></div></div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="stat-vault">--</div>
+      <div class="stat-label">Vault Entries</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="stat-tasks">--</div>
+      <div class="stat-label">Active Tasks</div>
+    </div>
+  </div>
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-title">📋 Daily Briefing</div>
+      <div id="briefing-content">Loading...</div>
+      <button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="generateBriefing()">Generate Morning Briefing</button>
+    </div>
+    <div class="card">
+      <div class="card-title">💡 Proactive Suggestions</div>
+      <div id="suggestions-list">Loading...</div>
+      <button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="generateSuggestions()">Generate</button>
+    </div>
+  </div>
+  <div class="grid grid-3" style="margin-top:16px">
+    <div class="card">
+      <div class="card-title">📊 System Performance</div>
+      <div id="perf-stats">Loading...</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔄 Background Queue</div>
+      <div id="queue-stats">Loading...</div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ Uptime</div>
+      <div id="uptime-stats">Loading...</div>
+    </div>
+  </div>
+</div>
+
+<!-- CHAT PAGE -->
+<div class="page" id="page-chat">
+  <div class="card" style="height:calc(100vh - 200px); display:flex; flex-direction:column;">
+    <div class="card-title">💬 Chat with Aeryn</div>
+    <div id="chat-messages" style="flex:1; overflow-y:auto; padding:16px 0;"></div>
+    <div style="display:flex; gap:12px; padding-top:12px; border-top:1px solid var(--border);">
+      <input class="input" id="chat-input" placeholder="Type a message..." onkeypress="if(event.key==='Enter')sendChat()">
+      <button class="btn btn-primary" onclick="sendChat()">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATIONS PAGE -->
+<div class="page" id="page-notifications">
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-title">Create Notification</div>
+      <input class="input" id="notif-title" placeholder="Title" style="margin-bottom:8px">
+      <textarea class="input" id="notif-msg" placeholder="Message" rows="3" style="margin-bottom:8px"></textarea>
+      <select class="input" id="notif-priority" style="margin-bottom:8px">
+        <option value="low">Low</option>
+        <option value="normal">Normal</option>
+        <option value="high">High</option>
+        <option value="critical">Critical</option>
+      </select>
+      <button class="btn btn-primary" onclick="createNotification()">Create</button>
+    </div>
+    <div class="card">
+      <div class="card-title">Pending Notifications</div>
+      <div id="pending-notifs">Loading...</div>
+    </div>
+  </div>
+</div>
+
+<!-- TASKS PAGE -->
+<div class="page" id="page-tasks">
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-title">Auto-Task from Text</div>
+      <textarea class="input" id="autotask-text" placeholder="e.g., I need to research AI frameworks and write a summary" rows="4" style="margin-bottom:8px"></textarea>
+      <button class="btn btn-primary" onclick="parseTasks()">Parse Tasks</button>
+      <div id="parsed-tasks" style="margin-top:12px"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Task Queue</div>
+      <div id="task-list">Loading...</div>
+    </div>
+  </div>
+</div>
+
+<!-- MEMORY PAGE -->
+<div class="page" id="page-memory">
+  <div class="card">
+    <div class="card-title">Semantic Search</div>
+    <input class="input" id="memory-search" placeholder="Search vault entries..." style="margin-bottom:12px" onkeyup="if(event.key==='Enter')searchMemory()">
+    <div id="memory-results"></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">Vault Entries</div>
+    <div id="vault-list">Loading...</div>
+  </div>
+</div>
+
+<!-- TOOLS PAGE -->
+<div class="page" id="page-tools">
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-title">Available Tools</div>
+      <div id="tools-list">Loading...</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Execute Tool</div>
+      <select class="input" id="tool-select" style="margin-bottom:8px"></select>
+      <textarea class="input" id="tool-params" placeholder='{"key": "value"}' rows="4" style="margin-bottom:8px"></textarea>
+      <button class="btn btn-primary" onclick="executeTool()">Execute</button>
+      <div id="tool-result" style="margin-top:12px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PLATFORM PAGE -->
+<div class="page" id="page-platform">
+  <div class="grid grid-3">
+    <div class="card">
+      <div class="card-title">API Keys</div>
+      <button class="btn btn-primary btn-sm" onclick="createApiKey()">Create Key</button>
+      <div id="api-keys-list" style="margin-top:12px">Loading...</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Usage (30 days)</div>
+      <div id="usage-summary">Loading...</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Secrets</div>
+      <div style="margin-bottom:8px">
+        <input class="input" id="secret-name" placeholder="Name" style="margin-bottom:4px">
+        <input class="input" id="secret-value" placeholder="Value" style="margin-bottom:4px">
+        <button class="btn btn-primary btn-sm" onclick="setSecret()">Store</button>
+      </div>
+      <div id="secrets-list">Loading...</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECURITY PAGE -->
+<div class="page" id="page-security">
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-title">🔒 Safety Check</div>
+      <input class="input" id="safety-text" placeholder="Text to check..." style="margin-bottom:8px">
+      <button class="btn btn-primary" onclick="checkSafety()">Check</button>
+      <div id="safety-result" style="margin-top:12px"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ Circuit Breakers</div>
+      <div id="circuit-breakers">Loading...</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+let currentSessionId = 'dashboard_' + Date.now();
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  event.target.classList.add('active');
+  if (name === 'notifications') loadNotifications();
+  if (name === 'tasks') loadTasks();
+  if (name === 'memory') loadMemory();
+  if (name === 'tools') loadTools();
+  if (name === 'platform') loadPlatform();
+  if (name === 'security') loadSecurity();
+}
+
+function toast(msg, type = 'info') {
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
+// Overview
+async function loadOverview() {
+  try {
+    const [stats, tasks] = await Promise.all([
+      fetch('/dashboard/stats').then(r => r.json()),
+      fetch('/shared/tasks/all').then(r => r.json())
+    ]);
+    
+    if (stats.system) {
+      const m = stats.system.memory_percent || 0;
+      document.getElementById('stat-mem').textContent = Math.round(stats.system.memory_used_mb / 1024) + 'GB';
+      document.getElementById('stat-disk').textContent = Math.round(stats.system.disk_used_gb) + 'GB';
+      document.getElementById('bar-mem').style.width = m + '%';
+      document.getElementById('bar-mem').className = 'stat-bar-fill ' + (m > 90 ? 'red' : m > 70 ? 'yellow' : 'green');
+      document.getElementById('bar-disk').style.width = (stats.system.disk_percent || 0) + '%';
+    }
+    
+    document.getElementById('stat-vault').textContent = (stats.vault?.total_entries || 0);
+    document.getElementById('stat-tasks').textContent = tasks.count || 0;
+  } catch (e) { console.error(e); }
+}
+
+async function generateBriefing() {
+  const res = await fetch('/briefing/morning', { method: 'POST' });
+  const data = await res.json();
+  document.getElementById('briefing-content').innerHTML = '<pre style="white-space:pre-wrap;font-family:inherit">' + data.content + '</pre>';
+}
+
+async function generateSuggestions() {
+  const res = await fetch('/proactive/generate', { method: 'POST' });
+  const data = await res.json();
+  const html = data.suggestions.map(s => '<div class="list-item"><span>' + s.title + '</span><span class="badge badge-blue">' + s.type + '</span></div>').join('');
+  document.getElementById('suggestions-list').innerHTML = html || '<p style="color:var(--text-muted)">No suggestions</p>';
+}
+
+// Chat
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const box = document.getElementById('chat-messages');
+  box.innerHTML += '<div style="margin:8px 0;text-align:right"><div style="background:var(--accent);color:var(--bg);padding:8px 12px;border-radius:12px;display:inline-block;max-width:70%">' + text + '</div></div>';
+  input.value = '';
+  box.innerHTML += '<div style="margin:8px 0;color:var(--text-muted)">Thinking...</div>';
+  box.scrollTop = box.scrollHeight;
+  try {
+    const res = await fetch('/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ goal: text, session_id: currentSessionId })
+    });
+    const data = await res.json();
+    box.lastChild.remove();
+    box.innerHTML += '<div style="margin:8px 0"><div style="background:var(--bg-hover);padding:8px 12px;border-radius:12px;display:inline-block;max-width:70%">' + (data.response || JSON.stringify(data)) + '</div></div>';
+  } catch (e) {
+    box.lastChild.remove();
+    box.innerHTML += '<div style="margin:8px 0;color:var(--red)">Error: ' + e.message + '</div>';
+  }
+  box.scrollTop = box.scrollHeight;
+}
+
+// Notifications
+async function loadNotifications() {
+  const res = await fetch('/notifications/pending');
+  const data = await res.json();
+  const html = data.notifications.map(n => '<div class="list-item"><span>' + n.title + '</span><span class="badge badge-' + (n.priority === 'critical' ? 'red' : n.priority === 'high' ? 'yellow' : 'blue') + '">' + n.priority + '</span></div>').join('');
+  document.getElementById('pending-notifs').innerHTML = html || '<p style="color:var(--text-muted)">No pending notifications</p>';
+}
+
+async function createNotification() {
+  const title = document.getElementById('notif-title').value;
+  const msg = document.getElementById('notif-msg').value;
+  const priority = document.getElementById('notif-priority').value;
+  await fetch('/notifications/create?user_id=dashboard&title=' + encodeURIComponent(title) + '&message=' + encodeURIComponent(msg) + '&priority=' + priority);
+  toast('Notification created');
+  loadNotifications();
+}
+
+// Tasks
+async function loadTasks() {
+  const res = await fetch('/shared/tasks/all');
+  const data = await res.json();
+  const html = data.tasks.map(t => '<div class="list-item"><span>' + t.title + '</span><span class="badge badge-' + (t.status === 'completed' ? 'green' : t.status === 'in_progress' ? 'yellow' : 'blue') + '">' + t.status + '</span></div>').join('');
+  document.getElementById('task-list').innerHTML = html || '<p style="color:var(--text-muted)">No tasks</p>';
+}
+
+async function parseTasks() {
+  const text = document.getElementById('autotask-text').value;
+  const res = await fetch('/auto-task/parse?user_id=dashboard&text=' + encodeURIComponent(text));
+  const data = await res.json();
+  const html = data.tasks.map(t => '<div class="list-item"><span>' + t.title + '</span><span class="badge badge-blue">parsed</span></div>').join('');
+  document.getElementById('parsed-tasks').innerHTML = html || '<p style="color:var(--text-muted)">No tasks found</p>';
+}
+
+// Memory
+async function loadMemory() {
+  const res = await fetch('/vault/entries?page=1&per_page=20');
+  const data = await res.json();
+  const html = data.entries.map(e => '<div class="list-item"><span>' + e.title + '</span><span class="badge badge-blue">' + e.layer + '</span></div>').join('');
+  document.getElementById('vault-list').innerHTML = html || '<p style="color:var(--text-muted)">No entries</p>';
+}
+
+async function searchMemory() {
+  const q = document.getElementById('memory-search').value;
+  const res = await fetch('/search/advanced?q=' + encodeURIComponent(q));
+  const data = await res.json();
+  const html = data.results.map(r => '<div class="list-item"><span>' + r.title + '</span><span class="badge badge-blue">' + r.score.toFixed(2) + '</span></div>').join('');
+  document.getElementById('memory-results').innerHTML = html || '<p style="color:var(--text-muted)">No results</p>';
+}
+
+// Tools
+async function loadTools() {
+  const res = await fetch('/tools/list');
+  const data = await res.json();
+  const html = data.tools.map(t => '<div class="list-item"><span>' + t + '</span></div>').join('');
+  document.getElementById('tools-list').innerHTML = html || '<p style="color:var(--text-muted)">No tools</p>';
+  document.getElementById('tool-select').innerHTML = data.tools.map(t => '<option>' + t + '</option>').join('');
+}
+
+async function executeTool() {
+  const tool = document.getElementById('tool-select').value;
+  let params = {};
+  try { params = JSON.parse(document.getElementById('tool-params').value || '{}'); } catch(e) {}
+  const res = await fetch('/tools/execute', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tool, params })
+  });
+  const data = await res.json();
+  document.getElementById('tool-result').innerHTML = '<pre style="white-space:pre-wrap;font-family:monospace;font-size:12px;background:var(--bg);padding:12px;border-radius:8px">' + JSON.stringify(data, null, 2) + '</pre>';
+}
+
+// Platform
+async function loadPlatform() {
+  const [keys, usage, secrets] = await Promise.all([
+    fetch('/api-keys/list?user_id=dashboard').then(r => r.json()),
+    fetch('/usage/summary?user_id=dashboard').then(r => r.json()),
+    fetch('/secrets/list?user_id=dashboard').then(r => r.json())
+  ]);
+  
+  document.getElementById('api-keys-list').innerHTML = keys.keys.map(k => '<div class="list-item"><span>' + k.name + '</span><span class="badge badge-' + (k.is_active ? 'green' : 'red') + '">' + (k.is_active ? 'active' : 'revoked') + '</span></div>').join('') || 'No keys';
+  document.getElementById('usage-summary').innerHTML = '<p>Events: ' + usage.total_events + '</p><p>Cost: $' + usage.total_cost.toFixed(4) + '</p><p>Tokens: ' + (usage.total_tokens_input + usage.total_tokens_output) + '</p>';
+  document.getElementById('secrets-list').innerHTML = secrets.secrets.map(s => '<div class="list-item"><span>' + s.name + '</span></div>').join('') || 'No secrets';
+}
+
+async function createApiKey() {
+  const name = prompt('Key name?');
+  if (!name) return;
+  await fetch('/api-keys/create?user_id=dashboard&name=' + encodeURIComponent(name));
+  loadPlatform();
+}
+
+async function setSecret() {
+  const name = document.getElementById('secret-name').value;
+  const value = document.getElementById('secret-value').value;
+  await fetch('/secrets/set?user_id=dashboard&name=' + encodeURIComponent(name) + '&value=' + encodeURIComponent(value));
+  toast('Secret stored');
+  loadPlatform();
+}
+
+// Security
+async function checkSafety() {
+  const text = document.getElementById('safety-text').value;
+  const res = await fetch('/guardrails/validate-input', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text, context: 'general' })
+  });
+  const data = await res.json();
+  document.getElementById('safety-result').innerHTML = '<span class="badge badge-' + (data.valid ? 'green' : 'red') + '">' + (data.valid ? 'SAFE' : 'UNSAFE') + '</span><br><br>Risk: ' + data.risk + '<br>Issues: ' + (data.issues.length ? data.issues.join(', ') : 'none');
+}
+
+async function loadSecurity() {
+  const res = await fetch('/errors/recovery/circuit-breakers');
+  const data = await res.json();
+  const html = data.circuit_breakers.map(c => '<div class="list-item"><span>' + c.name + '</span><span class="badge badge-' + (c.state === 'closed' ? 'green' : 'red') + '">' + c.state + '</span></div>').join('');
+  document.getElementById('circuit-breakers').innerHTML = html || '<p style="color:var(--text-muted)">No breakers</p>';
+}
+
+// SSE
+function connectSSE() {
+  const es = new EventSource('/dashboard/stream');
+  es.onopen = () => {
+    document.getElementById('sse-dot').style.background = 'var(--green)';
+    document.getElementById('conn-status').textContent = 'LIVE';
+  };
+  es.onerror = () => {
+    document.getElementById('sse-dot').style.background = 'var(--red)';
+    document.getElementById('conn-status').textContent = 'RECONNECTING';
+  };
+  es.addEventListener('stats', (e) => {
+    const d = JSON.parse(e.data);
+    if (d.system) {
+      document.getElementById('stat-mem').textContent = Math.round(d.system.memory_used_mb / 1024) + 'GB';
+      document.getElementById('stat-disk').textContent = Math.round(d.system.disk_used_gb) + 'GB';
+    }
+  });
+}
+
+// Theme
+function toggleTheme() {
+  document.body.classList.toggle('light');
+}
+
+// Init
+loadOverview();
+connectSSE();
+setInterval(loadOverview, 15000);
+</script>
+</body>
+</html>

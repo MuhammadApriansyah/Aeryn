@@ -7,7 +7,7 @@ from typing import Optional
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
-from fastapi.responses import Response
+from fastapi.responses import Response, FileResponse
 from pydantic import BaseModel, Field
 from aeryn_core.safety_engine import get_safety_engine, sanitize_output
 from aeryn_core.adapters import get_active_adapter, render_adapter_context
@@ -300,10 +300,7 @@ async def search(q: str, limit: int = 10):
 @app.get("/dashboard")
 async def dashboard():
     """Serve monitoring dashboard HTML."""
-    return Response(
-        content=DASHBOARD_HTML,
-        media_type="text/html",
-    )
+    return FileResponse("apps/api/dashboard.html")
 
 @app.get("/chat")
 async def web_chat():
