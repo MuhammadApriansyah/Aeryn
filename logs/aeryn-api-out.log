@@ -137,3 +137,16 @@
 2026-08-28 00:35:49: INFO:     127.0.0.1:41970 - "POST /dream/synthesize HTTP/1.1" 200 OK
 2026-08-28 00:35:49: INFO:     127.0.0.1:55314 - "POST /sandbox/create HTTP/1.1" 200 OK
 2026-08-28 00:35:49: INFO:     127.0.0.1:55330 - "GET /shared/stats HTTP/1.1" 200 OK
+2026-08-28 00:38:14: INFO:     127.0.0.1:50402 - "GET /dashboard HTTP/1.1" 404 Not Found
+2026-08-28 00:38:14: INFO:     127.0.0.1:50412 - "GET /dashboard/stats HTTP/1.1" 200 OK
+2026-08-28 00:38:14: INFO:     127.0.0.1:50424 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+2026-08-28 00:38:14: INFO:     127.0.0.1:50402 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+2026-08-28 00:38:15: INFO:     127.0.0.1:50402 - "GET /dashboard HTTP/1.1" 404 Not Found
+2026-08-28 00:38:25: INFO:     127.0.0.1:50430 - "GET /dashboard HTTP/1.1" 404 Not Found
+2026-08-28 00:38:29: INFO:     127.0.0.1:50430 - "GET / HTTP/1.1" 404 Not Found
+2026-08-28 00:39:35: INFO:     127.0.0.1:58014 - "GET / HTTP/1.1" 404 Not Found
+2026-08-28 00:39:39: INFO:     127.0.0.1:58014 - "GET /dashboard HTTP/1.1" 404 Not Found
+2026-08-28 00:39:46: INFO:     127.0.0.1:58028 - "GET /run HTTP/1.1" 405 Method Not Allowed
+2026-08-28 00:39:47: INFO:     127.0.0.1:58028 - "GET /run HTTP/1.1" 405 Method Not Allowed
+2026-08-28 00:39:54: INFO:     127.0.0.1:47754 - "GET /dashboard HTTP/1.1" 404 Not Found
+2026-08-28 00:39:55: INFO:     127.0.0.1:47754 - "GET /dashboard HTTP/1.1" 404 Not Found
