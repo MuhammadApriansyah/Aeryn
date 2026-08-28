@@ -72,6 +72,15 @@ async def app_lifespan(app):
 app = FastAPI(title="Aeryn Daemon", version="41.0")
 app.router.lifespan_context = app_lifespan
 
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 async def broadcast_loop():
     """Broadcast all data types every 5 seconds."""
     while True:
@@ -539,6 +548,88 @@ async def dashboard_websocket(websocket: WebSocket):
                 
                 if cmd_type == "ping":
                     await websocket.send_json({"type": "pong", "data": {}})
+                elif cmd_type == "chat":
+                    # Handle chat via WebSocket
+                    try:
+                        from aeryn_core.safety_engine import get_safety_engine
+                        eng = get_safety_engine()
+                        text = cmd_data.get("message", "")
+                        safety = eng.check_input(text)
+                        if not safety.safe:
+                            await websocket.send_json({"type": "error", "data": {"message": "Blocked"}})
+                        else:
+                            # Process chat
+                            from aeryn_core.persona_engine import load_persona
+                            persona = load_persona()
+                            # In standalone mode, call LLM
+                            router = get_mode_router()
+                            if router.is_standalone():
+                                messages = [
+                                    {"role": "system", "content": persona},
+                                    {"role": "user", "content": text},
+                                ]
+                                result = await router.llm.chat(messages)
+                                response = result["content"]
+                            else:
+                                response = f"Received: {text[:200]}"
+                            await websocket.send_json({"type": "chat_response", "data": {"response": response, "session_id": cmd_data.get("session_id", "default")}})
+                    except Exception as e:
+                        await websocket.send_json({"type": "error", "data": {"message": str(e)}})
+                elif cmd_type == "parse_tasks":
+                    try:
+                        auto_task = get_auto_task()
+                        tasks = auto_task.parse(cmd_data.get("user_id", "default"), cmd_data.get("text", ""))
+                        await websocket.send_json({"type": "task_parsed", "data": {"tasks": tasks, "count": len(tasks)}})
+                    except Exception as e:
+                        await websocket.send_json({"type": "error", "data": {"message": str(e)}})
+                elif cmd_type == "execute_tool":
+                    try:
+                        rt = get_tool_runtime()
+                        result = await rt.execute(cmd_data.get("tool", ""), cmd_data.get("params", {}))
+                        await websocket.send_json({"type": "tool_result", "data": result.to_dict()})
+                    except Exception as e:
+                        await websocket.send_json({"type": "error", "data": {"message": str(e)}})
+                elif cmd_type == "create_notification":
+                    try:
+                        mgr = get_notification_manager()
+                        notif = Notification(
+                            user_id=cmd_data.get("user_id", "default"),
+                            title=cmd_data.get("title", ""),
+                            message=cmd_data.get("message", ""),
+                            priority=cmd_data.get("priority", "normal"),
+                        )
+                        nid = mgr.create(notif)
+                        await websocket.send_json({"type": "notif_created", "data": {"id": nid}})
+                    except Exception as e:
+                        await websocket.send_json({"type": "error", "data": {"message": str(e)}})
+                elif cmd_type == "check_safety":
+                    try:
+                        eng = get_safety_engine()
+                        result = eng.check_input(cmd_data.get("text", ""))
+                        await websocket.send_json({"type": "safety_result", "data": {"valid": result.safe, "risk": result.risk}})
+                    except Exception as e:
+                        await websocket.send_json({"type": "error", "data": {"message": str(e)}})
+                elif cmd_type == "create_api_key":
+                    try:
+                        km = get_api_key_manager()
+                        result = km.create(cmd_data.get("user_id", "default"), cmd_data.get("name", "key"))
+                        await websocket.send_json({"type": "api_key_created", "data": result})
+                    except Exception as e:
+                        await websocket.send_json({"type": "error", "data": {"message": str(e)}})
+                elif cmd_type == "set_secret":
+                    try:
+                        sm = get_secrets_manager()
+                        sm.set(cmd_data.get("user_id", "default"), cmd_data.get("name", ""), cmd_data.get("value", ""))
+                        await websocket.send_json({"type": "secret_stored", "data": {}})
+                    except Exception as e:
+                        await websocket.send_json({"type": "error", "data": {"message": str(e)}})
+                elif cmd_type == "search":
+                    try:
+                        idx = get_semantic_indexer()
+                        results = idx.search(cmd_data.get("user_id", ""), limit=10)
+                        await websocket.send_json({"type": "search_results", "data": {"results": results}})
+                    except Exception as e:
+                        await websocket.send_json({"type": "error", "data": {"message": str(e)}})
                 elif cmd_type == "get_history":
                     history = emitter.get_history(50)
                     await websocket.send_json({"type": "history", "data": history})
