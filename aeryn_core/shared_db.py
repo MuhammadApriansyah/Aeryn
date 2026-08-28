@@ -276,6 +276,21 @@ class SharedDB:
         finally:
             conn.close()
     
+    def get_all_tasks(self) -> List[dict]:
+        """Get all tasks."""
+        conn = sqlite3.connect(self.db_path)
+        try:
+            rows = conn.execute("""
+                SELECT id, title, description, status, priority, progress FROM task_queue
+                ORDER BY created_at DESC LIMIT 50
+            """).fetchall()
+            return [
+                {"id": r[0], "title": r[1], "description": r[2], "status": r[3], "priority": r[4], "progress": r[5] or 0.0}
+                for r in rows
+            ]
+        finally:
+            conn.close()
+    
     def update_task(self, task_id: str, status: str = None, progress: float = None,
                     result: str = None, error: str = None):
         """Update task status."""
