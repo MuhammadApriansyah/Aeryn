@@ -72,51 +72,17 @@ async def app_lifespan(app):
 app = FastAPI(title="Aeryn Daemon", version="41.0")
 
 async def broadcast_loop():
-    """Broadcast system stats every 5 seconds."""
+    """Main broadcast loop - sends all data every 5 seconds via WebSocket + SSE."""
+    from aeryn_core.broadcast_all import broadcast_all
+    
     while True:
         await asyncio.sleep(5)
-        emitter = get_emitter()
-        try:
-            mem_total = mem_available = 0
-            try:
-                with open("/proc/meminfo") as f:
-                    for line in f:
-                        if line.startswith("MemTotal:"):
-                            mem_total = int(line.split()[1])
-                        elif line.startswith("MemAvailable:"):
-                            mem_available = int(line.split()[1])
-            except Exception:
-                pass
-            mem_used_mb = round((mem_total - mem_available) / 1024, 1) if mem_total else 0
-            mem_total_mb = round(mem_total / 1024, 1) if mem_total else 0
-            mem_pct = round(mem_used_mb / mem_total_mb * 100, 1) if mem_total_mb else 0
-            import shutil
-            disk = shutil.disk_usage("/")
-            disk_free_gb = round(disk.free / (1024**3), 2)
-            disk_pct = round((disk.total - disk.free) / disk.total * 100, 1)
-            process_mem = 0
-            try:
-                with open("/proc/self/status") as f:
-                    for line in f:
-                        if line.startswith("VmRSS:"):
-                            process_mem = int(line.split()[1]) / 1024
-                            break
-            except Exception:
-                pass
-            await emitter.broadcast("stats", {
-                "memory_used_mb": mem_used_mb,
-                "memory_total_mb": mem_total_mb,
-                "memory_percent": mem_pct,
-                "disk_free_gb": disk_free_gb,
-                "disk_percent": disk_pct,
-                "process_mem_mb": round(process_mem, 1),
-                "uptime_s": round(time.time() - _start_time, 0),
-                "requests_total": _request_count,
-                "errors_total": _error_count,
-            })
-        except Exception:
-            pass
+        await broadcast_all()
 
+
+_start_time = time.time()
+_request_count = 0
+_error_count = 0
 _start_time = time.time()
 _request_count = 0
 _error_count = 0
@@ -415,6 +381,8 @@ async def dashboard_stream():
 @app.websocket("/ws/dashboard")
 async def dashboard_websocket(websocket: WebSocket):
     """WebSocket endpoint for two-way dashboard commands."""
+    from aeryn_core.broadcast_all import handle_websocket_command, broadcast_all
+    
     emitter = get_emitter()
     client_id = f"ws_{int(time.time())}"
     emitter.register_ws(client_id, websocket)
@@ -422,6 +390,9 @@ async def dashboard_websocket(websocket: WebSocket):
     try:
         await websocket.accept()
         await websocket.send_json({"type": "connected", "data": {}})
+        
+        # Send initial data
+        await broadcast_all()
         
         while True:
             msg = await websocket.receive_text()
@@ -435,24 +406,11 @@ async def dashboard_websocket(websocket: WebSocket):
                 elif cmd_type == "get_history":
                     history = emitter.get_history(50)
                     await websocket.send_json({"type": "history", "data": history})
-                elif cmd_type == "get_stats":
-                    stats = emitter.get_stats()
-                    await websocket.send_json({"type": "stats", "data": stats})
-                elif cmd_type == "action":
-                    action = cmd_data.get("action", "")
-                    # Handle actions
-                    if action == "backup":
-                        await websocket.send_json({"type": "action_result", "data": {"action": action, "status": "started"}})
-                    elif action == "dream":
-                        await websocket.send_json({"type": "action_result", "data": {"action": action, "status": "started"}})
-                    elif action == "cache-clear":
-                        await websocket.send_json({"type": "action_result", "data": {"action": action, "status": "done"}})
-                    elif action == "restart":
-                        await websocket.send_json({"type": "action_result", "data": {"action": action, "status": "started"}})
-                    else:
-                        await websocket.send_json({"type": "error", "data": {"message": f"Unknown action: {action}"}})
                 else:
-                    await websocket.send_json({"type": "error", "data": {"message": f"Unknown command: {cmd_type}"}})
+                    # Handle all other commands via broadcast_all handler
+                    result = await handle_websocket_command(cmd_type, cmd_data)
+                    await websocket.send_json({"type": cmd_type, "data": result})
+                    
             except json.JSONDecodeError:
                 await websocket.send_json({"type": "error", "data": {"message": "Invalid JSON"}})
     except WebSocketDisconnect:

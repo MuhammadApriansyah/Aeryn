@@ -1,25 +1,20 @@
 #!/usr/bin/env python3
-"""V40.55 — Realtime: SSE + WebSocket infrastructure for dashboard.
-
-Provides:
-- EventEmitter: broadcast events to SSE + WebSocket clients
-- SSE endpoint: /dashboard/stream (server pushes stats every 5s)
-- WebSocket endpoint: /ws/dashboard (two-way commands)
-"""
+"""V41.0 — Realtime: Enhanced EventEmitter for all data types."""
 
 import os, sys, json, asyncio, time, threading
-from typing import Dict, Set, Optional, Any
+from typing import Dict, Set, Optional, Any, Callable
 from collections import defaultdict
 
 class EventEmitter:
-    """Broadcast events to SSE + WebSocket subscribers."""
+    """Broadcast events to SSE + WebSocket clients for all data types."""
     
     def __init__(self):
         self._sse_queues: Dict[str, asyncio.Queue] = {}
-        self._ws_connections: Dict[str, Any] = {}  # websocket objects
+        self._ws_connections: Dict[str, Any] = {}
         self._lock = threading.Lock()
         self._event_history: list = []
-        self._max_history = 100
+        self._max_history = 200
+        self._handlers: Dict[str, Callable] = {}  # command handlers for WS
     
     def register_sse(self, client_id: str, queue: asyncio.Queue):
         with self._lock:
@@ -37,6 +32,20 @@ class EventEmitter:
         with self._lock:
             self._ws_connections.pop(client_id, None)
     
+    def register_handler(self, command: str, handler: Callable):
+        """Register a handler for WebSocket commands."""
+        self._handlers[command] = handler
+    
+    async def handle_command(self, client_id: str, command: str, data: Any) -> Any:
+        """Handle a WebSocket command."""
+        handler = self._handlers.get(command)
+        if handler:
+            try:
+                return await handler(data)
+            except Exception as e:
+                return {"error": str(e)}
+        return {"error": f"Unknown command: {command}"}
+    
     async def broadcast(self, event_type: str, data: Any = None):
         """Broadcast event to all connected clients."""
         event = {
@@ -45,7 +54,6 @@ class EventEmitter:
             "timestamp": time.time(),
         }
         
-        # Store in history
         self._event_history.append(event)
         if len(self._event_history) > self._max_history:
             self._event_history.pop(0)
@@ -71,6 +79,15 @@ class EventEmitter:
         
         for cid in dead_ws:
             self.unregister_ws(cid)
+    
+    async def send_to_ws(self, client_id: str, event_type: str, data: Any = None):
+        """Send event to specific WebSocket client."""
+        ws = self._ws_connections.get(client_id)
+        if ws:
+            try:
+                await ws.send_json({"type": event_type, "data": data, "timestamp": time.time()})
+            except Exception:
+                self.unregister_ws(client_id)
     
     def get_history(self, limit: int = 50) -> list:
         return self._event_history[-limit:]
