@@ -28,6 +28,7 @@ from aeryn_core.entity_resolution import get_entity_resolver
 from aeryn_core.owasp_security import get_owasp_security
 from aeryn_core.plugin_system import get_plugin_manager
 from aeryn_core.long_horizon import get_long_horizon_planner, TaskPriority
+from aeryn_core.llm_client import get_mode_router, AerynLLMClient
 from aeryn_core.temporal_memory import get_temporal_memory
 from aeryn_core.self_improvement import get_self_improvement_engine
 from aeryn_core.skill_crystallization import get_skill_crystallizer
@@ -52,7 +53,7 @@ async def app_lifespan(app):
     yield
     task.cancel()
 
-app = FastAPI(title="Aeryn Daemon", version="40.55", lifespan=app_lifespan)
+app = FastAPI(title="Aeryn Daemon", version="41.0")
 
 async def broadcast_loop():
     """Broadcast system stats every 5 seconds."""
@@ -177,15 +178,102 @@ async def run(req: RunRequest):
     eng = get_safety_engine()
     safety = eng.check_input(req.goal)
     if not safety.safe: return {"status": "blocked", "safety": safety.to_dict()}
+    
     research = needs_research(req.goal)
     adapter = get_active_adapter(req.goal)
     persona = load_persona()
+    
+    # Build prompt
     prompt = f"{persona}\n\nUser: {req.goal}"
     if adapter: prompt += f"\n{render_adapter_context(req.goal)}"
-    response = f"Processing: {req.goal[:200]}"
-    if adapter: response += f"\n[Adapter: {adapter.name}]"
-    if research: response += "\n[Research needed]"
-    return {"status": "ok", "session_id": req.session_id, "safety": safety.to_dict(), "adapter": adapter.name if adapter else None, "needs_research": research, "response": sanitize_output(response)}
+    
+    # Get mode router
+    router = get_mode_router()
+    
+    if router.is_standalone():
+        # Standalone mode: call LLM directly
+        try:
+            messages = [
+                {"role": "system", "content": persona},
+                {"role": "user", "content": req.goal},
+            ]
+            result = await router.llm.chat(messages)
+            response = result["content"]
+            return {
+                "status": "ok",
+                "session_id": req.session_id,
+                "safety": safety.to_dict(),
+                "adapter": adapter.name if adapter else None,
+                "needs_research": research,
+                "response": sanitize_output(response),
+                "provider": result.get("provider"),
+                "model": result.get("model"),
+            }
+        except Exception as e:
+            return {
+                "status": "error",
+                "error": str(e),
+                "session_id": req.session_id,
+            }
+    else:
+        # Plugin mode: return prompt for Hermes to process
+        response = f"Processing: {req.goal[:200]}"
+        if adapter: response += f"\n[Adapter: {adapter.name}]"
+        if research: response += "\n[Research needed]"
+        return {
+            "status": "ok",
+            "session_id": req.session_id,
+            "safety": safety.to_dict(),
+            "adapter": adapter.name if adapter else None,
+            "needs_research": research,
+            "response": sanitize_output(response),
+        }
+
+
+@app.post("/chat")
+async def chat(req: RunRequest):
+    """Full chat endpoint with session + LLM (standalone mode)."""
+    router = get_mode_router()
+    
+    if router.is_plugin():
+        return await run(req)
+    
+    # Get or create session
+    session = router.sessions.get_or_create(req.session_id)
+    
+    # Safety check
+    eng = get_safety_engine()
+    safety = eng.check_input(req.goal)
+    if not safety.safe:
+        return {"status": "blocked", "safety": safety.to_dict()}
+    
+    # Add user message
+    session.add_message("user", req.goal)
+    router.memory.store(req.session_id, "user", req.goal)
+    
+    # Get context window
+    messages = [
+        {"role": "system", "content": load_persona()},
+    ] + session.get_context_window()
+    
+    # Call LLM
+    try:
+        result = await router.llm.chat(messages)
+        response = result["content"]
+        
+        # Store response
+        session.add_message("assistant", response)
+        router.memory.store(req.session_id, "assistant", response)
+        
+        return {
+            "status": "ok",
+            "session_id": req.session_id,
+            "response": response,
+            "provider": result.get("provider"),
+            "model": result.get("model"),
+        }
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
 
 @app.get("/search")
 async def search(q: str, limit: int = 10):
