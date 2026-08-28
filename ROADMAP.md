@@ -1,7 +1,56 @@
-# Aeryn — Development Roadmap 2025
+# Aeryn — Development Roadmap 2025-2026
 
 > Approved: 2026-08-28
 > Current Version: V40.55 (95 versions, 614 tests, Grade A)
+
+---
+
+## Market Context
+
+### Industry Data (2026)
+
+| Metric | Value |
+|---|---|
+| Global AI Agent Market (2025) | $7.63 billion |
+| Global AI Agent Market (2026) | $10.91 billion |
+| Projected Market (2030) | $52.6 billion |
+| CAGR | 46.3% |
+| Enterprise Adoption (2026) | 40% of apps embed agents |
+| MCP Download Growth | 8,000% (100K → 8M in 5 months) |
+
+### Key Market Insights
+
+1. **MCP is the Standard** — Model Context Protocol became "HTTP for AI agents"
+   - 9,400+ public MCP servers
+   - MCP server downloads grew 8,000% in 5 months
+   - Aeryn already has MCP Server — **on the right track**
+
+2. **Hybrid Deployment Wins**
+   - SaaS: 3.0/5
+   - Self-Hosted: 3.8/5
+   - **Hybrid: 4.2/5** (compliance + time-to-value)
+
+3. **Pricing Model Shift**
+   - Seat-based → Usage-based
+   - Per-tool-call billing emerging
+   - Outcome-based pricing (charge only on success)
+
+4. **Dominant Vendors**
+   - Salesforce Agentforce 360: $800M ARR, 29,000 deals
+   - Microsoft Copilot Studio: Computer-use agents GA 2026
+   - SAP Joule: 40+ specialized agents
+
+### Aeryn Competitive Advantages
+
+| Aeryn Strength | Market Differentiator |
+|---|---|
+| Emotional Intelligence | ❌ Not available in competitors |
+| Dream Synthesis | ❌ Not available in competitors |
+| Self-Improvement Loop | ❌ Not available in competitors |
+| 21 Safety Validators | ⚠️ More comprehensive than most |
+| Hybrid Architecture | ✅ Aligned with market trend |
+| MCP Server | ✅ Standard protocol |
+| Multi-Tenant | ✅ Enterprise-ready |
 
 ---
 
@@ -63,20 +112,28 @@ personalization.py     — User profile, preferences, mood tracking
 ### Goal
 Aeryn bisa diakses oleh **developer lain** via API yang reliable dan mudah.
 
+### Market Context
+- MCP adoption growing 8,000% — Aeryn needs full MCP compliance
+- Hybrid deployment scoring 4.2/5 — Aeryn already hybrid
+- Per-tool-call billing emerging — Aeryn needs usage metering
+- API documentation critical for developer adoption
+
 ### Fitur Utama
 
 | # | Fitur | Deskripsi | Status |
 |---|---|---|---|
 | 1 | **Public API Docs** | Swagger/Redoc interaktif | ❌ Planned |
 | 2 | **API Key Management** | Per-user key, rate limit, quota | ❌ Planned |
-| 3 | **SDK Python** | `pip install aeryn-sdk` | ❌ Planned |
-| 4 | **SDK TypeScript** | `npm install aeryn-sdk` | ❌ Planned |
-| 5 | **Plugin Marketplace** | Share/load plugins publik | ❌ Planned |
-| 6 | **Webhook System** | Push notifications ke external | ❌ Planned |
-| 7 | **GraphQL API** | Flexible querying | ✅ V40.35 |
-| 8 | **REST API** | Full CRUD endpoints | ✅ V40.0+ |
-| 9 | **MCP Server** | Model Context Protocol | ✅ V40.76 |
-| 10 | **Plugin System** | Install/unload lifecycle | ✅ V40.11 |
+| 3 | **Usage Metering** | Per-tool-call tracking | ❌ Planned |
+| 4 | **Per-Tool-Call Billing** | Usage-based pricing foundation | ❌ Planned |
+| 5 | **SDK Python** | `pip install aeryn-sdk` | ❌ Planned |
+| 6 | **SDK TypeScript** | `npm install aeryn-sdk` | ❌ Planned |
+| 7 | **Plugin Marketplace** | Share/load plugins publik | ❌ Planned |
+| 8 | **Webhook System** | Push notifications ke external | ❌ Planned |
+| 9 | **GraphQL API** | Flexible querying | ✅ V40.35 |
+| 10 | **REST API** | Full CRUD endpoints | ✅ V40.0+ |
+| 11 | **MCP Server** | Model Context Protocol | ✅ V40.76 |
+| 12 | **Plugin System** | Install/unload lifecycle | ✅ V40.11 |
 
 ### Architecture Additions
 
@@ -84,6 +141,7 @@ Aeryn bisa diakses oleh **developer lain** via API yang reliable dan mudah.
 api_gateway/
   ├── auth.py            — API key validation, OAuth2
   ├── rate_limiter.py    — Token bucket, per-key quotas
+  ├── metering.py        — Usage tracking, per-tool-call
   ├── docs.py            — Swagger/Redoc generation
   └── webhooks.py        — Webhook registration, delivery
 
@@ -113,10 +171,10 @@ marketplace/
 | Week | Deliverable |
 |---|---|
 | W1 | API Key Management + Auth |
-| W2 | Public API Docs (Swagger) |
-| W3 | SDK Python v1 |
-| W4 | SDK TypeScript v1 |
-| W5 | Plugin MVP |
+| W2 | Usage Metering + Per-Tool-Call Billing |
+| W3 | Public API Docs (Swagger) |
+| W4 | SDK Python v1 |
+| W5 | SDK TypeScript v1 |
 | W6 | Webhook System v1 |
 
 ---
@@ -125,6 +183,12 @@ marketplace/
 
 ### Goal
 Aeryn siap untuk **team dan organisasi** dengan security & compliance.
+
+### Market Context
+- 62% of enterprises experimenting, <25% scaled
+- 52% cite data quality as #1 blocker
+- EU AI Act enforcement starts Aug 2, 2026
+- Hybrid deployment preferred (4.2/5)
 
 ### Fitur Utama
 
@@ -272,12 +336,27 @@ infrastructure/
 
 ---
 
+## Monetization Strategy
+
+```
+Open Source Core                    Paid Enterprise
+├── MCP Server (14 tools)         ├── Usage metering
+├── REST API (50+ endpoints)      ├── Per-tool-call billing
+├── GraphQL                       ├── Outcome-based pricing
+├── Self-hosted                   ├── Team workspaces
+└── Basic auth                    ├── SSO providers
+                                   ├── Compliance (SOC2)
+                                   └── Support SLA
+```
+
+---
+
 ## Contributing
 
 1. Fork → Branch → PR
 2. Tests required (`pytest tests/ -q`)
 3. Lint clean (`python -m py_compile`)
-4. Document new features in `FEATURE_ROADMAP.md`
+4. Document new features in `ROADMAP.md`
 
 ---
 
@@ -288,3 +367,4 @@ Private — Sen's personal project.
 ---
 
 *Last updated: 2026-08-28*
+*Aeryn V40.55 | 95 versions | 614 tests | Grade A*
