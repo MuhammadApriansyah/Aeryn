@@ -123,3 +123,9 @@
 2026-08-28 00:11:48: INFO:     127.0.0.1:54506 - "GET /dashboard HTTP/1.1" 200 OK
 2026-08-28 00:11:48: INFO:     127.0.0.1:54506 - "GET /dashboard/stats HTTP/1.1" 200 OK
 2026-08-28 00:12:19: INFO:     127.0.0.1:55242 - "GET /dashboard/stats HTTP/1.1" 200 OK
+2026-08-28 00:20:02: INFO:     127.0.0.1:46780 - "GET /health HTTP/1.1" 200 OK
+2026-08-28 00:20:21: INFO:     127.0.0.1:60246 - "POST /dream/synthesize HTTP/1.1" 200 OK
+2026-08-28 00:20:21: INFO:     127.0.0.1:60258 - "GET /guardrails/validators HTTP/1.1" 200 OK
+2026-08-28 00:20:22: INFO:     127.0.0.1:60274 - "POST /sandbox/create HTTP/1.1" 200 OK
+2026-08-28 00:20:22: INFO:     127.0.0.1:60278 - "POST /memory/extract-entities HTTP/1.1" 422 Unprocessable Entity
+2026-08-28 00:20:22: INFO:     127.0.0.1:60286 - "GET /shared/stats HTTP/1.1" 200 OK

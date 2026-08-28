@@ -28,10 +28,10 @@ from aeryn_core.vault import AerynVault, VaultEntry, LAYER_WIKI
 from aeryn_core.social_memory import SocialMemory
 from aeryn_core.hybrid_search import get_search_engine
 from aeryn_core.persona_engine import load_persona
-from aeryn_core.guardrails import get_guardrails
-from aeryn_core.sandbox import get_secure_terminal
-from aeryn_core.memory_learning import get_memory_learner
-from aeryn_core.mcp_server import AerynToolHandler
+from aeryn_core.dream_synthesis import get_dream_synthesizer
+from aeryn_core.enhanced_memory import get_entity_extractor, get_preference_learner, get_cross_session_recall
+from aeryn_core.enhanced_guardrails import get_enhanced_guardrails
+from aeryn_core.enhanced_sandbox import get_enhanced_sandbox, SandboxLimits
 from aeryn_core.shared_db import get_shared_db
 from aeryn_core.config import ensure_dirs
 
@@ -497,6 +497,65 @@ async def get_stats():
     """Get overall statistics."""
     db = get_shared_db()
     return db.get_stats()
+
+
+# ── Enhanced Features Endpoints ─────────────────────────────────
+
+@app.get("/guardrails/validators")
+async def list_validators(category: str = None):
+    """List all available validators."""
+    guardrails = get_enhanced_guardrails()
+    if category:
+        return {"validators": guardrails.get_validators_by_category(category)}
+    return {"validators": guardrails.get_all_validators()}
+
+
+@app.post("/sandbox/create")
+async def create_sandbox(user_id: str = "default", allow_network: bool = False,
+                         max_time: int = 30):
+    """Create a new sandbox session."""
+    sandbox = get_enhanced_sandbox()
+    limits = SandboxLimits(max_execution_time=max_time, allow_network=allow_network)
+    session_id = sandbox.create_session(user_id=user_id, limits=limits)
+    return {"session_id": session_id, "status": "created"}
+
+
+@app.get("/sandbox/session/{session_id}")
+async def get_sandbox_session(session_id: str):
+    """Get sandbox session info and audit history."""
+    sandbox = get_enhanced_sandbox()
+    info = sandbox.get_session_info(session_id)
+    history = sandbox.audit.get_session_history(session_id)
+    return {"info": info, "history": history}
+
+
+@app.delete("/sandbox/session/{session_id}")
+async def cleanup_sandbox(session_id: str):
+    """Clean up a sandbox session."""
+    sandbox = get_enhanced_sandbox()
+    sandbox.cleanup_session(session_id)
+    return {"status": "cleaned"}
+
+
+@app.post("/dream/synthesize")
+async def dream_synthesize(user_id: str = "default", days: int = 7):
+    """Run dream synthesis."""
+    synthesizer = get_dream_synthesizer()
+    return synthesizer.synthesize(user_id, days)
+
+
+@app.get("/dream/insights")
+async def get_insights(user_id: str = "default", limit: int = 20):
+    """Get dream insights."""
+    synthesizer = get_dream_synthesizer()
+    return synthesizer.get_insights(user_id, limit)
+
+
+@app.post("/memory/extract-entities")
+async def extract_entities(text: str):
+    """Extract entities from text."""
+    extractor = get_entity_extractor()
+    return extractor.extract(text)
 
 
 # ── Guardrails Endpoints ────────────────────────────────────────
