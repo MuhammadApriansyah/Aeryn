@@ -166,3 +166,37 @@
 2026-08-28 00:58:05: INFO:     Waiting for application startup.
 2026-08-28 00:58:05: INFO:     Application startup complete.
 2026-08-28 00:58:05: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-28 01:11:00: INFO:     Shutting down
+2026-08-28 01:11:00: INFO:     Waiting for application shutdown.
+2026-08-28 01:11:00: INFO:     Application shutdown complete.
+2026-08-28 01:11:00: INFO:     Finished server process [16678]
+2026-08-28 01:11:00:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
+2026-08-28 01:11:00:     manager = get_plugin_manager()
+2026-08-28 01:11:00: IndentationError: unexpected indent
+2026-08-28 01:11:00:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
+2026-08-28 01:11:00:     manager = get_plugin_manager()
+2026-08-28 01:11:00: IndentationError: unexpected indent
+2026-08-28 01:11:00:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
+2026-08-28 01:11:00:     manager = get_plugin_manager()
+2026-08-28 01:11:00: IndentationError: unexpected indent
+2026-08-28 01:11:01:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
+2026-08-28 01:11:01:     manager = get_plugin_manager()
+2026-08-28 01:11:01: IndentationError: unexpected indent
+2026-08-28 01:11:01:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
+2026-08-28 01:11:01:     manager = get_plugin_manager()
+2026-08-28 01:11:01: IndentationError: unexpected indent
+2026-08-28 01:11:01:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
+2026-08-28 01:11:01:     manager = get_plugin_manager()
+2026-08-28 01:11:01: IndentationError: unexpected indent
+2026-08-28 01:11:01:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
+2026-08-28 01:11:01:     manager = get_plugin_manager()
+2026-08-28 01:11:01: IndentationError: unexpected indent
+2026-08-28 01:11:01:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
+2026-08-28 01:11:01:     manager = get_plugin_manager()
+2026-08-28 01:11:01: IndentationError: unexpected indent
+2026-08-28 01:11:01:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
+2026-08-28 01:11:01:     manager = get_plugin_manager()
+2026-08-28 01:11:01: IndentationError: unexpected indent
+2026-08-28 01:11:01:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
+2026-08-28 01:11:01:     manager = get_plugin_manager()
+2026-08-28 01:11:01: IndentationError: unexpected indent

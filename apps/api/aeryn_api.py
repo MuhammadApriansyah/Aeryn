@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""V40.0 — Aeryn Daemon :3010 (Hermes-compatible) — Production Ready."""
+"""V40.20 — Aeryn Daemon :3010 — Production Ready with All Features."""
 
 import os
 import sys
@@ -23,17 +23,19 @@ from aeryn_core.hybrid_search import get_search_engine
 from aeryn_core.persona_engine import load_persona
 from aeryn_core.shared_db import get_shared_db
 from aeryn_core.config import ensure_dirs
-from aeryn_core.multi_agent import get_multi_agent_orchestrator, AgentRole, TaskPriority
-from aeryn_core.memory_decay import get_memory_decay_engine
-from aeryn_core.entity_resolution import get_entity_resolver
-from aeryn_core.owasp_security import get_owasp_security
-from aeryn_core.plugin_system import get_plugin_manager
 from aeryn_core.dream_synthesis import get_dream_synthesizer
 from aeryn_core.enhanced_memory import get_entity_extractor, get_preference_learner, get_cross_session_recall
 from aeryn_core.enhanced_guardrails import get_enhanced_guardrails
 from aeryn_core.enhanced_sandbox import get_enhanced_sandbox, SandboxLimits
+from aeryn_core.multi_agent import get_multi_agent_orchestrator, AgentRole, TaskPriority as AgentTaskPriority
+from aeryn_core.memory_decay import get_memory_decay_engine
+from aeryn_core.entity_resolution import get_entity_resolver
+from aeryn_core.owasp_security import get_owasp_security
+from aeryn_core.plugin_system import get_plugin_manager
+from aeryn_core.long_horizon import get_long_horizon_planner, TaskPriority
+from aeryn_core.temporal_memory import get_temporal_memory
 
-app = FastAPI(title="Aeryn Daemon", version="40.16")
+app = FastAPI(title="Aeryn Daemon", version="40.20")
 
 # ── State ────────────────────────────────────────────────────────
 _start_time = time.time()
@@ -71,7 +73,7 @@ class RunRequest(BaseModel):
     goal: str = Field(..., min_length=1, max_length=4000)
     session_id: str = Field(default_factory=lambda: str(uuid.uuid4())[:12])
 
-# ── Endpoints ────────────────────────────────────────────────────
+# ── Core Endpoints ──────────────────────────────────────────────
 
 @app.get("/health")
 async def health():
@@ -80,9 +82,9 @@ async def health():
         import psutil
         process = psutil.Process()
         mem_mb = process.memory_info().rss / 1024 / 1024
-        return {"status": "healthy", "memory_mb": round(mem_mb, 1), "version": "40.0"}
+        return {"status": "healthy", "memory_mb": round(mem_mb, 1), "version": "40.20"}
     except ImportError:
-        return {"status": "healthy", "version": "40.0"}
+        return {"status": "healthy", "version": "40.20"}
 
 @app.post("/compile")
 async def compile(req: CompileRequest):
@@ -416,6 +418,181 @@ async def cleanup_sandbox(session_id: str):
     sandbox.cleanup_session(session_id)
     return {"status": "cleaned"}
 
+# ── Multi-Agent ─────────────────────────────────────────────────
+
+@app.post("/agents/register")
+async def register_agent(name: str, role: str = "worker", capabilities: str = "[]"):
+    orchestrator = get_multi_agent_orchestrator()
+    caps = json.loads(capabilities) if capabilities.startswith("[") else []
+    try:
+        agent_role = AgentRole(role)
+    except ValueError:
+        agent_role = AgentRole.WORKER
+    agent_id = orchestrator.register_agent(name, agent_role, caps)
+    return {"agent_id": agent_id, "status": "registered"}
+
+@app.get("/agents")
+async def list_agents():
+    orchestrator = get_multi_agent_orchestrator()
+    return {"agents": orchestrator.get_active_agents()}
+
+@app.post("/agents/tasks/create")
+async def create_agent_task(title: str, description: str = "", assigned_to: str = None,
+                            assigned_by: str = None, priority: int = 5):
+    orchestrator = get_multi_agent_orchestrator()
+    try:
+        task_priority = AgentTaskPriority(priority)
+    except ValueError:
+        task_priority = AgentTaskPriority.MEDIUM
+    task_id = orchestrator.create_task(title, description, assigned_to, assigned_by, task_priority)
+    return {"task_id": task_id, "status": "created"}
+
+@app.get("/agents/tasks")
+async def list_agent_tasks(status: str = None):
+    orchestrator = get_multi_agent_orchestrator()
+    return {"tasks": orchestrator.get_tasks(status=status)}
+
+# ── Memory Decay ────────────────────────────────────────────────
+
+@app.post("/memory/decay")
+async def run_decay(user_id: str = "default"):
+    engine = get_memory_decay_engine()
+    return engine.decay_all(user_id)
+
+@app.get("/memory/decay/stats")
+async def get_decay_stats():
+    engine = get_memory_decay_engine()
+    return engine.get_decay_stats()
+
+# ── Entity Resolution ───────────────────────────────────────────
+
+@app.post("/memory/entities/register")
+async def register_entity(name: str, entity_type: str, properties: str = "{}"):
+    resolver = get_entity_resolver()
+    props = json.loads(properties)
+    entity_id = resolver.register_entity(name, entity_type, props)
+    return {"entity_id": entity_id}
+
+@app.get("/memory/entities/resolve")
+async def resolve_entity(name: str, entity_type: str = None):
+    resolver = get_entity_resolver()
+    result = resolver.resolve(name, entity_type)
+    return {"entity": result}
+
+@app.get("/memory/entities")
+async def list_entities(entity_type: str = None):
+    resolver = get_entity_resolver()
+    return {"entities": resolver.get_all_entities(entity_type)}
+
+# ── Plugin System ───────────────────────────────────────────────
+
+@app.post("/plugins/install")
+async def install_plugin(source_dir: str):
+    manager = get_plugin_manager()
+    plugin = manager.install_plugin(source_dir)
+    if plugin:
+        return {"status": "installed", "plugin": plugin.name}
+    return {"status": "error", "error": "Failed to install plugin"}
+
+@app.get("/plugins")
+async def list_plugins():
+    manager = get_plugin_manager()
+    return {"plugins": manager.list_plugins()}
+
+@app.delete("/plugins/{name}")
+async def uninstall_plugin(name: str):
+    manager = get_plugin_manager()
+    if manager.uninstall_plugin(name):
+        return {"status": "uninstalled"}
+    return {"status": "error", "error": "Plugin not found"}
+
+# ── OWASP Security ──────────────────────────────────────────────
+
+@app.post("/security/scan")
+async def security_scan(text: str, context: str = "general"):
+    security = get_owasp_security()
+    return security.scan(text, context)
+
+@app.get("/security/controls")
+async def list_controls():
+    security = get_owasp_security()
+    return {"controls": list(security._controls.keys())}
+
+# ── Discord Bot ────────────────────────────────────────────────
+
+@app.get("/discord/commands")
+async def discord_commands():
+    from aeryn_core.discord_bot import DiscordBotHandler
+    handler = DiscordBotHandler()
+    return {"commands": handler.get_commands()}
+
+@app.post("/discord/interaction")
+async def discord_interaction(interaction: dict):
+    from aeryn_core.discord_bot import DiscordBotHandler
+    handler = DiscordBotHandler()
+    result = await handler.handle_interaction(interaction)
+    return result
+
+# ── Long-Horizon Planning ──────────────────────────────────────
+
+@app.post("/planning/tasks/create")
+async def create_plan(title: str, description: str = "", priority: int = 5):
+    planner = get_long_horizon_planner()
+    try:
+        task_priority = TaskPriority(priority)
+    except ValueError:
+        task_priority = TaskPriority.MEDIUM
+    task_id = planner.create_task(title, description, task_priority)
+    return {"task_id": task_id}
+
+@app.post("/planning/tasks/{task_id}/decompose")
+async def decompose_task(task_id: str, subtasks: list):
+    planner = get_long_horizon_planner()
+    subtask_ids = planner.decompose_task(task_id, subtasks)
+    return {"subtask_ids": subtask_ids}
+
+@app.post("/planning/tasks/{task_id}/execute")
+async def execute_plan(task_id: str):
+    planner = get_long_horizon_planner()
+    result = planner.execute_task(task_id)
+    return result
+
+@app.get("/planning/tasks/{task_id}")
+async def get_task(task_id: str):
+    planner = get_long_horizon_planner()
+    task = planner.get_task(task_id)
+    subtasks = planner.get_subtasks(task_id)
+    return {"task": task, "subtasks": subtasks}
+
+@app.get("/planning/tasks")
+async def list_plans(status: str = None):
+    planner = get_long_horizon_planner()
+    return {"tasks": planner.get_all_tasks(status)}
+
+# ── Temporal Memory ─────────────────────────────────────────────
+
+@app.post("/temporal/store")
+async def store_temporal(user_id: str, memory_type: str, title: str,
+                         content: str, timestamp: str = None):
+    temporal = get_temporal_memory()
+    mem_id = temporal.store(user_id, memory_type, title, content, timestamp)
+    return {"memory_id": mem_id}
+
+@app.get("/temporal/query")
+async def temporal_query(user_id: str, query: str):
+    temporal = get_temporal_memory()
+    return temporal.query_time(user_id, query)
+
+@app.get("/temporal/timeline/{user_id}")
+async def get_timeline(user_id: str, days: int = 30):
+    temporal = get_temporal_memory()
+    return {"timeline": temporal.get_timeline(user_id, days)}
+
+@app.get("/temporal/trends/{user_id}")
+async def get_trends(user_id: str, days: int = 30):
+    temporal = get_temporal_memory()
+    return {"trends": temporal.detect_trends(user_id, days)}
+
 # ── Monitoring (Production) ─────────────────────────────────────
 
 @app.get("/metrics")
@@ -435,135 +612,6 @@ async def get_alerts():
     return {"alerts": monitor.get_alerts()}
 
 # ── Main ─────────────────────────────────────────────────────────
-
-
-# ── Multi-Agent ─────────────────────────────────────────────────
-
-@app.post("/agents/register")
-async def register_agent(name: str, role: str = "worker", capabilities: str = "[]"):
-    """Register a new agent."""
-    from aeryn_core.multi_agent import get_multi_agent_orchestrator, AgentRole
-    orchestrator = get_multi_agent_orchestrator()
-    caps = json.loads(capabilities) if capabilities.startswith("[") else []
-    try:
-        agent_role = AgentRole(role)
-    except ValueError:
-        agent_role = AgentRole.WORKER
-    agent_id = orchestrator.register_agent(name, agent_role, caps)
-    return {"agent_id": agent_id, "status": "registered"}
-
-@app.get("/agents")
-async def list_agents():
-    """List all active agents."""
-    from aeryn_core.multi_agent import get_multi_agent_orchestrator
-    orchestrator = get_multi_agent_orchestrator()
-    return {"agents": orchestrator.get_active_agents()}
-
-@app.post("/agents/tasks/create")
-async def create_agent_task(title: str, description: str = "", assigned_to: str = None,
-                            assigned_by: str = None, priority: int = 5):
-    """Create a task for agents."""
-    from aeryn_core.multi_agent import get_multi_agent_orchestrator, TaskPriority
-    orchestrator = get_multi_agent_orchestrator()
-    try:
-        task_priority = TaskPriority(priority)
-    except ValueError:
-        task_priority = TaskPriority.MEDIUM
-    task_id = orchestrator.create_task(title, description, assigned_to, assigned_by, task_priority)
-    return {"task_id": task_id, "status": "created"}
-
-@app.get("/agents/tasks")
-async def list_agent_tasks(status: str = None):
-    """List agent tasks."""
-    from aeryn_core.multi_agent import get_multi_agent_orchestrator
-    orchestrator = get_multi_agent_orchestrator()
-    return {"tasks": orchestrator.get_tasks(status=status)}
-
-# ── Memory Decay ────────────────────────────────────────────────
-
-@app.post("/memory/decay")
-async def run_decay(user_id: str = "default"):
-    """Run memory decay."""
-    from aeryn_core.memory_decay import get_memory_decay_engine
-    engine = get_memory_decay_engine()
-    return engine.decay_all(user_id)
-
-@app.get("/memory/decay/stats")
-async def get_decay_stats():
-    """Get decay statistics."""
-    from aeryn_core.memory_decay import get_memory_decay_engine
-    engine = get_memory_decay_engine()
-    return engine.get_decay_stats()
-
-# ── Entity Resolution ───────────────────────────────────────────
-
-@app.post("/memory/entities/register")
-async def register_entity(name: str, entity_type: str, properties: str = "{}"):
-    """Register an entity."""
-    from aeryn_core.entity_resolution import get_entity_resolver
-    resolver = get_entity_resolver()
-    props = json.loads(properties)
-    entity_id = resolver.register_entity(name, entity_type, props)
-    return {"entity_id": entity_id}
-
-@app.get("/memory/entities/resolve")
-async def resolve_entity(name: str, entity_type: str = None):
-    """Resolve an entity name."""
-    from aeryn_core.entity_resolution import get_entity_resolver
-    resolver = get_entity_resolver()
-    result = resolver.resolve(name, entity_type)
-    return {"entity": result}
-
-@app.get("/memory/entities")
-async def list_entities(entity_type: str = None):
-    """List all entities."""
-    from aeryn_core.entity_resolution import get_entity_resolver
-    resolver = get_entity_resolver()
-    return {"entities": resolver.get_all_entities(entity_type)}
-
-# ── Plugin System ───────────────────────────────────────────────
-
-@app.post("/plugins/install")
-async def install_plugin(source_dir: str):
-    """Install a plugin."""
-    from aeryn_core.plugin_system import get_plugin_manager
-    manager = get_plugin_manager()
-    plugin = manager.install_plugin(source_dir)
-    if plugin:
-        return {"status": "installed", "plugin": plugin.name}
-    return {"status": "error", "error": "Failed to install plugin"}
-
-@app.get("/plugins")
-async def list_plugins():
-    """List all plugins."""
-    from aeryn_core.plugin_system import get_plugin_manager
-    manager = get_plugin_manager()
-    return {"plugins": manager.list_plugins()}
-
-@app.delete("/plugins/{name}")
-async def uninstall_plugin(name: str):
-    """Uninstall a plugin."""
-    from aeryn_core.plugin_system import get_plugin_manager
-    manager = get_plugin_manager()
-    if manager.uninstall_plugin(name):
-        return {"status": "uninstalled"}
-    return {"status": "error", "error": "Plugin not found"}
-
-# ── OWASP Security ──────────────────────────────────────────────
-
-@app.post("/security/scan")
-async def security_scan(text: str, context: str = "general"):
-    """Run OWASP security scan."""
-    from aeryn_core.owasp_security import get_owasp_security
-    security = get_owasp_security()
-    return security.scan(text, context)
-
-@app.get("/security/controls")
-async def list_controls():
-    """List OWASP controls."""
-    from aeryn_core.owasp_security import get_owasp_security
-    security = get_owasp_security()
-    return {"controls": list(security._controls.keys())}
 
 if __name__ == "__main__":
     import uvicorn
