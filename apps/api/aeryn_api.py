@@ -1,19 +1,14 @@
 #!/usr/bin/env python3
-"""V40.20 — Aeryn Daemon :3010 — Production Ready with All Features."""
+"""V40.44 — Aeryn Daemon :3010 — Full Feature Set."""
 
-import os
-import sys
-import time
-import json
-import uuid
+import os, sys, time, json, uuid, sqlite3
 from typing import Optional
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
-
 from aeryn_core.safety_engine import get_safety_engine, sanitize_output
 from aeryn_core.adapters import get_active_adapter, render_adapter_context
 from aeryn_core.reasoning_style import needs_research
@@ -37,15 +32,20 @@ from aeryn_core.temporal_memory import get_temporal_memory
 from aeryn_core.self_improvement import get_self_improvement_engine
 from aeryn_core.skill_crystallization import get_skill_crystallizer
 from aeryn_core.cloud_sync import get_cloud_sync
+from aeryn_core.constitutional_ai import get_constitutional_ai
+from aeryn_core.emotional_intelligence import get_emotional_intelligence
+from aeryn_core.telegram_bot import get_telegram_bot
+from aeryn_core.email_agent import get_email_agent
+from aeryn_core.calendar_integration import get_calendar
+from aeryn_core.github_integration import get_github
+from aeryn_core.data_encryption import get_encryption
+from aeryn_core.auth_manager import get_auth
 
-app = FastAPI(title="Aeryn Daemon", version="40.21")
+app = FastAPI(title="Aeryn Daemon", version="40.44")
 
-# ── State ────────────────────────────────────────────────────────
 _start_time = time.time()
 _request_count = 0
 _error_count = 0
-
-# ── Middleware ────────────────────────────────────────────────────
 
 @app.middleware("http")
 async def track_requests(request: Request, call_next):
@@ -57,8 +57,6 @@ async def track_requests(request: Request, call_next):
     except Exception:
         _error_count += 1
         raise
-
-# ── Request/Response Models ──────────────────────────────────────
 
 class CompileRequest(BaseModel):
     session_id: str = "default"
@@ -76,208 +74,98 @@ class RunRequest(BaseModel):
     goal: str = Field(..., min_length=1, max_length=4000)
     session_id: str = Field(default_factory=lambda: str(uuid.uuid4())[:12])
 
-# ── Core Endpoints ──────────────────────────────────────────────
-
 @app.get("/health")
 async def health():
-    """Health check."""
     try:
         import psutil
         process = psutil.Process()
         mem_mb = process.memory_info().rss / 1024 / 1024
-        return {"status": "healthy", "memory_mb": round(mem_mb, 1), "version": "40.20"}
+        return {"status": "healthy", "memory_mb": round(mem_mb, 1), "version": "40.44"}
     except ImportError:
-        return {"status": "healthy", "version": "40.20"}
+        return {"status": "healthy", "version": "40.44"}
 
 @app.post("/compile")
 async def compile(req: CompileRequest):
-    """Compile cognitive context (Hermes plugin: aeryn_context)."""
     eng = get_safety_engine()
     safety = eng.check_input(req.user_prompt)
     research = needs_research(req.user_prompt)
     adapter = get_active_adapter(req.user_prompt)
-    adapter_name = adapter.name if adapter else None
     persona = load_persona()
-    
-    emotional_tensor = {
-        "safety_risk": safety.risk,
-        "needs_research": research,
-        "adapter": adapter_name,
-        "safe": safety.safe,
-    }
-    
+    emotional_tensor = {"safety_risk": safety.risk, "needs_research": research, "adapter": adapter.name if adapter else None, "safe": safety.safe}
     sm = SocialMemory()
     facts = sm.get_facts(req.session_id)
-    
     prompt_parts = []
-    if req.base_prompt:
-        prompt_parts.append(req.base_prompt[:500])
+    if req.base_prompt: prompt_parts.append(req.base_prompt[:500])
     prompt_parts.append(f"\n[User: {req.user_prompt}]")
-    if facts:
-        prompt_parts.append(f"\n[Context: {', '.join(str(f) for f in facts[:5])}]")
+    if facts: prompt_parts.append(f"\n[Context: {', '.join(str(f) for f in facts[:5])}]")
     if adapter:
         ctx = render_adapter_context(req.user_prompt)
-        if ctx:
-            prompt_parts.append(f"\n{ctx}")
-    
-    compiled_prompt = "\n".join(prompt_parts)
-    
-    if not safety.safe:
-        gate_mode = "blocked"
-    elif research:
-        gate_mode = "research"
-    elif adapter:
-        gate_mode = "adapter"
-    else:
-        gate_mode = "standard"
-    
-    return {
-        "ok": True,
-        "gate_mode": gate_mode,
-        "blackboard": {"emotional_tensor_snapshot": emotional_tensor},
-        "memories": facts[:10] if facts else [],
-        "compiled_prompt": compiled_prompt,
-        "safety": safety.to_dict(),
-    }
+        if ctx: prompt_parts.append(f"\n{ctx}")
+    gate_mode = "blocked" if not safety.safe else ("research" if research else ("adapter" if adapter else "standard"))
+    return {"ok": True, "gate_mode": gate_mode, "blackboard": {"emotional_tensor_snapshot": emotional_tensor}, "memories": facts[:10] if facts else [], "compiled_prompt": "\n".join(prompt_parts), "safety": safety.to_dict()}
 
 @app.post("/digest")
 async def digest(req: DigestRequest):
-    """Report final response (Hermes plugin: aeryn_digest)."""
     eng = get_safety_engine()
     clean_response = sanitize_output(req.response)
     vault = AerynVault()
-    
     if len(req.user_prompt) > 10 and len(clean_response) > 10:
         try:
-            entry = VaultEntry(
-                layer=LAYER_WIKI,
-                title=f"Conversation {req.session_id[:8]}",
-                body=f"User: {req.user_prompt[:200]}\n\nResponse: {clean_response[:500]}",
-                tags=["conversation", "auto"],
-            )
-            vault.write(entry)
-        except Exception:
-            pass
-    
-    audit = {
-        "session_id": req.session_id,
-        "timestamp": time.time(),
-        "input_length": len(req.user_prompt),
-        "output_length": len(clean_response),
-        "sanitized": clean_response != req.response,
-    }
-    
-    return {
-        "ok": True,
-        "status": "digested",
-        "accounting_ledger_audit": {"audit_payload": audit},
-        "cog_mem_lifecycle_telemetry": {"focus_segment_retained": len(req.user_prompt) > 10},
-    }
+            vault.write(VaultEntry(layer=LAYER_WIKI, title=f"Conversation {req.session_id[:8]}", body=f"User: {req.user_prompt[:200]}\n\nResponse: {clean_response[:500]}", tags=["conversation", "auto"]))
+        except Exception: pass
+    return {"ok": True, "status": "digested", "accounting_ledger_audit": {"audit_payload": {"session_id": req.session_id, "timestamp": time.time()}}, "cog_mem_lifecycle_telemetry": {"focus_segment_retained": len(req.user_prompt) > 10}}
 
 @app.post("/run")
 async def run(req: RunRequest):
-    """Run goal through Aeryn pipeline."""
     eng = get_safety_engine()
     safety = eng.check_input(req.goal)
-    
-    if not safety.safe:
-        return {"status": "blocked", "safety": safety.to_dict()}
-    
+    if not safety.safe: return {"status": "blocked", "safety": safety.to_dict()}
     research = needs_research(req.goal)
     adapter = get_active_adapter(req.goal)
     persona = load_persona()
     prompt = f"{persona}\n\nUser: {req.goal}"
-    if adapter:
-        prompt += f"\n{render_adapter_context(req.goal)}"
-    
+    if adapter: prompt += f"\n{render_adapter_context(req.goal)}"
     response = f"Processing: {req.goal[:200]}"
-    if adapter:
-        response += f"\n[Adapter: {adapter.name}]"
-    if research:
-        response += "\n[Research needed]"
-    
-    return {
-        "status": "ok",
-        "session_id": req.session_id,
-        "safety": safety.to_dict(),
-        "adapter": adapter.name if adapter else None,
-        "needs_research": research,
-        "response": sanitize_output(response),
-    }
+    if adapter: response += f"\n[Adapter: {adapter.name}]"
+    if research: response += "\n[Research needed]"
+    return {"status": "ok", "session_id": req.session_id, "safety": safety.to_dict(), "adapter": adapter.name if adapter else None, "needs_research": research, "response": sanitize_output(response)}
 
 @app.get("/search")
 async def search(q: str, limit: int = 10):
-    """Search memories."""
     hse = get_search_engine()
     results = hse.search(q, limit=limit)
     return {"query": q, "results": results, "count": len(results)}
 
 @app.get("/dashboard/stats")
 async def dashboard_stats():
-    """Get statistics for dashboard."""
     try:
         with open("/proc/meminfo") as f:
             lines = f.readlines()
-        mem_total = 0
-        mem_available = 0
+        mem_total = mem_available = 0
         for line in lines:
-            if line.startswith("MemTotal:"):
-                mem_total = int(line.split()[1])
-            elif line.startswith("MemAvailable:"):
-                mem_available = int(line.split()[1])
-        
+            if line.startswith("MemTotal:"): mem_total = int(line.split()[1])
+            elif line.startswith("MemAvailable:"): mem_available = int(line.split()[1])
         mem_used_mb = (mem_total - mem_available) / 1024 if mem_total else 0
         mem_total_mb = mem_total / 1024 if mem_total else 0
         mem_pct = round(mem_used_mb / mem_total_mb * 100, 1) if mem_total_mb else 0
-        
         import shutil
         disk = shutil.disk_usage("/")
-        
         process_mem = 0
         try:
             with open("/proc/self/status") as f:
                 for line in f:
-                    if line.startswith("VmRSS:"):
-                        process_mem = int(line.split()[1]) / 1024
-                        break
-        except Exception:
-            pass
-        
+                    if line.startswith("VmRSS:"): process_mem = int(line.split()[1]) / 1024; break
+        except Exception: pass
         vault = AerynVault()
         vault_counts = vault.count_entries()
         total_vault = sum(vault_counts.values())
-        
         hse = get_search_engine()
         doc_count = hse._doc_count if hasattr(hse, '_doc_count') else 0
-        
         sm = SocialMemory()
         person_count = len(sm._data.get("people", {})) if hasattr(sm, '_data') else 0
-        
-        return {
-            "timestamp": time.time(),
-            "system": {
-                "memory_total_mb": round(mem_total_mb, 1),
-                "memory_used_mb": round(mem_used_mb, 1),
-                "memory_percent": mem_pct,
-                "disk_free_gb": round(disk.free / (1024**3), 2),
-                "disk_percent": round((disk.total - disk.free) / disk.total * 100, 1),
-                "process_mem_mb": round(process_mem, 1),
-                "uptime_s": round(time.time() - _start_time, 0),
-            },
-            "aeryn": {
-                "vault_total_entries": total_vault,
-                "vault_layers": vault_counts,
-                "search_docs": doc_count,
-                "social_people": person_count,
-                "requests_total": _request_count,
-                "errors_total": _error_count,
-                "safety_engine": True,
-            },
-        }
+        return {"timestamp": time.time(), "system": {"memory_total_mb": round(mem_total_mb, 1), "memory_used_mb": round(mem_used_mb, 1), "memory_percent": mem_pct, "disk_free_gb": round(disk.free / (1024**3), 2), "disk_percent": round((disk.total - disk.free) / disk.total * 100, 1), "process_mem_mb": round(process_mem, 1), "uptime_s": round(time.time() - _start_time, 0)}, "aeryn": {"vault_total_entries": total_vault, "vault_layers": vault_counts, "search_docs": doc_count, "social_people": person_count, "requests_total": _request_count, "errors_total": _error_count, "safety_engine": True}}
     except Exception as e:
         return {"error": str(e)}
-
-# ── Shared DB Endpoints ─────────────────────────────────────────
 
 @app.get("/shared/reminders/due")
 async def get_due_reminders():
@@ -337,8 +225,6 @@ async def get_stats():
     db = get_shared_db()
     return db.get_stats()
 
-# ── Dream Synthesis ─────────────────────────────────────────────
-
 @app.post("/dream/synthesize")
 async def dream_synthesize(user_id: str = "default", days: int = 7):
     synthesizer = get_dream_synthesizer()
@@ -348,8 +234,6 @@ async def dream_synthesize(user_id: str = "default", days: int = 7):
 async def get_dream_insights(user_id: str = "default", limit: int = 20):
     synthesizer = get_dream_synthesizer()
     return synthesizer.get_insights(user_id, limit)
-
-# ── Enhanced Memory ─────────────────────────────────────────────
 
 @app.post("/memory/extract-entities")
 async def extract_entities(text: str):
@@ -367,13 +251,10 @@ async def get_preferences(user_id: str, min_confidence: float = 0.0):
     learner = get_preference_learner()
     return learner.get_preferences(user_id, min_confidence)
 
-# ── Enhanced Guardrails ─────────────────────────────────────────
-
 @app.get("/guardrails/validators")
 async def list_validators(category: str = None):
     guardrails = get_enhanced_guardrails()
-    if category:
-        return {"validators": guardrails.get_validators_by_category(category)}
+    if category: return {"validators": guardrails.get_validators_by_category(category)}
     return {"validators": guardrails.get_all_validators()}
 
 @app.post("/guardrails/validate-input")
@@ -393,8 +274,6 @@ async def validate_output(text: str = None, expected_format: str = "text", body:
     guardrails = get_enhanced_guardrails()
     result = guardrails.validate_output(text, expected_format)
     return {"valid": result.valid, "risk": result.risk, "issues": result.issues, "sanitized": result.sanitized, "fallback": result.fallback}
-
-# ── Enhanced Sandbox ────────────────────────────────────────────
 
 @app.post("/sandbox/create")
 async def create_sandbox(user_id: str = "default", allow_network: bool = False, max_time: int = 30):
@@ -421,16 +300,12 @@ async def cleanup_sandbox(session_id: str):
     sandbox.cleanup_session(session_id)
     return {"status": "cleaned"}
 
-# ── Multi-Agent ─────────────────────────────────────────────────
-
 @app.post("/agents/register")
 async def register_agent(name: str, role: str = "worker", capabilities: str = "[]"):
     orchestrator = get_multi_agent_orchestrator()
     caps = json.loads(capabilities) if capabilities.startswith("[") else []
-    try:
-        agent_role = AgentRole(role)
-    except ValueError:
-        agent_role = AgentRole.WORKER
+    try: agent_role = AgentRole(role)
+    except ValueError: agent_role = AgentRole.WORKER
     agent_id = orchestrator.register_agent(name, agent_role, caps)
     return {"agent_id": agent_id, "status": "registered"}
 
@@ -440,13 +315,10 @@ async def list_agents():
     return {"agents": orchestrator.get_active_agents()}
 
 @app.post("/agents/tasks/create")
-async def create_agent_task(title: str, description: str = "", assigned_to: str = None,
-                            assigned_by: str = None, priority: int = 5):
+async def create_agent_task(title: str, description: str = "", assigned_to: str = None, assigned_by: str = None, priority: int = 5):
     orchestrator = get_multi_agent_orchestrator()
-    try:
-        task_priority = AgentTaskPriority(priority)
-    except ValueError:
-        task_priority = AgentTaskPriority.MEDIUM
+    try: task_priority = AgentTaskPriority(priority)
+    except ValueError: task_priority = AgentTaskPriority.MEDIUM
     task_id = orchestrator.create_task(title, description, assigned_to, assigned_by, task_priority)
     return {"task_id": task_id, "status": "created"}
 
@@ -454,8 +326,6 @@ async def create_agent_task(title: str, description: str = "", assigned_to: str 
 async def list_agent_tasks(status: str = None):
     orchestrator = get_multi_agent_orchestrator()
     return {"tasks": orchestrator.get_tasks(status=status)}
-
-# ── Memory Decay ────────────────────────────────────────────────
 
 @app.post("/memory/decay")
 async def run_decay(user_id: str = "default"):
@@ -466,8 +336,6 @@ async def run_decay(user_id: str = "default"):
 async def get_decay_stats():
     engine = get_memory_decay_engine()
     return engine.get_decay_stats()
-
-# ── Entity Resolution ───────────────────────────────────────────
 
 @app.post("/memory/entities/register")
 async def register_entity(name: str, entity_type: str, properties: str = "{}"):
@@ -487,14 +355,11 @@ async def list_entities(entity_type: str = None):
     resolver = get_entity_resolver()
     return {"entities": resolver.get_all_entities(entity_type)}
 
-# ── Plugin System ───────────────────────────────────────────────
-
 @app.post("/plugins/install")
 async def install_plugin(source_dir: str):
     manager = get_plugin_manager()
     plugin = manager.install_plugin(source_dir)
-    if plugin:
-        return {"status": "installed", "plugin": plugin.name}
+    if plugin: return {"status": "installed", "plugin": plugin.name}
     return {"status": "error", "error": "Failed to install plugin"}
 
 @app.get("/plugins")
@@ -505,11 +370,8 @@ async def list_plugins():
 @app.delete("/plugins/{name}")
 async def uninstall_plugin(name: str):
     manager = get_plugin_manager()
-    if manager.uninstall_plugin(name):
-        return {"status": "uninstalled"}
+    if manager.uninstall_plugin(name): return {"status": "uninstalled"}
     return {"status": "error", "error": "Plugin not found"}
-
-# ── OWASP Security ──────────────────────────────────────────────
 
 @app.post("/security/scan")
 async def security_scan(text: str, context: str = "general"):
@@ -520,8 +382,6 @@ async def security_scan(text: str, context: str = "general"):
 async def list_controls():
     security = get_owasp_security()
     return {"controls": list(security._controls.keys())}
-
-# ── Discord Bot ────────────────────────────────────────────────
 
 @app.get("/discord/commands")
 async def discord_commands():
@@ -536,15 +396,11 @@ async def discord_interaction(interaction: dict):
     result = await handler.handle_interaction(interaction)
     return result
 
-# ── Long-Horizon Planning ──────────────────────────────────────
-
 @app.post("/planning/tasks/create")
 async def create_plan(title: str, description: str = "", priority: int = 5):
     planner = get_long_horizon_planner()
-    try:
-        task_priority = TaskPriority(priority)
-    except ValueError:
-        task_priority = TaskPriority.MEDIUM
+    try: task_priority = TaskPriority(priority)
+    except ValueError: task_priority = TaskPriority.MEDIUM
     task_id = planner.create_task(title, description, task_priority)
     return {"task_id": task_id}
 
@@ -572,11 +428,8 @@ async def list_plans(status: str = None):
     planner = get_long_horizon_planner()
     return {"tasks": planner.get_all_tasks(status)}
 
-# ── Temporal Memory ─────────────────────────────────────────────
-
 @app.post("/temporal/store")
-async def store_temporal(user_id: str, memory_type: str, title: str,
-                         content: str, timestamp: str = None):
+async def store_temporal(user_id: str, memory_type: str, title: str, content: str, timestamp: str = None):
     temporal = get_temporal_memory()
     mem_id = temporal.store(user_id, memory_type, title, content, timestamp)
     return {"memory_id": mem_id}
@@ -596,11 +449,131 @@ async def get_trends(user_id: str, days: int = 30):
     temporal = get_temporal_memory()
     return {"trends": temporal.detect_trends(user_id, days)}
 
-# ── Monitoring (Production) ─────────────────────────────────────
+@app.post("/improvement/feedback")
+async def submit_feedback(user_id: str, interaction_type: str, input_text: str, output_text: str, rating: int = None, feedback_text: str = ""):
+    engine = get_self_improvement_engine()
+    fid = engine.feedback.record_interaction(user_id, interaction_type, input_text, output_text)
+    if rating is not None: engine.feedback.submit_feedback(fid, rating, feedback_text)
+    return {"feedback_id": fid, "status": "recorded"}
+
+@app.get("/improvement/report")
+async def get_improvement_report(user_id: str = "default"):
+    engine = get_self_improvement_engine()
+    return engine.get_improvement_report(user_id)
+
+@app.post("/skills/detect-patterns")
+async def detect_patterns(user_id: str = "default", min_frequency: int = 3):
+    crystallizer = get_skill_crystallizer()
+    patterns = crystallizer.detector.get_frequent_patterns(user_id, min_frequency)
+    return {"patterns": patterns}
+
+@app.post("/skills/crystallize")
+async def crystallize_skill(user_id: str, pattern_id: str, skill_name: str, description: str = ""):
+    crystallizer = get_skill_crystallizer()
+    skill_id = crystallizer.crystallize(user_id, pattern_id, skill_name, description)
+    return {"skill_id": skill_id}
+
+@app.get("/skills")
+async def list_skills(active_only: bool = True):
+    crystallizer = get_skill_crystallizer()
+    return {"skills": crystallizer.get_skills(active_only=active_only)}
+
+@app.post("/sync/backup")
+async def create_backup(backup_name: str = None):
+    sync = get_cloud_sync()
+    return sync.create_backup(backup_name)
+
+@app.get("/sync/backups")
+async def list_backups():
+    sync = get_cloud_sync()
+    return {"backups": sync.list_backups()}
+
+@app.post("/sync/restore")
+async def restore_backup(backup_name: str, dry_run: bool = False):
+    sync = get_cloud_sync()
+    return sync.restore_backup(backup_name, dry_run)
+
+@app.get("/constitutional/principles")
+async def get_principles():
+    cai = get_constitutional_ai()
+    conn = sqlite3.connect(cai.db_path)
+    rows = conn.execute("SELECT id, name, description, priority FROM principles WHERE is_active=1 ORDER BY priority DESC").fetchall()
+    conn.close()
+    return {"principles": [{"id": r[0], "name": r[1], "description": r[2], "priority": r[3]} for r in rows]}
+
+@app.post("/constitutional/check")
+async def constitutional_check(action: str, context: str = ""):
+    cai = get_constitutional_ai()
+    return cai.check_action(action, context)
+
+@app.post("/emotion/detect")
+async def detect_emotion(text: str, user_id: str = "default"):
+    ei = get_emotional_intelligence()
+    result = ei.detect_mood(text)
+    ei.record_mood(user_id, text)
+    result["empathy_response"] = ei.get_empathy_response(result["mood"])
+    return result
+
+@app.post("/telegram/webhook")
+async def telegram_webhook(update: dict):
+    bot = get_telegram_bot()
+    return bot.handle_update(update)
+
+@app.get("/telegram/commands")
+async def telegram_commands():
+    bot = get_telegram_bot()
+    return {"commands": bot.get_commands()}
+
+@app.post("/email/triage")
+async def email_triage(sender: str, subject: str, body: str):
+    agent = get_email_agent()
+    return agent.triage_email(sender, subject, body)
+
+@app.post("/email/generate-reply")
+async def email_reply(sender: str, subject: str, body: str):
+    agent = get_email_agent()
+    return {"reply": agent.generate_reply(sender, subject, body)}
+
+@app.post("/calendar/events")
+async def create_event(user_id: str, title: str, start_time: str, end_time: str = None, description: str = "", location: str = ""):
+    cal = get_calendar()
+    event_id = cal.create_event(user_id, title, start_time, end_time, description, location)
+    return {"event_id": event_id}
+
+@app.get("/calendar/events/{user_id}")
+async def get_events(user_id: str, start: str = None, end: str = None):
+    cal = get_calendar()
+    return {"events": cal.get_events(user_id, start, end)}
+
+@app.get("/github/status")
+async def github_status():
+    gh = get_github()
+    return {"status": "ready", "token": "configured" if gh.token else "not set"}
+
+@app.post("/encrypt")
+async def encrypt_data(data: str):
+    enc = get_encryption()
+    return {"encrypted": enc.encrypt(data)}
+
+@app.post("/decrypt")
+async def decrypt_data(encrypted_data: str):
+    enc = get_encryption()
+    return {"decrypted": enc.decrypt(encrypted_data)}
+
+@app.post("/auth/register")
+async def register_user(username: str, password: str, role: str = "user"):
+    auth = get_auth()
+    user_id = auth.create_user(username, password, role)
+    return {"user_id": user_id, "status": "created"}
+
+@app.post("/auth/login")
+async def login(username: str, password: str):
+    auth = get_auth()
+    token = auth.authenticate(username, password)
+    return {"token": token, "status": "success" if token else "failed"}
 
 @app.get("/metrics")
 async def get_metrics():
-    """Prometheus-compatible metrics."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from monitor import ProductionMonitor
     monitor = ProductionMonitor()
@@ -608,104 +581,10 @@ async def get_metrics():
 
 @app.get("/alerts")
 async def get_alerts():
-    """Active alerts."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from monitor import ProductionMonitor
     monitor = ProductionMonitor()
     return {"alerts": monitor.get_alerts()}
-
-# ── Main ─────────────────────────────────────────────────────────
-
-
-# ── Self-Improvement ────────────────────────────────────────────
-
-@app.post("/improvement/feedback")
-async def submit_feedback(user_id: str, interaction_type: str, input_text: str,
-                          output_text: str, rating: int = None, feedback_text: str = ""):
-    """Submit feedback for improvement."""
-    from aeryn_core.self_improvement import get_self_improvement_engine
-    engine = get_self_improvement_engine()
-    fid = engine.feedback.record_interaction(user_id, interaction_type, input_text, output_text)
-    if rating is not None:
-        engine.feedback.submit_feedback(fid, rating, feedback_text)
-    return {"feedback_id": fid, "status": "recorded"}
-
-@app.get("/improvement/report")
-async def get_improvement_report(user_id: str = "default"):
-    """Get self-improvement report."""
-    from aeryn_core.self_improvement import get_self_improvement_engine
-    engine = get_self_improvement_engine()
-    return engine.get_improvement_report(user_id)
-
-@app.post("/improvement/analyze")
-async def analyze_patterns(user_id: str = "default"):
-    """Analyze feedback patterns."""
-    from aeryn_core.self_improvement import get_self_improvement_engine
-    engine = get_self_improvement_engine()
-    return engine.analyze_patterns(user_id)
-
-# ── Skill Crystallization ──────────────────────────────────────
-
-@app.post("/skills/detect-patterns")
-async def detect_patterns(user_id: str = "default", min_frequency: int = 3):
-    """Detect frequent action patterns."""
-    from aeryn_core.skill_crystallization import get_skill_crystallizer
-    crystallizer = get_skill_crystallizer()
-    patterns = crystallizer.detector.get_frequent_patterns(user_id, min_frequency)
-    return {"patterns": patterns}
-
-@app.post("/skills/crystallize")
-async def crystallize_skill(user_id: str, pattern_id: str, skill_name: str,
-                            description: str = ""):
-    """Crystallize a pattern into a skill."""
-    from aeryn_core.skill_crystallization import get_skill_crystallizer
-    crystallizer = get_skill_crystallizer()
-    skill_id = crystallizer.crystallize(user_id, pattern_id, skill_name, description)
-    return {"skill_id": skill_id}
-
-@app.get("/skills")
-async def list_skills(active_only: bool = True):
-    """List all crystallized skills."""
-    from aeryn_core.skill_crystallization import get_skill_crystallizer
-    crystallizer = get_skill_crystallizer()
-    return {"skills": crystallizer.get_skills(active_only=active_only)}
-
-@app.post("/skills/{skill_id}/use")
-async def use_skill(skill_id: str, user_id: str = "default", params: dict = None):
-    """Use a crystallized skill."""
-    from aeryn_core.skill_crystallization import get_skill_crystallizer
-    crystallizer = get_skill_crystallizer()
-    return crystallizer.use_skill(skill_id, user_id, params or {})
-
-@app.get("/skills/{skill_id}/export")
-async def export_skill(skill_id: str):
-    """Export a skill for sharing."""
-    from aeryn_core.skill_crystallization import get_skill_crystallizer
-    crystallizer = get_skill_crystallizer()
-    return crystallizer.export_skill(skill_id)
-
-# ── Cloud Sync ─────────────────────────────────────────────────
-
-@app.post("/sync/backup")
-async def create_backup(backup_name: str = None):
-    """Create a backup."""
-    from aeryn_core.cloud_sync import get_cloud_sync
-    sync = get_cloud_sync()
-    return sync.create_backup(backup_name)
-
-@app.get("/sync/backups")
-async def list_backups():
-    """List available backups."""
-    from aeryn_core.cloud_sync import get_cloud_sync
-    sync = get_cloud_sync()
-    return {"backups": sync.list_backups()}
-
-@app.post("/sync/restore")
-async def restore_backup(backup_name: str, dry_run: bool = False):
-    """Restore from backup."""
-    from aeryn_core.cloud_sync import get_cloud_sync
-    sync = get_cloud_sync()
-    return sync.restore_backup(backup_name, dry_run)
 
 if __name__ == "__main__":
     import uvicorn

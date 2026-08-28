@@ -167,3 +167,13 @@
 2026-08-28 01:29:12: INFO:     127.0.0.1:36646 - "GET /health HTTP/1.1" 200 OK
 2026-08-28 01:29:12: INFO:     127.0.0.1:36660 - "POST /memory/decay HTTP/1.1" 200 OK
 2026-08-28 01:30:29: INFO:     127.0.0.1:48428 - "GET /health HTTP/1.1" 200 OK
+2026-08-28 02:35:28: INFO:     127.0.0.1:43882 - "GET /health HTTP/1.1" 200 OK
+2026-08-28 02:45:05: INFO:     127.0.0.1:47064 - "GET /health HTTP/1.1" 200 OK
+2026-08-28 02:45:27: INFO:     127.0.0.1:54258 - "GET /health HTTP/1.1" 200 OK
+2026-08-28 02:45:27: INFO:     127.0.0.1:54272 - "GET /constitutional/principles HTTP/1.1" 200 OK
+2026-08-28 02:45:27: INFO:     127.0.0.1:54276 - "POST /emotion/detect?text=I+am+so+happy HTTP/1.1" 200 OK
+2026-08-28 02:45:27: INFO:     127.0.0.1:54286 - "POST /auth/register?username=test&password=test&role=admin HTTP/1.1" 200 OK
+2026-08-28 02:45:28: INFO:     127.0.0.1:54298 - "GET /telegram/commands HTTP/1.1" 500 Internal Server Error
+2026-08-28 02:45:41: INFO:     127.0.0.1:57618 - "GET /telegram/commands HTTP/1.1" 500 Internal Server Error
+2026-08-28 02:47:59: INFO:     127.0.0.1:40100 - "GET /health HTTP/1.1" 200 OK
+2026-08-28 02:47:59: INFO:     127.0.0.1:40104 - "GET /telegram/commands HTTP/1.1" 200 OK

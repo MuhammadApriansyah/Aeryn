@@ -519,3 +519,355 @@
 2026-08-28 01:30:03: INFO:     Waiting for application startup.
 2026-08-28 01:30:03: INFO:     Application startup complete.
 2026-08-28 01:30:03: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-28 02:42:00: INFO:     Shutting down
+2026-08-28 02:42:00: INFO:     Waiting for application shutdown.
+2026-08-28 02:42:00: INFO:     Application shutdown complete.
+2026-08-28 02:42:00: INFO:     Finished server process [5960]
+2026-08-28 02:42:01:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:42:01:     sync = get_cloud_sync()
+2026-08-28 02:42:01: IndentationError: unexpected indent
+2026-08-28 02:42:05:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:42:05:     sync = get_cloud_sync()
+2026-08-28 02:42:05: IndentationError: unexpected indent
+2026-08-28 02:42:09:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:42:09:     sync = get_cloud_sync()
+2026-08-28 02:42:09: IndentationError: unexpected indent
+2026-08-28 02:42:13:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:42:13:     sync = get_cloud_sync()
+2026-08-28 02:42:13: IndentationError: unexpected indent
+2026-08-28 02:42:17:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:42:17:     sync = get_cloud_sync()
+2026-08-28 02:42:17: IndentationError: unexpected indent
+2026-08-28 02:42:21:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:42:21:     sync = get_cloud_sync()
+2026-08-28 02:42:21: IndentationError: unexpected indent
+2026-08-28 02:42:25:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:42:25:     sync = get_cloud_sync()
+2026-08-28 02:42:25: IndentationError: unexpected indent
+2026-08-28 02:42:30:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:42:30:     sync = get_cloud_sync()
+2026-08-28 02:42:30: IndentationError: unexpected indent
+2026-08-28 02:42:34:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:42:34:     sync = get_cloud_sync()
+2026-08-28 02:42:34: IndentationError: unexpected indent
+2026-08-28 02:42:38:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:42:38:     sync = get_cloud_sync()
+2026-08-28 02:42:38: IndentationError: unexpected indent
+2026-08-28 02:42:42:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:42:42:     sync = get_cloud_sync()
+2026-08-28 02:42:42: IndentationError: unexpected indent
+2026-08-28 02:42:46:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:42:46:     sync = get_cloud_sync()
+2026-08-28 02:42:46: IndentationError: unexpected indent
+2026-08-28 02:42:50:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:42:50:     sync = get_cloud_sync()
+2026-08-28 02:42:50: IndentationError: unexpected indent
+2026-08-28 02:42:54:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:42:54:     sync = get_cloud_sync()
+2026-08-28 02:42:54: IndentationError: unexpected indent
+2026-08-28 02:42:59:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:42:59:     sync = get_cloud_sync()
+2026-08-28 02:42:59: IndentationError: unexpected indent
+2026-08-28 02:43:03:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:43:03:     sync = get_cloud_sync()
+2026-08-28 02:43:03: IndentationError: unexpected indent
+2026-08-28 02:43:07:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:43:07:     sync = get_cloud_sync()
+2026-08-28 02:43:07: IndentationError: unexpected indent
+2026-08-28 02:43:11:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:43:11:     sync = get_cloud_sync()
+2026-08-28 02:43:11: IndentationError: unexpected indent
+2026-08-28 02:43:15:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:43:15:     sync = get_cloud_sync()
+2026-08-28 02:43:15: IndentationError: unexpected indent
+2026-08-28 02:43:19:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 709
+2026-08-28 02:43:19:     sync = get_cloud_sync()
+2026-08-28 02:43:19: IndentationError: unexpected indent
+2026-08-28 02:44:56: INFO:     Started server process [19726]
+2026-08-28 02:44:56: INFO:     Waiting for application startup.
+2026-08-28 02:44:56: INFO:     Application startup complete.
+2026-08-28 02:44:56: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-28 02:45:28: ERROR:    Exception in ASGI application
+2026-08-28 02:45:28:   + Exception Group Traceback (most recent call last):
+2026-08-28 02:45:28:   |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_utils.py", line 76, in collapse_excgroups
+2026-08-28 02:45:28:   |     yield
+2026-08-28 02:45:28:   |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 186, in __call__
+2026-08-28 02:45:28:   |     async with anyio.create_task_group() as task_group:
+2026-08-28 02:45:28:   |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/anyio/_backends/_asyncio.py", line 815, in __aexit__
+2026-08-28 02:45:28:   |     raise BaseExceptionGroup(
+2026-08-28 02:45:28:   | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+2026-08-28 02:45:28:   +-+---------------- 1 ----------------
+2026-08-28 02:45:28:     | Traceback (most recent call last):
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/uvicorn/protocols/http/h11_impl.py", line 416, in run_asgi
+2026-08-28 02:45:28:     |     result = await app(  # type: ignore[func-returns-value]
+2026-08-28 02:45:28:     |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 63, in __call__
+2026-08-28 02:45:28:     |     return await self.app(scope, receive, send)
+2026-08-28 02:45:28:     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 1054, in __call__
+2026-08-28 02:45:28:     |     await super().__call__(scope, receive, send)
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/applications.py", line 113, in __call__
+2026-08-28 02:45:28:     |     await self.middleware_stack(scope, receive, send)
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/errors.py", line 187, in __call__
+2026-08-28 02:45:28:     |     raise exc
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/errors.py", line 165, in __call__
+2026-08-28 02:45:28:     |     await self.app(scope, receive, _send)
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 185, in __call__
+2026-08-28 02:45:28:     |     with collapse_excgroups():
+2026-08-28 02:45:28:     |   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/contextlib.py", line 158, in __exit__
+2026-08-28 02:45:28:     |     self.gen.throw(typ, value, traceback)
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_utils.py", line 82, in collapse_excgroups
+2026-08-28 02:45:28:     |     raise exc
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 187, in __call__
+2026-08-28 02:45:28:     |     response = await self.dispatch_func(request, call_next)
+2026-08-28 02:45:28:     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 55, in track_requests
+2026-08-28 02:45:28:     |     response = await call_next(request)
+2026-08-28 02:45:28:     |                ^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 163, in call_next
+2026-08-28 02:45:28:     |     raise app_exc
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 149, in coro
+2026-08-28 02:45:28:     |     await self.app(scope, receive_or_disconnect, send_no_error)
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+2026-08-28 02:45:28:     |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+2026-08-28 02:45:28:     |     raise exc
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+2026-08-28 02:45:28:     |     await app(scope, receive, sender)
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 715, in __call__
+2026-08-28 02:45:28:     |     await self.middleware_stack(scope, receive, send)
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 735, in app
+2026-08-28 02:45:28:     |     await route.handle(scope, receive, send)
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 288, in handle
+2026-08-28 02:45:28:     |     await self.app(scope, receive, send)
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 76, in app
+2026-08-28 02:45:28:     |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+2026-08-28 02:45:28:     |     raise exc
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+2026-08-28 02:45:28:     |     await app(scope, receive, sender)
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 73, in app
+2026-08-28 02:45:28:     |     response = await f(request)
+2026-08-28 02:45:28:     |                ^^^^^^^^^^^^^^^^
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 301, in app
+2026-08-28 02:45:28:     |     raw_response = await run_endpoint_function(
+2026-08-28 02:45:28:     |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+2026-08-28 02:45:28:     |     return await dependant.call(**values)
+2026-08-28 02:45:28:     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:28:     |   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 525, in telegram_commands
+2026-08-28 02:45:28:     |     return {"commands": bot.get_commands()}
+2026-08-28 02:45:28:     |                         ^^^^^^^^^^^^^^^^
+2026-08-28 02:45:28:     | AttributeError: 'TelegramBot' object has no attribute 'get_commands'
+2026-08-28 02:45:28:     +------------------------------------
+2026-08-28 02:45:28: 
+2026-08-28 02:45:28: During handling of the above exception, another exception occurred:
+2026-08-28 02:45:28: 
+2026-08-28 02:45:28: Traceback (most recent call last):
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/uvicorn/protocols/http/h11_impl.py", line 416, in run_asgi
+2026-08-28 02:45:28:     result = await app(  # type: ignore[func-returns-value]
+2026-08-28 02:45:28:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 63, in __call__
+2026-08-28 02:45:28:     return await self.app(scope, receive, send)
+2026-08-28 02:45:28:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 1054, in __call__
+2026-08-28 02:45:28:     await super().__call__(scope, receive, send)
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/applications.py", line 113, in __call__
+2026-08-28 02:45:28:     await self.middleware_stack(scope, receive, send)
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/errors.py", line 187, in __call__
+2026-08-28 02:45:28:     raise exc
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/errors.py", line 165, in __call__
+2026-08-28 02:45:28:     await self.app(scope, receive, _send)
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 185, in __call__
+2026-08-28 02:45:28:     with collapse_excgroups():
+2026-08-28 02:45:28:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/contextlib.py", line 158, in __exit__
+2026-08-28 02:45:28:     self.gen.throw(typ, value, traceback)
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_utils.py", line 82, in collapse_excgroups
+2026-08-28 02:45:28:     raise exc
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 187, in __call__
+2026-08-28 02:45:28:     response = await self.dispatch_func(request, call_next)
+2026-08-28 02:45:28:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 55, in track_requests
+2026-08-28 02:45:28:     response = await call_next(request)
+2026-08-28 02:45:28:                ^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 163, in call_next
+2026-08-28 02:45:28:     raise app_exc
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 149, in coro
+2026-08-28 02:45:28:     await self.app(scope, receive_or_disconnect, send_no_error)
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+2026-08-28 02:45:28:     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+2026-08-28 02:45:28:     raise exc
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+2026-08-28 02:45:28:     await app(scope, receive, sender)
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 715, in __call__
+2026-08-28 02:45:28:     await self.middleware_stack(scope, receive, send)
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 735, in app
+2026-08-28 02:45:28:     await route.handle(scope, receive, send)
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 288, in handle
+2026-08-28 02:45:28:     await self.app(scope, receive, send)
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 76, in app
+2026-08-28 02:45:28:     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+2026-08-28 02:45:28:     raise exc
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+2026-08-28 02:45:28:     await app(scope, receive, sender)
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 73, in app
+2026-08-28 02:45:28:     response = await f(request)
+2026-08-28 02:45:28:                ^^^^^^^^^^^^^^^^
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 301, in app
+2026-08-28 02:45:28:     raw_response = await run_endpoint_function(
+2026-08-28 02:45:28:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+2026-08-28 02:45:28:     return await dependant.call(**values)
+2026-08-28 02:45:28:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:28:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 525, in telegram_commands
+2026-08-28 02:45:28:     return {"commands": bot.get_commands()}
+2026-08-28 02:45:28:                         ^^^^^^^^^^^^^^^^
+2026-08-28 02:45:28: AttributeError: 'TelegramBot' object has no attribute 'get_commands'
+2026-08-28 02:45:41: ERROR:    Exception in ASGI application
+2026-08-28 02:45:41:   + Exception Group Traceback (most recent call last):
+2026-08-28 02:45:41:   |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_utils.py", line 76, in collapse_excgroups
+2026-08-28 02:45:41:   |     yield
+2026-08-28 02:45:41:   |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 186, in __call__
+2026-08-28 02:45:41:   |     async with anyio.create_task_group() as task_group:
+2026-08-28 02:45:41:   |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/anyio/_backends/_asyncio.py", line 815, in __aexit__
+2026-08-28 02:45:41:   |     raise BaseExceptionGroup(
+2026-08-28 02:45:41:   | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+2026-08-28 02:45:41:   +-+---------------- 1 ----------------
+2026-08-28 02:45:41:     | Traceback (most recent call last):
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/uvicorn/protocols/http/h11_impl.py", line 416, in run_asgi
+2026-08-28 02:45:41:     |     result = await app(  # type: ignore[func-returns-value]
+2026-08-28 02:45:41:     |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 63, in __call__
+2026-08-28 02:45:41:     |     return await self.app(scope, receive, send)
+2026-08-28 02:45:41:     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 1054, in __call__
+2026-08-28 02:45:41:     |     await super().__call__(scope, receive, send)
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/applications.py", line 113, in __call__
+2026-08-28 02:45:41:     |     await self.middleware_stack(scope, receive, send)
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/errors.py", line 187, in __call__
+2026-08-28 02:45:41:     |     raise exc
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/errors.py", line 165, in __call__
+2026-08-28 02:45:41:     |     await self.app(scope, receive, _send)
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 185, in __call__
+2026-08-28 02:45:41:     |     with collapse_excgroups():
+2026-08-28 02:45:41:     |   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/contextlib.py", line 158, in __exit__
+2026-08-28 02:45:41:     |     self.gen.throw(typ, value, traceback)
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_utils.py", line 82, in collapse_excgroups
+2026-08-28 02:45:41:     |     raise exc
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 187, in __call__
+2026-08-28 02:45:41:     |     response = await self.dispatch_func(request, call_next)
+2026-08-28 02:45:41:     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 55, in track_requests
+2026-08-28 02:45:41:     |     response = await call_next(request)
+2026-08-28 02:45:41:     |                ^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 163, in call_next
+2026-08-28 02:45:41:     |     raise app_exc
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 149, in coro
+2026-08-28 02:45:41:     |     await self.app(scope, receive_or_disconnect, send_no_error)
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+2026-08-28 02:45:41:     |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+2026-08-28 02:45:41:     |     raise exc
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+2026-08-28 02:45:41:     |     await app(scope, receive, sender)
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 715, in __call__
+2026-08-28 02:45:41:     |     await self.middleware_stack(scope, receive, send)
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 735, in app
+2026-08-28 02:45:41:     |     await route.handle(scope, receive, send)
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 288, in handle
+2026-08-28 02:45:41:     |     await self.app(scope, receive, send)
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 76, in app
+2026-08-28 02:45:41:     |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+2026-08-28 02:45:41:     |     raise exc
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+2026-08-28 02:45:41:     |     await app(scope, receive, sender)
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 73, in app
+2026-08-28 02:45:41:     |     response = await f(request)
+2026-08-28 02:45:41:     |                ^^^^^^^^^^^^^^^^
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 301, in app
+2026-08-28 02:45:41:     |     raw_response = await run_endpoint_function(
+2026-08-28 02:45:41:     |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+2026-08-28 02:45:41:     |     return await dependant.call(**values)
+2026-08-28 02:45:41:     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:41:     |   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 525, in telegram_commands
+2026-08-28 02:45:41:     |     return {"commands": bot.get_commands()}
+2026-08-28 02:45:41:     |                         ^^^^^^^^^^^^^^^^
+2026-08-28 02:45:41:     | AttributeError: 'TelegramBot' object has no attribute 'get_commands'
+2026-08-28 02:45:41:     +------------------------------------
+2026-08-28 02:45:41: 
+2026-08-28 02:45:41: During handling of the above exception, another exception occurred:
+2026-08-28 02:45:41: 
+2026-08-28 02:45:41: Traceback (most recent call last):
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/uvicorn/protocols/http/h11_impl.py", line 416, in run_asgi
+2026-08-28 02:45:41:     result = await app(  # type: ignore[func-returns-value]
+2026-08-28 02:45:41:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 63, in __call__
+2026-08-28 02:45:41:     return await self.app(scope, receive, send)
+2026-08-28 02:45:41:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 1054, in __call__
+2026-08-28 02:45:41:     await super().__call__(scope, receive, send)
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/applications.py", line 113, in __call__
+2026-08-28 02:45:41:     await self.middleware_stack(scope, receive, send)
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/errors.py", line 187, in __call__
+2026-08-28 02:45:41:     raise exc
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/errors.py", line 165, in __call__
+2026-08-28 02:45:41:     await self.app(scope, receive, _send)
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 185, in __call__
+2026-08-28 02:45:41:     with collapse_excgroups():
+2026-08-28 02:45:41:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/contextlib.py", line 158, in __exit__
+2026-08-28 02:45:41:     self.gen.throw(typ, value, traceback)
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_utils.py", line 82, in collapse_excgroups
+2026-08-28 02:45:41:     raise exc
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 187, in __call__
+2026-08-28 02:45:41:     response = await self.dispatch_func(request, call_next)
+2026-08-28 02:45:41:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 55, in track_requests
+2026-08-28 02:45:41:     response = await call_next(request)
+2026-08-28 02:45:41:                ^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 163, in call_next
+2026-08-28 02:45:41:     raise app_exc
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py", line 149, in coro
+2026-08-28 02:45:41:     await self.app(scope, receive_or_disconnect, send_no_error)
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+2026-08-28 02:45:41:     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+2026-08-28 02:45:41:     raise exc
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+2026-08-28 02:45:41:     await app(scope, receive, sender)
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 715, in __call__
+2026-08-28 02:45:41:     await self.middleware_stack(scope, receive, send)
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 735, in app
+2026-08-28 02:45:41:     await route.handle(scope, receive, send)
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 288, in handle
+2026-08-28 02:45:41:     await self.app(scope, receive, send)
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 76, in app
+2026-08-28 02:45:41:     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+2026-08-28 02:45:41:     raise exc
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+2026-08-28 02:45:41:     await app(scope, receive, sender)
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py", line 73, in app
+2026-08-28 02:45:41:     response = await f(request)
+2026-08-28 02:45:41:                ^^^^^^^^^^^^^^^^
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 301, in app
+2026-08-28 02:45:41:     raw_response = await run_endpoint_function(
+2026-08-28 02:45:41:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+2026-08-28 02:45:41:     return await dependant.call(**values)
+2026-08-28 02:45:41:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 02:45:41:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 525, in telegram_commands
+2026-08-28 02:45:41:     return {"commands": bot.get_commands()}
+2026-08-28 02:45:41:                         ^^^^^^^^^^^^^^^^
+2026-08-28 02:45:41: AttributeError: 'TelegramBot' object has no attribute 'get_commands'
+2026-08-28 02:47:48: INFO:     Shutting down
+2026-08-28 02:47:48: INFO:     Waiting for application shutdown.
+2026-08-28 02:47:48: INFO:     Application shutdown complete.
+2026-08-28 02:47:48: INFO:     Finished server process [19726]
+2026-08-28 02:47:50: INFO:     Started server process [22579]
+2026-08-28 02:47:50: INFO:     Waiting for application startup.
+2026-08-28 02:47:50: INFO:     Application startup complete.
+2026-08-28 02:47:50: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
