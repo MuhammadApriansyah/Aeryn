@@ -79,288 +79,82 @@ textarea.input{resize:vertical;min-height:60px}
 .search-box input{padding:8px 12px 8px 36px;border:1px solid var(--border);border-radius:var(--rs);background:var(--bg);color:var(--text);font-size:13px;outline:none;width:200px}
 .search-box input:focus{border-color:var(--accent)}
 .search-icon{position:absolute;left:10px;color:var(--muted)}
+.reasoning-container{margin-top:8px;font-size:13px}
+.reasoning-toggle{cursor:pointer;color:var(--muted);padding:6px 12px;border-radius:8px;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;gap:8px;user-select:none;transition:all .15s}
+.reasoning-toggle:hover{background:var(--bg-hover);color:var(--text2)}
+.reasoning-toggle .arrow{transition:transform .2s;font-size:10px}
+.reasoning-toggle.open .arrow{transform:rotate(180deg)}
+.reasoning-content{display:none;margin-top:8px;padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;max-height:300px;overflow-y:auto}
+.reasoning-content.open{display:block}
+.reason-step{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.reason-step:last-child{border-bottom:none}
+.reason-step-num{font-weight:700;color:var(--accent);flex-shrink:0;width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:rgba(34,211,238,.1);border-radius:50%;font-size:11px}
+.reason-step-content{flex:1}
+.reason-step-desc{font-weight:500;color:var(--text)}
+.reason-step-detail{font-size:11px;color:var(--text-muted);margin-top:2px}
+.chat-msg{margin-bottom:16px}
+.chat-msg-user{display:flex;justify-content:flex-end}
+.chat-msg-user .chat-bubble{background:var(--accent);color:var(--bg);padding:10px 16px;border-radius:12px 12px 2px 12px;max-width:75%;font-size:14px;line-height:1.5}
+.chat-msg-bot{display:flex;flex-direction:column;gap:4px}
+.chat-msg-bot .chat-bubble{background:var(--bg-hover);padding:10px 16px;border-radius:12px 12px 12px 2px;max-width:75%;font-size:14px;line-height:1.5}
+.monitor-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.monitor-title{font-size:14px;font-weight:600;color:var(--text2)}
+.monitor-count{font-size:12px;color:var(--muted);background:var(--bg-hover);padding:2px 8px;border-radius:10px}
+.log-entry{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+.log-entry:last-child{border-bottom:none}
+.log-time{color:var(--muted);font-family:monospace;font-size:11px;flex-shrink:0;width:80px}
+.log-type{font-weight:600;flex-shrink:0;min-width:100px}
+.log-type.chat{color:var(--accent)}.log-type.broadcast{color:var(--green)}.log-type.action{color:var(--yellow)}.log-type.error{color:var(--red)}
+.log-content{color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.session-item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
+.session-item:last-child{border-bottom:none}
+.session-info{flex:1}
+.session-title{font-weight:500;font-size:14px}
+.session-meta{font-size:12px;color:var(--muted);margin-top:2px}
 @media(max-width:900px){.g4{grid-template-columns:repeat(2,1fr)}.sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.sb.collapsed{width:var(--w)}.main{margin-left:0!important}}
 </style>
 </head>
 <body>
-
-<div class="onboard-bg" id="onboard">
-  <div class="onboard">
-    <h2>🧠 Welcome to Aeryn!</h2>
-    <p>Real-time Cognitive Agent Platform — all data updates live via WebSocket.</p>
-    <div class="fg">
-      <div class="fi">💬 Chat — Real-time conversation</div>
-      <div class="fi">✅ Tasks — Auto-parse from text</div>
-      <div class="fi">🔔 Notifications — Live updates</div>
-      <div class="fi">🧠 Memory — Semantic search</div>
-      <div class="fi">⚡ Tools — Execute commands</div>
-      <div class="fi">🛡️ Security — Real-time monitoring</div>
-    </div>
-    <p><strong>Shortcuts:</strong> Ctrl+K Search | ? Shortcuts | Alt+1-8 Tabs</p>
-    <button class="btn bp" style="margin-top:16px;width:100%" onclick="document.getElementById('onboard').classList.remove('active');localStorage.setItem('aeryn-onboarded','1')">Get Started</button>
-  </div>
-</div>
-
-<div class="modal-bg" id="shortcuts">
-  <div class="modal">
-    <button class="modal-close" onclick="document.getElementById('shortcuts').classList.remove('active')">×</button>
-    <h3 class="modal-title">⌨️ Keyboard Shortcuts</h3>
-    <div class="shortcut-row"><span>Quick Search</span><span class="shortcut-key">Ctrl+K</span></div>
-    <div class="shortcut-row"><span>Toggle Sidebar</span><span class="shortcut-key">Ctrl+B</span></div>
-    <div class="shortcut-row"><span>Toggle Theme</span><span class="shortcut-key">Ctrl+D</span></div>
-    <div class="shortcut-row"><span>Alt+1-8</span><span class="shortcut-key">Switch tabs</span></div>
-    <div class="shortcut-row"><span>Esc</span><span class="shortcut-key">Close modals</span></div>
-  </div>
-</div>
-
-<aside class="sb" id="sidebar">
-  <div class="sb-header"><div class="sb-logo">🧠</div><span class="sb-brand">Aeryn</span></div>
-  <nav class="sb-nav">
-    <div class="nav-item active" onclick="show('overview')"><span class="nav-icon">📊</span><span class="nav-label">Overview</span></div>
-    <div class="nav-item" onclick="show('chat')"><span class="nav-icon">💬</span><span class="nav-label">Chat</span></div>
-    <div class="nav-item" onclick="show('notifications')"><span class="nav-icon">🔔</span><span class="nav-label">Notifications</span></div>
-    <div class="nav-item" onclick="show('tasks')"><span class="nav-icon">✅</span><span class="nav-label">Tasks</span></div>
-    <div class="nav-item" onclick="show('memory')"><span class="nav-icon">🧠</span><span class="nav-label">Memory</span></div>
-    <div class="nav-item" onclick="show('tools')"><span class="nav-icon">⚡</span><span class="nav-label">Tools</span></div>
-    <div class="nav-item" onclick="show('platform')"><span class="nav-icon">🏢</span><span class="nav-label">Platform</span></div>
-    <div class="nav-item" onclick="show('security')"><span class="nav-icon">🛡️</span><span class="nav-label">Security</span></div>
-  </nav>
-  <div style="padding:12px 8px;border-top:1px solid var(--border)">
-    <div class="nav-item" onclick="document.body.classList.toggle('light');this.querySelector('.nav-icon').textContent=document.body.classList.contains('light')?'☀️':'🌙'"><span class="nav-icon">🌙</span><span class="nav-label">Theme</span></div>
-    <div class="nav-item" onclick="document.getElementById('shortcuts').classList.add('active')"><span class="nav-icon">⌨️</span><span class="nav-label">Shortcuts</span></div>
-  </div>
-</aside>
-
-<main class="main">
-  <header class="tb">
-    <div class="tb-left"><button class="ham" onclick="toggleSidebar()">☰</button><span style="font-weight:600">Overview</span></div>
-    <div style="display:flex;align-items:center;gap:12px">
-      <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search... (Ctrl+K)" id="search" onkeydown="if(event.key==='Enter'){show('memory');document.getElementById('msearch').value=this.value;searchMem();this.value=''}"></div>
-      <div class="conn"><div class="conn-dot" id="dot"></div><span id="conn-text">CONNECTING</span></div>
-      <span style="font-size:12px;color:var(--muted)">v41.0</span>
-    </div>
-  </header>
-
-  <div class="content">
-    <!-- Overview -->
-    <div class="page active" id="p-overview">
-      <div class="grid g4" style="margin-bottom:16px">
-        <div class="stat"><div class="stat-accent a"></div><div class="stat-val" id="s-mem">--</div><div class="stat-lbl">Memory</div><div class="stat-bar"><div class="stat-fill a" id="b-mem"></div></div></div>
-        <div class="stat"><div class="stat-accent y"></div><div class="stat-val" id="s-disk">--</div><div class="stat-lbl">Disk</div><div class="stat-bar"><div class="stat-fill y" id="b-disk"></div></div></div>
-        <div class="stat"><div class="stat-accent g"></div><div class="stat-val" id="s-vault">--</div><div class="stat-lbl">Vault</div></div>
-        <div class="stat"><div class="stat-accent p"></div><div class="stat-val" id="s-tasks">--</div><div class="stat-lbl">Tasks</div></div>
-      </div>
-      <div class="grid g2">
-        <div class="card"><div class="card-title">📋 Briefing</div><div id="briefing">Waiting...</div></div>
-        <div class="card"><div class="card-title">💡 Suggestions</div><div id="sugg">Waiting...</div></div>
-      </div>
-      <div class="grid g3" style="margin-top:16px">
-        <div class="card"><div class="card-title">⚡ Performance</div><div id="perf">Waiting...</div></div>
-        <div class="card"><div class="card-title">🔄 Queue</div><div id="queue">Waiting...</div></div>
-        <div class="card"><div class="card-title">⏱️ Uptime</div><div id="uptime">Waiting...</div></div>
-      </div>
-    </div>
-
-    <!-- Chat -->
-    <div class="page" id="p-chat">
-      <div class="card" style="height:calc(100vh - 180px);display:flex;flex-direction:column">
-        <div class="card-title" style="margin-bottom:0;padding-bottom:12px;border-bottom:1px solid var(--border)">💬 Chat</div>
-        <div id="chatbox" style="flex:1;overflow-y:auto;padding:16px 0"></div>
-        <div style="display:flex;gap:12px;padding-top:12px;border-top:1px solid var(--border)"><input class="input" id="chatinput" placeholder="Ask Aeryn..." onkeydown="if(event.key==='Enter')sendChat()"><button class="btn bp" onclick="sendChat()">Send</button></div>
-      </div>
-    </div>
-
-    <!-- Notifications -->
-    <div class="page" id="p-notifications">
-      <div class="grid g2">
-        <div class="card">
-          <div class="card-title">Create</div>
-          <input class="input" id="nt-title" placeholder="Title" style="margin-bottom:8px">
-          <textarea class="input" id="nt-msg" placeholder="Message" rows="3" style="margin-bottom:8px"></textarea>
-          <select class="input" id="nt-prio" style="margin-bottom:12px"><option value="low">Low</option><option value="normal" selected>Normal</option><option value="high">High</option><option value="critical">Critical</option></select>
-          <button class="btn bp" onclick="createNotif()">Create</button>
-        </div>
-        <div class="card"><div class="card-title">Pending</div><div id="notif-list">Waiting...</div></div>
-      </div>
-    </div>
-
-    <!-- Tasks -->
-    <div class="page" id="p-tasks">
-      <div class="grid g2">
-        <div class="card"><div class="card-title">Auto-Task from Text</div><textarea class="input" id="at-text" placeholder="e.g., I need to research AI" rows="4" style="margin-bottom:8px"></textarea><button class="btn bp" onclick="parseTasks()">Parse</button><div id="at-result" style="margin-top:16px"></div></div>
-        <div class="card"><div class="card-title">Queue</div><div id="task-list">Waiting...</div></div>
-      </div>
-    </div>
-
-    <!-- Memory -->
-    <div class="page" id="p-memory">
-      <div class="card" style="margin-bottom:16px"><div class="card-title">Semantic Search</div><input class="input" id="msearch" placeholder="Search vault..." onkeydown="if(event.key==='Enter')searchMem()"></div>
-      <div class="card" style="margin-bottom:16px"><div class="card-title">Results</div><div id="mresults"></div></div>
-      <div class="card"><div class="card-title">Vault Entries</div><div id="vault-list">Waiting...</div></div>
-    </div>
-
-    <!-- Tools -->
-    <div class="page" id="p-tools">
-      <div class="grid g2">
-        <div class="card"><div class="card-title">Available</div><div id="tools-list">Waiting...</div></div>
-        <div class="card"><div class="card-title">Execute</div><select class="input" id="tool-sel" style="margin-bottom:8px"></select><textarea class="input" id="tool-params" placeholder='{"key":"value"}' rows="4" style="margin-bottom:8px"></textarea><button class="btn bp" onclick="execTool()">Run</button><pre id="tool-out" style="margin-top:12px;background:var(--bg);padding:12px;border-radius:8px;font-size:12px"></pre></div>
-      </div>
-    </div>
-
-    <!-- Platform -->
-    <div class="page" id="p-platform">
-      <div class="grid g3">
-        <div class="card"><div class="card-title">API Keys</div><button class="btn bp bsm" onclick="createKey()">Create</button><div id="keys-list" style="margin-top:12px">Waiting...</div></div>
-        <div class="card"><div class="card-title">Usage</div><div id="usage">Waiting...</div></div>
-        <div class="card"><div class="card-title">Secrets</div><input class="input" id="sec-name" placeholder="Name" style="margin-bottom:4px"><input class="input" id="sec-val" placeholder="Value" style="margin-bottom:8px"><button class="btn bs bsm" onclick="setSecret()">Store</button><div id="sec-list" style="margin-top:12px">Waiting...</div></div>
-      </div>
-    </div>
-
-    <!-- Security -->
-    <div class="page" id="p-security">
-      <div class="grid g2">
-        <div class="card"><div class="card-title">🔒 Safety</div><input class="input" id="safe-text" placeholder="Text to check..." style="margin-bottom:8px"><button class="btn bp" onclick="checkSafe()">Check</button><div id="safe-res" style="margin-top:12px"></div></div>
-        <div class="card"><div class="card-title">⚡ Circuit Breakers</div><div id="breakers">Waiting...</div></div>
-      </div>
-      <div class="card" style="margin-top:16px"><div class="card-title">🛡️ Constitutional AI</div><div id="const">Waiting...</div></div>
-    </div>
-  </div>
-</main>
-
+<div class="onboard-bg" id="onboard"><div class="onboard"><h2>🧠 Welcome to Aeryn!</h2><p>Real-time Cognitive Agent Platform.</p><div class="fg"><div class="fi">💬 Chat</div><div class="fi">✅ Tasks</div><div class="fi">🔔 Notifications</div><div class="fi">🧠 Memory</div></div><p><strong>Shortcuts:</strong> Ctrl+K | ? | Alt+1-9</p><button class="btn bp" style="margin-top:16px;width:100%" onclick="this.closest('#onboard').classList.remove('active')">Get Started</button></div></div>
+<div class="modal-bg" id="shortcuts"><div class="modal"><button class="modal-close" onclick="this.closest('#shortcuts').classList.remove('active')">×</button><h3 class="modal-title">⌨️ Shortcuts</h3><div class="shortcut-row"><span>Search</span><span class="shortcut-key">Ctrl+K</span></div><div class="shortcut-row"><span>Sidebar</span><span class="shortcut-key">Ctrl+B</span></div><div class="shortcut-row"><span>Tabs</span><span class="shortcut-key">Alt+1-9</span></div></div></div>
+<aside class="sb" id="sidebar"><div class="sb-header"><div class="sb-logo">🧠</div><span class="sb-brand">Aeryn</span></div><nav class="sb-nav"><div class="nav-item active" onclick="show('overview')"><span class="nav-icon">📊</span><span class="nav-label">Overview</span></div><div class="nav-item" onclick="show('chat')"><span class="nav-icon">💬</span><span class="nav-label">Chat</span></div><div class="nav-item" onclick="show('notifications')"><span class="nav-icon">🔔</span><span class="nav-label">Notifications</span></div><div class="nav-item" onclick="show('tasks')"><span class="nav-icon">✅</span><span class="nav-label">Tasks</span></div><div class="nav-item" onclick="show('memory')"><span class="nav-icon">🧠</span><span class="nav-label">Memory</span></div><div class="nav-item" onclick="show('tools')"><span class="nav-icon">⚡</span><span class="nav-label">Tools</span></div><div class="nav-item" onclick="show('platform')"><span class="nav-icon">🏢</span><span class="nav-label">Platform</span></div><div class="nav-item" onclick="show('security')"><span class="nav-icon">🛡️</span><span class="nav-label">Security</span></div><div class="nav-item" onclick="show('monitoring')"><span class="nav-icon">📋</span><span class="nav-label">Monitoring</span></div></nav><div style="padding:12px 8px;border-top:1px solid var(--border)"><div class="nav-item" onclick="document.body.classList.toggle('light')"><span class="nav-icon">🌙</span><span class="nav-label">Theme</span></div><div class="nav-item" onclick="document.getElementById('shortcuts').classList.add('active')"><span class="nav-icon">⌨️</span><span class="nav-label">Shortcuts</span></div></div></aside>
+<main class="main"><header class="tb"><div class="tb-left"><button class="ham" onclick="toggleSidebar()">☰</button><span style="font-weight:600">Overview</span></div><div style="display:flex;align-items:center;gap:12px"><div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search... (Ctrl+K)" id="search"></div><div class="conn"><div class="conn-dot" id="dot"></div><span id="conn-text">CONNECTING</span></div><span style="font-size:12px;color:var(--muted)">v41.0</span></div></header><div class="content">
+<div class="page active" id="p-overview"><div class="grid g4" style="margin-bottom:16px"><div class="stat"><div class="stat-accent a"></div><div class="stat-val" id="s-mem">--</div><div class="stat-lbl">Memory</div><div class="stat-bar"><div class="stat-fill a" id="b-mem"></div></div></div><div class="stat"><div class="stat-accent y"></div><div class="stat-val" id="s-disk">--</div><div class="stat-lbl">Disk</div><div class="stat-bar"><div class="stat-fill y" id="b-disk"></div></div></div><div class="stat"><div class="stat-accent g"></div><div class="stat-val" id="s-vault">--</div><div class="stat-lbl">Vault</div></div><div class="stat"><div class="stat-accent p"></div><div class="stat-val" id="s-tasks">--</div><div class="stat-lbl">Tasks</div></div></div><div class="grid g2"><div class="card"><div class="card-title">📋 Briefing</div><div id="briefing">Loading...</div></div><div class="card"><div class="card-title">💡 Suggestions</div><div id="sugg">Loading...</div></div></div><div class="grid g3" style="margin-top:16px"><div class="card"><div class="card-title">⚡ Performance</div><div id="perf">Loading...</div></div><div class="card"><div class="card-title">🔄 Queue</div><div id="queue">Loading...</div></div><div class="card"><div class="card-title">⏱️ Uptime</div><div id="uptime">Loading...</div></div></div></div>
+<div class="page" id="p-chat"><div class="card" style="height:calc(100vh - 180px);display:flex;flex-direction:column"><div class="card-title" style="margin-bottom:0;padding-bottom:12px;border-bottom:1px solid var(--border)">💬 Chat</div><div id="chatbox" style="flex:1;overflow-y:auto;padding:16px 0"></div><div style="display:flex;gap:12px;padding-top:12px;border-top:1px solid var(--border)"><input class="input" id="chatinput" placeholder="Ask Aeryn..."><button class="btn bp" onclick="sendChat()">Send</button></div></div></div>
+<div class="page" id="p-monitoring"><div class="grid g2"><div class="card"><div class="monitor-header"><span class="monitor-title">📋 Activity Log</span><span class="monitor-count" id="log-count">0</span></div><div id="activity-log" style="max-height:400px;overflow-y:auto"><p style="color:var(--muted)">Loading...</p></div></div><div class="card"><div class="monitor-header"><span class="monitor-title">💬 Sessions</span><button class="btn bs bsm" onclick="loadSessions()">Refresh</button></div><div id="sessions-list" style="max-height:400px;overflow-y:auto"><p style="color:var(--muted)">Loading...</p></div></div></div><div class="card" style="margin-top:16px"><div class="monitor-header"><span class="monitor-title">📊 History</span><select class="input" id="history-session" style="width:auto" onchange="loadHistory()"></select></div><div id="history-content" style="max-height:400px;overflow-y:auto"><p style="color:var(--muted)">Select session</p></div></div></div>
+</div></main>
 <script>
-let ws=null,es=null,sid='dash_'+Date.now(),t_reconnect=null;
-
-// ── WebSocket ─────────────────────────────────
-function connectWS(){
-  const p=location.protocol==='https:'?'wss:':'ws:';
-  ws=new WebSocket(`${p}//${location.host}/ws/dashboard`);
-  ws.onopen=()=>{updConn('live');if(t_reconnect){clearInterval(t_reconnect);t_reconnect=null}};
-  ws.onmessage=e=>{try{handle(JSON.parse(e.data))}catch(err){}};
-  ws.onclose=()=>{updConn('offline');if(!t_reconnect)t_reconnect=setTimeout(connectWS,3000)};
-  ws.onerror=()=>{ws.close();connectSSE()};
-}
-
-// ── SSE Fallback ─────────────────────────────
-function connectSSE(){
-  es=new EventSource('/dashboard/stream');
-  es.onopen=()=>updConn('live');
-  es.onerror=()=>{updConn('offline');es.close();if(!t_reconnect)t_reconnect=setTimeout(connectWS,5000)};
-  ['stats','tasks','notifications','vault','tools','performance','uptime','queue','api_keys','usage','secrets','circuit_breakers','briefing','suggestions','constitutional'].forEach(t=>es.addEventListener(t,e=>handle({type:t,data:JSON.parse(e.data)})));
-}
-
-// ── Message Handler ──────────────────────────
-function handle(m){
-  const d=m.data||{};
-  switch(m.type){
-    case 'stats':
-      if(d.memory_percent!==undefined){
-        document.getElementById('s-mem').textContent=(d.memory_used_mb/1024).toFixed(1)+'GB';
-        document.getElementById('s-disk').textContent=(d.disk_used_gb||0).toFixed(0)+'GB';
-        document.getElementById('b-mem').style.width=d.memory_percent+'%';
-        document.getElementById('b-mem').className='stat-fill '+(d.memory_percent>90?'r':d.memory_percent>70?'y':'a');
-        document.getElementById('b-disk').style.width=(d.disk_percent||0)+'%';
-      }
-      break;
-    case 'tasks':updTasks(d);document.getElementById('s-tasks').textContent=d.count||0;break;
-    case 'tasks:':updTasks(d);break;
-    case 'notifications':updNotifs(d);break;
-    case 'vault':updVault(d);document.getElementById('s-vault').textContent=d.total_entries||0;break;
-    case 'tools':updTools(d);break;
-    case 'performance':
-      document.getElementById('perf').innerHTML=`<div style="font-size:20px;font-weight:700;font-family:monospace">${d.cpu_percent||0}%</div><div class="stat-lbl">CPU</div><p style="margin-top:8px;font-size:13px">Mem: <strong>${(d.memory_used_mb/1024).toFixed(1)}GB</strong></p>`;
-      break;
-    case 'uptime':document.getElementById('uptime').innerHTML=`<div style="font-size:20px;font-weight:700;font-family:monospace">${d.uptime||'?'}</div><div class="stat-lbl">Uptime</div>`;break;
-    case 'queue':document.getElementById('queue').innerHTML=`<div style="font-size:20px;font-weight:700;font-family:monospace">${d.pending||0}</div><div class="stat-lbl">Pending</div><p style="margin-top:8px;font-size:13px">Running: <strong>${d.running||0}</strong></p>`;break;
-    case 'api_keys':updKeys(d);break;
-    case 'usage':
-      document.getElementById('usage').innerHTML=`<div style="font-size:28px;font-weight:700;font-family:monospace">${d.total_events||0}</div><div class="stat-lbl">Events</div><p style="margin-top:8px">Cost: <strong>$${(d.total_cost||0).toFixed(4)}</strong></p>`;
-      break;
-    case 'secrets':updSecrets(d);break;
-    case 'circuit_breakers':updBreakers(d);break;
-    case 'briefing':document.getElementById('briefing').innerHTML='<pre style="white-space:pre-wrap;font-family:inherit;margin:0">'+(d.content||'')+'</pre>';break;
-    case 'suggestions':
-      document.getElementById('sugg').innerHTML=(d.suggestions||[]).map(s=>`<div class="list-item"><div class="list-item-title">${s.title||s.description||'?'}</div><span class="badge bb">${s.type||'info'}</span></div>`).join('')||'<p style="color:var(--muted)">No suggestions</p>';
-      break;
-    case 'constitutional':document.getElementById('const').innerHTML=(d.principles||[]).map(p=>`<div class="list-item"><span class="list-item-title">${typeof p==='string'?p:p.name||'?'}</span></div>`).join('')||'Loading...';break;
-    case 'chat_response':updChat(d);break;
-    case 'error':toast('Error: '+(d.message||'?'));break;
-  }
-}
-
-// ── UI Updates ───────────────────────────────
-function updConn(s){const d=document.getElementById('dot');const t=document.getElementById('conn-text');d.className='conn-dot '+(s==='live'?'':'off');t.textContent=s.toUpperCase()}
-function updTasks(d){const el=document.getElementById('task-list');if(el)el.innerHTML=(d.tasks||[]).map(t=>`<div class="list-item"><div class="list-item-title">${t.title}</div><span class="badge b-${t.status==='completed'?'g':t.status==='in_progress'?'y':'b'}">${t.status}</span></div>`).join('')||'<p style="color:var(--muted);font-size:14px">No tasks</p>'}
-function updNotifs(d){const el=document.getElementById('notif-list');if(el)el.innerHTML=(d.notifications||[]).map(n=>`<div class="list-item"><div><div class="list-item-title">${n.title}</div><div style="font-size:12px;color:var(--muted)">${n.message}</div></div><span class="badge b-${n.priority==='critical'?'r':n.priority==='high'?'y':'b'}">${n.priority}</span></div>`).join('')||'<p style="color:var(--muted)">No pending</p>'}
-function updVault(d){const el=document.getElementById('vault-list');if(el)el.innerHTML=(d.entries||[]).map(e=>`<div class="list-item"><div class="list-item-title">${e.title}</div><span class="badge bb">${e.layer}</span></div>`).join('')||'<p style="color:var(--muted)">No entries</p>'}
-function updTools(d){const el=document.getElementById('tools-list');const sel=document.getElementById('tool-sel');if(d.tools){if(el)el.innerHTML=d.tools.map(t=>`<div class="list-item"><span class="list-item-title">${t}</span></div>`).join('');if(sel)sel.innerHTML=d.tools.map(t=>`<option>${t}</option>`).join('')}}
-function updKeys(d){const el=document.getElementById('keys-list');if(el)el.innerHTML=(d.keys||[]).map(k=>`<div class="list-item"><div class="list-item-title">${k.name}</div><span class="badge b-${k.is_active?'g':'r'}">${k.is_active?'active':'revoked'}</span></div>`).join('')||'No keys'}
-function updSecrets(d){const el=document.getElementById('sec-list');if(el)el.innerHTML=(d.secrets||[]).map(s=>`<div class="list-item"><span class="list-item-title">${s.name}</span></div>`).join('')||'No secrets'}
-function updBreakers(d){const el=document.getElementById('breakers');if(el)el.innerHTML=(d.circuit_breakers||[]).map(c=>`<div class="list-item"><span class="list-item-title">${c.name}</span><span class="badge b-${c.state==='closed'?'g':c.state==='open'?'r':'y'}">${c.state}</span></div>`).join('')||'No breakers'}
-
-// ── Actions ──────────────────────────────────
-function sendChat(){
-  const i=document.getElementById('chatinput');const t=i.value.trim();if(!t)return;
-  const b=document.getElementById('chatbox');
-  b.innerHTML+=`<div style="display:flex;justify-content:flex-end;margin-bottom:12px"><div style="background:var(--accent);color:var(--bg);padding:10px 16px;border-radius:12px;max-width:70%">${t}</div></div>`;
-  i.value='';b.innerHTML+='<div style="color:var(--muted);font-size:13px">Thinking...</div>';b.scrollTop=b.scrollHeight;
-  if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'chat',data:{message:t,session_id:sid}}));
-  else{b.lastElementChild.remove();b.innerHTML+='<div style="color:var(--red)">Offline</div>';b.scrollTop=b.scrollHeight}
-}
-function updChat(d){const b=document.getElementById('chatbox');b.lastElementChild.remove();b.innerHTML+=`<div style="margin-bottom:12px"><div style="background:var(--bg-hover);padding:10px 16px;border-radius:12px;max-width:70%">${d.response||JSON.stringify(d)}</div></div>`;b.scrollTop=b.scrollHeight}
-function createNotif(){
-  const t=document.getElementById('nt-title').value;const m=document.getElementById('nt-msg').value;const p=document.getElementById('nt-prio').value;
-  if(!t||!m)return;
-  if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'create_notification',data:{user_id:'dashboard',title:t,message:m,priority:p}}));
-  document.getElementById('nt-title').value='';document.getElementById('nt-msg').value='';toast('Created');
-}
-function parseTasks(){
-  const t=document.getElementById('at-text').value;if(!t)return;
-  if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'parse_tasks',data:{user_id:'dashboard',text:t}}));
-}
-function execTool(){
-  const t=document.getElementById('tool-sel').value;let p={};try{p=JSON.parse(document.getElementById('tool-params').value||'{}')}catch(e){}
-  if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'execute_tool',data:{tool:t,params:p}}));
-}
-function checkSafe(){
-  const t=document.getElementById('safe-text').value;if(!t)return;
-  if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'check_safety',data:{text:t}}));
-}
-function createKey(){const n=prompt('Key name?');if(!n)return;if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'create_api_key',data:{user_id:'dashboard',name:n}}))}
-function setSecret(){
-  const n=document.getElementById('sec-name').value;const v=document.getElementById('sec-val').value;if(!n||!v)return;
-  if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'set_secret',data:{user_id:'dashboard',name:n,value:v}}));
-  document.getElementById('sec-name').value='';document.getElementById('sec-val').value='';toast('Stored');
-}
-function searchMem(){const q=document.getElementById('msearch').value;if(!q)return;if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'search',data:{user_id:q}}))}
-
-// ── UI ───────────────────────────────────────
-function show(n){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(t=>t.classList.remove('active'));
-  document.getElementById('p-'+n).classList.add('active');
-  document.querySelectorAll('.nav-item')[['overview','chat','notifications','tasks','memory','tools','platform','security'].indexOf(n)].classList.add('active');
-  document.querySelector('.tb-left span:last-child').textContent=n.charAt(0).toUpperCase()+n.slice(1);
-}
-function toggleSidebar(){
-  const s=document.getElementById('sidebar');
-  if(window.innerWidth<=900){s.classList.toggle('open');let o=document.getElementById('sb-overlay');if(!o){o=document.createElement('div');o.id='sb-overlay';o.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:90';o.onclick=toggleSidebar;document.body.appendChild(o)}o.style.display=s.classList.contains('open')?'block':'none'}
-  else s.classList.toggle('collapsed')
-}
-function toast(m){const el=document.createElement('div');el.className='toast';el.textContent=m;document.body.appendChild(el);setTimeout(()=>el.remove(),3000)}
-
-// ── Keyboard ─────────────────────────────────
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){document.getElementById('shortcuts').classList.remove('active');document.getElementById('onboard').classList.remove('active')}
-  if(e.ctrlKey&&e.key==='k'){e.preventDefault();document.getElementById('search').focus()}
-  if(e.ctrlKey&&e.key==='b'){e.preventDefault();toggleSidebar()}
-  if(e.ctrlKey&&e.key==='d'){e.preventDefault();document.body.classList.toggle('light')}
-  if(e.altKey&&e.key>='1'&&e.key<='8'){e.preventDefault();show(['overview','chat','notifications','tasks','memory','tools','platform','security'][parseInt(e.key)-1])}
-  if(e.key==='?')document.getElementById('shortcuts').classList.add('active')
-});
-
-// ── Init ─────────────────────────────────────
-if(!localStorage.getItem('aeryn-onboarded'))document.getElementById('onboard').classList.add('active');
-connectWS();
+let ws,es,sid="dash_"+Date.now(),t_rec=null,tabs=["overview","chat","notifications","tasks","memory","tools","platform","security","monitoring"],logs=[];
+function connectWS(){const p=location.protocol==="https:"?"wss:":"ws:";ws=new WebSocket(p+"//"+location.host+"/ws/dashboard");ws.onopen=function(){updConn("live");if(t_rec){clearInterval(t_rec);t_rec=null};addLog("broadcast","Connected")};ws.onmessage=function(e){try{handle(JSON.parse(e.data))}catch(x){}};ws.onclose=function(){updConn("offline");if(!t_rec)t_rec=setTimeout(connectWS,3000)};ws.onerror=function(){ws.close();connectSSE()}}
+function connectSSE(){es=new EventSource("/dashboard/stream");es.onopen=function(){updConn("live")};es.onerror=function(){updConn("offline");es.close();if(!t_rec)t_rec=setTimeout(connectWS,5000)};["stats","tasks","notifications","vault","tools","performance","uptime","queue","api_keys","usage","secrets","circuit_breakers","briefing","suggestions","constitutional"].forEach(function(t){es.addEventListener(t,function(e){handle({type:t,data:JSON.parse(e.data)})})})}
+function addLog(t,c){logs.unshift({time:new Date().toLocaleTimeString(),type:t,content:c});if(logs.length>100)logs.pop();renderLog()}
+function renderLog(){var el=document.getElementById("activity-log");document.getElementById("log-count").textContent=logs.length;if(!logs.length)return;el.innerHTML=logs.map(function(e){return'<div class="log-entry"><span class="log-time">'+e.time+'</span><span class="log-type '+e.type+'">'+e.type.toUpperCase()+'</span><span class="log-content">'+e.content+"</span></div>"}).join("")}
+function loadSessions(){fetch("/api/monitoring/sessions").then(function(r){return r.json()}).then(function(d){var el=document.getElementById("sessions-list"),sel=document.getElementById("history-session");if(!d.sessions||!d.sessions.length){el.innerHTML='<p style="color:var(--muted)">No sessions</p>';return}el.innerHTML=d.sessions.map(function(s){return'<div class="session-item"><div class="session-info"><div class="session-title">'+(s.title||s.session_id.substring(0,20))+'</div><div class="session-meta">'+s.messages+' messages &bull; '+(s.last_active||"?")+'</div></div><div><button class="btn bs bsm" onclick="viewSession(\''+s.session_id+'\')">View</button></div></div>'}).join("");sel.innerHTML='<option value="">Select session</option>'+d.sessions.map(function(s){return'<option value="'+s.session_id+'">'+(s.title||s.session_id.substring(0,20))+"</option>"}).join("")})["catch"](function(e){console.error(e)})}
+function viewSession(id){document.getElementById("history-session").value=id;loadHistory()}
+function loadHistory(){var id=document.getElementById("history-session").value;if(!id)return;fetch("/api/monitoring/history?session_id="+id).then(function(r){return r.json()}).then(function(d){var el=document.getElementById("history-content");if(!d.history||!d.history.length){el.innerHTML='<p style="color:var(--muted)">No history</p>';return}el.innerHTML=d.history.map(function(h){var rh=h.reasoning&&h.reasoning.length?'<div class="reasoning-container"><div class="reasoning-toggle" onclick="toggleReasoning(this)"><span class="arrow">▼</span><span>Reasoning ("+h.reasoning.length+" steps)</span></div><div class="reasoning-content">'+JSON.parse(h.reasoning).map(function(r){return'<div class="reason-step"><div class="reason-step-num">'+r.step+'</div><div class="reason-step-content"><div class="reason-step-desc">'+r.description+'</div><div class="reason-step-detail">'+r.detail+"</div></div></div>"}).join("")+"</div></div>":"";return'<div class="chat-msg chat-msg-'+("user"===h.role?"user":"bot")+'"><div><div style="font-size:12px;color:var(--muted);margin-bottom:4px">'+h.role+" &bull; "+h.created_at+'</div><div class="chat-bubble">'+h.content+"</div>"+rh+"</div></div>"}).join("");el.scrollTop=el.scrollHeight})["catch"](function(e){console.error(e)})}
+function toggleReasoning(el){el.classList.toggle("open");el.nextElementSibling.classList.toggle("open")}
+function handle(m){var d=m.data||{};switch(m.type){case"connected":break;case"stats":if(void 0!==d.memory_percent){document.getElementById("s-mem").textContent=(d.memory_used_mb/1024).toFixed(1)+"GB";document.getElementById("s-disk").textContent=(d.disk_used_gb||0).toFixed(0)+"GB";document.getElementById("b-mem").style.width=d.memory_percent+"%";document.getElementById("b-mem").className="stat-fill "+(d.memory_percent>90?"r":d.memory_percent>70?"y":"a");document.getElementById("b-disk").style.width=(d.disk_percent||0)+"%"}break;case"tasks":updTasks(d);document.getElementById("s-tasks").textContent=d.count||0;break;case"notifications":updNotifs(d);break;case"vault":updVault(d);document.getElementById("s-vault").textContent=d.total_entries||0;break;case"tools":updTools(d);break;case"performance":document.getElementById("perf").innerHTML="<div style=\"font-size:20px;font-weight:700\">"+d.cpu_percent||0+"%</div><div class=\"stat-lbl\">CPU</div>";break;case"uptime":document.getElementById("uptime").innerHTML="<div style=\"font-size:20px;font-weight:700\">"+(d.uptime||"?")+"</div><div class=\"stat-lbl\">Uptime</div>";break;case"queue":document.getElementById("queue").innerHTML="<div style=\"font-size:20px;font-weight:700\">"+(d.pending||0)+'</div><div class="stat-lbl">Pending</div>';break;case"api_keys":updKeys(d);break;case"usage":document.getElementById("usage").innerHTML="<div style=\"font-size:28px;font-weight:700\">"+(d.total_events||0)+'</div><div class="stat-lbl">Events</div>';break;case"secrets":updSecrets(d);break;case"circuit_breakers":updBreakers(d);break;case"briefing":document.getElementById("briefing").innerHTML="<pre style=\"white-space:pre-wrap;margin:0\">"+(d.content||"")+"</pre>";break;case"suggestions":document.getElementById("sugg").innerHTML=(d.suggestions||[]).map(function(s){return'<div class="list-item"><div class="list-item-title">'+(s.title||s.description||"?")+'</div><span class="badge bb">'+(s.type||"info")+"</span></div>"}).join("")||"No suggestions";break;case"constitutional":document.getElementById("const").innerHTML=(d.principles||[]).map(function(p){return"string"==typeof p?'<div class="list-item"><span class="list-item-title">'+p+"</span></div>":'<div class="list-item"><span class="list-item-title">'+(p.name||"?")+"</span></div>"}).join("")||"Loading";break;case"chat_response":addLog("chat","Response received");updChat(d);break;case"task_parsed":addLog("action","Tasks parsed: "+(d.count||0));document.getElementById("at-result").innerHTML=(d.tasks||[]).map(function(t){return'<div class="list-item"><div class="list-item-title">'+t.title+'</div><span class="badge bp">parsed</span></div>'}).join("")||"No tasks";break;case"tool_result":addLog("action","Tool executed");document.getElementById("tool-out").textContent=JSON.stringify(d,null,2);break;case"notif_created":addLog("action","Notification created");break;case"safety_result":addLog("chat","Safety: "+(d.valid?"safe":"unsafe"));break;case"api_key_created":addLog("action","API key created");break;case"secret_stored":addLog("action","Secret stored");break;case"search_results":addLog("chat","Search: "+(d.results||[]).length+" results");break;case"error":addLog("error",d.message||"?");break}}
+function updConn(s){var d=document.getElementById("dot"),t=document.getElementById("conn-text");d.className="conn-dot "+("live"===s?"":"off");t.textContent=s.toUpperCase()}
+function updTasks(d){var el=document.getElementById("task-list");if(el)el.innerHTML=(d.tasks||[]).map(function(t){return'<div class="list-item"><div class="list-item-title">'+t.title+'</div><span class="badge b-'+("completed"===t.status?"g":"in_progress"===t.status?"y":"b")+'">'+t.status+"</span></div>"}).join("")||"No tasks"}
+function updNotifs(d){var el=document.getElementById("notif-list");if(el)el.innerHTML=(d.notifications||[]).map(function(n){return'<div class="list-item"><div><div class="list-item-title">'+n.title+'</div><div style="font-size:12px;color:var(--muted)">'+n.message+'</div></div><span class="badge b-'+("critical"===n.priority?"r":"high"===n.priority?"y":"b")+'">'+n.priority+"</span></div>"}).join("")||"No pending"}
+function updVault(d){var el=document.getElementById("vault-list");if(el)el.innerHTML=(d.entries||[]).map(function(e){return'<div class="list-item"><div class="list-item-title">'+e.title+'</div><span class="badge bb">'+e.layer+"</span></div>"}).join("")||"No entries"}
+function updTools(d){var el=document.getElementById("tools-list"),sel=document.getElementById("tool-sel");if(d.tools){if(el)el.innerHTML=d.tools.map(function(t){return'<div class="list-item"><span class="list-item-title">'+t+"</span></div>"}).join("");if(sel)sel.innerHTML=d.tools.map(function(t){return"<option>"+t+"</option>"}).join("")}}
+function updKeys(d){var el=document.getElementById("keys-list");if(el)el.innerHTML=(d.keys||[]).map(function(k){return'<div class="list-item"><div class="list-item-title">'+k.name+'</div><span class="badge b-'+(k.is_active?"g":"r")+'">'+(k.is_active?"active":"revoked")+"</span></div>"}).join("")||"No keys"}
+function updSecrets(d){var el=document.getElementById("sec-list");if(el)el.innerHTML=(d.secrets||[]).map(function(s){return'<div class="list-item"><span class="list-item-title">'+s.name+"</span></div>"}).join("")||"No secrets"}
+function updBreakers(d){var el=document.getElementById("breakers");if(el)el.innerHTML=(d.circuit_breakers||[]).map(function(c){return'<div class="list-item"><span class="list-item-title">'+c.name+'</div><span class="badge b-'+("closed"===c.state?"g":"open"===c.state?"r":"y")+'">'+c.state+"</span></div>"}).join("")||"No breakers"}
+function sendChat(){var i=document.getElementById("chatinput"),t=i.value.trim();if(!t)return;addLog("chat","Sent: "+t.substring(0,50));var b=document.getElementById("chatbox");b.innerHTML+='<div class="chat-msg chat-msg-user"><div class="chat-bubble">'+t+"</div></div>";b.innerHTML+='<div id="thinking-'+Date.now()+'" style="color:var(--muted);font-size:13px">Thinking...</div>';b.scrollTop=b.scrollHeight;i.value="";ws.send(JSON.stringify({type:"chat",data:{message:t,session_id:sid}}))}
+function updChat(d){var b=document.getElementById("chatbox"),th=b.querySelector('[id^="thinking-"]');if(th)th.remove();var rh=d.reasoning&&d.reasoning.length?'<div class="reasoning-container"><div class="reasoning-toggle" onclick="toggleReasoning(this)"><span class="arrow">▼</span><span>Reasoning ('+d.reasoning.length+' steps)</span></div><div class="reasoning-content">'+d.reasoning.map(function(r){return'<div class="reason-step"><div class="reason-step-num">'+r.step+'</div><div class="reason-step-content"><div class="reason-step-desc">'+r.description+'</div><div class="reason-step-detail">'+r.detail+"</div></div></div>"}).join("")+"</div></div>":"";b.innerHTML+='<div class="chat-msg chat-msg-bot"><div class="chat-bubble">'+(d.response||JSON.stringify(d))+"</div>"+rh+"</div>";b.scrollTop=b.scrollHeight}
+function createNotif(){var t=document.getElementById("nt-title").value,m=document.getElementById("nt-msg").value,p=document.getElementById("nt-prio").value;if(!t||!m)return;ws.send(JSON.stringify({type:"create_notification",data:{user_id:"dashboard",title:t,message:m,priority:p}}));document.getElementById("nt-title").value="";document.getElementById("nt-msg").value="";document.getElementById("nt-prio").value="normal"}
+function parseTasks(){var t=document.getElementById("at-text").value;if(!t)return;ws.send(JSON.stringify({type:"parse_tasks",data:{user_id:"dashboard",text:t}}))}
+function execTool(){var t=document.getElementById("tool-sel").value,p={};try{p=JSON.parse(document.getElementById("tool-params").value||"{}")}catch(c){}ws.send(JSON.stringify({type:"execute_tool",data:{tool:t,params:p}}))}
+function checkSafe(){var t=document.getElementById("safe-text").value;if(!t)return;ws.send(JSON.stringify({type:"check_safety",data:{text:t}}))}
+function createKey(){var n=prompt("Key name?");if(!n)return;ws.send(JSON.stringify({type:"create_api_key",data:{user_id:"dashboard",name:n}}))}
+function setSecret(){var n=document.getElementById("sec-name").value,v=document.getElementById("sec-val").value;if(!n||!v)return;ws.send(JSON.stringify({type:"set_secret",data:{user_id:"dashboard",name:n,value:v}}));document.getElementById("sec-name").value="";document.getElementById("sec-val").value=""}
+function searchMem(){var q=document.getElementById("msearch").value;if(!q)return;ws.send(JSON.stringify({type:"search",data:{user_id:q}}))}
+function show(n){document.querySelectorAll(".page").forEach(function(p){p.classList.remove("active")});document.querySelectorAll(".nav-item").forEach(function(t){t.classList.remove("active")});document.getElementById("p-"+n).classList.add("active");document.querySelectorAll(".nav-item")[tabs.indexOf(n)]&&document.querySelectorAll(".nav-item")[tabs.indexOf(n)].classList.add("active");document.querySelector(".tb-left span:last-child").textContent=n.charAt(0).toUpperCase()+n.slice(1);"monitoring"===n&&loadSessions()}
+function toggleSidebar(){var s=document.getElementById("sidebar");if(window.innerWidth<=900){s.classList.toggle("open");var o=document.getElementById("sb-overlay");if(!o){o=document.createElement("div");o.id="sb-overlay";o.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:90";o.onclick=toggleSidebar;document.body.appendChild(o)}o.style.display=s.classList.contains("open")?"block":"none"}else s.classList.toggle("collapsed")}
+document.addEventListener("keydown",function(e){"Escape"===e.key&&(document.getElementById("shortcuts").classList.remove("active"),document.getElementById("onboard").classList.remove("active"));e.ctrlKey&&"k"===e.key&&(e.preventDefault(),document.getElementById("search").focus());e.ctrlKey&&"b"===e.key&&(e.preventDefault(),toggleSidebar());e.ctrlKey&&"d"===e.key&&(e.preventDefault(),document.body.classList.toggle("light"));e.altKey&&e.key>="1"&&e.key<="9"&&(e.preventDefault(),show(tabs[parseInt(e.key)-1]));"?"===e.key&&document.getElementById("shortcuts").classList.add("active")});
+if(!localStorage.getItem("aeryn-onboarded"))document.getElementById("onboard").classList.add("active");connectWS();
 </script>
 </body>
 </html>

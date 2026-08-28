@@ -73,16 +73,10 @@ app = FastAPI(title="Aeryn Daemon", version="41.0")
 app.router.lifespan_context = app_lifespan
 
 from fastapi.middleware.cors import CORSMiddleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 async def broadcast_loop():
-    """Broadcast all data types every 5 seconds."""
+    """Broadcast system stats every 5 seconds."""
     while True:
         await asyncio.sleep(5)
         emitter = get_emitter()
@@ -100,14 +94,10 @@ async def broadcast_loop():
             mem_used_mb = round((mem_total - mem_available) / 1024, 1) if mem_total else 0
             mem_total_mb = round(mem_total / 1024, 1) if mem_total else 0
             mem_pct = round(mem_used_mb / mem_total_mb * 100, 1) if mem_total_mb else 0
-            try:
-                import shutil
-                disk = shutil.disk_usage("/")
-                disk_free_gb = round(disk.free / (1024**3), 2)
-                disk_pct = round((disk.total - disk.free) / disk.total * 100, 1)
-            except Exception:
-                disk_free_gb = 0
-                disk_pct = 0
+            import shutil
+            disk = shutil.disk_usage("/")
+            disk_free_gb = round(disk.free / (1024**3), 2)
+            disk_pct = round((disk.total - disk.free) / disk.total * 100, 1)
             process_mem = 0
             try:
                 with open("/proc/self/status") as f:
@@ -117,121 +107,19 @@ async def broadcast_loop():
                             break
             except Exception:
                 pass
-            
-            # 1. Stats
             await emitter.broadcast("stats", {
-                "memory_used_mb": mem_used_mb, "memory_total_mb": mem_total_mb, "memory_percent": mem_pct,
-                "disk_free_gb": disk_free_gb, "disk_percent": disk_pct,
+                "memory_used_mb": mem_used_mb,
+                "memory_total_mb": mem_total_mb,
+                "memory_percent": mem_pct,
+                "disk_free_gb": disk_free_gb,
+                "disk_percent": disk_pct,
                 "process_mem_mb": round(process_mem, 1),
                 "uptime_s": round(time.time() - _start_time, 0),
-                "requests_total": _request_count, "errors_total": _error_count,
+                "requests_total": _request_count,
+                "errors_total": _error_count,
             })
-            
-            # 2. Tasks
-            try:
-                db = get_shared_db()
-                tasks = db.get_all_tasks()
-                await emitter.broadcast("tasks", {"tasks": tasks, "count": len(tasks)})
-            except Exception:
-                await emitter.broadcast("tasks", {"tasks": [], "count": 0})
-            
-            # 3. Notifications
-            try:
-                notif_mgr = get_notification_manager()
-                notifs = notif_mgr.get_pending()
-                await emitter.broadcast("notifications", {"notifications": notifs})
-            except Exception:
-                await emitter.broadcast("notifications", {"notifications": []})
-            
-            # 4. Vault
-            try:
-                vault = AerynVault()
-                entries = vault.list_entries(limit=20)
-                counts = vault.count_entries()
-                await emitter.broadcast("vault", {"entries": entries, "total_entries": sum(counts.values())})
-            except Exception:
-                await emitter.broadcast("vault", {"entries": [], "total_entries": 0})
-            
-            # 5. Tools
-            try:
-                rt = get_tool_runtime()
-                await emitter.broadcast("tools", {"tools": rt.list_tools()})
-            except Exception:
-                await emitter.broadcast("tools", {"tools": []})
-            
-            # 6. Performance
-            await emitter.broadcast("performance", {
-                "cpu_percent": 0, "memory_percent": mem_pct,
-                "memory_used_mb": mem_used_mb, "memory_total_mb": mem_total_mb,
-                "disk_percent": disk_pct, "disk_free_gb": disk_free_gb,
-            })
-            
-            # 7. Uptime
-            await emitter.broadcast("uptime", {
-                "uptime": str(round(time.time() - _start_time, 0)) + "s",
-                "uptime_s": round(time.time() - _start_time, 0),
-            })
-            
-            # 8. Queue
-            try:
-                queue = get_task_queue()
-                await emitter.broadcast("queue", {"pending": queue.get_pending_count(), "running": queue.get_running_count()})
-            except Exception:
-                await emitter.broadcast("queue", {"pending": 0, "running": 0})
-            
-            # 9. API Keys
-            try:
-                km = get_api_key_manager()
-                await emitter.broadcast("api_keys", {"keys": km.list_keys("dashboard")})
-            except Exception:
-                await emitter.broadcast("api_keys", {"keys": []})
-            
-            # 10. Usage
-            try:
-                um = get_usage_metering()
-                await emitter.broadcast("usage", um.get_summary("dashboard"))
-            except Exception:
-                await emitter.broadcast("usage", {"total_events": 0, "total_cost": 0})
-            
-            # 11. Secrets
-            try:
-                sm = get_secrets_manager()
-                await emitter.broadcast("secrets", {"secrets": sm.list("dashboard")})
-            except Exception:
-                await emitter.broadcast("secrets", {"secrets": []})
-            
-            # 12. Circuit Breakers
-            try:
-                recovery = get_error_recovery()
-                await emitter.broadcast("circuit_breakers", {"circuit_breakers": recovery.get_circuit_breaker_states()})
-            except Exception:
-                await emitter.broadcast("circuit_breakers", {"circuit_breakers": []})
-            
-            # 13. Briefing
-            try:
-                briefing = get_daily_briefing()
-                await emitter.broadcast("briefing", briefing.generate_morning("dashboard"))
-            except Exception:
-                await emitter.broadcast("briefing", {"content": "Error"})
-            
-            # 14. Suggestions
-            try:
-                engine = get_proactive_v2()
-                await emitter.broadcast("suggestions", {"suggestions": engine.detect_patterns("dashboard")})
-            except Exception:
-                await emitter.broadcast("suggestions", {"suggestions": []})
-            
-            # 15. Constitutional
-            try:
-                cai = get_constitutional_ai()
-                await emitter.broadcast("constitutional", {"principles": cai.get_principles()})
-            except Exception:
-                await emitter.broadcast("constitutional", {"principles": []})
-            
         except Exception:
             pass
-
-
 
 _start_time = time.time()
 _request_count = 0
@@ -371,7 +259,7 @@ async def chat(req: RunRequest):
         return await run(req)
     
     # Get or create session
-    session = router.sessions.get_or_create(req.session_id)
+    session = router.get_or_create_session(req.session_id)
     
     # Safety check
     eng = get_safety_engine()
@@ -406,6 +294,38 @@ async def chat(req: RunRequest):
         }
     except Exception as e:
         return {"status": "error", "error": str(e)}
+
+
+
+# ── Monitoring Endpoints ──────────────────────
+
+@app.get("/api/monitoring/sessions")
+async def monitoring_sessions():
+    try:
+        router = get_mode_router()
+        sessions = router.memory.get_sessions()
+        return {"sessions": sessions}
+    except Exception as e:
+        return {"sessions": [], "error": str(e)}
+
+@app.get("/api/monitoring/history")
+async def monitoring_history(session_id: str, limit: int = 50):
+    try:
+        router = get_mode_router()
+        history = router.memory.get_history(session_id, limit)
+        return {"session_id": session_id, "history": history}
+    except Exception as e:
+        return {"session_id": session_id, "history": [], "error": str(e)}
+
+@app.get("/api/monitoring/stats")
+async def monitoring_stats():
+    try:
+        router = get_mode_router()
+        llm = router.llm
+        return {"total_requests": llm._request_count, "total_errors": llm._error_count,
+                "active_sessions": len(router.sessions), "mode": router.mode}
+    except Exception as e:
+        return {"error": str(e)}
 
 @app.get("/search")
 async def search(q: str, limit: int = 10):
@@ -533,10 +453,10 @@ async def dashboard_websocket(websocket: WebSocket):
     """WebSocket endpoint for two-way dashboard commands."""
     emitter = get_emitter()
     client_id = f"ws_{int(time.time())}"
+    await websocket.accept()
     emitter.register_ws(client_id, websocket)
     
     try:
-        await websocket.accept()
         await websocket.send_json({"type": "connected", "data": {}})
         
         while True:
@@ -549,30 +469,27 @@ async def dashboard_websocket(websocket: WebSocket):
                 if cmd_type == "ping":
                     await websocket.send_json({"type": "pong", "data": {}})
                 elif cmd_type == "chat":
-                    # Handle chat via WebSocket
                     try:
                         from aeryn_core.safety_engine import get_safety_engine
+                        from aeryn_core.persona_engine import load_persona
                         eng = get_safety_engine()
                         text = cmd_data.get("message", "")
                         safety = eng.check_input(text)
                         if not safety.safe:
                             await websocket.send_json({"type": "error", "data": {"message": "Blocked"}})
                         else:
-                            # Process chat
-                            from aeryn_core.persona_engine import load_persona
                             persona = load_persona()
-                            # In standalone mode, call LLM
                             router = get_mode_router()
-                            if router.is_standalone():
-                                messages = [
-                                    {"role": "system", "content": persona},
-                                    {"role": "user", "content": text},
-                                ]
-                                result = await router.llm.chat(messages)
-                                response = result["content"]
-                            else:
-                                response = f"Received: {text[:200]}"
-                            await websocket.send_json({"type": "chat_response", "data": {"response": response, "session_id": cmd_data.get("session_id", "default")}})
+                            sid = cmd_data.get("session_id", "default")
+                            session = router.get_or_create_session(sid)
+                            session.add_message("user", text)
+                            messages = [{"role": "system", "content": persona}] + session.get_context_window()
+                            result = await router.llm.chat(messages, sid)
+                            response = result["content"]
+                            session.add_message("assistant", response)
+                            router.memory.store(sid, "assistant", response)
+                            reasoning = result.get("reasoning", [])
+                            await websocket.send_json({"type": "chat_response", "data": {"response": response, "session_id": sid, "reasoning": reasoning}})
                     except Exception as e:
                         await websocket.send_json({"type": "error", "data": {"message": str(e)}})
                 elif cmd_type == "parse_tasks":
@@ -592,12 +509,7 @@ async def dashboard_websocket(websocket: WebSocket):
                 elif cmd_type == "create_notification":
                     try:
                         mgr = get_notification_manager()
-                        notif = Notification(
-                            user_id=cmd_data.get("user_id", "default"),
-                            title=cmd_data.get("title", ""),
-                            message=cmd_data.get("message", ""),
-                            priority=cmd_data.get("priority", "normal"),
-                        )
+                        notif = Notification(user_id=cmd_data.get("user_id", "default"), title=cmd_data.get("title", ""), message=cmd_data.get("message", ""), priority=cmd_data.get("priority", "normal"))
                         nid = mgr.create(notif)
                         await websocket.send_json({"type": "notif_created", "data": {"id": nid}})
                     except Exception as e:
