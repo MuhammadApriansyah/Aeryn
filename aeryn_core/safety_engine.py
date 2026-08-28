@@ -430,6 +430,11 @@ class RateLimiter:
         self._requests = defaultdict(deque)
         self._lock = threading.Lock()
     
+    @property
+    def max(self) -> int:
+        """Alias for max_requests for backward compat."""
+        return self.max_requests
+    
     def allow(self, key: str) -> bool:
         now = time.time()
         with self._lock:
@@ -440,16 +445,90 @@ class RateLimiter:
             self._requests[key].append(now)
             return True
 
-def rotate_all_data_files():
-    pass
+def rotate_all_data_files(dir_path: str, max_bytes: int = None, keep_tail_lines: int = 100,
+                         max_mb: int = 10) -> dict:
+    """Rotate all JSONL files in a directory (recursive)."""
+    results = {}
+    if max_bytes is None:
+        max_bytes = max_mb * 1024 * 1024
+    
+    if not os.path.isdir(dir_path):
+        return results
+    
+    for fname in os.listdir(dir_path):
+        fpath = os.path.join(dir_path, fname)
+        if os.path.isdir(fpath):
+            # Recurse into subdirectories
+            sub_results = rotate_all_data_files(fpath, max_bytes, keep_tail_lines)
+            results.update(sub_results)
+        elif fname.endswith(".jsonl"):
+            size = os.path.getsize(fpath)
+            if size >= max_bytes:
+                rotate_jsonl_if_large(fpath, max_bytes=max_bytes, keep_tail_lines=keep_tail_lines)
+                results[fname] = True
+            else:
+                results[fname] = False
+    
+    return results
 
-def rotate_jsonl_if_large(path, max_mb=10):
-    pass
+def rotate_jsonl_if_large(path, max_mb=10, keep_tail_lines=100, max_bytes=None) -> bool:
+    """Rotate JSONL file if it exceeds size limit. Returns True if rotated."""
+    if max_bytes is not None:
+        max_size = max_bytes
+    else:
+        max_size = max_mb * 1024 * 1024
+    
+    if not os.path.exists(path):
+        return False
+    
+    size = os.path.getsize(path)
+    if size < max_size:
+        return False
+    
+    with open(path, encoding="utf-8", errors="replace") as f:
+        lines = f.readlines()
+    
+    tail = lines[-keep_tail_lines:] if len(lines) > keep_tail_lines else lines
+    archive_path = f"{path}.arch-{int(time.time())}.gz"
+    import gzip
+    with gzip.open(archive_path, "wt", encoding="utf-8") as f:
+        f.writelines(lines[:-keep_tail_lines] if len(lines) > keep_tail_lines else lines)
+    
+    with open(path, "w", encoding="utf-8") as f:
+        f.writelines(tail)
+    
+    archive_dir = os.path.dirname(path)
+    archive_base = os.path.basename(path)
+    archives = sorted([f for f in os.listdir(archive_dir) if f.startswith(archive_base) and "arch-" in f and f.endswith(".gz")])
+    while len(archives) > 3:
+        old = archives.pop(0)
+        os.remove(os.path.join(archive_dir, old))
+    
+    return True
 
 def sanitize_goal_for_sop(goal: str) -> str:
     if not goal:
         return goal
-    return re.sub(r'[^\w\s\-\.\,\?\!\(\)]', '', goal[:500])
+    # Strip special characters
+    clean = re.sub(r'[^\w\s\-\.\,\?\!\(\)]', '', goal[:500])
+    # Normalize homoglyphs (Cyrillic, fullwidth, etc.)
+    homoglyph_map = {
+        'і': 'i', 'а': 'a', 'е': 'e', 'о': 'o', 'р': 'p', 'с': 'c',
+        'у': 'y', 'х': 'x', 'ѕ': 's', 'ɡ': 'g', 'ɑ': 'a', 'ε': 'e',
+    }
+    for cyr, lat in homoglyph_map.items():
+        clean = clean.replace(cyr, lat)
+    # Strip injection markers
+    injection_markers = [
+        r'ignore\s+(all\s+)?(previous|above|prior|earlier)?\s*(instructions?|rules?|prompts?|constraints?)',
+        r'forget\s+(everything|all|your\s+instructions?|your\s+rules?)',
+        r'you\s+are\s+now\s+(DAN|AIM?)',
+        r'jailbreak',
+        r'ignore\s+semua\s+aturan',
+    ]
+    for marker in injection_markers:
+        clean = re.sub(marker, '', clean, flags=re.I)
+    return clean
 
 def make_secure_terminal(sandbox_roots=None):
     pass
