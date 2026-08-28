@@ -3,7 +3,7 @@
 
 import os, sys, json, sqlite3, hashlib, uuid
 from typing import Dict, List, Optional
-from datetime import datetime
+from datetime import datetime, timedelta
 
 DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/auth.db")
 
@@ -74,7 +74,7 @@ class AuthManager:
             token = str(uuid.uuid4())
             conn = sqlite3.connect(self.db_path)
             conn.execute("INSERT INTO sessions (token, user_id, expires_at) VALUES (?,?,?)",
-                         (token, row[0], (datetime.now().replace(days=+7)).isoformat()))
+                         (token, row[0], (datetime.now() + timedelta(days=7)).isoformat()))
             conn.commit()
             conn.close()
             return token

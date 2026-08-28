@@ -41,7 +41,7 @@ from aeryn_core.github_integration import get_github
 from aeryn_core.data_encryption import get_encryption
 from aeryn_core.auth_manager import get_auth
 
-app = FastAPI(title="Aeryn Daemon", version="40.44")
+app = FastAPI(title="Aeryn Daemon", version="40.52")
 
 _start_time = time.time()
 _request_count = 0
@@ -585,6 +585,43 @@ async def get_alerts():
     from monitor import ProductionMonitor
     monitor = ProductionMonitor()
     return {"alerts": monitor.get_alerts()}
+
+
+# ── Browser Automation ──────────────────────────────────────────
+
+@app.post("/browser/task")
+async def browser_task(url: str, actions: list, user_id: str = "default"):
+    from aeryn_core.browser_vector import get_browser
+    browser = get_browser()
+    return browser.run_task(url, actions, user_id)
+
+# ── Vector DB ──────────────────────────────────────────────────
+
+@app.post("/vectordb/collections")
+async def create_collection(name: str, dimension: int = 384, description: str = ""):
+    from aeryn_core.browser_vector import get_vector_db
+    vdb = get_vector_db()
+    return {"collection": vdb.create_collection(name, dimension, description)}
+
+@app.post("/vectordb/{collection}/add")
+async def add_vectors(collection: str, texts: list, embeddings: list = None, metadatas: list = None):
+    from aeryn_core.browser_vector import get_vector_db
+    vdb = get_vector_db()
+    ids = vdb.add(collection, texts, embeddings, metadatas)
+    return {"ids": ids}
+
+@app.post("/vectordb/{collection}/search")
+async def search_vectors(collection: str, query_embedding: list, limit: int = 5):
+    from aeryn_core.browser_vector import get_vector_db
+    vdb = get_vector_db()
+    return {"results": vdb.search(collection, query_embedding, limit)}
+
+@app.delete("/vectordb/{collection}")
+async def delete_collection(collection: str):
+    from aeryn_core.browser_vector import get_vector_db
+    vdb = get_vector_db()
+    vdb.delete_collection(collection)
+    return {"status": "deleted"}
 
 if __name__ == "__main__":
     import uvicorn

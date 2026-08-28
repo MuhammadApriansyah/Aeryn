@@ -183,3 +183,6 @@
 2026-08-28 03:01:00: INFO:     127.0.0.1:53432 - "GET /dashboard HTTP/1.1" 404 Not Found
 2026-08-28 03:01:00: INFO:     127.0.0.1:53432 - "GET /favicon.ico HTTP/1.1" 404 Not Found
 2026-08-28 03:01:01: INFO:     127.0.0.1:53432 - "GET /dashboard HTTP/1.1" 404 Not Found
+2026-08-28 10:59:02: INFO:     127.0.0.1:35062 - "GET /health HTTP/1.1" 200 OK
+2026-08-28 11:12:48: INFO:     127.0.0.1:53278 - "GET /health HTTP/1.1" 200 OK
+2026-08-28 11:13:59: INFO:     127.0.0.1:49048 - "GET /health HTTP/1.1" 200 OK
