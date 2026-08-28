@@ -758,6 +758,265 @@ body.light {
   --text-muted: #71717a;
 }
 
+/* ── Task Queue ─────────────────────────────── */
+.task-count {
+  background: var(--accent);
+  color: var(--bg);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  margin-left: 8px;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-empty {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 16px;
+  font-size: 13px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--bg);
+  border-radius: 8px;
+}
+
+.task-info {
+  flex: 1;
+}
+
+.task-title {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.task-status {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.task-progress {
+  width: 60px;
+  height: 4px;
+  background: var(--bg-hover);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.task-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s;
+}
+
+/* ── Memory Browser ────────────────────────── */
+.search-box {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+}
+
+.search-box input:focus {
+  border-color: var(--accent);
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+  display: none;
+}
+
+.search-results.active {
+  display: block;
+}
+
+.search-result-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.search-result-item:hover {
+  background: var(--bg-hover);
+}
+
+.memory-table-wrap {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.memory-table {
+  width: 100%;
+}
+
+.memory-table th {
+  position: sticky;
+  top: 0;
+  background: var(--bg-card);
+}
+
+.memory-table td {
+  font-size: 12px;
+}
+
+.memory-table .view-btn {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.memory-table .view-btn:hover {
+  border-color: var(--accent);
+}
+
+.pagination {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.pagination button {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.pagination button:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination .page-info {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ── Modal ──────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.modal-close:hover {
+  color: var(--text);
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  max-height: 60vh;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* ── Collapsible ────────────────────────────── */
+.section.collapsible .section-header {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section.collapsible .section-header::after {
+  content: '▾';
+  font-size: 14px;
+  transition: transform 0.2s;
+}
+
+.section.collapsed .section-header::after {
+  transform: rotate(-90deg);
+}
+
+.section.collapsed .section-content {
+  display: none;
+}
+
 .footer {
   text-align: center;
   padding: 24px 0;
@@ -1181,6 +1440,259 @@ function connectWS() {
   };
 }
 
+// ── Theme Toggle ─────────────────────────────
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('aeryn-theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+function loadTheme() {
+  if (localStorage.getItem('aeryn-theme') === 'light') {
+    document.body.classList.add('light');
+  }
+}
+
+// ── Task Queue Monitor ────────────────────────
+async function loadTasks() {
+  try {
+    const r = await fetch('/shared/tasks/all');
+    const d = await r.json();
+    const list = document.getElementById('task-list');
+    const count = document.getElementById('task-count');
+    
+    if (!list || !count) return;
+    
+    count.textContent = d.count;
+    
+    if (d.count === 0) {
+      list.innerHTML = '<div class="task-empty">No pending tasks</div>';
+      return;
+    }
+    
+    list.innerHTML = '';
+    d.tasks.forEach(task => {
+      const item = document.createElement('div');
+      item.className = 'task-item';
+      const progress = task.progress || 0;
+      const statusClass = task.status === 'completed' ? 'success' : 
+                          task.status === 'failed' ? 'error' : 'info';
+      
+      item.innerHTML = `
+        <div class="task-dot ${statusClass}"></div>
+        <div class="task-info">
+          <div class="task-title">${task.title || 'Untitled'}</div>
+          <div class="task-status">${task.status} • Priority ${task.priority || 5}</div>
+        </div>
+        <div class="task-progress">
+          <div class="task-progress-fill" style="width: ${progress * 100}%"></div>
+        </div>
+      `;
+      list.appendChild(item);
+    });
+  } catch(e) {
+    console.error('Task load failed:', e);
+  }
+}
+
+// ── Memory Browser ────────────────────────────
+let memoryPage = 1;
+const memoryPerPage = 10;
+let searchTimeout = null;
+
+async function loadMemory(page = 1) {
+  try {
+    const r = await fetch(`/vault/entries?page=${page}&per_page=${memoryPerPage}`);
+    const d = await r.json();
+    const tbody = document.getElementById('memory-table-body');
+    const pagination = document.getElementById('memory-pagination');
+    
+    if (!tbody || !pagination) return;
+    
+    if (d.entries.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-muted)">No entries found</td></tr>';
+      pagination.innerHTML = '';
+      return;
+    }
+    
+    tbody.innerHTML = '';
+    d.entries.forEach(entry => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${entry.title?.substring(0, 40) || 'Untitled'}</td>
+        <td>${entry.layer || 'wiki'}</td>
+        <td>${(entry.tags || []).join(', ')}</td>
+        <td><button class="view-btn" onclick="viewEntry('${entry.id}')">View</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+    
+    // Pagination
+    pagination.innerHTML = '';
+    if (d.total_pages > 1) {
+      const prevBtn = document.createElement('button');
+      prevBtn.textContent = '← Prev';
+      prevBtn.disabled = page <= 1;
+      prevBtn.onclick = () => loadMemory(page - 1);
+      
+      const pageInfo = document.createElement('span');
+      pageInfo.className = 'page-info';
+      pageInfo.textContent = `Page ${page} of ${d.total_pages}`;
+      
+      const nextBtn = document.createElement('button');
+      nextBtn.textContent = 'Next →';
+      nextBtn.disabled = page >= d.total_pages;
+      nextBtn.onclick = () => loadMemory(page + 1);
+      
+      pagination.appendChild(prevBtn);
+      pagination.appendChild(pageInfo);
+      pagination.appendChild(nextBtn);
+    }
+  } catch(e) {
+    console.error('Memory load failed:', e);
+  }
+}
+
+async function viewEntry(id) {
+  try {
+    const r = await fetch(`/vault/entry/${id}`);
+    const entry = await r.json();
+    
+    const modal = document.getElementById('memory-modal');
+    const title = document.getElementById('modal-title');
+    const body = document.getElementById('modal-body');
+    
+    if (!modal || !title || !body) return;
+    
+    title.textContent = entry.title || 'Untitled';
+    body.textContent = entry.body || 'No content';
+    
+    modal.style.display = 'flex';
+  } catch(e) {
+    console.error('Entry load failed:', e);
+  }
+}
+
+function closeModal() {
+  const modal = document.getElementById('memory-memory');
+  if (modal) modal.style.display = 'none';
+}
+
+// ── Search Box ────────────────────────────────
+function setupSearch() {
+  const input = document.getElementById('memory-search');
+  const results = document.getElementById('search-results');
+  
+  if (!input || !results) return;
+  
+  input.addEventListener('input', () => {
+    clearTimeout(searchTimeout);
+    const q = input.value.trim();
+    
+    if (q.length < 2) {
+      results.classList.remove('active');
+      return;
+    }
+    
+    searchTimeout = setTimeout(async () => {
+      try {
+        const r = await fetch(`/vault/search?q=${encodeURIComponent(q)}&limit=10`);
+        const d = await r.json();
+        
+        results.innerHTML = '';
+        
+        if (d.results.length === 0) {
+          results.innerHTML = '<div class="search-result-item">No results</div>';
+        } else {
+          d.results.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'search-result-item';
+            div.textContent = item.title;
+            div.onclick = () => {
+              results.classList.remove('active');
+              viewEntry(item.id);
+            };
+            results.appendChild(div);
+          });
+        }
+        
+        results.classList.add('active');
+      } catch(e) {
+        console.error('Search failed:', e);
+      }
+    }, 300);
+  });
+  
+  input.addEventListener('blur', () => {
+    setTimeout(() => results.classList.remove('active'), 200);
+  });
+  
+  input.addEventListener('focus', () => {
+    if (input.value.trim().length >= 2) {
+      results.classList.add('active');
+    }
+  });
+}
+
+// ── Keyboard Shortcuts ────────────────────────
+function setupKeyboard() {
+  document.addEventListener('keydown', (e) => {
+    // R - Refresh
+    if (e.key === 'r' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      if (document.activeElement.tagName !== 'INPUT') {
+        loadTasks();
+        loadMemory();
+        loadVaultData();
+        showToast('info', 'Refreshed');
+      }
+    }
+    
+    // T - Toggle theme
+    if (e.key === 't' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      if (document.activeElement.tagName !== 'INPUT') {
+        toggleTheme();
+      }
+    }
+    
+    // / - Focus search
+    if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      e.preventDefault();
+      const input = document.getElementById('memory-search');
+      if (input) input.focus();
+    }
+    
+    // Esc - Close modal / blur
+    if (e.key === 'Escape') {
+      closeModal();
+      const input = document.getElementById('memory-search');
+      if (input && document.activeElement === input) {
+        input.blur();
+      }
+    }
+  });
+}
+
+// ── Collapsible Sections ──────────────────────
+function setupCollapsible() {
+  document.querySelectorAll('.section h2').forEach(header => {
+    header.style.cursor = 'pointer';
+    header.addEventListener('click', () => {
+      const section = header.closest('.section');
+      if (section.id === 'task-monitor-section' || section.id === 'memory-browser-section') {
+        section.classList.toggle('collapsed');
+        localStorage.setItem(`aeryn-collapse-${section.id}`, section.classList.contains('collapsed'));
+      }
+    });
+  });
+  
+  // Restore collapse state
+  ['task-monitor-section', 'memory-browser-section'].forEach(id => {
+    const section = document.getElementById(id);
+    if (section && localStorage.getItem(`aeryn-collapse-${id}`) === 'true') {
+      section.classList.add('collapsed');
+    }
+  });
+}
+
 // ── Fetch vault data (one-time) ────────────────
 async function loadVaultData() {
   try {
@@ -1203,12 +1715,19 @@ async function loadVaultData() {
   }
 }
 
+loadTheme();
 updateClock();
 setInterval(updateClock, 1000);
 connectSSE();
 connectWS();
 loadVaultData();
-setInterval(loadVaultData, 60000); // Refresh vault data every 60s
+loadTasks();
+loadMemory();
+setupSearch();
+setupKeyboard();
+setupCollapsible();
+setInterval(loadTasks, 30000);
+setInterval(loadMemory, 60000); // Refresh vault data every 60s
 </script>
 </body>
 </html>"""
