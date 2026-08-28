@@ -140,11 +140,24 @@ class SemanticIndexer:
         query_vec = self._embed(query)
         
         conn = sqlite3.connect(self.db_path)
+        # Use the existing FTS5 memories table or fallback to documents
         rows = conn.execute("""
-            SELECT d.id, d.title, d.content, d.metadata, e.vector
-            FROM documents d
-            JOIN embeddings e ON d.id = e.doc_id
+            SELECT id, content as title, content, '{}' as metadata, NULL as vector
+            FROM memories
         """).fetchall()
+        
+        # Also check documents table
+        try:
+            doc_rows = conn.execute("""
+                SELECT d.id, d.title, d.content, d.metadata, e.vector
+                FROM documents d
+                LEFT JOIN embeddings e ON d.id = e.memory_id
+            """).fetchall()
+            if doc_rows:
+                rows = doc_rows
+        except Exception:
+            pass
+        
         conn.close()
         
         results = []
