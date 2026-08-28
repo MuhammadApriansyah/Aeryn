@@ -200,3 +200,314 @@
 2026-08-28 01:11:01:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 534
 2026-08-28 01:11:01:     manager = get_plugin_manager()
 2026-08-28 01:11:01: IndentationError: unexpected indent
+2026-08-28 01:14:17: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:17: You can install "python-multipart" with: 
+2026-08-28 01:14:17: 
+2026-08-28 01:14:17: pip install python-multipart
+2026-08-28 01:14:17: 
+2026-08-28 01:14:17: Traceback (most recent call last):
+2026-08-28 01:14:17:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
+2026-08-28 01:14:17:     @app.post("/planning/tasks/{task_id}/decompose")
+2026-08-28 01:14:17: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
+2026-08-28 01:14:17:     self.add_api_route(
+2026-08-28 01:14:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
+2026-08-28 01:14:17:     route = route_class(
+2026-08-28 01:14:17:             ^^^^^^^^^^^^
+2026-08-28 01:14:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
+2026-08-28 01:14:17:     self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
+2026-08-28 01:14:17:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
+2026-08-28 01:14:17:     param_details = analyze_param(
+2026-08-28 01:14:17:                     ^^^^^^^^^^^^^^
+2026-08-28 01:14:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
+2026-08-28 01:14:17:     ensure_multipart_is_installed()
+2026-08-28 01:14:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
+2026-08-28 01:14:17:     raise RuntimeError(multipart_not_installed_error) from None
+2026-08-28 01:14:17: RuntimeError: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:17: You can install "python-multipart" with: 
+2026-08-28 01:14:17: 
+2026-08-28 01:14:17: pip install python-multipart
+2026-08-28 01:14:17: 
+2026-08-28 01:14:18: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:18: You can install "python-multipart" with: 
+2026-08-28 01:14:18: 
+2026-08-28 01:14:18: pip install python-multipart
+2026-08-28 01:14:18: 
+2026-08-28 01:14:18: Traceback (most recent call last):
+2026-08-28 01:14:18:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
+2026-08-28 01:14:18:     @app.post("/planning/tasks/{task_id}/decompose")
+2026-08-28 01:14:18:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:18:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
+2026-08-28 01:14:18:     self.add_api_route(
+2026-08-28 01:14:18:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
+2026-08-28 01:14:18:     route = route_class(
+2026-08-28 01:14:18:             ^^^^^^^^^^^^
+2026-08-28 01:14:18:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
+2026-08-28 01:14:18:     self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
+2026-08-28 01:14:18:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:18:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
+2026-08-28 01:14:18:     param_details = analyze_param(
+2026-08-28 01:14:18:                     ^^^^^^^^^^^^^^
+2026-08-28 01:14:18:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
+2026-08-28 01:14:18:     ensure_multipart_is_installed()
+2026-08-28 01:14:18:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
+2026-08-28 01:14:18:     raise RuntimeError(multipart_not_installed_error) from None
+2026-08-28 01:14:18: RuntimeError: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:18: You can install "python-multipart" with: 
+2026-08-28 01:14:18: 
+2026-08-28 01:14:18: pip install python-multipart
+2026-08-28 01:14:18: 
+2026-08-28 01:14:20: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:20: You can install "python-multipart" with: 
+2026-08-28 01:14:20: 
+2026-08-28 01:14:20: pip install python-multipart
+2026-08-28 01:14:20: 
+2026-08-28 01:14:20: Traceback (most recent call last):
+2026-08-28 01:14:20:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
+2026-08-28 01:14:20:     @app.post("/planning/tasks/{task_id}/decompose")
+2026-08-28 01:14:20:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:20:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
+2026-08-28 01:14:20:     self.add_api_route(
+2026-08-28 01:14:20:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
+2026-08-28 01:14:20:     route = route_class(
+2026-08-28 01:14:20:             ^^^^^^^^^^^^
+2026-08-28 01:14:20:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
+2026-08-28 01:14:20:     self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
+2026-08-28 01:14:20:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:20:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
+2026-08-28 01:14:20:     param_details = analyze_param(
+2026-08-28 01:14:20:                     ^^^^^^^^^^^^^^
+2026-08-28 01:14:20:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
+2026-08-28 01:14:20:     ensure_multipart_is_installed()
+2026-08-28 01:14:20:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
+2026-08-28 01:14:20:     raise RuntimeError(multipart_not_installed_error) from None
+2026-08-28 01:14:20: RuntimeError: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:20: You can install "python-multipart" with: 
+2026-08-28 01:14:20: 
+2026-08-28 01:14:20: pip install python-multipart
+2026-08-28 01:14:20: 
+2026-08-28 01:14:22: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:22: You can install "python-multipart" with: 
+2026-08-28 01:14:22: 
+2026-08-28 01:14:22: pip install python-multipart
+2026-08-28 01:14:22: 
+2026-08-28 01:14:22: Traceback (most recent call last):
+2026-08-28 01:14:22:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
+2026-08-28 01:14:22:     
+2026-08-28 01:14:22: @app.post("/planning/tasks/{task_id}/decompose")
+2026-08-28 01:14:22:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:22:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
+2026-08-28 01:14:22:     
+2026-08-28 01:14:22: self.add_api_route(
+2026-08-28 01:14:22:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
+2026-08-28 01:14:22:     
+2026-08-28 01:14:22: route = route_class(
+2026-08-28 01:14:22: 
+2026-08-28 01:14:22:             ^^^^^^^^^^^^
+2026-08-28 01:14:22:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
+2026-08-28 01:14:22:     self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
+2026-08-28 01:14:22:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:22:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
+2026-08-28 01:14:22:     param_details = analyze_param(
+2026-08-28 01:14:22: ^^^
+2026-08-28 01:14:22:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
+2026-08-28 01:14:22:     ensure_multipart_is_installed()
+2026-08-28 01:14:22:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
+2026-08-28 01:14:22:     raise RuntimeError(multipart_not_installed_error) from None
+2026-08-28 01:14:22: RuntimeError
+2026-08-28 01:14:22: : Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:22: You can install "python-multipart" with: 
+2026-08-28 01:14:22: 
+2026-08-28 01:14:22: pip install python-multipart
+2026-08-28 01:14:22: 
+2026-08-28 01:14:23: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:23: You can install "python-multipart" with: 
+2026-08-28 01:14:23: 
+2026-08-28 01:14:23: pip install python-multipart
+2026-08-28 01:14:23: 
+2026-08-28 01:14:23: Traceback (most recent call last):
+2026-08-28 01:14:23:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
+2026-08-28 01:14:23:     @app.post("/planning/tasks/{task_id}/decompose")
+2026-08-28 01:14:23:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:23:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
+2026-08-28 01:14:23:     self.add_api_route(
+2026-08-28 01:14:23:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
+2026-08-28 01:14:23:     route = route_class(
+2026-08-28 01:14:23:             ^^^^^^^^^^^^
+2026-08-28 01:14:23:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
+2026-08-28 01:14:23:     self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
+2026-08-28 01:14:23:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:23:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
+2026-08-28 01:14:23:     param_details = analyze_param(
+2026-08-28 01:14:23:   ^^^^^^^^^^^^^^
+2026-08-28 01:14:23:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
+2026-08-28 01:14:23:     ensure_multipart_is_installed()
+2026-08-28 01:14:23:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
+2026-08-28 01:14:23:     raise RuntimeError(multipart_not_installed_error) from None
+2026-08-28 01:14:23: RuntimeError: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:23: You can install "python-multipart" with: 
+2026-08-28 01:14:23: 
+2026-08-28 01:14:23: pip install python-multipart
+2026-08-28 01:14:23: 
+2026-08-28 01:14:25: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:25: You can install "python-multipart" with: 
+2026-08-28 01:14:25: 
+2026-08-28 01:14:25: pip install python-multipart
+2026-08-28 01:14:25: 
+2026-08-28 01:14:25: Traceback (most recent call last):
+2026-08-28 01:14:25:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
+2026-08-28 01:14:25:     
+2026-08-28 01:14:25: @app.post("/planning/tasks/{task_id}/decompose")
+2026-08-28 01:14:25:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
+2026-08-28 01:14:25:     self.add_api_route(
+2026-08-28 01:14:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
+2026-08-28 01:14:25:     route = route_class(
+2026-08-28 01:14:25:             ^^^^^^^^^^^^
+2026-08-28 01:14:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
+2026-08-28 01:14:25:     self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
+2026-08-28 01:14:25:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
+2026-08-28 01:14:25:     param_details = analyze_param(
+2026-08-28 01:14:25:                     ^^^^^^^^^^^^^^
+2026-08-28 01:14:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
+2026-08-28 01:14:25:     ensure_multipart_is_installed()
+2026-08-28 01:14:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
+2026-08-28 01:14:25:     raise RuntimeError(multipart_not_installed_error) from None
+2026-08-28 01:14:25: RuntimeError: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:25: You can install "python-multipart" with: 
+2026-08-28 01:14:25: 
+2026-08-28 01:14:25: pip install python-multipart
+2026-08-28 01:14:25: 
+2026-08-28 01:14:27: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:27: You can install "python-multipart" with: 
+2026-08-28 01:14:27: 
+2026-08-28 01:14:27: pip install python-multipart
+2026-08-28 01:14:27: 
+2026-08-28 01:14:27: Traceback (most recent call last):
+2026-08-28 01:14:27:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
+2026-08-28 01:14:27:     @app.post("/planning/tasks/{task_id}/decompose")
+2026-08-28 01:14:27:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:27:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
+2026-08-28 01:14:27:     self.add_api_route(
+2026-08-28 01:14:27:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
+2026-08-28 01:14:27:     route = route_class(
+2026-08-28 01:14:27:             ^^^^^^^^^^^^
+2026-08-28 01:14:27:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
+2026-08-28 01:14:27:     
+2026-08-28 01:14:27: self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
+2026-08-28 01:14:27:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:27:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
+2026-08-28 01:14:27:     param_details = analyze_param(
+2026-08-28 01:14:27:                     ^^^^^^^^^^^^^^
+2026-08-28 01:14:27:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
+2026-08-28 01:14:27:     ensure_multipart_is_installed()
+2026-08-28 01:14:27:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
+2026-08-28 01:14:27:     raise RuntimeError(multipart_not_installed_error) from None
+2026-08-28 01:14:27: RuntimeError: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:27: You can install "python-multipart" with: 
+2026-08-28 01:14:27: 
+2026-08-28 01:14:27: pip install python-multipart
+2026-08-28 01:14:27: 
+2026-08-28 01:14:28: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:28: You can install "python-multipart" with: 
+2026-08-28 01:14:28: 
+2026-08-28 01:14:28: pip install python-multipart
+2026-08-28 01:14:28: 
+2026-08-28 01:14:28: Traceback (most recent call last):
+2026-08-28 01:14:28:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
+2026-08-28 01:14:28:     @app.post("/planning/tasks/{task_id}/decompose")
+2026-08-28 01:14:28:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
+2026-08-28 01:14:28:     self.add_api_route(
+2026-08-28 01:14:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
+2026-08-28 01:14:28:     route = route_class(
+2026-08-28 01:14:28:             ^^^^^^^^^^^^
+2026-08-28 01:14:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
+2026-08-28 01:14:28:     
+2026-08-28 01:14:28: self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
+2026-08-28 01:14:28:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
+2026-08-28 01:14:28:     param_details = analyze_param(
+2026-08-28 01:14:28:                     ^^^^^^^^^^^^^^
+2026-08-28 01:14:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
+2026-08-28 01:14:28:     ensure_multipart_is_installed()
+2026-08-28 01:14:28:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
+2026-08-28 01:14:28:     raise RuntimeError(multipart_not_installed_error) from None
+2026-08-28 01:14:28: RuntimeError: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:28: You can install "python-multipart" with: 
+2026-08-28 01:14:28: 
+2026-08-28 01:14:28: pip install python-multipart
+2026-08-28 01:14:28: 
+2026-08-28 01:14:30: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:30: You can install "python-multipart" with: 
+2026-08-28 01:14:30: 
+2026-08-28 01:14:30: pip install python-multipart
+2026-08-28 01:14:30: 
+2026-08-28 01:14:30: Traceback (most recent call last):
+2026-08-28 01:14:30:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
+2026-08-28 01:14:30:     @app.post("/planning/tasks/{task_id}/decompose")
+2026-08-28 01:14:30:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
+2026-08-28 01:14:30:     self.add_api_route(
+2026-08-28 01:14:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
+2026-08-28 01:14:30:     route = route_class(
+2026-08-28 01:14:30: ^^^^^^^^^
+2026-08-28 01:14:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
+2026-08-28 01:14:30:     self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
+2026-08-28 01:14:30:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
+2026-08-28 01:14:30:     param_details = analyze_param(
+2026-08-28 01:14:30:                     ^^^^^^^^^^^^^^
+2026-08-28 01:14:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
+2026-08-28 01:14:30:     ensure_multipart_is_installed()
+2026-08-28 01:14:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
+2026-08-28 01:14:30:     raise RuntimeError(multipart_not_installed_error) from None
+2026-08-28 01:14:30: RuntimeError: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:30: You can install "python-multipart" with: 
+2026-08-28 01:14:30: 
+2026-08-28 01:14:30: pip install python-multipart
+2026-08-28 01:14:30: 
+2026-08-28 01:14:31: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:31: You can install "python-multipart" with: 
+2026-08-28 01:14:31: 
+2026-08-28 01:14:31: pip install python-multipart
+2026-08-28 01:14:31: 
+2026-08-28 01:14:31: Traceback (most recent call last):
+2026-08-28 01:14:31:   File "/home/sen/aeryn-core-agent/apps/api/aeryn_api.py", line 548, in <module>
+2026-08-28 01:14:31:     
+2026-08-28 01:14:31: @app.post("/planning/tasks/{task_id}/decompose")
+2026-08-28 01:14:31:      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 994, in decorator
+2026-08-28 01:14:31:     self.add_api_route(
+2026-08-28 01:14:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 933, in add_api_route
+2026-08-28 01:14:31:     route = route_class(
+2026-08-28 01:14:31: ^^^^^^^
+2026-08-28 01:14:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 554, in __init__
+2026-08-28 01:14:31:     self.dependant = get_dependant(path=self.path_format, call=self.endpoint)
+2026-08-28 01:14:31:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28 01:14:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 285, in get_dependant
+2026-08-28 01:14:31:     param_details = analyze_param(
+2026-08-28 01:14:31: ^^^^^^
+2026-08-28 01:14:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 482, in analyze_param
+2026-08-28 01:14:31:     ensure_multipart_is_installed()
+2026-08-28 01:14:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/dependencies/utils.py", line 115, in ensure_multipart_is_installed
+2026-08-28 01:14:31:     raise RuntimeError(multipart_not_installed_error) from None
+2026-08-28 01:14:31: RuntimeError: Form data requires "python-multipart" to be installed. 
+2026-08-28 01:14:31: You can install "python-multipart" with: 
+2026-08-28 01:14:31: 
+2026-08-28 01:14:31: pip install python-multipart
+2026-08-28 01:14:31: 
+2026-08-28 01:15:16: INFO:     Started server process [24960]
+2026-08-28 01:15:16: INFO:     Waiting for application startup.
+2026-08-28 01:15:16: INFO:     Application startup complete.
+2026-08-28 01:15:16: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-28 01:27:52: INFO:     Shutting down
+2026-08-28 01:27:52: INFO:     Waiting for application shutdown.
+2026-08-28 01:27:52: INFO:     Application shutdown complete.
+2026-08-28 01:27:52: INFO:     Finished server process [24960]
+2026-08-28 01:27:57: INFO:     Started server process [4784]
+2026-08-28 01:27:57: INFO:     Waiting for application startup.
+2026-08-28 01:27:57: INFO:     Application startup complete.
+2026-08-28 01:27:57: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)

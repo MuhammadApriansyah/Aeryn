@@ -155,3 +155,12 @@
 2026-08-28 00:58:06: INFO:     127.0.0.1:36744 - "GET /memory/entities?entity_type=person HTTP/1.1" 200 OK
 2026-08-28 00:58:06: INFO:     127.0.0.1:36760 - "GET /plugins HTTP/1.1" 200 OK
 2026-08-28 00:58:07: INFO:     127.0.0.1:36764 - "POST /security/scan HTTP/1.1" 422 Unprocessable Entity
+2026-08-28 01:15:18: INFO:     127.0.0.1:43736 - "GET /health HTTP/1.1" 200 OK
+2026-08-28 01:15:40: INFO:     127.0.0.1:36508 - "GET /health HTTP/1.1" 200 OK
+2026-08-28 01:15:41: INFO:     127.0.0.1:36514 - "GET /agents HTTP/1.1" 200 OK
+2026-08-28 01:15:41: INFO:     127.0.0.1:36518 - "GET /discord/commands HTTP/1.1" 200 OK
+2026-08-28 01:15:41: INFO:     127.0.0.1:36532 - "GET /planning/tasks HTTP/1.1" 200 OK
+2026-08-28 01:15:41: INFO:     127.0.0.1:36542 - "POST /security/scan HTTP/1.1" 422 Unprocessable Entity
+2026-08-28 01:15:42: INFO:     127.0.0.1:36558 - "GET /guardrails/validators HTTP/1.1" 200 OK
+2026-08-28 01:15:43: INFO:     127.0.0.1:36562 - "POST /dream/synthesize HTTP/1.1" 200 OK
+2026-08-28 01:28:08: INFO:     127.0.0.1:54390 - "GET /health HTTP/1.1" 200 OK

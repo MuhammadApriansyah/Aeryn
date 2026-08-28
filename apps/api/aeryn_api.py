@@ -34,8 +34,11 @@ from aeryn_core.owasp_security import get_owasp_security
 from aeryn_core.plugin_system import get_plugin_manager
 from aeryn_core.long_horizon import get_long_horizon_planner, TaskPriority
 from aeryn_core.temporal_memory import get_temporal_memory
+from aeryn_core.self_improvement import get_self_improvement_engine
+from aeryn_core.skill_crystallization import get_skill_crystallizer
+from aeryn_core.cloud_sync import get_cloud_sync
 
-app = FastAPI(title="Aeryn Daemon", version="40.20")
+app = FastAPI(title="Aeryn Daemon", version="40.21")
 
 # ── State ────────────────────────────────────────────────────────
 _start_time = time.time()
@@ -612,6 +615,97 @@ async def get_alerts():
     return {"alerts": monitor.get_alerts()}
 
 # ── Main ─────────────────────────────────────────────────────────
+
+
+# ── Self-Improvement ────────────────────────────────────────────
+
+@app.post("/improvement/feedback")
+async def submit_feedback(user_id: str, interaction_type: str, input_text: str,
+                          output_text: str, rating: int = None, feedback_text: str = ""):
+    """Submit feedback for improvement."""
+    from aeryn_core.self_improvement import get_self_improvement_engine
+    engine = get_self_improvement_engine()
+    fid = engine.feedback.record_interaction(user_id, interaction_type, input_text, output_text)
+    if rating is not None:
+        engine.feedback.submit_feedback(fid, rating, feedback_text)
+    return {"feedback_id": fid, "status": "recorded"}
+
+@app.get("/improvement/report")
+async def get_improvement_report(user_id: str = "default"):
+    """Get self-improvement report."""
+    from aeryn_core.self_improvement import get_self_improvement_engine
+    engine = get_self_improvement_engine()
+    return engine.get_improvement_report(user_id)
+
+@app.post("/improvement/analyze")
+async def analyze_patterns(user_id: str = "default"):
+    """Analyze feedback patterns."""
+    from aeryn_core.self_improvement import get_self_improvement_engine
+    engine = get_self_improvement_engine()
+    return engine.analyze_patterns(user_id)
+
+# ── Skill Crystallization ──────────────────────────────────────
+
+@app.post("/skills/detect-patterns")
+async def detect_patterns(user_id: str = "default", min_frequency: int = 3):
+    """Detect frequent action patterns."""
+    from aeryn_core.skill_crystallization import get_skill_crystallizer
+    crystallizer = get_skill_crystallizer()
+    patterns = crystallizer.detector.get_frequent_patterns(user_id, min_frequency)
+    return {"patterns": patterns}
+
+@app.post("/skills/crystallize")
+async def crystallize_skill(user_id: str, pattern_id: str, skill_name: str,
+                            description: str = ""):
+    """Crystallize a pattern into a skill."""
+    from aeryn_core.skill_crystallization import get_skill_crystallizer
+    crystallizer = get_skill_crystallizer()
+    skill_id = crystallizer.crystallize(user_id, pattern_id, skill_name, description)
+    return {"skill_id": skill_id}
+
+@app.get("/skills")
+async def list_skills(active_only: bool = True):
+    """List all crystallized skills."""
+    from aeryn_core.skill_crystallization import get_skill_crystallizer
+    crystallizer = get_skill_crystallizer()
+    return {"skills": crystallizer.get_skills(active_only=active_only)}
+
+@app.post("/skills/{skill_id}/use")
+async def use_skill(skill_id: str, user_id: str = "default", params: dict = None):
+    """Use a crystallized skill."""
+    from aeryn_core.skill_crystallization import get_skill_crystallizer
+    crystallizer = get_skill_crystallizer()
+    return crystallizer.use_skill(skill_id, user_id, params or {})
+
+@app.get("/skills/{skill_id}/export")
+async def export_skill(skill_id: str):
+    """Export a skill for sharing."""
+    from aeryn_core.skill_crystallization import get_skill_crystallizer
+    crystallizer = get_skill_crystallizer()
+    return crystallizer.export_skill(skill_id)
+
+# ── Cloud Sync ─────────────────────────────────────────────────
+
+@app.post("/sync/backup")
+async def create_backup(backup_name: str = None):
+    """Create a backup."""
+    from aeryn_core.cloud_sync import get_cloud_sync
+    sync = get_cloud_sync()
+    return sync.create_backup(backup_name)
+
+@app.get("/sync/backups")
+async def list_backups():
+    """List available backups."""
+    from aeryn_core.cloud_sync import get_cloud_sync
+    sync = get_cloud_sync()
+    return {"backups": sync.list_backups()}
+
+@app.post("/sync/restore")
+async def restore_backup(backup_name: str, dry_run: bool = False):
+    """Restore from backup."""
+    from aeryn_core.cloud_sync import get_cloud_sync
+    sync = get_cloud_sync()
+    return sync.restore_backup(backup_name, dry_run)
 
 if __name__ == "__main__":
     import uvicorn
