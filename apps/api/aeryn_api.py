@@ -1017,6 +1017,186 @@ body.light {
   display: none;
 }
 
+/* ── Phase 4: UX Polish ────────────────────── */
+
+/* Skeleton Loading */
+.skeleton {
+  background: linear-gradient(90deg, var(--bg) 25%, var(--bg-hover) 50%, var(--bg) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-text {
+  height: 14px;
+  margin-bottom: 8px;
+}
+
+.skeleton-card {
+  height: 80px;
+}
+
+/* Card Expand */
+.card.expandable {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.card.expandable:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+/* Live Logs */
+.log-viewer {
+  max-height: 150px;
+  overflow-y: auto;
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.log-entry {
+  display: flex;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.log-entry:last-child {
+  border-bottom: none;
+}
+
+.log-time {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.log-level {
+  flex-shrink: 0;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.log-level.info { background: rgba(34, 211, 238, 0.15); color: var(--accent); }
+.log-level.warn { background: rgba(250, 204, 21, 0.15); color: var(--yellow); }
+.log-level.error { background: rgba(248, 113, 113, 0.15); color: var(--red); }
+
+.log-message {
+  flex: 1;
+  word-break: break-all;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  body { padding: 16px; }
+  
+  .header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .header .live {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .sparkline-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .action-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .service-list {
+    flex-direction: column;
+  }
+  
+  .service-chip {
+    width: 100%;
+  }
+  
+  .endpoint-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .card .value {
+    font-size: 22px;
+  }
+  
+  .modal {
+    width: 95%;
+    max-width: none;
+  }
+  
+  .memory-table-wrap {
+    max-height: 200px;
+  }
+}
+
+/* Touch-friendly */
+@media (hover: none) {
+  .action-btn:hover {
+    transform: none;
+  }
+  
+  .card:hover {
+    transform: none;
+  }
+  
+  .action-btn:active {
+    background: var(--bg-hover);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Offline indicator */
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--red);
+  color: white;
+  text-align: center;
+  padding: 8px;
+  font-size: 12px;
+  z-index: 9999;
+  display: none;
+}
+
+body.offline .offline-banner {
+  display: block;
+}
+
+body.offline .header {
+  margin-top: 36px;
+}
+
 .footer {
   text-align: center;
   padding: 24px 0;
@@ -1205,6 +1385,18 @@ body.light {
     <div class="endpoint-chip"><span class="method post">POST</span>/dream/synthesize</div>
     <div class="endpoint-chip"><span class="method get">GET</span>/dashboard/stats</div>
   </div>
+</div>
+
+<!-- ── Live Logs Viewer ───────────────────────── -->
+<div class="section" id="logs-section">
+  <h2>📜 Live Logs</h2>
+  <div class="log-viewer" id="log-viewer">
+    <div class="log-entry"><span class="log-message">Connecting...</span></div>
+  </div>
+</div>
+
+<div class="offline-banner" id="offline-banner">
+  ⚠️ Connection lost. Reconnecting...
 </div>
 
 <div class="toast-container" id="toast-container"></div>
@@ -1715,17 +1907,144 @@ async function loadVaultData() {
   }
 }
 
+// ── Live Logs Viewer ──────────────────────────
+const logViewer = document.getElementById('log-viewer');
+let logLines = [];
+
+function addLogLine(level, message) {
+  if (!logViewer) return;
+  
+  const entry = document.createElement('div');
+  entry.className = 'log-entry';
+  entry.innerHTML = `
+    <span class="log-time">${new Date().toLocaleTimeString('id-ID', {hour12:false})}</span>
+    <span class="log-level ${level}">${level}</span>
+    <span class="log-message">${message}</span>
+  `;
+  
+  logViewer.appendChild(entry);
+  
+  // Keep max 50 lines
+  while (logViewer.children.length > 50) {
+    logViewer.removeChild(logViewer.firstChild);
+  }
+  
+  // Auto-scroll
+  logViewer.scrollTop = logViewer.scrollHeight;
+}
+
+// SSE for logs
+function connectLogStream() {
+  const evtSource = new EventSource('/dashboard/stream');
+  
+  evtSource.addEventListener('log', function(e) {
+    const data = JSON.parse(e.data);
+    addLogLine(data.level || 'info', data.message);
+  });
+  
+  return evtSource;
+}
+
+// ── Error Handling + Fallback ─────────────────
+let sseRetries = 0;
+const maxSseRetries = 3;
+let fallbackToPolling = false;
+
+function startFallbackPolling() {
+  if (fallbackToPolling) return;
+  fallbackToPolling = true;
+  showToast('warning', 'Using fallback polling mode');
+  
+  setInterval(async () => {
+    try {
+      const r = await fetch('/dashboard/stats');
+      const d = await r.json();
+      if (!d.error && d.system) {
+        const s = d.system;
+        document.getElementById('mem').innerHTML = s.memory_used_mb + '<span class="unit">MB</span>';
+        document.getElementById('mem-detail').textContent = s.memory_percent + '% of ' + s.memory_total_mb + ' MB';
+        const memBar = document.getElementById('mem-bar');
+        memBar.style.width = s.memory_percent + '%';
+        memBar.className = 'progress-fill' + (s.memory_percent > 85 ? ' warn' : '') + (s.memory_percent > 95 ? ' danger' : '');
+        
+        document.getElementById('disk').innerHTML = s.disk_free_gb + '<span class="unit">GB</span>';
+        document.getElementById('disk-detail').textContent = s.disk_percent + '% used';
+        const diskBar = document.getElementById('disk-bar');
+        diskBar.style.width = s.disk_percent + '%';
+        diskBar.className = 'progress-fill' + (s.disk_percent > 85 ? ' warn' : '') + (s.disk_percent > 95 ? ' danger' : '');
+        
+        document.getElementById('proc-mem').innerHTML = s.process_mem_mb + '<span class="unit">MB</span>';
+        const hrs = Math.floor(s.uptime_s / 3600);
+        const mins = Math.floor((s.uptime_s % 3600) / 60);
+        document.getElementById('uptime').textContent = hrs + 'h ' + mins + 'm uptime';
+        
+        document.getElementById('req-total').textContent = s.requests_total;
+        document.getElementById('err-detail').textContent = s.errors_total + ' errors';
+      }
+    } catch(e) {
+      console.error('Fallback poll failed:', e);
+    }
+  }, 5000);
+}
+
+// ── Offline Detection ─────────────────────────
+window.addEventListener('offline', () => {
+  document.body.classList.add('offline');
+  document.getElementById('offline-banner').style.display = 'block';
+});
+
+window.addEventListener('online', () => {
+  document.body.classList.remove('offline');
+  document.getElementById('offline-banner').style.display = 'none';
+  showToast('success', 'Connection restored');
+});
+
+// ── Card Expand ───────────────────────────────
+function setupCardExpand() {
+  document.querySelectorAll('.card').forEach(card => {
+    card.classList.add('expandable');
+    card.addEventListener('click', () => {
+      const label = card.querySelector('.label')?.textContent || 'Detail';
+      const value = card.querySelector('.value')?.textContent || '';
+      const detail = card.querySelector('.detail')?.textContent || '';
+      
+      const modal = document.getElementById('memory-modal');
+      const title = document.getElementById('modal-title');
+      const body = document.getElementById('modal-body');
+      
+      if (modal && title && body) {
+        title.textContent = label;
+        body.innerHTML = `<strong>${value}</strong><br><br>${detail}`;
+        modal.style.display = 'flex';
+      }
+    });
+  });
+}
+
+// ── Performance: Throttle sparkline redraw ────
+let sparklineThrottle = null;
+
+function throttledSparklineUpdate() {
+  if (sparklineThrottle) return;
+  sparklineThrottle = setTimeout(() => {
+    sparklineThrottle = null;
+  }, 1000); // Max 1 update per second
+}
+
+// ── Init ──────────────────────────────────────
 loadTheme();
 updateClock();
 setInterval(updateClock, 1000);
 connectSSE();
 connectWS();
+connectLogStream();
 loadVaultData();
 loadTasks();
 loadMemory();
 setupSearch();
 setupKeyboard();
 setupCollapsible();
+setupCardExpand();
 setInterval(loadTasks, 30000);
 setInterval(loadMemory, 60000); // Refresh vault data every 60s
 </script>
