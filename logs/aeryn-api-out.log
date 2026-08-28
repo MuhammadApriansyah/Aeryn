@@ -150,3 +150,8 @@
 2026-08-28 00:39:47: INFO:     127.0.0.1:58028 - "GET /run HTTP/1.1" 405 Method Not Allowed
 2026-08-28 00:39:54: INFO:     127.0.0.1:47754 - "GET /dashboard HTTP/1.1" 404 Not Found
 2026-08-28 00:39:55: INFO:     127.0.0.1:47754 - "GET /dashboard HTTP/1.1" 404 Not Found
+2026-08-28 00:58:06: INFO:     127.0.0.1:36726 - "GET /agents HTTP/1.1" 200 OK
+2026-08-28 00:58:06: INFO:     127.0.0.1:36728 - "POST /memory/decay HTTP/1.1" 200 OK
+2026-08-28 00:58:06: INFO:     127.0.0.1:36744 - "GET /memory/entities?entity_type=person HTTP/1.1" 200 OK
+2026-08-28 00:58:06: INFO:     127.0.0.1:36760 - "GET /plugins HTTP/1.1" 200 OK
+2026-08-28 00:58:07: INFO:     127.0.0.1:36764 - "POST /security/scan HTTP/1.1" 422 Unprocessable Entity

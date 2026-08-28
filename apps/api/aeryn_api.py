@@ -23,12 +23,17 @@ from aeryn_core.hybrid_search import get_search_engine
 from aeryn_core.persona_engine import load_persona
 from aeryn_core.shared_db import get_shared_db
 from aeryn_core.config import ensure_dirs
+from aeryn_core.multi_agent import get_multi_agent_orchestrator, AgentRole, TaskPriority
+from aeryn_core.memory_decay import get_memory_decay_engine
+from aeryn_core.entity_resolution import get_entity_resolver
+from aeryn_core.owasp_security import get_owasp_security
+from aeryn_core.plugin_system import get_plugin_manager
 from aeryn_core.dream_synthesis import get_dream_synthesizer
 from aeryn_core.enhanced_memory import get_entity_extractor, get_preference_learner, get_cross_session_recall
 from aeryn_core.enhanced_guardrails import get_enhanced_guardrails
 from aeryn_core.enhanced_sandbox import get_enhanced_sandbox, SandboxLimits
 
-app = FastAPI(title="Aeryn Daemon", version="40.0")
+app = FastAPI(title="Aeryn Daemon", version="40.16")
 
 # ── State ────────────────────────────────────────────────────────
 _start_time = time.time()
@@ -430,6 +435,135 @@ async def get_alerts():
     return {"alerts": monitor.get_alerts()}
 
 # ── Main ─────────────────────────────────────────────────────────
+
+
+# ── Multi-Agent ─────────────────────────────────────────────────
+
+@app.post("/agents/register")
+async def register_agent(name: str, role: str = "worker", capabilities: str = "[]"):
+    """Register a new agent."""
+    from aeryn_core.multi_agent import get_multi_agent_orchestrator, AgentRole
+    orchestrator = get_multi_agent_orchestrator()
+    caps = json.loads(capabilities) if capabilities.startswith("[") else []
+    try:
+        agent_role = AgentRole(role)
+    except ValueError:
+        agent_role = AgentRole.WORKER
+    agent_id = orchestrator.register_agent(name, agent_role, caps)
+    return {"agent_id": agent_id, "status": "registered"}
+
+@app.get("/agents")
+async def list_agents():
+    """List all active agents."""
+    from aeryn_core.multi_agent import get_multi_agent_orchestrator
+    orchestrator = get_multi_agent_orchestrator()
+    return {"agents": orchestrator.get_active_agents()}
+
+@app.post("/agents/tasks/create")
+async def create_agent_task(title: str, description: str = "", assigned_to: str = None,
+                            assigned_by: str = None, priority: int = 5):
+    """Create a task for agents."""
+    from aeryn_core.multi_agent import get_multi_agent_orchestrator, TaskPriority
+    orchestrator = get_multi_agent_orchestrator()
+    try:
+        task_priority = TaskPriority(priority)
+    except ValueError:
+        task_priority = TaskPriority.MEDIUM
+    task_id = orchestrator.create_task(title, description, assigned_to, assigned_by, task_priority)
+    return {"task_id": task_id, "status": "created"}
+
+@app.get("/agents/tasks")
+async def list_agent_tasks(status: str = None):
+    """List agent tasks."""
+    from aeryn_core.multi_agent import get_multi_agent_orchestrator
+    orchestrator = get_multi_agent_orchestrator()
+    return {"tasks": orchestrator.get_tasks(status=status)}
+
+# ── Memory Decay ────────────────────────────────────────────────
+
+@app.post("/memory/decay")
+async def run_decay(user_id: str = "default"):
+    """Run memory decay."""
+    from aeryn_core.memory_decay import get_memory_decay_engine
+    engine = get_memory_decay_engine()
+    return engine.decay_all(user_id)
+
+@app.get("/memory/decay/stats")
+async def get_decay_stats():
+    """Get decay statistics."""
+    from aeryn_core.memory_decay import get_memory_decay_engine
+    engine = get_memory_decay_engine()
+    return engine.get_decay_stats()
+
+# ── Entity Resolution ───────────────────────────────────────────
+
+@app.post("/memory/entities/register")
+async def register_entity(name: str, entity_type: str, properties: str = "{}"):
+    """Register an entity."""
+    from aeryn_core.entity_resolution import get_entity_resolver
+    resolver = get_entity_resolver()
+    props = json.loads(properties)
+    entity_id = resolver.register_entity(name, entity_type, props)
+    return {"entity_id": entity_id}
+
+@app.get("/memory/entities/resolve")
+async def resolve_entity(name: str, entity_type: str = None):
+    """Resolve an entity name."""
+    from aeryn_core.entity_resolution import get_entity_resolver
+    resolver = get_entity_resolver()
+    result = resolver.resolve(name, entity_type)
+    return {"entity": result}
+
+@app.get("/memory/entities")
+async def list_entities(entity_type: str = None):
+    """List all entities."""
+    from aeryn_core.entity_resolution import get_entity_resolver
+    resolver = get_entity_resolver()
+    return {"entities": resolver.get_all_entities(entity_type)}
+
+# ── Plugin System ───────────────────────────────────────────────
+
+@app.post("/plugins/install")
+async def install_plugin(source_dir: str):
+    """Install a plugin."""
+    from aeryn_core.plugin_system import get_plugin_manager
+    manager = get_plugin_manager()
+    plugin = manager.install_plugin(source_dir)
+    if plugin:
+        return {"status": "installed", "plugin": plugin.name}
+    return {"status": "error", "error": "Failed to install plugin"}
+
+@app.get("/plugins")
+async def list_plugins():
+    """List all plugins."""
+    from aeryn_core.plugin_system import get_plugin_manager
+    manager = get_plugin_manager()
+    return {"plugins": manager.list_plugins()}
+
+@app.delete("/plugins/{name}")
+async def uninstall_plugin(name: str):
+    """Uninstall a plugin."""
+    from aeryn_core.plugin_system import get_plugin_manager
+    manager = get_plugin_manager()
+    if manager.uninstall_plugin(name):
+        return {"status": "uninstalled"}
+    return {"status": "error", "error": "Plugin not found"}
+
+# ── OWASP Security ──────────────────────────────────────────────
+
+@app.post("/security/scan")
+async def security_scan(text: str, context: str = "general"):
+    """Run OWASP security scan."""
+    from aeryn_core.owasp_security import get_owasp_security
+    security = get_owasp_security()
+    return security.scan(text, context)
+
+@app.get("/security/controls")
+async def list_controls():
+    """List OWASP controls."""
+    from aeryn_core.owasp_security import get_owasp_security
+    security = get_owasp_security()
+    return {"controls": list(security._controls.keys())}
 
 if __name__ == "__main__":
     import uvicorn
