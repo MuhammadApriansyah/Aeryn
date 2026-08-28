@@ -3,646 +3,364 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aeryn — Cognitive Agent Platform</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Aeryn — Real-time Dashboard</title>
 <style>
-:root {
-  --bg: #09090b; --bg-elevated: #0c0c0e; --bg-card: #18181b; --bg-hover: #1f1f23; --bg-active: #27272a;
-  --border: #1f1f23; --border-active: #2e2e33; --text: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
-  --accent: #22d3ee; --accent-soft: rgba(34, 211, 238, 0.1); --accent-glow: rgba(34, 211, 238, 0.25);
-  --green: #4ade80; --yellow: #facc15; --red: #f87171; --blue: #60a5fa; --purple: #c084fc;
-  --sidebar-w: 240px; --sidebar-collapsed: 64px; --header-h: 56px; --radius: 10px; --radius-sm: 6px;
-}
-body.light { --bg: #f8fafc; --bg-elevated: #fff; --bg-card: #fff; --bg-hover: #f1f5f9; --bg-active: #e2e8f0; --border: #e2e8f0; --border-active: #cbd5e1; --text: #0f172a; --text-secondary: #475569; --text-muted: #94a3b8; }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow: hidden; }
-
-.sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); background: var(--bg-elevated); border-right: 1px solid var(--border); display: flex; flex-direction: column; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s ease; z-index: 100; }
-.sidebar.collapsed { width: var(--sidebar-collapsed); }
-.sidebar.collapsed .sidebar-brand { display: none; }
-.sidebar.collapsed .nav-label { display: none; }
-.sidebar.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
-.sidebar-header { height: var(--header-h); display: flex; align-items: center; gap: 12px; padding: 0 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-.sidebar-logo { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, var(--accent), var(--purple)); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-.sidebar-brand { font-weight: 700; font-size: 16px; white-space: nowrap; overflow: hidden; }
-.sidebar-nav { flex: 1; overflow-y: auto; padding: 12px 8px; }
-.nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: var(--radius-sm); cursor: pointer; color: var(--text-secondary); font-size: 14px; font-weight: 500; transition: all 0.15s; margin-bottom: 2px; white-space: nowrap; }
-.nav-item:hover { background: var(--bg-hover); color: var(--text); }
-.nav-item.active { background: var(--accent-soft); color: var(--accent); }
-.nav-icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-.sidebar-footer { padding: 12px 8px; border-top: 1px solid var(--border); }
-
-.main { margin-left: var(--sidebar-w); height: 100vh; display: flex; flex-direction: column; transition: margin-left 0.3s ease; }
-.sidebar.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
-
-.topbar { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0; }
-.topbar-left { display: flex; align-items: center; gap: 16px; }
-.hamburger { width: 32px; height: 32px; border: none; background: transparent; cursor: pointer; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 20px; transition: all 0.15s; }
-.hamburger:hover { background: var(--bg-hover); color: var(--text); }
-.page-title { font-size: 16px; font-weight: 600; }
-.topbar-right { display: flex; align-items: center; gap: 12px; }
-.connection { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 20px; background: var(--bg-hover); font-size: 12px; color: var(--text-muted); }
-.connection-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
-.connection-dot.offline { background: var(--red); animation: none; }
-.connection-dot.connecting { background: var(--yellow); }
-@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-.icon-btn { width: 32px; height: 32px; border: none; background: transparent; cursor: pointer; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 16px; transition: all 0.15s; }
-.icon-btn:hover { background: var(--bg-hover); color: var(--text); }
-.search-box { position: relative; display: flex; align-items: center; }
-.search-box input { padding: 8px 12px 8px 36px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); font-size: 13px; outline: none; width: 200px; transition: all 0.15s; }
-.search-box input:focus { border-color: var(--accent); width: 240px; }
-.search-icon { position: absolute; left: 10px; color: var(--text-muted); font-size: 14px; }
-
-.content { flex: 1; overflow-y: auto; padding: 24px; }
-.page { display: none; }
-.page.active { display: block; }
-
-.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
-.card-title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; margin-bottom: 16px; }
-
-.grid { display: grid; gap: 16px; }
-.grid-4 { grid-template-columns: repeat(4, 1fr); }
-.grid-3 { grid-template-columns: repeat(3, 1fr); }
-.grid-2 { grid-template-columns: repeat(2, 1fr); }
-.grid-21 { grid-template-columns: 2fr 1fr; }
-
-.stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; position: relative; overflow: hidden; }
-.stat-value { font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; margin-bottom: 4px; }
-.stat-label { font-size: 12px; color: var(--text-muted); }
-.stat-bar { height: 3px; background: var(--bg-hover); border-radius: 2px; margin-top: 10px; overflow: hidden; }
-.stat-bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
-.stat-bar-fill.green { background: var(--green); }
-.stat-bar-fill.yellow { background: var(--yellow); }
-.stat-bar-fill.red { background: var(--red); }
-.stat-bar-fill.accent { background: var(--accent); }
-.stat-accent { position: absolute; top: 0; left: 0; bottom: 0; width: 3px; background: var(--accent); border-radius: 3px 0 0 3px; }
-.stat-accent.green { background: var(--green); }
-.stat-accent.yellow { background: var(--yellow); }
-.stat-accent.purple { background: var(--purple); }
-
-.badge { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; letter-spacing: 0.3px; }
-.badge-green { background: rgba(74, 222, 128, 0.15); color: var(--green); }
-.badge-red { background: rgba(248, 113, 113, 0.15); color: var(--red); }
-.badge-yellow { background: rgba(250, 204, 21, 0.15); color: var(--yellow); }
-.badge-blue { background: rgba(96, 165, 250, 0.15); color: var(--blue); }
-.badge-purple { background: rgba(192, 132, 252, 0.15); color: var(--purple); }
-
-.btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: none; border-radius: var(--radius-sm); cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.15s; font-family: inherit; }
-.btn-primary { background: var(--accent); color: var(--bg); }
-.btn-primary:hover { background: #06b6d4; transform: translateY(-1px); box-shadow: 0 4px 12px var(--accent-glow); }
-.btn-secondary { background: var(--bg-hover); color: var(--text); }
-.btn-secondary:hover { background: var(--bg-active); }
-.btn-sm { padding: 6px 12px; font-size: 12px; }
-
-.input { padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); font-size: 14px; outline: none; width: 100%; transition: border-color 0.15s; font-family: inherit; }
-.input:focus { border-color: var(--accent); }
-textarea.input { resize: vertical; min-height: 60px; }
-
-.list-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
-.list-item:last-child { border-bottom: none; }
-.list-item-title { font-size: 14px; font-weight: 500; }
-.list-item-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-.progress { height: 4px; background: var(--bg-hover); border-radius: 2px; overflow: hidden; }
-.progress-fill { height: 100%; border-radius: 2px; background: var(--accent); transition: width 0.3s ease; }
-
-.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; }
-.toast { padding: 12px 20px; border-radius: var(--radius); background: var(--bg-card); border: 1px solid var(--border-active); box-shadow: 0 12px 32px rgba(0,0,0,0.3); font-size: 14px; animation: slideIn 0.3s ease; }
-@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 200; }
-.modal-overlay.active { display: flex; }
-.modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
-.modal-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-.modal-close { float: right; background: none; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; }
-.shortcut-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
-.shortcut-key { padding: 4px 8px; background: var(--bg-hover); border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
-
-.onboarding { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 300; }
-.onboarding.active { display: flex; }
-.onboarding-content { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; }
-.onboarding h2 { margin-bottom: 16px; }
-.onboarding p { color: var(--text-secondary); margin-bottom: 12px; line-height: 1.6; }
-.feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 16px 0; }
-.feature-item { padding: 12px; background: var(--bg-hover); border-radius: var(--radius-sm); font-size: 13px; }
-
-.live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; margin-right: 4px; }
-.live-dot.offline { background: var(--red); animation: none; }
-.live-dot.connecting { background: var(--yellow); }
-
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border-active); border-radius: 3px; }
-
-@media (max-width: 900px) {
-  .grid-4 { grid-template-columns: repeat(2, 1fr); }
-  .grid-21 { grid-template-columns: 1fr; }
-  .sidebar { transform: translateX(-100%); }
-  .sidebar.open { transform: translateX(0); }
-  .sidebar.collapsed { width: var(--sidebar-w); }
-  .main { margin-left: 0 !important; }
-  .search-box input { width: 140px; }
-}
-@media (max-width: 600px) {
-  .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
-  .content { padding: 16px; }
-  .feature-grid { grid-template-columns: 1fr; }
-}
+:root{--bg:#09090b;--bg-card:#18181b;--bg-hover:#1f1f23;--bg-active:#27272a;--border:#1f1f23;--text:#fafafa;--text2:#a1a1aa;--muted:#71717a;--accent:#22d3ee;--green:#4ade80;--yellow:#facc15;--red:#f87171;--blue:#60a5fa;--purple:#c084fc;--w:240px;--w-mini:64px;--h:56px;--r:10px;--rs:6px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}
+.sb{position:fixed;top:0;left:0;bottom:0;width:var(--w);background:var(--bg-card);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:transform .3s,width .3s}
+.sb.collapsed{width:var(--w-mini)}
+.sb-header{height:var(--h);display:flex;align-items:center;gap:12px;padding:0 16px;border-bottom:1px solid var(--border);flex-shrink:0}
+.sb-logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center}
+.sb-brand{font-weight:700;white-space:nowrap;overflow:hidden}
+.sb.collapsed .sb-brand,.sb.collapsed .nav-label{display:none}
+.sb-nav{flex:1;overflow-y:auto;padding:12px 8px}
+.nav-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--rs);cursor:pointer;color:var(--text2);font-size:14px;font-weight:500;margin-bottom:2px;white-space:nowrap}
+.nav-item:hover{background:var(--bg-hover)}
+.nav-item.active{background:rgba(34,211,238,.1);color:var(--accent)}
+.nav-icon{width:20px;text-align:center}
+.main{margin-left:var(--w);height:100vh;display:flex;flex-direction:column;transition:margin-left .3s}
+.sb.collapsed~.main{margin-left:var(--w-mini)}
+.tb{height:var(--h);display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid var(--border);flex-shrink:0}
+.tb-left{display:flex;align-items:center;gap:16px}
+.ham{width:32px;height:32px;border:none;background:transparent;cursor:pointer;border-radius:var(--rs);color:var(--text2);font-size:20px}
+.ham:hover{background:var(--bg-hover)}
+.content{flex:1;overflow-y:auto;padding:24px}
+.page{display:none}
+.page.active{display:block}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:20px}
+.card-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;font-weight:600;margin-bottom:16px}
+.grid{display:grid;gap:16px}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.stat{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;position:relative;overflow:hidden}
+.stat-val{font-size:24px;font-weight:700;font-family:monospace}
+.stat-lbl{font-size:12px;color:var(--muted)}
+.stat-bar{height:3px;background:var(--bg-hover);border-radius:2px;margin-top:10px;overflow:hidden}
+.stat-fill{height:100%;border-radius:2px;transition:width .5s}
+.stat-fill.g{background:var(--green)}.stat-fill.y{background:var(--yellow)}.stat-fill.r{background:var(--red)}.stat-fill.a{background:var(--accent)}
+.stat-accent{position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--accent)}
+.stat-accent.g{background:var(--green)}.stat-accent.y{background:var(--yellow)}.stat-accent.p{background:var(--purple)}
+.badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:12px;font-size:11px;font-weight:600}
+.bg{background:rgba(74,222,128,.15);color:var(--green)}.br{background:rgba(248,113,113,.15);color:var(--red)}
+.by{background:rgba(250,204,21,.15);color:var(--yellow)}.bb{background:rgba(96,165,250,.15);color:var(--blue)}
+.bp{background:rgba(192,132,252,.15);color:var(--purple)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border:none;border-radius:var(--rs);cursor:pointer;font-weight:600;font-size:13px;font-family:inherit}
+.bp{background:var(--accent);color:var(--bg)}.bp:hover{background:#06b6d4;box-shadow:0 4px 12px rgba(34,211,238,.25)}
+.bs{background:var(--bg-hover);color:var(--text)}.bs:hover{background:var(--bg-active)}
+.bsm{padding:6px 12px;font-size:12px}
+.input{padding:10px 14px;border:1px solid var(--border);border-radius:var(--rs);background:var(--bg);color:var(--text);font-size:14px;outline:none;width:100%;font-family:inherit}
+.input:focus{border-color:var(--accent)}
+textarea.input{resize:vertical;min-height:60px}
+.list-item{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+.list-item:last-child{border-bottom:none}
+.conn{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:20px;background:var(--bg-hover);font-size:12px;color:var(--muted)}
+.conn-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.conn-dot.off{background:var(--red);animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:var(--r);background:var(--bg-card);border:1px solid var(--border);box-shadow:0 12px 32px rgba(0,0,0,.3);animation:slideIn .3s}
+@keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:200}
+.modal-bg.active{display:flex}
+.modal{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:24px;max-width:500px;width:90%}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:16px}
+.modal-close{float:right;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.shortcut-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)}
+.shortcut-key{padding:4px 8px;background:var(--bg-hover);border-radius:4px;font-family:monospace;font-size:12px}
+.onboard-bg{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:300}
+.onboard-bg.active{display:flex}
+.onboard{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:32px;max-width:560px;width:90%}
+.onboard h2{margin-bottom:16px}
+.onboard p{color:var(--text2);margin-bottom:12px;line-height:1.6}
+.fg{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:16px 0}
+.fi{padding:12px;background:var(--bg-hover);border-radius:var(--rs);font-size:13px}
+.search-box{position:relative}
+.search-box input{padding:8px 12px 8px 36px;border:1px solid var(--border);border-radius:var(--rs);background:var(--bg);color:var(--text);font-size:13px;outline:none;width:200px}
+.search-box input:focus{border-color:var(--accent)}
+.search-icon{position:absolute;left:10px;color:var(--muted)}
+@media(max-width:900px){.g4{grid-template-columns:repeat(2,1fr)}.sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.sb.collapsed{width:var(--w)}.main{margin-left:0!important}}
 </style>
 </head>
 <body>
 
-<!-- Onboarding -->
-<div class="onboarding" id="onboarding">
-  <div class="onboarding-content">
+<div class="onboard-bg" id="onboard">
+  <div class="onboard">
     <h2>🧠 Welcome to Aeryn!</h2>
-    <p>Your Cognitive Agent Platform is ready. All data updates in real-time via WebSocket + SSE.</p>
-    <div class="feature-grid">
-      <div class="feature-item">💬 <strong>Chat</strong> — Real-time conversation</div>
-      <div class="feature-item">✅ <strong>Tasks</strong> — Auto-parse from text</div>
-      <div class="feature-item">🔔 <strong>Notifications</strong> — Live updates</div>
-      <div class="feature-item">🧠 <strong>Memory</strong> — Semantic search</div>
-      <div class="feature-item">⚡ <strong>Tools</strong> — Execute commands</div>
-      <div class="feature-item">🛡️ <strong>Security</strong> — Real-time monitoring</div>
+    <p>Real-time Cognitive Agent Platform — all data updates live via WebSocket.</p>
+    <div class="fg">
+      <div class="fi">💬 Chat — Real-time conversation</div>
+      <div class="fi">✅ Tasks — Auto-parse from text</div>
+      <div class="fi">🔔 Notifications — Live updates</div>
+      <div class="fi">🧠 Memory — Semantic search</div>
+      <div class="fi">⚡ Tools — Execute commands</div>
+      <div class="fi">🛡️ Security — Real-time monitoring</div>
     </div>
-    <p><strong>Shortcuts:</strong> <kbd>Ctrl+K</kbd> Search | <kbd>?</kbd> Shortcuts | <kbd>Alt+1-8</kbd> Tabs</p>
-    <button class="btn btn-primary" style="margin-top:16px;width:100%" onclick="closeOnboarding()">Get Started</button>
+    <p><strong>Shortcuts:</strong> Ctrl+K Search | ? Shortcuts | Alt+1-8 Tabs</p>
+    <button class="btn bp" style="margin-top:16px;width:100%" onclick="document.getElementById('onboard').classList.remove('active');localStorage.setItem('aeryn-onboarded','1')">Get Started</button>
   </div>
 </div>
 
-<!-- Shortcuts Modal -->
-<div class="modal-overlay" id="shortcuts-modal">
+<div class="modal-bg" id="shortcuts">
   <div class="modal">
-    <button class="modal-close" onclick="closeShortcuts()">×</button>
+    <button class="modal-close" onclick="document.getElementById('shortcuts').classList.remove('active')">×</button>
     <h3 class="modal-title">⌨️ Keyboard Shortcuts</h3>
     <div class="shortcut-row"><span>Quick Search</span><span class="shortcut-key">Ctrl+K</span></div>
     <div class="shortcut-row"><span>Toggle Sidebar</span><span class="shortcut-key">Ctrl+B</span></div>
     <div class="shortcut-row"><span>Toggle Theme</span><span class="shortcut-key">Ctrl+D</span></div>
-    <div class="shortcut-row"><span>Chat</span><span class="shortcut-key">Alt+1</span></div>
-    <div class="shortcut-row"><span>Tasks</span><span class="shortcut-key">Alt+2</span></div>
-    <div class="shortcut-row"><span>Notifications</span><span class="shortcut-key">Alt+3</span></div>
-    <div class="shortcut-row"><span>Memory</span><span class="shortcut-key">Alt+4</span></div>
-    <div class="shortcut-row"><span>Tools</span><span class="shortcut-key">Alt+5</span></div>
-    <div class="shortcut-row"><span>Close modal</span><span class="shortcut-key">Esc</span></div>
+    <div class="shortcut-row"><span>Alt+1-8</span><span class="shortcut-key">Switch tabs</span></div>
+    <div class="shortcut-row"><span>Esc</span><span class="shortcut-key">Close modals</span></div>
   </div>
 </div>
 
-<!-- Sidebar -->
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <div class="sidebar-logo">🧠</div>
-    <span class="sidebar-brand">Aeryn</span>
-  </div>
-  <nav class="sidebar-nav">
-    <div class="nav-item active" onclick="showPage('overview')" data-key="0"><span class="nav-icon">📊</span><span class="nav-label">Overview</span></div>
-    <div class="nav-item" onclick="showPage('chat')" data-key="1"><span class="nav-icon">💬</span><span class="nav-label">Chat</span></div>
-    <div class="nav-item" onclick="showPage('notifications')" data-key="2"><span class="nav-icon">🔔</span><span class="nav-label">Notifications</span></div>
-    <div class="nav-item" onclick="showPage('tasks')" data-key="3"><span class="nav-icon">✅</span><span class="nav-label">Tasks</span></div>
-    <div class="nav-item" onclick="showPage('memory')" data-key="4"><span class="nav-icon">🧠</span><span class="nav-label">Memory</span></div>
-    <div class="nav-item" onclick="showPage('tools')" data-key="5"><span class="nav-icon">⚡</span><span class="nav-label">Tools</span></div>
-    <div class="nav-item" onclick="showPage('platform')" data-key="6"><span class="nav-icon">🏢</span><span class="nav-label">Platform</span></div>
-    <div class="nav-item" onclick="showPage('security')" data-key="7"><span class="nav-icon">🛡️</span><span class="nav-label">Security</span></div>
+<aside class="sb" id="sidebar">
+  <div class="sb-header"><div class="sb-logo">🧠</div><span class="sb-brand">Aeryn</span></div>
+  <nav class="sb-nav">
+    <div class="nav-item active" onclick="show('overview')"><span class="nav-icon">📊</span><span class="nav-label">Overview</span></div>
+    <div class="nav-item" onclick="show('chat')"><span class="nav-icon">💬</span><span class="nav-label">Chat</span></div>
+    <div class="nav-item" onclick="show('notifications')"><span class="nav-icon">🔔</span><span class="nav-label">Notifications</span></div>
+    <div class="nav-item" onclick="show('tasks')"><span class="nav-icon">✅</span><span class="nav-label">Tasks</span></div>
+    <div class="nav-item" onclick="show('memory')"><span class="nav-icon">🧠</span><span class="nav-label">Memory</span></div>
+    <div class="nav-item" onclick="show('tools')"><span class="nav-icon">⚡</span><span class="nav-label">Tools</span></div>
+    <div class="nav-item" onclick="show('platform')"><span class="nav-icon">🏢</span><span class="nav-label">Platform</span></div>
+    <div class="nav-item" onclick="show('security')"><span class="nav-icon">🛡️</span><span class="nav-label">Security</span></div>
   </nav>
-  <div class="sidebar-footer">
-    <div class="nav-item" onclick="toggleTheme()"><span class="nav-icon" id="theme-icon">🌙</span><span class="nav-label">Theme</span></div>
-    <div class="nav-item" onclick="showShortcuts()"><span class="nav-icon">⌨️</span><span class="nav-label">Shortcuts</span></div>
+  <div style="padding:12px 8px;border-top:1px solid var(--border)">
+    <div class="nav-item" onclick="document.body.classList.toggle('light');this.querySelector('.nav-icon').textContent=document.body.classList.contains('light')?'☀️':'🌙'"><span class="nav-icon">🌙</span><span class="nav-label">Theme</span></div>
+    <div class="nav-item" onclick="document.getElementById('shortcuts').classList.add('active')"><span class="nav-icon">⌨️</span><span class="nav-label">Shortcuts</span></div>
   </div>
 </aside>
 
-<!-- Main -->
 <main class="main">
-  <header class="topbar">
-    <div class="topbar-left">
-      <button class="hamburger" onclick="toggleSidebar()">☰</button>
-      <span class="page-title" id="page-title">Overview</span>
-    </div>
-    <div class="topbar-right">
-      <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search... (Ctrl+K)" id="global-search" onkeyup="handleSearch(event)"></div>
-      <div class="connection"><div class="connection-dot connecting" id="conn-dot"></div><span id="conn-status">CONNECTING</span></div>
-      <span style="font-size:12px;color:var(--text-muted)">v41.0</span>
+  <header class="tb">
+    <div class="tb-left"><button class="ham" onclick="toggleSidebar()">☰</button><span style="font-weight:600">Overview</span></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search... (Ctrl+K)" id="search" onkeydown="if(event.key==='Enter'){show('memory');document.getElementById('msearch').value=this.value;searchMem();this.value=''}"></div>
+      <div class="conn"><div class="conn-dot" id="dot"></div><span id="conn-text">CONNECTING</span></div>
+      <span style="font-size:12px;color:var(--muted)">v41.0</span>
     </div>
   </header>
 
   <div class="content">
-    <!-- OVERVIEW -->
-    <div class="page active" id="page-overview">
-      <div class="grid grid-4" style="margin-bottom:20px">
-        <div class="stat"><div class="stat-accent accent"></div><div class="stat-value" id="stat-mem">--</div><div class="stat-label">Memory</div><div class="stat-bar"><div class="stat-bar-fill accent" id="bar-mem"></div></div></div>
-        <div class="stat"><div class="stat-accent yellow"></div><div class="stat-value" id="stat-disk">--</div><div class="stat-label">Disk</div><div class="stat-bar"><div class="stat-bar-fill yellow" id="bar-disk"></div></div></div>
-        <div class="stat"><div class="stat-accent green"></div><div class="stat-value" id="stat-vault">--</div><div class="stat-label">Vault</div></div>
-        <div class="stat"><div class="stat-accent purple"></div><div class="stat-value" id="stat-tasks">--</div><div class="stat-label">Tasks</div></div>
+    <!-- Overview -->
+    <div class="page active" id="p-overview">
+      <div class="grid g4" style="margin-bottom:16px">
+        <div class="stat"><div class="stat-accent a"></div><div class="stat-val" id="s-mem">--</div><div class="stat-lbl">Memory</div><div class="stat-bar"><div class="stat-fill a" id="b-mem"></div></div></div>
+        <div class="stat"><div class="stat-accent y"></div><div class="stat-val" id="s-disk">--</div><div class="stat-lbl">Disk</div><div class="stat-bar"><div class="stat-fill y" id="b-disk"></div></div></div>
+        <div class="stat"><div class="stat-accent g"></div><div class="stat-val" id="s-vault">--</div><div class="stat-lbl">Vault</div></div>
+        <div class="stat"><div class="stat-accent p"></div><div class="stat-val" id="s-tasks">--</div><div class="stat-lbl">Tasks</div></div>
       </div>
-      <div class="grid grid-21">
-        <div class="card"><div class="card-title">📋 Daily Briefing <span class="live-dot" id="briefing-dot"></span></div><div id="briefing-content">Waiting for real-time data...</div></div>
-        <div class="card"><div class="card-title">💡 Suggestions <span class="live-dot" id="suggestions-dot"></span></div><div id="suggestions-list">Waiting...</div></div>
+      <div class="grid g2">
+        <div class="card"><div class="card-title">📋 Briefing</div><div id="briefing">Waiting...</div></div>
+        <div class="card"><div class="card-title">💡 Suggestions</div><div id="sugg">Waiting...</div></div>
       </div>
-      <div class="grid grid-3" style="margin-top:16px">
-        <div class="card"><div class="card-title">⚡ Performance <span class="live-dot" id="perf-dot"></span></div><div id="perf-stats">Waiting...</div></div>
-        <div class="card"><div class="card-title">🔄 Queue <span class="live-dot" id="queue-dot"></span></div><div id="queue-stats">Waiting...</div></div>
-        <div class="card"><div class="card-title">⏱️ Uptime <span class="live-dot" id="uptime-dot"></span></div><div id="uptime-stats">Waiting...</div></div>
+      <div class="grid g3" style="margin-top:16px">
+        <div class="card"><div class="card-title">⚡ Performance</div><div id="perf">Waiting...</div></div>
+        <div class="card"><div class="card-title">🔄 Queue</div><div id="queue">Waiting...</div></div>
+        <div class="card"><div class="card-title">⏱️ Uptime</div><div id="uptime">Waiting...</div></div>
       </div>
     </div>
 
-    <!-- CHAT -->
-    <div class="page" id="page-chat">
+    <!-- Chat -->
+    <div class="page" id="p-chat">
       <div class="card" style="height:calc(100vh - 180px);display:flex;flex-direction:column">
-        <div class="card-title" style="margin-bottom:0;padding-bottom:12px;border-bottom:1px solid var(--border)">💬 Chat <span class="live-dot" id="chat-dot"></span></div>
-        <div id="chat-messages" style="flex:1;overflow-y:auto;padding:16px 0;"></div>
-        <div style="display:flex;gap:12px;padding-top:12px;border-top:1px solid var(--border)"><input class="input" id="chat-input" placeholder="Ask Aeryn..." onkeypress="if(event.key==='Enter')sendChat()"><button class="btn btn-primary" onclick="sendChat()">Send</button></div>
+        <div class="card-title" style="margin-bottom:0;padding-bottom:12px;border-bottom:1px solid var(--border)">💬 Chat</div>
+        <div id="chatbox" style="flex:1;overflow-y:auto;padding:16px 0"></div>
+        <div style="display:flex;gap:12px;padding-top:12px;border-top:1px solid var(--border)"><input class="input" id="chatinput" placeholder="Ask Aeryn..." onkeydown="if(event.key==='Enter')sendChat()"><button class="btn bp" onclick="sendChat()">Send</button></div>
       </div>
     </div>
 
-    <!-- NOTIFICATIONS -->
-    <div class="page" id="page-notifications">
-      <div class="grid grid-2">
-        <div class="card"><div class="card-title">Create <span class="live-dot" id="notif-create-dot"></span></div><input class="input" id="notif-title" placeholder="Title" style="margin-bottom:8px"><textarea class="input" id="notif-msg" placeholder="Message" rows="3" style="margin-bottom:8px"></textarea><select class="input" id="notif-priority" style="margin-bottom:12px"><option value="low">Low</option><option value="normal" selected>Normal</option><option value="high">High</option><option value="critical">Critical</option></select><button class="btn btn-primary" onclick="createNotification()">Create</button></div>
-        <div class="card"><div class="card-title">Pending <span class="live-dot" id="notif-pending-dot"></span></div><div id="pending-notifs">Waiting for real-time updates...</div></div>
+    <!-- Notifications -->
+    <div class="page" id="p-notifications">
+      <div class="grid g2">
+        <div class="card">
+          <div class="card-title">Create</div>
+          <input class="input" id="nt-title" placeholder="Title" style="margin-bottom:8px">
+          <textarea class="input" id="nt-msg" placeholder="Message" rows="3" style="margin-bottom:8px"></textarea>
+          <select class="input" id="nt-prio" style="margin-bottom:12px"><option value="low">Low</option><option value="normal" selected>Normal</option><option value="high">High</option><option value="critical">Critical</option></select>
+          <button class="btn bp" onclick="createNotif()">Create</button>
+        </div>
+        <div class="card"><div class="card-title">Pending</div><div id="notif-list">Waiting...</div></div>
       </div>
     </div>
 
-    <!-- TASKS -->
-    <div class="page" id="page-tasks">
-      <div class="grid grid-2">
-        <div class="card"><div class="card-title">Auto-Task <span class="live-dot" id="task-parse-dot"></span></div><textarea class="input" id="autotask-text" placeholder="e.g., I need to research AI frameworks" rows="4" style="margin-bottom:8px"></textarea><button class="btn btn-primary" onclick="parseTasks()">Parse</button><div id="parsed-tasks" style="margin-top:16px"></div></div>
-        <div class="card"><div class="card-title">Queue <span class="live-dot" id="task-queue-dot"></span></div><div id="task-list">Waiting for real-time updates...</div></div>
+    <!-- Tasks -->
+    <div class="page" id="p-tasks">
+      <div class="grid g2">
+        <div class="card"><div class="card-title">Auto-Task from Text</div><textarea class="input" id="at-text" placeholder="e.g., I need to research AI" rows="4" style="margin-bottom:8px"></textarea><button class="btn bp" onclick="parseTasks()">Parse</button><div id="at-result" style="margin-top:16px"></div></div>
+        <div class="card"><div class="card-title">Queue</div><div id="task-list">Waiting...</div></div>
       </div>
     </div>
 
-    <!-- MEMORY -->
-    <div class="page" id="page-memory">
-      <div class="card" style="margin-bottom:16px"><div class="card-title">Semantic Search <span class="live-dot" id="memory-search-dot"></span></div><input class="input" id="memory-search" placeholder="Search vault..." onkeyup="if(event.key==='Enter')searchMemory()"></div>
-      <div class="card" style="margin-bottom:16px"><div class="card-title">Results</div><div id="memory-results"></div></div>
-      <div class="card"><div class="card-title">Vault Entries <span class="live-dot" id="memory-vault-dot"></span></div><div id="vault-list">Waiting...</div></div>
+    <!-- Memory -->
+    <div class="page" id="p-memory">
+      <div class="card" style="margin-bottom:16px"><div class="card-title">Semantic Search</div><input class="input" id="msearch" placeholder="Search vault..." onkeydown="if(event.key==='Enter')searchMem()"></div>
+      <div class="card" style="margin-bottom:16px"><div class="card-title">Results</div><div id="mresults"></div></div>
+      <div class="card"><div class="card-title">Vault Entries</div><div id="vault-list">Waiting...</div></div>
     </div>
 
-    <!-- TOOLS -->
-    <div class="page" id="page-tools">
-      <div class="grid grid-2">
-        <div class="card"><div class="card-title">Available <span class="live-dot" id="tools-list-dot"></span></div><div id="tools-list">Waiting...</div></div>
-        <div class="card"><div class="card-title">Execute <span class="live-dot" id="tools-exec-dot"></span></div><select class="input" id="tool-select" style="margin-bottom:8px"></select><textarea class="input" id="tool-params" placeholder='{"key": "value"}' rows="4" style="margin-bottom:8px"></textarea><button class="btn btn-primary" onclick="executeTool()">Run</button><pre id="tool-result" style="margin-top:12px;background:var(--bg);padding:12px;border-radius:8px;font-size:12px"></pre></div>
+    <!-- Tools -->
+    <div class="page" id="p-tools">
+      <div class="grid g2">
+        <div class="card"><div class="card-title">Available</div><div id="tools-list">Waiting...</div></div>
+        <div class="card"><div class="card-title">Execute</div><select class="input" id="tool-sel" style="margin-bottom:8px"></select><textarea class="input" id="tool-params" placeholder='{"key":"value"}' rows="4" style="margin-bottom:8px"></textarea><button class="btn bp" onclick="execTool()">Run</button><pre id="tool-out" style="margin-top:12px;background:var(--bg);padding:12px;border-radius:8px;font-size:12px"></pre></div>
       </div>
     </div>
 
-    <!-- PLATFORM -->
-    <div class="page" id="page-platform">
-      <div class="grid grid-3">
-        <div class="card"><div class="card-title">API Keys <span class="live-dot" id="api-keys-dot"></span></div><button class="btn btn-primary btn-sm" onclick="createApiKey()">Create</button><div id="api-keys-list" style="margin-top:12px">Waiting...</div></div>
-        <div class="card"><div class="card-title">Usage <span class="live-dot" id="usage-dot"></span></div><div id="usage-summary">Waiting...</div></div>
-        <div class="card"><div class="card-title">Secrets <span class="live-dot" id="secrets-dot"></span></div><input class="input" id="secret-name" placeholder="Name" style="margin-bottom:4px"><input class="input" id="secret-value" placeholder="Value" style="margin-bottom:8px"><button class="btn btn-secondary btn-sm" onclick="setSecret()">Store</button><div id="secrets-list" style="margin-top:12px">Waiting...</div></div>
+    <!-- Platform -->
+    <div class="page" id="p-platform">
+      <div class="grid g3">
+        <div class="card"><div class="card-title">API Keys</div><button class="btn bp bsm" onclick="createKey()">Create</button><div id="keys-list" style="margin-top:12px">Waiting...</div></div>
+        <div class="card"><div class="card-title">Usage</div><div id="usage">Waiting...</div></div>
+        <div class="card"><div class="card-title">Secrets</div><input class="input" id="sec-name" placeholder="Name" style="margin-bottom:4px"><input class="input" id="sec-val" placeholder="Value" style="margin-bottom:8px"><button class="btn bs bsm" onclick="setSecret()">Store</button><div id="sec-list" style="margin-top:12px">Waiting...</div></div>
       </div>
     </div>
 
-    <!-- SECURITY -->
-    <div class="page" id="page-security">
-      <div class="grid grid-2">
-        <div class="card"><div class="card-title">🔒 Safety <span class="live-dot" id="safety-dot"></span></div><input class="input" id="safety-text" placeholder="Text to check..." style="margin-bottom:8px"><button class="btn btn-primary" onclick="checkSafety()">Check</button><div id="safety-result" style="margin-top:12px"></div></div>
-        <div class="card"><div class="card-title">⚡ Circuit Breakers <span class="live-dot" id="breakers-dot"></span></div><div id="circuit-breakers">Waiting...</div></div>
+    <!-- Security -->
+    <div class="page" id="p-security">
+      <div class="grid g2">
+        <div class="card"><div class="card-title">🔒 Safety</div><input class="input" id="safe-text" placeholder="Text to check..." style="margin-bottom:8px"><button class="btn bp" onclick="checkSafe()">Check</button><div id="safe-res" style="margin-top:12px"></div></div>
+        <div class="card"><div class="card-title">⚡ Circuit Breakers</div><div id="breakers">Waiting...</div></div>
       </div>
-      <div class="card" style="margin-top:16px"><div class="card-title">🛡️ Constitutional AI <span class="live-dot" id="constitutional-dot"></span></div><div id="constitutional-principles">Waiting...</div></div>
+      <div class="card" style="margin-top:16px"><div class="card-title">🛡️ Constitutional AI</div><div id="const">Waiting...</div></div>
     </div>
-
   </div>
 </main>
 
-<div class="toast-container" id="toast-container"></div>
-
 <script>
-let sid = 'dash_' + Date.now();
-let currentPage = 'overview';
-let ws = null;
-let eventSource = null;
-let reconnectTimer = null;
+let ws=null,es=null,sid='dash_'+Date.now(),t_reconnect=null;
 
-const pages = { overview: 'Overview', chat: 'Chat', notifications: 'Notifications', tasks: 'Tasks', memory: 'Memory', tools: 'Tools', platform: 'Platform', security: 'Security' };
-
-// ── WebSocket Connection ─────────────────────
-function connectWebSocket() {
-  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-  ws = new WebSocket(`${protocol}//${window.location.host}/ws/dashboard`);
-  
-  ws.onopen = () => {
-    console.log('WebSocket connected');
-    updateConnection('live');
-    if (reconnectTimer) { clearInterval(reconnectTimer); reconnectTimer = null; }
-    // Request initial data
-    ws.send(JSON.stringify({ type: 'get_stats' }));
-    ws.send(JSON.stringify({ type: 'get_tasks' }));
-    ws.send(JSON.stringify({ type: 'get_briefing' }));
-    ws.send(JSON.stringify({ type: 'get_suggestions' }));
-    ws.send(JSON.stringify({ type: 'get_performance' }));
-    ws.send(JSON.stringify({ type: 'get_uptime' }));
-    ws.send(JSON.stringify({ type: 'get_notifications' }));
-    ws.send(JSON.stringify({ type: 'get_tools' }));
-    ws.send(JSON.stringify({ type: 'get_api_keys' }));
-    ws.send(JSON.stringify({ type: 'get_usage' }));
-    ws.send(JSON.stringify({ type: 'get_secrets' }));
-    ws.send(JSON.stringify({ type: 'get_circuit_breakers' }));
-  };
-  
-  ws.onmessage = (event) => {
-    try {
-      const msg = JSON.parse(event.data);
-      handleWSMessage(msg);
-    } catch (e) { console.error('WS parse error:', e); }
-  };
-  
-  ws.onclose = () => {
-    console.log('WebSocket closed');
-    updateConnection('offline');
-    if (!reconnectTimer) reconnectTimer = setTimeout(connectWebSocket, 3000);
-  };
-  
-  ws.onerror = (e) => {
-    console.log('WebSocket error, falling back to SSE');
-    ws.close();
-    connectSSE();
-  };
+// ── WebSocket ─────────────────────────────────
+function connectWS(){
+  const p=location.protocol==='https:'?'wss:':'ws:';
+  ws=new WebSocket(`${p}//${location.host}/ws/dashboard`);
+  ws.onopen=()=>{updConn('live');if(t_reconnect){clearInterval(t_reconnect);t_reconnect=null}};
+  ws.onmessage=e=>{try{handle(JSON.parse(e.data))}catch(err){}};
+  ws.onclose=()=>{updConn('offline');if(!t_reconnect)t_reconnect=setTimeout(connectWS,3000)};
+  ws.onerror=()=>{ws.close();connectSSE()};
 }
 
 // ── SSE Fallback ─────────────────────────────
-function connectSSE() {
-  eventSource = new EventSource('/dashboard/stream');
-  
-  eventSource.onopen = () => { updateConnection('live'); };
-  
-  eventSource.onerror = () => {
-    updateConnection('offline');
-    eventSource.close();
-    if (!reconnectTimer) reconnectTimer = setTimeout(connectWebSocket, 5000);
-  };
-  
-  eventSource.addEventListener('stats', (e) => handleWSMessage({ type: 'stats', data: JSON.parse(e.data) }));
-  eventSource.addEventListener('tasks', (e) => handleWSMessage({ type: 'tasks', data: JSON.parse(e.data) }));
-  eventSource.addEventListener('notifications', (e) => handleWSMessage({ type: 'notifications', data: JSON.parse(e.data) }));
-  eventSource.addEventListener('performance', (e) => handleWSMessage({ type: 'performance', data: JSON.parse(e.data) }));
-  eventSource.addEventListener('briefing', (e) => handleWSMessage({ type: 'briefing', data: JSON.parse(e.data) }));
-  eventSource.addEventListener('suggestions', (e) => handleWSMessage({ type: 'suggestions', data: JSON.parse(e.data) }));
-  eventSource.addEventListener('vault', (e) => handleWSMessage({ type: 'vault', data: JSON.parse(e.data) }));
+function connectSSE(){
+  es=new EventSource('/dashboard/stream');
+  es.onopen=()=>updConn('live');
+  es.onerror=()=>{updConn('offline');es.close();if(!t_reconnect)t_reconnect=setTimeout(connectWS,5000)};
+  ['stats','tasks','notifications','vault','tools','performance','uptime','queue','api_keys','usage','secrets','circuit_breakers','briefing','suggestions','constitutional'].forEach(t=>es.addEventListener(t,e=>handle({type:t,data:JSON.parse(e.data)})));
 }
 
 // ── Message Handler ──────────────────────────
-function handleWSMessage(msg) {
-  switch (msg.type) {
-    case 'connected':
-      break;
+function handle(m){
+  const d=m.data||{};
+  switch(m.type){
     case 'stats':
-      updateStats(msg.data);
+      if(d.memory_percent!==undefined){
+        document.getElementById('s-mem').textContent=(d.memory_used_mb/1024).toFixed(1)+'GB';
+        document.getElementById('s-disk').textContent=(d.disk_used_gb||0).toFixed(0)+'GB';
+        document.getElementById('b-mem').style.width=d.memory_percent+'%';
+        document.getElementById('b-mem').className='stat-fill '+(d.memory_percent>90?'r':d.memory_percent>70?'y':'a');
+        document.getElementById('b-disk').style.width=(d.disk_percent||0)+'%';
+      }
       break;
-    case 'tasks':
-      updateTasks(msg.data);
-      break;
-    case 'notifications':
-      updateNotifications(msg.data);
-      break;
+    case 'tasks':updTasks(d);document.getElementById('s-tasks').textContent=d.count||0;break;
+    case 'tasks:':updTasks(d);break;
+    case 'notifications':updNotifs(d);break;
+    case 'vault':updVault(d);document.getElementById('s-vault').textContent=d.total_entries||0;break;
+    case 'tools':updTools(d);break;
     case 'performance':
-      updatePerformance(msg.data);
+      document.getElementById('perf').innerHTML=`<div style="font-size:20px;font-weight:700;font-family:monospace">${d.cpu_percent||0}%</div><div class="stat-lbl">CPU</div><p style="margin-top:8px;font-size:13px">Mem: <strong>${(d.memory_used_mb/1024).toFixed(1)}GB</strong></p>`;
       break;
-    case 'briefing':
-      updateBriefing(msg.data);
-      break;
-    case 'suggestions':
-      updateSuggestions(msg.data);
-      break;
-    case 'vault':
-      updateVault(msg.data);
-      break;
-    case 'tools':
-      updateTools(msg.data);
-      break;
-    case 'api_keys':
-      updateApiKeys(msg.data);
-      break;
+    case 'uptime':document.getElementById('uptime').innerHTML=`<div style="font-size:20px;font-weight:700;font-family:monospace">${d.uptime||'?'}</div><div class="stat-lbl">Uptime</div>`;break;
+    case 'queue':document.getElementById('queue').innerHTML=`<div style="font-size:20px;font-weight:700;font-family:monospace">${d.pending||0}</div><div class="stat-lbl">Pending</div><p style="margin-top:8px;font-size:13px">Running: <strong>${d.running||0}</strong></p>`;break;
+    case 'api_keys':updKeys(d);break;
     case 'usage':
-      updateUsage(msg.data);
+      document.getElementById('usage').innerHTML=`<div style="font-size:28px;font-weight:700;font-family:monospace">${d.total_events||0}</div><div class="stat-lbl">Events</div><p style="margin-top:8px">Cost: <strong>$${(d.total_cost||0).toFixed(4)}</strong></p>`;
       break;
-    case 'secrets':
-      updateSecrets(msg.data);
+    case 'secrets':updSecrets(d);break;
+    case 'circuit_breakers':updBreakers(d);break;
+    case 'briefing':document.getElementById('briefing').innerHTML='<pre style="white-space:pre-wrap;font-family:inherit;margin:0">'+(d.content||'')+'</pre>';break;
+    case 'suggestions':
+      document.getElementById('sugg').innerHTML=(d.suggestions||[]).map(s=>`<div class="list-item"><div class="list-item-title">${s.title||s.description||'?'}</div><span class="badge bb">${s.type||'info'}</span></div>`).join('')||'<p style="color:var(--muted)">No suggestions</p>';
       break;
-    case 'circuit_breakers':
-      updateCircuitBreakers(msg.data);
-      break;
-    case 'chat_response':
-      handleChatResponse(msg.data);
-      break;
-    case 'notif_created':
-      toast('Notification created');
-      break;
-    case 'task_parsed':
-      toast('Tasks parsed: ' + (msg.data.count || 0));
-      break;
-    case 'tool_result':
-      updateToolResult(msg.data);
-      break;
-    case 'error':
-      toast('Error: ' + msg.data.message);
-      break;
+    case 'constitutional':document.getElementById('const').innerHTML=(d.principles||[]).map(p=>`<div class="list-item"><span class="list-item-title">${typeof p==='string'?p:p.name||'?'}</span></div>`).join('')||'Loading...';break;
+    case 'chat_response':updChat(d);break;
+    case 'error':toast('Error: '+(d.message||'?'));break;
   }
 }
 
-// ── UI Update Functions ──────────────────────
-function updateConnection(status) {
-  const dot = document.getElementById('conn-dot');
-  const text = document.getElementById('conn-status');
-  dot.className = 'connection-dot ' + status;
-  text.textContent = status === 'live' ? 'LIVE' : status === 'connecting' ? 'CONNECTING' : 'OFFLINE';
+// ── UI Updates ───────────────────────────────
+function updConn(s){const d=document.getElementById('dot');const t=document.getElementById('conn-text');d.className='conn-dot '+(s==='live'?'':'off');t.textContent=s.toUpperCase()}
+function updTasks(d){const el=document.getElementById('task-list');if(el)el.innerHTML=(d.tasks||[]).map(t=>`<div class="list-item"><div class="list-item-title">${t.title}</div><span class="badge b-${t.status==='completed'?'g':t.status==='in_progress'?'y':'b'}">${t.status}</span></div>`).join('')||'<p style="color:var(--muted);font-size:14px">No tasks</p>'}
+function updNotifs(d){const el=document.getElementById('notif-list');if(el)el.innerHTML=(d.notifications||[]).map(n=>`<div class="list-item"><div><div class="list-item-title">${n.title}</div><div style="font-size:12px;color:var(--muted)">${n.message}</div></div><span class="badge b-${n.priority==='critical'?'r':n.priority==='high'?'y':'b'}">${n.priority}</span></div>`).join('')||'<p style="color:var(--muted)">No pending</p>'}
+function updVault(d){const el=document.getElementById('vault-list');if(el)el.innerHTML=(d.entries||[]).map(e=>`<div class="list-item"><div class="list-item-title">${e.title}</div><span class="badge bb">${e.layer}</span></div>`).join('')||'<p style="color:var(--muted)">No entries</p>'}
+function updTools(d){const el=document.getElementById('tools-list');const sel=document.getElementById('tool-sel');if(d.tools){if(el)el.innerHTML=d.tools.map(t=>`<div class="list-item"><span class="list-item-title">${t}</span></div>`).join('');if(sel)sel.innerHTML=d.tools.map(t=>`<option>${t}</option>`).join('')}}
+function updKeys(d){const el=document.getElementById('keys-list');if(el)el.innerHTML=(d.keys||[]).map(k=>`<div class="list-item"><div class="list-item-title">${k.name}</div><span class="badge b-${k.is_active?'g':'r'}">${k.is_active?'active':'revoked'}</span></div>`).join('')||'No keys'}
+function updSecrets(d){const el=document.getElementById('sec-list');if(el)el.innerHTML=(d.secrets||[]).map(s=>`<div class="list-item"><span class="list-item-title">${s.name}</span></div>`).join('')||'No secrets'}
+function updBreakers(d){const el=document.getElementById('breakers');if(el)el.innerHTML=(d.circuit_breakers||[]).map(c=>`<div class="list-item"><span class="list-item-title">${c.name}</span><span class="badge b-${c.state==='closed'?'g':c.state==='open'?'r':'y'}">${c.state}</span></div>`).join('')||'No breakers'}
+
+// ── Actions ──────────────────────────────────
+function sendChat(){
+  const i=document.getElementById('chatinput');const t=i.value.trim();if(!t)return;
+  const b=document.getElementById('chatbox');
+  b.innerHTML+=`<div style="display:flex;justify-content:flex-end;margin-bottom:12px"><div style="background:var(--accent);color:var(--bg);padding:10px 16px;border-radius:12px;max-width:70%">${t}</div></div>`;
+  i.value='';b.innerHTML+='<div style="color:var(--muted);font-size:13px">Thinking...</div>';b.scrollTop=b.scrollHeight;
+  if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'chat',data:{message:t,session_id:sid}}));
+  else{b.lastElementChild.remove();b.innerHTML+='<div style="color:var(--red)">Offline</div>';b.scrollTop=b.scrollHeight}
 }
-
-function updateStats(data) {
-  if (data.system) {
-    const m = data.system.memory_percent || 0;
-    document.getElementById('stat-mem').textContent = (data.system.memory_used_mb / 1024).toFixed(1) + 'GB';
-    document.getElementById('stat-disk').textContent = (data.system.disk_used_gb || 0).toFixed(0) + 'GB';
-    document.getElementById('bar-mem').style.width = m + '%';
-    document.getElementById('bar-mem').className = 'stat-bar-fill ' + (m > 90 ? 'red' : m > 70 ? 'yellow' : 'accent');
-    document.getElementById('bar-disk').style.width = (data.system.disk_percent || 0) + '%';
-  }
-  if (data.vault) document.getElementById('stat-vault').textContent = data.vault.total_entries || 0;
-  if (data.tasks) document.getElementById('stat-tasks').textContent = data.tasks.count || 0;
+function updChat(d){const b=document.getElementById('chatbox');b.lastElementChild.remove();b.innerHTML+=`<div style="margin-bottom:12px"><div style="background:var(--bg-hover);padding:10px 16px;border-radius:12px;max-width:70%">${d.response||JSON.stringify(d)}</div></div>`;b.scrollTop=b.scrollHeight}
+function createNotif(){
+  const t=document.getElementById('nt-title').value;const m=document.getElementById('nt-msg').value;const p=document.getElementById('nt-prio').value;
+  if(!t||!m)return;
+  if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'create_notification',data:{user_id:'dashboard',title:t,message:m,priority:p}}));
+  document.getElementById('nt-title').value='';document.getElementById('nt-msg').value='';toast('Created');
 }
-
-function updateTasks(data) {
-  if (!data.tasks) return;
-  const html = data.tasks.map(t => `<div class="list-item"><div><div class="list-item-title">${t.title}</div></div><span class="badge badge-${t.status === 'completed' ? 'green' : t.status === 'in_progress' ? 'yellow' : 'blue'}">${t.status}</span></div>`).join('');
-  const el = document.getElementById('task-list');
-  if (el) el.innerHTML = html || '<p style="color:var(--text-muted);font-size:14px">No tasks</p>';
+function parseTasks(){
+  const t=document.getElementById('at-text').value;if(!t)return;
+  if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'parse_tasks',data:{user_id:'dashboard',text:t}}));
 }
-
-function updateNotifications(data) {
-  if (!data.notifications) return;
-  const html = data.notifications.map(n => `<div class="list-item"><div><div class="list-item-title">${n.title}</div><div class="list-item-sub">${n.message}</div></div><span class="badge badge-${n.priority === 'critical' ? 'red' : n.priority === 'high' ? 'yellow' : 'blue'}">${n.priority}</span></div>`).join('');
-  const el = document.getElementById('pending-notifs');
-  if (el) el.innerHTML = html || '<p style="color:var(--text-muted);font-size:14px">No pending</p>';
+function execTool(){
+  const t=document.getElementById('tool-sel').value;let p={};try{p=JSON.parse(document.getElementById('tool-params').value||'{}')}catch(e){}
+  if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'execute_tool',data:{tool:t,params:p}}));
 }
-
-function updatePerformance(data) {
-  const el = document.getElementById('perf-stats');
-  if (el && data) {
-    el.innerHTML = `<div style="font-size:20px;font-weight:700;font-family:'JetBrains Mono',monospace">${data.cpu_percent || 0}%</div><div class="stat-label">CPU</div><p style="margin-top:8px;font-size:13px">Memory: <strong>${(data.memory_used_mb / 1024).toFixed(1)}GB / ${(data.memory_total_mb / 1024).toFixed(1)}GB</strong></p><p style="font-size:13px">Disk: <strong>${(data.disk_used_gb || 0).toFixed(0)}GB free</strong></p>`;
-  }
+function checkSafe(){
+  const t=document.getElementById('safe-text').value;if(!t)return;
+  if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'check_safety',data:{text:t}}));
 }
-
-function updateBriefing(data) {
-  const el = document.getElementById('briefing-content');
-  if (el && data) el.innerHTML = '<pre style="white-space:pre-wrap;font-family:inherit;margin:0">' + (data.content || 'No briefing available') + '</pre>';
+function createKey(){const n=prompt('Key name?');if(!n)return;if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'create_api_key',data:{user_id:'dashboard',name:n}}))}
+function setSecret(){
+  const n=document.getElementById('sec-name').value;const v=document.getElementById('sec-val').value;if(!n||!v)return;
+  if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'set_secret',data:{user_id:'dashboard',name:n,value:v}}));
+  document.getElementById('sec-name').value='';document.getElementById('sec-val').value='';toast('Stored');
 }
+function searchMem(){const q=document.getElementById('msearch').value;if(!q)return;if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'search',data:{user_id:q}}))}
 
-function updateSuggestions(data) {
-  if (!data.suggestions) return;
-  const html = data.suggestions.map(s => `<div class="list-item"><div><div class="list-item-title">${s.title}</div></div><span class="badge badge-blue">${s.type}</span></div>`).join('');
-  const el = document.getElementById('suggestions-list');
-  if (el) el.innerHTML = html || '<p style="color:var(--text-muted);font-size:14px">No suggestions</p>';
+// ── UI ───────────────────────────────────────
+function show(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(t=>t.classList.remove('active'));
+  document.getElementById('p-'+n).classList.add('active');
+  document.querySelectorAll('.nav-item')[['overview','chat','notifications','tasks','memory','tools','platform','security'].indexOf(n)].classList.add('active');
+  document.querySelector('.tb-left span:last-child').textContent=n.charAt(0).toUpperCase()+n.slice(1);
 }
-
-function updateVault(data) {
-  if (!data.entries) return;
-  const html = data.entries.map(e => `<div class="list-item"><div class="list-item-title">${e.title}</div><span class="badge badge-blue">${e.layer}</span></div>`).join('');
-  const el = document.getElementById('vault-list');
-  if (el) el.innerHTML = html || '<p style="color:var(--text-muted)">No entries</p>';
+function toggleSidebar(){
+  const s=document.getElementById('sidebar');
+  if(window.innerWidth<=900){s.classList.toggle('open');let o=document.getElementById('sb-overlay');if(!o){o=document.createElement('div');o.id='sb-overlay';o.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:90';o.onclick=toggleSidebar;document.body.appendChild(o)}o.style.display=s.classList.contains('open')?'block':'none'}
+  else s.classList.toggle('collapsed')
 }
+function toast(m){const el=document.createElement('div');el.className='toast';el.textContent=m;document.body.appendChild(el);setTimeout(()=>el.remove(),3000)}
 
-function updateTools(data) {
-  if (!data.tools) return;
-  const html = data.tools.map(t => `<div class="list-item"><span class="list-item-title">${t}</span></div>`).join('');
-  const el = document.getElementById('tools-list');
-  if (el) el.innerHTML = html;
-  const sel = document.getElementById('tool-select');
-  if (sel) sel.innerHTML = data.tools.map(t => `<option>${t}</option>`).join('');
-}
-
-function updateApiKeys(data) {
-  if (!data.keys) return;
-  const html = data.keys.map(k => `<div class="list-item"><div class="list-item-title">${k.name}</div><span class="badge badge-${k.is_active ? 'green' : 'red'}">${k.is_active ? 'active' : 'revoked'}</span></div>`).join('');
-  const el = document.getElementById('api-keys-list');
-  if (el) el.innerHTML = html || 'No keys';
-}
-
-function updateUsage(data) {
-  const el = document.getElementById('usage-summary');
-  if (el && data) el.innerHTML = `<div style="font-size:28px;font-weight:700;font-family:'JetBrains Mono',monospace">${data.total_events || 0}</div><div class="stat-label">Events</div><p style="margin-top:8px">Cost: <strong>$${(data.total_cost || 0).toFixed(4)}</strong></p><p>Tokens: <strong>${(data.total_tokens_input || 0) + (data.total_tokens_output || 0)}</strong></p>`;
-}
-
-function updateSecrets(data) {
-  if (!data.secrets) return;
-  const html = data.secrets.map(s => `<div class="list-item"><span class="list-item-title">${s.name}</span></div>`).join('');
-  const el = document.getElementById('secrets-list');
-  if (el) el.innerHTML = html || 'No secrets';
-}
-
-function updateCircuitBreakers(data) {
-  if (!data.circuit_breakers) return;
-  const html = data.circuit_breakers.map(c => `<div class="list-item"><span class="list-item-title">${c.name}</span><span class="badge badge-${c.state === 'closed' ? 'green' : c.state === 'open' ? 'red' : 'yellow'}">${c.state}</span></div>`).join('');
-  const el = document.getElementById('circuit-breakers');
-  if (el) el.innerHTML = html || 'No breakers';
-}
-
-// ── Chat (WebSocket) ─────────────────────────
-async function sendChat() {
-  const input = document.getElementById('chat-input');
-  const text = input.value.trim();
-  if (!text) return;
-  const box = document.getElementById('chat-messages');
-  box.innerHTML += `<div style="display:flex;justify-content:flex-end;margin-bottom:12px"><div style="background:var(--accent);color:var(--bg);padding:10px 16px;border-radius:12px;max-width:70%;font-size:14px">${text}</div></div>`;
-  input.value = '';
-  box.innerHTML += `<div style="color:var(--text-muted);font-size:13px;padding:8px 0">Thinking...</div>`;
-  box.scrollTop = box.scrollHeight;
-  
-  if (ws && ws.readyState === WebSocket.OPEN) {
-    ws.send(JSON.stringify({ type: 'chat', data: { message: text, session_id: sid } }));
-  } else {
-    // Fallback to REST
-    try {
-      const res = await fetch('/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ goal: text, session_id: sid }) });
-      const data = await res.json();
-      handleChatResponse(data);
-    } catch (e) {
-      box.lastElementChild.remove();
-      box.innerHTML += `<div style="color:var(--red);margin-bottom:12px">Error: ${e.message}</div>`;
-      box.scrollTop = box.scrollHeight;
-    }
-  }
-}
-
-function handleChatResponse(data) {
-  const box = document.getElementById('chat-messages');
-  box.lastElementChild.remove();
-  box.innerHTML += `<div style="margin-bottom:12px"><div style="background:var(--bg-hover);padding:10px 16px;border-radius:12px;max-width:70%;font-size:14px">${data.response || JSON.stringify(data)}</div></div>`;
-  box.scrollTop = box.scrollHeight;
-}
-
-// ── UI Functions ─────────────────────────────
-function showPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  document.querySelector(`.nav-item[data-key="${Object.keys(pages).indexOf(name)}"]`)?.classList.add('active');
-  document.getElementById('page-title').textContent = pages[name];
-  currentPage = name;
-}
-
-function toggleSidebar() {
-  const sidebar = document.getElementById('sidebar');
-  
-  if (window.innerWidth <= 900) {
-    // Mobile: toggle show/hide with overlay
-    sidebar.classList.toggle('open');
-    sidebar.classList.toggle('mobile-visible');
-    
-    // Create overlay if doesn't exist
-    let overlay = document.getElementById('sidebar-overlay');
-    if (!overlay) {
-      overlay = document.createElement('div');
-      overlay.id = 'sidebar-overlay';
-      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:90;display:none';
-      overlay.onclick = toggleSidebar;
-      document.body.appendChild(overlay);
-    }
-    
-    if (sidebar.classList.contains('open')) {
-      overlay.style.display = 'block';
-    } else {
-      overlay.style.display = 'none';
-    }
-  } else {
-    // Desktop: toggle collapsed/expanded
-    sidebar.classList.toggle('collapsed');
-  }
-}
-
-function toggleTheme() {
-  document.body.classList.toggle('light');
-  document.getElementById('theme-icon').textContent = document.body.classList.contains('light') ? '☀️' : '🌙';
-}
-
-function showShortcuts() { document.getElementById('shortcuts-modal').classList.add('active'); }
-function closeShortcuts() { document.getElementById('shortcuts-modal').classList.remove('active'); }
-function closeOnboarding() { document.getElementById('onboarding').classList.remove('active'); localStorage.setItem('aeryn-onboarded', 'true'); }
-
-function handleSearch(event) {
-  const query = event.target.value.toLowerCase();
-  if (event.key === 'Enter' && query) {
-    showPage('memory');
-    document.getElementById('memory-search').value = query;
-    searchMemory();
-    event.target.value = '';
-  }
-}
-
-// Keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') { closeShortcuts(); closeOnboarding(); }
-  if (e.ctrlKey && e.key === 'k') { e.preventDefault(); document.getElementById('global-search').focus(); }
-  if (e.ctrlKey && e.key === 'b') { e.preventDefault(); toggleSidebar(); }
-  if (e.ctrlKey && e.key === 'd') { e.preventDefault(); toggleTheme(); }
-  if (e.altKey && e.key >= '1' && e.key <= '8') { e.preventDefault(); showPage(Object.keys(pages)[parseInt(e.key) - 1]); }
-  if (e.key === '?' && !e.ctrlKey && !e.altKey) { showShortcuts(); }
+// ── Keyboard ─────────────────────────────────
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){document.getElementById('shortcuts').classList.remove('active');document.getElementById('onboard').classList.remove('active')}
+  if(e.ctrlKey&&e.key==='k'){e.preventDefault();document.getElementById('search').focus()}
+  if(e.ctrlKey&&e.key==='b'){e.preventDefault();toggleSidebar()}
+  if(e.ctrlKey&&e.key==='d'){e.preventDefault();document.body.classList.toggle('light')}
+  if(e.altKey&&e.key>='1'&&e.key<='8'){e.preventDefault();show(['overview','chat','notifications','tasks','memory','tools','platform','security'][parseInt(e.key)-1])}
+  if(e.key==='?')document.getElementById('shortcuts').classList.add('active')
 });
 
-// ── Init ────────────────────────────────────
-if (!localStorage.getItem('aeryn-onboarded')) {
-  document.getElementById('onboarding').classList.add('active');
-}
-
-connectWebSocket();
+// ── Init ─────────────────────────────────────
+if(!localStorage.getItem('aeryn-onboarded'))document.getElementById('onboard').classList.add('active');
+connectWS();
 </script>
 </body>
 </html>
