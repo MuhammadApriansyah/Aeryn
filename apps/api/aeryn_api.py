@@ -2123,7 +2123,8 @@ async def get_vault_entries(layer: str = None, page: int = 1, per_page: int = 10
     """Get vault entries with pagination."""
     vault = AerynVault()
     entries = vault.list_entries(layer=layer, limit=per_page, offset=(page - 1) * per_page)
-    total = vault.count_entries(layer)
+    counts = vault.count_entries()
+    total = counts.get(layer, sum(counts.values())) if layer else sum(counts.values())
     return {
         "entries": entries,
         "total": total,
