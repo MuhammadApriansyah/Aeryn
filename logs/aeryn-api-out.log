@@ -129,3 +129,11 @@
 2026-08-28 00:20:22: INFO:     127.0.0.1:60274 - "POST /sandbox/create HTTP/1.1" 200 OK
 2026-08-28 00:20:22: INFO:     127.0.0.1:60278 - "POST /memory/extract-entities HTTP/1.1" 422 Unprocessable Entity
 2026-08-28 00:20:22: INFO:     127.0.0.1:60286 - "GET /shared/stats HTTP/1.1" 200 OK
+2026-08-28 00:32:34: INFO:     127.0.0.1:48696 - "GET /metrics HTTP/1.1" 404 Not Found
+2026-08-28 00:32:34: INFO:     127.0.0.1:48698 - "GET /alerts HTTP/1.1" 404 Not Found
+2026-08-28 00:35:42: INFO:     127.0.0.1:41926 - "GET /health HTTP/1.1" 200 OK
+2026-08-28 00:35:47: INFO:     127.0.0.1:41938 - "GET /metrics HTTP/1.1" 200 OK
+2026-08-28 00:35:47: INFO:     127.0.0.1:41958 - "GET /guardrails/validators HTTP/1.1" 200 OK
+2026-08-28 00:35:49: INFO:     127.0.0.1:41970 - "POST /dream/synthesize HTTP/1.1" 200 OK
+2026-08-28 00:35:49: INFO:     127.0.0.1:55314 - "POST /sandbox/create HTTP/1.1" 200 OK
+2026-08-28 00:35:49: INFO:     127.0.0.1:55330 - "GET /shared/stats HTTP/1.1" 200 OK
