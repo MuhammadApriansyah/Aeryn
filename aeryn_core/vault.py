@@ -218,6 +218,73 @@ class AerynVault:
                 counts[sub] = 0
         return counts
     
+    def list_entries(self, layer: str = None, limit: int = 10, offset: int = 0) -> list:
+        """List vault entries with pagination."""
+        entries = []
+        search_layers = [layer] if layer else SUBDIRS
+        
+        for sub in search_layers:
+            dirpath = os.path.join(BASE, sub)
+            if not os.path.isdir(dirpath):
+                continue
+            for fname in sorted(os.listdir(dirpath)):
+                if not fname.endswith(".md"):
+                    continue
+                filepath = os.path.join(dirpath, fname)
+                try:
+                    stat = os.stat(filepath)
+                    with open(filepath, encoding="utf-8") as f:
+                        body = f.read()
+                    # Extract tags from frontmatter
+                    tags = []
+                    if body.startswith("---"):
+                        try:
+                            end = body.index("---", 3)
+                            fm = body[3:end].strip()
+                            for line in fm.split("\n"):
+                                if line.strip().startswith("tags:"):
+                                    tags = [t.strip() for t in line.split(":")[1].strip().strip("[]").split(",") if t.strip()]
+                        except Exception:
+                            pass
+                    entries.append({
+                        "id": fname.replace(".md", ""),
+                        "title": fname.replace(".md", "").replace("-", " ").replace("_", " ").title(),
+                        "layer": sub,
+                        "tags": tags,
+                        "created_at": stat.st_mtime,
+                        "size": stat.st_size,
+                    })
+                except Exception:
+                    pass
+        
+        # Sort by created_at desc
+        entries.sort(key=lambda x: x["created_at"], reverse=True)
+        return entries[offset:offset + limit]
+    
+    def get_entry(self, entry_id: str) -> Optional[dict]:
+        """Get single vault entry by ID (filename without .md)."""
+        for sub in SUBDIRS:
+            dirpath = os.path.join(BASE, sub)
+            if not os.path.isdir(dirpath):
+                continue
+            for fname in os.listdir(dirpath):
+                if not fname.endswith(".md"):
+                    continue
+                if fname.replace(".md", "") == entry_id:
+                    filepath = os.path.join(dirpath, fname)
+                    try:
+                        with open(filepath, encoding="utf-8") as f:
+                            body = f.read()
+                        return {
+                            "id": entry_id,
+                            "title": fname.replace(".md", "").replace("-", " ").replace("_", " ").title(),
+                            "layer": sub,
+                            "body": body,
+                        }
+                    except Exception:
+                        pass
+        return None
+    
     def render_summary(self) -> str:
         """Render vault summary for system prompt injection."""
         counts = self.count_entries()
