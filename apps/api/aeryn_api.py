@@ -136,6 +136,112 @@ async def search(q: str, limit: int = 10):
     results = hse.search(q, limit=limit)
     return {"query": q, "results": results, "count": len(results)}
 
+@app.get("/dashboard")
+async def dashboard():
+    """Serve monitoring dashboard HTML."""
+    return Response(
+        content=DASHBOARD_HTML,
+        media_type="text/html",
+    )
+
+DASHBOARD_HTML = """<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aeryn Dashboard</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e0e0e0; min-height: 100vh; padding: 20px; }
+  h1 { font-size: 24px; margin-bottom: 8px; color: #00ff88; }
+  .subtitle { color: #666; margin-bottom: 24px; font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .card { background: #12121a; border: 1px solid #222; border-radius: 12px; padding: 20px; }
+  .card h3 { font-size: 12px; text-transform: uppercase; color: #888; margin-bottom: 8px; }
+  .card .value { font-size: 28px; font-weight: bold; color: #00ff88; }
+  .card .sub { font-size: 12px; color: #666; margin-top: 4px; }
+  .section { background: #12121a; border: 1px solid #222; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .section h2 { font-size: 16px; margin-bottom: 12px; color: #00ccff; }
+  .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .online { background: #00ff88; box-shadow: 0 0 6px #00ff88; }
+  .offline { background: #ff4444; }
+  .refresh { float: right; background: #1a1a2e; border: 1px solid #333; color: #00ff88; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+  .refresh:hover { background: #222; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #222; }
+  th { color: #888; font-weight: 600; }
+  .progress { height: 6px; background: #1a1a2e; border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #00ff88, #00ccff); transition: width 0.3s; }
+</style>
+</head>
+<body>
+<h1>🚀 Aeryn Dashboard</h1>
+<p class="subtitle">Real-time monitoring — v40.54</p>
+
+<button class="refresh" onclick="loadStats()">🔄 Refresh</button>
+
+<div class="grid" id="cards">
+  <div class="card"><h3>Memory</h3><div class="value" id="mem">--</div><div class="sub" id="mem-sub">--</div></div>
+  <div class="card"><h3>Disk Free</h3><div class="value" id="disk">--</div><div class="sub" id="disk-sub">-- used</div></div>
+  <div class="card"><h3>Process</h3><div class="value" id="proc-mem">--</div><div class="sub" id="uptime">-- uptime</div></div>
+  <div class="card"><h3>Requests</h3><div class="value" id="req-total">--</div><div class="sub" id="err-total">-- errors</div></div>
+</div>
+
+<div class="section">
+  <h2>🧠 Aeryn Stats</h2>
+  <table>
+    <tr><th>Metric</th><th>Value</th></tr>
+    <tr><td>Vault Entries</td><td id="vault-total">--</td></tr>
+    <tr><td>Search Documents</td><td id="search-docs">--</td></tr>
+    <tr><td>Social People</td><td id="social-ppl">--</td></tr>
+    <tr><td>Safety Engine</td><td><span class="status-dot online"></span>OK</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2>📁 Vault Layers</h2>
+  <table id="vault-table"><tr><th>Layer</th><th>Entries</th></tr></table>
+</div>
+
+<script>
+async function loadStats() {
+  try {
+    const r = await fetch('/dashboard/stats');
+    const d = await r.json();
+    
+    if (d.error) { document.body.innerHTML = '<h1>Error: '+d.error+'</h1>'; return; }
+    
+    const s = d.system, a = d.aeryn;
+    
+    document.getElementById('mem').textContent = s.memory_used_mb + ' MB';
+    document.getElementById('mem-sub').textContent = s.memory_percent + '% used';
+    document.getElementById('disk').textContent = s.disk_free_gb + ' GB';
+    document.getElementById('disk-sub').textContent = s.disk_percent + '% used';
+    document.getElementById('proc-mem').textContent = s.process_mem_mb + ' MB';
+    document.getElementById('uptime').textContent = Math.round(s.uptime_s / 60) + 'm uptime';
+    document.getElementById('req-total').textContent = a.requests_total;
+    document.getElementById('err-total').textContent = a.errors_total + ' errors';
+    
+    document.getElementById('vault-total').textContent = a.vault_total_entries;
+    document.getElementById('search-docs').textContent = a.search_docs;
+    document.getElementById('social-ppl').textContent = a.social_people;
+    
+    const table = document.getElementById('vault-table');
+    table.innerHTML = '<tr><th>Layer</th><th>Entries</th></tr>';
+    for (const [layer, count] of Object.entries(a.vault_layers)) {
+      table.innerHTML += '<tr><td>' + layer + '</td><td>' + count + '</td></tr>';
+    }
+  } catch(e) {
+    document.body.innerHTML = '<h1>Connection failed: ' + e.message + '</h1>';
+  }
+}
+
+loadStats();
+setInterval(loadStats, 30000);
+</script>
+</body>
+</html>"""
+
 @app.get("/dashboard/stats")
 async def dashboard_stats():
     try:
