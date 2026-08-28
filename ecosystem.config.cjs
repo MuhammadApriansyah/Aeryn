@@ -9,6 +9,7 @@ module.exports = {
       max_memory_restart: "512M",
       env: {
         NODE_ENV: "production",
+        AERYN_MODE: "standalone",
         AERYN_PORT: "3010",
         AERYN_HOST: "127.0.0.1",
         PYTHONUNBUFFERED: "1",
