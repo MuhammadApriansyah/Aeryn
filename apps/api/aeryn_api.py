@@ -54,7 +54,7 @@ from aeryn_core.github_integration import get_github
 from aeryn_core.data_encryption import get_encryption
 from aeryn_core.auth_manager import get_auth
 from aeryn_core.realtime import get_emitter
-
+from aeryn_core.performance import get_optimizer, get_uptime
 
 from contextlib import asynccontextmanager
 
@@ -2592,6 +2592,49 @@ async def run_plugin(plugin_name: str, action: str, params: dict = None):
     """Run a plugin."""
     rt = get_plugin_runtime()
     return rt.run_plugin(plugin_name, action, params)
+
+# ── Phase 4 Endpoints ─────────────────────────
+
+@app.get("/performance/stats")
+async def performance_stats():
+    """Get performance statistics."""
+    opt = get_optimizer()
+    return opt.get_system_stats()
+
+@app.get("/uptime")
+async def uptime():
+    """Get uptime information."""
+    ut = get_uptime()
+    return {
+        "uptime_s": ut.uptime_seconds,
+        "uptime": ut.uptime_formatted,
+        "restart_count": ut._restart_count,
+    }
+
+@app.get("/health/detailed")
+async def detailed_health():
+    """Detailed health check."""
+    ut = get_uptime()
+    return ut.health_check()
+
+@app.get("/docs/swagger")
+async def swagger_ui():
+    """Serve Swagger UI."""
+    from fastapi.openapi.docs import get_swagger_ui_html
+    from fastapi.responses import HTMLResponse
+    html = get_swagger_ui_html(openapi_url="/openapi.json", title="Aeryn API")
+    return HTMLResponse(content=html.body.decode())
+
+@app.get("/openapi.json")
+async def openapi_schema():
+    """Serve OpenAPI schema."""
+    from fastapi.openapi.utils import get_openapi
+    return get_openapi(
+        title="Aeryn API",
+        version="41.0",
+        description="Aeryn Cognitive Agent Platform API",
+        routes=app.routes,
+    )
 
 @app.get("/shared/daily-log")
 async def get_daily_log():
