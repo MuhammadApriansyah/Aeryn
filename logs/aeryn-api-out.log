@@ -164,3 +164,5 @@
 2026-08-28 01:15:42: INFO:     127.0.0.1:36558 - "GET /guardrails/validators HTTP/1.1" 200 OK
 2026-08-28 01:15:43: INFO:     127.0.0.1:36562 - "POST /dream/synthesize HTTP/1.1" 200 OK
 2026-08-28 01:28:08: INFO:     127.0.0.1:54390 - "GET /health HTTP/1.1" 200 OK
+2026-08-28 01:29:12: INFO:     127.0.0.1:36646 - "GET /health HTTP/1.1" 200 OK
+2026-08-28 01:29:12: INFO:     127.0.0.1:36660 - "POST /memory/decay HTTP/1.1" 200 OK
