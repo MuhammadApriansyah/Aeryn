@@ -28,7 +28,6 @@ jobs:
           uv venv venv-proot
           source venv-proot/bin/activate
           uv pip install -r requirements.txt
-          uv pip install -e .
           
           # Install Rust & build engine
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
