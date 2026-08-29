@@ -6,6 +6,9 @@ from typing import Optional
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
+# Patch sqlite3.connect for WAL + busy_timeout — must be before any other imports
+import aeryn_core.patch_sqlite  # noqa
+
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import Response, FileResponse
 from pydantic import BaseModel, Field
