@@ -206,3 +206,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [Unreleased]: https://github.com/MuhammadApriansyah/Aeryn/compare/v41.0...HEAD
 [41.0]: https://github.com/MuhammadApriansyah/Aeryn/releases/tag/v41.0
 [40.0]: https://github.com/MuhammadApriansyah/Aeryn/releases/tag/v40.0
+
+## [41.1] — 2026-08-29
+
+### Added
+- **Hermes Bridge**: Adapter layer untuk shared skills/scripts dari Hermes
+- **Hermes Plugin**: Aeryn dapat running sebagai plugin di ekosistem Hermes
+- **Shared Loader**: Load 35 skills (3 Aeryn + 32 Hermes) dan 26 scripts (8 Aeryn + 18 Hermes)
+- **Three modes**: Plugin, Standalone + Hermes, Standalone
+
+### Changed
+- New `hermes_bridge/` package: adapter, loader, mode detection
+- New `hermes_plugin/` package: plugin wrapper
+- New `plugins/aeryn-core/`: Hermes plugin entry point
+
+### Verified
+- Mode: standalone-with-hermes
+- Skills: 35 loaded
+- Scripts: 26 loaded
+- Plugin: aeryn-core v41.0 working

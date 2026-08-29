@@ -1,0 +1,8 @@
+name: aeryn-core
+version: "41.0"
+description: "Aeryn — Personal Assistant Agent SaaS"
+author: Sen
+entry_point: plugin.py
+dependencies:
+  - aeryn_core
+  - aeryn_engine
