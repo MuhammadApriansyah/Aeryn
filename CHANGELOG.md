@@ -377,3 +377,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 613 tests pass
 - 0 failures
 - 1 warning
+
+## [45.0] — 2026-08-29
+
+### Added
+- **Native Sandbox with Conditional Security**:
+  - 4 isolation levels (Basic, Namespace, Bubblewrap, Full)
+  - Auto-detect environment → use best available level
+  - Directed fallback: graceful degradation if higher levels fail
+  - Level 0: resource limits + command whitelist + tempdir
+  - Level 1: Python unshare() + resource limits
+  - Level 2: Bubblewrap filesystem + namespace isolation
+  - Level 3: Full isolation (bwrap + secimport + cgroups)
+  - Zero dependencies: works without Docker, Bubblewrap, or root
+
+### Changed
+- Updated README.md with Native Sandbox documentation
+- Test count: 613 → 619
+
+### New Modules
+- `aeryn_core/sandbox/__init__.py` — Package entry
+- `aeryn_core/sandbox/detector.py` — Environment detection
+- `aeryn_core/sandbox/level0_basic.py` — Basic isolation
+- `aeryn_core/sandbox/level1_namespace.py` — Namespace isolation
+- `aeryn_core/sandbox/level2_bubblewrap.py` — Bubblewrap integration
+- `aeryn_core/sandbox/level3_full.py` — Full isolation
+- `aeryn_core/sandbox/fallback.py` — Fallback orchestrator
+
+### Test Results
+- 619 tests pass
+- 0 failures
+- 1 warning

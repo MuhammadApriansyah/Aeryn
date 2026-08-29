@@ -1,9 +1,9 @@
 # 🤖 Aeryn — Personal Assistant Agent SaaS
 
-> AI-powered personal assistant platform with multi-model support, team workspaces, enterprise features, Rust-powered performance, Hermes integration, security-first architecture, MCP protocol, multi-agent orchestration, integration SDK, and **3 strategic positioning options: Personal Assistant, Agent Infrastructure, Security Platform**.
+> AI-powered personal assistant platform with multi-model support, team workspaces, enterprise features, Rust-powered performance, Hermes integration, security-first architecture, MCP protocol, multi-agent orchestration, integration SDK, and **native sandbox with conditional security**.
 
-![Version](https://img.shields.io/badge/version-44.0-blue)
-![Tests](https://img.shields.io/badge/tests-613%20passed-brightgreen)
+![Version](https://img.shields.io/badge/version-45.0-blue)
+![Tests](https://img.shields.io/badge/tests-619%20passed-brightgreen)
 ![Security](https://img.shields.io/badge/security-layered-success)
 ![MCP](https://img.shields.io/badge/mcp-protocol-success)
 ![Python](https://img.shields.io/badge/python-3.11+-blue)
@@ -15,96 +15,39 @@
 
 ## 🚀 Features
 
-### Strategic Positioning (V44)
-
-#### Option A: Personal Assistant
-- **Proactive Engine**: Pattern-based suggestions, time-aware recommendations
-- **Personalization**: User preferences, behavior-based customization
-- **Personal Context**: User profile, goals, work style, energy patterns
-
-#### Option B: Agent Infrastructure
-- **Agent Templates**: Pre-built templates (researcher, writer, coder, analyst, support)
-- **Agent CLI**: Create, list, run agents from command line
-- **Template Marketplace**: Category-based template discovery
-
-#### Option C: Security Platform
-- **Security Dashboard**: Real-time monitoring, threat alerts
-- **Compliance Module**: SOC2, GDPR, HIPAA tracking and reporting
-- **Threat Detection**: Event logging, severity classification
+### Native Sandbox (NEW in V45)
+- **Conditional Security**: Auto-detect environment → use best available isolation level
+- **Directed Fallback**: Graceful degradation if higher levels fail
+- **4 Isolation Levels**: Basic → Namespace → Bubblewrap → Full
+- **Resource Limits**: Memory, CPU, file descriptors via `resource.setrlimit()`
+- **Command Whitelist**: Only approved commands can execute
+- **Filesystem Isolation**: Temp directory per execution
+- **Zero Dependencies**: Works without Docker, Bubblewrap, or root
 
 ### MCP Protocol (V43)
 - **MCP Server**: Serve tools, resources, prompts to external MCP clients
 - **MCP Client**: Connect to external MCP servers and invoke tools
 - **MCP Registry**: Manage multiple MCP server connections
-- **Tool Discovery**: Automatic tool/resource/prompt discovery
 
 ### Multi-Agent Orchestration (V43)
 - **Workflow Engine**: Coordinate multiple agents for complex tasks
 - **Task Management**: Priority-based task execution with dependencies
 - **Agent Registry**: Register agents with capabilities
-- **Workflow Status**: Real-time workflow monitoring
 
 ### Integration SDK (V43)
 - **Developer SDK**: Build third-party integrations
-- **Integration Registry**: Manage integrations
-- **Categories**: Organize by CRM, Communication, Development, etc.
+- **Integration Registry**: Manage integrations and versions
 
 ### Security-First Architecture (V42)
-- **Prompt Injection Defense**: Input sanitization, output validation, extraction detection
-- **Memory Injection Defense**: Integrity verification, access audit trail
+- **Prompt Injection Defense**: Input sanitization, output validation
+- **Memory Injection Defense**: Integrity verification, access audit
 - **Tool Permission Limits**: Risk-based tool access, blast radius reduction
 - **Model Routing**: Tiered model selection (60-70% cost reduction)
-- **Token Monitoring**: Per-request tracking, budget enforcement, cost attribution
+- **Token Monitoring**: Per-request tracking, budget enforcement
 
 ### Adaptive Rule Engine (V42)
 - **Hot-reloadable rules** — Change behavior without restart
 - **Priority-based evaluation** — Higher priority rules execute first
-- **Multiple conditions**: always, contains, equals, regex, threshold
-- **Multiple actions**: allow, deny, log, redirect, custom
-
-### Authentication & Security
-- JWT-based authentication with API keys
-- SSO (Google OAuth, GitHub OAuth)
-- Role-Based Access Control (RBAC)
-- Rate limiting with SQLite fallback
-- Circuit breaker pattern
-- PBKDF2-SHA256 password hashing
-
-### AI Capabilities
-- Multi-model LLM support (Gemini → OpenRouter → DeepSeek fallback)
-- Hybrid search (semantic + keyword)
-- Proactive suggestions & pattern detection
-- Advanced reasoning with multi-step Chain-of-Thought
-- Episodic, temporal, and graph memory
-
-### Rust Engine
-- **VectorDB**: Cosine similarity search (10-100x faster)
-- **RateLimiter**: Sliding window (microsecond precision)
-- **SSE Broadcaster**: High-concurrency broadcaster
-- **WebSocket Server**: Scalable WebSocket server
-- **Connection Pool**: PostgreSQL connection pooling
-
-### Hermes Integration
-- **35 skills** (3 Aeryn custom + 32 Hermes shared)
-- **26 scripts** (8 Aeryn custom + 18 Hermes shared)
-- **3 operating modes**: Plugin, Standalone + Hermes, Standalone
-
-### Platform
-- Team workspaces with shared memory
-- Plugin marketplace (publish, search, rate)
-- Webhook system for external integrations
-- SOC2 compliance module
-
-### Billing & Usage
-- Usage metering per event type
-- Stripe integration
-- Quota management per plan
-
-### DevOps
-- **CI/CD Pipeline**: GitHub Actions
-- **Docker Support**: Dockerfile + docker-compose
-- **Monitoring**: Metrics collector + token monitoring
-- **Load Testing**: Locust-based
 
 ---
 
@@ -112,25 +55,26 @@
 
 ```
 Aeryn/
-├── aeryn_core/              ← Python (165+ modules)
+├── aeryn_core/              ← Python (170+ modules)
 │   ├── auth/                ← Auth, SSO, rate limiting
 │   ├── billing/             ← Billing, usage metering
 │   ├── cost/                ← Token monitoring, model routing
 │   ├── database/            ← VectorDB, SQLite, Neon PG
 │   ├── hermes_bridge/       ← Hermes adapter (shared skills/scripts)
-│   ├── infra/               ← NEW: Agent templates + CLI
+│   ├── infra/               ← Agent templates + CLI
 │   ├── integrations/        ← Integration SDK
 │   ├── mcp/                 ← MCP server + client
 │   ├── memory/              ← Vault, semantic, temporal
 │   ├── multi_agent/         ← Multi-Agent orchestrator
-│   ├── personal/            ← NEW: Proactive engine + personalization
+│   ├── personal/            ← Proactive engine + personalization
 │   ├── platform/            ← Webhooks, plugins, workspaces
 │   ├── reasoning/           ← Context, reasoning style
 │   ├── safety/              ← Security, guardrails
+│   ├── sandbox/             ← NEW: Native sandbox (4 levels)
 │   └── security/            ← Prompt injection, memory guard, tool permissions, dashboard
 ├── aeryn-engine/            ← Rust (6 modules)
 ├── plugins/aeryn-core/      ← Hermes plugin entry
-├── tests/                   ← 613 tests
+├── tests/                   ← 619 tests
 ├── .github/workflows/       ← CI/CD Pipeline
 ├── Dockerfile + compose     ← Docker support
 └── monitoring/              ← Metrics collector
@@ -186,10 +130,57 @@ curl http://127.0.0.1:3010/health
 
 ---
 
+## 📚 Native Sandbox
+
+### 4 Isolation Levels
+
+| Level | Name | Requirements | Isolation |
+|-------|------|--------------|-----------|
+| 0 | Basic | None | Resource limits + whitelist + tempdir |
+| 1 | Namespace | `unshare` syscall | PID/UTS/IPC isolation + resource limits |
+| 2 | Bubblewrap | `apt install bubblewrap` | Filesystem + full namespace isolation |
+| 3 | Full | Bubblewrap + secimport + root | Maximum isolation with eBPF |
+
+### Usage
+
+```python
+from aeryn_core.sandbox import fallback_orchestrator
+
+# Auto-detect best available level
+result = fallback_orchestrator.execute(["python3", "script.py"])
+print(result["sandbox"])  # "basic", "namespace", "bubblewrap", or "full"
+print(result["stdout"])
+
+# Check current capabilities
+status = fallback_orchestrator.status()
+print(f"Level: {status['level']}")
+print(f"Capabilities: {status['capabilities']}")
+```
+
+### Fallback Behavior
+
+```
+Level 3 (Full) → fails → Level 2 (Bubblewrap) → fails → Level 1 (Namespace) → fails → Level 0 (Basic)
+```
+
+---
+
+## 🧪 Testing
+
+```bash
+# All tests
+./venv-proot/bin/python -m pytest tests/ -v
+
+# Load testing
+locust -f tests/load/locustfile.py --host=http://localhost:3010
+```
+
+---
+
 ## 📊 Test Coverage
 
 ```
-613 tests pass
+619 tests pass
 0 failures
 1 warning
 ```

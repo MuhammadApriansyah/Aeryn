@@ -3,8 +3,8 @@ title: ML Study
 author: aeryn
 tags: [ai, study]
 links: []
-created: 2026-08-29T22:13:45
-updated: 2026-08-29T22:13:45
+created: 2026-08-29T22:57:36
+updated: 2026-08-29T22:57:36
 hash: ee55cc852173
 ---
 
