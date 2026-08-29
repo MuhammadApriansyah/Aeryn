@@ -3,3 +3,4 @@ venv-proot/
 __pycache__/
 Personalisasi/Database/episodes/
 *.so
+target/
