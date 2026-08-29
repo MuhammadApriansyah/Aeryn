@@ -8,6 +8,7 @@ import os
 import json
 import uuid
 import urllib.request
+from typing import Dict, List, Optional
 import urllib.parse
 from typing import Dict, Optional
 from datetime import datetime

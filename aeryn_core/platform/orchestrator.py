@@ -8,7 +8,7 @@ from aeryn_core.agents.division_5_infra.master_agent import TransactionConsensus
 from aeryn_core.utils.guardrails import CognitiveGuardrailEngine
 from aeryn_core.utils.workflow_dag import DirectedAcyclicGraphWorkflowEngine
 from aeryn_core.utils.dynamic_router import EpistemicContextRouter
-from aeryn_core.utils.event_bus import CognitiveAsynchronousEventBus
+from aeryn_core.utils.event_bus import EventBus as CognitiveAsynchronousEventBus
 from aeryn_core.utils.memory_pool import StatefulVolatileMemoryPool
 from aeryn_core.utils.cog_mem_lifecycle import CognitiveSustainedMemoryLifecycle
 from aeryn_core.utils.bica_alignment import BidirectionalCognitiveAlignmentBridge

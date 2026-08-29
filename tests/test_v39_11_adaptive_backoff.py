@@ -44,5 +44,5 @@ def test_skip_after_max_failures():
 def test_single_attempt_in_codebase():
     src = open(os.path.join(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__))),
-        "aeryn_core", "model_client.py")).read()
+        "aeryn_core", "utils", "model_client.py")).read()
     assert "for attempt in range(1)" in src
