@@ -13,7 +13,8 @@ import os, json, sqlite3, asyncio, time
 from typing import Dict, List, Optional
 from datetime import datetime, timedelta
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/notifications.db")
+from aeryn_core.config import DATABASE_DIR
+DB_PATH = os.path.join(DATABASE_DIR, "notifications.db")
 
 
 class Notification:

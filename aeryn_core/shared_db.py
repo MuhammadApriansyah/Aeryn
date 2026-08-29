@@ -18,7 +18,8 @@ import threading
 from typing import Optional, List, Dict
 from datetime import datetime, timedelta
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/shared.db")
+from aeryn_core.config import DATABASE_DIR
+DB_PATH = os.path.join(DATABASE_DIR, "shared.db")
 
 
 class SharedDB:

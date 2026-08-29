@@ -5,6 +5,8 @@ import os, json, time, asyncio, sqlite3, urllib.request
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 
+from aeryn_core.config import DATABASE_DIR
+
 def _load_env_file():
     env_path = os.path.expanduser("~/.hermes/.env")
     if os.path.exists(env_path):
@@ -20,7 +22,7 @@ def _load_env_file():
 _load_env_file()
 
 AERYN_MODE = os.environ.get("AERYN_MODE", "plugin")
-_DB_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Personalisasi/Database")
+_DB_DIR = DATABASE_DIR
 os.makedirs(_DB_DIR, exist_ok=True)
 
 _PROVIDERS = {
