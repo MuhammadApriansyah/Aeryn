@@ -8,8 +8,9 @@ import ast
 import glob
 import os
 import sys
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-BASE = os.path.expanduser("~/aeryn-core-agent")
+BASE = BASE_DIR
 if __name__ != "__main__" and BASE not in sys.path:
     sys.path.insert(0, BASE)
 

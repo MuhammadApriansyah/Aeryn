@@ -166,9 +166,20 @@ class ToolExecutor:
                 return {"ok": False, "error": f"Dangerous command blocked: {d}"}
         
         try:
+            # Parse command to args (no shell=True for security)
+            import shlex
+            try:
+                args = shlex.split(command)
+            except ValueError:
+                return {"ok": False, "error": "Invalid command syntax"}
+            
+            if not args:
+                return {"ok": False, "error": "Empty command"}
+            
+            # Execute without shell
             result = subprocess.run(
-                command,
-                shell=True,
+                args,
+                shell=False,
                 capture_output=True,
                 text=True,
                 timeout=30,

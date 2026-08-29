@@ -166,9 +166,16 @@ class _SqliteCollection:
 
     def __init__(self, conn: sqlite3.Connection, name: str, lock: threading.Lock) -> None:
         self._conn = conn
-        self._name = name
+        self._name = self._sanitize_table_name(name)
         self._lock = lock
         self._ensure_table()
+    
+    @staticmethod
+    def _sanitize_table_name(name: str) -> str:
+        """Sanitize table name — only alphanumeric and underscore allowed."""
+        if not name or not re.match(r'^[a-zA-Z][a-zA-Z0-9_]*$', name):
+            raise ValueError(f"Invalid table name: {name!r}")
+        return name
 
     def _ensure_table(self) -> None:
         with self._lock:

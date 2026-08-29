@@ -293,9 +293,22 @@ class EnhancedSandbox:
                 env["https_proxy"] = "http://127.0.0.1:0"
                 env["no_proxy"] = "*"
             
+            # Parse command to args (no shell=True for security)
+            import shlex
+            try:
+                args = shlex.split(command)
+            except ValueError:
+                return SandboxResult(ok=False, returncode=-1, stdout="", stderr="",
+                                    duration_ms=0, error="Invalid command syntax")
+            
+            if not args:
+                return SandboxResult(ok=False, returncode=-1, stdout="", stderr="",
+                                    duration_ms=0, error="Empty command")
+            
+            # Execute without shell
             result = subprocess.run(
-                command,
-                shell=True,
+                args,
+                shell=False,
                 capture_output=True,
                 text=True,
                 timeout=session.limits.max_execution_time,

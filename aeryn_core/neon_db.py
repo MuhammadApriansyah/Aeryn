@@ -6,6 +6,7 @@ Provides connection pooling and query execution for PostgreSQL.
 
 import os
 import json
+import re
 import logging
 from typing import Optional, Dict, List, Any
 from contextlib import contextmanager
@@ -91,38 +92,49 @@ class NeonDB:
             rows = cursor.fetchall()
             return [dict(zip(columns, row)) for row in rows]
     
+    def _sanitize_table_name(self, table: str) -> None:
+        """Validate table name format — raise if invalid."""
+        if not re.match(r'^[a-zA-Z][a-zA-Z0-9_]*$', table):
+            raise ValueError(f"Invalid table name: {table!r}")
+
     def create_table(self, table_name: str, schema: str) -> None:
         """Create a table if not exists."""
+        self._sanitize_table_name(table_name)
         query = f"CREATE TABLE IF NOT EXISTS {table_name} ({schema})"
         self.execute(query)
-    
+
     def drop_table(self, table_name: str) -> None:
         """Drop a table if exists."""
+        self._sanitize_table_name(table_name)
         query = f"DROP TABLE IF EXISTS {table_name} CASCADE"
         self.execute(query)
-    
+
     def insert(self, table: str, data: Dict[str, Any]) -> None:
         """Insert a row into table."""
+        self._sanitize_table_name(table)
         columns = ', '.join(data.keys())
         placeholders = ', '.join(['%s'] * len(data))
         query = f"INSERT INTO {table} ({columns}) VALUES ({placeholders})"
         self.execute(query, tuple(data.values()))
-    
+
     def update(self, table: str, data: Dict[str, Any], where: str, where_params: tuple = None) -> None:
         """Update rows in table."""
+        self._sanitize_table_name(table)
         set_clause = ', '.join([f"{k} = %s" for k in data.keys()])
         query = f"UPDATE {table} SET {set_clause} WHERE {where}"
         params = tuple(data.values()) + (where_params or ())
         self.execute(query, params)
-    
+
     def delete(self, table: str, where: str, where_params: tuple = None) -> None:
         """Delete rows from table."""
+        self._sanitize_table_name(table)
         query = f"DELETE FROM {table} WHERE {where}"
         self.execute(query, where_params)
-    
+
     def select(self, table: str, where: str = None, params: tuple = None, 
                order_by: str = None, limit: int = None) -> List[Dict]:
         """Select rows from table."""
+        self._sanitize_table_name(table)
         query = f"SELECT * FROM {table}"
         if where:
             query += f" WHERE {where}"

@@ -36,11 +36,11 @@ class Sandbox:
     # Allowed directories (path jail)
     ALLOWED_PATHS = [
         "/tmp",
-        "/home/sen/aeryn-core-agent",
+        BASE_DIR,
         "/home/sen/webnovel-platform",
         "/home/sen/Downloads",
     ]
-    
+
     # Blocked commands
     BLOCKED_PATTERNS = [
         r"rm\s+-rf\s+/",
@@ -55,7 +55,7 @@ class Sandbox:
         r"curl\s+.*\|\s*sh",
         r"wget\s+.*\|\s*sh",
     ]
-    
+
     # Suspicious patterns (require confirmation)
     SUSPICIOUS_PATTERNS = [
         r"rm\s+-rf",
@@ -64,7 +64,15 @@ class Sandbox:
         r"pip\s+install",
         r"npm\s+install\s+-g",
     ]
-    
+
+    # Allowed safe commands whitelist
+    ALLOWED_SAFE_COMMANDS = [
+        "ls", "cat", "head", "tail", "wc", "grep", "find", "echo",
+        "mkdir", "touch", "cp", "mv", "rm", "chmod", "chown",
+        "python3", "python", "node", "npm", "pip", "git",
+        "date", "whoami", "pwd", "env", "export",
+    ]
+
     def __init__(self, timeout: int = 30, max_memory_mb: int = 256,
                  allow_network: bool = True):
         self.timeout = timeout
@@ -118,10 +126,28 @@ class Sandbox:
                 # Limit CPU time
                 resource.setrlimit(resource.RLIMIT_CPU, (self.timeout, self.timeout))
             
-            # Execute
+            # Parse command to args (no shell=True for security)
+            import shlex
+            try:
+                args = shlex.split(command)
+            except ValueError:
+                return SandboxResult(ok=False, returncode=-1, stdout="", stderr="",
+                                    duration_ms=0, error="Invalid command syntax")
+            
+            if not args:
+                return SandboxResult(ok=False, returncode=-1, stdout="", stderr="",
+                                    duration_ms=0, error="Empty command")
+            
+            # Validate base command is in whitelist
+            base_cmd = args[0]
+            if base_cmd not in self.ALLOWED_SAFE_COMMANDS:
+                return SandboxResult(ok=False, returncode=-1, stdout="", stderr="",
+                                    duration_ms=0, error=f"Command not in whitelist: {base_cmd}")
+            
+            # Execute without shell
             result = subprocess.run(
-                command,
-                shell=True,
+                args,
+                shell=False,
                 capture_output=True,
                 text=True,
                 timeout=self.timeout,

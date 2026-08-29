@@ -26,8 +26,9 @@ import urllib.request
 
 import discord
 from discord.ext import commands
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-BASE_DIR = os.path.expanduser("~/aeryn-core-agent")
+BASE_DIR = BASE_DIR
 sys.path.insert(0, BASE_DIR)
 sys.path.insert(0, os.path.join(BASE_DIR, "scripts"))  # V38 — utk production_guard
 

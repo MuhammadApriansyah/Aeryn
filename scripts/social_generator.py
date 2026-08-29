@@ -8,8 +8,9 @@ import random
 import re
 import time
 import urllib.request
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-BASE_DIR = os.path.expanduser("~/aeryn-core-agent")
+BASE_DIR = BASE_DIR
 PERSONA_DIR = os.path.join(BASE_DIR, "Personalisasi/Persona")
 SOCIAL_DB = os.path.join(BASE_DIR, "Personalisasi/Database/social.json")
 
