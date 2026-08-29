@@ -315,3 +315,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 602 tests pass
 - 0 failures
 - 1 warning
+
+## [43.0] — 2026-08-29
+
+### Added
+- **MCP Protocol**:
+  - MCP Server (serve tools, resources, prompts)
+  - MCP Client (connect to external MCP servers)
+  - MCP Registry (manage connections)
+  - Tool discovery
+- **Multi-Agent Orchestration**:
+  - Workflow engine for complex tasks
+  - Task management with priorities and dependencies
+  - Agent registry with capabilities
+  - Real-time workflow monitoring
+- **Integration SDK**:
+  - Developer SDK for third-party integrations
+  - Integration registry and versioning
+  - Category organization (CRM, Communication, Development)
+
+### Changed
+- Updated README.md with MCP, Multi-Agent, Integration documentation
+- Test count: 602 → 606
+
+### New Modules
+- `aeryn_core/mcp/` (server + client)
+- `aeryn_core/multi_agent/` (orchestrator)
+- `aeryn_core/integrations/` (sdk)
+
+### Test Results
+- 606 tests pass
+- 0 failures
+- 1 warning

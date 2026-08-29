@@ -1,21 +1,39 @@
 # 🤖 Aeryn — Personal Assistant Agent SaaS
 
-> AI-powered personal assistant platform with multi-model support, team workspaces, enterprise features, Rust-powered performance, Hermes integration, and **security-first architecture**.
+> AI-powered personal assistant platform with multi-model support, team workspaces, enterprise features, Rust-powered performance, Hermes integration, security-first architecture, MCP protocol, multi-agent orchestration, and integration SDK.
 
-![Version](https://img.shields.io/badge/version-42.0-blue)
-![Tests](https://img.shields.io/badge/tests-602%20passed-brightgreen)
+![Version](https://img.shields.io/badge/version-43.0-blue)
+![Tests](https://img.shields.io/badge/tests-606%20passed-brightgreen)
 ![Security](https://img.shields.io/badge/security-layered-success)
+![MCP](https://img.shields.io/badge/mcp-protocol-success)
 ![Python](https://img.shields.io/badge/python-3.11+-blue)
 ![Rust](https://img.shields.io/badge/rust-1.75+-orange)
 ![Hermes](https://img.shields.io/badge/hermes-integrated-purple)
-![Adaptive](https://img.shields.io/badge/adaptive-rules-success)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ---
 
 ## 🚀 Features
 
-### Security-First Architecture (NEW in V42)
+### MCP Protocol (NEW in V43)
+- **MCP Server**: Serve tools, resources, prompts to external MCP clients
+- **MCP Client**: Connect to external MCP servers and invoke tools
+- **MCP Registry**: Manage multiple MCP server connections
+- **Tool Discovery**: Automatic tool/resource/prompt discovery
+
+### Multi-Agent Orchestration (NEW in V43)
+- **Workflow Engine**: Coordinate multiple agents for complex tasks
+- **Task Management**: Priority-based task execution with dependencies
+- **Agent Registry**: Register agents with capabilities
+- **Workflow Status**: Real-time workflow monitoring
+
+### Integration SDK (NEW in V43)
+- **Developer SDK**: Build third-party integrations
+- **Integration Registry**: Manage integrations
+- **Categories**: Organize by CRM, Communication, Development, etc.
+- **Version Control**: Track integration versions
+
+### Security-First Architecture (V42)
 - **Prompt Injection Defense**: Input sanitization, output validation, extraction detection
 - **Memory Injection Defense**: Integrity verification, access audit trail
 - **Tool Permission Limits**: Risk-based tool access, blast radius reduction
@@ -78,20 +96,23 @@
 
 ```
 Aeryn/
-├── aeryn_core/              ← Python (147 modules)
+├── aeryn_core/              ← Python (155+ modules)
 │   ├── auth/                ← Auth, SSO, rate limiting
 │   ├── billing/             ← Billing, usage metering
-│   ├── cost/                ← NEW: Token monitoring, model routing
+│   ├── cost/                ← Token monitoring, model routing
 │   ├── database/            ← VectorDB, SQLite, Neon PG
 │   ├── hermes_bridge/       ← Hermes adapter (shared skills/scripts)
+│   ├── integrations/        ← NEW: Integration SDK
+│   ├── mcp/                 ← NEW: MCP server + client
 │   ├── memory/              ← Vault, semantic, temporal
+│   ├── multi_agent/         ← NEW: Multi-Agent orchestrator
 │   ├── platform/            ← Webhooks, plugins, workspaces
 │   ├── reasoning/           ← Context, reasoning style
 │   ├── safety/              ← Security, guardrails
-│   └── security/            ← NEW: Prompt injection, memory guard, tool permissions
+│   └── security/            ← Prompt injection, memory guard, tool permissions
 ├── aeryn-engine/            ← Rust (6 modules)
 ├── plugins/aeryn-core/      ← Hermes plugin entry
-├── tests/                   ← 602 tests
+├── tests/                   ← 606 tests
 ├── .github/workflows/       ← CI/CD Pipeline
 ├── Dockerfile + compose     ← Docker support
 └── monitoring/              ← Metrics collector
@@ -108,6 +129,7 @@ Aeryn/
 | Database | SQLite (local) + PostgreSQL/Neon (cloud) |
 | Authentication | JWT + API Keys |
 | AI/LLM | Gemini, OpenRouter, DeepSeek (fallback) |
+| Protocol | MCP (Model Context Protocol) |
 | Build System | uv + Maturin (PyO3) |
 | CI/CD | GitHub Actions |
 | Deployment | PM2, Docker |
@@ -146,6 +168,77 @@ curl http://127.0.0.1:3010/health
 
 ---
 
+## 📚 MCP Protocol
+
+### Registering a Tool (Server)
+```python
+from aeryn_core.mcp import mcp_server
+
+mcp_server.register_tool(
+    name="search",
+    description="Search the web",
+    input_schema={"type": "object", "properties": {"query": {"type": "string"}}},
+    handler="search_handler"
+)
+```
+
+### Calling an External Tool (Client)
+```python
+from aeryn_core.mcp import mcp_registry
+
+client = mcp_registry.register("github", "http://mcp-github.com")
+result = client.call_tool("search_repos", {"query": "aeryn"})
+```
+
+---
+
+## 🤖 Multi-Agent Orchestration
+
+```python
+from aeryn_core.multi_agent import orchestrator, Task
+
+# Register agents
+orch.register_agent("researcher", "Researcher", ["search", "analyze"])
+orch.register_agent("writer", "Writer", ["write", "edit"])
+
+# Create workflow
+workflow = orch.create_workflow("Research & Write", "Research and write article")
+
+# Add tasks
+task1 = Task("Research", "Research topic", "researcher", {"topic": "AI safety"})
+task2 = Task("Write", "Write article", "writer", {}, dependencies=[task1.id])
+
+workflow.add_task(task1)
+workflow.add_task(task2)
+
+# Execute
+result = orch.execute_workflow(workflow.id)
+```
+
+---
+
+## 🔧 Integration SDK
+
+```python
+from aeryn_core.integrations import integration_sdk
+
+# Register integration
+integration_sdk.register(
+    name="slack",
+    description="Slack integration",
+    author="Aeryn",
+    version="1.0.0",
+    category="communication",
+    config_schema={"type": "object"},
+    endpoint="http://localhost/slack"
+)
+
+# Call integration
+result = integration_sdk.call("slack", "send_message", {"text": "Hello!"})
+```
+
+---
+
 ## 🧪 Testing
 
 ```bash
@@ -165,19 +258,16 @@ locust -f tests/load/locustfile.py --host=http://localhost:3010
 - System prompt separation from user data
 - Output validation before execution
 - Runtime content filters for adversarial patterns
-- Tool permission limits (blast radius reduction)
 
 ### Memory Injection Defense
 - Memory integrity verification
 - Session isolation enforcement
 - Memory access audit logging
-- Anomaly detection for memory access patterns
 
 ### Tool Permission System
 - Risk classification (LOW, MEDIUM, HIGH, CRITICAL)
 - Confirmation required for high-stakes actions
 - Session-based tool access limits
-- Blast radius reduction
 
 ### Cost Optimization
 - Token usage tracking per request
@@ -190,7 +280,7 @@ locust -f tests/load/locustfile.py --host=http://localhost:3010
 ## 📊 Test Coverage
 
 ```
-602 tests pass
+606 tests pass
 0 failures
 1 warning
 ```
