@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           version: "0.12.5"
       
@@ -35,14 +35,7 @@ jobs:
           cd aeryn-engine && maturin develop --release && cd ..
           
           # Run tests
-          python -m pytest tests/ -v --tb=short --ignore=tests/load
+          python -m pytest tests/ --tb=short --ignore=tests/load 2>&1
           
           # Security scan
           grep -rn 'shell=True' aeryn_core/ apps/api/ --include='*.py' && exit 1 || echo "Security OK"
-      
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: test-results
-          path: test-results/
