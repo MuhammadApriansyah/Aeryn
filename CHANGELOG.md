@@ -432,3 +432,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 630 tests pass
 - 0 failures
 - 1 warning
+
+## [47.0] — 2026-08-29
+
+### Added
+- **Beginner-Friendly UI**:
+  - Setup Wizard (`aeryn start`) — interactive project setup
+  - Visual Dashboard (port 3020) — web-based project management
+  - Error Solver — friendly error messages with solutions
+  - One-Click Installer (`aeryn-installer.sh`)
+
+### Changed
+- Updated README.md with beginner-friendly documentation
+
+### New Modules
+- `aeryn_core/wizard/` — Interactive setup wizard
+- `aeryn_core/dashboard/` — Web-based dashboard
+- `aeryn_core/error_solver/` — Error analysis & solutions
+- `aeryn_core/installer/` — One-click installer generator
