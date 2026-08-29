@@ -19,8 +19,9 @@ MAX_FAKTA_PER_ORANG = 50
 # Auth
 JWT_SECRET = os.environ.get("AERYN_JWT_SECRET", "dev-secret-change-in-production")
 
-# Rate limiting
-RATE_LIMIT_MAX = 100
+ADAPTERS_DIR = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Adapters")
+PLUGINS_DIR = os.path.expanduser("~/aeryn-core-agent/plugins")
+LOGS_DIR = os.path.expanduser("~/aeryn-core-agent/logs")
 RATE_LIMIT_WINDOW = 60  # seconds
 
 # Circuit breaker

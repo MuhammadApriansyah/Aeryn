@@ -24,8 +24,9 @@ from aeryn_core.semantic_search import get_semantic_search
 from aeryn_core.vault import AerynVault, LAYER_DAILY
 from aeryn_core.social_memory import SocialMemory
 from aeryn_core.shared_db import get_shared_db
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/dream_synthesis.db")
+DB_PATH = os.path.join(DATABASE_DIR, "dream_synthesis.db")
 
 
 class DreamSynthesizer:
@@ -199,9 +200,7 @@ class DreamSynthesizer:
         changes = []
         
         # Compare recent vs older preferences
-        conn_local = sqlite3.connect(os.path.expanduser(
-            "~/aeryn-core-agent/Personalisasi/Database/memory_learning.db"
-        ))
+        conn_local = sqlite3.connect(os.path.join(DATABASE_DIR, "memory_learning.db"))
         try:
             # Get preferences from different time periods
             recent = conn_local.execute("""

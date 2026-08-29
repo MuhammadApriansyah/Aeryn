@@ -11,6 +11,7 @@ Generates proactive suggestions based on context:
 import os, json, sqlite3, asyncio
 from typing import Dict, List, Optional
 from datetime import datetime, timedelta
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
 
 class Suggestion:
@@ -31,9 +32,7 @@ class ProactiveEngine:
     """Generate proactive suggestions."""
     
     def __init__(self, db_path: str = None):
-        self.db_path = db_path or os.path.expanduser(
-            "~/aeryn-core-agent/Personalisasi/Database/proactive.db"
-        )
+        self.db_path = db_path or os.path.join(DATABASE_DIR, "proactive.db")
         os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
         self._init_db()
     

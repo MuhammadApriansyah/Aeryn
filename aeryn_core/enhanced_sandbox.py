@@ -22,8 +22,9 @@ import resource
 from typing import Dict, List, Optional
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/sandbox_audit.db")
+DB_PATH = os.path.join(DATABASE_DIR, "sandbox_audit.db")
 
 
 @dataclass

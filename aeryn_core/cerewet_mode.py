@@ -20,7 +20,8 @@ import re
 import threading
 import time
 
-DB_DIR = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database")
+from aeryn_core.config import DATABASE_DIR
+DB_DIR = DATABASE_DIR
 COMMITMENTS_PATH = os.path.join(DB_DIR, "commitments.json")
 _LOCK = threading.Lock()
 MAX_COMMITMENTS = 50          # cap (lesson V38.6: unbounded = bug)

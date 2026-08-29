@@ -3,15 +3,14 @@
 
 import os, json, sqlite3, secrets
 from typing import Dict, Optional
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
 
 class SecretsManager:
     """Simple secrets vault for API keys and tokens."""
     
     def __init__(self, db_path: str = None):
-        self.db_path = db_path or os.path.expanduser(
-            "~/aeryn-core-agent/Personalisasi/Database/secrets.db"
-        )
+        self.db_path = db_path or os.path.join(DATABASE_DIR, "secrets.db")
         os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
         self._init_db()
     

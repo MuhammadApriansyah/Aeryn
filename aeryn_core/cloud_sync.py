@@ -17,10 +17,11 @@ import hashlib
 import sqlite3
 from typing import Dict, List, Optional
 from datetime import datetime
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/cloud_sync.db")
+DB_PATH = os.path.join(DATABASE_DIR, "cloud_sync.db")
 BACKUP_DIR = "/mnt/android/Ubuntu/backups/aeryn"
 
 
@@ -83,7 +84,7 @@ class CloudSync:
     def scan_files(self, base_dir: str = None) -> Dict[str, Dict]:
         """Scan all files and compute hashes."""
         if not base_dir:
-            base_dir = os.path.expanduser("~/aeryn-core-agent")
+            base_dir = BASE_DIR
         
         files = {}
         for root, dirs, filenames in os.walk(base_dir):
@@ -117,7 +118,7 @@ class CloudSync:
         backup_path = os.path.join(self.backup_dir, backup_name)
         os.makedirs(backup_path, exist_ok=True)
         
-        base_dir = os.path.expanduser("~/aeryn-core-agent")
+        base_dir = BASE_DIR
         
         # Scan current files
         current_files = self.scan_files(base_dir)
@@ -191,7 +192,7 @@ class CloudSync:
         with open(manifest_path) as f:
             manifest = json.load(f)
         
-        base_dir = os.path.expanduser("~/aeryn-core-agent")
+        base_dir = BASE_DIR
         restored = 0
         
         if not dry_run:

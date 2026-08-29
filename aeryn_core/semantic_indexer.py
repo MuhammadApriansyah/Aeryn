@@ -8,11 +8,12 @@ Run periodically to keep search up to date.
 import os, sys, json, sqlite3, hashlib, math, time
 from typing import List, Dict, Optional
 from datetime import datetime
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/semantic_search.db")
-VAULT_BASE = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Vault")
+DB_PATH = os.path.join(DATABASE_DIR, "semantic_search.db")
+VAULT_BASE = VAULT_DIR
 LAYERS = ["Raw", "Wiki", "Projects", "System", "Daily", "Skills"]
 
 class SemanticIndexer:

@@ -144,3 +144,60 @@ def get_rate_limiter() -> RateLimiter:
     if _rate_limiter is None:
         _rate_limiter = RateLimiter()
     return _rate_limiter
+
+
+# ── Circuit Breaker ───────────────────────────
+
+class CircuitBreaker:
+    """Circuit breaker pattern for external service calls."""
+    
+    def __init__(self, max_failures: int = 3, base_wait: float = 1.0, max_wait: float = 60.0):
+        self.max_failures = max_failures
+        self.base_wait = base_wait
+        self.max_wait = max_wait
+        self.failure_count = 0
+        self.last_failure_time = None
+        self.state = "closed"  # closed, open, half-open
+    
+    def record_failure(self):
+        """Record a failure."""
+        self.failure_count += 1
+        self.last_failure_time = time.time()
+        if self.failure_count >= self.max_failures:
+            self.state = "open"
+    
+    def record_success(self):
+        """Record a success."""
+        self.failure_count = 0
+        self.state = "closed"
+    
+    def is_opened(self) -> bool:
+        """Check if circuit is open."""
+        if self.state == "open":
+            # Check if we should try half-open (after base_wait)
+            if self.last_failure_time and (time.time() - self.last_failure_time) > self.base_wait:
+                self.state = "half-open"
+                return False
+            return True
+        return False
+    
+    def should_skip(self) -> bool:
+        """Check if request should be skipped."""
+        return self.is_opened()
+    
+    def get_wait_time(self) -> float:
+        """Get wait time before retry."""
+        if self.failure_count == 0:
+            return 0
+        wait = self.base_wait * (2 ** (self.failure_count - 1))
+        return min(wait, self.max_wait)
+
+
+# Circuit breaker registry
+_circuit_breakers: Dict[str, CircuitBreaker] = {}
+
+def get_circuit_breaker(name: str, max_failures: int = 3, base_wait: float = 1.0) -> CircuitBreaker:
+    """Get or create a circuit breaker."""
+    if name not in _circuit_breakers:
+        _circuit_breakers[name] = CircuitBreaker(max_failures, base_wait)
+    return _circuit_breakers[name]

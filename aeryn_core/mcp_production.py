@@ -25,8 +25,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from aeryn_core.rate_limiter import RateLimiter
 from aeryn_core.safety_engine import get_safety_engine, sanitize_output
 from aeryn_core.shared_db import get_shared_db
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/mcp_auth.db")
+DB_PATH = os.path.join(DATABASE_DIR, "mcp_auth.db")
 
 
 class APIKeyManager:

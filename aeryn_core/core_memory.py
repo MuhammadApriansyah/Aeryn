@@ -12,7 +12,8 @@ import json
 import os
 import time
 
-DB_DIR = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database")
+from aeryn_core.config import DATABASE_DIR
+DB_DIR = DATABASE_DIR
 DEFAULT_PATH = os.path.join(DB_DIR, "core_memory.json")
 
 BLOCK_LIMITS = {"human": 2000, "context": 2000}

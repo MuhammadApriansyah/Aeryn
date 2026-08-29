@@ -53,6 +53,7 @@ from aeryn_core.constitutional_ai import get_constitutional_ai
 from aeryn_core.emotional_intelligence import get_emotional_intelligence
 from aeryn_core.auth import get_auth, ROLE_PERMISSIONS
 from aeryn_core.rate_limiter import get_rate_limiter
+from aeryn_core.email_verification import get_email_verification, get_password_reset
 from aeryn_core.telegram_bot import get_telegram_bot
 from aeryn_core.email_agent import get_email_agent
 from aeryn_core.calendar_integration import get_calendar
@@ -2934,6 +2935,96 @@ async def billing_charge(req: CreateChargeRequest, authorization: str = Header(N
     
     result = billing.track_charge(user["id"], req.amount, req.description)
     return {"status": "ok", "charge": result}
+
+# ── Email Verification & Password Reset ───────
+
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
+class VerifyEmailRequest(BaseModel):
+    token: str
+
+@app.post("/auth/forgot-password")
+async def forgot_password(req: ForgotPasswordRequest):
+    """Request password reset."""
+    auth = get_auth()
+    pw_reset = get_password_reset()
+    
+    # Find user by email
+    user = auth.db.fetchone("SELECT id, email FROM users WHERE email = %s", (req.email,))
+    if not user:
+        # Don't reveal if email exists
+        return {"status": "ok", "message": "If the email exists, a reset link has been sent"}
+    
+    # Create reset token
+    token = pw_reset.create_token(user["id"], user["email"])
+    
+    # Send email
+    pw_reset.send_reset_email(user["email"], token)
+    
+    return {"status": "ok", "message": "If the email exists, a reset link has been sent"}
+
+@app.post("/auth/reset-password")
+async def reset_password(req: ResetPasswordRequest):
+    """Reset password with token."""
+    pw_reset = get_password_reset()
+    auth = get_auth()
+    
+    # Verify token
+    result = pw_reset.verify_token(req.token)
+    if not result:
+        return {"error": "Invalid or expired token"}
+    
+    # Update password
+    password_hash = auth._hash_password(req.new_password)
+    auth.db.execute("UPDATE users SET password_hash = %s WHERE id = %s", (password_hash, result["user_id"]))
+    
+    # Mark token as used
+    pw_reset.mark_used(req.token)
+    
+    return {"status": "ok", "message": "Password has been reset"}
+
+@app.post("/auth/verify-email")
+async def verify_email(req: VerifyEmailRequest):
+    """Verify email with token."""
+    ev = get_email_verification()
+    
+    result = ev.verify_token(req.token)
+    if not result:
+        return {"error": "Invalid or expired token"}
+    
+    return {"status": "ok", "message": "Email verified"}
+
+@app.post("/auth/resend-verification")
+async def resend_verification(authorization: str = Header(None)):
+    """Resend verification email."""
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    
+    auth = get_auth()
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    ev = get_email_verification()
+    
+    # Check if already verified
+    user_data = auth.db.fetchone("SELECT email_verified FROM users WHERE id = %s", (user["id"],))
+    if user_data and user_data["email_verified"]:
+        return {"error": "Email already verified"}
+    
+    # Create new token
+    verify_token = ev.create_token(user["id"], user["email"])
+    
+    # Send email
+    ev.send_verification_email(user["email"], verify_token)
+    
+    return {"status": "ok", "message": "Verification email sent"}
 
 # ── Secrets & Plugins ─────────────────────────
 

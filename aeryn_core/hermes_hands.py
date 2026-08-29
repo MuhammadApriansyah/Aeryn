@@ -19,8 +19,9 @@ import os
 import shutil
 import subprocess
 import time
+from aeryn_core.config import BASE_DIR, DATABASE_DIR
 
-_DB_DIR = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database")
+_DB_DIR = DATABASE_DIR
 COUNTER_FILE = os.path.join(_DB_DIR, "hermes_hands_usage.json")
 
 DEFAULT_MAX_PER_DAY = 20

@@ -15,10 +15,11 @@ import re
 import sqlite3
 from typing import Dict, List, Optional, Tuple
 from datetime import datetime
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/entity_resolution.db")
+DB_PATH = os.path.join(DATABASE_DIR, "entity_resolution.db")
 
 
 class EntityResolver:

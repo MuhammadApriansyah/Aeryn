@@ -4,8 +4,9 @@
 import os, sys, json, sqlite3, time
 from typing import Dict, List, Optional
 from datetime import datetime, timedelta
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/sla_monitoring.db")
+DB_PATH = os.path.join(DATABASE_DIR, "sla_monitoring.db")
 
 class SLAMonitor:
     def __init__(self, db_path: str = DB_PATH):

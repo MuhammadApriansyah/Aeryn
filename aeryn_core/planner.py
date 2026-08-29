@@ -7,8 +7,9 @@ disimpan per-session dan bisa diinspeksi via GET /agent/plan/{session_id}.
 import json
 import os
 import urllib.request
+from aeryn_core.config import BASE_DIR, DATABASE_DIR
 
-PLAN_DIR = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/plans")
+PLAN_DIR = os.path.join(DATABASE_DIR, "plans")
 
 # V31.2 — SkillForge singleton untuk matcher (lazy-safe)
 try:

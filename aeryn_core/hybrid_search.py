@@ -18,9 +18,10 @@ from collections import Counter
 from typing import List, Dict, Tuple, Optional
 
 import sys
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 sys.path.insert(0, '/home/sen/aeryn-core-agent')
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/hybrid_search.db")
+DB_PATH = os.path.join(DATABASE_DIR, "hybrid_search.db")
 
 
 class HybridSearchEngine:

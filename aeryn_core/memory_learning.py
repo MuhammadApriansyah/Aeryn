@@ -16,8 +16,9 @@ import time
 import sqlite3
 from typing import List, Dict, Optional, Tuple
 from datetime import datetime
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/memory_learning.db")
+DB_PATH = os.path.join(DATABASE_DIR, "memory_learning.db")
 
 
 class EntityExtractor:

@@ -16,10 +16,11 @@ import time
 import sqlite3
 from typing import Dict, List, Optional
 from datetime import datetime, timedelta
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/memory_decay.db")
+DB_PATH = os.path.join(DATABASE_DIR, "memory_decay.db")
 
 
 class MemoryDecayEngine:
@@ -106,9 +107,7 @@ class MemoryDecayEngine:
     
     def _decay_preferences(self, user_id: str) -> Dict:
         """Decay user preferences."""
-        prefs_db = os.path.expanduser(
-            "~/aeryn-core-agent/Personalisasi/Database/enhanced_memory.db"
-        )
+        prefs_db = os.path.join(DATABASE_DIR, "enhanced_memory.db")
         
         if not os.path.exists(prefs_db):
             return {"decayed": 0}
@@ -205,9 +204,7 @@ class MemoryDecayEngine:
     
     def _decay_tasks(self, user_id: str) -> Dict:
         """Decay completed/old tasks."""
-        shared_db = os.path.expanduser(
-            "~/aeryn-core-agent/Personalisasi/Database/shared.db"
-        )
+        shared_db = os.path.join(DATABASE_DIR, "shared.db")
         
         if not os.path.exists(shared_db):
             return {"decayed": 0}

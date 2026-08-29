@@ -4,8 +4,9 @@
 import os, sys, json, sqlite3
 from typing import Dict, List, Optional
 from datetime import datetime
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/github_integration.db")
+DB_PATH = os.path.join(DATABASE_DIR, "github_integration.db")
 
 class GitHubIntegration:
     def __init__(self, token: str = None, db_path: str = DB_PATH):

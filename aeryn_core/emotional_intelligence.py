@@ -4,8 +4,9 @@
 import os, sys, json, sqlite3, re
 from typing import Dict, List
 from datetime import datetime
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/emotional_intelligence.db")
+DB_PATH = os.path.join(DATABASE_DIR, "emotional_intelligence.db")
 
 class EmotionalIntelligence:
     MOOD_PATTERNS = {

@@ -5,8 +5,9 @@
 import os, sys, json, sqlite3, subprocess, time
 from typing import Dict, List, Optional
 from datetime import datetime
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/browser.db")
+DB_PATH = os.path.join(DATABASE_DIR, "browser.db")
 
 class BrowserSession:
     def __init__(self, headless: bool = True, proxy: str = None):
@@ -168,7 +169,7 @@ def get_browser() -> BrowserAutomation:
 
 
 # === VECTOR DB ===
-VEC_DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/vector.db")
+VEC_DB_PATH = os.path.join(DATABASE_DIR, "vector.db")
 
 class VectorDB:
     def __init__(self, db_path: str = VEC_DB_PATH):

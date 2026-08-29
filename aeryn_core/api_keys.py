@@ -4,6 +4,7 @@
 import os, json, sqlite3, uuid, hashlib, secrets
 from typing import Dict, Optional, List
 from datetime import datetime
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
 
 class APIKey:
@@ -22,9 +23,7 @@ class APIKeyManager:
     """Manage API keys for multi-user access."""
     
     def __init__(self, db_path: str = None):
-        self.db_path = db_path or os.path.expanduser(
-            "~/aeryn-core-agent/Personalisasi/Database/api_keys.db"
-        )
+        self.db_path = db_path or os.path.join(DATABASE_DIR, "api_keys.db")
         os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
         self._init_db()
     

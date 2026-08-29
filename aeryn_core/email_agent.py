@@ -6,8 +6,9 @@ from typing import Dict, List, Optional
 from datetime import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/email_agent.db")
+DB_PATH = os.path.join(DATABASE_DIR, "email_agent.db")
 
 class EmailAgent:
     def __init__(self, db_path: str = DB_PATH):

@@ -15,8 +15,9 @@ import sqlite3
 import threading
 from typing import List, Dict, Optional
 from datetime import datetime
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/multi_agent_rooms.db")
+DB_PATH = os.path.join(DATABASE_DIR, "multi_agent_rooms.db")
 
 
 class Room:

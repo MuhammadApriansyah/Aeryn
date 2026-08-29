@@ -13,9 +13,10 @@ import time
 from typing import List, Dict, Optional, Set
 
 import sys
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 sys.path.insert(0, '/home/sen/aeryn-core-agent')
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/graph_memory.db")
+DB_PATH = os.path.join(DATABASE_DIR, "graph_memory.db")
 
 
 class GraphMemory:

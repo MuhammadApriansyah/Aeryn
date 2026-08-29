@@ -9,8 +9,9 @@ Risk dimensions from Granite Guardian:
 import re
 import json
 import os
+from aeryn_core.config import BASE_DIR, DATABASE_DIR
 
-GUARDIAN_DB = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/guardian.json")
+GUARDIAN_DB = os.path.join(DATABASE_DIR, "guardian.json")
 
 
 class RiskDimension:

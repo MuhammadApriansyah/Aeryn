@@ -7,15 +7,14 @@ Convert natural language into structured tasks.
 import os, json, sqlite3, re, uuid
 from typing import Dict, List, Optional
 from datetime import datetime
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
 
 class AutoTask:
     """Parse natural language into tasks."""
     
     def __init__(self):
-        self.db_path = os.path.expanduser(
-            "~/aeryn-core-agent/Personalisasi/Database/auto_tasks.db"
-        )
+        self.db_path = os.path.join(DATABASE_DIR, "auto_tasks.db")
         os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
         self._init_db()
     

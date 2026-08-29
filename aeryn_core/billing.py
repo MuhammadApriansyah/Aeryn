@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-V41.0 — Phase 3: Stripe Billing.
-Usage-based billing with Stripe integration.
+V41.0 — Stripe Billing Integration.
+Real Stripe API calls (no placeholders).
 """
 
 import os
@@ -47,7 +47,7 @@ PLANS = {
 
 
 class BillingManager:
-    """Manage billing and subscriptions."""
+    """Manage billing and subscriptions with real Stripe integration."""
     
     def __init__(self):
         self.db = get_neon()
@@ -122,41 +122,156 @@ class BillingManager:
         }
     
     def create_stripe_customer(self, email: str, name: str = None) -> Optional[Dict]:
-        """Create a Stripe customer (placeholder for actual Stripe integration)."""
+        """Create a real Stripe customer."""
         if not self.stripe_key:
             warn("Stripe key not configured")
             return None
         
-        # TODO: Implement actual Stripe API call
-        # customer = stripe.Customer.create(email=email, name=name)
-        return {"id": f"cus_{uuid.uuid4().hex[:12]}", "email": email}
+        import urllib.request
+        import urllib.error
+        
+        url = "https://api.stripe.com/v1/customers"
+        data = f"email={email}"
+        if name:
+            data += f"&name={name}"
+        
+        req = urllib.request.Request(url, data=data.encode(), method="POST")
+        req.add_header("Authorization", f"Bearer {self.stripe_key}")
+        req.add_header("Content-Type", "application/x-www-form-urlencoded")
+        
+        try:
+            response = urllib.request.urlopen(req)
+            result = json.loads(response.read().decode())
+            info("Stripe customer created", customer_id=result["id"], email=email)
+            return result
+        except urllib.error.HTTPError as e:
+            error("Stripe customer creation failed", email=email, error=e.code)
+            return None
     
     def create_subscription(self, customer_id: str, plan: str = "pro") -> Optional[Dict]:
-        """Create a subscription (placeholder)."""
+        """Create a real Stripe subscription."""
         if not self.stripe_key:
             warn("Stripe key not configured")
             return None
         
-        # TODO: Implement actual Stripe subscription
-        return {
-            "id": f"sub_{uuid.uuid4().hex[:12]}",
-            "customer": customer_id,
-            "plan": plan,
-            "status": "active",
+        # Price IDs dari Stripe Dashboard (harus dibuat dulu)
+        price_ids = {
+            "pro": os.environ.get("STRIPE_PRO_PRICE_ID", ""),
         }
+        
+        price_id = price_ids.get(plan, "")
+        if not price_id:
+            warn("Stripe price ID not configured", plan=plan)
+            return None
+        
+        import urllib.request
+        import urllib.error
+        
+        url = "https://api.stripe.com/v1/subscriptions"
+        data = f"customer={customer_id}&items[0][price]={price_id}"
+        
+        req = urllib.request.Request(url, data=data.encode(), method="POST")
+        req.add_header("Authorization", f"Bearer {self.stripe_key}")
+        req.add_header("Content-Type", "application/x-www-form-urlencoded")
+        
+        try:
+            response = urllib.request.urlopen(req)
+            result = json.loads(response.read().decode())
+            info("Stripe subscription created", subscription_id=result["id"], customer=customer_id)
+            return result
+        except urllib.error.HTTPError as e:
+            error("Stripe subscription creation failed", customer=customer_id, error=e.code)
+            return None
+    
+    def cancel_subscription(self, subscription_id: str) -> Optional[Dict]:
+        """Cancel a Stripe subscription."""
+        if not self.stripe_key:
+            warn("Stripe key not configured")
+            return None
+        
+        import urllib.request
+        import urllib.error
+        
+        url = f"https://api.stripe.com/v1/subscriptions/{subscription_id}"
+        data = "cancel_at_period_end=true"
+        
+        req = urllib.request.Request(url, data=data.encode(), method="POST")
+        req.add_header("Authorization", f"Bearer {self.stripe_key}")
+        req.add_header("Content-Type", "application/x-www-form-urlencoded")
+        
+        try:
+            response = urllib.request.urlopen(req)
+            result = json.loads(response.read().decode())
+            info("Stripe subscription canceled", subscription_id=subscription_id)
+            return result
+        except urllib.error.HTTPError as e:
+            error("Stripe subscription cancellation failed", subscription_id=subscription_id, error=e.code)
+            return None
+    
+    def create_payment_intent(self, amount: int, currency: str = "usd",
+                              customer_id: str = None, metadata: dict = None) -> Optional[Dict]:
+        """Create a real Stripe payment intent."""
+        if not self.stripe_key:
+            warn("Stripe key not configured")
+            return None
+        
+        import urllib.request
+        import urllib.error
+        
+        url = "https://api.stripe.com/v1/payment_intents"
+        data = f"amount={amount}&currency={currency}"
+        
+        if customer_id:
+            data += f"&customer={customer_id}"
+        
+        if metadata:
+            for key, value in metadata.items():
+                data += f"&metadata[{key}]={value}"
+        
+        req = urllib.request.Request(url, data=data.encode(), method="POST")
+        req.add_header("Authorization", f"Bearer {self.stripe_key}")
+        req.add_header("Content-Type", "application/x-www-form-urlencoded")
+        
+        try:
+            response = urllib.request.urlopen(req)
+            result = json.loads(response.read().decode())
+            info("Stripe payment intent created", intent_id=result["id"], amount=amount)
+            return result
+        except urllib.error.HTTPError as e:
+            error("Stripe payment intent creation failed", amount=amount, error=e.code)
+            return None
     
     def process_webhook(self, payload: bytes, signature: str) -> Optional[Dict]:
         """Process a Stripe webhook."""
         if not self.stripe_key or not self.stripe_webhook_secret:
+            warn("Stripe webhook secret not configured")
             return None
         
-        # TODO: Verify webhook signature and process event
-        # event = stripe.Webhook.construct_event(payload, signature, self.stripe_webhook_secret)
-        return None
+        # Verify signature
+        try:
+            import hmac
+            import hashlib
+            
+            expected_sig = hmac.new(
+                self.stripe_webhook_secret.encode(),
+                payload,
+                hashlib.sha256
+            ).hexdigest()
+            
+            if not hmac.compare_digest(expected_sig, signature):
+                warn("Invalid webhook signature")
+                return None
+            
+            event = json.loads(payload.decode())
+            info("Stripe webhook received", event_type=event.get("type"))
+            return event
+            
+        except Exception as e:
+            error("Webhook processing failed", error=str(e))
+            return None
 
 
-# ── Singleton ─────────────────────────────────
-
+# Singleton
 _billing: Optional[BillingManager] = None
 
 def get_billing() -> BillingManager:

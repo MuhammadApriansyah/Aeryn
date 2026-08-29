@@ -19,7 +19,7 @@ from datetime import datetime
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-PLUGINS_DIR = os.path.expanduser("~/aeryn-core-agent/plugins")
+from aeryn_core.config import PLUGINS_DIR
 
 
 class PluginManifest:

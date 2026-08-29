@@ -10,6 +10,7 @@ Fixes identified vulnerabilities:
 
 import os, sys, json, asyncio, re
 from typing import Dict, Optional
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -17,13 +18,13 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # ── 1. Path Traversal Mitigation ──────────────
 
 SAFE_READ_DIRS = [
-    os.path.expanduser("~/aeryn-core-agent"),
+    BASE_DIR,
     "/tmp/aeryn-safe",
 ]
 
 SAFE_WRITE_DIRS = [
-    os.path.expanduser("~/aeryn-core-agent/Personalisasi"),
-    os.path.expanduser("~/aeryn-core-agent/logs"),
+    os.path.join(BASE_DIR, "Personalisasi"),
+    os.path.join(BASE_DIR, "logs"),
     "/tmp/aeryn-safe",
 ]
 
@@ -104,7 +105,7 @@ class SafeProcess:
     def __init__(self, command: list, timeout: int = 30, cwd: str = None):
         self.command = command
         self.timeout = timeout
-        self.cwd = cwd or os.path.expanduser("~/aeryn-core-agent")
+        self.cwd = cwd or BASE_DIR
         self.proc = None
     
     async def __aenter__(self):

@@ -13,8 +13,9 @@ import json
 import os
 import shutil
 import time
+from aeryn_core.config import BASE_DIR, DATABASE_DIR
 
-DB = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database")
+DB = DATABASE_DIR
 ARCHIVE_DIR = os.path.join(DB, "archive")
 
 MAX_STRATEGY_AGE_DAYS = 30

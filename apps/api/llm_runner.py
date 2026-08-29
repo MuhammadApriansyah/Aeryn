@@ -41,7 +41,7 @@ class ToolExecutor:
     """Execute tools requested by the LLM."""
     
     def __init__(self, sandbox_roots: list = None):
-        self.sandbox_roots = sandbox_roots if sandbox_roots is not None else ["/tmp", os.path.expanduser("~/aeryn-core-agent")]
+        self.sandbox_roots = sandbox_roots if sandbox_roots is not None else ["/tmp", BASE_DIR]
         self._reminder_file = os.path.join(DATABASE_DIR, "reminders.jsonl")
     
     def execute(self, tool_name: str, params: dict) -> dict:

@@ -12,15 +12,14 @@ Enhanced proactive features:
 import os, json, sqlite3, asyncio
 from typing import Dict, List, Optional
 from datetime import datetime, timedelta
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
 
 class DailyBriefing:
     """Generate morning/evening briefings."""
     
     def __init__(self):
-        self.briefing_db = os.path.expanduser(
-            "~/aeryn-core-agent/Personalisasi/Database/briefings.db"
-        )
+        self.briefing_db = os.path.join(DATABASE_DIR, "briefings.db")
         os.makedirs(os.path.dirname(self.briefing_db), exist_ok=True)
         self._init_db()
     
@@ -148,9 +147,7 @@ class ProactiveEngineV2:
     """Enhanced proactive engine with pattern detection."""
     
     def __init__(self):
-        self.pattern_db = os.path.expanduser(
-            "~/aeryn-core-agent/Personalisasi/Database/patterns.db"
-        )
+        self.pattern_db = os.path.join(DATABASE_DIR, "patterns.db")
         os.makedirs(os.path.dirname(self.pattern_db), exist_ok=True)
         self._init_db()
     

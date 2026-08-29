@@ -4,6 +4,7 @@
 import os, sys, json, asyncio, sqlite3
 from typing import Dict, List, Optional, Set
 from datetime import datetime
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
 try:
     from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -11,7 +12,7 @@ try:
 except ImportError:
     HAS_FASTAPI = False
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/websocket.db")
+DB_PATH = os.path.join(DATABASE_DIR, "websocket.db")
 
 class ConnectionManager:
     """Manage WebSocket connections."""

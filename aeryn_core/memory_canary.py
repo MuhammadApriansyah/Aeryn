@@ -12,8 +12,9 @@ import json
 import os
 import time
 
-BASE = os.path.expanduser("~/aeryn-core-agent/Personalisasi")
-CANARY_PATH = os.path.join(BASE, "Database", "memory_canaries.json")
+from aeryn_core.config import BASE_DIR, DATABASE_DIR
+BASE = os.path.join(BASE_DIR, "Personalisasi")
+CANARY_PATH = os.path.join(DATABASE_DIR, "memory_canaries.json")
 
 # Canary ditanam HANYA saat audit mode aktif (env), tidak pernah di produksi.
 CANARY_FACTS = {

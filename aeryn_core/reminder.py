@@ -13,8 +13,9 @@ import threading
 import time
 
 from aeryn_core.social_memory import SocialMemory
+from aeryn_core.config import BASE_DIR, DATABASE_DIR
 
-DB_DIR = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database")
+DB_DIR = DATABASE_DIR
 REMINDERS_PATH = os.path.join(DB_DIR, "reminders.json")
 _LOCK = threading.Lock()
 MAX_REMINDERS = 100  # V38.6 lesson: unbounded growth = bug

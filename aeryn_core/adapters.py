@@ -8,7 +8,7 @@ import json
 import time
 from typing import Optional
 
-ADAPTERS_DIR = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Adapters")
+from aeryn_core.config import ADAPTERS_DIR
 
 
 class Adapter:

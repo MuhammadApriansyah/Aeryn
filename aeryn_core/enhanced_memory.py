@@ -22,8 +22,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from aeryn_core.semantic_search import get_semantic_search
 from aeryn_core.memory_learning import get_memory_learner, MemoryLearner
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/enhanced_memory.db")
+DB_PATH = os.path.join(DATABASE_DIR, "enhanced_memory.db")
 
 
 class EnhancedEntityExtractor:

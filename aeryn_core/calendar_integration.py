@@ -4,8 +4,9 @@
 import os, sys, json, sqlite3
 from typing import Dict, List, Optional
 from datetime import datetime, timedelta
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-DB_PATH = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database/calendar.db")
+DB_PATH = os.path.join(DATABASE_DIR, "calendar.db")
 
 class CalendarIntegration:
     def __init__(self, db_path: str = DB_PATH):

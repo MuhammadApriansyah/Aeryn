@@ -13,8 +13,9 @@ import hashlib
 import time
 from pathlib import Path
 from typing import Optional, List, Dict
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-BASE = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Vault")
+BASE = VAULT_DIR
 
 SUBDIRS = ["Raw", "Wiki", "Projects", "System", "Daily", "Skills"]
 

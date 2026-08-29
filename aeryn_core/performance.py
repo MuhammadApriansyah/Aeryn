@@ -4,6 +4,7 @@
 import os, sys, json, time, asyncio
 from typing import Dict, Optional, Any
 from datetime import datetime
+from aeryn_core.config import BASE_DIR, DATABASE_DIR
 
 
 class PerformanceOptimizer:
@@ -152,7 +153,7 @@ class UptimeManager:
     
     def _check_database(self) -> Dict:
         try:
-            db_path = os.path.expanduser("~/aeryn-core-agent/Personalisasi/Database")
+            db_path = DATABASE_DIR
             if os.path.exists(db_path):
                 dbs = [f for f in os.listdir(db_path) if f.endswith('.db')]
                 return {"healthy": True, "databases": len(dbs)}

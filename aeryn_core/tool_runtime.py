@@ -8,6 +8,7 @@ Tools run in-process with proper sandboxing.
 import os, sys, json, subprocess, asyncio, shutil
 from typing import Dict, List, Optional, Any
 from datetime import datetime
+from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
 
 class ToolResult:
@@ -132,7 +133,7 @@ class ToolRuntime:
                 "sh", "-c", command,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
-                cwd=os.path.expanduser("~/aeryn-core-agent"),
+                cwd=BASE_DIR,
             )
             stdout, stderr = await asyncio.wait_for(
                 proc.communicate(), timeout=timeout
