@@ -10,7 +10,7 @@ import urllib.request
 from typing import Optional, Dict, List, Any
 
 # Neon connection string
-NEON_URL = "postgresql://neondb_owner:npg_YdEUPFqO0I8S@ep-cool-base-a77mvohh-pooler.ap-southeast-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+NEON_URL = os.environ.get("NEON_DATABASE_URL", "")
 
 # Parse connection string
 def parse_connection_string(url: str) -> Dict[str, str]:
