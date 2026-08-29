@@ -47,9 +47,11 @@ jobs:
           
       - name: Security scan
         run: |
-          if grep -rn 'shell=True' aeryn_core/ apps/api/ --include='*.py' | grep -v '^.*#.*shell=True'; then
-            echo "ERROR: Found actual shell=True usage"
+          VIOLATIONS=$(grep -rn 'shell=True' aeryn_core/ apps/api/ --include='*.py' | grep -v '^\s*#' | grep -v '# .*shell=True' || true)
+          if [ -n "$VIOLATIONS" ]; then
+            echo "ERROR: Found shell=True usage:"
+            echo "$VIOLATIONS"
             exit 1
           else
-            echo "Security OK - no shell=True found"
+            echo "Security OK - no actual shell=True usage"
           fi
