@@ -56,6 +56,9 @@ from aeryn_core.rate_limiter import get_rate_limiter
 from aeryn_core.email_verification import get_email_verification, get_password_reset
 from aeryn_core.webhook_system import get_webhook_system
 from aeryn_core.plugin_marketplace import get_plugin_marketplace
+from aeryn_core.workspace_manager import get_workspace_manager
+from aeryn_core.sso_manager import get_sso_manager
+from aeryn_core.soc2_compliance import get_soc2_compliance
 from aeryn_core.telegram_bot import get_telegram_bot
 from aeryn_core.email_agent import get_email_agent
 from aeryn_core.calendar_integration import get_calendar
@@ -3087,6 +3090,378 @@ async def rate_plugin(req: RatePluginRequest, authorization: str = Header(None))
     
     success = mp.rate(req.plugin_id, user["id"], req.rating)
     return {"status": "ok" if success else "error"}
+
+# ── Workspace Endpoints ───────────────────────
+
+class CreateWorkspaceRequest(BaseModel):
+    name: str
+    description: str = None
+
+class UpdateWorkspaceRequest(BaseModel):
+    name: str = None
+    description: str = None
+
+class AddMemberRequest(BaseModel):
+    user_id: str
+    role: str = "member"
+
+class CreateInviteRequest(BaseModel):
+    email: str
+    role: str = "member"
+
+@app.post("/workspaces")
+async def create_workspace(req: CreateWorkspaceRequest, authorization: str = Header(None)):
+    """Create a new workspace."""
+    auth = get_auth()
+    wm = get_workspace_manager()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    result = wm.create_workspace(req.name, user["id"], req.description)
+    if not result:
+        return {"error": "Failed to create workspace"}
+    return {"status": "ok", "workspace": result}
+
+@app.get("/workspaces")
+async def list_workspaces(authorization: str = Header(None)):
+    """List user's workspaces."""
+    auth = get_auth()
+    wm = get_workspace_manager()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    return {"workspaces": wm.list_user_workspaces(user["id"])}
+
+@app.get("/workspaces/{workspace_id}")
+async def get_workspace(workspace_id: str, authorization: str = Header(None)):
+    """Get workspace details."""
+    auth = get_auth()
+    wm = get_workspace_manager()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    workspace = wm.get_workspace(workspace_id)
+    if not workspace:
+        return {"error": "Workspace not found"}
+    
+    # Check membership
+    role = wm.get_member_role(workspace_id, user["id"])
+    if not role:
+        return {"error": "Access denied"}
+    
+    return workspace
+
+@app.put("/workspaces/{workspace_id}")
+async def update_workspace(workspace_id: str, req: UpdateWorkspaceRequest, authorization: str = Header(None)):
+    """Update workspace."""
+    auth = get_auth()
+    wm = get_workspace_manager()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    # Check admin role
+    role = wm.get_member_role(workspace_id, user["id"])
+    if role != "admin":
+        return {"error": "Admin access required"}
+    
+    wm.update_workspace(workspace_id, req.name, req.description)
+    return {"status": "ok"}
+
+@app.delete("/workspaces/{workspace_id}")
+async def delete_workspace(workspace_id: str, authorization: str = Header(None)):
+    """Delete workspace."""
+    auth = get_auth()
+    wm = get_workspace_manager()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    # Check owner role
+    role = wm.get_member_role(workspace_id, user["id"])
+    if role != "admin":
+        return {"error": "Admin access required"}
+    
+    wm.delete_workspace(workspace_id)
+    return {"status": "ok"}
+
+@app.get("/workspaces/{workspace_id}/members")
+async def list_workspace_members(workspace_id: str, authorization: str = Header(None)):
+    """List workspace members."""
+    auth = get_auth()
+    wm = get_workspace_manager()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    # Check membership
+    role = wm.get_member_role(workspace_id, user["id"])
+    if not role:
+        return {"error": "Access denied"}
+    
+    return {"members": wm.list_members(workspace_id)}
+
+@app.post("/workspaces/{workspace_id}/members")
+async def add_workspace_member(workspace_id: str, req: AddMemberRequest, authorization: str = Header(None)):
+    """Add member to workspace."""
+    auth = get_auth()
+    wm = get_workspace_manager()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    # Check admin role
+    role = wm.get_member_role(workspace_id, user["id"])
+    if role != "admin":
+        return {"error": "Admin access required"}
+    
+    wm.add_member(workspace_id, req.user_id, req.role)
+    return {"status": "ok"}
+
+@app.delete("/workspaces/{workspace_id}/members/{user_id_to_remove}")
+async def remove_workspace_member(workspace_id: str, user_id_to_remove: str, authorization: str = Header(None)):
+    """Remove member from workspace."""
+    auth = get_auth()
+    wm = get_workspace_manager()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    # Check admin role
+    role = wm.get_member_role(workspace_id, user["id"])
+    if role != "admin":
+        return {"error": "Admin access required"}
+    
+    wm.remove_member(workspace_id, user_id_to_remove)
+    return {"status": "ok"}
+
+@app.post("/workspaces/{workspace_id}/invites")
+async def create_workspace_invite(workspace_id: str, req: CreateInviteRequest, authorization: str = Header(None)):
+    """Create workspace invite."""
+    auth = get_auth()
+    wm = get_workspace_manager()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    # Check admin role
+    role = wm.get_member_role(workspace_id, user["id"])
+    if role != "admin":
+        return {"error": "Admin access required"}
+    
+    result = wm.create_invite(workspace_id, req.email, user["id"], req.role)
+    return {"status": "ok", "invite": result}
+
+@app.post("/workspaces/invites/{token}/accept")
+async def accept_workspace_invite(token: str, authorization: str = Header(None)):
+    """Accept workspace invite."""
+    auth = get_auth()
+    wm = get_workspace_manager()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    result = wm.accept_invite(token, user["id"])
+    if not result:
+        return {"error": "Invalid or expired invite"}
+    return {"status": "ok", "workspace": result}
+
+# ── SSO Endpoints ─────────────────────────────
+
+@app.get("/auth/sso/google")
+async def google_sso_url():
+    """Get Google SSO URL."""
+    sso = get_sso_manager()
+    return {"url": sso.get_google_auth_url()}
+
+@app.get("/auth/sso/github")
+async def github_sso_url():
+    """Get GitHub SSO URL."""
+    sso = get_sso_manager()
+    return {"url": sso.get_github_auth_url()}
+
+@app.get("/auth/callback/google")
+async def google_callback(code: str):
+    """Google OAuth callback."""
+    sso = get_sso_manager()
+    result = await sso.handle_google_callback(code)
+    if not result:
+        return {"error": "Authentication failed"}
+    return {"status": "ok", "user": result}
+
+@app.get("/auth/callback/github")
+async def github_callback(code: str):
+    """GitHub OAuth callback."""
+    sso = get_sso_manager()
+    result = await sso.handle_github_callback(code)
+    if not result:
+        return {"error": "Authentication failed"}
+    return {"status": "ok", "user": result}
+
+@app.get("/auth/sso/accounts")
+async def list_sso_accounts(authorization: str = Header(None)):
+    """List user's linked SSO accounts."""
+    auth = get_auth()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    sso = get_sso_manager()
+    return {"accounts": sso.get_user_sso_accounts(user["id"])}
+
+@app.delete("/auth/sso/{provider}")
+async def unlink_sso_account(provider: str, authorization: str = Header(None)):
+    """Unlink SSO account."""
+    auth = get_auth()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    sso = get_sso_manager()
+    sso.unlink_sso(user["id"], provider)
+    return {"status": "ok"}
+
+# ── Admin Dashboard Endpoints ─────────────────
+
+@app.get("/admin/users")
+async def admin_list_users(authorization: str = Header(None)):
+    """List all users (admin only)."""
+    auth = get_auth()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    if not auth.has_permission(user, "admin:read"):
+        return {"error": "Admin access required"}
+    
+    db = get_neon()
+    return {"users": db.fetchall("SELECT id, email, display_name, role, is_active, created_at FROM users ORDER BY created_at DESC LIMIT 100")}
+
+@app.get("/admin/stats")
+async def admin_stats(authorization: str = Header(None)):
+    """Get system stats (admin only)."""
+    auth = get_auth()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    if not auth.has_permission(user, "admin:read"):
+        return {"error": "Admin access required"}
+    
+    db = get_neon()
+    
+    user_count = db.fetchone("SELECT COUNT(*) as cnt FROM users")["cnt"]
+    workspace_count = db.fetchone("SELECT COUNT(*) as cnt FROM workspaces")["cnt"]
+    plugin_count = db.fetchone("SELECT COUNT(*) as cnt FROM plugins")["cnt"]
+    
+    return {
+        "users": user_count,
+        "workspaces": workspace_count,
+        "plugins": plugin_count,
+    }
+
+# ── SOC2 Compliance Endpoints ─────────────────
+
+@app.get("/admin/compliance/report")
+async def compliance_report(authorization: str = Header(None)):
+    """Generate SOC2 compliance report (admin only)."""
+    auth = get_auth()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    if not auth.has_permission(user, "admin:read"):
+        return {"error": "Admin access required"}
+    
+    soc2 = get_soc2_compliance()
+    return soc2.generate_compliance_report()
+
+@app.get("/admin/compliance/regions")
+async def data_residency_regions(authorization: str = Header(None)):
+    """Get available data residency regions."""
+    soc2 = get_soc2_compliance()
+    return {"regions": soc2.get_data_residency_regions()}
+
+@app.post("/admin/compliance/cleanup")
+async def run_data_cleanup(authorization: str = Header(None)):
+    """Run data cleanup (admin only)."""
+    auth = get_auth()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    if not auth.has_permission(user, "admin:write"):
+        return {"error": "Admin access required"}
+    
+    soc2 = get_soc2_compliance()
+    return soc2.run_data_cleanup()
 
 # ── Email Verification & Password Reset ───────
 
