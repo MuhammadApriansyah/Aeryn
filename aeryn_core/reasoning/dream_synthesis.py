@@ -235,6 +235,8 @@ class DreamSynthesizer:
                         "evidence": [f"Old: {older_keys[key]}", f"New: {value}"],
                     })
         except Exception:
+            from aeryn_core.utils.logger import log_exception
+            log_exception(e, context=f"{__name__}")
             pass
         finally:
             conn_local.close()
@@ -267,6 +269,8 @@ class DreamSynthesizer:
                             "evidence": [f"Memory: {mem.get('memory_id', '')}"],
                         })
             except Exception:
+                from aeryn_core.utils.logger import log_exception
+                log_exception(e, context=f"{__name__}")
                 pass
         
         return forgotten[:3]
@@ -290,6 +294,8 @@ class DreamSynthesizer:
                     "evidence": [f"Graph stats: {json.dumps(stats)}"],
                 })
         except Exception:
+            from aeryn_core.utils.logger import log_exception
+            log_exception(e, context=f"{__name__}")
             pass
         
         return connections

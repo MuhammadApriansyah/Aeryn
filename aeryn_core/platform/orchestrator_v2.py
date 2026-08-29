@@ -71,6 +71,8 @@ class ReasoningModule:
             if summary and "0 nodes" not in summary:
                 parts.append(f"\n{summary}")
         except Exception:
+            from aeryn_core.utils.logger import log_exception
+            log_exception(e, context=f"{__name__}")
             pass
         
         # 7. External context (from Hermes reflex)

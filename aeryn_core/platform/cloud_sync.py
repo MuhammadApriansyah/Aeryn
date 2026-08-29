@@ -104,6 +104,8 @@ class CloudSync:
                         "hash": self.compute_hash(file_path),
                     }
                 except Exception:
+                    from aeryn_core.utils.logger import log_exception
+                    log_exception(e, context=f"{__name__}")
                     pass
         
         return files
@@ -150,6 +152,8 @@ class CloudSync:
                 shutil.copy2(file_path, dest_path)
                 total_size += os.path.getsize(file_path)
             except Exception:
+                from aeryn_core.utils.logger import log_exception
+                log_exception(e, context=f"{__name__}")
                 pass
         
         # Save backup manifest

@@ -282,6 +282,8 @@ class LoggingMiddleware:
             with open(self.log_file, "a") as f:
                 f.write(log_entry)
         except Exception:
+            from aeryn_core.utils.logger import log_exception
+            log_exception(e, context=f"{__name__}")
             pass
         
         return data

@@ -86,6 +86,8 @@ def run_critic(goal: str, answer: str, trace: list, runner=None,
                 try:
                     confidence = int(line.split(":")[1].strip().split()[0])
                 except (ValueError, IndexError):
+                    from aeryn_core.utils.logger import log_exception
+                    log_exception(e, context=f"{__name__}")
                     pass
                 break
         return {

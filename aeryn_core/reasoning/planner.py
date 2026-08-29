@@ -105,6 +105,8 @@ def make_plan(model_client, goal: str, session_id: str) -> dict:
                 _persist(session_id, plan)
                 return plan
     except Exception:
+        from aeryn_core.utils.logger import log_exception
+        log_exception(e, context=f"{__name__}")
         pass
     # Fallback deterministik — agen tetap bisa jalan tanpa plan
     plan = {"goal": goal, "subgoals": [
@@ -135,4 +137,6 @@ def _persist(session_id: str, plan: dict):
         json.dump(plan, open(os.path.join(PLAN_DIR, f"{session_id}.json"), "w"),
                   ensure_ascii=False, indent=1)
     except OSError:
+        from aeryn_core.utils.logger import log_exception
+        log_exception(e, context=f"{__name__}")
         pass

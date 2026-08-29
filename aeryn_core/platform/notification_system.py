@@ -305,6 +305,8 @@ class NotificationScheduler:
             with urllib.request.urlopen(req, timeout=10) as resp:
                 pass
         except Exception:
+            from aeryn_core.utils.logger import log_exception
+            log_exception(e, context=f"{__name__}")
             pass
     
     def stop(self):

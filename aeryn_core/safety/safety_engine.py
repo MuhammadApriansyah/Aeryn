@@ -148,6 +148,8 @@ def normalize_text(text: str) -> str:
         if decoded != text:
             text = decoded
     except Exception:
+        from aeryn_core.utils.logger import log_exception
+        log_exception(e, context=f"{__name__}")
         pass
     # Remove common obfuscation
     text = re.sub(r'[\-\.\*_~\`\(\)\[\]\{\}]+', '', text)

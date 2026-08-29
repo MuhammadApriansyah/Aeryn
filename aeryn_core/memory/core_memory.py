@@ -107,6 +107,8 @@ class CoreMemory:
                     "mode": mode, "chars": len(content),
                     "head": content[:80]}, ensure_ascii=False) + "\n")
         except OSError:
+            from aeryn_core.utils.logger import log_exception
+            log_exception(e, context=f"{__name__}")
             pass
         return {"ok": True, "block": block, "chars": len(new_val),
                 "limit": limit}

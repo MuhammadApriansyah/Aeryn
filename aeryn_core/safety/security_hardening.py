@@ -123,6 +123,8 @@ class SafeProcess:
                 self.proc.kill()
                 await asyncio.wait_for(self.proc.communicate(), timeout=5)
             except Exception:
+                from aeryn_core.utils.logger import log_exception
+                log_exception(e, context=f"{__name__}")
                 pass
 
 

@@ -168,6 +168,8 @@ class UnifiedCognitiveOrchestrator:
                     role, _, text = log.partition(":")
                     self.memory_bridge.ingest_turn(session_id, role.strip().lower() or "system", text.strip())
         except Exception:
+            from aeryn_core.utils.logger import log_exception
+            log_exception(e, context=f"{__name__}")
             pass
 
         compiled_prompt = self.div1_creative.compile_sovereign_system_prompt_node(
@@ -242,12 +244,16 @@ class UnifiedCognitiveOrchestrator:
             if mem_res["delegation_required"]:
                 self.rust_brain.inject_epistemic_graph_node(session_id, "CONSOLIDATED_FACT", clean_narrative[:50])
         except Exception:
+            from aeryn_core.utils.logger import log_exception
+            log_exception(e, context=f"{__name__}")
             pass
 
         # V24 REAL-MEMORY: respons LLM juga masuk vault → retrieval dua arah
         try:
             self.memory_bridge.ingest_turn(session_id, "aeryn", clean_narrative)
         except Exception:
+            from aeryn_core.utils.logger import log_exception
+            log_exception(e, context=f"{__name__}")
             pass
 
         return {

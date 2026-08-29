@@ -180,6 +180,8 @@ def _web_read(url: str):
                 return {"error": "akses ke IP private/internal diblokir",
                         "url": url}
         except ValueError:
+            from aeryn_core.utils.logger import log_exception
+            log_exception(e, context=f"{__name__}")
             pass
         if host in ("localhost",) or host.endswith(".local"):
             return {"error": "akses ke localhost diblokir", "url": url}

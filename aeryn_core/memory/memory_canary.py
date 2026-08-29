@@ -71,6 +71,8 @@ def probe(memory) -> dict:
                     issues.append(f"canary tag {tag} bocor ke episode!")
                     break
     except OSError:
+        from aeryn_core.utils.logger import log_exception
+        log_exception(e, context=f"{__name__}")
         pass
 
     return {"ok": not issues, "issues": issues,

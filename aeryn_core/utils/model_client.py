@@ -118,6 +118,8 @@ class ModelClient:
                     if name == "OPENROUTER_API_KEY" and not os.getenv("NOUS_API_KEY"):
                         os.environ["NOUS_API_KEY"] = val
             except OSError:
+                from aeryn_core.utils.logger import log_exception
+                log_exception(e, context=f"{__name__}")
                 pass
         # V34 — NOUS OAuth: ambil agent_key terkini dari auth.json Hermes.
         # Selalu overwrite env supaya token rotasi ikut (key statis = mati

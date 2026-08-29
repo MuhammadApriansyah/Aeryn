@@ -13,6 +13,8 @@ class CognitiveTerminalUserInterface:
         try:
             terminal_columns = os.get_terminal_size().columns
         except Exception:
+            from aeryn_core.utils.logger import log_exception
+            log_exception(e, context=f"{__name__}")
             pass
         
         print("\033[96m" + r"""

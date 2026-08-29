@@ -63,6 +63,8 @@ class SocialMemory:
                 "channels": d.get("channels", {}),
             }
         except (OSError, ValueError):
+            from aeryn_core.utils.logger import log_exception
+            log_exception(e, context=f"{__name__}")
             pass
 
     def _reload_if_changed(self):
