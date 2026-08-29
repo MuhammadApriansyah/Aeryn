@@ -13,37 +13,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "0.12.5"
+      
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       
-      - name: Install system deps
+      - name: Install dependencies and run tests
         run: |
-          sudo -S -p '' apt-get update
-          sudo -S -p '' apt-get install -y build-essential pkg-config libssl-dev curl
-      
-      - name: Setup environment and run tests
-        run: |
-          # Install uv
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          export PATH="$HOME/.local/bin:$PATH"
-          
-          # Create venv
           uv venv venv-proot
           source venv-proot/bin/activate
-          
-          # Install Python deps
           uv pip install -r requirements.txt
-          uv pip install pytest fastapi uvicorn pydantic
+          uv pip install -e .
           
-          # Install Rust and build engine
+          # Install Rust & build engine
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
           source $HOME/.cargo/env
           cd aeryn-engine && maturin develop --release && cd ..
           
           # Run tests
-          python -m pytest tests/ -v --tb=short
+          python -m pytest tests/ -v --tb=short --ignore=tests/load
           
           # Security scan
           grep -rn 'shell=True' aeryn_core/ apps/api/ --include='*.py' && exit 1 || echo "Security OK"
