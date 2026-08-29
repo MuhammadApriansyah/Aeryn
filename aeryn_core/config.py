@@ -16,6 +16,9 @@ MAX_GOAL_CHARS = 4000
 MAX_SESSION_ID_CHARS = 64
 MAX_FAKTA_PER_ORANG = 50
 
+# Auth
+JWT_SECRET = os.environ.get("AERYN_JWT_SECRET", "dev-secret-change-in-production")
+
 # Rate limiting
 RATE_LIMIT_MAX = 100
 RATE_LIMIT_WINDOW = 60  # seconds

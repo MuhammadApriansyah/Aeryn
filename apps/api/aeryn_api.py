@@ -50,6 +50,7 @@ from aeryn_core.skill_crystallization import get_skill_crystallizer
 from aeryn_core.cloud_sync import get_cloud_sync
 from aeryn_core.constitutional_ai import get_constitutional_ai
 from aeryn_core.emotional_intelligence import get_emotional_intelligence
+from aeryn_core.auth import get_auth, ROLE_PERMISSIONS
 from aeryn_core.telegram_bot import get_telegram_bot
 from aeryn_core.email_agent import get_email_agent
 from aeryn_core.calendar_integration import get_calendar

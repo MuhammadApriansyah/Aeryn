@@ -131,28 +131,19 @@ class NotificationManager:
         ]
     
     def mark_sent(self, notification_id: str, status: str = "sent", error: str = None):
-        """Mark notification as sent with retry."""
-        for attempt in range(3):
-            try:
-                conn = sqlite3.connect(self.db_path)
-                conn.execute("""
-                    UPDATE notifications SET is_sent = 1, sent_at = ? WHERE id = ?
-                """, (datetime.now().isoformat(), notification_id))
-                
-                conn.execute("""
-                    INSERT INTO notification_history (id, notification_id, status, error)
-                    VALUES (?, ?, ?, ?)
-                """, (str(uuid.uuid4())[:12], notification_id, status, error))
-                conn.commit()
-                conn.close()
-                return
-            except SQLiteOperationalError as e:
-                if "database is locked" in str(e) and attempt < 2:
-                    time.sleep(0.1 * (attempt + 1))
-                    continue
-                raise
-            except Exception:
-                raise
+        """Mark notification as sent."""
+        conn = sqlite3.connect(self.db_path, timeout=10)
+        conn.execute("PRAGMA busy_timeout = 10000")
+        conn.execute("""
+            UPDATE notifications SET is_sent = 1, sent_at = ? WHERE id = ?
+        """, (datetime.now().isoformat(), notification_id))
+        
+        conn.execute("""
+            INSERT INTO notification_history (id, notification_id, status, error)
+            VALUES (?, ?, ?, ?)
+        """, (str(uuid.uuid4())[:12], notification_id, status, error))
+        conn.commit()
+        conn.close()
     
     def get_pending(self, user_id: str = None) -> List[Dict]:
         """Get all pending notifications."""
