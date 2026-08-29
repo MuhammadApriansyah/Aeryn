@@ -13,31 +13,32 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
-        with:
-          version: "0.12.5"
-      
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       
-      - name: Install system dependencies
+      - name: Install system deps
         run: |
           sudo -S -p '' apt-get update
           sudo -S -p '' apt-get install -y build-essential pkg-config libssl-dev
       
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: aarch64-unknown-linux-gnu
       
-      - name: Install dependencies and run tests
+      - name: Install Python deps
         run: |
-          uv venv venv-proot
-          source venv-proot/bin/activate
-          uv pip install -r requirements.txt
-          cd aeryn-engine && maturin develop --release && cd ..
-          python -m pytest tests/ --tb=short --ignore=tests/load 2>&1
+          python -m pip install --upgrade pip
+          pip install pytest fastapi uvicorn pydantic numpy discord.py
+      
+      - name: Build aeryn-engine
+        run: |
+          cd aeryn-engine && pip install . && cd ..
+      
+      - name: Run tests
+        run: |
+          python -m pytest tests/ --tb=short --ignore=tests/load
+          
+      - name: Security scan
+        run: |
           grep -rn 'shell=True' aeryn_core/ apps/api/ --include='*.py' && exit 1 || echo "Security OK"
