@@ -4,7 +4,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core import cerewet_mode as cm
+import aeryn_core.reasoning.cerewet_mode as cm
 from aeryn_core.reasoning.cerewet_mode import (
     PENDING_CAP_PER_USER, add_commitment, pending_for)
 

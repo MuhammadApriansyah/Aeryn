@@ -11,7 +11,7 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core import tool_bridge
+import aeryn_core.platform.tool_bridge as tool_bridge
 from aeryn_core.platform.tool_bridge import build_default_registry
 
 

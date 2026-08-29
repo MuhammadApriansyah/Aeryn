@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(
     os.path.abspath(__file__))), "scripts"))
 
-from aeryn_core import cerewet_mode as cm
+import aeryn_core.reasoning.cerewet_mode as cm
 
 
 def test_social_nudge_appends_when_pending(tmp_path, monkeypatch):

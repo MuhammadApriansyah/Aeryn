@@ -5,7 +5,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core import reminder as rm
+import aeryn_core.reasoning.reminder as rm
 from aeryn_core.utils.image_tools import image_understand
 
 

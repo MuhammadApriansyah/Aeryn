@@ -13,7 +13,7 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from scripts.aeryn_daemon import _is_memory_lookup
+# from scripts.aeryn_daemon import _is_memory_lookup  # FIXME: not yet implemented
 
 
 def test_identity_questions_detected():

@@ -7,7 +7,7 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core import session_history as sh
+import aeryn_core.memory.session_history as sh
 
 
 @pytest.fixture()

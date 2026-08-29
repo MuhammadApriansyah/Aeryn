@@ -77,7 +77,7 @@ def test_dedup_skill_fingerprint_sama(tmp_path):
     _jl(os.path.join(sf_dir, "skills.jsonl"), skills)
     c = MemoryCurator(db_dir=str(db), archive_dir=str(tmp_path / "arch"))
     # SkillForge default dir dipakai curate_skills — patch via monkeypatch path:
-    from aeryn_core import skill_forge as sfx
+    from aeryn_core.platform.skill_forge import skill_forge as sfx
     old = sfx.SKILL_DIR
     sfx.SKILL_DIR = sf_dir
     try:

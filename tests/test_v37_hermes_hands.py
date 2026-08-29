@@ -13,7 +13,7 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core import hermes_hands as hh
+import aeryn_core.hermes.hermes_hands as hh
 
 
 @pytest.fixture()
