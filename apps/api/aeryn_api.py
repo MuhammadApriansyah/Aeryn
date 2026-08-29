@@ -43,6 +43,7 @@ from aeryn_core.auto_task import get_auto_task
 from aeryn_core.context_manager import get_context_manager
 from aeryn_core.api_keys import get_api_key_manager
 from aeryn_core.usage_metering import get_usage_metering
+from aeryn_core.billing import get_billing, PRICING, PLANS
 from aeryn_core.secrets_runtime import get_secrets_manager, get_plugin_runtime
 from aeryn_core.temporal_memory import get_temporal_memory
 from aeryn_core.self_improvement import get_self_improvement_engine
@@ -2790,7 +2791,7 @@ async def auth_validate(req: TokenRequest):
     return {"status": "ok", "user": user}
 
 @app.post("/auth/api-keys")
-async def auth_create_api_key(req: ApiKeyRequest, authorization: str = None):
+async def auth_create_api_key(req: ApiKeyRequest, authorization: str = Header(None)):
     """Create an API key for authenticated user."""
     auth = get_auth()
     # Get user from token in Authorization header
@@ -2802,6 +2803,82 @@ async def auth_create_api_key(req: ApiKeyRequest, authorization: str = None):
         return {"error": "Invalid token"}
     api_key = auth.generate_api_key(user["id"], req.name, req.scopes, req.expires_days)
     return {"status": "ok", "api_key": api_key}
+
+# ── Billing Endpoints ─────────────────────────
+
+class TrackUsageRequest(BaseModel):
+    event_type: str
+    endpoint: str = None
+    tokens_input: int = 0
+    tokens_output: int = 0
+
+class CreateChargeRequest(BaseModel):
+    amount: float
+    description: str = ""
+
+@app.post("/billing/track")
+async def billing_track(req: TrackUsageRequest, authorization: str = Header(None)):
+    """Track usage and calculate cost automatically."""
+    auth = get_auth()
+    billing = get_billing()
+    metering = get_usage_metering()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    # Calculate cost
+    cost = billing.calculate_cost(req.event_type, req.tokens_input, req.tokens_output)
+    
+    # Track event
+    metering.track(user["id"], req.event_type, req.endpoint, 
+                   req.tokens_input, req.tokens_output, cost)
+    
+    return {"status": "ok", "cost": cost}
+
+@app.get("/billing/quota")
+async def billing_quota(authorization: str = Header(None)):
+    """Check quota status."""
+    auth = get_auth()
+    billing = get_billing()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    # Check quota (default plan: user's role)
+    quota = billing.check_quota(user["id"], user.get("role", "free"))
+    return quota
+
+@app.get("/billing/pricing")
+async def pricing():
+    """Get pricing info."""
+    return {"plans": PLANS, "usage_rates": PRICING}
+
+@app.post("/billing/charge")
+async def billing_charge(req: CreateChargeRequest, authorization: str = Header(None)):
+    """Create a manual charge (admin only)."""
+    auth = get_auth()
+    billing = get_billing()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    if not auth.has_permission(user, "billing:write"):
+        return {"error": "Permission denied"}
+    
+    result = billing.track_charge(user["id"], req.amount, req.description)
+    return {"status": "ok", "charge": result}
 
 # ── Secrets & Plugins ─────────────────────────
 
