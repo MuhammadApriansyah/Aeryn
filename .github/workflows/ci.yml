@@ -47,4 +47,9 @@ jobs:
           
       - name: Security scan
         run: |
-          grep -rn 'shell=True' aeryn_core/ apps/api/ --include='*.py' && exit 1 || echo "Security OK"
+          if grep -rn 'shell=True' aeryn_core/ apps/api/ --include='*.py' | grep -v '^.*#.*shell=True'; then
+            echo "ERROR: Found actual shell=True usage"
+            exit 1
+          else
+            echo "Security OK - no shell=True found"
+          fi
