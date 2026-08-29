@@ -10,7 +10,7 @@ import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.model_client import ModelClient
+from aeryn_core.utils.model_client import ModelClient
 
 
 def test_endpoint_candidates_all_have_keys():

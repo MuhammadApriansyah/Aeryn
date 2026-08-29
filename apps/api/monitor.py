@@ -62,7 +62,7 @@ class ProductionMonitor:
     
     def check_queue_depth(self):
         """Check queue depth in shared DB."""
-        from aeryn_core.shared_db import get_shared_db
+        from aeryn_core.database.shared_db import get_shared_db
         db = get_shared_db()
         stats = db.get_stats()
         total_pending = stats.get("reminders", {}).get("pending", 0) + stats.get("tasks", {}).get("pending", 0)

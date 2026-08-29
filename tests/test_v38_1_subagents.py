@@ -10,7 +10,7 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.sub_agent_runner import (
+from aeryn_core.platform.sub_agent_runner import (
     MAX_SUBAGENTS_PER_RUN, in_subagent, spawn_subagents)
 
 

@@ -37,8 +37,8 @@ def _post(path: str, payload: dict, timeout: int = 120):
 # ── Probe definitions ────────────────────────────────────────────────
 def probe_direct_tools():
     """Lapisan 1: fungsi tool langsung — hasil harus deterministik."""
-    from aeryn_core.tool_bridge import build_default_registry
-    from aeryn_core.hermes_brain import register
+    from aeryn_core.platform.tool_bridge import build_default_registry
+    from aeryn_core.hermes.hermes_brain import register
     reg = build_default_registry(sandbox_roots=["~/aeryn-core-agent"])
     register(reg)
     out = {}
@@ -78,7 +78,7 @@ def probe_direct_tools():
             "sandbox_escape_blocked": escape_ok}
     # V37 P2 — ask_hermes: uji GUARD saja (murah, tanpa spawn hermes):
     # task terlalu pendek harus ditolak sebelum subprocess dibuat.
-    from aeryn_core.hermes_hands import ask_hermes as _ah
+    from aeryn_core.hermes.hermes_hands import ask_hermes as _ah
     short = _ah("pendek")
     out["ask_hermes_guard"] = {
         "ok": isinstance(short, dict) and short.get("ok") is False,

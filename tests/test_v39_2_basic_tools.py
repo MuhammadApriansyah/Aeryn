@@ -4,8 +4,8 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.basic_tools import datetime_now, math_calc
-from aeryn_core.fallback_router import FALLBACK_MAP
+from aeryn_core.utils.basic_tools import datetime_now, math_calc
+from aeryn_core.utils.fallback_router import FALLBACK_MAP
 
 
 def test_datetime_now_wib():

@@ -10,7 +10,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.shadow_mode import ParityLedger
+from aeryn_core.safety.shadow_mode import ParityLedger
 
 
 class _FakeRegistry:
@@ -38,7 +38,7 @@ def test_ledger_corrupt_file_starts_fresh(tmp_path):
 
 
 def test_strategy_injected_back_into_prompt():
-    from aeryn_core.episodic_memory import EpisodicMemory
+    from aeryn_core.memory.episodic_memory import EpisodicMemory
     eps = [{"goal": "cari X", "ok": True, "tools": ["web_search"],
             "lessons": [], "strategy":
             "GOAL_NEW: boros tool 5/2 - pakai heuristik dulu"}]
@@ -47,7 +47,7 @@ def test_strategy_injected_back_into_prompt():
 
 
 def test_prompt_block_without_strategy_unchanged():
-    from aeryn_core.episodic_memory import EpisodicMemory
+    from aeryn_core.memory.episodic_memory import EpisodicMemory
     eps = [{"goal": "halo", "ok": True, "tools": [], "lessons": []}]
     block = EpisodicMemory.prompt_block(eps)
     assert "strategi" not in block

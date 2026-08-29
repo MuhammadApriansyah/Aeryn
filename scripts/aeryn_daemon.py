@@ -28,7 +28,7 @@ sys.path.insert(0, "/home/sen/aeryn-core-agent")
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-from aeryn_core.orchestrator import UnifiedCognitiveOrchestrator
+from aeryn_core.platform.orchestrator import UnifiedCognitiveOrchestrator
 
 app = FastAPI(title="Aeryn-Core Daemon", version="0.24.0")
 
@@ -145,31 +145,31 @@ def reset_session(session_id: str):
 # ── V25: Agentic loop (hybrid-native scaffolding) ───────────────────────
 import sys
 sys.path.insert(0, "/home/sen/aeryn-core-agent")
-from aeryn_core.model_client import ModelClient
-from aeryn_core.tool_bridge import build_default_registry
-from aeryn_core.tool_governance import ToolGovernanceGate
-from aeryn_core.shadow_mode import ParityLedger, ShadowRunner
-from aeryn_core.planner import make_plan, load_plan
-from aeryn_core.terminal_tool import make_terminal, TERMINAL_SCHEMA
-from aeryn_core.episodic_memory import EpisodicMemory
-from aeryn_core.reflection import PostRunReflection
+from aeryn_core.utils.model_client import ModelClient
+from aeryn_core.platform.tool_bridge import build_default_registry
+from aeryn_core.platform.tool_governance import ToolGovernanceGate
+from aeryn_core.safety.shadow_mode import ParityLedger, ShadowRunner
+from aeryn_core.reasoning.planner import make_plan, load_plan
+from aeryn_core.safety.terminal_tool import make_terminal, TERMINAL_SCHEMA
+from aeryn_core.memory.episodic_memory import EpisodicMemory
+from aeryn_core.reasoning.reflection import PostRunReflection
 from aeryn_core.agents.division_4_gov.sub_agents_real import SubAgentContextDriftShield
 
 TOOLS = build_default_registry(sandbox_roots=["~/aeryn-core-agent", "~/webnovel-platform"])
 # V27.2 — tool tier power: terminal sandboxed (whitelist + no-shell + cwd lock).
 # V37.5-SEC — dibungkus SecurityKernel: path di argumen + flag dgn nilai
 # path divalidasi (menutup bypass --output=/x, -fprint/etc/x, cat .env).
-from aeryn_core.safety_engine import make_secure_terminal
+from aeryn_core.safety.safety_engine import make_secure_terminal
 TOOLS.register("terminal", make_secure_terminal(["~/aeryn-core-agent", "~/webnovel-platform"]),
                TERMINAL_SCHEMA, tier="power")
 # V33 "Shared Brain" — Aeryn membaca memori kolektif Hermes (tier safe,
 # read-only): library RAG + knowledge graph + pitfalls. Satu otak, dua agen.
-from aeryn_core.hermes_brain import register as register_hermes_brain
+from aeryn_core.hermes.hermes_brain import register as register_hermes_brain
 register_hermes_brain(TOOLS)
 # V34 — CoreMemory ala Letta: blok human/context selalu di prompt,
 # agent edit sendiri via tool core_memory_edit.
-from aeryn_core.core_memory import CoreMemory
-from aeryn_core.hermes_brain import CORE_MEMORY_SCHEMA
+from aeryn_core.memory.core_memory import CoreMemory
+from aeryn_core.hermes.hermes_brain import CORE_MEMORY_SCHEMA
 CORE_MEM = CoreMemory()
 
 
@@ -181,7 +181,7 @@ TOOLS.register("core_memory_edit", _core_memory_edit, CORE_MEMORY_SCHEMA,
                tier="safe")
 # V38.1 — spawn_subagents: Aeryn punya sub-agen sendiri (pola delegate_task
 # Hermes, skala kecil). Runner diinjeksi dari daemon (pipeline lengkap).
-from aeryn_core.sub_agent_runner import (SPAWN_SCHEMA, MAX_SUBAGENTS_PER_RUN,
+from aeryn_core.platform.sub_agent_runner import (SPAWN_SCHEMA, MAX_SUBAGENTS_PER_RUN,
                                          SUB_MAX_ITERATIONS, SUB_WALL_SECONDS,
                                          in_subagent, spawn_subagents)
 
@@ -215,13 +215,13 @@ TOOLS.register("spawn_subagents", _spawn_subagents, SPAWN_SCHEMA,
                tier="safe")
 # V39.2 — dua tool dasar dari analisa episode: datetime (anti halusinasi
 # tanggal) + math_calc (kalkulasi aman via AST whitelist, tanpa eval).
-from aeryn_core.basic_tools import (datetime_now, math_calc,
+from aeryn_core.utils.basic_tools import (datetime_now, math_calc,
                                     DATETIME_SCHEMA, MATH_SCHEMA)
 TOOLS.register("datetime_now", datetime_now, DATETIME_SCHEMA, tier="safe")
 TOOLS.register("math_calc", math_calc, MATH_SCHEMA, tier="safe")
 # V39.3 — reminder internal + image understanding
-from aeryn_core.reminder import set_reminder, REMINDER_SCHEMA
-from aeryn_core.image_tools import image_understand, IMAGE_SCHEMA
+from aeryn_core.reasoning.reminder import set_reminder, REMINDER_SCHEMA
+from aeryn_core.utils.image_tools import image_understand, IMAGE_SCHEMA
 
 
 def _set_reminder(note: str, delay_minutes: float = 30):
@@ -253,7 +253,7 @@ def _checker_math(args, result):
 # V37 P2 — ask_hermes: tangan lintas-hemisfer. Aeryn bisa minta Hermes
 # (otak kiri) mengerjakan tugas berat via CLI one-shot. Cap harian di
 # modul; tier "safe" karena efeknya di luar sandbox tapi terbatas & dicatat.
-from aeryn_core.hermes_hands import ask_hermes, ASK_HERMES_SCHEMA
+from aeryn_core.hermes.hermes_hands import ask_hermes, ASK_HERMES_SCHEMA
 TOOLS.register("ask_hermes", ask_hermes, ASK_HERMES_SCHEMA, tier="safe")
 
 
@@ -347,8 +347,8 @@ SHADOW.register_checker("graph_traverse", _checker_graph_traverse)
 SHADOW.register_checker("pitfall_search", _checker_pitfall_search)
 
 # V32 imports
-from aeryn_core.persona_engine import PersonaEngine
-from aeryn_core.social_memory import SocialMemory
+from aeryn_core.utils.persona_engine import PersonaEngine
+from aeryn_core.memory.social_memory import SocialMemory
 PERSONA = PersonaEngine()
 SOCIAL = SocialMemory()
 
@@ -571,14 +571,14 @@ class AgentRunReq(BaseModel):
 # V38.6 — + GLOBAL limiter: rotasi session_id tidak lagi mem-bypass
 # V38.7 — reset endpoint kini juga butuh allowlist majikan (dulu siapa pun
 # yang bisa akses localhost bisa menghapus memori sesi orang lain)
-from aeryn_core.safety_engine import RateLimiter, validate_run_payload, make_secure_terminal
+from aeryn_core.safety.safety_engine import RateLimiter, validate_run_payload, make_secure_terminal
 _RUN_LIMITER = RateLimiter(max_requests=20, window_seconds=60)
 _GLOBAL_LIMITER = RateLimiter(max_requests=120, window_seconds=60)
 
 
 def _master_allowed(session_id: str) -> bool:
     """V38.7 — operasi destruktif (reset) hanya untuk sesi majikan."""
-    from aeryn_core.social_memory import SocialMemory
+    from aeryn_core.memory.social_memory import SocialMemory
     return SocialMemory.is_persistent_person_key(session_id) or \
         session_id.startswith("dc_")
 
@@ -721,7 +721,7 @@ def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
     # V37 P1 — refleks kontinuitas lintas-otak: Aeryn tahu apa yang baru
     # dibicarakan majikan dengan Hermes (read-only, fail-soft).
     try:
-        from aeryn_core.hermes_reflex import get_reflex_digest
+        from aeryn_core.hermes.hermes_reflex import get_reflex_digest
         reflex = get_reflex_digest()
         if reflex:
             system_prompt += f"\n{reflex}"
@@ -740,7 +740,7 @@ def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
             "konfirmasi singkat saja.")
     # V39.6 — research-first reasoning + next-token prediction (Sen)
     try:
-        from aeryn_core.reasoning_style import (RESEARCH_FIRST_RULE,
+        from aeryn_core.reasoning.reasoning_style import (RESEARCH_FIRST_RULE,
                                                 NEXT_TOKEN_RULE,
                                                 COGNITIVE_CHAIN_OF_THOUGHT_RULE,
                                                 needs_research)
@@ -751,7 +751,7 @@ def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
         system_prompt += COGNITIVE_CHAIN_OF_THOUGHT_RULE
         # V39.16 — inject adapter behavior contract
         try:
-            from aeryn_core.adapters import render_adapter_context
+            from aeryn_core.utils.adapters import render_adapter_context
             adapter_ctx = render_adapter_context(req.goal)
             if adapter_ctx:
                 system_prompt += adapter_ctx
@@ -759,14 +759,14 @@ def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
             pass
         # V39.16 — inject vault state
         try:
-            from aeryn_core.vault import get_vault
+            from aeryn_core.memory.vault import get_vault
             vault_summary = get_vault().render_summary()
             system_prompt += f"\n{vault_summary}"
         except Exception:
             pass
         # V39.17 — inject knowledge graph context
         try:
-            from aeryn_core.graph import VaultGraph
+            from aeryn_core.memory.graph import VaultGraph
             graph = VaultGraph()
             graph_summary = graph.render_graph_summary(req.goal, depth=1)
             if graph_summary:
@@ -777,7 +777,7 @@ def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
         pass
     # V39.7 — CEREWET MODE: nagih komitmen + gaya aspri proaktif
     try:
-        from aeryn_core.cerewet_mode import (CEREWET_RULES,
+        from aeryn_core.reasoning.cerewet_mode import (CEREWET_RULES,
                                              cerewet_context_block,
                                              detect_commitment,
                                              add_commitment)
@@ -794,7 +794,7 @@ def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
     # V39.8 — CEREWET SETTLE: user menjawab komitmen dgn "udah/sudah
     # selesai/done" → tandai selesai (jalur deterministik, bukan doa).
     try:
-        from aeryn_core.cerewet_mode import settle_commitment
+        from aeryn_core.reasoning.cerewet_mode import settle_commitment
         low = req.goal.lower().lstrip()
         if low.startswith(("udah", "sudah", "sudahnya", "done", "kelar",
                            "beres")):
@@ -828,7 +828,7 @@ def _build_system_prompt(req: AgentRunReq, MODEL_) -> tuple:
             "Hanya jawab dengan kalimat biasa, 1-3 kalimat.")
     past = MEMORY.recall(req.goal)
     system_prompt += MEMORY.prompt_block(past)
-    from aeryn_core.emotion_tone import tone_directive
+    from aeryn_core.reasoning.emotion_tone import tone_directive
     system_prompt += tone_directive(LAST_TENSOR.get(req.session_id, {}))
     return system_prompt, plan
 
@@ -957,7 +957,7 @@ def _run_steps(req: AgentRunReq):
             except Exception:
                 goal_sig = "?"
             try:
-                from aeryn_core.event_bus import (EVENT_ERROR, EVENT_FINAL,
+                from aeryn_core.utils.event_bus import (EVENT_ERROR, EVENT_FINAL,
                                                   EVENT_TIMEOUT, BUS)
                 etype = (EVENT_TIMEOUT if timed_out else
                          EVENT_ERROR if error else EVENT_FINAL)
@@ -972,7 +972,7 @@ def _run_steps(req: AgentRunReq):
                           answer=answer, error=error, timed_out=timed_out)
             # V35 INFRA-1 — simpan turn ke riwayat sesi (user + jawaban sukses)
             try:
-                from aeryn_core.session_history import record as _hist_record
+                from aeryn_core.memory.session_history import record as _hist_record
                 _hist_record(req.session_id, "user", req.goal)
                 if answer and not error and not timed_out:
                     _hist_record(req.session_id, "assistant", answer)
@@ -990,7 +990,7 @@ def _run_steps(req: AgentRunReq):
                 pass
             else:
                 try:
-                    from aeryn_core.critic_refine import run_critic
+                    from aeryn_core.safety.critic_refine import run_critic
                     critic_result = run_critic(
                         goal=req.goal, answer=answer or "", trace=trace,
                         runner=_critic_runner, max_iterations=1, wall_seconds=45)
@@ -1065,7 +1065,7 @@ def _run_steps(req: AgentRunReq):
                 auto_critic = req.critic or tool_calls_count >= 3
 
                 if auto_critic and answer and any(t["type"] == "tool" for t in trace):
-                    from aeryn_core.critic_pass import make_critic
+                    from aeryn_core.safety.critic_pass import make_critic
                     digests = [t.get("result_digest", "") for t in trace
                                if t["type"] == "tool"]
                     c = make_critic(MODEL_)(answer, digests)
@@ -1082,7 +1082,7 @@ def _run_steps(req: AgentRunReq):
                 # aman + alasan (fail-closed, arahan jelas).
                 if answer and any(t["type"] == "tool" for t in trace):
                     try:
-                        from aeryn_core.verifier import verify_answer
+                        from aeryn_core.safety.verifier import verify_answer
                         v = verify_answer(MODEL_, answer, req.goal, trace)
                         if not v["pass"]:
                             answer = (
@@ -1105,7 +1105,7 @@ def _run_steps(req: AgentRunReq):
                 # masih ada iterasi → paksa 1 riset; iterasi habis →
                 # disclaimer jujur di jawaban.
                 try:
-                    from aeryn_core.research_guard import (
+                    from aeryn_core.safety.research_guard import (
                         UNGROUNDED_DISCLAIMER, FORCED_RESEARCH_DIRECTIVE,
                         is_ungrounded_factual)
                     if is_ungrounded_factual(req.goal, trace):
@@ -1204,7 +1204,7 @@ def _run_steps(req: AgentRunReq):
                 # hasil agar langkah model berikutnya selalu jelas
                 # (filosofi Sen: jangan menambal tanpa ujung — arahkan).
                 try:
-                    from aeryn_core.fallback_router import (
+                    from aeryn_core.utils.fallback_router import (
                                                         get_fallback_directive)
                     directive = get_fallback_directive(fn, result)
                     if directive and isinstance(result, dict):
@@ -1237,7 +1237,7 @@ RUN_STATS = {"runs": 0, "errors": 0, "timeouts": 0,
 @app.get("/events/recent")
 def events_recent(limit: int = 20, event_type: str = None):
     """V36 — introspeksi event bus: kejadian run terakhir (final/error/timeout)."""
-    from aeryn_core.event_bus import BUS
+    from aeryn_core.utils.event_bus import BUS
     return {"events": BUS.recent(event_type=event_type, limit=limit)}
 
 
@@ -1252,7 +1252,7 @@ def metrics():
            "tools": tools}
     # V36 — health watchdog dari event bus (instance singleton per proses)
     try:
-        from aeryn_core.event_bus import BUS, HealthWatchdog
+        from aeryn_core.utils.event_bus import BUS, HealthWatchdog
         global _WATCHDOG
         try:
             _WATCHDOG
@@ -1293,7 +1293,7 @@ def _nightly_loop():
 def _reminder_loop():
     """V39.3 — cek reminder jatuh tempo tiap 30 detik; jalankan sebagai run
     kecil di session pemiliknya (laporan otomatis ke channel yang benar)."""
-    from aeryn_core.reminder import due_reminders
+    from aeryn_core.reasoning.reminder import due_reminders
     while True:
         time.sleep(30)
         try:

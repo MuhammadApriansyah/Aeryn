@@ -15,10 +15,10 @@ from typing import List, Dict, Optional
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from aeryn_core.vault import AerynVault, VaultEntry, LAYER_WIKI, LAYER_DAILY
-from aeryn_core.social_memory import SocialMemory
+from aeryn_core.memory.vault import AerynVault, VaultEntry, LAYER_WIKI, LAYER_DAILY
+from aeryn_core.memory.social_memory import SocialMemory
 from aeryn_core.hybrid_search import get_search_engine
-from aeryn_core.config import DATABASE_DIR, ensure_dirs
+from aeryn_core.utils.config import DATABASE_DIR, ensure_dirs
 
 class ReminderScheduler:
     """Check and trigger reminders."""

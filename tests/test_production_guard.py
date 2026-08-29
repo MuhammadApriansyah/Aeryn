@@ -6,7 +6,7 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.production_guard import (
+from aeryn_core.safety.production_guard import (
     RateLimiter,
     validate_run_payload,
     wrap_untrusted,

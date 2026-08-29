@@ -6,7 +6,7 @@ import sys
 import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from aeryn_core.reflection import PostRunReflection
+from aeryn_core.reasoning.reflection import PostRunReflection
 
 
 @pytest.fixture
@@ -72,7 +72,7 @@ def test_find_recent_strategy_expired_kosong(refl):
 
 def test_strategy_tersimpan_di_episode(tmp_path):
     """Integrasi: Episode mencatat strategy."""
-    from aeryn_core.episodic_memory import EpisodicMemory
+    from aeryn_core.memory.episodic_memory import EpisodicMemory
     mem = EpisodicMemory(episode_dir=str(tmp_path / "eps"))
     mem.record("sid", "fs_read x", "heuristic",
                [{"type": "tool", "name": "fs_read"}],

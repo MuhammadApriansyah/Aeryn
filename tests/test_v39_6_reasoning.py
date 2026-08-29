@@ -4,7 +4,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.reasoning_style import (
+from aeryn_core.reasoning.reasoning_style import (
     NEXT_TOKEN_RULE, RESEARCH_FIRST_RULE, build_next_token_hint,
     needs_research)
 

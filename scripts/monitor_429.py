@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.makedirs(os.path.expanduser("~/hermes"), exist_ok=True)
 
 # V39.11 — baca endpoint dari ModelClient biar konsisten dengan runtime.
-from aeryn_core.model_client import ModelClient
+from aeryn_core.utils.model_client import ModelClient
 
 REPORT_FILE = os.path.expanduser("~/hermes/429_monitor_report.json")
 LOG_FILE = os.path.expanduser("~/hermes/429_monitor.log")

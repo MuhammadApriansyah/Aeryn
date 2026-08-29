@@ -85,7 +85,7 @@ class TestUnifiedCognitiveOrchestrator:
     """Tests for UnifiedCognitiveOrchestrator with mocked dependencies."""
 
     def test_init(self):
-        from aeryn_core.orchestrator import UnifiedCognitiveOrchestrator
+        from aeryn_core.platform.orchestrator import UnifiedCognitiveOrchestrator
         orch = UnifiedCognitiveOrchestrator()
         assert orch.dimension == 384
         assert orch.idle_threshold == 10
@@ -99,32 +99,32 @@ class TestUnifiedCognitiveOrchestrator:
         assert orch.div5_infra is not None
 
     def test_init_custom_params(self):
-        from aeryn_core.orchestrator import UnifiedCognitiveOrchestrator
+        from aeryn_core.platform.orchestrator import UnifiedCognitiveOrchestrator
         orch = UnifiedCognitiveOrchestrator(dimension=256, idle_threshold=5, absolute_threshold=0.8)
         assert orch.dimension == 256
         assert orch.idle_threshold == 5
         assert orch.absolute_threshold == 0.8
 
     def test_dag_engine_initialized(self):
-        from aeryn_core.orchestrator import UnifiedCognitiveOrchestrator
+        from aeryn_core.platform.orchestrator import UnifiedCognitiveOrchestrator
         orch = UnifiedCognitiveOrchestrator()
         assert orch.dag_engine is not None
         # Should have 5 task nodes registered
         assert len(orch.dag_engine.nodes) == 5
 
     def test_workflow_anchors_initially_empty(self):
-        from aeryn_core.orchestrator import UnifiedCognitiveOrchestrator
+        from aeryn_core.platform.orchestrator import UnifiedCognitiveOrchestrator
         orch = UnifiedCognitiveOrchestrator()
         assert orch.workflow_anchors == []
 
     def test_cached_blackboard_initially_empty(self):
-        from aeryn_core.orchestrator import UnifiedCognitiveOrchestrator
+        from aeryn_core.platform.orchestrator import UnifiedCognitiveOrchestrator
         orch = UnifiedCognitiveOrchestrator()
         assert orch.cached_shared_blackboard == "{}"
         assert orch.cached_active_gate_mode == 3
 
     def test_subsystems_initialized(self):
-        from aeryn_core.orchestrator import UnifiedCognitiveOrchestrator
+        from aeryn_core.platform.orchestrator import UnifiedCognitiveOrchestrator
         orch = UnifiedCognitiveOrchestrator()
         assert orch.context_router is not None
         assert orch.event_bus is not None
@@ -140,7 +140,7 @@ class TestUnifiedCognitiveOrchestrator:
         assert orch.memory_bridge is not None
 
     def test_register_agent_workflow_anchor(self):
-        from aeryn_core.orchestrator import UnifiedCognitiveOrchestrator
+        from aeryn_core.platform.orchestrator import UnifiedCognitiveOrchestrator
         import asyncio
         orch = UnifiedCognitiveOrchestrator()
         result = asyncio.get_event_loop().run_until_complete(
@@ -156,7 +156,7 @@ class TestUnifiedCognitiveOrchestrator:
         assert orch.workflow_anchors[0]["status"] == "ACTIVE_ANCHOR"
 
     def test_register_multiple_anchors(self):
-        from aeryn_core.orchestrator import UnifiedCognitiveOrchestrator
+        from aeryn_core.platform.orchestrator import UnifiedCognitiveOrchestrator
         import asyncio
         orch = UnifiedCognitiveOrchestrator()
         for i in range(3):
@@ -170,7 +170,7 @@ class TestUnifiedCognitiveOrchestrator:
         assert len(orch.workflow_anchors) == 3
 
     def test_compile_stateful_system_prompt(self):
-        from aeryn_core.orchestrator import UnifiedCognitiveOrchestrator
+        from aeryn_core.platform.orchestrator import UnifiedCognitiveOrchestrator
         orch = UnifiedCognitiveOrchestrator()
         result = orch.compile_stateful_system_prompt(
             session_id="test_session",
@@ -183,7 +183,7 @@ class TestUnifiedCognitiveOrchestrator:
         assert len(result) > 0
 
     def test_compile_stateful_system_prompt_with_history(self):
-        from aeryn_core.orchestrator import UnifiedCognitiveOrchestrator
+        from aeryn_core.platform.orchestrator import UnifiedCognitiveOrchestrator
         orch = UnifiedCognitiveOrchestrator()
         result = orch.compile_stateful_system_prompt(
             session_id="test_session",
@@ -196,7 +196,7 @@ class TestUnifiedCognitiveOrchestrator:
         assert len(result) > 0
 
     def test_digest_external_llm_response(self):
-        from aeryn_core.orchestrator import UnifiedCognitiveOrchestrator
+        from aeryn_core.platform.orchestrator import UnifiedCognitiveOrchestrator
         orch = UnifiedCognitiveOrchestrator()
         # First compile a prompt to set internal state
         orch.compile_stateful_system_prompt(
@@ -217,7 +217,7 @@ class TestUnifiedCognitiveOrchestrator:
         assert result["status"] == "SUCCESS_COMMIT"
 
     def test_digest_with_think_tags(self):
-        from aeryn_core.orchestrator import UnifiedCognitiveOrchestrator
+        from aeryn_core.platform.orchestrator import UnifiedCognitiveOrchestrator
         orch = UnifiedCognitiveOrchestrator()
         orch.compile_stateful_system_prompt(
             session_id="test_session",
@@ -234,7 +234,7 @@ class TestUnifiedCognitiveOrchestrator:
         assert "think" not in result["cleaned_response_text"].lower()
 
     def test_digest_returns_ledger_audit(self):
-        from aeryn_core.orchestrator import UnifiedCognitiveOrchestrator
+        from aeryn_core.platform.orchestrator import UnifiedCognitiveOrchestrator
         orch = UnifiedCognitiveOrchestrator()
         orch.compile_stateful_system_prompt(
             session_id="test_session",

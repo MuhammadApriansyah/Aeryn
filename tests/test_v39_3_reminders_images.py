@@ -6,7 +6,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from aeryn_core import reminder as rm
-from aeryn_core.image_tools import image_understand
+from aeryn_core.utils.image_tools import image_understand
 
 
 def _fresh(tmp_path, monkeypatch):
@@ -44,7 +44,7 @@ def test_validation():
 def test_cap_evicts_fired_first(tmp_path, monkeypatch):
     monkeypatch.setattr(rm, "REMINDERS_PATH",
                         str(tmp_path / "r.json"))
-    from aeryn_core.reminder import MAX_REMINDERS
+    from aeryn_core.reasoning.reminder import MAX_REMINDERS
     # isi penuh dgn fired
     for i in range(MAX_REMINDERS):
         rm.set_reminder(f"lama-{i}", delay_minutes=1)

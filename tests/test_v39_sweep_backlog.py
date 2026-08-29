@@ -5,7 +5,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.injection_sweep import run_sweep, weakness_backlog
+from aeryn_core.safety.injection_sweep import run_sweep, weakness_backlog
 
 
 def test_all_indirect_samples_wrapped():

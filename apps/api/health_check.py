@@ -10,7 +10,7 @@ from datetime import datetime
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.config import DATABASE_DIR, ensure_dirs
+from aeryn_core.utils.config import DATABASE_DIR, ensure_dirs
 
 def check_disk_space():
     """Check available disk space."""
@@ -48,7 +48,7 @@ def check_database():
 def check_safety_engine():
     """Check safety engine is loaded."""
     try:
-        from aeryn_core.safety_engine import get_safety_engine
+        from aeryn_core.safety.safety_engine import get_safety_engine
         eng = get_safety_engine()
         result = eng.check_input("test")
         return {"ok": True, "risk": result.risk}
@@ -58,7 +58,7 @@ def check_safety_engine():
 def check_vault():
     """Check vault is accessible."""
     try:
-        from aeryn_core.vault import AerynVault, ensure_dirs
+        from aeryn_core.memory.vault import AerynVault, ensure_dirs
         ensure_dirs()
         vault = AerynVault()
         return {"ok": True}

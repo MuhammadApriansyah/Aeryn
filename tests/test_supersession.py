@@ -3,7 +3,7 @@
 import sys, os, uuid
 sys.path.insert(0, '/home/sen/aeryn-core-agent')
 
-from aeryn_core.supersession import SupersessionManager, get_supersession_manager
+from aeryn_core.memory.supersession import SupersessionManager, get_supersession_manager
 
 def test_supersede():
     smgr = SupersessionManager()

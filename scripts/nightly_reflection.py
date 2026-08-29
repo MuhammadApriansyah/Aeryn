@@ -299,7 +299,7 @@ def main():
 
     # V38 — rotasi data file besar (anti disk exhaustion) sebelum handoff
     try:
-        from aeryn_core.safety_engine import rotate_all_data_files
+        from aeryn_core.safety.safety_engine import rotate_all_data_files
         rot = rotate_all_data_files()
         rotated = [k for k, v in rot.items() if v]
         if rotated:
@@ -353,7 +353,7 @@ def main():
 
     # V39-F4/F5 — injection sweep mingguan + weakness backlog
     try:
-        from aeryn_core.injection_sweep import run_sweep, weakness_backlog
+        from aeryn_core.safety.injection_sweep import run_sweep, weakness_backlog
         sweep = run_sweep()
         backlog = weakness_backlog()
         report["security_sweep"] = {
@@ -374,7 +374,7 @@ def main():
     try:
         sys.path.insert(0, os.path.dirname(os.path.dirname(
             os.path.abspath(__file__))))
-        from aeryn_core.core_memory import CoreMemory
+        from aeryn_core.memory.core_memory import CoreMemory
         cm = CoreMemory()
         digest = core_memory_digest(report)
         cm.edit("context", "replace",

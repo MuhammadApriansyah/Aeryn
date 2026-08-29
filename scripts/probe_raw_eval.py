@@ -8,7 +8,7 @@ import ast
 import glob
 import os
 import sys
-from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
+from aeryn_core.utils.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
 BASE = BASE_DIR
 if __name__ != "__main__" and BASE not in sys.path:

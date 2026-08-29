@@ -7,67 +7,67 @@ from typing import Optional
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # Patch sqlite3.connect for WAL + busy_timeout — must be before any other imports
-import aeryn_core.patch_sqlite  # noqa
+import aeryn_core.utils.patch_sqlite  # noqa
 
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect, Header
 from fastapi.responses import Response, FileResponse
 from pydantic import BaseModel, Field
-from aeryn_core.safety_engine import get_safety_engine, sanitize_output
-from aeryn_core.adapters import get_active_adapter, render_adapter_context
-from aeryn_core.reasoning_style import needs_research
-from aeryn_core.vault import AerynVault, VaultEntry, LAYER_WIKI
-from aeryn_core.social_memory import SocialMemory
+from aeryn_core.safety.safety_engine import get_safety_engine, sanitize_output
+from aeryn_core.utils.adapters import get_active_adapter, render_adapter_context
+from aeryn_core.reasoning.reasoning_style import needs_research
+from aeryn_core.memory.vault import AerynVault, VaultEntry, LAYER_WIKI
+from aeryn_core.memory.social_memory import SocialMemory
 from aeryn_core.hybrid_search import get_search_engine
-from aeryn_core.persona_engine import load_persona
-from aeryn_core.shared_db import get_shared_db
-from aeryn_core.config import ensure_dirs
-from aeryn_core.dream_synthesis import get_dream_synthesizer
-from aeryn_core.enhanced_memory import get_entity_extractor, get_preference_learner, get_cross_session_recall
-from aeryn_core.enhanced_guardrails import get_enhanced_guardrails
-from aeryn_core.enhanced_sandbox import get_enhanced_sandbox, SandboxLimits
-from aeryn_core.multi_agent import get_multi_agent_orchestrator, AgentRole, TaskPriority as AgentTaskPriority
-from aeryn_core.memory_decay import get_memory_decay_engine
-from aeryn_core.entity_resolution import get_entity_resolver
-from aeryn_core.owasp_security import get_owasp_security
-from aeryn_core.plugin_system import get_plugin_manager
-from aeryn_core.long_horizon import get_long_horizon_planner, TaskPriority
-from aeryn_core.llm_client import get_mode_router, AerynLLMClient
-from aeryn_core.notification_system import get_notification_manager, get_scheduler, Notification
-from aeryn_core.semantic_indexer import get_semantic_indexer
-from aeryn_core.error_recovery import get_error_recovery, with_retry, with_fallback, with_circuit_breaker
-from aeryn_core.tool_runtime import get_tool_runtime
-from aeryn_core.background_queue import get_task_queue
-from aeryn_core.proactive_engine import get_proactive_engine
-from aeryn_core.proactive_v2 import get_daily_briefing, get_proactive_v2
-from aeryn_core.auto_task import get_auto_task
-from aeryn_core.context_manager import get_context_manager
-from aeryn_core.api_keys import get_api_key_manager
-from aeryn_core.usage_metering import get_usage_metering
-from aeryn_core.billing import get_billing, PRICING, PLANS
-from aeryn_core.secrets_runtime import get_secrets_manager, get_plugin_runtime
-from aeryn_core.temporal_memory import get_temporal_memory
-from aeryn_core.self_improvement import get_self_improvement_engine
-from aeryn_core.skill_crystallization import get_skill_crystallizer
-from aeryn_core.cloud_sync import get_cloud_sync
-from aeryn_core.constitutional_ai import get_constitutional_ai
-from aeryn_core.emotional_intelligence import get_emotional_intelligence
-from aeryn_core.auth import get_auth, ROLE_PERMISSIONS
-from aeryn_core.rate_limiter import get_rate_limiter
+from aeryn_core.utils.persona_engine import load_persona
+from aeryn_core.database.shared_db import get_shared_db
+from aeryn_core.utils.config import ensure_dirs
+from aeryn_core.reasoning.dream_synthesis import get_dream_synthesizer
+from aeryn_core.memory.enhanced_memory import get_entity_extractor, get_preference_learner, get_cross_session_recall
+from aeryn_core.safety.enhanced_guardrails import get_enhanced_guardrails
+from aeryn_core.safety.enhanced_sandbox import get_enhanced_sandbox, SandboxLimits
+from aeryn_core.platform.multi_agent import get_multi_agent_orchestrator, AgentRole, TaskPriority as AgentTaskPriority
+from aeryn_core.memory.memory_decay import get_memory_decay_engine
+from aeryn_core.memory.entity_resolution import get_entity_resolver
+from aeryn_core.safety.owasp_security import get_owasp_security
+from aeryn_core.platform.plugin_system import get_plugin_manager
+from aeryn_core.reasoning.long_horizon import get_long_horizon_planner, TaskPriority
+from aeryn_core.utils.llm_client import get_mode_router, AerynLLMClient
+from aeryn_core.platform.notification_system import get_notification_manager, get_scheduler, Notification
+from aeryn_core.database.semantic_indexer import get_semantic_indexer
+from aeryn_core.utils.error_recovery import get_error_recovery, with_retry, with_fallback, with_circuit_breaker
+from aeryn_core.platform.tool_runtime import get_tool_runtime
+from aeryn_core.platform.background_queue import get_task_queue
+from aeryn_core.reasoning.proactive_engine import get_proactive_engine
+from aeryn_core.reasoning.proactive_v2 import get_daily_briefing, get_proactive_v2
+from aeryn_core.platform.auto_task import get_auto_task
+from aeryn_core.reasoning.context_manager import get_context_manager
+from aeryn_core.auth.api_keys import get_api_key_manager
+from aeryn_core.billing.usage_metering import get_usage_metering
+from aeryn_core.billing.billing import get_billing, PRICING, PLANS
+from aeryn_core.safety.secrets_runtime import get_secrets_manager, get_plugin_runtime
+from aeryn_core.memory.temporal_memory import get_temporal_memory
+from aeryn_core.reasoning.self_improvement import get_self_improvement_engine
+from aeryn_core.platform.skill_crystallization import get_skill_crystallizer
+from aeryn_core.platform.cloud_sync import get_cloud_sync
+from aeryn_core.reasoning.constitutional_ai import get_constitutional_ai
+from aeryn_core.reasoning.emotional_intelligence import get_emotional_intelligence
+from aeryn_core.auth.auth import get_auth, ROLE_PERMISSIONS
+from aeryn_core.auth.rate_limiter import get_rate_limiter
 from aeryn_core.email_verification import get_email_verification, get_password_reset
-from aeryn_core.webhook_system import get_webhook_system
-from aeryn_core.plugin_marketplace import get_plugin_marketplace
-from aeryn_core.workspace_manager import get_workspace_manager
-from aeryn_core.sso_manager import get_sso_manager
-from aeryn_core.soc2_compliance import get_soc2_compliance
-from aeryn_core.telegram_bot import get_telegram_bot
-from aeryn_core.email_agent import get_email_agent
-from aeryn_core.calendar_integration import get_calendar
-from aeryn_core.github_integration import get_github
-from aeryn_core.data_encryption import get_encryption
+from aeryn_core.platform.webhook_system import get_webhook_system
+from aeryn_core.platform.plugin_marketplace import get_plugin_marketplace
+from aeryn_core.platform.workspace_manager import get_workspace_manager
+from aeryn_core.auth.sso_manager import get_sso_manager
+from aeryn_core.safety.soc2_compliance import get_soc2_compliance
+from aeryn_core.platform.telegram_bot import get_telegram_bot
+from aeryn_core.platform.email_agent import get_email_agent
+from aeryn_core.platform.calendar_integration import get_calendar
+from aeryn_core.platform.github_integration import get_github
+from aeryn_core.utils.data_encryption import get_encryption
 
-from aeryn_core.realtime import get_emitter
-from aeryn_core.performance import get_optimizer, get_uptime
-from aeryn_core.logger import info, warn, error, log_exception
+from aeryn_core.platform.realtime import get_emitter
+from aeryn_core.utils.performance import get_optimizer, get_uptime
+from aeryn_core.utils.logger import info, warn, error, log_exception
 
 from contextlib import asynccontextmanager
 
@@ -220,7 +220,7 @@ async def broadcast_loop():
             })
             # 2. Tasks
             try:
-                from aeryn_core.shared_db import get_shared_db
+                from aeryn_core.database.shared_db import get_shared_db
                 db = get_shared_db()
                 tasks = db.get_all_tasks()
                 await emitter.broadcast("tasks", {"tasks": tasks, "count": len(tasks)})
@@ -630,8 +630,8 @@ async def dashboard_websocket(websocket: WebSocket):
                     await websocket.send_json({"type": "pong", "data": {}})
                 elif cmd_type == "chat":
                     try:
-                        from aeryn_core.safety_engine import get_safety_engine
-                        from aeryn_core.persona_engine import load_persona
+                        from aeryn_core.safety.safety_engine import get_safety_engine
+                        from aeryn_core.utils.persona_engine import load_persona
                         eng = get_safety_engine()
                         text = cmd_data.get("message", "")
                         safety = eng.check_input(text)
@@ -669,7 +669,7 @@ async def dashboard_websocket(websocket: WebSocket):
                         await websocket.send_json({"type": "error", "data": {"message": str(e)}})
                 elif cmd_type == "create_notification":
                     try:
-                        from aeryn_core.notification_system import Notification
+                        from aeryn_core.platform.notification_system import Notification
                         mgr = get_notification_manager()
                         notif = Notification(user_id=cmd_data.get("user_id", "default"), title=cmd_data.get("title", ""), message=cmd_data.get("message", ""), priority=cmd_data.get("priority", "normal"))
                         nid = mgr.create(notif)
@@ -3806,13 +3806,13 @@ async def list_controls():
 
 @app.get("/discord/commands")
 async def discord_commands():
-    from aeryn_core.discord_bot import DiscordBotHandler
+    from aeryn_core.platform.discord_bot import DiscordBotHandler
     handler = DiscordBotHandler()
     return {"commands": handler.get_commands()}
 
 @app.post("/discord/interaction")
 async def discord_interaction(interaction: dict):
-    from aeryn_core.discord_bot import DiscordBotHandler
+    from aeryn_core.platform.discord_bot import DiscordBotHandler
     handler = DiscordBotHandler()
     result = await handler.handle_interaction(interaction)
     return result
@@ -4012,7 +4012,7 @@ async def get_alerts():
 
 @app.post("/browser/task")
 async def browser_task(url: str, actions: list, user_id: str = "default"):
-    from aeryn_core.browser_vector import get_browser
+    from aeryn_core.platform.browser_vector import get_browser
     browser = get_browser()
     return browser.run_task(url, actions, user_id)
 
@@ -4020,26 +4020,26 @@ async def browser_task(url: str, actions: list, user_id: str = "default"):
 
 @app.post("/vectordb/collections")
 async def create_collection(name: str, dimension: int = 384, description: str = ""):
-    from aeryn_core.browser_vector import get_vector_db
+    from aeryn_core.platform.browser_vector import get_vector_db
     vdb = get_vector_db()
     return {"collection": vdb.create_collection(name, dimension, description)}
 
 @app.post("/vectordb/{collection}/add")
 async def add_vectors(collection: str, texts: list, embeddings: list = None, metadatas: list = None):
-    from aeryn_core.browser_vector import get_vector_db
+    from aeryn_core.platform.browser_vector import get_vector_db
     vdb = get_vector_db()
     ids = vdb.add(collection, texts, embeddings, metadatas)
     return {"ids": ids}
 
 @app.post("/vectordb/{collection}/search")
 async def search_vectors(collection: str, query_embedding: list, limit: int = 5):
-    from aeryn_core.browser_vector import get_vector_db
+    from aeryn_core.platform.browser_vector import get_vector_db
     vdb = get_vector_db()
     return {"results": vdb.search(collection, query_embedding, limit)}
 
 @app.delete("/vectordb/{collection}")
 async def delete_collection(collection: str):
-    from aeryn_core.browser_vector import get_vector_db
+    from aeryn_core.platform.browser_vector import get_vector_db
     vdb = get_vector_db()
     vdb.delete_collection(collection)
     return {"status": "deleted"}

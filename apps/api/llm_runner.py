@@ -25,15 +25,15 @@ from datetime import datetime, timedelta
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from aeryn_core.safety_engine import get_safety_engine, sanitize_output
-from aeryn_core.adapters import get_active_adapter, render_adapter_context
-from aeryn_core.reasoning_style import needs_research
-from aeryn_core.vault import AerynVault, VaultEntry, LAYER_WIKI
-from aeryn_core.social_memory import SocialMemory
+from aeryn_core.safety.safety_engine import get_safety_engine, sanitize_output
+from aeryn_core.utils.adapters import get_active_adapter, render_adapter_context
+from aeryn_core.reasoning.reasoning_style import needs_research
+from aeryn_core.memory.vault import AerynVault, VaultEntry, LAYER_WIKI
+from aeryn_core.memory.social_memory import SocialMemory
 from aeryn_core.hybrid_search import get_search_engine
-from aeryn_core.persona_engine import load_persona
-from aeryn_core.config import ensure_dirs, DATABASE_DIR
-from aeryn_core.model_client import ModelClient
+from aeryn_core.utils.persona_engine import load_persona
+from aeryn_core.utils.config import ensure_dirs, DATABASE_DIR
+from aeryn_core.utils.model_client import ModelClient
 
 # ── Tool Execution Engine ────────────────────────────────────────
 
@@ -124,7 +124,7 @@ class ToolExecutor:
             return {"ok": False, "error": "No path provided"}
         
         # Safety check
-        from aeryn_core.safety_engine import check_path
+        from aeryn_core.safety.safety_engine import check_path
         ok, reason = check_path(path, "read")
         if not ok:
             return {"ok": False, "error": reason}
@@ -141,7 +141,7 @@ class ToolExecutor:
         if not path:
             return {"ok": False, "error": "No path provided"}
         
-        from aeryn_core.safety_engine import check_path
+        from aeryn_core.safety.safety_engine import check_path
         ok, reason = check_path(path, "write")
         if not ok:
             return {"ok": False, "error": reason}

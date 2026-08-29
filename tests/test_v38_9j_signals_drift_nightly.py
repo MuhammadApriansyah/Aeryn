@@ -4,7 +4,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.reasoning_style import needs_research
+from aeryn_core.reasoning.reasoning_style import needs_research
 
 
 def test_howto_variants_need_research():

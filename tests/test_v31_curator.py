@@ -7,7 +7,7 @@ import time
 import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from aeryn_core.memory_curator import MemoryCurator
+from aeryn_core.memory.memory_curator import MemoryCurator
 
 
 def _jl(path, rows):

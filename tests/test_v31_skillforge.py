@@ -7,7 +7,7 @@ import time
 import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from aeryn_core.skill_forge import SkillForge
+from aeryn_core.platform.skill_forge import SkillForge
 
 
 def _write_eps(path_dir, eps):

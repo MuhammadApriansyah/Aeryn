@@ -3,7 +3,7 @@
 import sys, os, uuid
 sys.path.insert(0, '/home/sen/aeryn-core-agent')
 
-from aeryn_core.graph_memory import GraphMemory, get_graph_memory
+from aeryn_core.memory.graph_memory import GraphMemory, get_graph_memory
 
 def test_add_node():
     gm = GraphMemory()

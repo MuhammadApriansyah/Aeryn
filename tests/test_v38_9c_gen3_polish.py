@@ -4,8 +4,8 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.reasoning_style import needs_research
-from aeryn_core.research_guard import is_ungrounded_factual
+from aeryn_core.reasoning.reasoning_style import needs_research
+from aeryn_core.safety.research_guard import is_ungrounded_factual
 
 
 def test_tutorial_questions_need_research():
@@ -28,6 +28,6 @@ def test_research_guard_bounded():
 
 
 def test_verifier_accepts_next_token_arrow():
-    from aeryn_core.verifier import mechanical_checks
+    from aeryn_core.safety.verifier import mechanical_checks
     m = mechanical_checks("jawaban\n\n➡️ Mau kulanjutkan?", [])
     assert not m["issues"]

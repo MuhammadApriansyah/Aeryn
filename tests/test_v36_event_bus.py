@@ -3,7 +3,7 @@ ring buffer cap, watchdog threshold, isolasi exception subscriber."""
 
 import threading
 
-from aeryn_core.event_bus import (
+from aeryn_core.utils.event_bus import (
     BUS,
     EVENT_ERROR,
     EVENT_FINAL,

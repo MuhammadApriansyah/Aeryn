@@ -8,8 +8,8 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-import aeryn_core.tool_bridge as tb
-from aeryn_core.tool_bridge import make_fs_write
+import aeryn_core.platform.tool_bridge as tb
+from aeryn_core.platform.tool_bridge import make_fs_write
 
 
 def test_tocou_symlink_swap_blocked(tmp_path, monkeypatch):

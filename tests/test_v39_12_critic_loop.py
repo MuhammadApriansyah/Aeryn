@@ -4,7 +4,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.critic_refine import (
+from aeryn_core.safety.critic_refine import (
     CRITIC_SOP,
     build_critic_sop,
     run_critic,

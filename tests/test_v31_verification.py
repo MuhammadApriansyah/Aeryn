@@ -5,7 +5,7 @@ import sys
 import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from aeryn_core.verification_gate import annotate_answer, check_claims
+from aeryn_core.safety.verification_gate import annotate_answer, check_claims
 
 
 def _trace(tools, digest="ok"):

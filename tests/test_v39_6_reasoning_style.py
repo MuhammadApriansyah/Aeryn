@@ -5,7 +5,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.reasoning_style import (
+from aeryn_core.reasoning.reasoning_style import (
     COGNITIVE_CHAIN_OF_THOUGHT_RULE,
     RESEARCH_FIRST_RULE,
     NEXT_TOKEN_RULE,

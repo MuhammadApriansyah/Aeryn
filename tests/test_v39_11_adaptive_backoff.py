@@ -5,7 +5,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from aeryn_core import model_client as mc
-from aeryn_core.model_client import CircuitBreaker
+from aeryn_core.utils.model_client import CircuitBreaker
 
 
 def test_circuit_breaker_exists():

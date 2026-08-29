@@ -38,7 +38,7 @@ def test_memory_write_still_priority():
 def test_truncated_run_records_error():
     """Simulasi episode truncated: error eksplisit harus ikut terekam."""
     import importlib
-    from aeryn_core.episodic_memory import EpisodicMemory
+    from aeryn_core.memory.episodic_memory import EpisodicMemory
 
     mem = EpisodicMemory.__new__(EpisodicMemory)  # tanpa init file asli
     mem.path = "/tmp/test_v371_episodes.jsonl"

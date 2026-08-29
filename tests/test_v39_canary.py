@@ -9,11 +9,11 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.memory_canary import CANARY_FACTS, plant, probe
+from aeryn_core.memory.memory_canary import CANARY_FACTS, plant, probe
 
 
 def test_plant_and_probe_intact(tmp_path):
-    from aeryn_core.core_memory import CoreMemory
+    from aeryn_core.memory.core_memory import CoreMemory
     cm = CoreMemory(path=str(tmp_path / "core.json"))
     plant(cm)
     rep = probe.__wrapped__(cm) if hasattr(probe, "__wrapped__") else None
@@ -24,8 +24,8 @@ def test_plant_and_probe_intact(tmp_path):
 
 
 def test_probe_detects_missing_canary(tmp_path, monkeypatch):
-    from aeryn_core.core_memory import CoreMemory
-    import aeryn_core.memory_canary as mc
+    from aeryn_core.memory.core_memory import CoreMemory
+    import aeryn_core.memory.memory_canary as mc
 
     cm = CoreMemory(path=str(tmp_path / "core.json"))
     plant(cm)
@@ -38,8 +38,8 @@ def test_probe_detects_missing_canary(tmp_path, monkeypatch):
 
 
 def test_exfiltration_detection(tmp_path, monkeypatch):
-    from aeryn_core.core_memory import CoreMemory
-    import aeryn_core.memory_canary as mc
+    from aeryn_core.memory.core_memory import CoreMemory
+    import aeryn_core.memory.memory_canary as mc
 
     dbdir = tmp_path / "Database" / "episodes"
     dbdir.mkdir(parents=True)

@@ -8,7 +8,7 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.core_memory import CoreMemory, BLOCK_LIMITS
+from aeryn_core.memory.core_memory import CoreMemory, BLOCK_LIMITS
 
 
 @pytest.fixture()
@@ -62,7 +62,7 @@ def test_registered_in_daemon_tools():
     assert "core_memory_edit" in d.TOOLS.tools
     assert d.TOOLS.tools["core_memory_edit"]["tier"] == "safe"
     # schema terbaca dari hermes_brain
-    from aeryn_core.hermes_brain import CORE_MEMORY_SCHEMA
+    from aeryn_core.hermes.hermes_brain import CORE_MEMORY_SCHEMA
     assert d.TOOLS.tools["core_memory_edit"]["schema"]["function"][
         "name"] == "core_memory_edit"
 

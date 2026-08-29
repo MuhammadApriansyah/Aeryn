@@ -8,8 +8,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 def test_graph_index_building():
     """Graph builds index from vault."""
-    from aeryn_core.graph import VaultGraph
-    from aeryn_core.vault import AerynVault, VaultEntry, LAYER_WIKI
+    from aeryn_core.memory.graph import VaultGraph
+    from aeryn_core.memory.vault import AerynVault, VaultEntry, LAYER_WIKI
     
     vault = AerynVault()
     entry1 = VaultEntry(layer=LAYER_WIKI, title="Note A", body="Links to [[Note B]] and [[Note C]].")
@@ -23,8 +23,8 @@ def test_graph_index_building():
 
 def test_graph_outgoing_links():
     """Find outgoing links from a note."""
-    from aeryn_core.graph import VaultGraph
-    from aeryn_core.vault import AerynVault, VaultEntry, LAYER_WIKI
+    from aeryn_core.memory.graph import VaultGraph
+    from aeryn_core.memory.vault import AerynVault, VaultEntry, LAYER_WIKI
     
     vault = AerynVault()
     entry = VaultEntry(layer=LAYER_WIKI, title="Source Note", body="See [[Target One]] and [[Target Two]].")
@@ -38,8 +38,8 @@ def test_graph_outgoing_links():
 
 def test_graph_backlinks():
     """Find backlinks to a note."""
-    from aeryn_core.graph import VaultGraph
-    from aeryn_core.vault import AerynVault, VaultEntry, LAYER_WIKI
+    from aeryn_core.memory.graph import VaultGraph
+    from aeryn_core.memory.vault import AerynVault, VaultEntry, LAYER_WIKI
     
     vault = AerynVault()
     entry1 = VaultEntry(layer=LAYER_WIKI, title="Popular Note", body="Important content.")
@@ -54,8 +54,8 @@ def test_graph_backlinks():
 
 def test_graph_local():
     """Get local graph centered on a note."""
-    from aeryn_core.graph import VaultGraph
-    from aeryn_core.vault import AerynVault, VaultEntry, LAYER_WIKI
+    from aeryn_core.memory.graph import VaultGraph
+    from aeryn_core.memory.vault import AerynVault, VaultEntry, LAYER_WIKI
     
     vault = AerynVault()
     entry1 = VaultEntry(layer=LAYER_WIKI, title="Center", body="Links to [[Left]] and [[Right]].")
@@ -72,8 +72,8 @@ def test_graph_local():
 
 def test_graph_related():
     """Find related notes via shared tags."""
-    from aeryn_core.graph import VaultGraph
-    from aeryn_core.vault import AerynVault, VaultEntry, LAYER_WIKI
+    from aeryn_core.memory.graph import VaultGraph
+    from aeryn_core.memory.vault import AerynVault, VaultEntry, LAYER_WIKI
     
     vault = AerynVault()
     entry1 = VaultEntry(layer=LAYER_WIKI, title="AI Research", body="About AI.", tags=["ai", "research"])
@@ -88,8 +88,8 @@ def test_graph_related():
 
 def test_graph_orphans():
     """Find orphaned notes."""
-    from aeryn_core.graph import VaultGraph
-    from aeryn_core.vault import AerynVault, VaultEntry, LAYER_WIKI
+    from aeryn_core.memory.graph import VaultGraph
+    from aeryn_core.memory.vault import AerynVault, VaultEntry, LAYER_WIKI
     
     vault = AerynVault()
     entry1 = VaultEntry(layer=LAYER_WIKI, title="Orphan Note", body="No links here.")
@@ -104,8 +104,8 @@ def test_graph_orphans():
 
 def test_graph_summary():
     """Render graph summary for system prompt."""
-    from aeryn_core.graph import VaultGraph
-    from aeryn_core.vault import AerynVault, VaultEntry, LAYER_WIKI
+    from aeryn_core.memory.graph import VaultGraph
+    from aeryn_core.memory.vault import AerynVault, VaultEntry, LAYER_WIKI
     
     vault = AerynVault()
     entry = VaultEntry(layer=LAYER_WIKI, title="Summary Test", body="Content with links.")

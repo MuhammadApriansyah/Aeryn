@@ -24,7 +24,7 @@ def test_persona_no_conflicting_passive_rules():
 def test_needs_research_stable_concepts_tolerated():
     """Konsep stabil tetap boleh dijawab dari kepala (FP diterima &
     didokumentasikan) — test hanya memastikan fungsi deterministik."""
-    from aeryn_core.reasoning_style import needs_research
+    from aeryn_core.reasoning.reasoning_style import needs_research
     # deterministik: hasil sama utk input sama
     assert needs_research("apa itu rekursi") == needs_research("apa itu rekursi")
     assert needs_research("apa itu react 19") is True

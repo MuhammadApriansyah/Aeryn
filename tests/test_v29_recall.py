@@ -8,8 +8,8 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.semantic_recall import SemanticRecall
-from aeryn_core.episodic_memory import EpisodicMemory
+from aeryn_core.memory.semantic_recall import SemanticRecall
+from aeryn_core.memory.episodic_memory import EpisodicMemory
 
 
 @pytest.fixture

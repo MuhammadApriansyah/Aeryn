@@ -5,7 +5,7 @@ import sys
 import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from aeryn_core.dynamic_schema import (build_dynamic_schemas, relevant_tools,
+from aeryn_core.utils.dynamic_schema import (build_dynamic_schemas, relevant_tools,
                                        schema_stats, _goal_paths)
 
 BASE = [

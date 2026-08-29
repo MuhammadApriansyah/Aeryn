@@ -4,7 +4,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.tool_governance import ToolGovernanceGate
+from aeryn_core.platform.tool_governance import ToolGovernanceGate
 
 
 class TestToolGovernanceGateInit:

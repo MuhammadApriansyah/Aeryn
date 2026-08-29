@@ -10,8 +10,8 @@ with open(os.path.expanduser('~/.hermes/.env')) as f:
             k,v = line.split('=',1)
             os.environ[k.strip()] = v.strip().strip('"').strip("'")
 
-from aeryn_core.model_client import ModelClient
-from aeryn_core.reasoning_style import (
+from aeryn_core.utils.model_client import ModelClient
+from aeryn_core.reasoning.reasoning_style import (
     COGNITIVE_CHAIN_OF_THOUGHT_RULE,
     RESEARCH_FIRST_RULE,
     NEXT_TOKEN_RULE,

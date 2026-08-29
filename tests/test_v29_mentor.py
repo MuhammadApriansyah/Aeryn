@@ -6,7 +6,7 @@ import sys
 import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from aeryn_core.reflection import PostRunReflection
+from aeryn_core.reasoning.reflection import PostRunReflection
 
 
 @pytest.fixture

@@ -3,7 +3,7 @@
 import sys, os, time
 sys.path.insert(0, '/home/sen/aeryn-core-agent')
 
-from aeryn_core.rate_limiter import RateLimiter, CircuitBreaker, get_circuit_breaker
+from aeryn_core.auth.rate_limiter import RateLimiter, CircuitBreaker, get_circuit_breaker
 
 def test_rate_limiter():
     rl = RateLimiter()

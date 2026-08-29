@@ -23,7 +23,7 @@ def main():
     else:
         response = sys.stdin.read()
 
-    from aeryn_core.orchestrator import UnifiedCognitiveOrchestrator
+    from aeryn_core.platform.orchestrator import UnifiedCognitiveOrchestrator
 
     brain = UnifiedCognitiveOrchestrator(dimension=384)
     result = brain.digest_external_llm_response(

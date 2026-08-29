@@ -30,7 +30,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
-from aeryn_core.model_client import ModelClient  # noqa: E402
+from aeryn_core.utils.model_client import ModelClient  # noqa: E402
 
 USER_AGENT = "aeryn-core/27 (+https://github.com/sen/aeryn-core)"
 PROBE_TIMEOUT_S = 20          # per-request — satu provider hang tidak boleh menggantung keseluruhan

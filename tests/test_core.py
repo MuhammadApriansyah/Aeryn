@@ -10,11 +10,11 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.episodic_memory import EpisodicMemory
-from aeryn_core.emotion_tone import tone_directive
-from aeryn_core.critic_pass import make_critic
-from aeryn_core.planner import _heuristic_plan, _looks_structured
-from aeryn_core.reflection import PostRunReflection
+from aeryn_core.memory.episodic_memory import EpisodicMemory
+from aeryn_core.reasoning.emotion_tone import tone_directive
+from aeryn_core.safety.critic_pass import make_critic
+from aeryn_core.reasoning.planner import _heuristic_plan, _looks_structured
+from aeryn_core.reasoning.reflection import PostRunReflection
 
 
 # ══════════ EpisodicMemory (V27.4) ══════════

@@ -8,7 +8,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.verifier import (
+from aeryn_core.safety.verifier import (
     mechanical_checks, verify_answer, verify_with_llm)
 
 

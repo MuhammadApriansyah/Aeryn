@@ -8,7 +8,7 @@ import random
 import re
 import time
 import urllib.request
-from aeryn_core.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
+from aeryn_core.utils.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
 BASE_DIR = BASE_DIR
 PERSONA_DIR = os.path.join(BASE_DIR, "Personalisasi/Persona")
@@ -29,7 +29,7 @@ _GREETINGS = [
 
 def _cerewet_social_nudge(user_id: str) -> str:
     try:
-        from aeryn_core.cerewet_mode import (
+        from aeryn_core.reasoning.cerewet_mode import (
             cerewet_context_block, mark_nagged, _load as _cl)
         uid = str(user_id)
         sid = f"dc_{uid}" if not uid.startswith("dc_") else uid

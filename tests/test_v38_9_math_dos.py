@@ -8,7 +8,7 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.basic_tools import math_calc
+from aeryn_core.utils.basic_tools import math_calc
 
 
 def test_dos_pow_rejected_fast():

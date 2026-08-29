@@ -8,7 +8,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.social_memory import SocialMemory
+from aeryn_core.memory.social_memory import SocialMemory
 
 
 def test_discord_ids_are_persistent():

@@ -12,8 +12,8 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.tool_bridge import build_default_registry
-from aeryn_core.hermes_brain import (
+from aeryn_core.platform.tool_bridge import build_default_registry
+from aeryn_core.hermes.hermes_brain import (
     register,
     _memory_search,
     _graph_traverse,

@@ -31,7 +31,7 @@ def main():
             tasks = json.load(f)
 
     # Import berat setelah argumen valid (fail fast)
-    from aeryn_core.orchestrator import UnifiedCognitiveOrchestrator
+    from aeryn_core.platform.orchestrator import UnifiedCognitiveOrchestrator
 
     brain = UnifiedCognitiveOrchestrator(dimension=384)
     compiled = brain.compile_stateful_system_prompt(

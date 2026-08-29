@@ -5,7 +5,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.fallback_router import get_fallback_directive
+from aeryn_core.utils.fallback_router import get_fallback_directive
 
 
 def test_error_gets_directive():
@@ -51,7 +51,7 @@ def test_success_result_untouched():
 def test_every_registered_tool_has_map_or_default():
     """Semua tool di daemon harus jatuh di peta ATAU default directive —
     tidak ada error yang 'menggantung' tanpa arahan."""
-    from aeryn_core.fallback_router import FALLBACK_MAP, DEFAULT_DIRECTIVE
+    from aeryn_core.utils.fallback_router import FALLBACK_MAP, DEFAULT_DIRECTIVE
     for tool in ("web_search", "web_read", "http_get", "fs_read",
                  "fs_write", "terminal", "ask_hermes", "spawn_subagents",
                  "memory_search", "core_memory_edit"):

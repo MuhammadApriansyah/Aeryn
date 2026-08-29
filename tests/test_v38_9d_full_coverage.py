@@ -4,7 +4,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.fallback_router import FALLBACK_MAP
+from aeryn_core.utils.fallback_router import FALLBACK_MAP
 
 
 def test_all_16_tools_have_fallback():

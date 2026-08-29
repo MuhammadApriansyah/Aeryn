@@ -3,7 +3,7 @@
 import sys, os
 sys.path.insert(0, '/home/sen/aeryn-core-agent')
 
-from aeryn_core.persona_engine import PersonaEngine, load_persona
+from aeryn_core.utils.persona_engine import PersonaEngine, load_persona
 
 def test_load_persona():
     persona = load_persona()

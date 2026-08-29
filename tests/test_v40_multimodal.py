@@ -7,7 +7,7 @@ import struct
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.multimodal import (
+from aeryn_core.utils.multimodal import (
     MultimodalResult,
     process_image,
     process_audio,

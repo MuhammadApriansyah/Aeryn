@@ -4,7 +4,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.verifier import verify_answer
+from aeryn_core.safety.verifier import verify_answer
 
 
 class Counting:

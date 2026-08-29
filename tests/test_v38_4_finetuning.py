@@ -10,9 +10,9 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.tool_bridge import build_default_registry
-from aeryn_core.hermes_hands import ask_hermes
-from aeryn_core.core_memory import CoreMemory
+from aeryn_core.platform.tool_bridge import build_default_registry
+from aeryn_core.hermes.hermes_hands import ask_hermes
+from aeryn_core.memory.core_memory import CoreMemory
 
 
 def test_web_read_blocks_internal_urls():

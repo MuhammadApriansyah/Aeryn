@@ -10,12 +10,12 @@ from typing import Optional
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.safety_engine import get_safety_engine, sanitize_output
-from aeryn_core.adapters import get_active_adapter, render_adapter_context
-from aeryn_core.reasoning_style import needs_research
-from aeryn_core.persona_engine import load_persona
-from aeryn_core.social_memory import SocialMemory
-from aeryn_core.config import ensure_dirs
+from aeryn_core.safety.safety_engine import get_safety_engine, sanitize_output
+from aeryn_core.utils.adapters import get_active_adapter, render_adapter_context
+from aeryn_core.reasoning.reasoning_style import needs_research
+from aeryn_core.utils.persona_engine import load_persona
+from aeryn_core.memory.social_memory import SocialMemory
+from aeryn_core.utils.config import ensure_dirs
 
 class HermesBridge:
     """Bridge between Hermes gateway and Aeryn core."""

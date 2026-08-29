@@ -10,7 +10,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.tool_bridge import ToolGraduationRegistry
+from aeryn_core.platform.tool_bridge import ToolGraduationRegistry
 
 
 def test_load_state_rejects_foreign_format(tmp_path):

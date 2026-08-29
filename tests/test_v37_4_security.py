@@ -8,8 +8,8 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.terminal_tool import make_terminal
-from aeryn_core.tool_bridge import build_default_registry
+from aeryn_core.safety.terminal_tool import make_terminal
+from aeryn_core.platform.tool_bridge import build_default_registry
 
 
 def test_terminal_blocks_secret_read():

@@ -57,7 +57,7 @@ def build_dataset():
         ("Misela", "terima nama kenalan"),
     ]
     for key, desc in traversal_cases:
-        from aeryn_core.social_memory import SocialMemory
+        from aeryn_core.memory.social_memory import SocialMemory
         expected = SocialMemory.is_persistent_person_key(key)
         dataset.append({
             "type": "key_filter",
