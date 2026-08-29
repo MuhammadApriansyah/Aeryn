@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 # Patch sqlite3.connect for WAL + busy_timeout — must be before any other imports
 import aeryn_core.patch_sqlite  # noqa
 
-from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect, Header
 from fastapi.responses import Response, FileResponse
 from pydantic import BaseModel, Field
 from aeryn_core.safety_engine import get_safety_engine, sanitize_output
@@ -56,7 +56,7 @@ from aeryn_core.email_agent import get_email_agent
 from aeryn_core.calendar_integration import get_calendar
 from aeryn_core.github_integration import get_github
 from aeryn_core.data_encryption import get_encryption
-from aeryn_core.auth_manager import get_auth
+
 from aeryn_core.realtime import get_emitter
 from aeryn_core.performance import get_optimizer, get_uptime
 from aeryn_core.logger import info, warn, error, log_exception
@@ -2739,6 +2739,69 @@ async def track_usage(user_id: str, event_type: str, endpoint: str = None,
     metering = get_usage_metering()
     metering.track(user_id, event_type, endpoint, tokens_input, tokens_output, cost)
     return {"status": "tracked"}
+
+# ── Auth Endpoints ────────────────────────────
+
+from pydantic import BaseModel, Field
+
+class RegisterRequest(BaseModel):
+    email: str
+    password: str
+    display_name: str = None
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+class TokenRequest(BaseModel):
+    token: str
+
+class ApiKeyRequest(BaseModel):
+    name: str = "default"
+    scopes: list = None
+    expires_days: int = 365
+
+@app.post("/auth/register")
+async def auth_register(req: RegisterRequest):
+    """Register a new user."""
+    auth = get_auth()
+    user = auth.create_user(req.email, req.password, req.display_name)
+    if not user:
+        return {"error": "User already exists or invalid data"}
+    return {"status": "ok", "user": user}
+
+@app.post("/auth/login")
+async def auth_login(req: LoginRequest):
+    """Login and get session token."""
+    auth = get_auth()
+    user = auth.authenticate(req.email, req.password)
+    if not user:
+        return {"error": "Invalid credentials"}
+    token = auth.generate_token(user["id"])
+    return {"status": "ok", "token": token, "user": user}
+
+@app.post("/auth/validate")
+async def auth_validate(req: TokenRequest):
+    """Validate a session token."""
+    auth = get_auth()
+    user = auth.validate_token(req.token)
+    if not user:
+        return {"error": "Invalid or expired token"}
+    return {"status": "ok", "user": user}
+
+@app.post("/auth/api-keys")
+async def auth_create_api_key(req: ApiKeyRequest, authorization: str = None):
+    """Create an API key for authenticated user."""
+    auth = get_auth()
+    # Get user from token in Authorization header
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required. Format: Bearer <token>"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    api_key = auth.generate_api_key(user["id"], req.name, req.scopes, req.expires_days)
+    return {"status": "ok", "api_key": api_key}
 
 # ── Secrets & Plugins ─────────────────────────
 
