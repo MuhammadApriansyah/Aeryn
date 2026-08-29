@@ -2,61 +2,55 @@ name: CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.11']
     
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-    
-    - name: Install uv
-      uses: astral-sh/setup-uv@v3
-      with:
-        version: "0.12.5"
-    
-    - name: Install system dependencies
-      run: |
-        sudo -S -p '' apt-get update
-        sudo -S -p '' apt-get install -y build-essential pkg-config libssl-dev
-    
-    - name: Create venv and install dependencies
-      run: |
-        uv venv venv-proot
-        source venv-proot/bin/activate
-        uv pip install -r requirements.txt
-    
-    - name: Build aeryn-engine
-      run: |
-        source venv-proot/bin/activate
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-        source $HOME/.cargo/env
-        cd aeryn-engine && maturin develop --release
-    
-    - name: Run tests
-      run: |
-        source venv-proot/bin/activate
-        python -m pytest tests/ -v --tb=short
-    
-    - name: Security scan
-      run: |
-        source venv-proot/bin/activate
-        grep -rn 'shell=True' aeryn_core/ apps/api/ --include='*.py' && exit 1 || echo "Security OK"
-    
-    - name: Upload results
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: test-results
-        path: test-results/
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install system deps
+        run: |
+          sudo -S -p '' apt-get update
+          sudo -S -p '' apt-get install -y build-essential pkg-config libssl-dev curl
+      
+      - name: Setup environment and run tests
+        run: |
+          # Install uv
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          export PATH="$HOME/.local/bin:$PATH"
+          
+          # Create venv
+          uv venv venv-proot
+          source venv-proot/bin/activate
+          
+          # Install Python deps
+          uv pip install -r requirements.txt
+          uv pip install pytest fastapi uvicorn pydantic
+          
+          # Install Rust and build engine
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          source $HOME/.cargo/env
+          cd aeryn-engine && maturin develop --release && cd ..
+          
+          # Run tests
+          python -m pytest tests/ -v --tb=short
+          
+          # Security scan
+          grep -rn 'shell=True' aeryn_core/ apps/api/ --include='*.py' && exit 1 || echo "Security OK"
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: test-results/
