@@ -1,102 +1,146 @@
-"""V39.60 — RateLimiter: extracted to separate module for reusability."""
+#!/usr/bin/env python3
+"""
+V41.0 — Rate Limiting.
+Middleware untuk membatasi request per user.
+"""
 
 import time
-import threading
-from collections import defaultdict, deque
+import uuid
+from typing import Dict, Optional
+from collections import defaultdict
+
+from aeryn_core.neon_db import get_neon
+from aeryn_core.logger import info, warn
+
+# Default limits
+DEFAULT_LIMITS = {
+    "free": {"requests_per_minute": 60, "requests_per_hour": 500, "requests_per_day": 2000},
+    "user": {"requests_per_minute": 100, "requests_per_hour": 1000, "requests_per_day": 5000},
+    "admin": {"requests_per_minute": 200, "requests_per_hour": 5000, "requests_per_day": 50000},
+}
 
 
 class RateLimiter:
-    """Token bucket rate limiter with per-key tracking."""
+    """Rate limiter dengan sliding window."""
     
-    def __init__(self, max_requests: int = 100, window_seconds: int = 60):
-        self.max_requests = max_requests
-        self.window = window_seconds
-        self._requests = defaultdict(deque)
-        self._lock = threading.Lock()
+    def __init__(self):
+        self.db = get_neon()
+        self._init_table()
     
-    def allow(self, key: str) -> bool:
-        """Check if request is allowed for key."""
-        now = time.time()
-        with self._lock:
-            # Clean old entries
-            while self._requests[key] and self._requests[key][0] < now - self.window:
-                self._requests[key].popleft()
-            if len(self._requests[key]) >= self.max_requests:
-                return False
-            self._requests[key].append(now)
-            return True
+    def _init_table(self):
+        """Inisialisasi tabel rate_limits."""
+        self.db.execute("""
+            CREATE TABLE IF NOT EXISTS rate_limits (
+                id TEXT PRIMARY KEY,
+                user_id TEXT NOT NULL,
+                endpoint TEXT NOT NULL,
+                method TEXT NOT NULL,
+                requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                ip_address TEXT,
+                user_agent TEXT
+            );
+        """)
+        self.db.execute("""
+            CREATE INDEX IF NOT EXISTS idx_rate_user_time 
+            ON rate_limits(user_id, requested_at);
+        """)
     
-    def reset(self, key: str = None):
-        """Reset rate limiter for key or all."""
-        with self._lock:
-            if key:
-                self._requests.pop(key, None)
-            else:
-                self._requests.clear()
+    def _cleanup_old(self, user_id: str):
+        """Hapus record lama (> 24 jam)."""
+        self.db.execute("""
+            DELETE FROM rate_limits 
+            WHERE user_id = %s AND requested_at < NOW() - INTERVAL '24 hours';
+        """, (user_id,))
     
-    def get_stats(self, key: str) -> dict:
-        """Get rate limiter stats for key."""
-        now = time.time()
-        with self._lock:
-            # Clean old
-            while self._requests[key] and self._requests[key][0] < now - self.window:
-                self._requests[key].popleft()
+    def check(self, user_id: str, endpoint: str, method: str = "GET",
+              ip_address: str = None, user_agent: str = None,
+              role: str = "user") -> Dict:
+        """
+        Cek apakah request diizinkan.
+        Returns: {"allowed": bool, "remaining": int, "reset_at": str}
+        """
+        limits = DEFAULT_LIMITS.get(role, DEFAULT_LIMITS["user"])
+        
+        # Cleanup old records
+        self._cleanup_old(user_id)
+        
+        # Count requests in last minute
+        minute_ago = time.time() - 60
+        hour_ago = time.time() - 3600
+        day_ago = time.time() - 86400
+        
+        # Count per minute
+        result = self.db.fetchone("""
+            SELECT COUNT(*) as cnt FROM rate_limits
+            WHERE user_id = %s AND requested_at > %s
+        """, (user_id, time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(minute_ago))))
+        minute_count = result['cnt'] if result else 0
+        
+        # Count per hour
+        result = self.db.fetchone("""
+            SELECT COUNT(*) as cnt FROM rate_limits
+            WHERE user_id = %s AND requested_at > %s
+        """, (user_id, time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(hour_ago))))
+        hour_count = result['cnt'] if result else 0
+        
+        # Count per day
+        result = self.db.fetchone("""
+            SELECT COUNT(*) as cnt FROM rate_limits
+            WHERE user_id = %s AND requested_at > %s
+        """, (user_id, time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(day_ago))))
+        day_count = result['cnt'] if result else 0
+        
+        # Check limits
+        if minute_count >= limits["requests_per_minute"]:
             return {
-                "key": key,
-                "requests_in_window": len(self._requests[key]),
-                "max_requests": self.max_requests,
-                "window_seconds": self.window,
+                "allowed": False,
+                "remaining": 0,
+                "limit": limits["requests_per_minute"],
+                "window": "minute",
+                "retry_after": 60 - (time.time() - minute_ago)
             }
+        
+        if hour_count >= limits["requests_per_hour"]:
+            return {
+                "allowed": False,
+                "remaining": 0,
+                "limit": limits["requests_per_hour"],
+                "window": "hour",
+                "retry_after": 3600 - (time.time() - hour_ago)
+            }
+        
+        if day_count >= limits["requests_per_day"]:
+            return {
+                "allowed": False,
+                "remaining": 0,
+                "limit": limits["requests_per_day"],
+                "window": "day",
+                "retry_after": 86400 - (time.time() - day_ago)
+            }
+        
+        # Record this request
+        self.db.insert('rate_limits', {
+            'id': uuid.uuid4().hex,
+            'user_id': user_id,
+            'endpoint': endpoint,
+            'method': method,
+            'ip_address': ip_address or '',
+            'user_agent': user_agent or '',
+        })
+        
+        return {
+            "allowed": True,
+            "remaining": limits["requests_per_minute"] - minute_count - 1,
+            "limit": limits["requests_per_minute"],
+            "window": "minute"
+        }
 
 
-class CircuitBreaker:
-    """Circuit breaker pattern for external service calls."""
-    
-    def __init__(self, max_failures: int = 3, base_wait: float = 1.0, max_wait: float = 60):
-        self.max_failures = max_failures
-        self.base_wait = base_wait
-        self.max_wait = max_wait
-        self._failures = 0
-        self._last_failure = 0
-        self._lock = threading.Lock()
-    
-    def record_failure(self):
-        with self._lock:
-            self._failures += 1
-            self._last_failure = time.time()
-    
-    def record_success(self):
-        with self._lock:
-            self._failures = max(0, self._failures - 1)
-    
-    def is_opened(self) -> bool:
-        return self._failures >= self.max_failures
-    
-    def should_skip(self) -> bool:
-        if not self.is_opened():
-            return False
-        wait = min(self.base_wait * (2 ** (self._failures - self.max_failures)), self.max_wait)
-        return time.time() - self._last_failure < wait
-    
-    def reset(self):
-        with self._lock:
-            self._failures = 0
-            self._last_failure = 0
+# Singleton
+_rate_limiter = None
 
-
-# Global registry for circuit breakers per provider
-_cb_cache = {}
-_cb_lock = threading.Lock()
-
-
-def get_circuit_breaker(url: str, **kwargs) -> CircuitBreaker:
-    """Get or create circuit breaker for URL."""
-    with _cb_lock:
-        if url not in _cb_cache:
-            _cb_cache[url] = CircuitBreaker(**kwargs)
-        return _cb_cache[url]
-
-
-def get_rate_limiter(max_requests: int = 100, window_seconds: int = 60) -> RateLimiter:
-    """Get a new rate limiter instance."""
-    return RateLimiter(max_requests, window_seconds)
+def get_rate_limiter() -> RateLimiter:
+    global _rate_limiter
+    if _rate_limiter is None:
+        _rate_limiter = RateLimiter()
+    return _rate_limiter

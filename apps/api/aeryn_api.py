@@ -52,6 +52,7 @@ from aeryn_core.cloud_sync import get_cloud_sync
 from aeryn_core.constitutional_ai import get_constitutional_ai
 from aeryn_core.emotional_intelligence import get_emotional_intelligence
 from aeryn_core.auth import get_auth, ROLE_PERMISSIONS
+from aeryn_core.rate_limiter import get_rate_limiter
 from aeryn_core.telegram_bot import get_telegram_bot
 from aeryn_core.email_agent import get_email_agent
 from aeryn_core.calendar_integration import get_calendar
@@ -96,6 +97,60 @@ async def global_exception_handler(request: Request, call_next):
             status_code=500,
             media_type="application/json",
         )
+
+# Rate limiting middleware
+@app.middleware("http")
+async def rate_limit_middleware(request: Request, call_next):
+    """Rate limiting middleware."""
+    try:
+        # Skip rate limiting for health check
+        if request.url.path == "/health":
+            return await call_next(request)
+        
+        # Get user from authorization header
+        auth_header = request.headers.get("authorization", "")
+        user_id = "anonymous"
+        role = "free"
+        
+        if auth_header.startswith("Bearer "):
+            token = auth_header.replace("Bearer ", "")
+            auth = get_auth()
+            user = auth.validate_token(token)
+            if user:
+                user_id = user["id"]
+                role = user.get("role", "user")
+        
+        # Check rate limit
+        limiter = get_rate_limiter()
+        result = limiter.check(
+            user_id=user_id,
+            endpoint=request.url.path,
+            method=request.method,
+            ip_address=request.client.host if request.client else None,
+            user_agent=request.headers.get("user-agent"),
+            role=role,
+        )
+        
+        if not result["allowed"]:
+            warn("Rate limit exceeded", user_id=user_id, endpoint=request.url.path)
+            return Response(
+                content=json.dumps({
+                    "error": "Rate limit exceeded",
+                    "retry_after": result.get("retry_after", 60),
+                    "limit": result["limit"],
+                    "window": result["window"],
+                }),
+                status_code=429,
+                media_type="application/json",
+                headers={"Retry-After": str(int(result.get("retry_after", 60)))},
+            )
+        
+        response = await call_next(request)
+        return response
+        
+    except Exception as e:
+        log_exception(e, context="rate_limit_middleware")
+        return await call_next(request)
 
 async def broadcast_loop():
     """Broadcast 15 data types every 5 seconds."""
