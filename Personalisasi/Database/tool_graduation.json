@@ -6,12 +6,12 @@
  },
  "http_get": {
   "status": "shadowing",
-  "success": 1060,
+  "success": 1069,
   "fail": 0
  },
  "web_read": {
   "status": "shadowing",
-  "success": 682,
+  "success": 697,
   "fail": 12
  },
  "fs_read": {
@@ -31,17 +31,17 @@
  },
  "memory_search": {
   "status": "native",
-  "success": 648,
+  "success": 657,
   "fail": 0
  },
  "graph_traverse": {
   "status": "shadowing",
-  "success": 270,
+  "success": 273,
   "fail": 0
  },
  "pitfall_search": {
   "status": "shadowing",
-  "success": 270,
+  "success": 273,
   "fail": 0
  },
  "core_memory_edit": {

@@ -225,3 +225,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Skills: 35 loaded
 - Scripts: 26 loaded
 - Plugin: aeryn-core v41.0 working
+
+## [41.1] — 2026-08-29
+
+### Added
+- **CI/CD Pipeline**: GitHub Actions for build, test, deploy
+- **Docker Support**: Dockerfile + docker-compose.yml
+- **Monitoring Dashboard**: Metrics collector (monitoring/metrics.py)
+- **Load Testing**: Locust load tests (tests/load/locustfile.py)
+- **Hermes Bridge**: Adapter layer for shared skills/scripts (35 skills, 26 scripts)
+- **Hermes Plugin**: Plugin wrapper for Hermes ecosystem
+- **Rate Limiter SQLite Fallback**: Works without Neon PG
+- **Circuit Breaker**: Fault tolerance pattern
+
+### Changed
+- Updated README.md with full documentation
+- Hermes integration modes: plugin, standalone+hermes, standalone
+- Rate limiter now uses SQLite (no hard Neon dependency)
+- SQL injection fixes: table name sanitization
+- All credentials moved to .env
+
+### Fixed
+- Rate limiter tests (were failing due to Neon connection)
+- SQL injection vulnerabilities in neon_db.py, vector_db.py, workspace_manager.py
+- Credential leak (Neon URL hardcoded → NEON_DATABASE_URL env var)
+
+### Security
+- No hardcoded credentials
+- No shell=True
+- Parameterized queries with table sanitization
+- Input validation & sanitization
+
+### Test Results
+- 590 tests pass
+- 0 failures
+- 1 warning

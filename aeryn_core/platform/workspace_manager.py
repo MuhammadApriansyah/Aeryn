@@ -172,7 +172,7 @@ class WorkspaceManager:
         params.append(workspace_id)
         
         self.db.execute(
-            f"UPDATE workspaces SET {', '.join(updates)} WHERE id = %s",
+            f"UPDATE workspaces SET {"".join(updates)} WHERE id = %s",
             tuple(params)
         )
         

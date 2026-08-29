@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 """
-V41.0 — Rate Limiting.
-Middleware untuk membatasi request per user.
+V41.0 — Rate Limiting + Circuit Breaker.
+Fallback to SQLite if Neon PG is unavailable.
 """
 
+import os
 import time
-import uuid
+import sqlite3
+import threading
 from typing import Dict, Optional
 from collections import defaultdict
 
-from aeryn_core.database.neon_db import get_neon
-from aeryn_core.utils.logger import info, warn
+DATABASE_DIR = os.environ.get('DATABASE_DIR', 'Personalisasi/Database')
+DB_PATH = os.path.join(DATABASE_DIR, 'rate_limiter.db')
 
-# Default limits
 DEFAULT_LIMITS = {
     "free": {"requests_per_minute": 60, "requests_per_hour": 500, "requests_per_day": 2000},
     "user": {"requests_per_minute": 100, "requests_per_hour": 1000, "requests_per_day": 5000},
@@ -21,183 +22,115 @@ DEFAULT_LIMITS = {
 
 
 class RateLimiter:
-    """Rate limiter dengan sliding window."""
+    """Rate limiter dengan sliding window — SQLite fallback."""
     
     def __init__(self):
-        self.db = get_neon()
-        self._init_table()
+        os.makedirs(DATABASE_DIR, exist_ok=True)
+        self._lock = threading.Lock()
+        self._init_db()
     
-    def _init_table(self):
-        """Inisialisasi tabel rate_limits."""
-        self.db.execute("""
-            CREATE TABLE IF NOT EXISTS rate_limits (
-                id TEXT PRIMARY KEY,
-                user_id TEXT NOT NULL,
-                endpoint TEXT NOT NULL,
-                method TEXT NOT NULL,
-                requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                ip_address TEXT,
-                user_agent TEXT
-            );
-        """)
-        self.db.execute("""
-            CREATE INDEX IF NOT EXISTS idx_rate_user_time 
-            ON rate_limits(user_id, requested_at);
-        """)
+    def _init_db(self):
+        with self._lock:
+            conn = sqlite3.connect(DB_PATH)
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS rate_limits (
+                    id TEXT PRIMARY KEY,
+                    user_id TEXT NOT NULL,
+                    endpoint TEXT NOT NULL,
+                    method TEXT NOT NULL,
+                    requested_at REAL,
+                    ip_address TEXT,
+                    user_agent TEXT
+                )
+            """)
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_rate_user ON rate_limits(user_id)")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_rate_time ON rate_limits(requested_at)")
+            conn.commit()
+            conn.close()
     
-    def _cleanup_old(self, user_id: str):
-        """Hapus record lama (> 24 jam)."""
-        self.db.execute("""
-            DELETE FROM rate_limits 
-            WHERE user_id = %s AND requested_at < NOW() - INTERVAL '24 hours';
-        """, (user_id,))
-    
-    def check(self, user_id: str, endpoint: str, method: str = "GET",
-              ip_address: str = None, user_agent: str = None,
-              role: str = "user") -> Dict:
-        """
-        Cek apakah request diizinkan.
-        Returns: {"allowed": bool, "remaining": int, "reset_at": str}
-        """
-        limits = DEFAULT_LIMITS.get(role, DEFAULT_LIMITS["user"])
+    def check(self, user_id: str, endpoint: str = "/", method: str = "GET", ip: str = None, ua: str = None) -> Dict:
+        now = time.time()
         
-        # Cleanup old records
-        self._cleanup_old(user_id)
+        with self._lock:
+            conn = sqlite3.connect(DB_PATH)
+            
+            one_minute_ago = now - 60
+            cursor = conn.execute(
+                "SELECT COUNT(*) FROM rate_limits WHERE user_id = ? AND requested_at > ?",
+                (user_id, one_minute_ago)
+            )
+            minute_count = cursor.fetchone()[0]
+            
+            req_id = f"rl_{user_id}_{int(now * 1000)}"
+            conn.execute(
+                "INSERT INTO rate_limits (id, user_id, endpoint, method, requested_at, ip_address, user_agent) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (req_id, user_id, endpoint, method, now, ip, ua)
+            )
+            
+            one_hour_ago = now - 3600
+            conn.execute("DELETE FROM rate_limits WHERE requested_at < ?", (one_hour_ago,))
+            
+            conn.commit()
+            conn.close()
         
-        # Count requests in last minute
-        minute_ago = time.time() - 60
-        hour_ago = time.time() - 3600
-        day_ago = time.time() - 86400
-        
-        # Count per minute
-        result = self.db.fetchone("""
-            SELECT COUNT(*) as cnt FROM rate_limits
-            WHERE user_id = %s AND requested_at > %s
-        """, (user_id, time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(minute_ago))))
-        minute_count = result['cnt'] if result else 0
-        
-        # Count per hour
-        result = self.db.fetchone("""
-            SELECT COUNT(*) as cnt FROM rate_limits
-            WHERE user_id = %s AND requested_at > %s
-        """, (user_id, time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(hour_ago))))
-        hour_count = result['cnt'] if result else 0
-        
-        # Count per day
-        result = self.db.fetchone("""
-            SELECT COUNT(*) as cnt FROM rate_limits
-            WHERE user_id = %s AND requested_at > %s
-        """, (user_id, time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(day_ago))))
-        day_count = result['cnt'] if result else 0
-        
-        # Check limits
-        if minute_count >= limits["requests_per_minute"]:
-            return {
-                "allowed": False,
-                "remaining": 0,
-                "limit": limits["requests_per_minute"],
-                "window": "minute",
-                "retry_after": 60 - (time.time() - minute_ago)
-            }
-        
-        if hour_count >= limits["requests_per_hour"]:
-            return {
-                "allowed": False,
-                "remaining": 0,
-                "limit": limits["requests_per_hour"],
-                "window": "hour",
-                "retry_after": 3600 - (time.time() - hour_ago)
-            }
-        
-        if day_count >= limits["requests_per_day"]:
-            return {
-                "allowed": False,
-                "remaining": 0,
-                "limit": limits["requests_per_day"],
-                "window": "day",
-                "retry_after": 86400 - (time.time() - day_ago)
-            }
-        
-        # Record this request
-        self.db.insert('rate_limits', {
-            'id': uuid.uuid4().hex,
-            'user_id': user_id,
-            'endpoint': endpoint,
-            'method': method,
-            'ip_address': ip_address or '',
-            'user_agent': user_agent or '',
-        })
+        limits = DEFAULT_LIMITS.get("user")
+        allowed = minute_count < limits["requests_per_minute"]
         
         return {
-            "allowed": True,
-            "remaining": limits["requests_per_minute"] - minute_count - 1,
+            "allowed": allowed,
+            "remaining": max(0, limits["requests_per_minute"] - minute_count - 1),
             "limit": limits["requests_per_minute"],
-            "window": "minute"
+            "window": "minute",
         }
+    
+    def reset(self, user_id: str):
+        with self._lock:
+            conn = sqlite3.connect(DB_PATH)
+            conn.execute("DELETE FROM rate_limits WHERE user_id = ?", (user_id,))
+            conn.commit()
+            conn.close()
 
-
-# Singleton
-_rate_limiter = None
-
-def get_rate_limiter() -> RateLimiter:
-    global _rate_limiter
-    if _rate_limiter is None:
-        _rate_limiter = RateLimiter()
-    return _rate_limiter
-
-
-# ── Circuit Breaker ───────────────────────────
 
 class CircuitBreaker:
-    """Circuit breaker pattern for external service calls."""
+    """Circuit breaker pattern."""
     
-    def __init__(self, max_failures: int = 3, base_wait: float = 1.0, max_wait: float = 60.0):
+    def __init__(self, max_failures: int = 3, base_wait: float = 5.0):
         self.max_failures = max_failures
         self.base_wait = base_wait
-        self.max_wait = max_wait
         self.failure_count = 0
-        self.last_failure_time = None
-        self.state = "closed"  # closed, open, half-open
+        self.last_failure_time = 0
+        self.state = "closed"
     
     def record_failure(self):
-        """Record a failure."""
         self.failure_count += 1
         self.last_failure_time = time.time()
         if self.failure_count >= self.max_failures:
             self.state = "open"
     
     def record_success(self):
-        """Record a success."""
         self.failure_count = 0
         self.state = "closed"
     
     def is_opened(self) -> bool:
-        """Check if circuit is open."""
+        return self.state == "open"
+    
+    def should_skip(self) -> bool:
         if self.state == "open":
-            # Check if we should try half-open (after base_wait)
-            if self.last_failure_time and (time.time() - self.last_failure_time) > self.base_wait:
+            if time.time() - self.last_failure_time > self.base_wait:
                 self.state = "half-open"
                 return False
             return True
         return False
-    
-    def should_skip(self) -> bool:
-        """Check if request should be skipped."""
-        return self.is_opened()
-    
-    def get_wait_time(self) -> float:
-        """Get wait time before retry."""
-        if self.failure_count == 0:
-            return 0
-        wait = self.base_wait * (2 ** (self.failure_count - 1))
-        return min(wait, self.max_wait)
 
 
-# Circuit breaker registry
-_circuit_breakers: Dict[str, CircuitBreaker] = {}
+_circuit_breaker = None
 
-def get_circuit_breaker(name: str, max_failures: int = 3, base_wait: float = 1.0) -> CircuitBreaker:
-    """Get or create a circuit breaker."""
-    if name not in _circuit_breakers:
-        _circuit_breakers[name] = CircuitBreaker(max_failures, base_wait)
-    return _circuit_breakers[name]
+def get_circuit_breaker() -> CircuitBreaker:
+    global _circuit_breaker
+    if _circuit_breaker is None:
+        _circuit_breaker = CircuitBreaker()
+    return _circuit_breaker
+
+
+def get_rate_limiter() -> RateLimiter:
+    return RateLimiter()

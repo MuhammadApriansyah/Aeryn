@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  aeryn:
+    build: .
+    container_name: aeryn-api
+    ports:
+      - "3010:3010"
+    environment:
+      - DATABASE_DIR=/app/Personalisasi/Database
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - NEON_DATABASE_URL=${NEON_DATABASE_URL:-}
+    volumes:
+      - aeryn-data:/app/Personalisasi
+      - aeryn-logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3010/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Optional: PostgreSQL for local development
+  # db:
+  #   image: postgres:15
+  #   container_name: aeryn-db
+  #   environment:
+  #     POSTGRES_DB: aeryn
+  #     POSTGRES_USER: aeryn
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+
+volumes:
+  aeryn-data:
+  aeryn-logs:
+  # pgdata:

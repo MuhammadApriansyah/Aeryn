@@ -228,7 +228,7 @@ class _SqliteCollection:
 
         with self._lock:
             rows = self._conn.execute(
-                f"SELECT id, document, embedding, metadata FROM {self._name}"
+                f"SELECT id, document, embedding, metadata FROM {self._sanitize_table_name(self._name)}"
             ).fetchall()
 
         scored: List[Tuple[float, str, str, Dict[str, Any]]] = []
@@ -256,7 +256,7 @@ class _SqliteCollection:
         with self._lock:
             for doc_id in ids:
                 self._conn.execute(
-                    f"DELETE FROM {self._name} WHERE id = ?", (doc_id,)
+                    f"DELETE FROM {self._sanitize_table_name(self._name)} WHERE id = ?", (doc_id,)
                 )
             self._conn.commit()
 

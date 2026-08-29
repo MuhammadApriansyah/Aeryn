@@ -114,28 +114,28 @@ class NeonDB:
         self._sanitize_table_name(table)
         columns = ', '.join(data.keys())
         placeholders = ', '.join(['%s'] * len(data))
-        query = f"INSERT INTO {table} ({columns}) VALUES ({placeholders})"
+        query = "INSERT INTO {} ({}) VALUES ({})".format(self._sanitize_table_name(table), columns, placeholders)
         self.execute(query, tuple(data.values()))
 
     def update(self, table: str, data: Dict[str, Any], where: str, where_params: tuple = None) -> None:
         """Update rows in table."""
         self._sanitize_table_name(table)
         set_clause = ', '.join([f"{k} = %s" for k in data.keys()])
-        query = f"UPDATE {table} SET {set_clause} WHERE {where}"
+        query = "UPDATE {} SET {} WHERE {}".format(self._sanitize_table_name(table), set_clause, where)
         params = tuple(data.values()) + (where_params or ())
         self.execute(query, params)
 
     def delete(self, table: str, where: str, where_params: tuple = None) -> None:
         """Delete rows from table."""
         self._sanitize_table_name(table)
-        query = f"DELETE FROM {table} WHERE {where}"
+        query = "DELETE FROM {} WHERE {}".format(self._sanitize_table_name(table), where)
         self.execute(query, where_params)
 
     def select(self, table: str, where: str = None, params: tuple = None, 
                order_by: str = None, limit: int = None) -> List[Dict]:
         """Select rows from table."""
         self._sanitize_table_name(table)
-        query = f"SELECT * FROM {table}"
+        query = "SELECT * FROM {}".format(self._sanitize_table_name(table))
         if where:
             query += f" WHERE {where}"
         if order_by:

@@ -1,12 +1,13 @@
 # 🤖 Aeryn — Personal Assistant Agent SaaS
 
-> AI-powered personal assistant platform with multi-model support, team workspaces, enterprise features, and Rust-powered performance.
+> AI-powered personal assistant platform with multi-model support, team workspaces, enterprise features, Rust-powered performance, and Hermes integration.
 
-![Version](https://img.shields.io/badge/version-41.0-blue)
+![Version](https://img.shields.io/badge/version-41.1-blue)
 ![Tests](https://img.shields.io/badge/tests-590%20passed-brightgreen)
 ![Security](https://img.shields.io/badge/security-clean-success)
 ![Python](https://img.shields.io/badge/python-3.11+-blue)
 ![Rust](https://img.shields.io/badge/rust-1.75+-orange)
+![Hermes](https://img.shields.io/badge/hermes-integrated-purple)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ---
@@ -17,7 +18,8 @@
 - JWT-based authentication with API keys
 - SSO (Google OAuth, GitHub OAuth)
 - Role-Based Access Control (RBAC): admin, user, readonly
-- Rate limiting per user/role
+- Rate limiting per user/role (SQLite fallback)
+- Circuit breaker pattern
 - PBKDF2-SHA256 password hashing
 
 ### AI Capabilities
@@ -30,10 +32,16 @@
 
 ### Rust Engine (High-Performance)
 - **VectorDB**: Cosine similarity search (10-100x faster than pure Python)
-- **RateLimiter**: Sliding window rate limiter (DashMap-based)
+- **RateLimiter**: Sliding window rate limiter (DashMap-based, microsecond precision)
 - **SSE Broadcaster**: High-concurrency Server-Sent Events broadcaster
 - **WebSocket Server**: Scalable WebSocket server
 - **Connection Pool**: PostgreSQL connection pooling
+
+### Hermes Integration
+- **35 skills** (3 Aeryn custom + 32 Hermes shared)
+- **26 scripts** (8 Aeryn custom + 18 Hermes shared)
+- **3 operating modes**: Plugin, Standalone + Hermes, Standalone
+- Auto-detection of Hermes availability
 
 ### Platform
 - Team workspaces with shared memory
@@ -48,6 +56,12 @@
 - Stripe integration (subscriptions, payment intents)
 - Quota management per plan (free/pro/enterprise)
 
+### DevOps
+- **CI/CD Pipeline**: GitHub Actions for build, test, deploy
+- **Docker Support**: Dockerfile + docker-compose
+- **Monitoring**: Metrics collector with SQLite storage
+- **Load Testing**: Locust-based load testing
+
 ---
 
 ## 🏗️ Architecture
@@ -57,24 +71,26 @@ Aeryn/
 ├── aeryn_core/              ← Python (147 modules, business logic)
 │   ├── auth/                ← Authentication, SSO, rate limiting
 │   ├── billing/             ← Billing, usage metering
-│   ├── database/            ← PostgreSQL (Neon) + SQLite + vector DB
+│   ├── database/            ← VectorDB, SQLite, Neon PG
 │   ├── hermes/              ← Hermes integration (brain, hands, reflex)
-│   ├── memory/              ← Vault, semantic, temporal, episodic memory
+│   ├── hermes_bridge/       ← Hermes adapter (shared skills/scripts)
+│   ├── hermes_plugin/       ← Plugin wrapper
+│   ├── memory/              ← Vault, semantic, temporal, episodic
 │   ├── platform/            ← Webhooks, plugins, workspaces, integrations
-│   ├── reasoning/           ← Context, reasoning style, proactive engine
+│   ├── reasoning/           ← Context, reasoning style, proactive
 │   ├── safety/              ← Security, guardrails, sandbox
-│   └── utils/               ← Logger, config, performance, adapters
+│   └── utils/               ← Logger, config, performance, cache
 ├── aeryn-engine/            ← Rust (5 hot-path modules)
-│   ├── src/lib.rs           ← PyO3 bindings
-│   ├── Cargo.toml           ← tokio, crossbeam, dashmap, parking_lot
-│   └── pyproject.toml       ← maturin build
-├── apps/api/                ← FastAPI daemon (:3010)
+│   └── src/lib.rs           ← PyO3 bindings
+├── plugins/aeryn-core/      ← Hermes plugin entry
 ├── scripts/                 ← Operational scripts
 ├── skills/                  ← Procedural knowledge
 ├── tests/                   ← 590 tests
-├── docs/                    ← Documentation
-├── sdk/                     ← Python + TypeScript SDKs
-└── Personalisasi/           ← User data (Vault, Database, Persona)
+├── docs/                    ← README + CHANGELOG
+├── .github/workflows/       ← CI/CD Pipeline
+├── monitoring/              ← Metrics collector
+├── Dockerfile               ← Docker support
+└── docker-compose.yml       ← Docker Compose
 ```
 
 ---
@@ -92,7 +108,8 @@ Aeryn/
 | Real-time | WebSocket + SSE |
 | Task Queue | asyncio background tasks |
 | Build System | uv + Maturin (PyO3) |
-| Deployment | PM2 |
+| CI/CD | GitHub Actions |
+| Deployment | PM2, Docker |
 
 ---
 
@@ -140,6 +157,7 @@ cat > .env << 'EOF'
 GEMINI_API_KEY=your_key_here
 OPENROUTER_API_KEY=your_key_here
 DEEPSEEK_API_KEY=your_key_here
+NEON_DATABASE_URL=your_neon_url_here
 DATABASE_DIR=Personalisasi/Database
 EOF
 ```
@@ -150,8 +168,8 @@ EOF
 # Start with PM2
 pm2 start ecosystem.config.js
 
-# Or run directly
-./venv-proot/bin/python apps/api/aeryn_api.py
+# Or with Docker
+docker-compose up -d
 ```
 
 ### Health Check
@@ -191,6 +209,9 @@ Interactive API docs available at:
 
 # With coverage
 ./venv-proot/bin/python -m pytest tests/ --cov=aeryn_core --cov-report=html
+
+# Load testing
+locust -f tests/load/locustfile.py --host=http://localhost:3010
 ```
 
 ---
@@ -217,12 +238,13 @@ Interactive API docs available at:
 
 - PBKDF2-SHA256 password hashing (100k iterations)
 - JWT tokens with expiration
-- SQL injection prevention (parameterized queries)
+- SQL injection prevention (parameterized queries + table sanitization)
 - Command injection prevention (no shell=True)
 - Input sanitization & validation
-- Rate limiting per endpoint
+- Rate limiting per endpoint (SQLite fallback)
 - CORS protection
 - Audit logging
+- No hardcoded credentials (all from .env)
 
 ---
 
@@ -240,13 +262,18 @@ Interactive API docs available at:
 
 Aeryn can operate in three modes:
 
-| Mode | Description |
-|------|-------------|
-| **Plugin** | Running as Hermes plugin (messaging gateway) |
-| **Standalone + Hermes** | Aeryn standalone with Hermes shared resources |
-| **Standalone** | Fully independent without Hermes |
+| Mode | Description | Use Case |
+|------|-------------|----------|
+| **Plugin** | Running as Hermes plugin | User chat via Telegram/Discord |
+| **Standalone + Hermes** | Aeryn standalone with Hermes shared resources | Development, testing |
+| **Standalone** | Fully independent | Production deployment |
 
-Hermes shared resources (52 skills + 19 scripts) are automatically loaded when available.
+### Shared Resources
+
+| Resource | Aeryn Custom | Hermes Shared | Total |
+|----------|-------------|---------------|-------|
+| Skills | 3 | 32 | 35 |
+| Scripts | 8 | 18 | 26 |
 
 ---
 
