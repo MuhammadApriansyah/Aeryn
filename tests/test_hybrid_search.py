@@ -3,7 +3,7 @@
 import sys, os, uuid
 sys.path.insert(0, '/home/sen/aeryn-core-agent')
 
-from aeryn_core.hybrid_search import HybridSearchEngine
+from aeryn_core.memory.hybrid_search import HybridSearchEngine
 
 def test_index_and_search():
     hse = HybridSearchEngine()
