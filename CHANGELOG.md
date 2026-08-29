@@ -280,3 +280,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 598 tests pass
 - 0 failures
 - 1 warning
+
+## [42.0] — 2026-08-29
+
+### Added
+- **Security Hardening**:
+  - Prompt injection defense (input sanitization, output validation)
+  - Memory injection defense (integrity verification, access audit)
+  - Tool permission limits (risk-based access, blast radius reduction)
+  - System prompt protection (extraction detection)
+- **Cost Optimization**:
+  - Token monitoring (per-request tracking, budget enforcement)
+  - Model routing (tiered selection for 60-70% cost reduction)
+  - Cost attribution by team/feature/user
+- **Adaptive Rule Engine** (V42):
+  - Hot-reloadable rules
+  - Priority-based evaluation
+  - Multiple conditions and actions
+
+### Changed
+- Updated README.md with security documentation
+- Test count: 598 → 602
+
+### Security
+- No hardcoded credentials
+- No shell=True
+- Parameterized queries with table sanitization
+- Input validation & sanitization
+- Output validation before execution
+- Memory access audit logging
+- Tool permission limits
+
+### Test Results
+- 602 tests pass
+- 0 failures
+- 1 warning

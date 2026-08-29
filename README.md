@@ -1,10 +1,10 @@
 # 🤖 Aeryn — Personal Assistant Agent SaaS
 
-> AI-powered personal assistant platform with multi-model support, team workspaces, enterprise features, Rust-powered performance, Hermes integration, and **fully adaptive rule engine**.
+> AI-powered personal assistant platform with multi-model support, team workspaces, enterprise features, Rust-powered performance, Hermes integration, and **security-first architecture**.
 
-![Version](https://img.shields.io/badge/version-41.2-blue)
-![Tests](https://img.shields.io/badge/tests-598%20passed-brightgreen)
-![Security](https://img.shields.io/badge/security-clean-success)
+![Version](https://img.shields.io/badge/version-42.0-blue)
+![Tests](https://img.shields.io/badge/tests-602%20passed-brightgreen)
+![Security](https://img.shields.io/badge/security-layered-success)
 ![Python](https://img.shields.io/badge/python-3.11+-blue)
 ![Rust](https://img.shields.io/badge/rust-1.75+-orange)
 ![Hermes](https://img.shields.io/badge/hermes-integrated-purple)
@@ -15,13 +15,18 @@
 
 ## 🚀 Features
 
-### Adaptive Rule Engine (NEW in V41.2)
+### Security-First Architecture (NEW in V42)
+- **Prompt Injection Defense**: Input sanitization, output validation, extraction detection
+- **Memory Injection Defense**: Integrity verification, access audit trail
+- **Tool Permission Limits**: Risk-based tool access, blast radius reduction
+- **Model Routing**: Tiered model selection (60-70% cost reduction)
+- **Token Monitoring**: Per-request tracking, budget enforcement, cost attribution
+
+### Adaptive Rule Engine (V42)
 - **Hot-reloadable rules** — Change behavior without restart
 - **Priority-based evaluation** — Higher priority rules execute first
-- **Multiple conditions**: `always`, `contains`, `equals`, `regex`, `threshold`
-- **Multiple actions**: `allow`, `deny`, `log`, `redirect`, `custom`
-- **JSON import/export** — Rules as code
-- **Sub-millisecond evaluation** — Rust-powered performance
+- **Multiple conditions**: always, contains, equals, regex, threshold
+- **Multiple actions**: allow, deny, log, redirect, custom
 
 ### Authentication & Security
 - JWT-based authentication with API keys
@@ -64,7 +69,7 @@
 ### DevOps
 - **CI/CD Pipeline**: GitHub Actions
 - **Docker Support**: Dockerfile + docker-compose
-- **Monitoring**: Metrics collector
+- **Monitoring**: Metrics collector + token monitoring
 - **Load Testing**: Locust-based
 
 ---
@@ -76,17 +81,17 @@ Aeryn/
 ├── aeryn_core/              ← Python (147 modules)
 │   ├── auth/                ← Auth, SSO, rate limiting
 │   ├── billing/             ← Billing, usage metering
+│   ├── cost/                ← NEW: Token monitoring, model routing
 │   ├── database/            ← VectorDB, SQLite, Neon PG
 │   ├── hermes_bridge/       ← Hermes adapter (shared skills/scripts)
 │   ├── memory/              ← Vault, semantic, temporal
 │   ├── platform/            ← Webhooks, plugins, workspaces
 │   ├── reasoning/           ← Context, reasoning style
 │   ├── safety/              ← Security, guardrails
-│   └── utils/               ← Logger, config, cache
+│   └── security/            ← NEW: Prompt injection, memory guard, tool permissions
 ├── aeryn-engine/            ← Rust (6 modules)
-│   └── src/lib.rs           ← Adaptive Engine + PyO3
 ├── plugins/aeryn-core/      ← Hermes plugin entry
-├── tests/                   ← 598 tests
+├── tests/                   ← 602 tests
 ├── .github/workflows/       ← CI/CD Pipeline
 ├── Dockerfile + compose     ← Docker support
 └── monitoring/              ← Metrics collector
@@ -155,17 +160,37 @@ locust -f tests/load/locustfile.py --host=http://localhost:3010
 
 ## 🔒 Security
 
-- No hardcoded credentials
-- No shell=True
-- Parameterized queries with table sanitization
-- Rate limiting per endpoint
+### Prompt Injection Defense
+- Input sanitization for all user inputs
+- System prompt separation from user data
+- Output validation before execution
+- Runtime content filters for adversarial patterns
+- Tool permission limits (blast radius reduction)
+
+### Memory Injection Defense
+- Memory integrity verification
+- Session isolation enforcement
+- Memory access audit logging
+- Anomaly detection for memory access patterns
+
+### Tool Permission System
+- Risk classification (LOW, MEDIUM, HIGH, CRITICAL)
+- Confirmation required for high-stakes actions
+- Session-based tool access limits
+- Blast radius reduction
+
+### Cost Optimization
+- Token usage tracking per request
+- Cost attribution by team/feature/user
+- Model routing (tiered selection)
+- Budget enforcement
 
 ---
 
 ## 📊 Test Coverage
 
 ```
-598 tests pass
+602 tests pass
 0 failures
 1 warning
 ```
