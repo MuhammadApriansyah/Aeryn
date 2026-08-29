@@ -31,18 +31,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest fastapi uvicorn pydantic numpy discord.py maturin
       
+      - name: Set cargo PATH
+        run: echo "$HOME/.cargo/bin:$PATH" >> $GITHUB_PATH
+      
       - name: Build and install aeryn-engine
         run: |
-          export PATH="$HOME/.cargo/bin:$PATH"
-          cd /home/runner/work/Aeryn/Aeryn/aeryn-engine
+          cd aeryn-engine
           maturin develop --release
       
       - name: Run tests
         run: |
-          cd /home/runner/work/Aeryn/Aeryn
           python -m pytest tests/ --tb=short --ignore=tests/load
           
       - name: Security scan
         run: |
-          cd /home/runner/work/Aeryn/Aeryn
           grep -rn 'shell=True' aeryn_core/ apps/api/ --include='*.py' && exit 1 || echo "Security OK"
