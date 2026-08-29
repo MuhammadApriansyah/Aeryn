@@ -408,3 +408,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 619 tests pass
 - 0 failures
 - 1 warning
+
+## [46.0] — 2026-08-29
+
+### Added
+- **Fullstack AI Engineer Mode**:
+  - Fullstack CLI (`new`, `dev`, `db:migrate`, `db:seed`, `test`, `build`, `deploy`)
+  - Realistic project templates (React + Fastify + SQLite)
+  - Database migration system with rollback
+  - Hot reload development workflow
+  - Multi-target deployment (PM2, Docker, Vercel)
+
+### Changed
+- Updated README.md with Fullstack AI Engineer documentation
+- Test count: 619 → 630
+
+### New Modules
+- `aeryn_core/fullstack/cli/` — Fullstack CLI
+- `aeryn_core/fullstack/templates/` — Project templates
+- `aeryn_core/fullstack/migration/` — Migration system
+
+### Test Results
+- 630 tests pass
+- 0 failures
+- 1 warning
