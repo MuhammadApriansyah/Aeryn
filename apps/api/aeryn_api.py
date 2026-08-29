@@ -351,7 +351,6 @@ async def chat(req: RunRequest):
     
     # Add user message
     session.add_message("user", req.goal)
-    router.memory.store(req.session_id, "user", req.goal)
     
     # Get context window
     messages = [
@@ -366,7 +365,6 @@ async def chat(req: RunRequest):
 
         # Store response
         session.add_message("assistant", response, json.dumps(reasoning))
-        router.memory.store(req.session_id, "assistant", response)
         
         return {
             "status": "ok",
@@ -538,7 +536,6 @@ async def dashboard_websocket(websocket: WebSocket):
                             result = await router.llm.chat(messages, sid)
                             response = result["content"]
                             session.add_message("assistant", response, json.dumps(result.get("reasoning", [])))
-                            router.memory.add_message(sid, "assistant", response)
                             reasoning = result.get("reasoning", [])
                             await websocket.send_json({"type": "chat_response", "data": {"response": response, "session_id": sid, "reasoning": reasoning}})
                             # Small delay to ensure chat_response is received before broadcast
