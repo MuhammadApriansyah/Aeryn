@@ -1,9 +1,9 @@
 # 🤖 Aeryn — Personal Assistant Agent SaaS
 
-> AI-powered personal assistant platform with multi-model support, team workspaces, enterprise features, Rust-powered performance, Hermes integration, security-first architecture, MCP protocol, multi-agent orchestration, and integration SDK.
+> AI-powered personal assistant platform with multi-model support, team workspaces, enterprise features, Rust-powered performance, Hermes integration, security-first architecture, MCP protocol, multi-agent orchestration, integration SDK, and **3 strategic positioning options: Personal Assistant, Agent Infrastructure, Security Platform**.
 
-![Version](https://img.shields.io/badge/version-43.0-blue)
-![Tests](https://img.shields.io/badge/tests-606%20passed-brightgreen)
+![Version](https://img.shields.io/badge/version-44.0-blue)
+![Tests](https://img.shields.io/badge/tests-613%20passed-brightgreen)
 ![Security](https://img.shields.io/badge/security-layered-success)
 ![MCP](https://img.shields.io/badge/mcp-protocol-success)
 ![Python](https://img.shields.io/badge/python-3.11+-blue)
@@ -15,23 +15,39 @@
 
 ## 🚀 Features
 
-### MCP Protocol (NEW in V43)
+### Strategic Positioning (V44)
+
+#### Option A: Personal Assistant
+- **Proactive Engine**: Pattern-based suggestions, time-aware recommendations
+- **Personalization**: User preferences, behavior-based customization
+- **Personal Context**: User profile, goals, work style, energy patterns
+
+#### Option B: Agent Infrastructure
+- **Agent Templates**: Pre-built templates (researcher, writer, coder, analyst, support)
+- **Agent CLI**: Create, list, run agents from command line
+- **Template Marketplace**: Category-based template discovery
+
+#### Option C: Security Platform
+- **Security Dashboard**: Real-time monitoring, threat alerts
+- **Compliance Module**: SOC2, GDPR, HIPAA tracking and reporting
+- **Threat Detection**: Event logging, severity classification
+
+### MCP Protocol (V43)
 - **MCP Server**: Serve tools, resources, prompts to external MCP clients
 - **MCP Client**: Connect to external MCP servers and invoke tools
 - **MCP Registry**: Manage multiple MCP server connections
 - **Tool Discovery**: Automatic tool/resource/prompt discovery
 
-### Multi-Agent Orchestration (NEW in V43)
+### Multi-Agent Orchestration (V43)
 - **Workflow Engine**: Coordinate multiple agents for complex tasks
 - **Task Management**: Priority-based task execution with dependencies
 - **Agent Registry**: Register agents with capabilities
 - **Workflow Status**: Real-time workflow monitoring
 
-### Integration SDK (NEW in V43)
+### Integration SDK (V43)
 - **Developer SDK**: Build third-party integrations
 - **Integration Registry**: Manage integrations
 - **Categories**: Organize by CRM, Communication, Development, etc.
-- **Version Control**: Track integration versions
 
 ### Security-First Architecture (V42)
 - **Prompt Injection Defense**: Input sanitization, output validation, extraction detection
@@ -96,23 +112,25 @@
 
 ```
 Aeryn/
-├── aeryn_core/              ← Python (155+ modules)
+├── aeryn_core/              ← Python (165+ modules)
 │   ├── auth/                ← Auth, SSO, rate limiting
 │   ├── billing/             ← Billing, usage metering
 │   ├── cost/                ← Token monitoring, model routing
 │   ├── database/            ← VectorDB, SQLite, Neon PG
 │   ├── hermes_bridge/       ← Hermes adapter (shared skills/scripts)
-│   ├── integrations/        ← NEW: Integration SDK
-│   ├── mcp/                 ← NEW: MCP server + client
+│   ├── infra/               ← NEW: Agent templates + CLI
+│   ├── integrations/        ← Integration SDK
+│   ├── mcp/                 ← MCP server + client
 │   ├── memory/              ← Vault, semantic, temporal
-│   ├── multi_agent/         ← NEW: Multi-Agent orchestrator
+│   ├── multi_agent/         ← Multi-Agent orchestrator
+│   ├── personal/            ← NEW: Proactive engine + personalization
 │   ├── platform/            ← Webhooks, plugins, workspaces
 │   ├── reasoning/           ← Context, reasoning style
 │   ├── safety/              ← Security, guardrails
-│   └── security/            ← Prompt injection, memory guard, tool permissions
+│   └── security/            ← Prompt injection, memory guard, tool permissions, dashboard
 ├── aeryn-engine/            ← Rust (6 modules)
 ├── plugins/aeryn-core/      ← Hermes plugin entry
-├── tests/                   ← 606 tests
+├── tests/                   ← 613 tests
 ├── .github/workflows/       ← CI/CD Pipeline
 ├── Dockerfile + compose     ← Docker support
 └── monitoring/              ← Metrics collector
@@ -168,119 +186,10 @@ curl http://127.0.0.1:3010/health
 
 ---
 
-## 📚 MCP Protocol
-
-### Registering a Tool (Server)
-```python
-from aeryn_core.mcp import mcp_server
-
-mcp_server.register_tool(
-    name="search",
-    description="Search the web",
-    input_schema={"type": "object", "properties": {"query": {"type": "string"}}},
-    handler="search_handler"
-)
-```
-
-### Calling an External Tool (Client)
-```python
-from aeryn_core.mcp import mcp_registry
-
-client = mcp_registry.register("github", "http://mcp-github.com")
-result = client.call_tool("search_repos", {"query": "aeryn"})
-```
-
----
-
-## 🤖 Multi-Agent Orchestration
-
-```python
-from aeryn_core.multi_agent import orchestrator, Task
-
-# Register agents
-orch.register_agent("researcher", "Researcher", ["search", "analyze"])
-orch.register_agent("writer", "Writer", ["write", "edit"])
-
-# Create workflow
-workflow = orch.create_workflow("Research & Write", "Research and write article")
-
-# Add tasks
-task1 = Task("Research", "Research topic", "researcher", {"topic": "AI safety"})
-task2 = Task("Write", "Write article", "writer", {}, dependencies=[task1.id])
-
-workflow.add_task(task1)
-workflow.add_task(task2)
-
-# Execute
-result = orch.execute_workflow(workflow.id)
-```
-
----
-
-## 🔧 Integration SDK
-
-```python
-from aeryn_core.integrations import integration_sdk
-
-# Register integration
-integration_sdk.register(
-    name="slack",
-    description="Slack integration",
-    author="Aeryn",
-    version="1.0.0",
-    category="communication",
-    config_schema={"type": "object"},
-    endpoint="http://localhost/slack"
-)
-
-# Call integration
-result = integration_sdk.call("slack", "send_message", {"text": "Hello!"})
-```
-
----
-
-## 🧪 Testing
-
-```bash
-# All tests
-./venv-proot/bin/python -m pytest tests/ -v
-
-# Load testing
-locust -f tests/load/locustfile.py --host=http://localhost:3010
-```
-
----
-
-## 🔒 Security
-
-### Prompt Injection Defense
-- Input sanitization for all user inputs
-- System prompt separation from user data
-- Output validation before execution
-- Runtime content filters for adversarial patterns
-
-### Memory Injection Defense
-- Memory integrity verification
-- Session isolation enforcement
-- Memory access audit logging
-
-### Tool Permission System
-- Risk classification (LOW, MEDIUM, HIGH, CRITICAL)
-- Confirmation required for high-stakes actions
-- Session-based tool access limits
-
-### Cost Optimization
-- Token usage tracking per request
-- Cost attribution by team/feature/user
-- Model routing (tiered selection)
-- Budget enforcement
-
----
-
 ## 📊 Test Coverage
 
 ```
-606 tests pass
+613 tests pass
 0 failures
 1 warning
 ```

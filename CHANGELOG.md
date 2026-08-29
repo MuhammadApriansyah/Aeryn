@@ -347,3 +347,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 606 tests pass
 - 0 failures
 - 1 warning
+
+## [44.0] — 2026-08-29
+
+### Added
+- **Option A: Personal Assistant**:
+  - Proactive Engine (pattern-based suggestions)
+  - Personalization (user preferences, behavior-based)
+  - Personal Context (user profile, goals, work style)
+- **Option B: Agent Infrastructure**:
+  - Agent Templates (5 pre-built: researcher, writer, coder, analyst, support)
+  - Agent CLI (create, list, run agents)
+  - Template Marketplace (category-based discovery)
+- **Option C: Security Platform**:
+  - Security Dashboard (real-time monitoring, threat alerts)
+  - Compliance Module (SOC2, GDPR, HIPAA tracking)
+  - Threat Detection (event logging, severity classification)
+
+### Changed
+- Updated README.md with Option A, B, C documentation
+- Test count: 606 → 613
+
+### New Modules
+- `aeryn_core/personal/` (proactive_engine, personalization, context)
+- `aeryn_core/infra/` (templates, cli)
+- `aeryn_core/security/dashboard/` (security_dashboard, compliance)
+
+### Test Results
+- 613 tests pass
+- 0 failures
+- 1 warning
