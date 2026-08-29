@@ -26,12 +26,23 @@ jobs:
       with:
         version: "0.12.5"
     
+    - name: Install system dependencies
+      run: |
+        sudo -S -p '' apt-get update
+        sudo -S -p '' apt-get install -y build-essential pkg-config libssl-dev
+    
     - name: Create venv and install dependencies
       run: |
         uv venv venv-proot
         source venv-proot/bin/activate
         uv pip install -r requirements.txt
-        uv pip install pytest
+    
+    - name: Build aeryn-engine
+      run: |
+        source venv-proot/bin/activate
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        source $HOME/.cargo/env
+        cd aeryn-engine && maturin develop --release
     
     - name: Run tests
       run: |
