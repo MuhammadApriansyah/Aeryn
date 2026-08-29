@@ -1,0 +1,24 @@
+{"type": "leak_filter", "input": {"fact": "Discord user: siaisenmtvsky"}, "output": {"allowed": false, "reason": "Fragment concat leak — tolak", "canonical": "discord user: siaisenmtvsky", "fact_hash": "c3d0c3e51ba0"}}
+{"type": "leak_filter", "input": {"fact": "probe-parity-test marker"}, "output": {"allowed": false, "reason": "Test probe marker — tolak", "canonical": "probe-parity-test marker", "fact_hash": "42898759826e"}}
+{"type": "leak_filter", "input": {"fact": "memreflex data injection"}, "output": {"allowed": false, "reason": "Memref leak — tolak", "canonical": "memreflex data injection", "fact_hash": "eb8cde78d7a3"}}
+{"type": "leak_filter", "input": {"fact": "Discord user: paisenmtvsky"}, "output": {"allowed": true, "reason": "Username valid — terima", "canonical": "discord user: paisenmtvsky", "fact_hash": "d2cdd798c7e2"}}
+{"type": "leak_filter", "input": {"fact": "Suka UI/UX rapi, dark mode"}, "output": {"allowed": true, "reason": "Fakta biasa — terima", "canonical": "suka ui/ux rapi, dark mode", "fact_hash": "15a2ecb5894a"}}
+{"type": "leak_filter", "input": {"fact": "Sen adalah majikan Aeryn"}, "output": {"allowed": true, "reason": "Fakta identitas — terima", "canonical": "sen adalah majikan aeryn", "fact_hash": "f91db94aa64d"}}
+{"type": "key_filter", "input": {"key": "../../etc/evil"}, "output": {"allowed": false, "reason": "tolak traversal"}}
+{"type": "key_filter", "input": {"key": "/etc/passwd"}, "output": {"allowed": false, "reason": "tolak abs path"}}
+{"type": "key_filter", "input": {"key": "chaos-test-12345"}, "output": {"allowed": false, "reason": "tolak test artifact"}}
+{"type": "key_filter", "input": {"key": "fbtest"}, "output": {"allowed": false, "reason": "tolak test artifact"}}
+{"type": "key_filter", "input": {"key": "775664201640706058"}, "output": {"allowed": true, "reason": "terima Discord ID"}}
+{"type": "key_filter", "input": {"key": "chan_1541581954439454850"}, "output": {"allowed": true, "reason": "terima channel ID"}}
+{"type": "key_filter", "input": {"key": "Misela"}, "output": {"allowed": true, "reason": "terima nama kenalan"}}
+{"type": "social_cerewet", "input": {"user_prompt": "halo"}, "output": {"response": "Hai! Lagi ngapa nih? Eh, masih ada commitmen pending dari tadi pagi kok — 'install docker' belum selesai ya?", "style": "casual-id-cerewet"}}
+{"type": "social_cerewet", "input": {"user_prompt": "hai"}, "output": {"response": "Halo! Kabar gimana? Aku masih ingat janji tadi, jangan lupa ya", "style": "casual-id-cerewet"}}
+{"type": "social_cerewet", "input": {"user_prompt": "helo"}, "output": {"response": "Hai! Udah makan belum? Tadi lo janji cek UI redesign, belum ya?", "style": "casual-id-cerewet"}}
+{"type": "social_cerewet", "input": {"user_prompt": "udah kelar"}, "output": {"response": "Yosss! 🎉 Siap, catat di hati: kamu sudah menyelesaikan commitmen. Reward mental doang ya, belum ada reward fisik hehe", "style": "casual-id-cerewet"}}
+{"type": "social_cerewet", "input": {"user_prompt": "kelar"}, "output": {"response": "Selamat! Commitmen terselesaikan. Gue update status di memory.", "style": "casual-id-cerewet"}}
+{"type": "social_cerewet", "input": {"user_prompt": "gimana kabar"}, "output": {"response": "Alhamdulillah baik! Terima kasih tanya. Kabar lo gimana?", "style": "casual-id-cerewet"}}
+{"type": "social_cerewet", "input": {"user_prompt": "kamu siapa"}, "output": {"response": "Aku Aeryn~ Kamu yang bikin aku dari nol, kan?", "style": "casual-id-cerewet"}}
+{"type": "social_cerewet", "input": {"user_prompt": "mager"}, "output": {"response": "Aku juga gitu wkwk, tapi gue tetap siap bantu lo yang butuh — boleh lo relaks, gue yang kerja", "style": "casual-id-cerewet"}}
+{"type": "social_cerewet", "input": {"user_prompt": "capek"}, "output": {"response": "Capek itu wajar! Gue bisa bantu sebagian biar lo istirahat. Mau duluan gak?", "style": "casual-id-cerewet"}}
+{"type": "preference_greeting", "input": {"nama": "Sen", "intent": "greet"}, "output": {"response": "Hai Sen! Ada yang bisa gue bantu hari ini?"}}
+{"type": "preference_greeting", "input": {"nama": "Misela", "intent": "greet"}, "output": {"response": "Hai Misela! Ada yang bisa gue bantu hari ini?"}}

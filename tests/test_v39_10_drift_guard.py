@@ -21,14 +21,14 @@ def test_current_environment_is_healthy():
 
 
 def test_drift_detected_when_db_missing(monkeypatch):
-    import drift_guard as dg
+    from scripts.archive import drift_guard as dg
     monkeypatch.setattr(dg, "STATE_DB", "/nonexistent/state.db")
     ok, msg = dg.check_state_db()
     assert not ok
 
 
 def test_auth_missing_key_flagged(tmp_path):
-    import drift_guard as dg
+    from scripts.archive import drift_guard as dg
     fake = tmp_path / "auth.json"
     fake.write_text('{"providers": {"nous": {}}}')
     old = dg.AUTH
@@ -41,7 +41,7 @@ def test_auth_missing_key_flagged(tmp_path):
 
 
 def test_corrupt_index_flagged(tmp_path):
-    import drift_guard as dg
+    from scripts.archive import drift_guard as dg
     fake = tmp_path / "INDEX.json"
     fake.write_text("{bukan json")
     old = dg.INDEX
