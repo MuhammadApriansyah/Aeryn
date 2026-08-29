@@ -33,7 +33,12 @@ jobs:
       
       - name: Build aeryn-engine
         run: |
-          cd aeryn-engine && pip install . && cd ..
+          source $HOME/.cargo/env
+          cd aeryn-engine
+          pip install maturin
+          maturin build --release
+          pip install target/wheels/*.whl
+          cd ..
       
       - name: Run tests
         run: |
