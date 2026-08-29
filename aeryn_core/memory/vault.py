@@ -247,8 +247,6 @@ class AerynVault:
                                 if line.strip().startswith("tags:"):
                                     tags = [t.strip() for t in line.split(":")[1].strip().strip("[]").split(",") if t.strip()]
                         except Exception:
-                            from aeryn_core.utils.logger import log_exception
-                            log_exception(e, context=f"{__name__}")
                             pass
                     entries.append({
                         "id": fname.replace(".md", ""),
@@ -259,8 +257,6 @@ class AerynVault:
                         "size": stat.st_size,
                     })
                 except Exception:
-                    from aeryn_core.utils.logger import log_exception
-                    log_exception(e, context=f"{__name__}")
                     pass
         
         # Sort by created_at desc
@@ -288,8 +284,6 @@ class AerynVault:
                             "body": body,
                         }
                     except Exception:
-                        from aeryn_core.utils.logger import log_exception
-                        log_exception(e, context=f"{__name__}")
                         pass
         return None
     

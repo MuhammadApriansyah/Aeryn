@@ -93,8 +93,6 @@ class SemanticSearchEngine:
             self._embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
             return self._embedding_model
         except (ImportError, Exception):
-            from aeryn_core.utils.logger import log_exception
-            log_exception(e, context=f"{__name__}")
             pass
         
         try:

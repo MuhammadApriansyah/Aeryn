@@ -76,7 +76,7 @@ def test_checker():
 # ── "ingat ini:" bukan social query (bug ketemu di smoke V34) ────────
 def test_memory_command_not_social():
     from scripts.aeryn_daemon import _is_social_query as d
-    from scripts.social_generator import _is_social_query as g
+    from scripts.archive.social_generator import _is_social_query as g
     for q in ("ingat ini: proyek baru namanya nebula-dash",
               "catat: sen suka kopi", "remember this: x=1"):
         assert d(q) is False, q

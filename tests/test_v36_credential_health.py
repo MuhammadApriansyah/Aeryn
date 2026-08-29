@@ -14,7 +14,7 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-import scripts.credential_health as ch
+import scripts.archive.credential_health as ch
 
 
 # ---------------------------------------------------------------- helpers

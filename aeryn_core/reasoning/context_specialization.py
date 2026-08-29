@@ -137,8 +137,6 @@ class ContextBuilder:
                     vault_context += f"  - {r.get('preview', '')[:150]}\n"
                 vault_context += "]"
         except Exception:
-            from aeryn_core.utils.logger import log_exception
-            log_exception(e, context=f"{__name__}")
             pass
         
         return ContextSpec(

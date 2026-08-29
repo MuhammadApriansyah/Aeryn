@@ -52,8 +52,6 @@ class MemoryVaultBridge:
         try:
             self.brain.upsert_memory_node(session_id, node_id, event_type)
         except Exception:
-            from aeryn_core.utils.logger import log_exception
-            log_exception(e, context=f"{__name__}")
             pass
 
         return {"ingested": True, "node_id": node_id, "event_type": event_type}
@@ -70,8 +68,6 @@ class MemoryVaultBridge:
                 self.brain.connect_semantic_edge(session_id, f"turn_{i}", f"turn_{i+1}", "FOLLOWS", 0.6)
                 linked += 1
             except Exception:
-                from aeryn_core.utils.logger import log_exception
-                log_exception(e, context=f"{__name__}")
                 pass
         return linked
 

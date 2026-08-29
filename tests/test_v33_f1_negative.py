@@ -9,7 +9,7 @@ import pytest
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from scripts.aeryn_daemon import _is_social_query as daemon_is_social
-from scripts.social_generator import _is_social_query as gen_is_social
+from scripts.archive.social_generator import _is_social_query as gen_is_social
 
 # ── HARUS BUKAN SOSIAL (knowledge/task → tool path) ──────────────────
 TECHNICAL_QUERIES = [

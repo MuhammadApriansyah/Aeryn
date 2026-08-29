@@ -7,12 +7,12 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def test_dataset_file_exists():
-    from scripts.generate_finetune_v3912 import OUTPUT_FILE
+    from scripts.archive.generate_finetune_v3912 import OUTPUT_FILE
     assert os.path.exists(OUTPUT_FILE), f"Dataset not found: {OUTPUT_FILE}"
 
 
 def test_dataset_valid_jsonl():
-    from scripts.generate_finetune_v3912 import OUTPUT_FILE
+    from scripts.archive.generate_finetune_v3912 import OUTPUT_FILE
     ok = 0
     with open(OUTPUT_FILE) as f:
         for line in f:
@@ -28,7 +28,7 @@ def test_dataset_valid_jsonl():
 
 def test_cot_samples_present():
     """Ensure CoT reasoning samples exist."""
-    from scripts.generate_finetune_v3912 import OUTPUT_FILE
+    from scripts.archive.generate_finetune_v3912 import OUTPUT_FILE
     cot = []
     with open(OUTPUT_FILE) as f:
         for line in f:
@@ -40,7 +40,7 @@ def test_cot_samples_present():
 
 def test_critic_samples_present():
     """Ensure critic pattern samples exist."""
-    from scripts.generate_finetune_v3912 import OUTPUT_FILE
+    from scripts.archive.generate_finetune_v3912 import OUTPUT_FILE
     critic = []
     with open(OUTPUT_FILE) as f:
         for line in f:
@@ -52,7 +52,7 @@ def test_critic_samples_present():
 
 def test_persona_samples_present():
     """Ensure persona integration samples exist."""
-    from scripts.generate_finetune_v3912 import OUTPUT_FILE
+    from scripts.archive.generate_finetune_v3912 import OUTPUT_FILE
     persona = []
     with open(OUTPUT_FILE) as f:
         for line in f:
@@ -64,7 +64,7 @@ def test_persona_samples_present():
 
 def test_error_recovery_samples_present():
     """Ensure error recovery samples exist."""
-    from scripts.generate_finetune_v3912 import OUTPUT_FILE
+    from scripts.archive.generate_finetune_v3912 import OUTPUT_FILE
     recovery = []
     with open(OUTPUT_FILE) as f:
         for line in f:
@@ -77,7 +77,7 @@ def test_error_recovery_samples_present():
 def test_sample_id_is_sha256_short():
     """Sample ID must be first 12 chars of sha256."""
     import hashlib
-    from scripts.generate_finetune_v3912 import OUTPUT_FILE
+    from scripts.archive.generate_finetune_v3912 import OUTPUT_FILE
     with open(OUTPUT_FILE) as f:
         for line in f:
             obj = json.loads(line)

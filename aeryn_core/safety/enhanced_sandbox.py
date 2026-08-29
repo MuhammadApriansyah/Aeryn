@@ -282,8 +282,6 @@ class EnhancedSandbox:
                     limits.max_disk_mb * 1024 * 1024,
                 ))
             except Exception:
-                from aeryn_core.utils.logger import log_exception
-                log_exception(e, context=f"{__name__}")
                 pass
         
         # Execute

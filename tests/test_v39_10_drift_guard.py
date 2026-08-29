@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(
     __file__))) + "/scripts")
 
-from scripts.drift_guard import CHECKS, main
+from scripts.archive.drift_guard import CHECKS, main
 
 
 def test_all_checks_run_and_return_tuple():

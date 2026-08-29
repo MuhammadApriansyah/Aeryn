@@ -43,8 +43,6 @@ class ParityLedger:
                 _json.dump(self.records, f)
             os.replace(tmp, self.path)
         except OSError:
-            from aeryn_core.utils.logger import log_exception
-            log_exception(e, context=f"{__name__}")
             pass
 
     def record(self, tool_name: str, parity_ok: bool):

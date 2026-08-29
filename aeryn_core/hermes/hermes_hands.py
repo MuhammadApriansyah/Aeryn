@@ -50,8 +50,6 @@ def _load_counter() -> dict:
         if isinstance(data, dict) and "date" in data and "count" in data:
             return data
     except (OSError, ValueError):
-        from aeryn_core.utils.logger import log_exception
-        log_exception(e, context=f"{__name__}")
         pass
     return {"date": _today(), "count": 0}
 

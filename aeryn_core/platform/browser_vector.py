@@ -24,8 +24,6 @@ class BrowserSession:
             self._driver = browser.new_context()
             return True
         except ImportError:
-            from aeryn_core.utils.logger import log_exception
-            log_exception(e, context=f"{__name__}")
             pass
         
         try:
@@ -71,8 +69,6 @@ class BrowserSession:
                 self._driver.screenshot(path=path)
                 return path
         except Exception:
-            from aeryn_core.utils.logger import log_exception
-            log_exception(e, context=f"{__name__}")
             pass
         return ""
     
@@ -81,8 +77,6 @@ class BrowserSession:
             if hasattr(self._driver, 'content'):
                 return self._driver.content()
         except Exception:
-            from aeryn_core.utils.logger import log_exception
-            log_exception(e, context=f"{__name__}")
             pass
         return ""
     
@@ -94,8 +88,6 @@ class BrowserSession:
             if self._playwright:
                 self._playwright.stop()
         except Exception:
-            from aeryn_core.utils.logger import log_exception
-            log_exception(e, context=f"{__name__}")
             pass
 
 class BrowserAutomation:

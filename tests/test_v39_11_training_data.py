@@ -7,14 +7,14 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def test_dataset_file_created():
-    sys.path.insert(0, sys.path[0] + "/scripts")
+    sys.path.insert(0, sys.path[0] + "/scripts/archive")
     import generate_training_data as gen
     gen.main()
     assert os.path.exists(gen.TRAINING_FILE)
 
 
 def test_dataset_jsonl_valid():
-    sys.path.insert(0, sys.path[0] + "/scripts")
+    sys.path.insert(0, sys.path[0] + "/scripts/archive")
     import generate_training_data as gen
     with open(gen.TRAINING_FILE, encoding="utf-8") as f:
         for line in f:
@@ -25,7 +25,7 @@ def test_dataset_jsonl_valid():
 
 
 def test_leak_filter_samples():
-    sys.path.insert(0, sys.path[0] + "/scripts")
+    sys.path.insert(0, sys.path[0] + "/scripts/archive")
     import generate_training_data as gen
     ds = gen.build_dataset()
     leak_samples = [d for d in ds if d["type"] == "leak_filter"]
@@ -40,7 +40,7 @@ def test_leak_filter_samples():
 
 
 def test_cerewet_samples():
-    sys.path.insert(0, sys.path[0] + "/scripts")
+    sys.path.insert(0, sys.path[0] + "/scripts/archive")
     import generate_training_data as gen
     ds = gen.build_dataset()
     cerewet = [d for d in ds if d["type"] == "social_cerewet"]
@@ -53,7 +53,7 @@ def test_cerewet_samples():
 
 
 def test_key_filter_samples():
-    sys.path.insert(0, sys.path[0] + "/scripts")
+    sys.path.insert(0, sys.path[0] + "/scripts/archive")
     import generate_training_data as gen
     ds = gen.build_dataset()
     keys = [d for d in ds if d["type"] == "key_filter"]

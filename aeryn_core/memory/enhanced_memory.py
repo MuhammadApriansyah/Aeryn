@@ -265,8 +265,6 @@ class CrossSessionRecall:
                     metadata={"session_id": session_id, "role": role},
                 )
             except Exception:
-                from aeryn_core.utils.logger import log_exception
-                log_exception(e, context=f"{__name__}")
                 pass
     
     def recall(self, query: str, user_id: str = "default", limit: int = 5) -> List[Dict]:

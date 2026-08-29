@@ -33,8 +33,6 @@ try:
     import chromadb  # type: ignore
     _CHROMADB_AVAILABLE = True
 except ImportError:
-    from aeryn_core.utils.logger import log_exception
-    log_exception(e, context=f"{__name__}")
     pass
 
 
@@ -355,8 +353,6 @@ class VectorDB:
             try:
                 self._chromadb_client.delete_collection(name)
             except Exception:
-                from aeryn_core.utils.logger import log_exception
-                log_exception(e, context=f"{__name__}")
                 pass
         else:
             with self._lock:

@@ -115,12 +115,8 @@ def _image_metadata(data: bytes, path: str) -> dict:
         meta["mode"] = img.mode
         meta["format"] = img.format or meta["format"]
     except ImportError:
-        from aeryn_core.utils.logger import log_exception
-        log_exception(e, context=f"{__name__}")
         pass
     except Exception:
-        from aeryn_core.utils.logger import log_exception
-        log_exception(e, context=f"{__name__}")
         pass
     return meta
 
@@ -212,8 +208,6 @@ def _audio_metadata(path: str) -> dict:
                     meta["channels"] = int(stream.get("channels", 0))
                     break
         except (json.JSONDecodeError, ValueError):
-            from aeryn_core.utils.logger import log_exception
-            log_exception(e, context=f"{__name__}")
             pass
     return meta
 
@@ -268,8 +262,6 @@ def _video_metadata(path: str) -> dict:
                     meta["codec"] = stream.get("codec_name", "")
                     break
         except (json.JSONDecodeError, ValueError):
-            from aeryn_core.utils.logger import log_exception
-            log_exception(e, context=f"{__name__}")
             pass
     return meta
 
@@ -340,12 +332,8 @@ def _pdf_metadata(path: str) -> dict:
         doc.close()
         return meta
     except ImportError:
-        from aeryn_core.utils.logger import log_exception
-        log_exception(e, context=f"{__name__}")
         pass
     except Exception:
-        from aeryn_core.utils.logger import log_exception
-        log_exception(e, context=f"{__name__}")
         pass
 
     # Fallback: pdfinfo
@@ -356,8 +344,6 @@ def _pdf_metadata(path: str) -> dict:
                 try:
                     meta["page_count"] = int(line.split(":", 1)[1].strip())
                 except ValueError:
-                    from aeryn_core.utils.logger import log_exception
-                    log_exception(e, context=f"{__name__}")
                     pass
             elif line.startswith("Title:"):
                 meta["title"] = line.split(":", 1)[1].strip()

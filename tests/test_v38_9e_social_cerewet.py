@@ -12,7 +12,7 @@ import aeryn_core.reasoning.cerewet_mode as cm
 def test_social_nudge_appends_when_pending(tmp_path, monkeypatch):
     monkeypatch.setattr(cm, "COMMITMENTS_PATH",
                         str(tmp_path / "c.json"))
-    from scripts.social_generator import _cerewet_social_nudge
+    from scripts.archive.social_generator import _cerewet_social_nudge
     uid = "1541581954439454850"
     cm.add_commitment(f"dc_{uid}_chan", "nanti aku install docker")
     nudge = _cerewet_social_nudge(uid)
@@ -22,14 +22,14 @@ def test_social_nudge_appends_when_pending(tmp_path, monkeypatch):
 def test_social_nudge_empty_when_none(tmp_path, monkeypatch):
     monkeypatch.setattr(cm, "COMMITMENTS_PATH",
                         str(tmp_path / "none.json"))
-    from scripts.social_generator import _cerewet_social_nudge
+    from scripts.archive.social_generator import _cerewet_social_nudge
     assert _cerewet_social_nudge("000000") == ""
 
 
 def test_nudge_marks_nagged_no_double(tmp_path, monkeypatch):
     monkeypatch.setattr(cm, "COMMITMENTS_PATH",
                         str(tmp_path / "c.json"))
-    from scripts.social_generator import _cerewet_social_nudge
+    from scripts.archive.social_generator import _cerewet_social_nudge
     uid = "555000111"
     cm.add_commitment(f"dc_{uid}", "besok gue rapat")
     first = _cerewet_social_nudge(uid)
