@@ -54,6 +54,8 @@ from aeryn_core.emotional_intelligence import get_emotional_intelligence
 from aeryn_core.auth import get_auth, ROLE_PERMISSIONS
 from aeryn_core.rate_limiter import get_rate_limiter
 from aeryn_core.email_verification import get_email_verification, get_password_reset
+from aeryn_core.webhook_system import get_webhook_system
+from aeryn_core.plugin_marketplace import get_plugin_marketplace
 from aeryn_core.telegram_bot import get_telegram_bot
 from aeryn_core.email_agent import get_email_agent
 from aeryn_core.calendar_integration import get_calendar
@@ -78,7 +80,33 @@ async def app_lifespan(app):
     scheduler_task.cancel()
     queue_task.cancel()
 
-app = FastAPI(title="Aeryn Daemon", version="41.0")
+app = FastAPI(
+    title="Aeryn API",
+    description="""
+## Aeryn — Personal Assistant Agent SaaS
+
+### Authentication
+- **Bearer Token**: Use `/auth/login` to get a token, then include `Authorization: Bearer <token>` header
+- **API Keys**: Use `/auth/api-keys` to create API keys for programmatic access
+
+### Rate Limits
+- **Free**: 60 req/min, 500 req/hour, 200 req/day
+- **Pro**: 100 req/min, 1000 req/hour, 5000 req/day
+- **Admin**: 200 req/min, 5000 req/hour, 50000 req/day
+
+### Features
+- **Chat**: Natural language conversation with Aeryn
+- **Search**: Hybrid search (keyword + semantic)
+- **Tasks**: Task management with priorities
+- **Notifications**: Scheduled notifications
+- **Vault**: Obsidian-style memory architecture
+- **Proactive**: Daily briefings and suggestions
+- **Multi-tenant**: Per-user data isolation
+    """,
+    version="41.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+)
 app.router.lifespan_context = app_lifespan
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -2935,6 +2963,130 @@ async def billing_charge(req: CreateChargeRequest, authorization: str = Header(N
     
     result = billing.track_charge(user["id"], req.amount, req.description)
     return {"status": "ok", "charge": result}
+
+# ── Webhook Endpoints ─────────────────────────
+
+class RegisterWebhookRequest(BaseModel):
+    url: str
+    events: list = None
+    secret: str = None
+
+@app.post("/webhooks/register")
+async def register_webhook(req: RegisterWebhookRequest, authorization: str = Header(None)):
+    """Register a webhook endpoint."""
+    auth = get_auth()
+    ws = get_webhook_system()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    result = ws.register(user["id"], req.url, req.events, req.secret)
+    return {"status": "ok", "webhook": result}
+
+@app.delete("/webhooks/unregister")
+async def unregister_webhook(webhook_id: str, authorization: str = Header(None)):
+    """Unregister a webhook endpoint."""
+    auth = get_auth()
+    ws = get_webhook_system()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    ws.unregister(webhook_id)
+    return {"status": "ok"}
+
+@app.get("/webhooks")
+async def list_webhooks(authorization: str = Header(None)):
+    """List user's webhooks."""
+    auth = get_auth()
+    ws = get_webhook_system()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    return {"webhooks": ws.list_webhooks(user["id"])}
+
+# ── Plugin Marketplace Endpoints ──────────────
+
+class PublishPluginRequest(BaseModel):
+    name: str
+    source_code: str
+    display_name: str = None
+    description: str = None
+    version: str = "0.1.0"
+    tags: list = None
+    dependencies: list = None
+    is_public: bool = True
+
+class RatePluginRequest(BaseModel):
+    plugin_id: str
+    rating: float
+
+@app.get("/plugins")
+async def list_plugins(query: str = None, limit: int = 20, offset: int = 0):
+    """List public plugins."""
+    mp = get_plugin_marketplace()
+    return {"plugins": mp.search(query=query, limit=limit, offset=offset)}
+
+@app.post("/plugins/publish")
+async def publish_plugin(req: PublishPluginRequest, authorization: str = Header(None)):
+    """Publish a plugin."""
+    auth = get_auth()
+    mp = get_plugin_marketplace()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    result = mp.publish(
+        user["id"], req.name, req.source_code,
+        req.display_name, req.description, req.version,
+        req.tags, req.dependencies, is_public=req.is_public
+    )
+    
+    if not result:
+        return {"error": "Failed to publish plugin"}
+    return {"status": "ok", "plugin": result}
+
+@app.get("/plugins/{plugin_id}")
+async def get_plugin(plugin_id: str):
+    """Get plugin details."""
+    mp = get_plugin_marketplace()
+    plugin = mp.get(plugin_id)
+    if not plugin:
+        return {"error": "Plugin not found"}
+    return plugin
+
+@app.post("/plugins/rate")
+async def rate_plugin(req: RatePluginRequest, authorization: str = Header(None)):
+    """Rate a plugin."""
+    auth = get_auth()
+    mp = get_plugin_marketplace()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    success = mp.rate(req.plugin_id, user["id"], req.rating)
+    return {"status": "ok" if success else "error"}
 
 # ── Email Verification & Password Reset ───────
 
