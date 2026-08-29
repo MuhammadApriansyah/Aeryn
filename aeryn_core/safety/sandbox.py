@@ -126,7 +126,7 @@ class Sandbox:
                 # Limit CPU time
                 resource.setrlimit(resource.RLIMIT_CPU, (self.timeout, self.timeout))
             
-            # Parse command to args (no shell=True for security)
+            # Parse command to args (no REDACTED for security)
             import shlex
             try:
                 args = shlex.split(command)

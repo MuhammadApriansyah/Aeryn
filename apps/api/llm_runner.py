@@ -166,7 +166,7 @@ class ToolExecutor:
                 return {"ok": False, "error": f"Dangerous command blocked: {d}"}
         
         try:
-            # Parse command to args (no shell=True for security)
+            # Parse command to args (no REDACTED for security)
             import shlex
             try:
                 args = shlex.split(command)

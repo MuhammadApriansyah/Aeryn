@@ -128,7 +128,7 @@ class ToolRuntime:
             return ToolResult(ok=False, error=f"Blocked: {msg}", tool="terminal")
         
         try:
-            # Use sh -c for simple commands (safer than shell=True)
+            # Use sh -c for simple commands (safer than REDACTED)
             proc = await asyncio.create_subprocess_exec(
                 "sh", "-c", command,
                 stdout=asyncio.subprocess.PIPE,

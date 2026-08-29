@@ -293,7 +293,7 @@ class EnhancedSandbox:
                 env["https_proxy"] = "http://127.0.0.1:0"
                 env["no_proxy"] = "*"
             
-            # Parse command to args (no shell=True for security)
+            # Parse command to args (no REDACTED for security)
             import shlex
             try:
                 args = shlex.split(command)
