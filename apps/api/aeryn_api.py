@@ -358,7 +358,7 @@ async def chat(req: RunRequest):
         return await run(req)
     
     # Get or create session
-    session = router.sessions.get_or_create(req.session_id)
+    session = router.get_or_create_session(req.session_id)
     
     # Safety check
     eng = get_safety_engine()
@@ -531,6 +531,11 @@ async def dashboard_websocket(websocket: WebSocket):
                 cmd = json.loads(msg)
                 cmd_type = cmd.get("type", "")
                 cmd_data = cmd.get("data", {})
+                if isinstance(cmd_data, str):
+                    try:
+                        cmd_data = json.loads(cmd_data)
+                    except (json.JSONDecodeError, TypeError):
+                        cmd_data = {}
                 
                 if cmd_type == "ping":
                     await websocket.send_json({"type": "pong", "data": {}})

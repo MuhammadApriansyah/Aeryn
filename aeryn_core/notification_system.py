@@ -9,9 +9,10 @@ Features:
 - Notification history
 """
 
-import os, json, sqlite3, asyncio, time
+import os, json, sqlite3, asyncio, time, uuid
 from typing import Dict, List, Optional
 from datetime import datetime, timedelta
+from sqlite3 import OperationalError as SQLiteOperationalError
 
 from aeryn_core.config import DATABASE_DIR
 DB_PATH = os.path.join(DATABASE_DIR, "notifications.db")
@@ -130,18 +131,28 @@ class NotificationManager:
         ]
     
     def mark_sent(self, notification_id: str, status: str = "sent", error: str = None):
-        """Mark notification as sent."""
-        conn = sqlite3.connect(self.db_path)
-        conn.execute("""
-            UPDATE notifications SET is_sent = 1, sent_at = ? WHERE id = ?
-        """, (datetime.now().isoformat(), notification_id))
-        
-        conn.execute("""
-            INSERT INTO notification_history (id, notification_id, status, error)
-            VALUES (?, ?, ?, ?)
-        """, (str(uuid.uuid4())[:12], notification_id, status, error))
-        conn.commit()
-        conn.close()
+        """Mark notification as sent with retry."""
+        for attempt in range(3):
+            try:
+                conn = sqlite3.connect(self.db_path)
+                conn.execute("""
+                    UPDATE notifications SET is_sent = 1, sent_at = ? WHERE id = ?
+                """, (datetime.now().isoformat(), notification_id))
+                
+                conn.execute("""
+                    INSERT INTO notification_history (id, notification_id, status, error)
+                    VALUES (?, ?, ?, ?)
+                """, (str(uuid.uuid4())[:12], notification_id, status, error))
+                conn.commit()
+                conn.close()
+                return
+            except SQLiteOperationalError as e:
+                if "database is locked" in str(e) and attempt < 2:
+                    time.sleep(0.1 * (attempt + 1))
+                    continue
+                raise
+            except Exception:
+                raise
     
     def get_pending(self, user_id: str = None) -> List[Dict]:
         """Get all pending notifications."""
@@ -220,24 +231,41 @@ class NotificationScheduler:
             try:
                 await self._process_due()
             except Exception as e:
+                import traceback
                 print(f"Scheduler error: {e}")
+                traceback.print_exc()
             await asyncio.sleep(30)  # Check every 30 seconds
     
     async def _process_due(self):
         """Process due notifications."""
-        due = self.manager.get_due(limit=5)
+        for attempt in range(3):
+            try:
+                due = self.manager.get_due(limit=5)
+                break
+            except Exception as e:
+                if "database is locked" in str(e) and attempt < 2:
+                    await asyncio.sleep(0.1 * (attempt + 1))
+                    continue
+                else:
+                    return
         
         for notif in due:
             # Skip if in quiet hours (unless critical)
             if notif["priority"] != "critical" and self.manager.is_quiet_hours(notif["user_id"]):
                 continue
             
-            # Dispatch
-            try:
-                await self._dispatch(notif)
-                self.manager.mark_sent(notif["id"], "sent")
-            except Exception as e:
-                self.manager.mark_sent(notif["id"], "failed", str(e))
+            # Retry logic for dispatch
+            for attempt in range(3):
+                try:
+                    await self._dispatch(notif)
+                    self.manager.mark_sent(notif["id"], "sent")
+                    break
+                except Exception as e:
+                    if "database is locked" in str(e) and attempt < 2:
+                        await asyncio.sleep(0.1 * (attempt + 1))
+                        continue
+                    self.manager.mark_sent(notif["id"], "failed", str(e))
+                    break
     
     async def _dispatch(self, notif: dict):
         """Dispatch notification to appropriate channel."""
