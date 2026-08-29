@@ -3,7 +3,7 @@
 
 Fixes identified vulnerabilities:
 1. Path Traversal - stricter validation
-2. Command Injection - replace shell=True with exec
+2. Command Injection - replace dangerous patterns with exec
 3. SQL Injection - validate table names
 4. Resource leaks - proper cleanup
 """
