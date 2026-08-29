@@ -260,3 +260,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 590 tests pass
 - 0 failures
 - 1 warning
+
+## [41.2] — 2026-08-29
+
+### Added
+- **Adaptive Rule Engine** (Opsi B):
+  - Hot-reloadable rules — change behavior without restart
+  - Priority-based evaluation
+  - Multiple conditions: always, contains, equals, regex, threshold
+  - Multiple actions: allow, deny, log, redirect, custom
+  - JSON import/export
+  - Sub-millisecond evaluation (Rust-powered)
+
+### Changed
+- Updated README.md with Adaptive Rule Engine documentation
+- Test count: 590 → 598
+
+### Test Results
+- 598 tests pass
+- 0 failures
+- 1 warning

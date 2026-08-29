@@ -1,14 +1,158 @@
 use pyo3::prelude::*;
 use pyo3::exceptions::PyValueError;
 use std::sync::Arc;
-use parking_lot::RwLock;
-use std::collections::HashMap;
 use std::time::{SystemTime, UNIX_EPOCH};
-use dashmap::DashMap;
+use parking_lot::RwLock;
+
+/// Adaptive Rule Engine — hot-reloadable rules
+#[pyclass]
+pub struct AdaptiveEngine {
+    rules: Arc<RwLock<Vec<serde_json::Value>>>,
+}
+
+#[pymethods]
+impl AdaptiveEngine {
+    #[new]
+    fn new() -> Self {
+        Self {
+            rules: Arc::new(RwLock::new(Vec::new())),
+        }
+    }
+
+    fn add_rule(&self, rule_json: String) -> PyResult<()> {
+        let rule: serde_json::Value = serde_json::from_str(&rule_json)
+            .map_err(|e| PyValueError::new_err(format!("Invalid JSON: {}", e)))?;
+        
+        let mut rules = self.rules.write();
+        // Remove existing rule with same id
+        if let Some(id) = rule.get("id").and_then(|v| v.as_str()) {
+            rules.retain(|r| r.get("id").and_then(|v| v.as_str()) != Some(id));
+        }
+        rules.push(rule);
+        // Sort by priority (higher first)
+        rules.sort_by(|a, b| {
+            let pa = a.get("priority").and_then(|v| v.as_u64()).unwrap_or(0);
+            let pb = b.get("priority").and_then(|v| v.as_u64()).unwrap_or(0);
+            pb.cmp(&pa)
+        });
+        Ok(())
+    }
+
+    fn remove_rule(&self, rule_id: String) -> bool {
+        let mut rules = self.rules.write();
+        let initial = rules.len();
+        rules.retain(|r| r.get("id").and_then(|v| v.as_str()) != Some(&rule_id));
+        rules.len() < initial
+    }
+
+    fn list_rules(&self) -> Vec<String> {
+        let rules = self.rules.read();
+        rules.iter()
+            .map(|r| serde_json::to_string(r).unwrap_or_default())
+            .collect()
+    }
+
+    fn evaluate(&self, input: String) -> Vec<String> {
+        let rules = self.rules.read();
+        let mut results: Vec<String> = Vec::new();
+        
+        for rule in rules.iter() {
+            if Self::matches_rule(input.as_str(), rule) {
+                let now = SystemTime::now()
+                    .duration_since(UNIX_EPOCH)
+                    .unwrap()
+                    .as_secs();
+                
+                let action = rule.get("action")
+                    .and_then(|v| v.as_object())
+                    .and_then(|o| o.get("type"))
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("log");
+                
+                results.push(format!(r#"{{"rule_id": "{}", "action": "{}", "matched": true, "timestamp": {}}}"#,
+                    rule.get("id").and_then(|v| v.as_str()).unwrap_or(""),
+                    action,
+                    now
+                ));
+            }
+        }
+        
+        results
+    }
+
+    fn load_rules_from_json(&self, json_str: String) -> PyResult<usize> {
+        let rules: Vec<serde_json::Value> = serde_json::from_str(&json_str)
+            .map_err(|e| PyValueError::new_err(format!("JSON parse error: {}", e)))?;
+        let count = rules.len();
+        for rule in rules {
+            self.add_rule(serde_json::to_string(&rule).unwrap())?;
+        }
+        Ok(count)
+    }
+
+    fn export_rules_to_json(&self) -> String {
+        let rules = self.rules.read();
+        serde_json::to_string(&*rules).unwrap_or_else(|_| "[]".to_string())
+    }
+
+    fn clear_rules(&self) {
+        self.rules.write().clear();
+    }
+
+    fn rule_count(&self) -> usize {
+        self.rules.read().len()
+    }
+}
+
+impl AdaptiveEngine {
+    fn matches_rule(input: &str, rule: &serde_json::Value) -> bool {
+        // Check if enabled
+        if rule.get("enabled").and_then(|v| v.as_bool()) == Some(false) {
+            return false;
+        }
+        
+        let condition = match rule.get("condition").and_then(|v| v.as_object()) {
+            Some(c) => c,
+            None => return true, // No condition = always match
+        };
+        
+        let cond_type = condition.get("type").and_then(|v| v.as_str()).unwrap_or("always");
+        
+        match cond_type {
+            "always" => true,
+            "contains" => {
+                condition.get("value")
+                    .and_then(|v| v.as_str())
+                    .map(|val| input.contains(val))
+                    .unwrap_or(false)
+            }
+            "equals" => {
+                condition.get("value")
+                    .and_then(|v| v.as_str())
+                    .map(|val| input == val)
+                    .unwrap_or(false)
+            }
+            "regex" => {
+                condition.get("pattern")
+                    .and_then(|v| v.as_str())
+                    .and_then(|pat| regex::Regex::new(pat).ok())
+                    .map(|re| re.is_match(input))
+                    .unwrap_or(false)
+            }
+            "threshold" => {
+                condition.get("value")
+                    .and_then(|v| v.as_f64())
+                    .map(|val| input.len() as f64 >= val)
+                    .unwrap_or(false)
+            }
+            _ => false,
+        }
+    }
+}
 
 #[pyclass]
 pub struct VectorDB {
-    collections: Arc<RwLock<HashMap<String, VectorCollection>>>,
+    collections: Arc<RwLock<std::collections::HashMap<String, VectorCollection>>>,
 }
 
 #[derive(Clone)]
@@ -43,7 +187,7 @@ impl VectorCollection {
 impl VectorDB {
     #[new]
     fn new() -> Self {
-        Self { collections: Arc::new(RwLock::new(HashMap::new())) }
+        Self { collections: Arc::new(RwLock::new(std::collections::HashMap::new())) }
     }
 
     fn get_or_create_collection(&self, name: String) -> PyResult<Collection> {
@@ -66,7 +210,7 @@ impl VectorDB {
 #[pyclass]
 pub struct Collection {
     name: String,
-    collections: Arc<RwLock<HashMap<String, VectorCollection>>>,
+    collections: Arc<RwLock<std::collections::HashMap<String, VectorCollection>>>,
 }
 
 #[pymethods]
@@ -105,7 +249,7 @@ impl Collection {
         &self,
         query_embeddings: Vec<Vec<f32>>,
         n_results: Option<usize>,
-    ) -> Vec<HashMap<String, String>> {
+    ) -> Vec<std::collections::HashMap<String, String>> {
         let cols = self.collections.read();
         let coll = match cols.get(&self.name) {
             Some(c) => c,
@@ -130,7 +274,7 @@ impl Collection {
         results
             .into_iter()
             .map(|(id, score, doc)| {
-                let mut map = HashMap::new();
+                let mut map = std::collections::HashMap::new();
                 map.insert("id".to_string(), id);
                 map.insert("score".to_string(), format!("{:.4}", score));
                 map.insert("document".to_string(), doc);
@@ -155,6 +299,8 @@ impl Collection {
         cols.get(&self.name).map(|c| c.records.len()).unwrap_or(0)
     }
 }
+
+use dashmap::DashMap;
 
 #[pyclass]
 pub struct RateLimiter {
@@ -190,9 +336,9 @@ impl RateLimiter {
         self.windows.remove(&key);
     }
 
-    fn stats(&self) -> HashMap<String, usize> {
+    fn stats(&self) -> std::collections::HashMap<String, usize> {
         let entries: Vec<_> = self.windows.iter().collect();
-        let mut result = HashMap::new();
+        let mut result = std::collections::HashMap::new();
         for entry in entries {
             result.insert(entry.key().clone(), entry.value().len());
         }
@@ -279,6 +425,7 @@ impl ConnectionPool {
 
 #[pymodule]
 fn aeryn_engine(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+    m.add_class::<AdaptiveEngine>()?;
     m.add_class::<VectorDB>()?;
     m.add_class::<Collection>()?;
     m.add_class::<RateLimiter>()?;
