@@ -58,12 +58,14 @@ from aeryn_core.data_encryption import get_encryption
 from aeryn_core.auth_manager import get_auth
 from aeryn_core.realtime import get_emitter
 from aeryn_core.performance import get_optimizer, get_uptime
+from aeryn_core.logger import info, warn, error, log_exception
 
 from contextlib import asynccontextmanager
 
 @asynccontextmanager
 async def app_lifespan(app):
     """Manage background tasks."""
+    info("Aeryn API starting", version="41.0")
     task = asyncio.create_task(broadcast_loop())
     scheduler_task = asyncio.create_task(get_scheduler().start())
     queue_task = asyncio.create_task(get_task_queue().start())
@@ -77,6 +79,21 @@ app.router.lifespan_context = app_lifespan
 
 from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+
+# Global exception handler
+@app.middleware("http")
+async def global_exception_handler(request: Request, call_next):
+    """Global HTTP exception handler with structured logging."""
+    try:
+        response = await call_next(request)
+        return response
+    except Exception as e:
+        log_exception(e, context=f"{request.method} {request.url.path}")
+        return Response(
+            content=json.dumps({"error": "Internal server error", "detail": str(e)}),
+            status_code=500,
+            media_type="application/json",
+        )
 
 async def broadcast_loop():
     """Broadcast 15 data types every 5 seconds."""
