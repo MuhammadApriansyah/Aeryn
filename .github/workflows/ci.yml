@@ -10,6 +10,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     
+    env:
+      PATH: /root/.cargo/bin:/usr/local/bin:/usr/bin:/bin
+    
     steps:
       - uses: actions/checkout@v5
       
@@ -26,18 +29,13 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
       
-      - name: Install Python deps
+      - name: Install Python deps and build engine
         run: |
           python -m pip install --upgrade pip
           pip install pytest fastapi uvicorn pydantic numpy discord.py maturin
-      
-      - name: Set cargo PATH
-        run: echo "$HOME/.cargo/bin:$PATH" >> $GITHUB_PATH
-      
-      - name: Build and install aeryn-engine
-        run: |
           cd aeryn-engine
-          maturin develop --release
+          pip install .
+          cd ..
       
       - name: Run tests
         run: |
