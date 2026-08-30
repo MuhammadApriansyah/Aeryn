@@ -6,17 +6,18 @@
 
 ## 📊 Ringkasan
 
-| Kategori | Jumlah | Prioritas |
-|----------|--------|-----------|
-| **AI-Coding-Agent-Ready** | 10 files | ⭐⭐⭐⭐⭐ |
-| **Pipeline & Team** | 4 files | ⭐⭐⭐⭐⭐ |
-| **API & SDK** | 3 files | ⭐⭐⭐⭐ |
-| **Channel Integration** | 4 files | ⭐⭐⭐⭐ |
-| **Billing & Monetization** | 3 files | ⭐⭐⭐⭐ |
-| **Plugin & Marketplace** | 2 files | ⭐⭐⭐⭐ |
-| **Infrastructure** | 3 files | ⭐⭐⭐ |
-| **Onboarding** | 2 files | ⭐⭐⭐ |
-| **TOTAL** | **31 files** | |
+| Kategori | Jumlah | Prioritas | Status |
+|----------|--------|-----------|--------|
+| **AI-Coding-Agent-Ready** | 10 files | ⭐⭐⭐⭐⭐ | ❌ Belum |
+| **Pipeline & Team** | 4 files | ⭐⭐⭐⭐⭐ | ❌ Belum |
+| **API & SDK** | 3 files | ⭐⭐⭐⭐ | ❌ Belum |
+| **Channel Integration** | 4 files | ⭐⭐⭐⭐ | ❌ Belum |
+| **Billing & Monetization** | 3 files | ⭐⭐⭐⭐ | ❌ Belum |
+| **Plugin & Marketplace** | 2 files | ⭐⭐⭐⭐ | ❌ Belum |
+| **Infrastructure** | 3 files | ⭐⭐⭐ | ❌ Belum |
+| **Onboarding** | 2 files | ⭐⭐⭐ | ❌ Belum |
+| **Troubleshooting** | 2 files | ⭐⭐⭐ | ✅ Ada |
+| **TOTAL** | **33 files** | | |
 
 ---
 
@@ -391,14 +392,16 @@ Dokumentasi untuk deployment, caching, dan monitoring.
 
 ---
 
-### 8. Onboarding (2 files) — ⭐⭐⭐
+### 9. Troubleshooting (2 files) — ⭐⭐⭐
 
-Dokumentasi untuk new user onboarding.
+Dokumentasi troubleshooting yang sudah ada.
 
-| # | File Path | Tujuan | Referensi |
-|---|-----------|--------|-----------|
-| 1 | `docs/onboarding/quickstart.md` | 5-minute quickstart guide | Agent Startup Skills |
-| 2 | `docs/onboarding/wizard.md` | Interactive setup wizard | Agent Startup Skills |
+| # | File Path | Tujuan | Status |
+|---|-----------|--------|--------|
+| 1 | `docs/troubleshooting-nextjs-turbopack.md` | Next.js 16 + Turbopack Bus Error fixes | ✅ Ada |
+| 2 | `docs/ui-recommendations.md` | UI development roadmap | ✅ Ada |
+
+**Catatan:** 2 file ini sudah ada dan tinggal di-expand jika diperlukan.
 
 ---
 
@@ -408,12 +411,22 @@ Dokumentasi untuk new user onboarding.
 
 | Prioritas | Jumlah Files | Kategori |
 |-----------|--------------|----------|
-| ⭐⭐⭐⭐⭐ | 14 | AI-Coding-Agent-Ready + Pipeline |
-| ⭐⭐⭐⭐ | 9 | API + Channel + Billing + Plugin |
-| ⭐⭐⭐ | 5 | Infrastructure + Onboarding |
-| **TOTAL** | **28** | |
+| ⭐⭐⭐⭐⭐ | 14 | AI-Coding-Agent-Ready + Pipeline | ❌ |
+| ⭐⭐⭐⭐ | 9 | API + Channel + Billing + Plugin | ❌ |
+| ⭐⭐⭐ | 5 | Infrastructure + Onboarding | ❌ |
+| ✅ Selesai | 2 | Troubleshooting + UI Recommendations | ✅ |
+| **TOTAL** | **33** | | |
 
-### By Source Reference
+### Implementation Timeline
+
+| Sprint | Target | Files |
+|--------|--------|-------|
+| Sprint 0 | ✅ Sudah selesai | troubleshooting-nextjs-turbopack.md, ui-recommendations.md |
+| Sprint 1 | V59 — Minggu 1-2 | CLAUDE.md, AGENTS.md, .claude/skills/, .cursorrules/ |
+| Sprint 2 | V59 — Minggu 3-4 | .ai-coding-checklist.md, prompts/, billing docs |
+| Sprint 3 | V60 — Minggu 5-8 | pipeline docs, channel docs |
+| Sprint 4 | V60 — Minggu 9-12 | API docs, plugin docs, infra docs, onboarding, debug skill |
+| **33 files total** | **4 sprints** | |
 
 | Sumber | Files Diadaptasi |
 |--------|------------------|
@@ -424,49 +437,54 @@ Dokumentasi untuk new user onboarding.
 | ECC | 4 (Plugin + Harness) |
 | Hermes | 2 (Memory + Cross-platform) |
 | DeerFlow | 1 (Monitoring) |
+| Internal | 2 (Troubleshooting + UI) |
 
 ---
 
 ## 🗺️ Implementation Order
 
+### Sprint 0 (Sudah Selesai ✅)
+1. ✅ `docs/troubleshooting-nextjs-turbopack.md`
+2. ✅ `docs/ui-recommendations.md`
+
 ### Sprint 1 (V59 — Minggu 1-2)
-1. `CLAUDE.md`
-2. `AGENTS.md`
-3. `.claude/skills/aeryn-dev.md`
-4. `.claude/skills/aeryn-deploy.md`
-5. `.cursorrules/rules.md`
+3. `CLAUDE.md`
+4. `AGENTS.md`
+5. `.claude/skills/aeryn-dev.md`
+6. `.claude/skills/aeryn-deploy.md`
+7. `.cursorrules/rules.md`
 
 ### Sprint 2 (V59 — Minggu 3-4)
-6. `.ai-coding-checklist.md`
-7. `prompts/add-new-feature.md`
-8. `prompts/create-api-endpoint.md`
-9. `prompts/modify-database-schema.md`
-10. `docs/billing/credit-system.md`
-11. `docs/billing/subscriptions.md`
-12. `docs/billing/stripe-integration.md`
+8. `.ai-coding-checklist.md`
+9. `prompts/add-new-feature.md`
+10. `prompts/create-api-endpoint.md`
+11. `prompts/modify-database-schema.md`
+12. `docs/billing/credit-system.md`
+13. `docs/billing/subscriptions.md`
+14. `docs/billing/stripe-integration.md`
 
 ### Sprint 3 (V60 — Minggu 5-8)
-13. `docs/pipeline/phases.md`
-14. `docs/pipeline/team.md`
-15. `docs/pipeline/gates.md`
-16. `docs/pipeline/templates.md`
-17. `docs/channels/whatsapp.md`
-18. `docs/channels/telegram.md`
-19. `docs/channels/slack.md`
-20. `docs/channels/web-widget.md`
+15. `docs/pipeline/phases.md`
+16. `docs/pipeline/team.md`
+17. `docs/pipeline/gates.md`
+18. `docs/pipeline/templates.md`
+19. `docs/channels/whatsapp.md`
+20. `docs/channels/telegram.md`
+21. `docs/channels/slack.md`
+22. `docs/channels/web-widget.md`
 
 ### Sprint 4 (V60 — Minggu 9-12)
-21. `docs/api/endpoints.md`
-22. `docs/api/python-sdk.md`
-23. `docs/api/authentication.md`
-24. `docs/plugins/development.md`
-25. `docs/plugins/marketplace.md`
-26. `docs/infrastructure/deployment.md`
-27. `docs/infrastructure/caching.md`
-28. `docs/infrastructure/monitoring.md`
-29. `docs/onboarding/quickstart.md`
-30. `docs/onboarding/wizard.md`
-31. `.claude/skills/aeryn-debug.md`
+23. `docs/api/endpoints.md`
+24. `docs/api/python-sdk.md`
+25. `docs/api/authentication.md`
+26. `docs/plugins/development.md`
+27. `docs/plugins/marketplace.md`
+28. `docs/infrastructure/deployment.md`
+29. `docs/infrastructure/caching.md`
+30. `docs/infrastructure/monitoring.md`
+31. `docs/onboarding/quickstart.md`
+32. `docs/onboarding/wizard.md`
+33. `.claude/skills/aeryn-debug.md`
 
 ---
 
