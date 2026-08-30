@@ -233,3 +233,24 @@ All notable changes to Aeryn will be documented in this file.
 - 658 tests pass
 - 0 failures
 - 1 warning
+
+## [57.0] — 2026-08-30
+
+### Added
+- **Multi-Region Deploy**: Deploy to multiple AWS regions with Terraform
+- **Distributed Tracing**: OpenTelemetry + Jaeger integration
+- **Advanced Monitoring APM**: Prometheus metrics + Grafana dashboards
+
+### Changed
+- Updated README.md with production-grade observability documentation
+- Test count: 658 → 661
+
+### New Modules
+- `aeryn_core/multi_region_deploy/` — Multi-region deployment
+- `aeryn_core/distributed_tracing/` — OpenTelemetry tracing
+- `aeryn_core/advanced_monitoring/` — Prometheus APM monitoring
+
+### Test Results
+- 661 tests pass
+- 0 failures
+- 1 warning
