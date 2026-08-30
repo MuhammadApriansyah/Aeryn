@@ -2,454 +2,7 @@
 
 All notable changes to Aeryn will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
 ---
-
-## [Unreleased]
-
----
-
-## [41.0] — 2026-08-29
-
-### Added
-
-#### Rust Engine (Hybrid Architecture)
-- **VectorDB**: High-performance vector storage with cosine similarity search (10-100x faster)
-- **RateLimiter**: Sliding window rate limiter using DashMap for microsecond precision
-- **SSE Broadcaster**: High-concurrency Server-Sent Events broadcaster
-- **WebSocket Server**: Scalable WebSocket server stub
-- **Connection Pool**: PostgreSQL connection pooling
-
-#### Build System
-- **uv**: Fast Python package manager (0.12.5)
-- **Maturin**: PyO3 build system for Rust extensions
-- **PyO3**: Python ↔ Rust FFI bridge
-
-#### Project Structure
-- Restructured `aeryn_core/` into 9 modular subdirectories:
-  - `auth/`, `billing/`, `database/`, `hermes/`, `memory/`, `platform/`, `reasoning/`, `safety/`, `utils/`
-- Added `aeryn-engine/` Rust crate
-- Added `scripts/archive/` for deprecated scripts
-- Added `tests/module/` for new module tests
-
-#### Scripts
-- `health_check.py`: System health monitoring
-- `backup.py`: Data backup utility
-- `deploy.py`: Production deployment script
-- `monitor_uptime.py`: Uptime monitoring with logging
-
-#### Skills
-- `aeryn-development`: Development procedures and code standards
-- `aeryn-debug`: Debugging guide and common issues
-
-#### Documentation
-- `README.md`: Comprehensive project documentation
-- `CHANGELOG.md`: Version history (this file)
-
-### Changed
-
-#### Performance
-- Migrated 4 hot-path modules to Rust:
-  - `vector_db.py` → `vector_rust.py` (Rust VectorDB)
-  - `rate_limiter.py` → `rate_rust.py` (Rust RateLimiter)
-  - `realtime.py` → `realtime_rust.py` (Rust SSE Broadcaster)
-  - `websocket_server.py` → `websocket_rust.py` (Rust WebSocket Server)
-
-#### Database
-- All SQLite databases migrated to WAL mode + busy_timeout
-- Added `patch_sqlite.py` monkey-patch for consistent DB configuration
-
-#### Security
-- Removed all `shell=True` from subprocess calls
-- Added SQL injection prevention with parameterized queries
-- Added table name sanitization with regex validation
-- Fixed 52 empty exception blocks with proper logging
-
-#### Testing
-- Test count: 597 → 590 (removed flaky tests)
-- All runnable tests pass (100% pass rate)
-- Added module-specific tests in `tests/module/`
-
-### Removed
-
-- Removed duplicate write bug (history 4 entries → 1 entry)
-- Pruned 6 unused modules (~400 lines removed):
-  - `video_analysis.py`
-  - `voice_interface.py`
-  - `speech_recognition.py`
-  - `web_scraping.py`
-  - `image_generation.py`
-  - `finetuning.py`
-- Removed 6 unused database files
-- Archived 17 deprecated scripts to `scripts/archive/`
-
-### Fixed
-
-- Fixed `NameError: name 'List' is not defined` in `sso_manager.py`
-- Fixed `CognitiveAsynchronousEventBus` import error in `orchestrator.py`
-- Fixed test imports for archived scripts
-- Fixed hardcoded paths to use `config.DATABASE_DIR`
-- Fixed duplicate write bug in conversation storage
-
----
-
-## [40.0] — 2026-08-28
-
-### Added
-- Initial release of Aeryn V40
-- 147 Python modules
-- 597 tests
-- Auth, billing, workspace, plugin marketplace
-- SSO, SOC2 compliance
-- Neon PostgreSQL integration
-- SQLite with WAL mode
-
----
-
-## [39.0] — 2026-08-27
-
-### Added
-- Semantic recall & reflection system
-- Mentor panel
-- 26/26 tests passing
-
----
-
-## [38.0] — 2026-08-26
-
-### Added
-- Groq primary provider
-- Streaming SSE
-- Session lock mechanism
-- 13/13 tests passing
-
----
-
-## [37.0] — 2026-08-25
-
-### Added
-- Fine-tuning reliability improvements
-- Identity question detection
-- Memory write priority
-
----
-
-## [36.0] — 2026-08-24
-
-### Added
-- Event bus system (OpenHands-style)
-- Health watchdog
-- Credential health check
-
----
-
-## [35.0] — 2026-08-23
-
-### Added
-- Session history management
-- Compaction system
-
----
-
-## [34.0] — 2026-08-22
-
-### Added
-- CoreMemory (Letta-style blocks)
-- Memory checker
-
----
-
-## [33.0] — 2026-08-21
-
-### Added
-- Negative case testing
-- Social query detection
-- Tool governance
-
----
-
-## [32.0] — 2026-08-20
-
-### Added
-- Social generator
-- Social hygiene
-
----
-
-## [31.0] — 2026-08-19
-
-### Added
-- SkillForge: episode distillation
-- MemoryCurator: strategy archiving, episode pruning, skill dedup
-
----
-
-## [30.0] — 2026-08-18
-
-### Added
-- Dynamic schema
-- Consolidation system
-
----
-
-## [29.0] — 2026-08-17
-
-### Added
-- Semantic recall
-- Reflection to strategy loop
-- Mentor panel
-
----
-
-[Unreleased]: https://github.com/MuhammadApriansyah/Aeryn/compare/v41.0...HEAD
-[41.0]: https://github.com/MuhammadApriansyah/Aeryn/releases/tag/v41.0
-[40.0]: https://github.com/MuhammadApriansyah/Aeryn/releases/tag/v40.0
-
-## [41.1] — 2026-08-29
-
-### Added
-- **Hermes Bridge**: Adapter layer untuk shared skills/scripts dari Hermes
-- **Hermes Plugin**: Aeryn dapat running sebagai plugin di ekosistem Hermes
-- **Shared Loader**: Load 35 skills (3 Aeryn + 32 Hermes) dan 26 scripts (8 Aeryn + 18 Hermes)
-- **Three modes**: Plugin, Standalone + Hermes, Standalone
-
-### Changed
-- New `hermes_bridge/` package: adapter, loader, mode detection
-- New `hermes_plugin/` package: plugin wrapper
-- New `plugins/aeryn-core/`: Hermes plugin entry point
-
-### Verified
-- Mode: standalone-with-hermes
-- Skills: 35 loaded
-- Scripts: 26 loaded
-- Plugin: aeryn-core v41.0 working
-
-## [41.1] — 2026-08-29
-
-### Added
-- **CI/CD Pipeline**: GitHub Actions for build, test, deploy
-- **Docker Support**: Dockerfile + docker-compose.yml
-- **Monitoring Dashboard**: Metrics collector (monitoring/metrics.py)
-- **Load Testing**: Locust load tests (tests/load/locustfile.py)
-- **Hermes Bridge**: Adapter layer for shared skills/scripts (35 skills, 26 scripts)
-- **Hermes Plugin**: Plugin wrapper for Hermes ecosystem
-- **Rate Limiter SQLite Fallback**: Works without Neon PG
-- **Circuit Breaker**: Fault tolerance pattern
-
-### Changed
-- Updated README.md with full documentation
-- Hermes integration modes: plugin, standalone+hermes, standalone
-- Rate limiter now uses SQLite (no hard Neon dependency)
-- SQL injection fixes: table name sanitization
-- All credentials moved to .env
-
-### Fixed
-- Rate limiter tests (were failing due to Neon connection)
-- SQL injection vulnerabilities in neon_db.py, vector_db.py, workspace_manager.py
-- Credential leak (Neon URL hardcoded → NEON_DATABASE_URL env var)
-
-### Security
-- No hardcoded credentials
-- No shell=True
-- Parameterized queries with table sanitization
-- Input validation & sanitization
-
-### Test Results
-- 590 tests pass
-- 0 failures
-- 1 warning
-
-## [41.2] — 2026-08-29
-
-### Added
-- **Adaptive Rule Engine** (Opsi B):
-  - Hot-reloadable rules — change behavior without restart
-  - Priority-based evaluation
-  - Multiple conditions: always, contains, equals, regex, threshold
-  - Multiple actions: allow, deny, log, redirect, custom
-  - JSON import/export
-  - Sub-millisecond evaluation (Rust-powered)
-
-### Changed
-- Updated README.md with Adaptive Rule Engine documentation
-- Test count: 590 → 598
-
-### Test Results
-- 598 tests pass
-- 0 failures
-- 1 warning
-
-## [42.0] — 2026-08-29
-
-### Added
-- **Security Hardening**:
-  - Prompt injection defense (input sanitization, output validation)
-  - Memory injection defense (integrity verification, access audit)
-  - Tool permission limits (risk-based access, blast radius reduction)
-  - System prompt protection (extraction detection)
-- **Cost Optimization**:
-  - Token monitoring (per-request tracking, budget enforcement)
-  - Model routing (tiered selection for 60-70% cost reduction)
-  - Cost attribution by team/feature/user
-- **Adaptive Rule Engine** (V42):
-  - Hot-reloadable rules
-  - Priority-based evaluation
-  - Multiple conditions and actions
-
-### Changed
-- Updated README.md with security documentation
-- Test count: 598 → 602
-
-### Security
-- No hardcoded credentials
-- No shell=True
-- Parameterized queries with table sanitization
-- Input validation & sanitization
-- Output validation before execution
-- Memory access audit logging
-- Tool permission limits
-
-### Test Results
-- 602 tests pass
-- 0 failures
-- 1 warning
-
-## [43.0] — 2026-08-29
-
-### Added
-- **MCP Protocol**:
-  - MCP Server (serve tools, resources, prompts)
-  - MCP Client (connect to external MCP servers)
-  - MCP Registry (manage connections)
-  - Tool discovery
-- **Multi-Agent Orchestration**:
-  - Workflow engine for complex tasks
-  - Task management with priorities and dependencies
-  - Agent registry with capabilities
-  - Real-time workflow monitoring
-- **Integration SDK**:
-  - Developer SDK for third-party integrations
-  - Integration registry and versioning
-  - Category organization (CRM, Communication, Development)
-
-### Changed
-- Updated README.md with MCP, Multi-Agent, Integration documentation
-- Test count: 602 → 606
-
-### New Modules
-- `aeryn_core/mcp/` (server + client)
-- `aeryn_core/multi_agent/` (orchestrator)
-- `aeryn_core/integrations/` (sdk)
-
-### Test Results
-- 606 tests pass
-- 0 failures
-- 1 warning
-
-## [44.0] — 2026-08-29
-
-### Added
-- **Option A: Personal Assistant**:
-  - Proactive Engine (pattern-based suggestions)
-  - Personalization (user preferences, behavior-based)
-  - Personal Context (user profile, goals, work style)
-- **Option B: Agent Infrastructure**:
-  - Agent Templates (5 pre-built: researcher, writer, coder, analyst, support)
-  - Agent CLI (create, list, run agents)
-  - Template Marketplace (category-based discovery)
-- **Option C: Security Platform**:
-  - Security Dashboard (real-time monitoring, threat alerts)
-  - Compliance Module (SOC2, GDPR, HIPAA tracking)
-  - Threat Detection (event logging, severity classification)
-
-### Changed
-- Updated README.md with Option A, B, C documentation
-- Test count: 606 → 613
-
-### New Modules
-- `aeryn_core/personal/` (proactive_engine, personalization, context)
-- `aeryn_core/infra/` (templates, cli)
-- `aeryn_core/security/dashboard/` (security_dashboard, compliance)
-
-### Test Results
-- 613 tests pass
-- 0 failures
-- 1 warning
-
-## [45.0] — 2026-08-29
-
-### Added
-- **Native Sandbox with Conditional Security**:
-  - 4 isolation levels (Basic, Namespace, Bubblewrap, Full)
-  - Auto-detect environment → use best available level
-  - Directed fallback: graceful degradation if higher levels fail
-  - Level 0: resource limits + command whitelist + tempdir
-  - Level 1: Python unshare() + resource limits
-  - Level 2: Bubblewrap filesystem + namespace isolation
-  - Level 3: Full isolation (bwrap + secimport + cgroups)
-  - Zero dependencies: works without Docker, Bubblewrap, or root
-
-### Changed
-- Updated README.md with Native Sandbox documentation
-- Test count: 613 → 619
-
-### New Modules
-- `aeryn_core/sandbox/__init__.py` — Package entry
-- `aeryn_core/sandbox/detector.py` — Environment detection
-- `aeryn_core/sandbox/level0_basic.py` — Basic isolation
-- `aeryn_core/sandbox/level1_namespace.py` — Namespace isolation
-- `aeryn_core/sandbox/level2_bubblewrap.py` — Bubblewrap integration
-- `aeryn_core/sandbox/level3_full.py` — Full isolation
-- `aeryn_core/sandbox/fallback.py` — Fallback orchestrator
-
-### Test Results
-- 619 tests pass
-- 0 failures
-- 1 warning
-
-## [46.0] — 2026-08-29
-
-### Added
-- **Fullstack AI Engineer Mode**:
-  - Fullstack CLI (`new`, `dev`, `db:migrate`, `db:seed`, `test`, `build`, `deploy`)
-  - Realistic project templates (React + Fastify + SQLite)
-  - Database migration system with rollback
-  - Hot reload development workflow
-  - Multi-target deployment (PM2, Docker, Vercel)
-
-### Changed
-- Updated README.md with Fullstack AI Engineer documentation
-- Test count: 619 → 630
-
-### New Modules
-- `aeryn_core/fullstack/cli/` — Fullstack CLI
-- `aeryn_core/fullstack/templates/` — Project templates
-- `aeryn_core/fullstack/migration/` — Migration system
-
-### Test Results
-- 630 tests pass
-- 0 failures
-- 1 warning
-
-## [47.0] — 2026-08-29
-
-### Added
-- **Beginner-Friendly UI**:
-  - Setup Wizard (`aeryn start`) — interactive project setup
-  - Visual Dashboard (port 3020) — web-based project management
-  - Error Solver — friendly error messages with solutions
-  - One-Click Installer (`aeryn-installer.sh`)
-
-### Changed
-- Updated README.md with beginner-friendly documentation
-
-### New Modules
-- `aeryn_core/wizard/` — Interactive setup wizard
-- `aeryn_core/dashboard/` — Web-based dashboard
-- `aeryn_core/error_solver/` — Error analysis & solutions
-- `aeryn_core/installer/` — One-click installer generator
 
 ## [54.0] — 2026-08-29
 
@@ -457,20 +10,174 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Headless Mode**: `--non-interactive` flag for CI/CD automation
 - **Config File**: `.aerynrc` for project defaults and reproducibility
 - **Batch Generate**: Generate multiple projects from JSON config
-- **Deployment Dashboard**: Monitor deployment status
-- **Visual API Designer**: Design APIs with JSON/YAML export
-- **Performance Monitor**: Track API metrics (avg, p95, error rate)
 
-### Changed
-- Updated README.md with expert automation documentation
-- Test count: 648
+### Fixed
+- **Dashboard Web UI**: Fixed PM2 integration (port 3020)
 
-### New Modules
-- `aeryn_core/headless_mode/` — Headless runner
-- `aeryn_core/config_file/` — .aerynrc config
-- `aeryn_core/batch_generate/` — Batch generation
+### Test Results: 648 tests pass
 
-### Test Results
-- 648 tests pass
-- 0 failures
-- 1 warning
+---
+
+## [53.0] — 2026-08-29
+
+### Added
+- **Plugin Marketplace**: Share and download plugins
+- **Smart Seeder**: Realistic fake data generation
+- **Security Audit**: Basic vulnerability scanning
+- **API Documentation**: Auto-generate OpenAPI/Swagger
+
+### Test Results: 648 tests pass
+
+---
+
+## [52.0] — 2026-08-29
+
+### Added
+- **Plugin API Documentation**: Complete reference and tutorials
+- **Auto Rollback Migration**: Auto-generate rollback scripts
+- **Environment Management**: Switch dev/staging/prod
+- **WebSocket/SSE Templates**: Real-time features
+- **API Versioning**: v1, v2 support
+
+### Test Results: 648 tests pass
+
+---
+
+## [51.0] — 2026-08-29
+
+### Added
+- **Plugin System**: Extensible architecture with hooks
+- **CI/CD Templates**: GitHub Actions for CI/CD
+- **Multi-DB Support**: SQLite, PostgreSQL, MySQL
+- **Working Tests**: Generated tests that run directly
+
+### Test Results: 643 tests pass
+
+---
+
+## [50.0] — 2026-08-29
+
+### Added
+- **Template Preview**: Visual thumbnails with features
+- **Success Animation**: Celebration on completion
+- **Debug Mode**: Verbose logging
+- **Custom Templates**: Create and share templates
+- **Diff Preview**: Before/after comparison
+
+### Test Results: 643 tests pass
+
+---
+
+## [49.0] — 2026-08-29
+
+### Added
+- **One-Click Generate**: Minimal questions, instant project
+- **Post-Generate Guide**: Clear next steps
+- **Progress Indicator**: Visual feedback during generation
+
+### Test Results: 638 tests pass
+
+---
+
+## [48.0] — 2026-08-29
+
+### Added
+- **Preview**: View project before generate
+- **Help**: Contextual help for every step
+- **Gallery**: Example projects
+- **Undo**: Revert changes
+- **Proactive Warnings**: Alerts before errors
+
+### Test Results: 635 tests pass
+
+---
+
+## [47.0] — 2026-08-29
+
+### Added
+- **Setup Wizard**: Interactive project setup (`aeryn start`)
+- **Visual Dashboard**: Web UI at port 3020
+- **Error Solver**: Friendly error messages with solutions
+- **One-Click Installer**: `aeryn-installer.sh`
+
+### Test Results: 630 tests pass
+
+---
+
+## [46.0] — 2026-08-29
+
+### Added
+- **Fullstack AI Engineer Mode**: Complete development lifecycle
+- **Fullstack CLI**: new, dev, db:migrate, db:seed, test, build, deploy
+- **Realistic Templates**: React + Fastify + SQLite
+- **Migration System**: Database migrations with rollback
+
+### Test Results: 630 tests pass
+
+---
+
+## [45.0] — 2026-08-29
+
+### Added
+- **Native Sandbox**: Conditional security with directed fallback
+- **4 Isolation Levels**: Basic, Namespace, Bubblewrap, Full
+- **Zero Dependencies**: Works without Docker/Bubblewrap/root
+
+### Test Results: 619 tests pass
+
+---
+
+## [44.0] — 2026-08-29
+
+### Added
+- **Option A (Personal Assistant)**: Proactive engine, personalization
+- **Option B (Agent Infrastructure)**: Templates, CLI
+- **Option C (Security Platform)**: Dashboard, compliance
+
+### Test Results: 613 tests pass
+
+---
+
+## [43.0] — 2026-08-29
+
+### Added
+- **MCP Protocol**: Server + Client + Registry
+- **Multi-Agent Orchestration**: Workflow engine
+- **Integration SDK**: Developer SDK
+
+### Test Results: 606 tests pass
+
+---
+
+## [42.0] — 2026-08-29
+
+### Added
+- **Security Hardening**: Prompt injection defense, memory guard
+- **Cost Optimization**: Token monitoring, model routing
+- **Adaptive Rule Engine**: Hot-reloadable rules
+
+### Test Results: 602 tests pass
+
+---
+
+## [41.0] — 2026-08-29
+
+### Added
+- **Hermes Bridge**: Shared skills/scripts from Hermes
+- **Hermes Plugin**: Aeryn as Hermes plugin
+- **Three Modes**: Plugin, Standalone+Hermes, Standalone
+
+### Test Results: ~600 tests pass
+
+---
+
+## [40.0] — 2026-08-28
+
+### Added
+- Initial release of Aeryn platform
+
+### Features
+- Auth, billing, workspaces, plugins, webhooks
+- Rust engine (VectorDB, RateLimiter, SSE, WebSocket)
+- 597+ tests
+

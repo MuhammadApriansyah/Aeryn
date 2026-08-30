@@ -1,0 +1,123 @@
+2026-08-30 01:08:41: Traceback (most recent call last):
+2026-08-30 01:08:41:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 3, in <module>
+2026-08-30 01:08:41:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:08:41: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:08:43: Traceback (most recent call last):
+2026-08-30 01:08:43:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 3, in <module>
+2026-08-30 01:08:43:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:08:43: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:08:45: Traceback (most recent call last):
+2026-08-30 01:08:45:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 3, in <module>
+2026-08-30 01:08:45:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:08:45: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:08:48: Traceback (most recent call last):
+2026-08-30 01:08:48:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 3, in <module>
+2026-08-30 01:08:48:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:08:48: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:08:50: Traceback (most recent call last):
+2026-08-30 01:08:50:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 3, in <module>
+2026-08-30 01:08:50:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:08:50: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:08:52: Traceback (most recent call last):
+2026-08-30 01:08:52:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 3, in <module>
+2026-08-30 01:08:52:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:08:52: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:08:54: Traceback (most recent call last):
+2026-08-30 01:08:54:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 3, in <module>
+2026-08-30 01:08:54:     
+2026-08-30 01:08:54: from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:08:54: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:08:56: Traceback (most recent call last):
+2026-08-30 01:08:56:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 3, in <module>
+2026-08-30 01:08:56:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:08:56: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:08:58: Traceback (most recent call last):
+2026-08-30 01:08:58:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 3, in <module>
+2026-08-30 01:08:58:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:08:58: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:09:01: Traceback (most recent call last):
+2026-08-30 01:09:01:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 3, in <module>
+2026-08-30 01:09:01:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:09:01: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:09:25: Traceback (most recent call last):
+2026-08-30 01:09:25:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 10, in <module>
+2026-08-30 01:09:25:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:09:25: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:09:27: Traceback (most recent call last):
+2026-08-30 01:09:27:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 10, in <module>
+2026-08-30 01:09:27:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:09:27: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:09:29: Traceback (most recent call last):
+2026-08-30 01:09:29:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 10, in <module>
+2026-08-30 01:09:29:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:09:29: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:09:32: Traceback (most recent call last):
+2026-08-30 01:09:32:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 10, in <module>
+2026-08-30 01:09:32:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:09:32: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:09:34: Traceback (most recent call last):
+2026-08-30 01:09:34:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 10, in <module>
+2026-08-30 01:09:34:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:09:34: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:09:36: Traceback (most recent call last):
+2026-08-30 01:09:36:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 10, in <module>
+2026-08-30 01:09:36:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:09:36: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:09:38: Traceback (most recent call last):
+2026-08-30 01:09:38:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 10, in <module>
+2026-08-30 01:09:38:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:09:38: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:09:40: Traceback (most recent call last):
+2026-08-30 01:09:40:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 10, in <module>
+2026-08-30 01:09:40:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:09:40: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:09:42: Traceback (most recent call last):
+2026-08-30 01:09:42:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 10, in <module>
+2026-08-30 01:09:42:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:09:42: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:09:45: Traceback (most recent call last):
+2026-08-30 01:09:45:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 10, in <module>
+2026-08-30 01:09:45:     
+2026-08-30 01:09:45: from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:09:45: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:10:24: Traceback (most recent call last):
+2026-08-30 01:10:24:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 12, in <module>
+2026-08-30 01:10:24:     
+2026-08-30 01:10:24: from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:10:24: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:10:26: Traceback (most recent call last):
+2026-08-30 01:10:26:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 12, in <module>
+2026-08-30 01:10:26:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:10:26: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:10:28: Traceback (most recent call last):
+2026-08-30 01:10:28:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 12, in <module>
+2026-08-30 01:10:28:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:10:28: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:10:30: Traceback (most recent call last):
+2026-08-30 01:10:30:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 12, in <module>
+2026-08-30 01:10:30:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:10:30: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:10:32: Traceback (most recent call last):
+2026-08-30 01:10:32:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 12, in <module>
+2026-08-30 01:10:32:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:10:32: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:10:34: Traceback (most recent call last):
+2026-08-30 01:10:34:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 12, in <module>
+2026-08-30 01:10:34:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:10:34: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:10:36: Traceback (most recent call last):
+2026-08-30 01:10:36:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 12, in <module>
+2026-08-30 01:10:36:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:10:36: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:10:39: Traceback (most recent call last):
+2026-08-30 01:10:39:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 12, in <module>
+2026-08-30 01:10:39:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:10:39: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:10:41: Traceback (most recent call last):
+2026-08-30 01:10:41:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 12, in <module>
+2026-08-30 01:10:41:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:10:41: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 01:10:43: Traceback (most recent call last):
+2026-08-30 01:10:43:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 12, in <module>
+2026-08-30 01:10:43:     from aeryn_core.dashboard.server import dashboard_server
+2026-08-30 01:10:43: ModuleNotFoundError: No module named 'aeryn_core'
