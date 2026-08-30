@@ -450,3 +450,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `aeryn_core/dashboard/` — Web-based dashboard
 - `aeryn_core/error_solver/` — Error analysis & solutions
 - `aeryn_core/installer/` — One-click installer generator
+
+## [54.0] — 2026-08-29
+
+### Added
+- **Headless Mode**: `--non-interactive` flag for CI/CD automation
+- **Config File**: `.aerynrc` for project defaults and reproducibility
+- **Batch Generate**: Generate multiple projects from JSON config
+- **Deployment Dashboard**: Monitor deployment status
+- **Visual API Designer**: Design APIs with JSON/YAML export
+- **Performance Monitor**: Track API metrics (avg, p95, error rate)
+
+### Changed
+- Updated README.md with expert automation documentation
+- Test count: 648
+
+### New Modules
+- `aeryn_core/headless_mode/` — Headless runner
+- `aeryn_core/config_file/` — .aerynrc config
+- `aeryn_core/batch_generate/` — Batch generation
+
+### Test Results
+- 648 tests pass
+- 0 failures
+- 1 warning
