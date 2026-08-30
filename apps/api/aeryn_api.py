@@ -159,9 +159,8 @@ async def rate_limit_middleware(request: Request, call_next):
             user_id=user_id,
             endpoint=request.url.path,
             method=request.method,
-            ip_address=request.client.host if request.client else None,
-            user_agent=request.headers.get("user-agent"),
-            role=role,
+            ip=request.client.host if request.client else None,
+            ua=request.headers.get("user-agent"),
         )
         
         if not result["allowed"]:
