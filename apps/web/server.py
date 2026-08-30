@@ -28,6 +28,15 @@ async def js(filename: str):
     return JSONResponse({"error": "Not found"}, status_code=404)
 
 
+@router.get("/favicon.ico", response_class=HTMLResponse)
+async def favicon():
+    template_path = os.path.join(TEMPLATE_DIR, "favicon.html")
+    if os.path.exists(template_path):
+        with open(template_path) as f:
+            return f.read()
+    return ""
+
+
 # === SINGLE PAGE ROUTE (All sections in one dashboard) ===
 
 @router.get("/", response_class=HTMLResponse)
