@@ -28,38 +28,12 @@ async def js(filename: str):
     return JSONResponse({"error": "Not found"}, status_code=404)
 
 
-# === PAGE ROUTES ===
+# === SINGLE PAGE ROUTE (All sections in one dashboard) ===
 
 @router.get("/", response_class=HTMLResponse)
-async def home():
-    return _serve_dashboard()
-
 @router.get("/web", response_class=HTMLResponse)
-async def web():
-    return _serve_dashboard()
-
-@router.get("/projects", response_class=HTMLResponse)
-async def projects():
-    return _serve_dashboard()
-
-@router.get("/workspaces", response_class=HTMLResponse)
-async def workspaces():
-    return _serve_dashboard()
-
-@router.get("/chat", response_class=HTMLResponse)
-async def chat():
-    return _serve_dashboard()
-
-@router.get("/plugins", response_class=HTMLResponse)
-async def plugins():
-    return _serve_dashboard()
-
-@router.get("/audit", response_class=HTMLResponse)
-async def audit():
-    return _serve_dashboard()
-
-@router.get("/settings", response_class=HTMLResponse)
-async def settings():
+@router.get("/dashboard", response_class=HTMLResponse)
+async def serve_dashboard():
     return _serve_dashboard()
 
 

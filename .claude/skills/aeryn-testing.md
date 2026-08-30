@@ -1,132 +1,304 @@
-# Aeryn Testing Strategy
+# Aeryn — Testing Strategy
 
-## Running Tests
+## Test Location
 
-### Full Suite (Required After Every Change)
+All tests are in the `/home/sen/aeryn-core-agent/tests/` directory.
 
+```
+tests/
+├── test_adaptive_engine.py
+├── test_core.py
+├── test_features.py
+├── test_fullstack.py
+├── test_graph_memory.py
+├── test_hybrid_search.py
+├── test_mcp_multiagent.py
+├── test_oneclick.py
+├── test_orchestrator.py
+├── test_rate_limiter.py
+├── test_sandbox.py
+├── test_security_cost.py
+├── test_supersession.py
+├── test_tool_governance.py
+├── test_v29_*.py through test_v57_features.py
+└── ... (91 total test files)
+```
+
+## How to Run Tests
+
+### Full Suite
 ```bash
 cd /home/sen/aeryn-core-agent
 source venv-proot/bin/activate
 python -m pytest tests/ -x -q
 ```
 
-Expected output: `**661 passed**` in ~35 seconds
+**Options:**
+- `-x` — Stop on first failure
+- `-q` — Quiet mode (one line per result)
+- `-v` — Verbose mode (full test names)
+- `--tb=short` — Short tracebacks
 
-### Individual Test Files
-
+### Single File
 ```bash
-python -m pytest tests/test_adaptive.py -x -q
-python -m pytest tests/test_api_endpoints.py -x -q
-python -m pytest tests/test_auth.py -x -q
+python -m pytest tests/test_safety_engine.py -x -q
 ```
 
-### Verbose Mode
-
+### Single Test
 ```bash
-python -m pytest tests/ -x -v --tb=short
+python -m pytest tests/test_safety_engine.py::TestSafetyEngine::test_sanitize -x -q
 ```
 
-## Test Philosophy
+### By Keyword
+```bash
+python -m pytest tests/ -k "rate_limit" -x -q
+```
 
-**NO test doubles in production code.** This is a strict rule.
+## Test Count
 
-- ✅ Real tests verify real behavior
-- ✅ Tests use actual database connections (SQLite)
-- ✅ Tests exercise real API endpoints
-- ✅ Tests validate real data transformations
-- ❌ No mocks, stubs, or fakes in production code
-- ❌ No `unittest.mock` in `aeryn_core/` or `apps/`
+- **91 test files**
+- **661 total tests**
+- Coverage spans: auth, billing, memory, reasoning, safety, API, platform
 
-## Test Coverage
+## Test Patterns
 
-| Area | Test Count | Description |
-|------|-----------|-------------|
-| Adaptive System | ~50 tests | Self-healing, error detection, fallback chains |
-| Auth & Billing | ~80 tests | API keys, rate limiting, subscription plans |
-| Memory System | ~120 tests | Vault, search, temporal memory, social memory |
-| API Endpoints | ~150 tests | FastAPI endpoint validation |
-| Safety | ~80 tests | Guardrails, sandbox, OWASP compliance |
-| Platform | ~90 tests | Plugin system, notifications, task queue |
-| Self-Improvement | ~30 tests | Feedback loop, prompt optimization |
-| Web Dashboard | ~61 tests | SPA routing, health checks |
+### Pattern 1: Real Testing (NO Test Doubles)
+
+**CRITICAL:** Production code must NEVER contain mocks, stubs, or fakes. All testing uses real implementations.
+
+```python
+# CORRECT — Real implementation
+def test_vault_storage():
+    vault = AerynVault()
+    entry = VaultEntry(key="test", value={"data": 123}, layer=LAYER_WIKI)
+    vault.store(entry)
+    result = vault.retrieve("test")
+    assert result.value == {"data": 123}
+
+# WRONG — Mock in production test path
+def test_with_mock():
+    mock_vault = Mock(AerynVault)  # Don't do this in production code
+    mock_vault.retrieve.return_value = fake_entry
+```
+
+### Pattern 2: Singleton Reset
+
+Since many components are singletons, tests may need reset:
+
+```python
+class TestMyFeature:
+    def setup_method(self):
+        # Get fresh singleton instance
+        self.feature = get_my_feature()
+        # Reset state if needed
+        self.feature._reset()
+```
+
+### Pattern 3: SQLite In-Memory for Tests
+
+```python
+def test_database_operation():
+    # Use in-memory DB for isolation
+    conn = sqlite3.connect(":memory:")
+    conn.execute("CREATE TABLE test (id INTEGER PRIMARY KEY, data TEXT)")
+    conn.execute("INSERT INTO test (data) VALUES ('hello')")
+    result = conn.execute("SELECT data FROM test").fetchone()
+    assert result[0] == "hello"
+```
+
+### Pattern 4: Pydantic Validation Tests
+
+```python
+def test_request_validation():
+    # Valid request
+    req = MyRequest(param1="valid", param2=50)
+    assert req.param2 == 50
+    
+    # Invalid request raises ValidationError
+    with pytest.raises(ValidationError):
+        MyRequest(param1="", param2=-1)
+```
+
+### Pattern 5: API Endpoint Tests
+
+```python
+from fastapi.testclient import TestClient
+
+def test_health_endpoint():
+    client = TestClient(app)
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert response.json()["status"] == "ok"
+```
+
+### Pattern 6: Async Tests
+
+```python
+import asyncio
+import pytest
+
+@pytest.mark.asyncio
+async def test_async_operation():
+    result = await async_function()
+    assert result is not None
+```
+
+### Pattern 7: Error Recovery Tests
+
+```python
+def test_retry_mechanism():
+    recovery = get_error_recovery()
+    
+    call_count = 0
+    
+    @with_retry(max_attempts=3, delay=0.1)
+    def flaky():
+        nonlocal call_count
+        call_count += 1
+        if call_count < 3:
+            raise ValueError("Temporary failure")
+        return "success"
+    
+    result = flaky()
+    assert result == "success"
+    assert call_count == 3
+```
+
+## Test File Naming
+
+| Pattern | Example |
+|---------|---------|
+| `test_<feature>.py` | `test_safety_engine.py` |
+| `test_v<version>_<feature>.py` | `test_v38_1_subagents.py` |
+| `test_<category>.py` | `test_features.py` |
 
 ## Writing New Tests
 
-### Test File Structure
+### Step 1: Create test file
+```python
+# tests/test_my_new_feature.py
+"""
+Tests for My New Feature.
+"""
+
+import pytest
+from aeryn_core.<category>.my_new_feature import get_my_new_feature
+
+
+class TestMyNewFeature:
+    """Test suite for MyNewFeature."""
+    
+    def setup_method(self):
+        """Reset state before each test."""
+        self.feature = get_my_new_feature()
+        self.feature._reset()
+    
+    def test_basic_functionality(self):
+        """Test basic operation works."""
+        result = self.feature.do_something("input")
+        assert result is not None
+        assert "output" in result
+    
+    def test_edge_case_empty_input(self):
+        """Test behavior with empty input."""
+        with pytest.raises(ValueError):
+            self.feature.do_something("")
+    
+    def test_singleton_pattern(self):
+        """Verify singleton behavior."""
+        a = get_my_new_feature()
+        b = get_my_new_feature()
+        assert a is b
+    
+    def test_state_persistence(self):
+        """Verify state persists across calls."""
+        self.feature.set_state("key", "value")
+        assert self.feature.get_state("key") == "value"
+    
+    def test_concurrent_access(self):
+        """Test thread safety if applicable."""
+        import threading
+        
+        results = []
+        
+        def worker():
+            results.append(self.feature.do_something("input"))
+        
+        threads = [threading.Thread(target=worker) for _ in range(10)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        
+        assert len(results) == 10
+```
+
+### Step 2: Run new tests
+```bash
+cd /home/sen/aeryn-core-agent
+source venv-proot/bin/activate
+python -m pytest tests/test_my_new_feature.py -x -v
+```
+
+### Step 3: Verify full suite still passes
+```bash
+python -m pytest tests/ -x -q
+```
+
+## Test Categories
+
+| Category | Files | What's Tested |
+|----------|-------|---------------|
+| Auth | `test_rate_limiter.py`, `test_v36_credential_health.py` | API keys, rate limits, credentials |
+| Billing | `test_security_cost.py` | Plans, pricing, usage |
+| Memory | `test_graph_memory.py`, `test_hybrid_search.py`, `test_supersession.py` | Vault, search, graph, decay |
+| Safety | `test_sandbox.py`, `test_production_guard.py` | Sandbox, guardrails, security |
+| Features | `test_v50_features.py` through `test_v57_features.py` | Sprint features |
+| Platform | `test_mcp_multiagent.py`, `test_tool_governance.py` | MCP, multi-agent, tools |
+| API | `test_fullstack.py`, `test_core.py` | End-to-end API flows |
+| Adaptive | `test_adaptive_engine.py` | Self-improvement system |
+
+## Test Fixtures
+
+Common fixtures can be defined in `conftest.py` (if needed):
 
 ```python
-# tests/test_my_feature.py
+# tests/conftest.py
 import pytest
-import os
 import sys
+import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from aeryn_core.my_module import MyClass
+@pytest.fixture
+def vault():
+    from aeryn_core.memory.vault import AerynVault
+    v = AerynVault()
+    v._reset()
+    return v
 
-def test_my_function():
-    # Arrange
-    obj = MyClass()
-    
-    # Act
-    result = obj.do_something("test")
-    
-    # Assert
-    assert result == expected_value
-    assert result is not None
-
-def test_error_case():
-    obj = MyClass()
-    with pytest.raises(SomeException):
-        obj.invalid_operation()
+@pytest.fixture
+def rate_limiter():
+    from aeryn_core.auth.rate_limiter import get_rate_limiter
+    rl = get_rate_limiter()
+    rl._reset()
+    return rl
 ```
 
-### Test Naming Convention
+## Coverage Gaps
 
-- `test_*` for successful cases
-- `test_*_error` for error cases
-- `test_*_empty` for empty input
-- `test_*_invalid` for invalid input
+When writing tests, focus on:
+1. **Error paths** — Not just happy paths
+2. **Edge cases** — Empty input, null values, boundary conditions
+3. **State management** — Singleton state, persistence, cleanup
+4. **Concurrency** — Thread safety for shared resources
+5. **Validation** — Pydantic model validation, input sanitization
 
-### Test Fixtures
+## Continuous Testing
 
-Tests use real SQLite databases in `tests/` directory. Database is created fresh for each test run:
-
-```python
-@pytest.fixture(autouse=True)
-def setup_db():
-    # Real database setup
-    os.makedirs("tests/data", exist_ok=True)
-    yield
-    # Real cleanup
-    import shutil
-    if os.path.exists("tests/data"):
-        shutil.rmtree("tests/data")
-```
-
-## Verifying No Test Doubles
-
+After ANY code change:
 ```bash
-# Check for mocks in production code
-grep -rn "from unittest.mock import\|import mock" aeryn_core/ apps/ --include="*.py"
-
-# Should return 0 results
-# If it returns results, that's a violation
-```
-
-## CI Pipeline
-
-Tests must pass before merge:
-
-```bash
-# 1. Run tests
 python -m pytest tests/ -x -q
-
-# 2. Verify no test doubles
-grep -rn "unittest.mock" aeryn_core/ apps/ --include="*.py"
-
-# 3. Check import works
-python -c "from aeryn_core import *"
-
-# All three must pass
 ```
+
+This runs all 661 tests and stops on first failure.

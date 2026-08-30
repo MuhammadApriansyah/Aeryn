@@ -4156,16 +4156,16 @@ async def spa_root():
     from apps.web.server import _serve_dashboard
     return _serve_dashboard()
 
-# SPA routes that don't conflict with API routes
+# Redirect all old SPA routes to single dashboard
 for _route in ["/projects", "/workspaces", "/chat", "/audit", "/settings", "/notifications"]:
-    def make_handler():
-        async def handler():
-            from apps.web.server import _serve_dashboard
-            return _serve_dashboard()
-        return handler
-    _handler = make_handler()
-    _handler.__name__ = f"spa_{_route.strip('/')}"
-    app.add_api_route(_route, endpoint=_handler, response_class=HTMLResponse)
+    def make_redirect():
+        async def redirect():
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(url="/")
+        return redirect
+    _handler = make_redirect()
+    _handler.__name__ = f"redirect_{_route.strip('/')}"
+    app.add_api_route(_route, endpoint=_handler)
 
 @app.get("/app/{spa:path}", response_class=HTMLResponse)
 async def spa_fallback(spa: str):

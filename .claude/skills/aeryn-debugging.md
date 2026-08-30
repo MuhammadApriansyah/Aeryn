@@ -1,178 +1,391 @@
-# Aeryn Debugging Guide
-
-## Quick Start Debugging
-
-```bash
-# 1. Check if backend is running
-curl http://127.0.0.1:3010/health
-
-# 2. Check PM2 logs
-pm2 logs aeryn-api --lines 50
-
-# 3. Check process status
-pm2 list
-
-# 4. Restart if needed
-pm2 restart aeryn-api
-```
+# Aeryn — Debugging Guide
 
 ## Common Issues & Solutions
 
-### 1. PostgreSQL Connection Errors
+### Issue: PostgreSQL Connection Errors
 
-**Error**: `connection to server on socket "/var/run/postgresql/.s.PGSQL.3010" failed`
+**Symptom:** Logs show PostgreSQL connection attempts or errors.
 
-**Cause**: Aeryn uses SQLite, but some code paths try PostgreSQL.
+**Cause:** This is EXPECTED. Aeryn uses SQLite only, but some libraries may attempt PostgreSQL connections.
 
-**Solution**: 
-- This is EXPECTED behavior — the system gracefully falls back to SQLite
-- Check error logs to confirm fallback is working
-- Do NOT try to install PostgreSQL
+**Solution:** Ignore PostgreSQL errors — they are non-fatal. The system falls back to SQLite:
 
-**Log verification**:
-```bash
-pm2 logs aeryn-api | grep "Database connection failed"
-# Should see: "Using SQLite fallback" after the PostgreSQL error
+```python
+# This is by design — SQLite is the only database
+import aeryn_core.utils.patch_sqlite  # Patches sqlite3.connect for WAL
 ```
 
-### 2. Port Already in Use
+**If PostgreSQL errors block startup:**
+- Check `psycopg2` is not in `requirements.txt` (it isn't)
+- Verify no `.env` file contains `DATABASE_URL` pointing to PostgreSQL
+- Run `grep -r "postgres" apps/ aeryn_core/` to find accidental references
 
-**Error**: `Address already in use` when starting server
+---
 
-**Solution**:
+### Issue: Port Already in Use (Port 3010)
+
+**Symptom:** `Address already in use` or `EADDRINUSE` when starting API.
+
+**Solution:**
 ```bash
+# Find and kill process on port 3010
 fuser -k 3010/tcp
+
+# Or more specifically
+lsof -i :3010
+kill -9 <PID>
+
+# Then restart
 pm2 restart aeryn-api
 ```
 
-### 3. API Route Conflict (SPA)
+---
 
-**Problem**: Direct URL access to `/plugins` returns 500 error.
+### Issue: PM2 Process Won't Start
 
-**Cause**: FastAPI API route `/plugins` conflicts with SPA route.
+**Symptom:** `pm2 start` fails or process shows `errored` status.
 
-**Workaround**: 
-- Use client-side navigation (click menu items)
-- Direct URL access for `/plugins` not supported due to PostgreSQL dependency
-- All other routes (`/projects`, `/workspaces`, `/chat`, `/audit`, `/settings`) work via direct URL
-
-### 4. Rate Limiter TypeError
-
-**Error**: `RateLimiter.check() got an unexpected keyword argument 'ip_address'`
-
-**Cause**: Existing bug in `apps/api/aeryn_api.py` line 158 — middleware calls `limiter.check()` with wrong signature.
-
-**Status**: Non-fatal — exceptions are caught and logged. API still functions.
-
-**Fix needed**: Update `aeryn_core/auth/rate_limiter.py` or fix middleware in `aeryn_api.py`.
-
-### 5. SQLite Busy Timeout
-
-**Error**: `database is locked`
-
-**Solution**: The patched SQLite connection uses `busy_timeout=5000ms`, but concurrent access may still cause issues.
-
-```python
-import aeryn_core.utils.patch_sqlite  # Must be imported first
-conn = sqlite3.connect("data.db")
-conn.execute("PRAGMA busy_timeout = 5000")
-```
-
-## Debugging Tools
-
-### 1. Health Check Endpoint
-
+**Debug steps:**
 ```bash
-curl http://127.0.0.1:3010/health
-# {"status":"healthy","memory_mb":24.3,"version":"40.44"}
+# Check PM2 logs
+pm2 logs aeryn-api --lines 50
+
+# Check error log file
+tail -50 logs/aeryn-api-error.log
+
+# Check output log file
+tail -50 logs/aeryn-api-out.log
+
+# Test run without PM2
+cd /home/sen/aeryn-core-agent
+source venv-proot/bin/python
+python apps/api/aeryn_api.py
 ```
 
-### 2. Adaptive System Endpoints
+**Common causes:**
+- Missing virtual environment activation
+- Import error (check `sys.path` includes project root)
+- Port conflict (see above)
+- Missing environment variables
 
+---
+
+### Issue: Module Not Found / Import Error
+
+**Symptom:** `ModuleNotFoundError: No module named 'aeryn_core'`
+
+**Solution:**
 ```bash
-curl http://127.0.0.1:3010/api/adaptive/health
-curl http://127.0.0.1:3010/api/adaptive/errors
-curl -X POST http://127.0.0.1:3010/api/adaptive/run-cycle
+# Ensure venv is activated
+source venv-proot/bin/activate
+
+# Verify sys.path
+python -c "import sys; print(sys.path)"
+
+# The code includes this at top of aeryn_api.py:
+# sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 ```
 
-### 3. API Docs
+---
 
-- Swagger UI: `http://127.0.0.1:3010/docs`
-- ReDoc: `http://127.0.0.1:3010/redoc`
+### Issue: Rate Limiter TypeError
 
-### 4. Browser DevTools
+**Symptom:** `TypeError` in rate limiter middleware.
 
-For SPA debugging:
-1. Open DevTools (F12)
-2. Check Console tab for JS errors
-3. Check Network tab for API failures
-4. Use Application tab to inspect localStorage
-
-### 5. Error Recovery System
+**Known issue:** The rate limiter middleware has a known TypeError. Check:
 
 ```python
-from aeryn_core.utils.error_recovery import get_error_recovery, with_retry, with_fallback
+# aeryn_core/auth/rate_limiter.py
+# The middleware may have signature issues
 
-recovery = get_error_recovery()
-
-# Check error patterns
-errors = recovery.get_error_log()
-
-# Manual recovery
-recovery.apply_fix("connection_error", {"retry_count": 3})
+# Workaround: Check middleware registration
+# In aeryn_api.py, rate limiting is applied per-endpoint
 ```
 
-## Error Handling Architecture
+**Debug:**
+```bash
+grep -n "rate_limiter" apps/api/aeryn_api.py
+python -c "from aeryn_core.auth.rate_limiter import get_rate_limiter; rl = get_rate_limiter(); print(rl)"
+```
 
-### Error Recovery Strategies
+---
 
-Located in `aeryn_core/utils/error_recovery.py`:
+### Issue: /plugins Route Conflict
 
-| Strategy | Trigger | Action |
-|----------|---------|--------|
-| `retry_with_backoff` | Network errors | Retry with exponential backoff |
-| `connection_fallback` | DB connection errors | Switch to SQLite fallback |
-| `cache_fallback` | API timeout | Return cached response |
-| `skip_on_error` | Non-critical errors | Continue with reduced features |
+**Symptom:** API `/plugins` endpoint conflicts with SPA `/plugins` page.
 
-### Using Error Recovery
+**Cause:** The `/plugins` API route (plugin system) conflicts with the SPA route for the plugins dashboard page.
+
+**Solution:** Use different paths:
+- API: `/api/v1/plugins/` (with prefix)
+- SPA: `/plugins` (dashboard page)
+
+**Status:** Known issue — prioritize SPA route, move API to `/api/v1/plugins/`.
+
+---
+
+### Issue: SQLite Database Locked
+
+**Symptom:** `database is locked` errors.
+
+**Cause:** Concurrent writes without proper WAL configuration.
+
+**Solution:**
+```python
+# Ensure WAL patch is imported FIRST
+import aeryn_core.utils.patch_sqlite  # noqa
+
+# This sets:
+# - journal_mode=WAL
+# - busy_timeout=5000
+```
+
+**If still occurring:**
+```bash
+# Check for stale lock files
+ls -la data/*.db-*
+
+# Remove stale locks
+rm -f data/*.db-journal data/*.db-wal data/*.db-shm
+
+# Restart
+pm2 restart aeryn-api
+```
+
+---
+
+## Debug Tools
+
+### PM2 Logs
+```bash
+# All logs
+pm2 logs
+
+# Specific service
+pm2 logs aeryn-api
+
+# Error only
+pm2 logs aeryn-api --err
+
+# Last N lines
+pm2 logs aeryn-api --lines 100
+```
+
+### Log Files
+```bash
+# Error log
+tail -f logs/aeryn-api-error.log
+
+# Output log
+tail -f logs/aeryn-api-out.log
+
+# Dashboard logs
+tail -f logs/aeryn-dashboard-error.log
+```
+
+### Python Debugging
+```bash
+# Run with Python directly (no PM2)
+source venv-proot/bin/activate
+python apps/api/aeryn_api.py
+
+# With debug logging
+AERYN_LOG_LEVEL=debug python apps/api/aeryn_api.py
+
+# With pdb
+python -m pdb apps/api/aeryn_api.py
+```
+
+### Browser DevTools (for SPA)
+
+1. Open dashboard at `http://127.0.0.1:3010`
+2. Press `F12` for DevTools
+3. **Console tab:** JavaScript errors and logs
+4. **Network tab:** API request/response inspection
+5. **Elements tab:** DOM structure debugging
+
+**Key things to check in DevTools:**
+- 404 errors on API calls (wrong endpoint)
+- 500 errors (server-side failures)
+- WebSocket connection status
+- JavaScript exceptions
+
+### SQLite Database Inspection
+```bash
+# Connect to database
+sqlite3 data/aeryn.db
+
+# List tables
+.tables
+
+# Check schema
+.schema
+
+# Query data
+SELECT * FROM vault LIMIT 5;
+
+# Check WAL mode
+PRAGMA journal_mode;
+
+# Exit
+.quit
+```
+
+---
+
+## Error Handling System
+
+### Error Recovery (`aeryn_core/utils/error_recovery.py`)
+
+Provides decorators for resilient operations:
 
 ```python
-from aeryn_core.utils.error_recovery import with_retry, with_fallback
+from aeryn_core.utils.error_recovery import with_retry, with_fallback, with_circuit_breaker
 
-# With retry
-result = with_retry(risky_function, max_retries=3, delay=2.0)
+# Retry on failure
+@with_retry(max_attempts=3, delay=2, backoff=2)
+def flaky_api_call():
+    # Will retry up to 3 times with exponential backoff
+    pass
 
-# With fallback
-result = with_fallback(
-    primary_func=call_api,
-    fallback_func=return_cache,
-    exception_types=[TimeoutError, ConnectionError]
+# Fallback value on failure
+@with_fallback(fallback_value={"status": "degraded"})
+def risky_operation():
+    # Returns fallback_value on any exception
+    pass
+
+# Circuit breaker
+@with_circuit_breaker(failure_threshold=5, recovery_timeout=60)
+def unreliable_service():
+    # Stops calling after 5 failures, retries after 60s
+    pass
+```
+
+### Error Handling (`aeryn_core/utils/error_handling.py`)
+
+Centralized error handling with structured responses.
+
+### Logger (`aeryn_core/utils/logger.py`)
+
+```python
+from aeryn_core.utils.logger import info, warn, error, log_exception
+
+# Structured logging
+info("User logged in", user_id="user123", ip="192.168.1.1")
+warn("Rate limit exceeded", usage=95, limit=100)
+error("Database write failed", error=str(e))
+
+# Exception logging with traceback
+try:
+    risky_operation()
+except Exception as e:
+    log_exception(e, context={"operation": "risky"})
+```
+
+---
+
+## Adaptive System (Self-Healing)
+
+Located in `aeryn_core/adaptive/__init__.py` (34K).
+
+### Key Features
+1. **Error Detection & Auto-Recovery** — Catches exceptions and retries with backoff
+2. **Recursive Self-Improvement Loop** — Learns from past errors
+3. **Adaptive Behavior Adjustment** — Adjusts parameters based on success/failure
+4. **Self-Healing Infrastructure** — Restarts failed components
+
+### How to Use
+```python
+from aeryn_core.adaptive import get_adaptive_system
+
+adaptive = get_adaptive_system()
+
+# Record an error for learning
+adaptive.record_error(
+    component="api_handler",
+    error_message="Connection timeout",
+    context={"endpoint": "/api/v1/chat"}
 )
+
+# Get recommendation
+reccommendation = adaptive.get_recommendation("api_handler", context)
+
+# Check health
+health = adaptive.get_health_status()
 ```
 
-## Adaptive System Debugging
+### Health Monitoring
+```python
+from aeryn_core.utils.performance import get_optimizer, get_uptime
 
-The adaptive system auto-heals. To debug:
+optimizer = get_optimizer()
+metrics = optimizer.get_metrics()
 
+uptime = get_uptime()
+print(f"Uptime: {uptime}")
+```
+
+---
+
+## Debugging Checklist
+
+When something goes wrong, follow this order:
+
+1. **Check PM2 logs:** `pm2 logs aeryn-api --lines 50`
+2. **Check error log:** `tail -50 logs/aeryn-api-error.log`
+3. **Check port:** `lsof -i :3010`
+4. **Check venv:** `which python` (should be venv-proot)
+5. **Check .env:** `cat .env` (verify required vars)
+6. **Check SQLite:** `sqlite3 data/aeryn.db ".tables"`
+7. **Check WAL:** `sqlite3 data/aeryn.db "PRAGMA journal_mode;"`
+8. **Run tests:** `python -m pytest tests/ -x -q`
+9. **Browser DevTools:** Check Console and Network tabs
+10. **Restart services:** `pm2 restart all`
+
+---
+
+## Known Issues & Workarounds
+
+| Issue | Status | Workaround |
+|-------|--------|------------|
+| PostgreSQL connection errors | Expected — SQLite is used | Ignore non-fatal errors |
+| /plugins route conflict | Known | Use `/api/v1/plugins/` for API, `/plugins` for SPA |
+| rate_limiter middleware TypeError | Known | Check decorator signature |
+| Port 3010 conflict | Occasional | `fuser -k 3010/tcp` then restart |
+| SQLite locked on heavy write | Rare | Ensure WAL mode, increase busy_timeout |
+
+---
+
+## Performance Debugging
+
+### Slow API Response
 ```bash
-# Run a manual cycle
-curl -X POST http://127.0.0.1:3010/api/adaptive/run-cycle
+# Check PM2 memory usage
+pm2 status
 
-# Check what fixes were applied
-curl http://127.0.0.1:3010/api/adaptive/errors
-curl http://127.0.0.1:3010/api/adaptive/health
+# Check logs for slow queries
+grep "slow\|timeout\|took" logs/aeryn-api-out.log
 
-# Check database
-sqlite3 Personalisasi/Database/adaptive_system.db "SELECT * FROM adaptations ORDER BY timestamp DESC LIMIT 10;"
+# Profile Python code
+python -m cProfile -s cumulative apps/api/aeryn_api.py
 ```
 
-### Adaptive System Files
+### Memory Issues
+```bash
+# Check memory usage
+free -h
+pm2 status
 
-| File | Purpose |
-|------|---------|
-| `aeryn_core/adaptive/__init__.py` | Main adaptive orchestrator |
-| `aeryn_core/adaptive/error_detector.py` | Error pattern detection |
-| `aeryn_core/adaptive/fallback_chains.py` | Fallback action chains |
-| `aeryn_core/adaptive/health_monitor.py` | Real-time health monitoring |
-| `aeryn_core/adaptive/fix_applier.py` | Apply automatic fixes |
+# Check for memory leaks
+pm2 reload aeryn-api  # Hot reload
+```
+
+### Database Performance
+```bash
+# Check SQLite performance
+sqlite3 data/aeryn.db "PRAGMA cache_size;"
+sqlite3 data/aeryn.db "PRAGMA page_size;"
+
+# Analyze slow queries
+sqlite3 data/aeryn.db "EXPLAIN QUERY SELECT * FROM vault LIMIT 10;"
+```
