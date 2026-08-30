@@ -181,3 +181,29 @@ All notable changes to Aeryn will be documented in this file.
 - Rust engine (VectorDB, RateLimiter, SSE, WebSocket)
 - 597+ tests
 
+
+## [55.0] — 2026-08-30
+
+### Added
+- **Workspace Management**: Multi-tenant workspaces with RBAC (owner, member roles)
+- **Audit Trail**: Track all actions with timestamps, user IDs, and IP for compliance
+- **Rate Limiting**: Built-in API rate limiter (Fastify middleware)
+- **Cache Layer**: Redis caching template with ioredis
+- **Job Queue**: Background job processing with Bull (email, image processing)
+- **Generated Tests**: Working tests that run directly with Vitest
+
+### Changed
+- Updated README.md with enterprise features documentation
+- Test count: 648 → 653
+
+### New Modules
+- `aeryn_core/workspace/` — Multi-tenant workspace manager
+- `aeryn_core/audit_trail/` — Audit trail for compliance
+- `aeryn_core/rate_limiting/` — Built-in API rate limiter
+- `aeryn_core/cache_layer/` — Redis caching template
+- `aeryn_core/job_queue/` — Bull job queue template
+
+### Test Results
+- 653 tests pass
+- 0 failures
+- 1 warning

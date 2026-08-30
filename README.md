@@ -1,9 +1,9 @@
 # 🤖 Aeryn — Personal Assistant Agent SaaS
 
-> AI-powered personal assistant platform with multi-model support, team workspaces, enterprise features, Rust-powered performance, Hermes integration, security-first architecture, MCP protocol, multi-agent orchestration, integration SDK, native sandbox, fullstack AI engineer mode, beginner-friendly UI, and **expert automation features**.
+> AI-powered personal assistant platform with multi-model support, team workspaces, enterprise features, Rust-powered performance, Hermes integration, security-first architecture, MCP protocol, multi-agent orchestration, integration SDK, native sandbox, fullstack AI engineer mode, beginner-friendly UI, expert automation features, and **enterprise workspace management**.
 
-![Version](https://img.shields.io/badge/version-54.0-blue)
-![Tests](https://img.shields.io/badge/tests-648%20passed-brightgreen)
+![Version](https://img.shields.io/badge/version-55.0-blue)
+![Tests](https://img.shields.io/badge/tests-653%20passed-brightgreen)
 ![Security](https://img.shields.io/badge/security-layered-success)
 ![Fullstack](https://img.shields.io/badge/fullstack-engineer-success)
 ![Dashboard](https://img.shields.io/badge/dashboard-web-success)
@@ -11,6 +11,10 @@
 ![Debug](https://img.shields.io/badge/debug-mode-success)
 ![Headless](https://img.shields.io/badge/headless-mode-success)
 ![Batch](https://img.shields.io/badge/batch-generate-success)
+![Workspace](https://img.shields.io/badge/workspace-multi--tenant-success)
+![Audit](https://img.shields.io/badge/audit-trail-success)
+![Cache](https://img.shields.io/badge/cache-redis-success)
+![Queue](https://img.shields.io/badge/job-queue-success)
 ![Python](https://img.shields.io/badge/python-3.11+-blue)
 ![Rust](https://img.shields.io/badge/rust-1.75+-orange)
 ![Hermes](https://img.shields.io/badge/hermes-integrated-purple)
@@ -20,31 +24,34 @@
 
 ## 🚀 Features
 
-### Expert Automation (NEW in V54)
-- **Headless Mode**: `--non-interactive` flag for fully automated CI/CD
-- **Config File**: `.aerynrc` for project defaults and reproducibility
-- **Batch Generate**: Generate multiple projects from JSON config
-- **Deployment Dashboard**: Monitor deployment status
-- **Visual API Designer**: Design APIs with JSON/YAML export
-- **Performance Monitor**: Track API metrics (avg, p50, p95, p99, error rate)
+### Enterprise Features (NEW in V55)
+- **Workspace Management**: Multi-tenant workspaces with RBAC
+- **Audit Trail**: Track all actions for compliance
+- **Rate Limiting**: Built-in API rate limiter
+- **Cache Layer**: Redis caching template
+- **Job Queue**: Background job processing (Bull)
+
+### Expert Automation (V54)
+- **Headless Mode**: `--non-interactive` for CI/CD
+- **Config File**: `.aerynrc` for project defaults
+- **Batch Generate**: Multiple projects from JSON
 
 ### Beginner-Friendly UI (V47-V50)
-- **Setup Wizard**: `aeryn start` — interactive project setup
-- **Visual Dashboard**: Web-based UI at `http://localhost:3020`
-- **One-Click Generate**: Minimal questions, instant project creation
-- **Post-Generate Guide**: Clear next steps after project creation
-- **Progress Indicator**: Visual feedback during generation
-- **Error Solver**: Friendly error messages with solutions
+- **Setup Wizard**: `aeryn start`
+- **Visual Dashboard**: Web UI at port 3020
+- **One-Click Generate**: Minimal questions
+- **Post-Generate Guide**: Clear next steps
+- **Progress Indicator**: Visual feedback
+- **Error Solver**: Friendly error messages
 - **One-Click Installer**: `./aeryn-installer.sh`
 
 ### Fullstack AI Engineer (V46)
 - **Fullstack CLI**: `new`, `dev`, `db:migrate`, `db:seed`, `test`, `build`, `deploy`
-- **Realistic Templates**: React + Fastify + SQLite with auth, CRUD
+- **Realistic Templates**: React + Fastify + SQLite
 - **Migration System**: Database migrations with rollback
 
 ### Native Sandbox (V45)
 - **Conditional Security**: Auto-detect → best isolation level
-- **Directed Fallback**: Graceful degradation
 - **4 Isolation Levels**: Basic → Namespace → Bubblewrap → Full
 
 ### MCP Protocol (V43)
@@ -57,10 +64,6 @@
 - **Tool Permission Limits**: Risk-based access
 - **Model Routing**: Tiered selection (60-70% cost reduction)
 
-### Adaptive Rule Engine (V42)
-- **Hot-reloadable rules** — Change behavior without restart
-- **Priority-based evaluation** — Higher priority rules execute first
-
 ---
 
 ## 🏗️ Architecture
@@ -68,6 +71,11 @@
 ```
 Aeryn/
 ├── aeryn_core/
+│   ├── workspace/           ← Multi-tenant workspace management
+│   ├── audit_trail/         ← Audit trail for compliance
+│   ├── rate_limiting/       ← Built-in API rate limiter
+│   ├── cache_layer/         ← Redis caching template
+│   ├── job_queue/           ← Background job processing
 │   ├── fullstack/           ← Fullstack AI Engineer
 │   ├── sandbox/             ← Native sandbox (4 levels)
 │   ├── mcp/                 ← MCP server + client
@@ -107,7 +115,7 @@ Aeryn/
 │   └── ...
 ├── aeryn-engine/            ← Rust (6 modules)
 ├── plugins/aeryn-core/      ← Hermes plugin entry
-├── tests/                   ← 648 tests
+├── tests/                   ← 653 tests
 ├── .github/workflows/       ← CI/CD Pipeline
 ├── Dockerfile + compose     ← Docker support
 └── monitoring/              ← Metrics collector
@@ -133,36 +141,20 @@ Aeryn/
 
 ## 🚀 Quick Start
 
-### Option 1: Setup Wizard (Recommended for beginners)
-
 ```bash
+# Option 1: Setup Wizard
 aeryn start
-```
 
-### Option 2: One-Click Generate
-
-```bash
+# Option 2: One-Click Generate
 aeryn new my-app --template react
-cd my-app
-aeryn dev
-```
 
-### Option 3: Visual Dashboard
-
-```bash
+# Option 3: Visual Dashboard
 aeryn dashboard
-# Open http://localhost:3020
-```
 
-### Option 4: Headless Mode (For CI/CD)
-
-```bash
+# Option 4: Headless Mode
 aeryn new my-app --non-interactive --template react
-```
 
-### Option 5: Batch Generate
-
-```bash
+# Option 5: Batch Generate
 aeryn batch projects.json
 ```
 
@@ -187,6 +179,8 @@ aeryn batch projects.json
 | `aeryn templates` | List available templates |
 | `aeryn plugins` | List installed plugins |
 | `aeryn config` | Show current config |
+| `aeryn workspace list` | List workspaces |
+| `aeryn audit` | View audit trail |
 
 ---
 
@@ -200,51 +194,18 @@ aeryn batch projects.json
     "database": "sqlite",
     "auth": true,
     "testing": true,
-    "ci_cd": true
+    "ci_cd": true,
+    "rate_limiting": true,
+    "caching": true,
+    "job_queue": false
   },
-  "plugins": [],
+  "plugins": ["auth"],
   "environments": {
     "development": {"port": 3010},
     "staging": {"port": 3011},
     "production": {"port": 3012}
   }
 }
-```
-
----
-
-## 🔧 Headless Mode Example
-
-```python
-from aeryn_core.headless_mode import headless_runner
-
-result = headless_runner.generate({
-    "name": "my-app",
-    "template": "react",
-    "plugins": ["auth"],
-    "post_generate": ["install_deps", "run_tests"]
-})
-
-print(result)
-# {"success": true, "result": {...}}
-```
-
----
-
-## 📦 Batch Generate Example
-
-```json
-{
-  "projects": [
-    {"name": "app-1", "template": "react"},
-    {"name": "app-2", "template": "api"},
-    {"name": "app-3", "template": "bot"}
-  ]
-}
-```
-
-```bash
-aeryn batch projects.json
 ```
 
 ---
@@ -264,7 +225,7 @@ locust -f tests/load/locustfile.py --host=http://localhost:3010
 ## 📊 Test Coverage
 
 ```
-648 tests pass
+653 tests pass
 0 failures
 1 warning
 ```
