@@ -152,30 +152,31 @@
 
       case 'projects':
         container.innerHTML = '<div class="card"><h2>Projects</h2><p style="color:var(--muted)">Create and manage your AI projects.</p>' +
-          '<div class="actions-grid"><button class="action-btn"><span class="action-icon">➕</span><span>New Project</span></button>' +
-          '<button class="action-btn"><span class="action-icon">📂</span><span>Browse</span></button></div></div>';
+          '<div class="actions-grid"><button class="action-btn" onclick="showToast(\'Coming in V59\', \'info\')"><span class="action-icon">➕</span><span>New Project</span></button>' +
+          '<button class="action-btn" onclick="showToast(\'Coming in V59\', \'info\')"><span class="action-icon">📂</span><span>Browse</span></button></div></div>';
         break;
 
       case 'workspaces':
         container.innerHTML = '<div class="card"><h2>Workspaces</h2><p style="color:var(--muted)">Multi-tenant workspace management.</p>' +
-          '<div class="actions-grid"><button class="action-btn"><span class="action-icon">🏢</span><span>Create Workspace</span></button>' +
-          '<button class="action-btn"><span class="action-icon">👥</span><span>Invite Members</span></button></div></div>';
+          '<div class="actions-grid"><button class="action-btn" onclick="showToast(\'Coming in V60\', \'info\')"><span class="action-icon">🏢</span><span>Create Workspace</span></button>' +
+          '<button class="action-btn" onclick="showToast(\'Coming in V60\', \'info\')"><span class="action-icon">👥</span><span>Invite Members</span></button></div></div>';
         break;
 
       case 'chat':
         container.innerHTML = '<div class="card"><h2>Chat with Aeryn</h2><p style="color:var(--muted)">Conversational AI interface.</p>' +
-          '<div class="actions-grid"><button class="action-btn"><span class="action-icon">💬</span><span>New Chat</span></button>' +
-          '<button class="action-btn"><span class="action-icon">📜</span><span>History</span></button></div></div>';
+          '<div class="actions-grid"><button class="action-btn" onclick="showToast(\'Coming in V59\', \'info\')"><span class="action-icon">💬</span><span>New Chat</span></button>' +
+          '<button class="action-btn" onclick="showToast(\'Coming in V61\', \'info\')"><span class="action-icon">📜</span><span>History</span></button></div></div>';
         break;
 
       case 'plugins':
         container.innerHTML = '<div class="card"><h2>Plugins</h2><p style="color:var(--muted)">Extend Aeryn with plugins.</p>' +
-          '<div class="actions-grid"><button class="action-btn"><span class="action-icon">🧩</span><span>Browse Plugins</span></button>' +
-          '<button class="action-btn"><span class="action-icon">⚡</span><span>Create Plugin</span></button></div></div>';
+          '<div class="actions-grid"><button class="action-btn" onclick="showToast(\'Coming in V60\', \'info\')"><span class="action-icon">🧩</span><span>Browse Plugins</span></button>' +
+          '<button class="action-btn" onclick="showToast(\'Coming in V60\', \'info\')"><span class="action-icon">⚡</span><span>Create Plugin</span></button></div></div>';
         break;
 
       case 'audit':
-        container.innerHTML = '<div class="card"><h2>Audit Trail</h2><p style="color:var(--muted)">Track all actions and changes.</p></div>';
+        container.innerHTML = '<div class="card"><h2>Audit Trail</h2><p style="color:var(--muted)">Track all actions and changes.</p>' +
+          '<button class="action-btn" onclick="showToast(\'Coming in V61\', \'info\')"><span class="action-icon">📋</span><span>View Logs</span></button></div>';
         break;
 
       case 'settings':

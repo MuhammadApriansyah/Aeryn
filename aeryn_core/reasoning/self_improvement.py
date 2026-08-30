@@ -13,6 +13,7 @@ import os
 import sys
 import json
 import time
+import uuid
 import sqlite3
 from typing import Dict, List, Optional
 from datetime import datetime
@@ -88,7 +89,6 @@ class FeedbackCollector:
                           input_text: str, output_text: str,
                           session_id: str = None, metadata: Dict = None) -> str:
         """Record an interaction for later feedback."""
-        import uuid
         fid = str(uuid.uuid4())[:8]
         
         conn = sqlite3.connect(self.db_path)
@@ -201,7 +201,6 @@ class SelfImprovementEngine:
     def adjust_behavior(self, user_id: str, adjustment_type: str,
                         old_value: str, new_value: str, reason: str) -> str:
         """Record a behavior adjustment."""
-        import uuid
         adj_id = str(uuid.uuid4())[:8]
         
         conn = sqlite3.connect(self.feedback.db_path)
@@ -216,9 +215,8 @@ class SelfImprovementEngine:
         
         return adj_id
     
-    def optimize_prompt(self, prompt_name: str, original: str, optimized: str) -> str:
+    def optimize_prompt(self, prompt_name: str, original: str, optimized: str, improvement_score: float = 0.5) -> str:
         """Record a prompt optimization."""
-        import uuid
         opt_id = str(uuid.uuid4())[:8]
         
         conn = sqlite3.connect(self.feedback.db_path)
