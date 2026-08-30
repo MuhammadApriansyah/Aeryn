@@ -1,194 +1,312 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aeryn Dashboard</title>
-    <link rel="stylesheet" href="/web/static/css/dashboard.css">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Aeryn Dashboard</title>
+  <meta name="description" content="AI Personal Assistant Platform"/>
+  <link rel="stylesheet" href="/_next/static/chunks/globals.css"/>
 </head>
 <body>
-    <nav class="sidebar">
-        <div class="logo">
-            <span class="logo-icon">🤖</span>
-            <span class="logo-text">Aeryn</span>
-        </div>
-        <ul class="nav-links">
-            <li class="active" data-page="dashboard"><a href="#">📊 Dashboard</a></li>
-            <li data-page="projects"><a href="#">📁 Projects</a></li>
-            <li data-page="workspaces"><a href="#">🏢 Workspaces</a></li>
-            <li data-page="chat"><a href="#">💬 Chat</a></li>
-            <li data-page="plugins"><a href="#">🧩 Plugins</a></li>
-            <li data-page="audit"><a href="#">📋 Audit</a></li>
-            <li data-page="settings"><a href="#">⚙️ Settings</a></li>
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Offline Banner -->
+  <div id="offline-banner" class="offline-banner" role="alert" style="display:none">
+    <span>⚠️</span>
+    <span>Backend API is offline. Some features may not work.</span>
+  </div>
+  
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+  
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar" role="navigation" aria-label="Main navigation">
+      <div class="sidebar-header">
+        <span class="logo-icon">🤖</span>
+        <span class="logo-text">Aeryn</span>
+      </div>
+      <nav class="nav">
+        <ul class="nav-list" id="nav-list">
+          <!-- Nav items rendered by JS -->
         </ul>
-        <div class="sidebar-footer">
-            <span class="version">V57.0</span>
-            <span class="status-dot" id="sidebar-status"></span>
-        </div>
-    </nav>
+      </nav>
+      <div class="sidebar-footer">
+        <span class="version-tag">V58.0</span>
+      </div>
+    </aside>
     
-    <main class="content">
-        <header class="topbar">
-            <div class="search">
-                <input type="text" placeholder="Search..." id="search-input">
-            </div>
-            <div class="user-menu">
-                <span class="status-indicator online" id="backend-dot"></span>
-                <span id="backend-text">Checking...</span>
-            </div>
-        </header>
-        
-        <div id="main-content">
-            <!-- Dashboard Page -->
-            <div id="page-dashboard" class="page active">
-                <h1 class="page-title">Dashboard</h1>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-label">Backend</div>
-                        <div class="stat-value online" id="stat-backend">Online</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Memory</div>
-                        <div class="stat-value" id="stat-memory">-</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Version</div>
-                        <div class="stat-value" id="stat-version">-</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Uptime</div>
-                        <div class="stat-value" id="stat-uptime">-</div>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <h2>Quick Actions</h2>
-                    <div class="actions-grid">
-                        <button class="action-btn" onclick="Aeryn.showPage('projects')">
-                            <span class="action-icon">➕</span>
-                            <span>New Project</span>
-                        </button>
-                        <button class="action-btn" onclick="Aeryn.showPage('chat')">
-                            <span class="action-icon">💬</span>
-                            <span>Chat</span>
-                        </button>
-                        <button class="action-btn" onclick="Aeryn.showPage('workspaces')">
-                            <span class="action-icon">🏢</span>
-                            <span>Workspaces</span>
-                        </button>
-                        <button class="action-btn" onclick="Aeryn.refresh()">
-                            <span class="action-icon">🔄</span>
-                            <span>Refresh</span>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <h2>Activity</h2>
-                    <div class="activity-list" id="activity-list">
-                        <div class="activity-item">
-                            <span class="activity-icon">🟢</span>
-                            <span>Dashboard loaded</span>
-                            <span class="activity-time">Now</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Projects Page -->
-            <div id="page-projects" class="page">
-                <h1 class="page-title">Projects</h1>
-                <div class="card">
-                    <div class="card-header">
-                        <h2>All Projects</h2>
-                        <button class="btn btn-primary" onclick="Aeryn.createProject()">+ New Project</button>
-                    </div>
-                    <div id="projects-list" class="table-container">
-                        <p class="empty-state">No projects yet. Create your first project!</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Workspaces Page -->
-            <div id="page-workspaces" class="page">
-                <h1 class="page-title">Workspaces</h1>
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Workspaces</h2>
-                        <button class="btn btn-primary" onclick="Aeryn.createWorkspace()">+ New Workspace</button>
-                    </div>
-                    <div id="workspaces-list" class="table-container">
-                        <table class="data-table">
-                            <thead><tr><th>Name</th><th>Description</th><th>Created</th></tr></thead>
-                            <tbody id="workspaces-tbody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Chat Page -->
-            <div id="page-chat" class="page">
-                <h1 class="page-title">Chat</h1>
-                <div class="card chat-card">
-                    <div class="chat-messages" id="chat-messages">
-                        <div class="chat-message system">Welcome to Aeryn Chat!</div>
-                    </div>
-                    <div class="chat-input">
-                        <input type="text" id="chat-input" placeholder="Type a message..." onkeypress="Aeryn.chatKeypress(event)">
-                        <button class="btn btn-primary" onclick="Aeryn.sendChat()">Send</button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Plugins Page -->
-            <div id="page-plugins" class="page">
-                <h1 class="page-title">Plugins</h1>
-                <div class="card">
-                    <h2>Installed Plugins</h2>
-                    <div id="plugins-list" class="table-container">
-                        <table class="data-table">
-                            <thead><tr><th>Name</th><th>Version</th><th>Status</th></tr></thead>
-                            <tbody id="plugins-tbody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Audit Page -->
-            <div id="page-audit" class="page">
-                <h1 class="page-title">Audit Log</h1>
-                <div class="card">
-                    <h2>Recent Activity</h2>
-                    <div id="audit-list" class="table-container">
-                        <table class="data-table">
-                            <thead><tr><th>Time</th><th>User</th><th>Action</th><th>Resource</th></tr></thead>
-                            <tbody id="audit-tbody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Settings Page -->
-            <div id="page-settings" class="page">
-                <h1 class="page-title">Settings</h1>
-                <div class="card">
-                    <h2>General</h2>
-                    <div class="form-group">
-                        <label>Backend Port</label>
-                        <input type="number" value="3010" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label>Web UI Port</label>
-                        <input type="number" value="3010" readonly>
-                    </div>
-                    <button class="btn btn-primary" onclick="Aeryn.refresh()">Refresh Status</button>
-                </div>
-            </div>
+    <!-- Main Content -->
+    <main class="main" id="main-content">
+      <!-- Topbar -->
+      <div class="topbar">
+        <div class="search">
+          <input type="text" id="search-input" placeholder="Search... (Ctrl+K)" aria-label="Search"/>
         </div>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">☀️</button>
+      </div>
+      
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol class="breadcrumb-list" id="breadcrumb-list">
+          <li class="breadcrumb-item"><span class="breadcrumb-label">🏠 Home</span></li>
+          <li class="breadcrumb-item" aria-current="page"><span class="breadcrumb-label" id="breadcrumb-current">Dashboard</span></li>
+        </ol>
+      </nav>
+      
+      <!-- Page Title -->
+      <h1 class="page-title" id="page-title">Dashboard</h1>
+      
+      <!-- Content Area -->
+      <div id="page-content" class="page-content">
+        <!-- Loading Skeleton -->
+        <div class="stats-grid" id="skeleton-stats">
+          <div class="stat skeleton-stat"><div class="skeleton-label"></div><div class="skeleton-value"></div></div>
+          <div class="stat skeleton-stat"><div class="skeleton-label"></div><div class="skeleton-value"></div></div>
+          <div class="stat skeleton-stat"><div class="skeleton-label"></div><div class="skeleton-value"></div></div>
+          <div class="stat skeleton-stat"><div class="skeleton-label"></div><div class="skeleton-value"></div></div>
+        </div>
+      </div>
     </main>
+  </div>
+  
+  <script>
+    // === AERYN APP ===
+    const navItems = [
+      { id: 'dashboard', icon: '📊', label: 'Dashboard' },
+      { id: 'projects', icon: '📁', label: 'Projects' },
+      { id: 'workspaces', icon: '🏢', label: 'Workspaces' },
+      { id: 'chat', icon: '💬', label: 'Chat' },
+      { id: 'plugins', icon: '🧩', label: 'Plugins' },
+      { id: 'audit', icon: '📋', label: 'Audit Trail' },
+      { id: 'settings', icon: '⚙️', label: 'Settings' }
+    ];
     
-    <div id="toast-container" class="toast-container"></div>
+    let currentPage = 'dashboard';
+    let healthData = null;
+    let startTime = Date.now();
     
-    <script src="/web/static/js/dashboard.js"></script>
+    // Theme
+    function getTheme() { return localStorage.getItem('aeryn-theme') || 'dark'; }
+    function setTheme(t) {
+      localStorage.setItem('aeryn-theme', t);
+      document.documentElement.setAttribute('data-theme', t);
+      const btn = document.getElementById('theme-toggle');
+      if (btn) btn.textContent = t === 'dark' ? '☀️' : '🌙';
+    }
+    
+    // Toast
+    function showToast(msg, type = 'info', duration = 3000) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.setAttribute('role', 'alert');
+      toast.innerHTML = `<span class="toast-message">${msg}</span><button class="toast-close" aria-label="Close notification">×</button>`;
+      container.appendChild(toast);
+      toast.querySelector('.toast-close').onclick = () => toast.remove();
+      setTimeout(() => toast.remove(), duration);
+    }
+    
+    // Render Navigation
+    function renderNav() {
+      const list = document.getElementById('nav-list');
+      list.innerHTML = navItems.map(item => `
+        <li>
+          <button class="nav-item ${currentPage === item.id ? 'active' : ''}" 
+                  onclick="navigateTo('${item.id}')"
+                  aria-current="${currentPage === item.id ? 'page' : undefined}">
+            <span class="nav-icon" aria-hidden="true">${item.icon}</span>
+            <span class="nav-label">${item.label}</span>
+          </button>
+        </li>
+      `).join('');
+    }
+    
+    // Render Breadcrumb
+    function renderBreadcrumb() {
+      const current = navItems.find(n => n.id === currentPage);
+      const label = current ? current.label : currentPage;
+      document.getElementById('breadcrumb-current').textContent = label;
+      document.getElementById('page-title').textContent = label;
+    }
+    
+    // Navigate
+    function navigateTo(page) {
+      currentPage = page;
+      window.history.pushState({}, '', '/' + page);
+      renderNav();
+      renderBreadcrumb();
+      renderPage();
+      showToast(`Navigated to ${page}`, 'info', 1000);
+    }
+    
+    // Render Page Content
+    function renderPage() {
+      const container = document.getElementById('page-content');
+      
+      switch(currentPage) {
+        case 'dashboard':
+          if (healthData) {
+            const s = healthData.status || 'offline';
+            const sc = s === 'healthy' ? 'online' : 'offline';
+            const m = (healthData.memory_mb || 0).toFixed(1);
+            const v = healthData.version || '--';
+            container.innerHTML = `
+              <div class="stats-grid">
+                <div class="stat"><div class="label">Backend Status</div><div class="value ${sc}">${s}</div></div>
+                <div class="stat"><div class="label">Memory</div><div class="value accent">${m} MB</div></div>
+                <div class="stat"><div class="label">Version</div><div class="value purple">${v}</div></div>
+                <div class="stat"><div class="label">Uptime</div><div class="value orange" id="uptime">00:00:00</div></div>
+              </div>
+              <div class="card"><h2>Quick Actions</h2>
+                <div class="actions-grid">
+                  <button class="action-btn" onclick="window.location.reload()"><span class="action-icon">🔄</span><span>Refresh</span></button>
+                  <button class="action-btn" onclick="document.getElementById('search-input').focus()"><span class="action-icon">🔍</span><span>Search</span></button>
+                </div>
+              </div>`;
+          }
+          break;
+        case 'projects':
+          container.innerHTML = `<div class="card"><h2>Projects</h2><p style="color:var(--muted)">Create and manage AI projects. Coming soon.</p>
+            <div class="actions-grid" style="margin-top:20px">
+              <button class="action-btn"><span class="action-icon">➕</span><span>New Project</span></button>
+              <button class="action-btn"><span class="action-icon">📂</span><span>Browse</span></button>
+            </div></div>`;
+          break;
+        case 'workspaces':
+          container.innerHTML = `<div class="card"><h2>Workspaces</h2><p style="color:var(--muted)">Multi-tenant workspace management. Coming soon.</p>
+            <div class="actions-grid" style="margin-top:20px">
+              <button class="action-btn"><span class="action-icon">🏢</span><span>Create Workspace</span></button>
+              <button class="action-btn"><span class="action-icon">👥</span><span>Invite Members</span></button>
+            </div></div>`;
+          break;
+        case 'chat':
+          container.innerHTML = `<div class="card"><h2>Chat with Aeryn</h2><p style="color:var(--muted)">Conversational AI interface. Coming soon.</p>
+            <div class="actions-grid" style="margin-top:20px">
+              <button class="action-btn"><span class="action-icon">💬</span><span>New Chat</span></button>
+              <button class="action-btn"><span class="action-icon">📜</span><span>History</span></button>
+            </div></div>`;
+          break;
+        case 'plugins':
+          container.innerHTML = `<div class="card"><h2>Plugins</h2><p style="color:var(--muted)">Extend Aeryn with plugins. Coming soon.</p>
+            <div class="actions-grid" style="margin-top:20px">
+              <button class="action-btn"><span class="action-icon">🧩</span><span>Browse Plugins</span></button>
+              <button class="action-btn"><span class="action-icon">⚡</span><span>Create Plugin</span></button>
+            </div></div>`;
+          break;
+        case 'audit':
+          container.innerHTML = `<div class="card"><h2>Audit Trail</h2><p style="color:var(--muted)">Track all actions and changes. Coming soon.</p></div>`;
+          break;
+        case 'settings':
+          const t = getTheme();
+          container.innerHTML = `
+            <div class="card"><h2>Appearance</h2>
+              <div style="display:flex;align-items:center;gap:16px;margin-top:12px">
+                <span>Theme: <strong>${t}</strong></span>
+                <button class="action-btn" style="padding:8px 16px" onclick="toggleTheme()"><span class="action-icon">🌓</span><span>Toggle</span></button>
+              </div>
+            </div>
+            <div class="card"><h2>Keyboard Shortcuts</h2>
+              <div style="display:grid;gap:8px;margin-top:12px">
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>Search</span><span class="kbd">Ctrl</span> + <span class="kbd">K</span></div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>Toggle Theme</span><span class="kbd">Ctrl</span> + <span class="kbd">T</span></div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>Help</span><span class="kbd">Ctrl</span> + <span class="kbd">/</span></div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0"><span>Skip to content</span><span class="kbd">Tab</span></div>
+              </div>
+            </div>`;
+          break;
+      }
+    }
+    
+    // Toggle Theme
+    function toggleTheme() {
+      const newTheme = getTheme() === 'dark' ? 'light' : 'dark';
+      setTheme(newTheme);
+      showToast(`Switched to ${newTheme} theme`, 'success');
+    }
+    
+    // Fetch Health
+    async function fetchHealth() {
+      try {
+        const res = await fetch('/api/health');
+        if (res.ok) {
+          healthData = await res.json();
+          document.getElementById('offline-banner').style.display = 'none';
+          renderPage();
+          startUptimeCounter();
+        } else {
+          throw new Error('not ok');
+        }
+      } catch(e) {
+        document.getElementById('offline-banner').style.display = 'flex';
+      }
+    }
+    
+    // Uptime Counter
+    let uptimeStarted = false;
+    function startUptimeCounter() {
+      if (uptimeStarted) return;
+      uptimeStarted = true;
+      setInterval(() => {
+        const el = document.getElementById('uptime');
+        if (el) {
+          const elapsed = Math.floor((Date.now() - startTime) / 1000);
+          const h = Math.floor(elapsed / 3600).toString().padStart(2, '0');
+          const m = Math.floor((elapsed % 3600) / 60).toString().padStart(2, '0');
+          const s = (elapsed % 60).toString().padStart(2, '0');
+          el.textContent = `${h}:${m}:${s}`;
+        }
+      }, 1000);
+    }
+    
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        document.getElementById('search-input').focus();
+        showToast('Search focused', 'info', 1500);
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 't') {
+        e.preventDefault();
+        toggleTheme();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+        e.preventDefault();
+        showToast('Shortcuts: Ctrl+K search, Ctrl+T theme, Ctrl+/ help', 'info', 3000);
+      }
+    });
+    
+    // Theme Toggle Button
+    document.getElementById('theme-toggle').onclick = toggleTheme;
+    
+    // Search Input
+    document.getElementById('search-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const q = e.target.value.toLowerCase();
+        const found = navItems.find(n => n.label.toLowerCase().includes(q));
+        if (found) navigateTo(found.id);
+        else showToast(`No results for: ${q}`, 'warning');
+      }
+    });
+    
+    // Handle browser back/forward
+    window.addEventListener('popstate', () => {
+      const path = window.location.pathname.replace('/', '') || 'dashboard';
+      if (path !== currentPage) {
+        currentPage = path;
+        renderNav();
+        renderBreadcrumb();
+        renderPage();
+      }
+    });
+    
+    // Initialize
+    setTheme(getTheme());
+    renderNav();
+    renderBreadcrumb();
+    fetchHealth();
+    setInterval(fetchHealth, 5000);
+  </script>
 </body>
 </html>

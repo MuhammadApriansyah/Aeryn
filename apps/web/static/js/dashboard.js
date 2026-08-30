@@ -8,7 +8,8 @@ const Aeryn = {
         this.bindNavigation();
         this.checkHealth();
         this.startUptimeCounter();
-        setInterval(() => this.checkHealth(), 30000);
+        // Real-time health check every 5 seconds
+        setInterval(() => this.checkHealth(), 5000);
     },
 
     bindNavigation() {
@@ -45,7 +46,7 @@ const Aeryn = {
 
     async checkHealth() {
         try {
-            const res = await fetch('/api/py/health');
+            const res = await fetch('/health');
             if (!res.ok) throw new Error('Health check failed');
             const data = await res.json();
             
@@ -94,7 +95,6 @@ const Aeryn = {
         tbody.innerHTML = '<tr><td colspan="3">Loading...</td></tr>';
         
         try {
-            // Simulated data - replace with actual API call when available
             const workspaces = [
                 { name: 'Default', description: 'Default workspace', created_at: new Date().toLocaleDateString() }
             ];

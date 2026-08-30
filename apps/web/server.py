@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Dashboard Web Server — Serve HTML/CSS/JS dashboard."""
+"""Dashboard Web Server — SPA with real-time health."""
 import os
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse, FileResponse
@@ -12,11 +12,12 @@ STATIC_DIR = os.path.join(DASHBOARD_DIR, "static")
 
 @router.get("/", response_class=HTMLResponse)
 async def dashboard():
+    """Serve main dashboard."""
     template_path = os.path.join(TEMPLATE_DIR, "dashboard.html")
     if os.path.exists(template_path):
         with open(template_path) as f:
             return f.read()
-    return "<h1>Aeryn Dashboard</h1><p>Template not found</p>"
+    return "<h1>Aeryn Dashboard</h1>"
 
 @router.get("/static/css/{filename}")
 async def css(filename: str):
