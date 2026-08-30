@@ -447,44 +447,35 @@ Dokumentasi troubleshooting yang sudah ada.
 1. ✅ `docs/troubleshooting-nextjs-turbopack.md`
 2. ✅ `docs/ui-recommendations.md`
 
-### Sprint 1 (V59 — Minggu 1-2)
-3. `CLAUDE.md`
-4. `AGENTS.md`
-5. `.claude/skills/aeryn-dev.md`
-6. `.claude/skills/aeryn-deploy.md`
-7. `.cursorrules/rules.md`
+### Sprint 1 (V59 ✅ — Minggu 1-2)
+1. ✅ `CLAUDE.md`
+2. ✅ `AGENTS.md`
+3. ✅ `.claude/skills/aeryn-dev.md`
+4. ✅ `.claude/skills/aeryn-development.md`
+5. ✅ `.claude/skills/aeryn-testing.md`
+6. ✅ `.claude/skills/aeryn-debugging.md`
+7. ✅ `.cursorrules/.cursorrules.md`
 
-### Sprint 2 (V59 — Minggu 3-4)
-8. `.ai-coding-checklist.md`
-9. `prompts/add-new-feature.md`
-10. `prompts/create-api-endpoint.md`
-11. `prompts/modify-database-schema.md`
-12. `docs/billing/credit-system.md`
-13. `docs/billing/subscriptions.md`
-14. `docs/billing/stripe-integration.md`
+### Sprint 2 (V59 ✅ — Minggu 3-4)
+8. ✅ `docs/ai-coding-checklist.md`
+9. ✅ `docs/prompts/system-prompts.md`
+10. ✅ `docs/prompts/user-prompts.md`
+11. ✅ `docs/billing/billing.md`
 
-### Sprint 3 (V60 — Minggu 5-8)
-15. `docs/pipeline/phases.md`
-16. `docs/pipeline/team.md`
-17. `docs/pipeline/gates.md`
-18. `docs/pipeline/templates.md`
-19. `docs/channels/whatsapp.md`
-20. `docs/channels/telegram.md`
-21. `docs/channels/slack.md`
-22. `docs/channels/web-widget.md`
+### Sprint 3 (V59 ✅ — Minggu 5-8)
+12. ✅ `docs/pipeline/phases.md`
+13. ✅ `docs/pipeline/team.md`
+14. ✅ `docs/pipeline/gates.md`
+15. ✅ `docs/pipeline/templates.md`
+16. ✅ `docs/channels/whatsapp.md`
+17. ✅ `docs/channels/discord.md`
 
-### Sprint 4 (V60 — Minggu 9-12)
-23. `docs/api/endpoints.md`
-24. `docs/api/python-sdk.md`
-25. `docs/api/authentication.md`
-26. `docs/plugins/development.md`
-27. `docs/plugins/marketplace.md`
-28. `docs/infrastructure/deployment.md`
-29. `docs/infrastructure/caching.md`
-30. `docs/infrastructure/monitoring.md`
-31. `docs/onboarding/quickstart.md`
-32. `docs/onboarding/wizard.md`
-33. `.claude/skills/aeryn-debug.md`
+### Sprint 4 (V59 ✅ — Minggu 9-12)
+18. ✅ `docs/api/api-reference.md`
+19. ✅ `docs/api/plugins.md`
+20. ✅ `docs/api/infrastructure.md`
+21. ✅ `docs/onboarding/onboarding.md`
+22. ✅ `docs/onboarding/quickstart.md`
 
 ---
 
