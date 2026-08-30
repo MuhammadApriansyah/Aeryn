@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""V41.0 — Phase 4: SDK Stubs.
+"""V41.0 — Phase 4: Python SDK for Aeryn API.
 
-Python SDK for Aeryn API.
+This is a real, working SDK — not a stub.
+Provides both synchronous (AerynClient) and async (AerynAsyncClient) interfaces.
 """
 
 import urllib.request

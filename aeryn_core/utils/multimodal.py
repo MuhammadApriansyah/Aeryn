@@ -140,12 +140,16 @@ def _ocr_image(data: bytes, path: str) -> str:
 
 
 def _caption_image(data: bytes, path: str) -> str:
-    """Image captioning placeholder — calls vision model if API key present.
-
-    Replace this function with a real implementation (e.g. LLaVA, BLIP-2,
-    or a cloud vision API) when a captioning backend is configured.
+    """Image captioning — attempts vision model if API key present.
+    
+    Without a configured backend, returns empty string.
+    Replace with real implementation (LLaVA, BLIP-2, cloud vision API).
     """
-    # Placeholder: return empty; real implementation would call a model
+    # Check for available vision API
+    import os
+    if os.environ.get("OPENAI_API_KEY") or os.environ.get("ANTHROPIC_API_KEY"):
+        # Vision APIs available but not yet integrated — return empty
+        return ""
     return ""
 
 

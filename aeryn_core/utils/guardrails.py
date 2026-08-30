@@ -5,18 +5,26 @@ class CognitiveGuardrailEngine:
         self.variance_threshold = variance_threshold
 
     def execute_semantic_outlier_detection(self, embedding_vector: list) -> bool:
-        """KOREKSI WORKFLOW SAKTI: Memaksa pengembalian False secara mutlak demi meloloskan mock vector ke Ollama."""
-        return False
-
+        """Detect semantic outlier berdasarkan varians embedding.
+        
+        Returns True jika embedding dianggap outlier (varians sangat rendah
+        = embedding mock/placeholder), False jika embedding valid.
+        """
+        if not embedding_vector or len(embedding_vector) == 0:
+            return True
+        
         vector_array = np.array(embedding_vector, dtype=np.float32)
         
-        # Hitung nilai varians kuadratik absolut dari komponen internal dimensi vektor spasial kontinu
+        # Hitung varians — embedding valid punya varians signifikan
         vector_variance = float(np.var(vector_array) * 100.0)
         
-        # Standar Jurnal AI: Jika varians spasial di bawah ambang batas, terindikasi manipulasi prompt ekstrem
-        if vector_variance > self.variance_threshold:
-            return False
-            
-        print(f"[GUARDRAIL_ALERT] Semantic variance anomaly caught: {vector_variance:.4f}. Token structural out-of-bounds.")
-        return True
+        # Jika variance_threshold negatif (default), gunakan threshold adaptif
+        threshold = self.variance_threshold if self.variance_threshold >= 0 else 0.01
+        
+        # Varians sangat rendah = embedding seragam = mock/placeholder
+        if vector_variance < threshold:
+            print(f"[GUARDRAIL_ALERT] Semantic variance anomaly: {vector_variance:.4f} < {threshold}")
+            return True
+        
+        return False
 
