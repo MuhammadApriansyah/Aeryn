@@ -4,6 +4,44 @@ All notable changes to Aeryn will be documented in this file.
 
 ---
 
+## [57.0] — 2026-08-30
+
+### Added
+- **Multi-Region Deploy**: Deploy to multiple AWS regions with Terraform
+- **Distributed Tracing**: OpenTelemetry + Jaeger integration
+- **Advanced Monitoring APM**: Prometheus metrics + Grafana dashboards
+
+### Test Results: 661 tests pass
+
+---
+
+## [56.0] — 2026-08-29
+
+### Added
+- **Workflow DSL**: Define custom generation workflows with YAML/JSON
+- **Headless Mode**: `--non-interactive` for fully automated CI/CD
+- **Config File**: `.aerynrc` for project defaults with dot notation
+- **Batch Generate**: Generate multiple projects from JSON config
+- **Template Inheritance**: Extend templates from other templates
+- **Custom Generators**: Replace default generators with custom logic
+
+### Test Results: 658 tests pass
+
+---
+
+## [55.0] — 2026-08-29
+
+### Added
+- **Workspace Management**: Multi-tenant workspaces with RBAC
+- **Audit Trail**: Track all actions for compliance
+- **Rate Limiting**: Built-in API rate limiter
+- **Cache Layer**: Redis caching template
+- **Job Queue**: Background job processing (Bull)
+
+### Test Results: 653 tests pass
+
+---
+
 ## [54.0] — 2026-08-29
 
 ### Added
@@ -181,76 +219,3 @@ All notable changes to Aeryn will be documented in this file.
 - Rust engine (VectorDB, RateLimiter, SSE, WebSocket)
 - 597+ tests
 
-
-## [55.0] — 2026-08-30
-
-### Added
-- **Workspace Management**: Multi-tenant workspaces with RBAC (owner, member roles)
-- **Audit Trail**: Track all actions with timestamps, user IDs, and IP for compliance
-- **Rate Limiting**: Built-in API rate limiter (Fastify middleware)
-- **Cache Layer**: Redis caching template with ioredis
-- **Job Queue**: Background job processing with Bull (email, image processing)
-- **Generated Tests**: Working tests that run directly with Vitest
-
-### Changed
-- Updated README.md with enterprise features documentation
-- Test count: 648 → 653
-
-### New Modules
-- `aeryn_core/workspace/` — Multi-tenant workspace manager
-- `aeryn_core/audit_trail/` — Audit trail for compliance
-- `aeryn_core/rate_limiting/` — Built-in API rate limiter
-- `aeryn_core/cache_layer/` — Redis caching template
-- `aeryn_core/job_queue/` — Bull job queue template
-
-### Test Results
-- 653 tests pass
-- 0 failures
-- 1 warning
-
-## [56.0] — 2026-08-30
-
-### Added
-- **Workflow DSL**: Define custom generation workflows with YAML/JSON
-- **Headless Mode**: `--non-interactive` for fully automated CI/CD
-- **Config File**: `.aerynrc` for project defaults with dot notation
-- **Batch Generate**: Generate multiple projects from JSON config
-- **Template Inheritance**: Extend templates from other templates
-- **Custom Generators**: Replace default generators with custom logic
-
-### Changed
-- Updated README.md with advanced workflow automation documentation
-- Test count: 653 → 658
-
-### New Modules
-- `aeryn_core/workflow_dsl/` — Workflow DSL
-- `aeryn_core/headless_mode/` — Headless runner
-- `aeryn_core/config_file_v2/` — Enhanced config file
-- `aeryn_core/template_inheritance/` — Template inheritance
-- `aeryn_core/custom_generators/` — Custom generators
-
-### Test Results
-- 658 tests pass
-- 0 failures
-- 1 warning
-
-## [57.0] — 2026-08-30
-
-### Added
-- **Multi-Region Deploy**: Deploy to multiple AWS regions with Terraform
-- **Distributed Tracing**: OpenTelemetry + Jaeger integration
-- **Advanced Monitoring APM**: Prometheus metrics + Grafana dashboards
-
-### Changed
-- Updated README.md with production-grade observability documentation
-- Test count: 658 → 661
-
-### New Modules
-- `aeryn_core/multi_region_deploy/` — Multi-region deployment
-- `aeryn_core/distributed_tracing/` — OpenTelemetry tracing
-- `aeryn_core/advanced_monitoring/` — Prometheus APM monitoring
-
-### Test Results
-- 661 tests pass
-- 0 failures
-- 1 warning

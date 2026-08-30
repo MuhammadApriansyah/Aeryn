@@ -17,7 +17,7 @@ from aeryn_core.utils.adapters import get_active_adapter, render_adapter_context
 from aeryn_core.reasoning.reasoning_style import needs_research
 from aeryn_core.memory.vault import AerynVault, VaultEntry, LAYER_WIKI
 from aeryn_core.memory.social_memory import SocialMemory
-from aeryn_core.hybrid_search import get_search_engine
+from aeryn_core.memory.hybrid_search import get_search_engine
 from aeryn_core.utils.persona_engine import load_persona
 from aeryn_core.database.shared_db import get_shared_db
 from aeryn_core.utils.config import ensure_dirs
@@ -53,7 +53,7 @@ from aeryn_core.reasoning.constitutional_ai import get_constitutional_ai
 from aeryn_core.reasoning.emotional_intelligence import get_emotional_intelligence
 from aeryn_core.auth.auth import get_auth, ROLE_PERMISSIONS
 from aeryn_core.auth.rate_limiter import get_rate_limiter
-from aeryn_core.email_verification import get_email_verification, get_password_reset
+from aeryn_core.auth.email_verification import get_email_verification, get_password_reset
 from aeryn_core.platform.webhook_system import get_webhook_system
 from aeryn_core.platform.plugin_marketplace import get_plugin_marketplace
 from aeryn_core.platform.workspace_manager import get_workspace_manager
@@ -4103,6 +4103,10 @@ async def monitoring_stats():
     except Exception as e:
         return {"error": str(e)}
 
+
+# Dashboard web routes
+from apps.web.server import router as dashboard_router
+app.include_router(dashboard_router, prefix="/web")
 if __name__ == "__main__":
     import uvicorn
     ensure_dirs()

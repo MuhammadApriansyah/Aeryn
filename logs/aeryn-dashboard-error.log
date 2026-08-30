@@ -121,3 +121,13 @@
 2026-08-30 01:10:43:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 12, in <module>
 2026-08-30 01:10:43:     from aeryn_core.dashboard.server import dashboard_server
 2026-08-30 01:10:43: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 03:07:48: Traceback (most recent call last):
+2026-08-30 03:07:48:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 86, in <module>
+2026-08-30 03:07:48:     httpd.serve_forever()
+2026-08-30 03:07:48:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 233, in serve_forever
+2026-08-30 03:07:48:     ready = selector.select(poll_interval)
+2026-08-30 03:07:48:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 03:07:48:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/selectors.py", line 415, in select
+2026-08-30 03:07:48:     fd_event_list = self._selector.poll(timeout)
+2026-08-30 03:07:48:                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 03:07:48: KeyboardInterrupt

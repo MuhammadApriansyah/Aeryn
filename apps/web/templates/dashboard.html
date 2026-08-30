@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aeryn Dashboard</title>
+    <link rel="stylesheet" href="/web/static/css/dashboard.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo">
+            <span class="logo-icon">🤖</span>
+            <span class="logo-text">Aeryn</span>
+        </div>
+        <ul class="nav-links">
+            <li class="active" data-page="dashboard"><a href="#">📊 Dashboard</a></li>
+            <li data-page="projects"><a href="#">📁 Projects</a></li>
+            <li data-page="workspaces"><a href="#">🏢 Workspaces</a></li>
+            <li data-page="chat"><a href="#">💬 Chat</a></li>
+            <li data-page="plugins"><a href="#">🧩 Plugins</a></li>
+            <li data-page="audit"><a href="#">📋 Audit</a></li>
+            <li data-page="settings"><a href="#">⚙️ Settings</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <span class="version">V57.0</span>
+            <span class="status-dot" id="sidebar-status"></span>
+        </div>
+    </nav>
+    
+    <main class="content">
+        <header class="topbar">
+            <div class="search">
+                <input type="text" placeholder="Search..." id="search-input">
+            </div>
+            <div class="user-menu">
+                <span class="status-indicator online" id="backend-dot"></span>
+                <span id="backend-text">Checking...</span>
+            </div>
+        </header>
+        
+        <div id="main-content">
+            <!-- Dashboard Page -->
+            <div id="page-dashboard" class="page active">
+                <h1 class="page-title">Dashboard</h1>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Backend</div>
+                        <div class="stat-value online" id="stat-backend">Online</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Memory</div>
+                        <div class="stat-value" id="stat-memory">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Version</div>
+                        <div class="stat-value" id="stat-version">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Uptime</div>
+                        <div class="stat-value" id="stat-uptime">-</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>Quick Actions</h2>
+                    <div class="actions-grid">
+                        <button class="action-btn" onclick="Aeryn.showPage('projects')">
+                            <span class="action-icon">➕</span>
+                            <span>New Project</span>
+                        </button>
+                        <button class="action-btn" onclick="Aeryn.showPage('chat')">
+                            <span class="action-icon">💬</span>
+                            <span>Chat</span>
+                        </button>
+                        <button class="action-btn" onclick="Aeryn.showPage('workspaces')">
+                            <span class="action-icon">🏢</span>
+                            <span>Workspaces</span>
+                        </button>
+                        <button class="action-btn" onclick="Aeryn.refresh()">
+                            <span class="action-icon">🔄</span>
+                            <span>Refresh</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>Activity</h2>
+                    <div class="activity-list" id="activity-list">
+                        <div class="activity-item">
+                            <span class="activity-icon">🟢</span>
+                            <span>Dashboard loaded</span>
+                            <span class="activity-time">Now</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Projects Page -->
+            <div id="page-projects" class="page">
+                <h1 class="page-title">Projects</h1>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>All Projects</h2>
+                        <button class="btn btn-primary" onclick="Aeryn.createProject()">+ New Project</button>
+                    </div>
+                    <div id="projects-list" class="table-container">
+                        <p class="empty-state">No projects yet. Create your first project!</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Workspaces Page -->
+            <div id="page-workspaces" class="page">
+                <h1 class="page-title">Workspaces</h1>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Workspaces</h2>
+                        <button class="btn btn-primary" onclick="Aeryn.createWorkspace()">+ New Workspace</button>
+                    </div>
+                    <div id="workspaces-list" class="table-container">
+                        <table class="data-table">
+                            <thead><tr><th>Name</th><th>Description</th><th>Created</th></tr></thead>
+                            <tbody id="workspaces-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chat Page -->
+            <div id="page-chat" class="page">
+                <h1 class="page-title">Chat</h1>
+                <div class="card chat-card">
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="chat-message system">Welcome to Aeryn Chat!</div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="chat-input" placeholder="Type a message..." onkeypress="Aeryn.chatKeypress(event)">
+                        <button class="btn btn-primary" onclick="Aeryn.sendChat()">Send</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Plugins Page -->
+            <div id="page-plugins" class="page">
+                <h1 class="page-title">Plugins</h1>
+                <div class="card">
+                    <h2>Installed Plugins</h2>
+                    <div id="plugins-list" class="table-container">
+                        <table class="data-table">
+                            <thead><tr><th>Name</th><th>Version</th><th>Status</th></tr></thead>
+                            <tbody id="plugins-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Audit Page -->
+            <div id="page-audit" class="page">
+                <h1 class="page-title">Audit Log</h1>
+                <div class="card">
+                    <h2>Recent Activity</h2>
+                    <div id="audit-list" class="table-container">
+                        <table class="data-table">
+                            <thead><tr><th>Time</th><th>User</th><th>Action</th><th>Resource</th></tr></thead>
+                            <tbody id="audit-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings Page -->
+            <div id="page-settings" class="page">
+                <h1 class="page-title">Settings</h1>
+                <div class="card">
+                    <h2>General</h2>
+                    <div class="form-group">
+                        <label>Backend Port</label>
+                        <input type="number" value="3010" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Web UI Port</label>
+                        <input type="number" value="3010" readonly>
+                    </div>
+                    <button class="btn btn-primary" onclick="Aeryn.refresh()">Refresh Status</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div id="toast-container" class="toast-container"></div>
+    
+    <script src="/web/static/js/dashboard.js"></script>
+</body>
+</html>
