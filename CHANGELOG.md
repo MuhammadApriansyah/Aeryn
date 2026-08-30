@@ -4,6 +4,24 @@ All notable changes to Aeryn will be documented in this file.
 
 ---
 
+## [58.0] — 2026-08-30
+
+### Added
+- **Next.js 16 + Turbopack**: Modern React frontend with Turbopack bundler
+- **API Proxy**: Next.js API routes proxy to FastAPI backend
+- **Real-time Health Check**: Dashboard polls backend every 5 seconds
+- **PM2 Integration**: Both frontend and backend managed by PM2
+
+### Technical Details
+- Next.js 16.3.3 with Turbopack (stable)
+- Build with `NODE_OPTIONS=--max-old-space-size=512` for ARM64 compatibility
+- Backend API: port 3010 (FastAPI)
+- Frontend: port 3020 (Next.js)
+
+### Test Results: 661 tests pass
+
+---
+
 ## [57.0] — 2026-08-30
 
 ### Added
@@ -218,4 +236,3 @@ All notable changes to Aeryn will be documented in this file.
 - Auth, billing, workspaces, plugins, webhooks
 - Rust engine (VectorDB, RateLimiter, SSE, WebSocket)
 - 597+ tests
-

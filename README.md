@@ -1,12 +1,12 @@
 # 🤖 Aeryn — Personal Assistant Agent SaaS
 
-> AI-powered personal assistant platform with multi-model support, team workspaces, enterprise features, Rust-powered performance, Hermes integration, security-first architecture, MCP protocol, multi-agent orchestration, integration SDK, native sandbox, fullstack AI engineer mode, beginner-friendly UI, expert automation features, enterprise workspace management, advanced workflow automation, and **production-grade observability**.
+> AI-powered personal assistant platform with multi-model support, team workspaces, enterprise features, Rust-powered performance, Hermes integration, security-first architecture, MCP protocol, multi-agent orchestration, integration SDK, native sandbox, fullstack AI engineer mode, beginner-friendly UI, expert automation features, enterprise workspace management, advanced workflow automation, production-grade observability, and **Next.js 16 + Turbopack** frontend.
 
-![Version](https://img.shields.io/badge/version-57.0-blue)
+![Version](https://img.shields.io/badge/version-58.0-blue)
 ![Tests](https://img.shields.io/badge/tests-661%20passed-brightgreen)
 ![Security](https://img.shields.io/badge/security-layered-success)
 ![Fullstack](https://img.shields.io/badge/fullstack-engineer-success)
-![Dashboard](https://img.shields.io/badge/dashboard-web-success)
+![Dashboard](https://img.shields.io/badge/dashboard-next.js%2016-success)
 ![Templates](https://img.shields.io/badge/templates-custom-success)
 ![Debug](https://img.shields.io/badge/debug-mode-success)
 ![Headless](https://img.shields.io/badge/headless-mode-success)
@@ -28,10 +28,16 @@
 
 ## 🚀 Features
 
-### Production-Grade Observability (NEW in V57)
-- **Multi-Region Deploy**: Deploy to multiple AWS regions with load balancing
-- **Distributed Tracing**: OpenTelemetry integration for production debugging
-- **Advanced Monitoring APM**: Prometheus metrics and Grafana dashboards
+### Modern Frontend (NEW in V58)
+- **Next.js 16 + Turbopack**: Modern React frontend with Turbopack bundler
+- **API Proxy**: Next.js API routes proxy to FastAPI backend
+- **Real-time Health Check**: Dashboard polls backend every 5 seconds
+- **PM2 Integration**: Both frontend and backend managed by PM2
+
+### Production-Grade Observability (V57)
+- **Multi-Region Deploy**: Deploy to multiple AWS regions with Terraform
+- **Distributed Tracing**: OpenTelemetry + Jaeger integration
+- **Advanced Monitoring APM**: Prometheus metrics + Grafana dashboards
 
 ### Advanced Workflow Automation (V56)
 - **Workflow DSL**: Define custom generation workflows with YAML/JSON
@@ -78,168 +84,145 @@
 
 | Layer | Technology |
 |-------|-----------|
-| Language | Python 3.11+, Rust 1.75+ |
-| API Framework | FastAPI |
-| Database | SQLite (local) + PostgreSQL/Neon (cloud) |
-| Authentication | JWT + API Keys |
-| AI/LLM | Gemini, OpenRouter, DeepSeek (fallback) |
-| Protocol | MCP (Model Context Protocol) |
-| Build System | uv + Maturin (PyO3) |
-| CI/CD | GitHub Actions |
-| Deployment | PM2, Docker |
+| **Frontend** | Next.js 16 + Turbopack, React 19, CSS3 |
+| **Backend** | Python 3.11+, FastAPI |
+| **Engine** | Rust 1.75+ (PyO3) |
+| **Database** | SQLite (local) + PostgreSQL/Neon (cloud) |
+| **Authentication** | JWT + API Keys |
+| **AI/LLM** | Gemini, OpenRouter, DeepSeek (fallback) |
+| **Protocol** | MCP (Model Context Protocol) |
+| **Build System** | uv + Maturin (PyO3), npm |
+| **CI/CD** | GitHub Actions |
+| **Deployment** | PM2, Docker |
 
 ---
 
 ## 🚀 Quick Start
 
 ```bash
-# Option 1: Setup Wizard
-aeryn start
+# Clone repo
+git clone https://github.com/MuhammadApriysyah/Aeryn.git
+cd Aeryn
 
-# Option 2: One-Click Generate
-aeryn new my-app --template react
+# Setup backend (Python)
+python3 -m venv venv-proot
+source venv-proot/bin/activate
+pip install -r requirements.txt
 
-# Option 3: Visual Dashboard
-aeryn dashboard
+# Setup frontend (Next.js)
+cd aeryn-web
+npm install
 
-# Option 4: Headless Mode
-aeryn new my-app --non-interactive --template react
+# Build frontend
+NODE_OPTIONS="--max-old-space-size=512" npm run build
 
-# Option 5: Batch Generate
-aeryn batch projects.json
+# Start both with PM2
+cd ..
+pm2 start ecosystem.config.cjs    # Backend
+pm2 start ecosystem-web.config.cjs # Frontend
 
-# Option 6: Workflow DSL
-aeryn run workflow.yaml
-
-# Option 7: Multi-Region Deploy
-aeryn deploy --multi-region us-east,eu-west,ap-southeast
+# Access dashboard
+open http://localhost:3020
 ```
 
 ---
 
-## 📚 Commands
+## 📡 API Endpoints
 
-| Command | Description |
-|---------|-------------|
-| `aeryn start` | Interactive setup wizard |
-| `aeryn dashboard` | Launch visual dashboard |
-| `aeryn new <name> [--template] [--non-interactive]` | Create new project |
-| `aeryn batch <config.json>` | Batch generate projects |
-| `aeryn run <workflow.yaml>` | Run custom workflow |
-| `aeryn dev [--port 3010]` | Start development server |
-| `aeryn db:migrate` | Run migrations |
-| `aeryn db:seed` | Seed database |
-| `aeryn test [--watch] [--coverage]` | Run tests |
-| `aeryn build [--target node\|static]` | Build production |
-| `aeryn deploy [--target pm2\|docker\|vercel\|multi-region]` | Deploy |
-| `aeryn debug` | Enable debug mode |
-| `aeryn templates` | List available templates |
-| `aeryn plugins` | List installed plugins |
-| `aeryn config` | Show current config |
-| `aeryn workspace list` | List workspaces |
-| `aeryn audit` | View audit trail |
+| Endpoint | Description |
+|----------|-------------|
+| `GET /health` | Health check |
+| `POST /chat` | Chat with Aeryn |
+| `GET /search` | Hybrid search |
+| `POST /run` | Run agent task |
+| `GET /dashboard/stream` | SSE stream |
+| `WS /ws/dashboard` | WebSocket |
 
 ---
 
-## 📋 .aerynrc Config File
-
-```json
-{
-  "version": "1.0",
-  "defaults": {
-    "template": "react",
-    "database": "sqlite",
-    "auth": true,
-    "testing": true,
-    "ci_cd": true,
-    "rate_limiting": true,
-    "caching": true,
-    "job_queue": false,
-    "tracing": true,
-    "monitoring": true
-  },
-  "plugins": ["auth"],
-  "environments": {
-    "development": {"port": 3010},
-    "staging": {"port": 3011},
-    "production": {"port": 3012}
-  },
-  "regions": ["us-east", "eu-west"]
-}
-```
-
----
-
-## 🔧 Workflow DSL Example
-
-```yaml
-name: "Full-Stack Deploy"
-on_error: stop
-steps:
-  - name: generate
-    action: generate
-    params: {name: my-app, template: react}
-  - name: test
-    action: run_tests
-  - name: deploy
-    action: deploy
-    params: {target: pm2}
-```
-
----
-
-## 🌍 Multi-Region Deploy
+## 📋 PM2 Commands
 
 ```bash
-# Deploy to multiple AWS regions
-aeryn deploy --multi-region us-east,eu-west,ap-southeast
-
-# Generated structure:
-# - Terraform configs for each region
-# - Application Load Balancer
-# - Auto-scaling groups
-# - Health checks per region
+pm2 list              # List all processes
+pm2 logs aeryn-api    # Backend logs
+pm2 logs aeryn-web    # Frontend logs
+pm2 restart aeryn-api # Restart backend
+pm2 restart aeryn-web # Restart frontend
+pm2 save              # Save config
 ```
 
 ---
 
-## 🔍 Distributed Tracing (OpenTelemetry)
+## 📚 Architecture
 
-```bash
-# Auto-generated tracing config
-aeryn new my-app --template react
-
-# Generated files:
-# - config/tracing.js (OpenTelemetry + Jaeger)
-# - Automatic span creation per request
-# - Trace propagation across services
 ```
-
----
-
-## 📊 Advanced Monitoring (Prometheus APM)
-
-```bash
-# Auto-generated monitoring config
-aeryn new my-app --template react
-
-# Generated files:
-# - config/monitoring.js (Prometheus metrics)
-# - /metrics endpoint for scraping
-# - Grafana dashboard JSON
-# - Alert rules
-```
-
----
-
-## 🧪 Testing
-
-```bash
-# All tests
-./venv-proot/bin/python -m pytest tests/ -v
-
-# Load testing
-locust -f tests/load/locustfile.py --host=http://localhost:3010
+Aeryn/
+├── aeryn-web/               ← Next.js 16 Frontend (NEW)
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── api/         ← API routes (proxy)
+│   │   │   ├── page.jsx     ← Dashboard
+│   │   │   └── layout.jsx
+│   │   └── components/
+│   └── package.json
+├── apps/
+│   └── api/
+│       └── aeryn_api.py     ← FastAPI Backend
+├── aeryn_core/
+│   ├── workspace/           ← Multi-tenant workspace management
+│   ├── audit_trail/         ← Audit trail for compliance
+│   ├── rate_limiting/       ← Built-in API rate limiter
+│   ├── cache_layer/         ← Redis caching template
+│   ├── job_queue/           ← Background job processing
+│   ├── fullstack/           ← Fullstack AI Engineer
+│   ├── sandbox/             ← Native sandbox (4 levels)
+│   ├── mcp/                 ← MCP server + client
+│   ├── multi_agent/         ← Multi-Agent orchestrator
+│   ├── dashboard/           ← Web-based UI
+│   ├── wizard/              ← Interactive setup wizard
+│   ├── oneclick/            ← One-click generate
+│   ├── postguide/           ← Post-generate guide
+│   ├── progress/            ← Progress indicator
+│   ├── error_solver/        ← Error analysis & solutions
+│   ├── preview/             ← Project preview
+│   ├── help/                ← Contextual help
+│   ├── gallery/             ← Example gallery
+│   ├── undo/                ← Undo changes
+│   ├── proactive/           ← Proactive warnings
+│   ├── template_preview/    ← Visual template preview
+│   ├── success_anim/        ← Success animation
+│   ├── debug_mode/          ← Debug mode
+│   ├── custom_template/     ← Custom template editor
+│   ├── diff_preview/        ← Diff preview
+│   ├── plugin_system/       ← Plugin architecture
+│   ├── plugin_marketplace/  ← Plugin sharing
+│   ├── plugin_docs/         ← Plugin documentation
+│   ├── ci_cd/               ← CI/CD templates
+│   ├── multi_db/            ← Multi-database support
+│   ├── working_tests/       ← Working test generation
+│   ├── websocket_template/  ← WebSocket/SSE templates
+│   ├── api_versioning/      ← API versioning
+│   ├── env_management/      ← Environment management
+│   ├── auto_rollback/       ← Auto rollback migration
+│   ├── deploy_dashboard/    ← Deployment monitoring
+│   ├── api_designer/        ← Visual API designer
+│   ├── performance_monitor/ ← Performance monitoring
+│   ├── headless_mode/       ← Headless/automated mode
+│   ├── config_file/         ← .aerynrc config
+│   ├── batch_generate/      ← Batch generation
+│   ├── workflow_dsl/        ← Workflow DSL
+│   ├── config_file_v2/      ← Enhanced config file
+│   ├── template_inheritance/← Template inheritance
+│   ├── custom_generators/   ← Custom generators
+│   └── ...
+├── aeryn-engine/            ← Rust (6 modules)
+├── plugins/aeryn-core/      ← Hermes plugin entry
+├── tests/                   ← 658+ tests
+├── .github/workflows/       ← CI/CD Pipeline
+├── Dockerfile + compose     ← Docker support
+├── ecosystem.config.cjs     ← PM2 backend config
+├── ecosystem-web.config.cjs ← PM2 frontend config
+└── monitoring/              ← Metrics collector
 ```
 
 ---
