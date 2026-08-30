@@ -3,8 +3,8 @@ title: Source Note
 author: aeryn
 tags: []
 links: []
-created: 2026-08-30T00:32:39
-updated: 2026-08-30T00:32:39
+created: 2026-08-30T00:49:03
+updated: 2026-08-30T00:49:03
 hash: 2304b0e5ed94
 ---
 
