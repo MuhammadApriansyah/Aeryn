@@ -10,7 +10,7 @@ Aeryn is a **fully adaptive, recursive self-improving AI personal assistant plat
 
 ```bash
 # 1. Clone & enter
-git clone https://github.com/MuhammadApriysyah/Aeryn.git && cd Aeryn
+git clone https://github.com/MuhammadApriansyah/Aeryn.git && cd Aeryn
 
 # 2. Backend setup
 python3 -m venv venv-proot && source venv-proot/bin/activate
