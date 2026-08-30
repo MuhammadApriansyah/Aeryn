@@ -207,3 +207,29 @@ All notable changes to Aeryn will be documented in this file.
 - 653 tests pass
 - 0 failures
 - 1 warning
+
+## [56.0] — 2026-08-30
+
+### Added
+- **Workflow DSL**: Define custom generation workflows with YAML/JSON
+- **Headless Mode**: `--non-interactive` for fully automated CI/CD
+- **Config File**: `.aerynrc` for project defaults with dot notation
+- **Batch Generate**: Generate multiple projects from JSON config
+- **Template Inheritance**: Extend templates from other templates
+- **Custom Generators**: Replace default generators with custom logic
+
+### Changed
+- Updated README.md with advanced workflow automation documentation
+- Test count: 653 → 658
+
+### New Modules
+- `aeryn_core/workflow_dsl/` — Workflow DSL
+- `aeryn_core/headless_mode/` — Headless runner
+- `aeryn_core/config_file_v2/` — Enhanced config file
+- `aeryn_core/template_inheritance/` — Template inheritance
+- `aeryn_core/custom_generators/` — Custom generators
+
+### Test Results
+- 658 tests pass
+- 0 failures
+- 1 warning

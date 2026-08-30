@@ -1,9 +1,9 @@
 # 🤖 Aeryn — Personal Assistant Agent SaaS
 
-> AI-powered personal assistant platform with multi-model support, team workspaces, enterprise features, Rust-powered performance, Hermes integration, security-first architecture, MCP protocol, multi-agent orchestration, integration SDK, native sandbox, fullstack AI engineer mode, beginner-friendly UI, expert automation features, and **enterprise workspace management**.
+> AI-powered personal assistant platform with multi-model support, team workspaces, enterprise features, Rust-powered performance, Hermes integration, security-first architecture, MCP protocol, multi-agent orchestration, integration SDK, native sandbox, fullstack AI engineer mode, beginner-friendly UI, expert automation features, enterprise workspace management, and **advanced workflow automation**.
 
-![Version](https://img.shields.io/badge/version-55.0-blue)
-![Tests](https://img.shields.io/badge/tests-653%20passed-brightgreen)
+![Version](https://img.shields.io/badge/version-56.0-blue)
+![Tests](https://img.shields.io/badge/tests-658%20passed-brightgreen)
 ![Security](https://img.shields.io/badge/security-layered-success)
 ![Fullstack](https://img.shields.io/badge/fullstack-engineer-success)
 ![Dashboard](https://img.shields.io/badge/dashboard-web-success)
@@ -15,6 +15,7 @@
 ![Audit](https://img.shields.io/badge/audit-trail-success)
 ![Cache](https://img.shields.io/badge/cache-redis-success)
 ![Queue](https://img.shields.io/badge/job-queue-success)
+![Workflow](https://img.shields.io/badge/workflow-dsl-success)
 ![Python](https://img.shields.io/badge/python-3.11+-blue)
 ![Rust](https://img.shields.io/badge/rust-1.75+-orange)
 ![Hermes](https://img.shields.io/badge/hermes-integrated-purple)
@@ -24,7 +25,15 @@
 
 ## 🚀 Features
 
-### Enterprise Features (NEW in V55)
+### Advanced Workflow Automation (NEW in V56)
+- **Workflow DSL**: Define custom generation workflows with YAML/JSON
+- **Headless Mode**: `--non-interactive` for fully automated CI/CD
+- **Config File**: `.aerynrc` for project defaults with dot notation
+- **Batch Generate**: Generate multiple projects from JSON config
+- **Template Inheritance**: Extend templates from other templates
+- **Custom Generators**: Replace default generators with custom logic
+
+### Enterprise Features (V55)
 - **Workspace Management**: Multi-tenant workspaces with RBAC
 - **Audit Trail**: Track all actions for compliance
 - **Rate Limiting**: Built-in API rate limiter
@@ -112,10 +121,14 @@ Aeryn/
 │   ├── headless_mode/       ← Headless/automated mode
 │   ├── config_file/         ← .aerynrc config
 │   ├── batch_generate/      ← Batch generation
+│   ├── workflow_dsl/        ← Workflow DSL
+│   ├── config_file_v2/      ← Enhanced config file
+│   ├── template_inheritance/← Template inheritance
+│   ├── custom_generators/   ← Custom generators
 │   └── ...
 ├── aeryn-engine/            ← Rust (6 modules)
 ├── plugins/aeryn-core/      ← Hermes plugin entry
-├── tests/                   ← 653 tests
+├── tests/                   ← 658 tests
 ├── .github/workflows/       ← CI/CD Pipeline
 ├── Dockerfile + compose     ← Docker support
 └── monitoring/              ← Metrics collector
@@ -156,6 +169,9 @@ aeryn new my-app --non-interactive --template react
 
 # Option 5: Batch Generate
 aeryn batch projects.json
+
+# Option 6: Workflow DSL
+aeryn run workflow.yaml
 ```
 
 ---
@@ -169,6 +185,7 @@ aeryn batch projects.json
 | `aeryn new <name> [--template react\|vue\|api\|bot]` | Create new project |
 | `aeryn new <name> --non-interactive` | Headless generation |
 | `aeryn batch <config.json>` | Batch generate projects |
+| `aeryn run <workflow.yaml>` | Run custom workflow |
 | `aeryn dev [--port 3010]` | Start development server |
 | `aeryn db:migrate` | Run migrations |
 | `aeryn db:seed` | Seed database |
@@ -210,6 +227,35 @@ aeryn batch projects.json
 
 ---
 
+## 🔧 Workflow DSL Example
+
+```yaml
+# workflow.yaml
+name: "Full-Stack Deploy"
+description: "Generate, test, and deploy"
+on_error: stop
+steps:
+  - name: generate_project
+    action: generate
+    params:
+      name: my-app
+      template: react
+  - name: install_deps
+    action: install_deps
+  - name: run_tests
+    action: run_tests
+  - name: deploy_prod
+    action: deploy
+    params:
+      target: pm2
+```
+
+```bash
+aeryn run workflow.yaml
+```
+
+---
+
 ## 🧪 Testing
 
 ```bash
@@ -225,7 +271,7 @@ locust -f tests/load/locustfile.py --host=http://localhost:3010
 ## 📊 Test Coverage
 
 ```
-653 tests pass
+658 tests pass
 0 failures
 1 warning
 ```
