@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 import aeryn_core.utils.patch_sqlite  # noqa
 
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect, Header
-from fastapi.responses import Response, FileResponse
+from fastapi.responses import Response, FileResponse, JSONResponse, HTMLResponse
 from pydantic import BaseModel, Field
 from aeryn_core.safety.safety_engine import get_safety_engine, sanitize_output
 from aeryn_core.utils.adapters import get_active_adapter, render_adapter_context
@@ -3784,7 +3784,7 @@ async def install_plugin(source_dir: str):
     if plugin: return {"status": "installed", "plugin": plugin.name}
     return {"status": "error", "error": "Failed to install plugin"}
 
-@app.get("/plugins")
+@app.get("/plugins/installed")
 async def list_plugins():
     manager = get_plugin_manager()
     return {"plugins": manager.list_plugins()}
@@ -4148,6 +4148,34 @@ async def monitoring_stats():
 # Dashboard web routes
 from apps.web.server import router as dashboard_router
 app.include_router(dashboard_router, prefix="/web")
+
+# SPA routes — serve dashboard HTML for client-side routing routes
+@app.get("/", response_class=HTMLResponse)
+async def spa_root():
+    """Serve dashboard HTML for client-side routing pages."""
+    from apps.web.server import _serve_dashboard
+    return _serve_dashboard()
+
+# SPA routes that don't conflict with API routes
+for _route in ["/projects", "/workspaces", "/chat", "/audit", "/settings", "/notifications"]:
+    def make_handler():
+        async def handler():
+            from apps.web.server import _serve_dashboard
+            return _serve_dashboard()
+        return handler
+    _handler = make_handler()
+    _handler.__name__ = f"spa_{_route.strip('/')}"
+    app.add_api_route(_route, endpoint=_handler, response_class=HTMLResponse)
+
+@app.get("/app/{spa:path}", response_class=HTMLResponse)
+async def spa_fallback(spa: str):
+    """Serve dashboard HTML for client-side routing routes."""
+    SPA_ROUTES = {"/", "/projects", "/workspaces", "/chat", "/plugins", "/audit", "/settings", "/notifications"}
+    from apps.web.server import _serve_dashboard
+    if "/" + spa in SPA_ROUTES:
+        return _serve_dashboard()
+    return JSONResponse({"error": "Not found"}, status_code=404)
+
 if __name__ == "__main__":
     import uvicorn
     ensure_dirs()

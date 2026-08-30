@@ -4,6 +4,35 @@ All notable changes to Aeryn will be documented in this file.
 
 ---
 
+## [59.0] — 2026-08-30
+
+### Added
+- **Error Boundary**: `showErrorBoundary()` + `safeExecute()` wrapper for runtime error handling
+- **Empty State**: Custom empty states for Projects, Workspaces, Chat, Plugins, Audit pages
+- **Confirmation Dialog**: `showConfirmDialog()` for destructive actions with focus trap + Escape close
+- **Loading States**: Skeleton screens per page + `showLoading()` function
+- **Real Pages Implemented**: Projects (localStorage CRUD), Workspaces (create/delete), Chat (sessions), Plugins (install/uninstall), Audit Trail (table view)
+- **Command Palette**: `Ctrl+Shift+P` opens command palette with fuzzy search
+- **Notification Center**: Full notification management with read/unread + badge
+- **Project Actions**: Create/Open/Delete projects with localStorage persistence
+- **Workspace Actions**: Create/Open/Delete workspaces
+- **Chat Sessions**: New/Open chat sessions
+- **Data Management**: Export/Import all localStorage data
+
+### Fixed
+- Removed all test doubles from production code
+- Fixed guardrails.py: removed unreachable `return False` before variance calculation
+- Fixed self_improvement.py: uuid import moved to top-level + optimize_prompt argument
+- Fixed dashboard.html: CSS/JS links point to correct SPA paths
+- Fixed duplicate `/plugins` API route conflict
+
+### Technical Details
+- Backend API: port 3010 (FastAPI)
+- Web UI: port 3010/ (SPA with full client-side routing)
+- Zero dependencies (vanilla JS + CSS)
+
+---
+
 ## [58.0] — 2026-08-30
 
 ### Added

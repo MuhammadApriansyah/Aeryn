@@ -8,38 +8,33 @@
   <link rel="stylesheet" href="/web/static/css/dashboard.css"/>
 </head>
 <body>
-  <!-- Skip Link -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
   
-  <!-- Offline Banner -->
   <div id="offline-banner" class="offline-banner" role="alert" style="display:none">
     <span>⚠️</span>
     <span>Backend API is offline. Some features may not work.</span>
   </div>
   
-  <!-- Toast Container -->
   <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
   
   <div class="container">
-    <!-- Sidebar -->
     <aside class="sidebar" role="navigation" aria-label="Main navigation">
       <div class="sidebar-header">
         <span class="logo-icon">🤖</span>
         <span class="logo-text">Aeryn</span>
       </div>
       <nav class="nav">
-        <ul class="nav-list" id="nav-list">
-          <!-- Nav items rendered by JS -->
-        </ul>
+        <ul class="nav-list" id="nav-list"></ul>
       </nav>
       <div class="sidebar-footer">
-        <span class="version-tag">V58.0</span>
+        <button class="notifications-btn" onclick="window.AerynApp.navigate('notifications')" aria-label="Notifications">
+          🔔 <span id="notification-badge" class="badge" style="display:none">0</span>
+        </button>
+        <span class="version-tag">V59.0</span>
       </div>
     </aside>
     
-    <!-- Main Content -->
     <main class="main" id="main-content">
-      <!-- Topbar -->
       <div class="topbar">
         <div class="search">
           <input type="text" id="search-input" placeholder="Search... (Ctrl+K)" aria-label="Search"/>
@@ -47,7 +42,6 @@
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">☀️</button>
       </div>
       
-      <!-- Breadcrumb -->
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <ol class="breadcrumb-list" id="breadcrumb-list">
           <li class="breadcrumb-item"><span class="breadcrumb-label">🏠 Home</span></li>
@@ -55,12 +49,9 @@
         </ol>
       </nav>
       
-      <!-- Page Title -->
       <h1 class="page-title" id="page-title">Dashboard</h1>
       
-      <!-- Content Area -->
       <div id="page-content" class="page-content">
-        <!-- Loading Skeleton -->
         <div class="stats-grid" id="skeleton-stats">
           <div class="stat skeleton-stat"><div class="skeleton-label"></div><div class="skeleton-value"></div></div>
           <div class="stat skeleton-stat"><div class="skeleton-label"></div><div class="skeleton-value"></div></div>

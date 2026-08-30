@@ -34,7 +34,7 @@ open http://localhost:3010/web/
 
 ## 📊 Stats
 
-![Version](https://img.shields.io/badge/version-58-87CEEB)
+![Version](https://img.shields.io/badge/version-59-87CEEB)
 ![Tests](https://img.shields.io/badge/tests-661%20passed-87CEEB)
 ![Security](https://img.shields.io/badge/security-layered-87CEEB)
 ![Fullstack](https://img.shields.io/badge/fullstack-engineer-87CEEB)
@@ -65,7 +65,7 @@ open http://localhost:3010/web/
 Aeryn is an **AI personal assistant platform** built from the ground up with:
 
 - **5 agent divisions** (Creative, Psychology, Reasoning, Governance, Infrastructure)
-- **18 major versions** of continuous development (V40–V58)
+- **19 major versions** of continuous development (V40–V59)
 - **661 automated tests** covering auth, billing, workspaces, plugins, security, and more
 - **Fully adaptive system** with recursive self-improvement capabilities
 - **SPA dashboard** with full WCAG 2.1 AA accessibility compliance
@@ -107,7 +107,7 @@ aeryn-core-agent/
 
 ---
 
-## 🎨 Features (V58.0)
+## 🎨 Features (V59.0)
 
 ### ✨ Fully Adaptive System (NEW)
 
@@ -120,7 +120,7 @@ aeryn-core-agent/
 | **SQLite Logging** | All errors, adaptations, health metrics in `data/adaptive_system.db` |
 | **Screen Reader** | `announceToScreenReader()` for all critical UI state changes |
 
-### 🖥️ Modern Frontend (V58)
+### 🖥️ Modern Frontend (V59)
 
 | Feature | Details |
 |---------|---------|
@@ -133,6 +133,12 @@ aeryn-core-agent/
 | **Loading Skeleton** | Shimmer animation while data fetches |
 | **Responsive** | Mobile-first design, works on all screen sizes |
 | **Real-time Health** | Dashboard polls backend every 5 seconds |
+| **Error Boundary** | Graceful error fallback with reload + go-home options |
+| **Empty States** | Custom empty states for all pages (Projects, Chat, Plugins, etc.) |
+| **Confirmation Dialog** | Focus-trapped modal for destructive actions |
+| **Real Pages** | Projects, Workspaces, Chat, Plugins, Audit pages fully implemented |
+| **Command Palette** | `Ctrl+Shift+P` fuzzy search across all features |
+| **Notification Center** | Full notification management with read/unread + badge |
 
 ### 🧬 5 Cognitive Divisions
 
