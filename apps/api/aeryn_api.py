@@ -75,7 +75,7 @@ from contextlib import asynccontextmanager
 @asynccontextmanager
 async def app_lifespan(app):
     """Manage background tasks."""
-    info("Aeryn API starting", version="41.0")
+    info("Aeryn API starting", version="61.0")
     task = asyncio.create_task(broadcast_loop())
     scheduler_task = asyncio.create_task(get_scheduler().start())
     queue_task = asyncio.create_task(get_task_queue().start())
@@ -605,14 +605,24 @@ async def dashboard_stream():
 
 @app.websocket("/ws/dashboard")
 async def dashboard_websocket(websocket: WebSocket):
-    """WebSocket endpoint for two-way dashboard commands."""
+    """WebSocket endpoint for real-time two-way dashboard commands."""
     emitter = get_emitter()
-    client_id = f"ws_{int(time.time())}"
+    client_id = f"ws_{int(time.time())}_{id(websocket)}"
     await websocket.accept()
     emitter.register_ws(client_id, websocket)
     
     try:
-        await websocket.send_json({"type": "connected", "data": {}})
+        # Send connection ack
+        await websocket.send_json({"type": "connected", "data": {"client_id": client_id}})
+        
+        # Push immediate health update on connect
+        await _push_health_update(websocket)
+        
+        # Push immediate stats on connect
+        await _push_stats_update(websocket)
+        
+        # Push immediate notifications on connect
+        await _push_notifications_update(websocket)
         
         while True:
             msg = await websocket.receive_text()
@@ -628,31 +638,19 @@ async def dashboard_websocket(websocket: WebSocket):
                 
                 if cmd_type == "ping":
                     await websocket.send_json({"type": "pong", "data": {}})
+                
+                elif cmd_type == "get_health":
+                    await _push_health_update(websocket)
+                
+                elif cmd_type == "get_stats":
+                    await _push_stats_update(websocket)
+                
+                elif cmd_type == "get_notifications":
+                    await _push_notifications_update(websocket)
+                
                 elif cmd_type == "chat":
-                    try:
-                        from aeryn_core.safety.safety_engine import get_safety_engine
-                        from aeryn_core.utils.persona_engine import load_persona
-                        eng = get_safety_engine()
-                        text = cmd_data.get("message", "")
-                        safety = eng.check_input(text)
-                        if not safety.safe:
-                            await websocket.send_json({"type": "error", "data": {"message": "Blocked"}})
-                        else:
-                            persona = load_persona()
-                            router = get_mode_router()
-                            sid = cmd_data.get("session_id", "default")
-                            session = router.get_or_create_session(sid)
-                            session.add_message("user", text)
-                            messages = [{"role": "system", "content": persona}] + session.get_context_window()
-                            result = await router.llm.chat(messages, sid)
-                            response = result["content"]
-                            session.add_message("assistant", response, json.dumps(result.get("reasoning", [])))
-                            reasoning = result.get("reasoning", [])
-                            await websocket.send_json({"type": "chat_response", "data": {"response": response, "session_id": sid, "reasoning": reasoning}})
-                            # Small delay to ensure chat_response is received before broadcast
-                            await asyncio.sleep(0.5)
-                    except Exception as e:
-                        await websocket.send_json({"type": "error", "data": {"message": str(e)}})
+                    await _handle_chat(websocket, emitter, cmd_data)
+                
                 elif cmd_type == "parse_tasks":
                     try:
                         auto_task = get_auto_task()
@@ -660,6 +658,7 @@ async def dashboard_websocket(websocket: WebSocket):
                         await websocket.send_json({"type": "task_parsed", "data": {"tasks": tasks, "count": len(tasks)}})
                     except Exception as e:
                         await websocket.send_json({"type": "error", "data": {"message": str(e)}})
+                
                 elif cmd_type == "execute_tool":
                     try:
                         rt = get_tool_runtime()
@@ -667,15 +666,30 @@ async def dashboard_websocket(websocket: WebSocket):
                         await websocket.send_json({"type": "tool_result", "data": result.to_dict()})
                     except Exception as e:
                         await websocket.send_json({"type": "error", "data": {"message": str(e)}})
+                
                 elif cmd_type == "create_notification":
                     try:
                         from aeryn_core.platform.notification_system import Notification
                         mgr = get_notification_manager()
-                        notif = Notification(user_id=cmd_data.get("user_id", "default"), title=cmd_data.get("title", ""), message=cmd_data.get("message", ""), priority=cmd_data.get("priority", "normal"))
+                        notif = Notification(
+                            user_id=cmd_data.get("user_id", "default"),
+                            title=cmd_data.get("title", ""),
+                            message=cmd_data.get("message", ""),
+                            priority=cmd_data.get("priority", "normal")
+                        )
                         nid = mgr.create(notif)
                         await websocket.send_json({"type": "notif_created", "data": {"id": nid}})
+                        # Broadcast new notification to all WS clients
+                        await emitter.broadcast("notification_new", {
+                            "id": nid,
+                            "user_id": cmd_data.get("user_id", "default"),
+                            "title": cmd_data.get("title", ""),
+                            "message": cmd_data.get("message", ""),
+                            "priority": cmd_data.get("priority", "normal"),
+                        })
                     except Exception as e:
                         await websocket.send_json({"type": "error", "data": {"message": str(e)}})
+                
                 elif cmd_type == "check_safety":
                     try:
                         eng = get_safety_engine()
@@ -683,6 +697,7 @@ async def dashboard_websocket(websocket: WebSocket):
                         await websocket.send_json({"type": "safety_result", "data": {"valid": result.safe, "risk": result.risk}})
                     except Exception as e:
                         await websocket.send_json({"type": "error", "data": {"message": str(e)}})
+                
                 elif cmd_type == "create_api_key":
                     try:
                         km = get_api_key_manager()
@@ -690,6 +705,7 @@ async def dashboard_websocket(websocket: WebSocket):
                         await websocket.send_json({"type": "api_key_created", "data": result})
                     except Exception as e:
                         await websocket.send_json({"type": "error", "data": {"message": str(e)}})
+                
                 elif cmd_type == "set_secret":
                     try:
                         sm = get_secrets_manager()
@@ -697,6 +713,7 @@ async def dashboard_websocket(websocket: WebSocket):
                         await websocket.send_json({"type": "secret_stored", "data": {}})
                     except Exception as e:
                         await websocket.send_json({"type": "error", "data": {"message": str(e)}})
+                
                 elif cmd_type == "search":
                     try:
                         idx = get_semantic_indexer()
@@ -704,15 +721,13 @@ async def dashboard_websocket(websocket: WebSocket):
                         await websocket.send_json({"type": "search_results", "data": {"results": results}})
                     except Exception as e:
                         await websocket.send_json({"type": "error", "data": {"message": str(e)}})
+                
                 elif cmd_type == "get_history":
                     history = emitter.get_history(50)
                     await websocket.send_json({"type": "history", "data": history})
-                elif cmd_type == "get_stats":
-                    stats = emitter.get_stats()
-                    await websocket.send_json({"type": "stats", "data": stats})
+                
                 elif cmd_type == "action":
                     action = cmd_data.get("action", "")
-                    # Handle actions
                     if action == "backup":
                         await websocket.send_json({"type": "action_result", "data": {"action": action, "status": "started"}})
                     elif action == "dream":
@@ -733,6 +748,114 @@ async def dashboard_websocket(websocket: WebSocket):
         pass
     finally:
         emitter.unregister_ws(client_id)
+
+
+async def _push_health_update(websocket):
+    """Push current health data to a specific WebSocket client."""
+    try:
+        import psutil
+        process = psutil.Process()
+        mem_mb = process.memory_info().rss / 1024 / 1024
+        health = {
+            "status": "healthy",
+            "memory_mb": round(mem_mb, 1),
+            "version": "61.0",
+            "cpu_percent": psutil.cpu_percent(interval=0.1),
+        }
+    except ImportError:
+        health = {"status": "healthy", "version": "61.0", "memory_mb": 0, "cpu_percent": 0}
+    except Exception as e:
+        health = {"status": "error", "error": str(e), "version": "61.0"}
+    
+    try:
+        await websocket.send_json({"type": "health_update", "data": health})
+    except Exception:
+        pass
+
+
+async def _push_stats_update(websocket):
+    """Push system stats to a specific WebSocket client."""
+    try:
+        # Get memory stats
+        with open("/proc/meminfo") as f:
+            lines = f.readlines()
+        mem_total = mem_available = 0
+        for line in lines:
+            if line.startswith("MemTotal:"):
+                mem_total = int(line.split()[1])
+            elif line.startswith("MemAvailable:"):
+                mem_available = int(line.split()[1])
+        mem_used_mb = round((mem_total - mem_available) / 1024, 1) if mem_total else 0
+        mem_total_mb = round(mem_total / 1024, 1) if mem_total else 0
+        mem_pct = round(mem_used_mb / mem_total_mb * 100, 1) if mem_total_mb else 0
+
+        try:
+            import shutil
+            disk = shutil.disk_usage("/")
+            disk_free_gb = round(disk.free / (1024**3), 2)
+            disk_pct = round((disk.total - disk.free) / disk.total * 100, 1)
+        except Exception:
+            disk_free_gb = 0
+            disk_pct = 0
+
+        stats = {
+            "memory_used_mb": mem_used_mb,
+            "memory_total_mb": mem_total_mb,
+            "memory_percent": mem_pct,
+            "disk_free_gb": disk_free_gb,
+            "disk_percent": disk_pct,
+            "uptime_s": round(time.time() - _start_time, 0),
+        }
+        await websocket.send_json({"type": "stats", "data": stats})
+    except Exception:
+        pass
+
+
+async def _push_notifications_update(websocket):
+    """Push pending notifications to a specific WebSocket client."""
+    try:
+        notif_mgr = get_notification_manager()
+        notifs = notif_mgr.get_pending()
+        await websocket.send_json({"type": "notifications", "data": {"notifications": notifs}})
+    except Exception:
+        await websocket.send_json({"type": "notifications", "data": {"notifications": []}})
+
+
+async def _handle_chat(websocket, emitter, cmd_data):
+    """Handle chat command via WebSocket with LLM."""
+    try:
+        from aeryn_core.safety.safety_engine import get_safety_engine
+        from aeryn_core.utils.persona_engine import load_persona
+        eng = get_safety_engine()
+        text = cmd_data.get("message", "")
+        safety = eng.check_input(text)
+        if not safety.safe:
+            await websocket.send_json({"type": "error", "data": {"message": "Blocked by safety engine"}})
+            return
+        
+        persona = load_persona()
+        router = get_mode_router()
+        sid = cmd_data.get("session_id", "default")
+        session = router.get_or_create_session(sid)
+        session.add_message("user", text)
+        messages = [{"role": "system", "content": persona}] + session.get_context_window()
+        result = await router.llm.chat(messages, sid)
+        response = result["content"]
+        session.add_message("assistant", response, json.dumps(result.get("reasoning", [])))
+        reasoning = result.get("reasoning", [])
+        
+        await websocket.send_json({
+            "type": "chat_response",
+            "data": {
+                "response": response,
+                "session_id": sid,
+                "reasoning": reasoning,
+                "provider": result.get("provider"),
+                "model": result.get("model"),
+            }
+        })
+    except Exception as e:
+        await websocket.send_json({"type": "error", "data": {"message": str(e)}})
 
 DASHBOARD_HTML = """<!DOCTYPE html>
 <html lang="id">
