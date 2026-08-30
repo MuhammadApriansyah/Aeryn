@@ -18,10 +18,21 @@ def _load_env_file():
                     key, value = key.strip(), value.strip()
                     if key and value and key not in os.environ:
                         os.environ[key] = value
+    # Load Aeryn-specific env
+    aeryn_env = os.path.expanduser("~/.aeryn/.env")
+    if os.path.exists(aeryn_env):
+        with open(aeryn_env) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    key, value = line.split('=', 1)
+                    key, value = key.strip(), value.strip()
+                    if key and value and key not in os.environ:
+                        os.environ[key] = value
 
 _load_env_file()
 
-AERYN_MODE = os.environ.get("AERYN_MODE", "plugin")
+AERYN_MODE = os.environ.get("AERYN_MODE", "standalone")
 _DB_DIR = DATABASE_DIR
 os.makedirs(_DB_DIR, exist_ok=True)
 
@@ -139,7 +150,7 @@ class AerynLLMClient:
         self._reasoning_store.add_step(session_id, n, "Send request", prov)
 
         if not _FALLBACK_CHAIN:
-            return {"content": "No LLM providers available.", "reasoning": steps, "provider": "none", "model": "none", "tokens": 0}
+            return {"content": "No LLM providers available. Please set OPENROUTER_API_KEY, NOUS_API_KEY, or GEMINI_API_KEY in environment or ~/.aeryn/.env", "reasoning": steps, "provider": "none", "model": "none", "tokens": 0}
 
         for attempt, prov_name in enumerate(_FALLBACK_CHAIN):
             p = _PROVIDERS[prov_name]

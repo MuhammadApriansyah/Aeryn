@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""V40.44 — Aeryn Daemon :3010 — Full Feature Set."""
+"""V61.0 — Aeryn Daemon :3010 — Full Feature Set."""
 
 import os, sys, time, json, uuid, sqlite3, asyncio
 from typing import Optional
@@ -346,9 +346,9 @@ async def health():
         import psutil
         process = psutil.Process()
         mem_mb = process.memory_info().rss / 1024 / 1024
-        return {"status": "healthy", "memory_mb": round(mem_mb, 1), "version": "40.44"}
+        return {"status": "healthy", "memory_mb": round(mem_mb, 1), "version": "61.0"}
     except ImportError:
-        return {"status": "healthy", "version": "40.44"}
+        return {"status": "healthy", "version": "61.0"}
 
 @app.post("/compile")
 async def compile(req: CompileRequest):
