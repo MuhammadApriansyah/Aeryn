@@ -52,6 +52,7 @@ from aeryn_core.platform.cloud_sync import get_cloud_sync
 from aeryn_core.reasoning.constitutional_ai import get_constitutional_ai
 from aeryn_core.reasoning.emotional_intelligence import get_emotional_intelligence
 from aeryn_core.auth.auth import get_auth, ROLE_PERMISSIONS
+from aeryn_core.adaptive import get_adaptive_system
 from aeryn_core.auth.rate_limiter import get_rate_limiter
 from aeryn_core.auth.email_verification import get_email_verification, get_password_reset
 from aeryn_core.platform.webhook_system import get_webhook_system
@@ -4087,6 +4088,46 @@ async def monitoring_history(session_id: str, limit: int = 50):
         return {"session_id": session_id, "history": [dict(r) for r in rows]}
     except Exception as e:
         return {"session_id": session_id, "history": [], "error": str(e)}
+
+@app.get("/api/adaptive/health")
+async def adaptive_health():
+    """Get adaptive system health report."""
+    try:
+        system = get_adaptive_system()
+        return system.get_health_report()
+    except Exception as e:
+        return {"error": str(e), "status": "unknown"}
+
+
+@app.get("/api/adaptive/errors")
+async def adaptive_errors(hours: int = 24):
+    """Get adaptive error summary."""
+    try:
+        system = get_adaptive_system()
+        return system.get_error_summary(hours)
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.get("/api/adaptive/adaptations")
+async def adaptive_adaptations(hours: int = 24):
+    """Get adaptive adaptation summary."""
+    try:
+        system = get_adaptive_system()
+        return system.get_adaptation_summary(hours)
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.post("/api/adaptive/run-cycle")
+async def adaptive_run_cycle():
+    """Manually run a self-improvement cycle."""
+    try:
+        system = get_adaptive_system()
+        return system.run_self_improvement_cycle()
+    except Exception as e:
+        return {"error": str(e)}
+
 
 @app.get("/api/monitoring/stats")
 async def monitoring_stats():

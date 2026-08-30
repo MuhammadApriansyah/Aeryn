@@ -3,8 +3,8 @@ title: AI Research
 author: aeryn
 tags: [ai, research]
 links: []
-created: 2026-08-30T16:21:10
-updated: 2026-08-30T16:21:10
+created: 2026-08-30T17:19:05
+updated: 2026-08-30T17:19:05
 hash: 29a9172d762f
 ---
 
