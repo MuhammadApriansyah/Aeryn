@@ -34,29 +34,29 @@ open http://localhost:3010/web/
 
 ## 📊 Stats
 
-![Version](https://img.shields.io/badge/version-58.0-blue)
-![Tests](https://img.shields.io/badge/tests-661%20passed-brightgreen)
-![Security](https://img.shields.io/badge/security-layered-success)
-![Fullstack](https://img.shields.io/badge/fullstack-engineer-success)
-![Dashboard](https://img.shields.io/badge/dashboard-SPA-success)
-![Templates](https://img.shields.io/badge/templates-custom-success)
-![Debug](https://img.shields.io/badge/debug-mode-success)
-![Headless](https://img.shields.io/badge/headless-mode-success)
-![Batch](https://img.shields.io/badge/batch-generate-success)
-![Workspace](https://img.shields.io/badge/workspace-multi--tenant-success)
-![Audit](https://img.shields.io/badge/audit-trail-success)
-![Cache](https://img.shields.io/badge/cache-redis-success)
-![Queue](https://img.shields.io/badge/job-queue-success)
-![Workflow](https://img.shields.io/badge/workflow-dsl-success)
-![MultiRegion](https://img.shields.io/badge/multi--region-deploy-success)
-![Tracing](https://img.shields.io/badge/distributed--tracing-success)
-![APM](https://img.shields.io/badge/apm-monitoring-success)
-![Accessibility](https://img.shields.io/badge/accessibility-WCAG%202.1%20AA-success)
-![Theme](https://img.shields.io/badge/theme-dark%2Flight-success)
-![Python](https://img.shields.io/badge/python-3.11+-blue)
-![Rust](https://img.shields.io/badge/rust-1.75+-orange)
-![Hermes](https://img.shields.io/badge/hermes-integrated-purple)
-![License](https://img.shields.io/badge/license-MIT-green)
+![Version](https://img.shields.io/badge/version-58-87CEEB)
+![Tests](https://img.shields.io/badge/tests-661%20passed-87CEEB)
+![Security](https://img.shields.io/badge/security-layered-87CEEB)
+![Fullstack](https://img.shields.io/badge/fullstack-engineer-87CEEB)
+![Dashboard](https://img.shields.io/badge/dashboard-SPA-87CEEB)
+![Templates](https://img.shields.io/badge/templates-custom-87CEEB)
+![Debug](https://img.shields.io/badge/debug-mode-87CEEB)
+![Headless](https://img.shields.io/badge/headless-mode-87CEEB)
+![Batch](https://img.shields.io/badge/batch-generate-87CEEB)
+![Workspace](https://img.shields.io/badge/workspace-multi--tenant-87CEEB)
+![Audit](https://img.shields.io/badge/audit-trail-87CEEB)
+![Cache](https://img.shields.io/badge/cache-redis-87CEEB)
+![Queue](https://img.shields.io/badge/job-queue-87CEEB)
+![Workflow](https://img.shields.io/badge/workflow-dsl-87CEEB)
+![MultiRegion](https://img.shields.io/badge/multi--region-deploy-87CEEB)
+![Tracing](https://img.shields.io/badge/distributed--tracing-87CEEB)
+![APM](https://img.shields.io/badge/apm-monitoring-87CEEB)
+![Accessibility](https://img.shields.io/badge/accessibility-WCAG%202.1%20AA-87CEEB)
+![Theme](https://img.shields.io/badge/theme-dark%2Flight-87CEEB)
+![Python](https://img.shields.io/badge/python-3.11+-87CEEB)
+![Rust](https://img.shields.io/badge/rust-1.75+-87CEEB)
+![Hermes](https://img.shields.io/badge/hermes-integrated-87CEEB)
+![License](https://img.shields.io/badge/license-MIT-87CEEB)
 
 ---
 
@@ -72,16 +72,7 @@ Aeryn is an **AI personal assistant platform** built from the ground up with:
 
 ### Why Aeryn?
 
-| Feature | Aeryn | Claude Code | Cursor | CrewAI |
-|---------|-------|-------------|--------|--------|
-| Self-improving | ✅ Recursive loop | ❌ | ❌ | ❌ |
-| Persistent memory | ✅ Multi-layer | ❌ | ❌ | ⚠️ Basic |
-| Accessibility (WCAG) | ✅ Full AA | ❌ | ❌ | ❌ |
-| Multi-division agents | ✅ 5 divisions | ❌ | ❌ | ⚠️ Single |
-| Enterprise security | ✅ 4-level sandbox | ⚠️ Basic | ❌ | ❌ |
-| Plugin ecosystem | ✅ Marketplace | ⚠️ Skills | ❌ | ⚠️ Basic |
-| Open source | ✅ MIT | ❌ | ❌ | ✅ Apache 2.0 |
-| Self-hostable | ✅ Full | ❌ | ❌ | ✅ Full |
+Aeryn is designed to be **self-improving** — it learns from every interaction, adapts to your workflow, and gets smarter over time. With 5 cognitive divisions, persistent multi-layer memory, and a 4-level security sandbox, Aeryn is built for both personal and enterprise use.
 
 ---
 
