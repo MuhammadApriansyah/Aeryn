@@ -566,7 +566,217 @@
       renderSettings();
     }, 'renderAll');
   }
+  // ============================================================================
+  // WEBSOCKET
+  // ============================================================================
 
-  // ============================================================================\n  // WEBSOCKET\n  // ============================================================================\n\n  function updateWsStatus(connected) {\n    var indicator = document.getElementById('ws-status');\n    if (!indicator) return;\n    if (connected) {\n      indicator.textContent = 'Real-time: ON (WebSocket)';\n      indicator.className = 'ws-status connected';\n    } else {\n      indicator.textContent = 'Real-time: OFF (Polling)';\n      indicator.className = 'ws-status disconnected';\n    }\n  }\n\n  function wsSend(type, data) {\n    if (wsConnection && wsConnection.readyState === WebSocket.OPEN) {\n      wsConnection.send(JSON.stringify({ type: type, data: data || {} }));\n    }\n  }\n\n  function handleWsMessage(event) {\n    var msg;\n    try {\n      msg = JSON.parse(event.data);\n    } catch (e) {\n      return;\n    }\n    var type = msg.type;\n    var data = msg.data || {};\n\n    switch (type) {\n      case 'connected':\n        showToast('WebSocket connected', 'info', 2000);\n        updateWsStatus(true);\n        break;\n      case 'health_update':\n        healthData = data;\n        renderHealthStats(document.getElementById('health-stats'));\n        break;\n      case 'notifications':\n        // Merge server notifications with local notifications\n        if (data && data.notifications) {\n          data.notifications.forEach(function(n) {\n            notifications.unshift({\n              id: 'srv_' + n.id,\n              title: n.title || '',\n              message: n.message || '',\n              type: n.priority || 'info',\n              read: false,\n              timestamp: n.scheduled_for || new Date().toISOString(),\n              source: 'server'\n            });\n          });\n          updateNotifBadge();\n          renderNotifications();\n        });\n        break;\n      case 'notification_new':\n        // Real-time notification push\n        addNotification(data.title || 'New Notification', data.message || '', data.priority || 'info');\n        break;\n      case 'stats':\n        // Merge stats into healthData for rendering\n        if (data.uptime_s !== undefined) {\n          startTime = Date.now() - (data.uptime_s * 1000);\n          startUptimeCounter();\n        }\n        break;\n      case 'chat_response':\n        showToast('Chat response received', 'info', 2000);\n        break;\n      case 'pong':\n        break;\n      default:\n        // Ignore unhandled event types\n        break;\n    }\n  }\n\n  function connectWebSocket() {\n    if (wsReconnectTimer) {\n      clearTimeout(wsReconnectTimer);\n      wsReconnectTimer = null;\n    }\n\n    var proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';\n    var host = window.location.host;\n    var wsUrl = proto + '//' + host + '/ws/dashboard';\n\n    try {\n      wsConnection = new WebSocket(wsUrl);\n    } catch (e) {\n      console.error('WebSocket creation failed:', e);\n      fallbackToPolling();\n      return;\n    }\n\n    wsConnection.addEventListener('open', function(event) {\n      wsSend('ping', {});\n      wsSend('get_health', {});\n      wsSend('get_notifications', {});\n      useWebSocket = true;\n    });\n\n    wsConnection.addEventListener('message', handleWsMessage);\n\n    wsConnection.addEventListener('close', function(event) {\n      updateWsStatus(false);\n      if (useWebSocket) {\n        wsReconnectTimer = setTimeout(function() {\n          connectWebSocket();\n        }, wsReconnectDelay);\n        wsReconnectDelay = Math.min(wsReconnectDelay * 2, wsMaxReconnectDelay);\n      }\n    });\n\n    wsConnection.addEventListener('error', function(event) {\n      wsConnection.close();\n    });\n  }\n\n  function fallbackToPolling() {\n    useWebSocket = false;\n    showToast('WebSocket unavailable, using polling fallback', 'warning', 5000);\n    updateWsStatus(false);\n  }\n\n  // ============================================================================\n  // HEALTH POLLING\n  // ============================================================================\n\n  function fetchHealth() {\n    fetch('/api/adaptive/health')\n      .then(function(r) { return r.json(); })\n      .then(function(data) {\n        if (data.overall_status) {\n          healthData = { status: data.overall_status, memory_mb: data.metrics ? data.metrics.memory.used_mb / 1024 : 0, version: 'V59' };\n        } else {\n          healthData = data;\n        }\n        // Only render from polling if WebSocket is not active (avoid flicker)\n        if (!useWebSocket) {\n          renderHealthStats(document.getElementById('health-stats'));\n        }\n      })\n      .catch(function() {\n        healthData = { status: 'offline', memory_mb: 0, version: 'V59' };\n        if (!useWebSocket) {\n          renderHealthStats(document.getElementById('health-stats'));\n        }\n      });\n  }\n\n  // ============================================================================\n  // KEYBOARD SHORTCUTS\n  // ============================================================================\n\n  function initKeyboard() {\n    document.addEventListener('keydown', function(e) {\n      if (e.ctrlKey && e.key === 'k') { e.preventDefault(); document.getElementById('search-input').focus(); }\n      if (e.ctrlKey && e.key === 't') { e.preventDefault(); toggleTheme(); }\n      if (e.ctrlKey && e.shiftKey && e.key === 'P') { e.preventDefault(); toggleCommandPalette(); }\n      if (e.ctrlKey && e.key === '/') { e.preventDefault(); showToast('Shortcuts: Ctrl+K=Search, Ctrl+T=Theme, Ctrl+Shift+P=Commands', 'info'); }\n    });\n  }\n\n  // ============================================================================\n  // INITIALIZATION\n  // ============================================================================\n\n  function init() {\n    setTheme(getTheme());\n    renderAll();\n    fetchHealth();\n\n    // Try WebSocket first; polling continues as fallback\n    try {\n      connectWebSocket();\n    } catch (e) {\n      fallbackToPolling();\n    }\n    setInterval(fetchHealth, 5000);\n    initKeyboard();\n    updateNotifBadge();\n  }\n\n  // ============================================================================\n  // PUBLIC API\n  // ============================================================================\n\n  window.AerynApp = {\n    init: init,\n    renderAll: renderAll,\n    createProject: createProject,\n    deleteProject: deleteProject,\n    openProject: openProject,\n    createWorkspace: createWorkspace,\n    deleteWorkspace: deleteWorkspace,\n    openWorkspace: openWorkspace,\n    togglePlugin: togglePlugin,\n    clearAudit: clearAudit,\n    markNotifRead: markNotifRead,\n    markAllRead: markAllRead,\n    toggleTheme: toggleTheme,\n    toggleCommandPalette: toggleCommandPalette,\n    exportData: exportData,\n    clearData: clearData,\n    wsSend: wsSend,\n    connectWebSocket: connectWebSocket,\n    isWebSocket: function() { return useWebSocket && wsConnection && wsConnection.readyState === WebSocket.OPEN; }\n  };
+  function updateWsStatus(connected) {
+    var indicator = document.getElementById('ws-status');
+    if (!indicator) return;
+    if (connected) {
+      indicator.textContent = 'Real-time: ON (WebSocket)';
+      indicator.className = 'ws-status connected';
+    } else {
+      indicator.textContent = 'Real-time: OFF (Polling)';
+      indicator.className = 'ws-status disconnected';
+    }
+  }
 
-  if (document.readyState === 'loading') {\n    document.addEventListener('DOMContentLoaded', init);\n  } else {\n    init();\n  }\n})();
+  function wsSend(type, data) {
+    if (wsConnection && wsConnection.readyState === WebSocket.OPEN) {
+      wsConnection.send(JSON.stringify({ type: type, data: data || {} }));
+    }
+  }
+
+  function handleWsMessage(event) {
+    var msg;
+    try {
+      msg = JSON.parse(event.data);
+    } catch (e) {
+      return;
+    }
+    var type = msg.type;
+    var data = msg.data || {};
+
+    switch (type) {
+      case 'connected':
+        showToast('WebSocket connected', 'info', 2000);
+        updateWsStatus(true);
+        break;
+      case 'health_update':
+        healthData = data;
+        renderHealthStats(document.getElementById('health-stats'));
+        break;
+      case 'notifications':
+        if (data && data.notifications) {
+          data.notifications.forEach(function(n) {
+            notifications.unshift({
+              id: 'srv_' + n.id,
+              title: n.title || '',
+              message: n.message || '',
+              type: n.priority || 'info',
+              read: false,
+              timestamp: n.scheduled_for || new Date().toISOString(),
+              source: 'server'
+            });
+          });
+          updateNotifBadge();
+          renderNotifications();
+        }
+        break;
+      case 'notification_new':
+        addNotification(data.title || 'New Notification', data.message || '', data.priority || 'info');
+        break;
+      case 'stats':
+        if (data.uptime_s !== undefined) {
+          startTime = Date.now() - (data.uptime_s * 1000);
+          startUptimeCounter();
+        }
+        break;
+      case 'chat_response':
+        showToast('Chat response received', 'info', 2000);
+        break;
+      case 'pong':
+        break;
+      default:
+        break;
+    }
+  }
+
+  function connectWebSocket() {
+    if (wsReconnectTimer) {
+      clearTimeout(wsReconnectTimer);
+      wsReconnectTimer = null;
+    }
+
+    var proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    var host = window.location.host;
+    var wsUrl = proto + '//' + host + '/ws/dashboard';
+
+    try {
+      wsConnection = new WebSocket(wsUrl);
+    } catch (e) {
+      console.error('WebSocket creation failed:', e);
+      fallbackToPolling();
+      return;
+    }
+
+    wsConnection.addEventListener('open', function(event) {
+      wsSend('ping', {});
+      wsSend('get_health', {});
+      wsSend('get_notifications', {});
+      useWebSocket = true;
+    });
+
+    wsConnection.addEventListener('message', handleWsMessage);
+
+    wsConnection.addEventListener('close', function(event) {
+      updateWsStatus(false);
+      if (useWebSocket) {
+        wsReconnectTimer = setTimeout(function() {
+          connectWebSocket();
+        }, wsReconnectDelay);
+        wsReconnectDelay = Math.min(wsReconnectDelay * 2, wsMaxReconnectDelay);
+      }
+    });
+
+    wsConnection.addEventListener('error', function(event) {
+      wsConnection.close();
+    });
+  }
+
+  function fallbackToPolling() {
+    useWebSocket = false;
+    showToast('WebSocket unavailable, using polling fallback', 'warning', 5000);
+    updateWsStatus(false);
+  }
+
+  // ============================================================================
+  // HEALTH POLLING (fallback)
+  // ============================================================================
+
+  function fetchHealth() {
+    fetch('/api/adaptive/health')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.overall_status) {
+          healthData = { status: data.overall_status, memory_mb: data.metrics ? data.metrics.memory.used_mb / 1024 : 0, version: 'V59' };
+        } else {
+          healthData = data;
+        }
+        if (!useWebSocket) {
+          renderHealthStats(document.getElementById('health-stats'));
+        }
+      })
+      .catch(function() {
+        healthData = { status: 'offline', memory_mb: 0, version: 'V59' };
+        if (!useWebSocket) {
+          renderHealthStats(document.getElementById('health-stats'));
+        }
+      });
+  }
+
+  // ============================================================================
+  // KEYBOARD SHORTCUTS
+  // ============================================================================
+
+  function initKeyboard() {
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && e.key === 'k') { e.preventDefault(); document.getElementById('search-input').focus(); }
+      if (e.ctrlKey && e.key === 't') { e.preventDefault(); toggleTheme(); }
+      if (e.ctrlKey && e.shiftKey && e.key === 'P') { e.preventDefault(); toggleCommandPalette(); }
+      if (e.ctrlKey && e.key === '/') { e.preventDefault(); showToast('Shortcuts: Ctrl+K=Search, Ctrl+T=Theme, Ctrl+Shift+P=Commands', 'info'); }
+    });
+  }
+
+  // ============================================================================
+  // INITIALIZATION
+  // ============================================================================
+
+  function init() {
+    setTheme(getTheme());
+    renderAll();
+    fetchHealth();
+
+    try {
+      connectWebSocket();
+    } catch (e) {
+      fallbackToPolling();
+    }
+    setInterval(fetchHealth, 5000);
+    initKeyboard();
+    updateNotifBadge();
+  }
+
+  // ============================================================================
+  // PUBLIC API
+  // ============================================================================
+
+  window.AerynApp = {
+    init: init,
+    renderAll: renderAll,
+    createProject: createProject,
+    deleteProject: deleteProject,
+    openProject: openProject,
+    createWorkspace: createWorkspace,
+    deleteWorkspace: deleteWorkspace,
+    openWorkspace: openWorkspace,
+    togglePlugin: togglePlugin,
+    clearAudit: clearAudit,
+    markNotifRead: markNotifRead,
+    markAllRead: markAllRead,
+    toggleTheme: toggleTheme,
+    toggleCommandPalette: toggleCommandPalette,
+    exportData: exportData,
+    clearData: clearData,
+    wsSend: wsSend,
+    connectWebSocket: connectWebSocket,
+    isWebSocket: function() { return useWebSocket && wsConnection && wsConnection.readyState === WebSocket.OPEN; }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();

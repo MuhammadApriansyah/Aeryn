@@ -756,11 +756,15 @@ async def _push_health_update(websocket):
         import psutil
         process = psutil.Process()
         mem_mb = process.memory_info().rss / 1024 / 1024
+        try:
+            cpu_pct = psutil.cpu_percent(interval=0.1)
+        except Exception:
+            cpu_pct = 0
         health = {
             "status": "healthy",
             "memory_mb": round(mem_mb, 1),
             "version": "61.0",
-            "cpu_percent": psutil.cpu_percent(interval=0.1),
+            "cpu_percent": cpu_pct,
         }
     except ImportError:
         health = {"status": "healthy", "version": "61.0", "memory_mb": 0, "cpu_percent": 0}

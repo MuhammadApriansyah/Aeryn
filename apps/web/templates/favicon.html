@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--
+  Aeryn favicon template.
+
+  A simple SVG favicon for the Aeryn dashboard: a purple→blue gradient circle
+  with the letter "A". Drop this into <head> of any template, or serve it
+  directly as image/svg+xml for a standalone favicon endpoint.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Aeryn</title>
+    <!-- Reference the inline SVG below as the favicon -->
+    <link rel="icon" type="image/svg+xml" href="#aeryn-favicon"/>
+  </head>
+  <body>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 64 64"
+      width="64"
+      height="64"
+      role="img"
+      aria-label="Aeryn logo"
+    >
+      <defs>
+        <!-- Purple → blue diagonal gradient -->
+        <linearGradient id="aeryn-favicon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#7c3aed"/>
+          <stop offset="100%" stop-color="#2563eb"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Background circle -->
+      <circle cx="32" cy="32" r="30" fill="url(#aeryn-favicon-gradient)"/>
+
+      <!-- The "A" letter, centered -->
+      <text
+        x="50%"
+        y="50%"
+        dominant-baseline="central"
+        text-anchor="middle"
+        font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+        font-weight="700"
+        font-size="34"
+        fill="#ffffff"
+        letter-spacing="-0.5"
+      >A</text>
+    </svg>
+  </body>
+</html>

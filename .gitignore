@@ -1,6 +1,37 @@
+# Environment & secrets
 .env
-venv-proot/
+.env.*
+
+# Python
 __pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+.Python
+.python-version
+venv/
+venv-proot/
+.venv/
+venv-ci/
+env/
+*.egg-info/
+.eggs/
+
+# Rust build
+target/
+Cargo.lock
+
+# Aeryn runtime artifacts
 Personalisasi/Database/episodes/
 *.so
-target/
+
+# Archive directory
+.archive/
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo

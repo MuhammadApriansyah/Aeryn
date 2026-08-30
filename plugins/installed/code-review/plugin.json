@@ -1,0 +1,19 @@
+{
+  "name": "code-review",
+  "version": "1.0.0",
+  "description": "Analyze Python code for syntax errors, style issues, and potential bugs",
+  "author": "Aeryn",
+  "entry_point": "main.py",
+  "tools": [
+    {
+      "name": "analyze_code",
+      "description": "Analyze Python code for issues",
+      "parameters": {
+        "code": {"type": "string", "description": "Python code to analyze"},
+        "filename": {"type": "string", "description": "Optional filename for context"}
+      }
+    }
+  ],
+  "permissions": ["read"],
+  "enabled": true
+}

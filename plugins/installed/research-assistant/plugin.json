@@ -1,0 +1,27 @@
+{
+  "name": "research-assistant",
+  "version": "1.0.0",
+  "description": "Search vault entries and summarize findings",
+  "author": "Aeryn",
+  "entry_point": "main.py",
+  "tools": [
+    {
+      "name": "search_vault",
+      "description": "Search Aeryn vault entries by query",
+      "parameters": {
+        "query": {"type": "string", "description": "Search query"},
+        "layer": {"type": "string", "description": "Vault layer to search (Wiki, Notes, Daily)"},
+        "limit": {"type": "integer", "description": "Max results"}
+      }
+    },
+    {
+      "name": "summarize",
+      "description": "Summarize text using LLM",
+      "parameters": {
+        "text": {"type": "string", "description": "Text to summarize"}
+      }
+    }
+  ],
+  "permissions": ["read"],
+  "enabled": true
+}
