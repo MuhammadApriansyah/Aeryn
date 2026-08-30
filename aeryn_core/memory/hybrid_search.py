@@ -19,7 +19,9 @@ from typing import List, Dict, Tuple, Optional
 
 import sys
 from aeryn_core.utils.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
-sys.path.insert(0, '/home/sen/aeryn-core-agent')
+_parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _parent_dir not in sys.path:
+    sys.path.insert(0, _parent_dir)
 
 DB_PATH = os.path.join(DATABASE_DIR, "hybrid_search.db")
 

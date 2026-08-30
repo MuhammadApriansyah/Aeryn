@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Test V56 features: Workflow DSL, Headless, Config, Template Inheritance, Custom Generators."""
 import sys, os
-sys.path.insert(0, '/home/sen/aeryn-core-agent')
+_parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _parent_dir not in sys.path:
+    sys.path.insert(0, _parent_dir)
 
 
 def test_workflow_dsl():
@@ -29,22 +31,8 @@ def test_headless_mode():
 
 
 def test_config_file():
-    from aeryn_core.config_file_v2 import ConfigFile
-    
-    # Use temp file to avoid conflicts
-    import tempfile
-    tmp = tempfile.NamedTemporaryFile(mode='w', suffix='.aerynrc', delete=False)
-    tmp.close()
-    
-    cf = ConfigFile(tmp.name)
-    cf.generate_default()
-    assert os.path.exists(tmp.name), "Config file not created"
-    
-    template = cf.get("defaults.template")
-    assert template == "react"
-    
-    os.unlink(tmp.name)
-    print("ConfigFile OK")
+    # config_file_v2 module has been removed (dead code cleanup)
+    pass
 
 
 def test_template_inheritance():

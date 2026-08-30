@@ -43,7 +43,7 @@ TOOL_MANIFEST = {
             "parameters": {
                 "path": {"type": "string", "required": True, "description": "File path"}
             },
-            "example": {"tool": "fs_read", "params": {"path": "/home/sen/notes.txt"}}
+            "example": {"tool": "fs_read", "params": {"path": "~/notes.txt"}}
         },
         {
             "name": "fs_write",

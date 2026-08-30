@@ -32,19 +32,8 @@ def test_oneclick_generator():
 
 
 def test_postguide():
-    from aeryn_core.postguide import postguide
-    
-    project_info = {
-        "name": "test-app",
-        "path": "/tmp/test-app",
-        "type": "fullstack"
-    }
-    
-    guide = postguide.generate_guide(project_info)
-    assert "PROJECT BERHASIL" in guide
-    assert "cd test-app" in guide
-    
-    print("✓ PostGuide")
+    # postguide module has been removed (dead code cleanup)
+    pass
 
 
 def test_progress_indicator():

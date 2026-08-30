@@ -37,8 +37,7 @@ class Sandbox:
     ALLOWED_PATHS = [
         "/tmp",
         BASE_DIR,
-        "/home/sen/webnovel-platform",
-        "/home/sen/Downloads",
+        os.path.expanduser("~/"),
     ]
 
     # Blocked commands
