@@ -10,3 +10,5 @@
 {"trace_id": "e54e3e58-ed0", "session_id": "web_1788181376334", "user_id": "default", "span_count": 0, "total_duration_ms": 1718, "spans": [], "metadata": {}}
 {"trace_id": "e11197cc-f97", "session_id": "web_1788181376334", "user_id": "default", "span_count": 0, "total_duration_ms": 2030, "spans": [], "metadata": {}}
 {"trace_id": "f9016f28-967", "session_id": "8cf6d7ae-848", "user_id": "default", "span_count": 0, "total_duration_ms": 1617, "spans": [], "metadata": {}}
+{"trace_id": "f8a897ac-c78", "session_id": "w_1788189912229", "user_id": "default", "span_count": 0, "total_duration_ms": 1726, "spans": [], "metadata": {}}
+{"trace_id": "fa8734a3-ae9", "session_id": "w_1788189912229", "user_id": "default", "span_count": 0, "total_duration_ms": 1709, "spans": [], "metadata": {}}

@@ -6,7 +6,7 @@
 <title>Aeryn — AI Agent Platform</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; font-size: 14px; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: #0a0a0f; color: #e4e4e7; line-height: 1.6;
@@ -14,266 +14,404 @@ body {
 }
 a { color: inherit; text-decoration: none; }
 button { cursor: pointer; font-family: inherit; border: none; background: none; color: inherit; }
+input, textarea { font-family: inherit; font-size: inherit; color: inherit; }
 
-/* ── Navigation ── */
-.nav {
+/* ── Fixed Header ── */
+.hdr {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 20px 40px; background: rgba(10,10,15,0.8); backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex; align-items: center; gap: 24px;
+  padding: 16px 32px; background: rgba(10,10,15,0.85); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
-.nav-logo { font-size: 20px; font-weight: 700; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.nav-links { display: flex; gap: 32px; }
-.nav-links a { font-size: 14px; color: #a1a1aa; transition: color 0.2s; }
-.nav-links a:hover { color: #fff; }
-.nav-status { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #a1a1aa; }
-.nav-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; }
-.nav-dot.online { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
+.hdr-logo { font-size: 18px; font-weight: 700; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
+.hdr-nav { display: flex; gap: 20px; }
+.hdr-nav a { font-size: 13px; color: #a1a1aa; transition: color 0.2s; }
+.hdr-nav a:hover, .hdr-nav a.ac { color: #fff; }
+.hdr-r { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.hdr-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; }
+.hdr-dot.ok { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
+.hdr-status { font-size: 12px; color: #a1a1aa; }
+.hdr-btn { padding: 6px 12px; border-radius: 8px; font-size: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
+.hdr-btn:hover { background: rgba(255,255,255,0.1); }
+
+/* ── Main Content ── */
+.main { margin-top: 60px; display: flex; min-height: calc(100vh - 60px); }
+
+/* ── Sidebar (Collapsible) ── */
+.sb {
+  width: 260px; background: #12121a; border-right: 1px solid #2a2a3a;
+  display: flex; flex-direction: column; position: fixed; top: 60px; bottom: 0; left: 0; z-index: 50;
+  transition: transform 0.3s;
+}
+.sb.collapsed { transform: translateX(-260px); }
+.sb-h { padding: 16px 20px; border-bottom: 1px solid #2a2a3a; display: flex; align-items: center; gap: 10px; }
+.sb-l { font-size: 16px; font-weight: 700; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.sb-n { flex: 1; padding: 8px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; }
+.nv { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; color: #a1a1aa; font-weight: 500; font-size: 13px; transition: all 0.15s; width: 100%; text-align: left; }
+.nv:hover { background: #1a1a25; color: #fff; }
+.nv.ac { background: rgba(99,102,241,0.1); color: #818cf8; }
+.nv i { width: 20px; text-align: center; font-style: normal; font-size: 16px; }
+.sb-f { padding: 12px; border-top: 1px solid #2a2a3a; }
+.sb-t { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #1a1a25; border-radius: 8px; font-size: 12px; }
+.sb-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; }
+.sb-dot.ok { background: #22c55e; }
+
+/* ── Content Area ── */
+.ct { flex: 1; margin-left: 260px; display: flex; flex-direction: column; transition: margin-left 0.3s; }
+.sb.collapsed + .ct { margin-left: 0; }
 
 /* ── Hero ── */
-.hero {
-  min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; padding: 120px 40px 80px;
-}
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px;
-  background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2);
-  font-size: 13px; color: #818cf8; margin-bottom: 32px;
-}
-.hero h1 {
-  font-size: clamp(40px, 8vw, 80px); font-weight: 800; line-height: 1.1; letter-spacing: -2px;
-  max-width: 900px; margin-bottom: 24px;
-}
+.hero { padding: 80px 40px; text-align: center; border-bottom: 1px solid #2a2a3a; }
+.hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); font-size: 13px; color: #818cf8; margin-bottom: 24px; }
+.hero h1 { font-size: clamp(36px, 6vw, 64px); font-weight: 800; line-height: 1.1; letter-spacing: -2px; max-width: 800px; margin: 0 auto 20px; }
 .hero h1 span { background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.hero p { font-size: 18px; color: #a1a1aa; max-width: 600px; margin-bottom: 40px; }
-.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
-.btn {
-  padding: 14px 28px; border-radius: 12px; font-weight: 600; font-size: 15px;
-  transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
-}
-.btn-primary { background: linear-gradient(135deg, #6366f1, #7c3aed); color: #fff; }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99,102,241,0.4); }
-.btn-secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #e4e4e7; }
-.btn-secondary:hover { background: rgba(255,255,255,0.1); }
+.hero p { font-size: 16px; color: #a1a1aa; max-width: 500px; margin: 0 auto 32px; }
+.hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn { padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+.btn-p { background: linear-gradient(135deg, #6366f1, #7c3aed); color: #fff; }
+.btn-p:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99,102,241,0.4); }
+.btn-s { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
+.btn-s:hover { background: rgba(255,255,255,0.1); }
 
-/* ── Sections ── */
-.section { padding: 100px 40px; max-width: 1200px; margin: 0 auto; }
-.section-header { margin-bottom: 60px; }
-.section-number { font-size: 13px; color: #6366f1; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
-.section-title { font-size: clamp(32px, 5vw, 56px); font-weight: 800; line-height: 1.1; letter-spacing: -1px; }
-.section-title span { background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.section-desc { font-size: 16px; color: #a1a1aa; max-width: 500px; margin-top: 16px; }
+/* ── Stats Bar ── */
+.stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; padding: 24px 40px; border-bottom: 1px solid #2a2a3a; }
+.stat { text-align: center; padding: 16px; background: #12121a; border-radius: 12px; border: 1px solid #2a2a3a; }
+.stat-v { font-size: 24px; font-weight: 700; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.stat-l { font-size: 12px; color: #a1a1aa; margin-top: 4px; }
 
-/* ── Capabilities Grid ── */
-.capabilities { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-.capability {
-  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px;
-  padding: 32px; transition: all 0.3s;
-}
-.capability:hover { border-color: rgba(99,102,241,0.3); transform: translateY(-4px); }
-.capability-num { font-size: 13px; color: #6366f1; font-weight: 600; margin-bottom: 16px; }
-.capability-icon { font-size: 40px; margin-bottom: 16px; }
-.capability h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
-.capability p { font-size: 14px; color: #a1a1aa; }
-
-/* ── Stats ── */
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; }
-.stat { text-align: center; padding: 32px; background: rgba(255,255,255,0.02); border-radius: 16px; border: 1px solid rgba(255,255,255,0.06); }
-.stat-value { font-size: 48px; font-weight: 800; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.stat-label { font-size: 14px; color: #a1a1aa; margin-top: 8px; }
+/* ── Capabilities ── */
+.cap { padding: 60px 40px; border-bottom: 1px solid #2a2a3a; }
+.cap-h { margin-bottom: 40px; }
+.cap-n { font-size: 12px; color: #6366f1; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+.cap-t { font-size: clamp(28px, 4vw, 48px); font-weight: 800; line-height: 1.1; letter-spacing: -1px; }
+.cap-t span { background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.cap-g { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.cap-c { background: #12121a; border: 1px solid #2a2a3a; border-radius: 16px; padding: 24px; transition: all 0.3s; }
+.cap-c:hover { border-color: rgba(99,102,241,0.3); transform: translateY(-4px); }
+.cap-num { font-size: 12px; color: #6366f1; font-weight: 600; margin-bottom: 12px; }
+.cap-ic { font-size: 36px; margin-bottom: 12px; }
+.cap-c h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.cap-c p { font-size: 13px; color: #a1a1aa; }
 
 /* ── Chat Section ── */
-.chat-section { max-width: 800px; margin: 0 auto; }
-.chat-box {
-  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px;
-  overflow: hidden;
-}
-.chat-messages { height: 400px; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 12px; }
-.message { max-width: 75%; padding: 12px 18px; border-radius: 16px; }
-.message.user { align-self: flex-end; background: linear-gradient(135deg, #6366f1, #7c3aed); color: #fff; }
-.message.assistant { align-self: flex-start; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); }
-.message.system { align-self: center; font-size: 12px; color: #71717a; background: transparent; }
-.chat-input { display: flex; gap: 12px; padding: 20px; border-top: 1px solid rgba(255,255,255,0.06); }
-.chat-input textarea {
-  flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
-  color: #e4e4e7; padding: 12px 16px; border-radius: 12px; resize: none; min-height: 48px; font-family: inherit;
-}
-.chat-input textarea:focus { outline: none; border-color: #6366f1; }
+.chat { padding: 40px; flex: 1; display: flex; flex-direction: column; }
+.chat-h { margin-bottom: 20px; }
+.chat-t { font-size: 24px; font-weight: 700; }
+.chat-bx { flex: 1; display: flex; flex-direction: column; background: #12121a; border: 1px solid #2a2a3a; border-radius: 16px; overflow: hidden; }
+.chat-m { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; min-height: 400px; max-height: 60vh; }
+.msg { max-width: 75%; padding: 12px 18px; border-radius: 14px; }
+.msg.u { align-self: flex-end; background: linear-gradient(135deg, #6366f1, #7c3aed); color: #fff; }
+.msg.a { align-self: flex-start; background: #1a1a25; border: 1px solid #2a2a3a; }
+.msg.s { align-self: center; font-size: 12px; color: #71717a; background: transparent; }
+.chat-i { display: flex; gap: 12px; padding: 16px; border-top: 1px solid #2a2a3a; }
+.chat-i textarea { flex: 1; background: #1a1a25; border: 1px solid #2a2a3a; color: #e4e4e7; padding: 12px 16px; border-radius: 10px; resize: none; min-height: 44px; max-height: 120px; }
+.chat-i textarea:focus { outline: none; border-color: #6366f1; }
 
-/* ── Footer ── */
-.footer { padding: 60px 40px; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); }
-.footer p { font-size: 14px; color: #71717a; }
+/* ── Right Panel ── */
+.rp { width: 300px; background: #12121a; border-left: 1px solid #2a2a3a; display: flex; flex-direction: column; position: fixed; top: 60px; right: 0; bottom: 0; z-index: 40; transition: transform 0.3s; }
+.rp.collapsed { transform: translateX(300px); }
+.rp-h { padding: 12px 16px; border-bottom: 1px solid #2a2a3a; display: flex; align-items: center; gap: 8px; }
+.rp-t { font-size: 13px; font-weight: 600; }
+.rp-n { margin-left: auto; }
+.rp-tab { padding: 8px 12px; font-size: 11px; background: #1a1a25; border-radius: 6px; }
+.rp-tab.ac { background: #6366f1; color: #fff; }
+.rp-c { flex: 1; overflow-y: auto; padding: 12px; }
+.rp-item { padding: 10px 12px; background: #1a1a25; border-radius: 8px; margin-bottom: 8px; font-size: 12px; }
+.rp-item-h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.rp-item-id { font-family: monospace; color: #818cf8; font-size: 11px; }
+.rp-item-d { font-size: 11px; color: #71717a; }
+
+/* ── Modal Full-Screen ── */
+.md-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 200; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+.md-overlay.ac { display: flex; }
+.md { background: #12121a; border: 1px solid #2a2a3a; border-radius: 16px; width: 95vw; height: 90vh; max-width: 1200px; display: flex; flex-direction: column; }
+.md-h { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid #2a2a3a; }
+.md-t { font-size: 16px; font-weight: 600; }
+.md-x { padding: 6px 12px; background: #1a1a25; border-radius: 8px; font-size: 12px; }
+.md-b { flex: 1; overflow-y: auto; padding: 20px; }
+.md-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+.md-tab { padding: 8px 16px; border-radius: 8px; font-size: 13px; background: #1a1a25; }
+.md-tab.ac { background: #6366f1; color: #fff; }
+.md-section { margin-bottom: 24px; }
+.md-section h3 { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #818cf8; }
+.md-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: #1a1a25; border-radius: 8px; margin-bottom: 6px; font-size: 13px; }
+.md-row-l { color: #a1a1aa; }
+.md-row-r { font-weight: 500; }
+.md-btn { padding: 6px 12px; font-size: 12px; background: #2a2a3a; border-radius: 6px; }
+.md-btn:hover { background: #6366f1; }
+.md-log { background: #0a0a0f; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 11px; max-height: 200px; overflow-y: auto; white-space: pre-wrap; }
+
+/* ── Toast ── */
+.toast { position: fixed; bottom: 16px; right: 16px; z-index: 300; padding: 12px 20px; background: #1a1a25; border: 1px solid #2a2a3a; border-radius: 10px; font-size: 13px; animation: slideIn 0.3s; }
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
 /* ── Responsive ── */
-@media (max-width: 768px) {
-  .nav { padding: 16px 20px; }
-  .nav-links { display: none; }
-  .hero { padding: 100px 20px 60px; }
-  .section { padding: 60px 20px; }
-  .capabilities { grid-template-columns: 1fr; }
-  .stats { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 1024px) {
+  .sb { display: none; }
+  .ct { margin-left: 0; }
+  .rp { display: none; }
+  .stats { grid-template-columns: repeat(3, 1fr); }
 }
-
-/* ── Animations ── */
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-.fade-in { animation: fadeInUp 0.6s ease forwards; }
+@media (max-width: 768px) {
+  .hdr-nav { display: none; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .hero { padding: 40px 20px; }
+  .cap { padding: 40px 20px; }
+  .chat { padding: 20px; }
+}
 </style>
 </head>
 <body>
 
-<!-- Navigation -->
-<nav class="nav">
-  <div class="nav-logo">🤖 Aeryn</div>
-  <div class="nav-links">
+<!-- Header -->
+<header class="hdr">
+  <div class="hdr-logo">🤖 Aeryn</div>
+  <nav class="hdr-nav">
+    <a href="#hero" class="ac">Overview</a>
     <a href="#capabilities">Capabilities</a>
-    <a href="#status">Status</a>
     <a href="#chat">Chat</a>
+    <a href="#" onclick="openCmdCenter()">Command Center</a>
+  </nav>
+  <div class="hdr-r">
+    <span class="hdr-dot" id="hdrDot"></span>
+    <span class="hdr-status" id="hdrStatus">Checking...</span>
+    <button class="hdr-btn" onclick="openCmdCenter()">⌘K</button>
   </div>
-  <div class="nav-status">
-    <span class="nav-dot" id="navDot"></span>
-    <span id="navStatus">Checking...</span>
-  </div>
-</nav>
+</header>
 
-<!-- Hero -->
-<section class="hero">
-  <div class="hero-badge">
-    <span class="nav-dot online" id="heroDot" style="background:#22c55e;box-shadow:0 0 8px #22c55e"></span>
-    <span id="heroStatus">System Online</span>
-  </div>
-  <h1>Your <span>AI Agent</span> Platform</h1>
-  <p>Adaptive, self-improving, multi-agent system that learns from experience. Built for teams who want working systems, not slideware.</p>
-  <div class="hero-actions">
-    <a href="#chat" class="btn btn-primary">💬 Start Chat</a>
-    <a href="#capabilities" class="btn btn-secondary">Explore Capabilities</a>
-  </div>
-</section>
+<div class="main">
+  <!-- Sidebar -->
+  <aside class="sb" id="sidebar">
+    <div class="sb-h"><div class="sb-l">Aeryn</div></div>
+    <nav class="sb-n">
+      <button class="nv ac" data-p="overview"><i>📊</i> Overview</button>
+      <button class="nv" data-p="chat"><i>💬</i> Chat</button>
+      <button class="nv" data-p="tools"><i>🔧</i> Tools</button>
+      <button class="nv" data-p="divisions"><i>🏢</i> Divisions</button>
+      <button class="nv" data-p="workflows"><i>📋</i> Workflows</button>
+      <button class="nv" data-p="traces"><i>🔍</i> Traces</button>
+      <button class="nv" data-p="settings"><i>⚙️</i> Settings</button>
+    </nav>
+    <div class="sb-f"><div class="sb-t"><span class="sb-dot" id="sbDot"></span><span id="sbStatus">Checking...</span></div></div>
+  </aside>
 
-<!-- Capabilities -->
-<section class="section" id="capabilities">
-  <div class="section-header">
-    <div class="section-number">What I Can Do</div>
-    <h2 class="section-title">Five capabilities, <span>one system</span></h2>
-    <p class="section-desc">Each capability works alone or together. No handoffs, no decks about decks.</p>
-  </div>
-  <div class="capabilities">
-    <div class="capability fade-in">
-      <div class="capability-num">01</div>
-      <div class="capability-icon">🧠</div>
-      <h3>AI & Automation</h3>
-      <p>Put AI on the work that's bleeding you. Automate the repetitive, aim at what costs time and money.</p>
-    </div>
-    <div class="capability fade-in">
-      <div class="capability-num">02</div>
-      <div class="capability-icon">⚙️</div>
-      <h3>Custom Software</h3>
-      <p>Working products, not slideware. Internal tools, dashboards, client apps that move the needle.</p>
-    </div>
-    <div class="capability fade-in">
-      <div class="capability-num">03</div>
-      <div class="capability-icon">🔗</div>
-      <h3>Integrations</h3>
-      <p>Make the tools you already pay for talk. Your stack, finally working as one system.</p>
-    </div>
-    <div class="capability fade-in">
-      <div class="capability-num">04</div>
-      <div class="capability-icon">📊</div>
-      <h3>Data into Decisions</h3>
-      <p>Turn numbers into next moves. Reporting that tells you what to do, not just what happened.</p>
-    </div>
-    <div class="capability fade-in">
-      <div class="capability-num">05</div>
-      <div class="capability-icon">🔄</div>
-      <h3>Self-Improving</h3>
-      <p>Learns from every interaction. Gets better at tool selection, routing, and responses over time.</p>
-    </div>
-  </div>
-</section>
-
-<!-- Status -->
-<section class="section" id="status">
-  <div class="section-header">
-    <div class="section-number">System Status</div>
-    <h2 class="section-title">Live <span>metrics</span></h2>
-  </div>
-  <div class="stats">
-    <div class="stat"><div class="stat-value" id="statStatus">—</div><div class="stat-label">Status</div></div>
-    <div class="stat"><div class="stat-value" id="statMem">—</div><div class="stat-label">Memory (MB)</div></div>
-    <div class="stat"><div class="stat-value" id="statVer">—</div><div class="stat-label">Version</div></div>
-    <div class="stat"><div class="stat-value" id="statTraces">0</div><div class="stat-label">Traces</div></div>
-  </div>
-</section>
-
-<!-- Chat -->
-<section class="section" id="chat">
-  <div class="section-header">
-    <div class="section-number">Start a Conversation</div>
-    <h2 class="section-title">Tell me <span>what you need</span></h2>
-  </div>
-  <div class="chat-section">
-    <div class="chat-box">
-      <div class="chat-messages" id="chatMsg">
-        <div class="message system">Welcome. Type a message to begin.</div>
+  <!-- Content -->
+  <main class="ct">
+    <!-- Hero -->
+    <section class="hero" id="hero">
+      <div class="hero-badge"><span class="hdr-dot ok" id="heroDot"></span><span id="heroStatus">System Online</span></div>
+      <h1>Your <span>AI Agent</span> Platform</h1>
+      <p>Adaptive, self-improving, multi-agent system that learns from experience. Built for teams who want working systems, not slideware.</p>
+      <div class="hero-cta">
+        <a href="#chat" class="btn btn-p">💬 Start Chat</a>
+        <a href="#capabilities" class="btn btn-s">Explore Capabilities</a>
       </div>
-      <div class="chat-input">
-        <textarea id="chatInput" placeholder="Type your message... (Enter to send)" rows="1"></textarea>
-        <button class="btn btn-primary" onclick="sendChat()">Send</button>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats" id="stats">
+      <div class="stat"><div class="stat-v" id="sStatus">—</div><div class="stat-l">Status</div></div>
+      <div class="stat"><div class="stat-v" id="sMem">—</div><div class="stat-l">Memory (MB)</div></div>
+      <div class="stat"><div class="stat-v" id="sVer">—</div><div class="stat-l">Version</div></div>
+      <div class="stat"><div class="stat-v" id="sTraces">0</div><div class="stat-l">Traces</div></div>
+      <div class="stat"><div class="stat-v" id="sUptime">—</div><div class="stat-l">Uptime</div></div>
+    </section>
+
+    <!-- Capabilities -->
+    <section class="cap" id="capabilities">
+      <div class="cap-h">
+        <div class="cap-n">What I Can Do</div>
+        <h2 class="cap-t">Five capabilities, <span>one system</span></h2>
+      </div>
+      <div class="cap-g">
+        <div class="cap-c"><div class="cap-num">01</div><div class="cap-ic">🧠</div><h3>AI & Automation</h3><p>Put AI on the work that's bleeding you. Automate the repetitive, aim at what costs time and money.</p></div>
+        <div class="cap-c"><div class="cap-num">02</div><div class="cap-ic">⚙️</div><h3>Custom Software</h3><p>Working products, not slideware. Internal tools, dashboards, client apps that move the needle.</p></div>
+        <div class="cap-c"><div class="cap-num">03</div><div class="cap-ic">🔗</div><h3>Integrations</h3><p>Make the tools you already pay for talk. Your stack, finally working as one system.</p></div>
+        <div class="cap-c"><div class="cap-num">04</div><div class="cap-ic">📊</div><h3>Data into Decisions</h3><p>Turn numbers into next moves. Reporting that tells you what to do, not just what happened.</p></div>
+        <div class="cap-c"><div class="cap-num">05</div><div class="cap-ic">🔄</div><h3>Self-Improving</h3><p>Learns from every interaction. Gets better at tool selection, routing, and responses over time.</p></div>
+      </div>
+    </section>
+
+    <!-- Chat -->
+    <section class="chat" id="chat">
+      <div class="chat-h"><h2 class="chat-t">💬 Chat with Aeryn</h2></div>
+      <div class="chat-bx">
+        <div class="chat-m" id="chatMsg"><div class="msg s">Welcome. Type a message to begin.</div></div>
+        <div class="chat-i">
+          <textarea id="chatInput" placeholder="Type your message... (Enter to send, Shift+Enter for newline)"></textarea>
+          <button class="btn btn-p" onclick="sendChat()">Send</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Right Panel -->
+  <aside class="rp" id="rightPanel">
+    <div class="rp-h">
+      <span class="rp-t">Activity</span>
+      <div class="rp-n">
+        <button class="rp-tab ac" data-tab="traces">Traces</button>
+        <button class="rp-tab" data-tab="tools">Tools</button>
+        <button class="rp-tab" data-tab="memory">Memory</button>
       </div>
     </div>
-  </div>
-</section>
+    <div class="rp-c" id="rpContent"></div>
+  </aside>
+</div>
 
-<!-- Footer -->
-<footer class="footer">
-  <p>Aeryn AI Agent Platform — Adaptive, Self-Improving, Multi-Agent</p>
-</footer>
+<!-- Command Center Modal -->
+<div class="md-overlay" id="cmdCenter">
+  <div class="md">
+    <div class="md-h">
+      <h2 class="md-t">⌘ Command Center</h2>
+      <button class="md-x" onclick="closeCmdCenter()">✕ Close</button>
+    </div>
+    <div class="md-b">
+      <div class="md-tabs">
+        <button class="md-tab ac" data-cc="sessions">Sessions</button>
+        <button class="md-tab" data-cc="system">System</button>
+        <button class="md-tab" data-cc="usage">Usage</button>
+        <button class="md-tab" data-cc="maintenance">Maintenance</button>
+      </div>
+      <div id="ccContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toastC" style="position:fixed;bottom:16px;right:16px;z-index:300;display:flex;flex-direction:column;gap:8px;"></div>
 
 <script>
-const A = { h: '/health', g: '/gateway/env', tr: '/observability/traces', ch: '/chat' };
-const S = { sid: 'w_' + Date.now() };
+const A = { h:'/health', g:'/gateway/env', tr:'/observability/traces', trs:'/observability/stats', si:'/self-improvement/stats', sip:'/self-improvement/patterns', sa:'/self-improvement/adapt', pl:'/plugins', dn:'/divisions', de:n=>`/divisions/${n}/execute`, wf:'/workflows', ws:i=>`/workflows/${i}/step`, wa:i=>`/workflows/${i}/approve`, ch:'/chat', ru:'/run', se:'/search?q=', sk:'/capabilities/skills', mr:'/memory/recall?q=', tk:'/daemon/tasks', cn:'/connectors' };
+const S = { sid:'w_'+Date.now(), traces:[], workflows:[], tools:[], start:Date.now() };
 
-async function api(u, o = {}) {
-  try { const r = await fetch(u, { headers: { 'Content-Type': 'application/json' }, ...o }); return await r.json(); }
-  catch (e) { return { error: e.message }; }
-}
+async function api(u, o={}) { try { const r = await fetch(u, { headers:{'Content-Type':'application/json'}, ...o }); return await r.json(); } catch(e) { return {error:e.message}; } }
+function toast(m) { const c=document.getElementById('toastC'),d=document.createElement('div');d.className='toast';d.textContent=m;c.appendChild(d);setTimeout(()=>d.remove(),2500); }
 
+// Load status
 async function loadStatus() {
   const h = await api(A.h);
-  document.getElementById('statStatus').textContent = h.status || '—';
-  document.getElementById('statMem').textContent = h.memory_mb || '—';
-  document.getElementById('statVer').textContent = h.version || '—';
+  document.getElementById('sStatus').textContent = h.status || '—';
+  document.getElementById('sMem').textContent = h.memory_mb || '—';
+  document.getElementById('sVer').textContent = h.version || '—';
+  const uptime = Math.floor((Date.now()-S.start)/1000);
+  document.getElementById('sUptime').textContent = uptime < 60 ? uptime+'s' : Math.floor(uptime/60)+'m';
   const online = h.status === 'healthy';
-  document.getElementById('navDot').className = 'nav-dot ' + (online ? 'online' : '');
-  document.getElementById('navStatus').textContent = online ? 'Online' : 'Offline';
+  document.getElementById('hdrDot').className = 'hdr-dot '+(online?'ok':'');
+  document.getElementById('sbDot').className = 'sb-dot '+(online?'ok':'');
+  document.getElementById('hdrStatus').textContent = online ? 'Online' : 'Offline';
+  document.getElementById('sbStatus').textContent = online ? 'Online' : 'Offline';
   document.getElementById('heroStatus').textContent = online ? 'System Online' : 'System Offline';
   document.getElementById('heroDot').style.background = online ? '#22c55e' : '#ef4444';
   loadTraces();
 }
 
 async function loadTraces() {
-  const r = await api(A.tr + '?limit=5');
-  document.getElementById('statTraces').textContent = (r.traces || []).length;
+  const r = await api(A.tr+'?limit=5');
+  S.traces = r.traces || [];
+  document.getElementById('sTraces').textContent = S.traces.length;
+  renderTraces();
 }
 
+function renderTraces() {
+  const el = document.getElementById('rpContent');
+  if (!el) return;
+  el.innerHTML = S.traces.length ? S.traces.map(t => `<div class="rp-item"><div class="rp-item-h"><span class="rp-item-id">${t.id}</span><span>${t.spans||0} spans</span></div><div class="rp-item-d">${t.duration||'—'}</div></div>`).join('') : '<div class="rp-item">No traces yet</div>';
+}
+
+// Chat
 async function sendChat() {
   const i = document.getElementById('chatInput'), m = i.value.trim();
   if (!m) return;
   addMsg('user', m); i.value = '';
-  const r = await api(A.ch, { method: 'POST', body: JSON.stringify({ goal: m, session_id: S.sid }) });
+  const r = await api(A.ch, { method:'POST', body: JSON.stringify({ goal:m, session_id:S.sid }) });
   if (r.response) {
     addMsg('assistant', r.response);
-    if (r.tool_used || r.division) addMsg('system', '🔧 ' + (r.tool_used || '—') + ' | 📂 ' + (r.division || '—'));
-  } else addMsg('system', 'Error: ' + r.error);
+    if (r.tool_used || r.division) addMsg('system', '🔧 '+(r.tool_used||'—')+' | 📂 '+(r.division||'—'));
+  } else addMsg('system', 'Error: '+r.error);
 }
 
 function addMsg(role, text) {
   const c = document.getElementById('chatMsg'), d = document.createElement('div');
-  d.className = 'message ' + role; d.textContent = text;
+  d.className = 'msg '+role[0]; d.textContent = text;
   c.appendChild(d); c.scrollTop = c.scrollHeight;
 }
 
 document.getElementById('chatInput').addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+});
+
+// Command Center
+function openCmdCenter() { document.getElementById('cmdCenter').classList.add('ac'); loadCC('sessions'); }
+function closeCmdCenter() { document.getElementById('cmdCenter').classList.remove('ac'); }
+
+async function loadCC(tab) {
+  document.querySelectorAll('.md-tab').forEach(t => t.classList.toggle('ac', t.dataset.cc === tab));
+  const el = document.getElementById('ccContent');
+  if (tab === 'sessions') {
+    el.innerHTML = `<div class="md-section"><h3>Active Sessions</h3><div class="md-row"><span class="md-row-l">Current</span><span class="md-row-r">${S.sid}</span></div><div class="md-row"><span class="md-row-l">Started</span><span class="md-row-r">${new Date(S.start).toLocaleString()}</span></div></div>`;
+  } else if (tab === 'system') {
+    const h = await api(A.h), g = await api(A.g);
+    el.innerHTML = `<div class="md-section"><h3>Health</h3><div class="md-row"><span class="md-row-l">Status</span><span class="md-row-r">${h.status}</span></div><div class="md-row"><span class="md-row-l">Memory</span><span class="md-row-r">${h.memory_mb} MB</span></div><div class="md-row"><span class="md-row-l">Version</span><span class="md-row-r">${h.version}</span></div></div><div class="md-section"><h3>Environment</h3><div class="md-row"><span class="md-row-l">Type</span><span class="md-row-r">${g.environment?.type}</span></div><div class="md-row"><span class="md-row-l">DB</span><span class="md-row-r">${g.environment?.db}</span></div><div class="md-row"><span class="md-row-l">Auth</span><span class="md-row-r">${g.auth_enabled ? '✅' : '❌'}</span></div></div><div class="md-section"><h3>Logs</h3><button class="md-btn" onclick="refreshLogs()">Refresh Logs</button><div class="md-log" id="mdLogs">Click refresh to load logs...</div></div>`;
+  } else if (tab === 'usage') {
+    const s = await api(A.trs);
+    el.innerHTML = `<div class="md-section"><h3>Observability Stats</h3><div class="md-row"><span class="md-row-l">Total Traces</span><span class="md-row-r">${s.total_traces||0}</span></div><div class="md-row"><span class="md-row-l">Avg Duration</span><span class="md-row-r">${s.avg_duration||'—'}</span></div></div><div class="md-section"><h3>Self-Improvement</h3><div class="md-row"><span class="md-row-l">Learnings</span><span class="md-row-r">${s.total_learnings||0}</span></div><div class="md-row"><span class="md-row-l">Improvements</span><span class="md-row-r">${s.total_improvements||0}</span></div></div>`;
+  } else if (tab === 'maintenance') {
+    el.innerHTML = `<div class="md-section"><h3>Actions</h3><button class="md-btn" onclick="triggerAdapt()">Trigger Self-Improvement</button> <button class="md-btn" onclick="exportData()">Export Data (JSON)</button></div>`;
+  }
+}
+
+async function refreshLogs() {
+  const el = document.getElementById('mdLogs');
+  el.textContent = 'Loading...';
+  const r = await api(A.tr+'?limit=10');
+  el.textContent = JSON.stringify(r, null, 2);
+}
+
+async function triggerAdapt() {
+  const r = await api(A.sa, { method:'POST' });
+  toast(`Adapted: ${r.changes?.length||0} changes`);
+  loadCC('usage');
+}
+
+function exportData() {
+  const data = { traces: S.traces, workflows: S.workflows, tools: S.tools, exported: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'aeryn-export.json'; a.click();
+  URL.revokeObjectURL(url);
+  toast('Exported to JSON');
+}
+
+// Modal tabs
+document.querySelectorAll('.md-tab').forEach(t => t.onclick = () => loadCC(t.dataset.cc));
+
+// Right panel tabs
+document.querySelectorAll('.rp-tab').forEach(t => t.onclick = () => {
+  document.querySelectorAll('.rp-tab').forEach(x => x.classList.remove('ac'));
+  t.classList.add('ac');
+  if (t.dataset.tab === 'traces') renderTraces();
+  else if (t.dataset.tab === 'tools') loadToolsRP();
+  else if (t.dataset.tab === 'memory') loadMemoryRP();
+});
+
+async function loadToolsRP() {
+  const r = await api(A.pl);
+  S.tools = r.tools || [];
+  const el = document.getElementById('rpContent');
+  el.innerHTML = S.tools.length ? S.tools.map(t => `<div class="rp-item"><div class="rp-item-h"><span class="rp-item-id">${t.name}</span></div><div class="rp-item-d">${t.description||''}</div></div>`).join('') : '<div class="rp-item">No tools</div>';
+}
+
+async function loadMemoryRP() {
+  const r = await api(A.mr+'dashboard');
+  const el = document.getElementById('rpContent');
+  el.innerHTML = '<div class="rp-item"><div class="rp-item-h"><span class="rp-item-id">Memory Search</span></div><div class="rp-item-d">Use Ctrl+K to search memory</div></div>';
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.key === 'k') { e.preventDefault(); document.getElementById('cmdCenter').classList.toggle('ac'); }
+  if (e.key === 'Escape') { document.getElementById('cmdCenter').classList.remove('ac'); }
 });
 
 // Init
