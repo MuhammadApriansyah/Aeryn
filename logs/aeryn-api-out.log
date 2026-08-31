@@ -159,3 +159,14 @@
 2026-08-31 13:38:42: 2026-08-31 13:38:42 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
 2026-08-31 13:38:42: 2026-08-31 13:38:42 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
 2026-08-31 13:38:55: INFO:     127.0.0.1:54412 - "GET /skills HTTP/1.1" 200 OK
+2026-08-31 13:46:29: 2026-08-31 13:46:29 [INFO] aeryn_core.platform.adaptive_gateway: AdaptiveGateway initialized: env=proot db=sqlite
+2026-08-31 13:46:29: INFO:     127.0.0.1:55178 - "GET /gateway/env HTTP/1.1" 200 OK
+2026-08-31 13:46:30: INFO:     127.0.0.1:55192 - "GET /skills HTTP/1.1" 200 OK
+2026-08-31 13:47:55: 2026-08-31 13:47:55 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-08-31 13:48:01: 2026-08-31 13:48:01 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-08-31 13:48:01: 2026-08-31 13:48:01 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-08-31 13:49:15: INFO:     127.0.0.1:35474 - "GET /skills HTTP/1.1" 200 OK
+2026-08-31 13:56:11: 2026-08-31 13:56:11 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-08-31 13:56:14: 2026-08-31 13:56:14 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-08-31 13:56:14: 2026-08-31 13:56:14 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-08-31 13:56:30: INFO:     127.0.0.1:39888 - "GET /skills HTTP/1.1" 200 OK

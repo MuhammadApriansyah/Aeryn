@@ -4,6 +4,29 @@ All notable changes to Aeryn will be documented in this file.
 
 ---
 
+## [61.1] — 2026-08-31
+
+### Added — Adaptive Infrastructure (Roadmap P0a–P6)
+- **P0a Adaptive Gateway**: `adaptive_gateway.py` with `detect_environment()` (proot/vps/k8s), wires AuthManager + RateLimiter + CircuitBreaker. Endpoint `/gateway/env`.
+- **P0b Agent Daemon**: `agent_daemon.py` autonomy loop — picks tasks, executes via tool_runtime + LLM, stores results. Endpoints `/daemon/tasks`.
+- **P1 Sandbox Wiring**: `tool_runtime._terminal()` now uses `EnhancedSandbox` (resource limits + path isolation). `rm -rf /` blocked.
+- **P2 Postgres Adapter**: `db_adapter.py` verified routing to PostgreSQL. FTS5 blocker documented (hybrid_search uses SQLite virtual tables).
+- **P3 Consolidation**: Removed orphan `orchestrator_v2.py`.
+- **P4 Stub Audit**: `AUDIT_STUBS.md` — 69 small files documented as package markers / intentional scaffolds.
+- **P5 API Versioning + Portability**: `/v1/` prefix alias for all routers (backward-compatible). `AERYN_BASE_DIR` env override.
+- **P6 Capability Bridge**: `capability_bridge.py` — dynamic skill loader + semantic memory recall. Endpoints `/skills`, `/memory/recall`.
+
+### Verified
+- All P0a–P6 logic verified via direct function calls (no test doubles).
+- `/v1/chat`, `/v1/health` return 200; legacy paths still work.
+- Sandbox: valid command executes, `rm -rf /` blocked.
+
+### Known Limitations
+- PM2 in proot has module-reload quirk; restart via `pm2 kill` + fresh `start` recommended.
+- Postgres not default (FTS5 dependency); SQLite remains stable default.
+
+---
+
 ## [59.0] — 2026-08-30
 
 ### Added

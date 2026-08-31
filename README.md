@@ -1,6 +1,6 @@
 # 🤖 Aeryn — Personal AI Assistant Platform
 
-> **5,600+ files · 661 tests · 18 major versions · WCAG 2.1 AA · Self-improving**
+> **5,600+ files · 661 tests · 18 major versions · WCAG 2.1 AA · Self-improving · Adaptive**
 
 Aeryn is a **fully adaptive, recursive self-improving AI personal assistant platform** with 5 cognitive divisions, a memory system that evolves with you, enterprise-grade security, and a SPA dashboard accessible to everyone.
 
@@ -17,17 +17,30 @@ python3 -m venv venv-proot && source venv-proot/bin/activate
 pip install -r requirements.txt
 
 # 3. Start everything (backend + web UI)
-pm2 start apps/api/aeryn_api.py --name aeryn-api --interpreter ./venv-proot/bin/python
+pm2 start ecosystem.config.cjs
 
 # 4. Open Dashboard
-open http://localhost:3010/web/
+open http://localhost:3010/
 ```
 
 | Service | URL |
 |---------|-----|
 | Backend API | `http://localhost:3010` |
-| Web UI | `http://localhost:3010/web/` |
+| API v1 (versioned) | `http://localhost:3010/v1/` |
+| Web UI | `http://localhost:3010/` |
 | API Docs (Swagger) | `http://localhost:3010/docs` |
+| Gateway Status | `http://localhost:3010/gateway/env` |
+
+### Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `AERYN_ENV` | `proot` | Runtime environment: `proot`, `vps`, `k8s`, `docker` |
+| `AERYN_BASE_DIR` | `~/aeryn-core-agent` | Project root (portable path) |
+| `AERYN_PORT` | `3010` | API port |
+| `AERYN_HOST` | `127.0.0.1` | API host |
+| `DATABASE_URL` | (none) | PostgreSQL connection (optional, falls back to SQLite) |
+| `TZ` | `UTC` | Timezone (e.g. `Asia/Jakarta`) |
 | API Docs (ReDoc) | `http://localhost:3010/redoc` |
 
 ---
