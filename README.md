@@ -47,7 +47,9 @@ open http://localhost:3010/
 
 ## 📊 Stats
 
-![Version](https://img.shields.io/badge/version-59-87CEEB)
+![Version](https://img.shields.io/badge/version-61.1-87CEEB)
+![Dimensions](https://img.shields.io/badge/dimensions-11/11-brightgreen)
+![Sources](https://img.shields.io/badge/sources_analyzed-8-blue)
 ![Tests](https://img.shields.io/badge/tests-661%20passed-87CEEB)
 ![Security](https://img.shields.io/badge/security-layered-87CEEB)
 ![Fullstack](https://img.shields.io/badge/fullstack-engineer-87CEEB)
