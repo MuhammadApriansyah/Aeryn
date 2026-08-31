@@ -152,6 +152,17 @@ def get_registry() -> PluginRegistry:
         _register_builtin_tools(_registry)
     return _registry
 
+def _get_registry_safe() -> Optional[PluginRegistry]:
+    """Get registry without triggering DB connection."""
+    global _registry
+    if _registry is None:
+        try:
+            _registry = PluginRegistry()
+            _register_builtin_tools(_registry)
+        except Exception:
+            return None
+    return _registry
+
 
 def _register_builtin_tools(registry: PluginRegistry):
     """Register Aeryn's built-in tools."""

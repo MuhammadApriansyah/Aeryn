@@ -299,20 +299,15 @@ async def trigger_adaptation():
 # --- Plugin Registry Endpoints ---
 @app.get("/plugins")
 async def list_plugins():
-    """List all registered plugins/tools."""
+    """List all registered plugins/tools (safe mode if DB unavailable)."""
     try:
-        from aeryn_core.platform.plugin_registry import get_registry
-        reg = get_registry()
-        return {"tools": reg.list_tools(), **reg.get_stats()}
+        from aeryn_core.platform.plugin_registry import _get_registry_safe
+        reg = _get_registry_safe()
+        if reg:
+            return {"tools": reg.list_tools(), **reg.get_stats()}
+        return {"tools": [], "total_tools": 0, "categories": {}, "note": "Tool runtime disabled (shared_db unavailable)"}
     except Exception as e:
-        # Return basic info if registry fails to initialize
-        return {
-            "error": f"Registry init failed: {type(e).__name__}",
-            "tools": [],
-            "total_tools": 0,
-            "categories": {},
-            "hint": "Tool runtime requires shared_db (SQLite). Check Personalisasi/Database/ exists."
-        }
+        return {"tools": [], "total_tools": 0, "categories": {}, "error": type(e).__name__}
 
 @app.get("/plugins/discover")
 async def discover_plugins(q: str = "", limit: int = 5):
