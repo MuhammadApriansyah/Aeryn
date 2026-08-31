@@ -2,3 +2,4 @@
 {"trace_id": "02c63121-a8a", "session_id": "3ab9ae1c-a28", "user_id": "default", "span_count": 0, "total_duration_ms": 1898, "spans": [], "metadata": {}}
 {"trace_id": "6962f715-22f", "session_id": "35878ef4-fe2", "user_id": "default", "span_count": 0, "total_duration_ms": 1729, "spans": [], "metadata": {}}
 {"trace_id": "c02b2014-343", "session_id": "c741571d-8b6", "user_id": "default", "span_count": 0, "total_duration_ms": 3227, "spans": [], "metadata": {}}
+{"trace_id": "a7cdb3ff-24b", "session_id": "20abf741-bac", "user_id": "default", "span_count": 0, "total_duration_ms": 1701, "spans": [], "metadata": {}}
