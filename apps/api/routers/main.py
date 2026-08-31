@@ -44,7 +44,7 @@ async def broadcast_loop():
         try:
             emitter = get_emitter()
             # Broadcast system health
-            emitter.emit("health_update", {"timestamp": time.time(), "status": "healthy"})
+            await emitter.broadcast("health_update", {"timestamp": time.time(), "status": "healthy"})
         except Exception as e:
             log_exception(e, "broadcast_loop")
 
