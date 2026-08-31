@@ -1167,3 +1167,23 @@
 2026-09-01 06:22:29: INFO:     127.0.0.1:42804 - "GET / HTTP/1.1" 200 OK
 2026-09-01 06:22:29: INFO:     127.0.0.1:42808 - "GET /static/css/dashboard.css HTTP/1.1" 200 OK
 2026-09-01 06:22:29: INFO:     127.0.0.1:42818 - "GET /static/js/dashboard.js HTTP/1.1" 200 OK
+2026-09-01 06:23:24: INFO:     127.0.0.1:38588 - "GET / HTTP/1.1" 200 OK
+2026-09-01 06:23:24: INFO:     127.0.0.1:38598 - "GET / HTTP/1.1" 200 OK
+2026-09-01 06:23:25: INFO:     127.0.0.1:38602 - "GET /static/css/dashboard.css HTTP/1.1" 200 OK
+2026-09-01 06:23:25: INFO:     127.0.0.1:38610 - "GET /static/js/dashboard.js HTTP/1.1" 200 OK
+2026-09-01 06:23:25: INFO:     127.0.0.1:38622 - "GET / HTTP/1.1" 200 OK
+2026-09-01 06:23:25: INFO:     127.0.0.1:38626 - "GET / HTTP/1.1" 200 OK
+2026-09-01 06:26:12: INFO:     127.0.0.1:57612 - "GET /favicon.ico HTTP/1.1" 200 OK
+2026-09-01 06:26:13: INFO:     127.0.0.1:57612 - "GET / HTTP/1.1" 200 OK
+2026-09-01 06:26:13: INFO:     127.0.0.1:57626 - "GET /static/js/dashboard.js HTTP/1.1" 200 OK
+2026-09-01 06:26:13: INFO:     127.0.0.1:57612 - "GET /static/css/dashboard.css HTTP/1.1" 200 OK
+2026-09-01 06:26:13: INFO:     127.0.0.1:57626 - "GET /favicon.ico HTTP/1.1" 200 OK
+2026-09-01 06:29:10: INFO:     127.0.0.1:44886 - "GET / HTTP/1.1" 200 OK
+2026-09-01 06:29:10: INFO:     127.0.0.1:44886 - "GET /static/css/dashboard.css HTTP/1.1" 304 Not Modified
+2026-09-01 06:29:11: INFO:     127.0.0.1:44886 - "GET /favicon.ico HTTP/1.1" 200 OK
+2026-09-01 06:29:54: 2026-09-01 06:29:54 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 06:29:58: 2026-09-01 06:29:58 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-01 06:29:58: 2026-09-01 06:29:58 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-01 06:29:58: 2026-09-01 06:29:58 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-01 06:29:59: 2026-09-01 06:29:59 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 06:29:59: 2026-09-01 06:29:59 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
