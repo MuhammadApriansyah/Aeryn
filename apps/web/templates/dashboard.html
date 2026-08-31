@@ -1,186 +1,462 @@
 <!DOCTYPE html>
-<html lang="id" data-theme="dark">
+<html lang="id">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Aeryn Dashboard — AI Agent Platform</title>
-  <meta name="description" content="Aeryn AI Agent Platform — Dashboard for monitoring, tools, divisions, and workflows"/>
-  <link rel="stylesheet" href="/static/css/dashboard.css"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aeryn — AI Agent Dashboard</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0a0f; --surface: #12121a; --surface2: #1a1a25; --border: #2a2a3a;
+  --text: #e4e4e7; --text2: #a1a1aa; --accent: #6366f1; --accent2: #818cf8;
+  --green: #22c55e; --yellow: #eab308; --red: #ef4444; --blue: #3b82f6;
+  --radius: 12px; --radius-sm: 8px;
+}
+[data-theme="light"] {
+  --bg: #fafafa; --surface: #fff; --surface2: #f4f4f5; --border: #e4e4e7;
+  --text: #18181b; --text2: #71717a;
+}
+html { font-size: 14px; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6;
+}
+a { color: var(--accent2); text-decoration: none; }
+button { cursor: pointer; font-family: inherit; border: none; }
+input, textarea, select { font-family: inherit; font-size: inherit; }
+
+/* Layout */
+.app { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 240px; background: var(--surface); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 100;
+}
+.sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); }
+.sidebar-logo { font-size: 24px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.sidebar-logo span { background: linear-gradient(135deg, var(--accent), #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.sidebar-nav { flex: 1; padding: 12px; overflow-y: auto; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-sm);
+  color: var(--text2); transition: all 0.15s; width: 100%; background: transparent; text-align: left;
+}
+.nav-item:hover { background: var(--surface2); color: var(--text); }
+.nav-item.active { background: var(--accent); color: #fff; }
+.nav-icon { font-size: 18px; width: 24px; text-align: center; }
+.sidebar-footer { padding: 12px; border-top: 1px solid var(--border); }
+.status-badge { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--surface2); border-radius: var(--radius-sm); font-size: 12px; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); }
+.status-dot.online { background: var(--green); }
+.status-dot.loading { background: var(--yellow); animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+.main { flex: 1; margin-left: 240px; display: flex; flex-direction: column; }
+.topbar {
+  background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 24px;
+  display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 50;
+}
+.topbar-title { font-size: 18px; font-weight: 600; }
+.topbar-actions { margin-left: auto; display: flex; gap: 8px; }
+.btn { padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 500; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent2); }
+.btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { border-color: var(--accent); }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+.btn-icon { padding: 8px; background: var(--surface2); border-radius: var(--radius-sm); color: var(--text); }
+
+.content { flex: 1; padding: 24px; overflow-y: auto; }
+.page { display: none; }
+.page.active { display: block; }
+
+/* Cards */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.card-title { font-size: 16px; font-weight: 600; }
+.card-subtitle { font-size: 13px; color: var(--text2); }
+
+/* Stats Grid */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+.stat-value { font-size: 28px; font-weight: 700; color: var(--accent); }
+.stat-label { font-size: 13px; color: var(--text2); margin-top: 4px; }
+.stat-change { font-size: 12px; margin-top: 8px; }
+.stat-change.up { color: var(--green); }
+.stat-change.down { color: var(--red); }
+
+/* Grid */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 1024px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+/* Chat */
+.chat-container { display: flex; flex-direction: column; height: calc(100vh - 200px); min-height: 400px; }
+.chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.message { max-width: 75%; padding: 12px 16px; border-radius: var(--radius); animation: fadeIn 0.2s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.message.user { align-self: flex-end; background: var(--accent); color: #fff; }
+.message.assistant { align-self: flex-start; background: var(--surface2); border: 1px solid var(--border); }
+.message.system { align-self: center; font-size: 12px; color: var(--text2); background: transparent; }
+.message-meta { font-size: 11px; color: var(--text2); margin-top: 6px; }
+.chat-input { display: flex; gap: 12px; padding: 16px; border-top: 1px solid var(--border); }
+.chat-input textarea { flex: 1; background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: var(--radius-sm); resize: none; min-height: 44px; max-height: 120px; }
+
+/* Tools */
+.tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; transition: all 0.15s; }
+.tool-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.tool-name { font-weight: 600; margin-bottom: 4px; }
+.tool-desc { font-size: 13px; color: var(--text2); }
+.tool-tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.tag { background: var(--surface2); padding: 2px 8px; border-radius: 4px; font-size: 11px; color: var(--text2); }
+
+/* Divisions */
+.division-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: center; }
+.division-icon { font-size: 32px; margin-bottom: 8px; }
+.division-name { font-weight: 600; margin-bottom: 4px; }
+.division-desc { font-size: 12px; color: var(--text2); }
+
+/* Traces */
+.trace-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 8px; }
+.trace-header { display: flex; justify-content: space-between; align-items: center; }
+.trace-id { font-family: monospace; font-size: 12px; color: var(--accent); }
+.trace-time { font-size: 12px; color: var(--text2); }
+
+/* Toast */
+.toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; }
+.toast { background: var(--surface); border: 1px solid var(--border); padding: 12px 20px; border-radius: var(--radius-sm); box-shadow: 0 8px 30px rgba(0,0,0,0.3); animation: slideIn 0.2s; }
+.toast.success { border-left: 3px solid var(--green); }
+.toast.error { border-left: 3px solid var(--red); }
+.toast.info { border-left: 3px solid var(--blue); }
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* Modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 200; }
+.modal-overlay.active { display: flex; }
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); max-width: 600px; width: 90%; max-height: 80vh; overflow: auto; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+.modal-body { padding: 20px; }
+.modal-body pre { background: var(--bg); padding: 16px; border-radius: var(--radius-sm); overflow: auto; font-size: 12px; }
+
+/* Loading */
+.loading { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { width: 60px; }
+  .sidebar .nav-label, .sidebar .sidebar-logo span { display: none; }
+  .sidebar-header { padding: 12px; }
+  .main { margin-left: 60px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
-  
-  <header class="top-nav" role="banner">
-    <div class="logo" aria-label="Aeryn Logo">🤖 Aeryn</div>
-    
-    <nav class="nav-tabs" role="navigation" aria-label="Main navigation">
-      <button class="nav-tab active" data-tab="overview" aria-selected="true">Overview</button>
-      <button class="nav-tab" data-tab="chat" aria-selected="false">Chat</button>
-      <button class="nav-tab" data-tab="tools" aria-selected="false">Tools</button>
-      <button class="nav-tab" data-tab="divisions" aria-selected="false">Divisions</button>
-      <button class="nav-tab" data-tab="workflows" aria-selected="false">Workflows</button>
-      <button class="nav-tab" data-tab="observability" aria-selected="false">Traces</button>
-      <button class="nav-tab" data-tab="settings" aria-selected="false">Settings</button>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" role="navigation" aria-label="Main navigation">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">🤖 <span>Aeryn</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-page="overview" aria-current="page"><span class="nav-icon">📊</span><span class="nav-label">Overview</span></button>
+      <button class="nav-item" data-page="chat"><span class="nav-icon">💬</span><span class="nav-label">Chat</span></button>
+      <button class="nav-item" data-page="tools"><span class="nav-icon">🔧</span><span class="nav-label">Tools</span></button>
+      <button class="nav-item" data-page="divisions"><span class="nav-icon">🏢</span><span class="nav-label">Divisions</span></button>
+      <button class="nav-item" data-page="workflows"><span class="nav-icon">📋</span><span class="nav-label">Workflows</span></button>
+      <button class="nav-item" data-page="traces"><span class="nav-icon">🔍</span><span class="nav-label">Traces</span></button>
+      <button class="nav-item" data-page="settings"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
     </nav>
-    
-    <div class="top-actions">
-      <div class="search-box">
-        <input type="search" id="global-search" placeholder="Search... (Ctrl+K)" aria-label="Global search"/>
-      </div>
-      <button class="btn-icon" id="theme-toggle" onclick="AerynApp.toggleTheme()" aria-label="Toggle theme">🌙</button>
-      <button class="btn-icon" id="refresh-btn" onclick="AerynApp.refreshAll()" aria-label="Refresh data">🔄</button>
-      <div class="status-indicator" id="status-indicator" aria-live="polite">
-        <span class="status-dot" id="status-dot"></span>
-        <span id="status-text">Connecting...</span>
+    <div class="sidebar-footer">
+      <div class="status-badge">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Checking...</span>
       </div>
     </div>
-  </header>
+  </aside>
 
-  <main id="main-content" class="dashboard-content" role="main">
-    
-    <!-- Overview Tab -->
-    <section class="tab-panel active" id="tab-overview" role="tabpanel" aria-label="Overview">
-      <div class="stats-grid" id="health-stats" aria-live="polite">
-        <div class="stat-card loading"><span class="stat-label">Loading...</span></div>
+  <!-- Main -->
+  <main class="main">
+    <header class="topbar">
+      <h1 class="topbar-title" id="pageTitle">Overview</h1>
+      <div class="topbar-actions">
+        <button class="btn btn-secondary btn-sm" onclick="refreshAll()" title="Refresh">🔄 Refresh</button>
+        <button class="btn-icon" onclick="toggleTheme()" title="Toggle theme" id="themeBtn">🌙</button>
       </div>
-      
-      <div class="quick-actions">
-        <h2>Quick Actions</h2>
-        <div class="action-grid">
-          <button class="action-btn" onclick="AerynApp.switchTab('chat')" aria-label="Open Chat">
-            <span class="action-icon">💬</span>
-            <span class="action-label">Chat</span>
-          </button>
-          <button class="action-btn" onclick="AerynApp.quickRun()" aria-label="Quick Run">
-            <span class="action-icon">⚡</span>
-            <span class="action-label">Quick Run</span>
-          </button>
-          <button class="action-btn" onclick="AerynApp.switchTab('tools')" aria-label="Manage Tools">
-            <span class="action-icon">🔧</span>
-            <span class="action-label">Tools</span>
-          </button>
-          <button class="action-btn" onclick="AerynApp.switchTab('workflows')" aria-label="Create Workflow">
-            <span class="action-icon">📋</span>
-            <span class="action-label">Workflow</span>
-          </button>
-          <button class="action-btn" onclick="AerynApp.triggerAdapt()" aria-label="Trigger Self-Improvement">
-            <span class="action-icon">🧠</span>
-            <span class="action-label">Adapt</span>
-          </button>
-        </div>
-      </div>
-      
-      <div class="dashboard-grid">
-        <div class="card" id="recent-traces">
-          <h3>Recent Traces</h3>
-          <div class="card-content"><p class="muted">Loading...</p></div>
-        </div>
-        <div class="card" id="self-improvement-status">
-          <h3>Self-Improvement</h3>
-          <div class="card-content"><p class="muted">Loading...</p></div>
-        </div>
-      </div>
-    </section>
+    </header>
 
-    <!-- Chat Tab -->
-    <section class="tab-panel" id="tab-chat" role="tabpanel" aria-label="Chat">
-      <div class="chat-container">
-        <div class="chat-messages" id="chat-messages" aria-live="polite" aria-label="Chat messages">
-          <div class="message system">
-            <div class="message-content">Welcome to Aeryn Chat. Type a message or goal below.</div>
+    <div class="content">
+      <!-- Overview -->
+      <div class="page active" id="page-overview">
+        <div class="stats-grid" id="statsGrid">
+          <div class="stat-card"><div class="stat-value" id="statStatus">—</div><div class="stat-label">Status</div></div>
+          <div class="stat-card"><div class="stat-value" id="statMemory">—</div><div class="stat-label">Memory (MB)</div></div>
+          <div class="stat-card"><div class="stat-value" id="statVersion">—</div><div class="stat-label">Version</div></div>
+          <div class="stat-card"><div class="stat-value" id="statTraces">—</div><div class="stat-label">Traces</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Recent Traces</span></div>
+            <div id="recentTraces"><p style="color:var(--text2)">Loading...</p></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Self-Improvement</span></div>
+            <div id="siStats"><p style="color:var(--text2)">Loading...</p></div>
           </div>
         </div>
-        <div class="chat-input-area">
-          <textarea id="chat-input" placeholder="Type your message... (Enter to send, Shift+Enter for newline)" aria-label="Chat input"></textarea>
-          <button class="btn-primary" id="chat-send" onclick="AerynApp.sendChat()" aria-label="Send message">Send</button>
+      </div>
+
+      <!-- Chat -->
+      <div class="page" id="page-chat">
+        <div class="card chat-container">
+          <div class="chat-messages" id="chatMessages">
+            <div class="message system">Welcome to Aeryn Chat. Type a message to begin.</div>
+          </div>
+          <div class="chat-input">
+            <textarea id="chatInput" placeholder="Type your message... (Enter to send, Shift+Enter for newline)" rows="1"></textarea>
+            <button class="btn btn-primary" onclick="sendChat()">Send</button>
+          </div>
         </div>
       </div>
-    </section>
 
-    <!-- Tools Tab -->
-    <section class="tab-panel" id="tab-tools" role="tabpanel" aria-label="Tools & Plugins">
-      <div class="section-header">
-        <h2>Registered Tools</h2>
-        <div class="search-box">
-          <input type="search" id="tools-search" placeholder="Discover tools..." aria-label="Search tools"/>
-        </div>
-      </div>
-      <div class="tools-grid" id="tools-grid">
-        <p class="muted">Loading tools...</p>
-      </div>
-    </section>
-
-    <!-- Divisions Tab -->
-    <section class="tab-panel" id="tab-divisions" role="tabpanel" aria-label="Divisions">
-      <h2>5 Cognitive Divisions</h2>
-      <div class="divisions-grid" id="divisions-grid">
-        <p class="muted">Loading divisions...</p>
-      </div>
-    </section>
-
-    <!-- Workflows Tab -->
-    <section class="tab-panel" id="tab-workflows" role="tabpanel" aria-label="Workflows">
-      <div class="section-header">
-        <h2>Workflows</h2>
-        <button class="btn-primary" onclick="AerynApp.createWorkflow()" aria-label="Create new workflow">+ New Workflow</button>
-      </div>
-      <div class="workflows-list" id="workflows-list">
-        <p class="muted">No workflows yet. Create one to get started.</p>
-      </div>
-    </section>
-
-    <!-- Observability Tab -->
-    <section class="tab-panel" id="tab-observability" role="tabpanel" aria-label="Observability & Traces">
-      <div class="section-header">
-        <h2>Traces & Observability</h2>
-        <div class="header-actions">
-          <button class="btn-secondary" onclick="AerynApp.loadTraces()" aria-label="Refresh traces">Refresh</button>
-          <span id="trace-stats" class="badge">0 traces</span>
-        </div>
-      </div>
-      <div class="traces-list" id="traces-list">
-        <p class="muted">Loading traces...</p>
-      </div>
-    </section>
-
-    <!-- Settings Tab -->
-    <section class="tab-panel" id="tab-settings" role="tabpanel" aria-label="Settings">
-      <h2>Settings</h2>
-      <div class="settings-grid">
+      <!-- Tools -->
+      <div class="page" id="page-tools">
         <div class="card">
-          <h3>Environment</h3>
-          <div class="card-content" id="env-info">
-            <p class="muted">Loading...</p>
+          <div class="card-header">
+            <span class="card-title">Registered Tools</span>
+            <input type="search" id="toolsSearch" placeholder="Discover tools..." style="padding:6px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text)">
           </div>
+          <div class="tools-grid" id="toolsGrid"><p style="color:var(--text2)">Loading...</p></div>
         </div>
+      </div>
+
+      <!-- Divisions -->
+      <div class="page" id="page-divisions">
         <div class="card">
-          <h3>Gateway Status</h3>
-          <div class="card-content" id="gateway-info">
-            <p class="muted">Loading...</p>
+          <div class="card-header"><span class="card-title">5 Cognitive Divisions</span></div>
+          <div class="tools-grid" id="divisionsGrid"><p style="color:var(--text2)">Loading...</p></div>
+        </div>
+      </div>
+
+      <!-- Workflows -->
+      <div class="page" id="page-workflows">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Workflows</span>
+            <button class="btn btn-primary btn-sm" onclick="createWorkflow()">+ New</button>
           </div>
+          <div id="workflowsList"><p style="color:var(--text2)">No workflows yet.</p></div>
         </div>
+      </div>
+
+      <!-- Traces -->
+      <div class="page" id="page-traces">
         <div class="card">
-          <h3>Self-Improvement</h3>
-          <div class="card-content">
-            <button class="btn-primary" onclick="AerynApp.triggerAdapt()">Trigger Adaptation</button>
-            <button class="btn-secondary" onclick="AerynApp.loadPatterns()">View Patterns</button>
+          <div class="card-header">
+            <span class="card-title">Observability Traces</span>
+            <button class="btn btn-secondary btn-sm" onclick="loadTraces()">Refresh</button>
+          </div>
+          <div id="tracesList"><p style="color:var(--text2)">Loading...</p></div>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div class="page" id="page-settings">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Environment</span></div>
+            <div id="envInfo"><p style="color:var(--text2)">Loading...</p></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Gateway</span></div>
+            <div id="gatewayInfo"><p style="color:var(--text2)">Loading...</p></div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   </main>
+</div>
 
-  <div id="toast-container" class="toast-container" aria-live="assertive" aria-atomic="true"></div>
-  <div id="modal-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
-    <div class="modal">
-      <div class="modal-header">
-        <h3 id="modal-title">Modal</h3>
-        <button class="btn-icon" onclick="AerynApp.closeModal()" aria-label="Close">✕</button>
-      </div>
-      <div class="modal-body" id="modal-body"></div>
-    </div>
+<div class="toast-container" id="toasts"></div>
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header"><h3 id="modalTitle">Modal</h3><button class="btn-icon" onclick="closeModal()">✕</button></div>
+    <div class="modal-body" id="modalBody"></div>
   </div>
+</div>
 
-  <script src="/static/js/dashboard.js"></script>
+<script>
+const API = {
+  health: '/health', gatewayEnv: '/gateway/env',
+  traces: '/observability/traces', traceStats: '/observability/stats',
+  siStats: '/self-improvement/stats', siAdapt: '/self-improvement/adapt',
+  plugins: '/plugins', discoverTools: q => `/plugins/discover?q=${encodeURIComponent(q)}`,
+  divisions: '/divisions', executeDivision: n => `/divisions/${n}/execute`,
+  workflows: '/workflows', workflow: id => `/workflows/${id}`,
+  workflowStep: id => `/workflows/${id}/step`, workflowApprove: id => `/workflows/${id}/approve`,
+  chat: '/chat', run: '/run', search: q => `/search?q=${encodeURIComponent(q)}`,
+};
+
+const state = { sessionId: 'web_' + Date.now(), traces: [], workflows: [] };
+
+async function api(url, opts = {}) {
+  try {
+    const r = await fetch(url, { headers: { 'Content-Type': 'application/json' }, ...opts });
+    return await r.json();
+  } catch (e) { return { error: e.message }; }
+}
+
+function toast(msg, type = 'info') {
+  const t = document.createElement('div');
+  t.className = `toast ${type}`; t.textContent = msg;
+  document.getElementById('toasts').appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+function showModal(title, content) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = `<pre>${content}</pre>`;
+  document.getElementById('modal').classList.add('active');
+}
+function closeModal() { document.getElementById('modal').classList.remove('active'); }
+
+function toggleTheme() {
+  const h = document.documentElement;
+  const t = h.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  h.setAttribute('data-theme', t);
+  document.getElementById('themeBtn').textContent = t === 'dark' ? '🌙' : '☀️';
+}
+
+// Navigation
+document.querySelectorAll('.nav-item').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const page = btn.dataset.page;
+    document.querySelectorAll('.pages .page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.getElementById('pageTitle').textContent = btn.querySelector('.nav-label').textContent;
+    ({ overview: loadOverview, chat: () => {}, tools: loadTools, divisions: loadDivisions, workflows: loadWorkflows, traces: loadTraces, settings: loadSettings })[page]?.();
+  };
+});
+
+async function loadOverview() {
+  const h = await api(API.health);
+  document.getElementById('statStatus').textContent = h.status || '—';
+  document.getElementById('statMemory').textContent = h.memory_mb || '—';
+  document.getElementById('statVersion').textContent = h.version || '—';
+  document.getElementById('statusDot').className = 'status-dot ' + (h.status === 'healthy' ? 'online' : 'offline');
+  document.getElementById('statusText').textContent = h.status === 'healthy' ? 'Online' : 'Offline';
+  loadTraces();
+  loadSI();
+}
+
+async function loadSI() {
+  const s = await api(API.siStats);
+  document.getElementById('siStats').innerHTML = `<p>Learnings: <strong>${s.total_learnings || 0}</strong></p><p>Improvements: <strong>${s.total_improvements || 0}</strong></p><button class="btn btn-sm btn-primary" onclick="triggerAdapt()">Trigger Adapt</button>`;
+}
+
+async function triggerAdapt() {
+  const r = await api(API.siAdapt, { method: 'POST' });
+  toast(`Adaptation: ${r.changes?.length || 0} changes`, 'success');
+  loadSI();
+}
+
+async function loadTraces() {
+  const r = await api(API.traces + '?limit=5');
+  state.traces = r.traces || [];
+  document.getElementById('statTraces').textContent = state.traces.length;
+  const html = state.traces.length ? state.traces.map(t => `<div class="trace-item"><div class="trace-header"><span class="trace-id">${t.id}</span><span>${t.spans || 0} spans</span></div></div>`).join('') : '<p style="color:var(--text2)">No traces yet</p>';
+  const el = document.getElementById('recentTraces');
+  if (el) el.innerHTML = html;
+  const tl = document.getElementById('tracesList');
+  if (tl) tl.innerHTML = html;
+}
+
+async function loadTools() {
+  const r = await api(API.plugins);
+  const tools = r.tools || [];
+  document.getElementById('toolsGrid').innerHTML = tools.length ? tools.map(t => `<div class="tool-card"><div class="tool-name">${t.name}</div><div class="tool-desc">${t.description || ''}</div><div class="tool-tags">${(t.tags || []).map(g => `<span class="tag">${g}</span>`).join('')}</div></div>`).join('') : '<p style="color:var(--text2)">No tools</p>';
+}
+
+document.getElementById('toolsSearch')?.addEventListener('input', async e => {
+  const r = await api(API.discoverTools(e.target.value));
+  const tools = r.tools || [];
+  document.getElementById('toolsGrid').innerHTML = tools.map(t => `<div class="tool-card"><div class="tool-name">${t.name} <small>(${t.score})</small></div><div class="tool-desc">${t.description || ''}</div></div>`).join('');
+});
+
+async function loadDivisions() {
+  const r = await api(API.divisions);
+  const divs = r.divisions || [];
+  const icons = { creative: '🎨', psych: '🧠', reasoning: '⚙️', gov: '🛡️', infra: '🚀' };
+  document.getElementById('divisionsGrid').innerHTML = divs.map(d => `<div class="division-card"><div class="division-icon">${icons[d] || '📦'}</div><div class="division-name">${d}</div><button class="btn btn-sm btn-secondary" onclick="executeDiv('${d}')">Execute</button></div>`).join('');
+}
+
+async function executeDiv(name) {
+  const r = await api(API.executeDivision(name), { method: 'POST', body: JSON.stringify({ tasks: [{ name: 'quick', description: `Quick task for ${name}` }] }) });
+  toast(`${name}: ${r.completed}/${r.tasks} done`, 'success');
+}
+
+async function loadWorkflows() {
+  const r = await api(API.workflows);
+  state.workflows = r.workflows || [];
+  document.getElementById('workflowsList').innerHTML = state.workflows.length ? state.workflows.map(w => `<div class="trace-item"><div class="trace-header"><span>${w.name}</span><span class="tag">${w.status}</span></div><button class="btn btn-sm" onclick="stepWf('${w.id}')">Step</button></div>`).join('') : '<p style="color:var(--text2)">No workflows</p>';
+}
+
+async function createWorkflow() {
+  const idea = prompt('SaaS idea:');
+  if (!idea) return;
+  const r = await api(API.workflows, { method: 'POST', body: JSON.stringify({ name: 'saas', idea }) });
+  toast(`Created: ${r.id}`, 'success');
+  loadWorkflows();
+}
+
+async function stepWf(id) {
+  const r = await api(API.workflowStep(id), { method: 'POST' });
+  toast(r.status, r.status === 'waiting_approval' ? 'info' : 'success');
+  if (r.status === 'waiting_approval') {
+    if (confirm('Approve?')) await api(API.workflowApprove(id), { method: 'POST', body: JSON.stringify({ step_name: Object.keys(r.checkpoint || {})[0] || '', option: 'approve' }) });
+  }
+  loadWorkflows();
+}
+
+async function loadSettings() {
+  const e = await api(API.gatewayEnv);
+  document.getElementById('envInfo').innerHTML = `<p>Env: <strong>${e.environment?.type}</strong></p><p>DB: <strong>${e.environment?.db}</strong></p><p>Auth: <strong>${e.auth_enabled ? '✅' : '❌'}</strong></p>`;
+  document.getElementById('gatewayInfo').innerHTML = `<p>Chat CB: ${e.circuit_breakers?.chat?.state}</p><p>LLM CB: ${e.circuit_breakers?.llm?.state}</p>`;
+}
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  addMsg('user', msg);
+  input.value = '';
+  const r = await api(API.chat, { method: 'POST', body: JSON.stringify({ goal: msg, session_id: state.sessionId }) });
+  if (r.response) {
+    addMsg('assistant', r.response);
+    if (r.tool_used || r.division) addMsg('system', `🔧 ${r.tool_used || '—'} | 📂 ${r.division || '—'}`);
+  } else addMsg('system', `Error: ${r.error}`);
+}
+
+function addMsg(role, text) {
+  const el = document.getElementById('chatMessages');
+  const d = document.createElement('div');
+  d.className = `message ${role}`;
+  d.innerHTML = `<div>${text.replace(/\n/g, '<br>')}</div>`;
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+}
+
+document.getElementById('chatInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+});
+
+function refreshAll() { loadOverview(); toast('Refreshed', 'success'); }
+
+// Init
+loadOverview();
+setInterval(loadOverview, 15000);
+</script>
 </body>
 </html>
