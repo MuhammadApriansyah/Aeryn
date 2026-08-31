@@ -668,3 +668,272 @@
 2026-09-01 00:17:29: INFO:     127.0.0.1:45258 - "GET /gateway/env HTTP/1.1" 200 OK
 2026-09-01 00:17:30: INFO:     127.0.0.1:45270 - "GET /divisions HTTP/1.1" 200 OK
 2026-09-01 00:17:30: INFO:     127.0.0.1:45274 - "GET /workflows HTTP/1.1" 200 OK
+2026-09-01 00:52:47: 2026-09-01 00:52:47 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 00:52:49: 2026-09-01 00:52:49 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 00:52:49: 2026-09-01 00:52:49 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 01:35:05: INFO:     127.0.0.1:51916 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:35:05: 2026-09-01 01:35:05 [INFO] aeryn_core.platform.adaptive_gateway: AdaptiveGateway initialized: env=proot db=sqlite
+2026-09-01 01:35:05: INFO:     127.0.0.1:51922 - "GET /gateway/env HTTP/1.1" 200 OK
+2026-09-01 01:35:05: INFO:     127.0.0.1:51928 - "GET /observability/traces HTTP/1.1" 200 OK
+2026-09-01 01:35:05: INFO:     127.0.0.1:51932 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 01:35:05: INFO:     127.0.0.1:51940 - "GET /self-improvement/stats HTTP/1.1" 200 OK
+2026-09-01 01:35:05: INFO:     127.0.0.1:51942 - "GET /self-improvement/patterns HTTP/1.1" 200 OK
+2026-09-01 01:35:05: INFO:     127.0.0.1:51944 - "GET /plugins HTTP/1.1" 200 OK
+2026-09-01 01:35:05: INFO:     127.0.0.1:51950 - "GET /capabilities/skills HTTP/1.1" 200 OK
+2026-09-01 01:35:06: INFO:     127.0.0.1:51958 - "GET /memory/recall?q=test HTTP/1.1" 200 OK
+2026-09-01 01:35:06: INFO:     127.0.0.1:51974 - "GET /daemon/tasks HTTP/1.1" 200 OK
+2026-09-01 01:35:06: INFO:     127.0.0.1:51982 - "GET /connectors HTTP/1.1" 200 OK
+2026-09-01 01:35:06: INFO:     127.0.0.1:51996 - "GET /divisions HTTP/1.1" 200 OK
+2026-09-01 01:35:06: INFO:     127.0.0.1:52000 - "GET /workflows HTTP/1.1" 200 OK
+2026-09-01 01:36:10: INFO:     127.0.0.1:56750 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:36:11: INFO:     127.0.0.1:56750 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:36:12: INFO:     127.0.0.1:56750 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:36:12: INFO:     127.0.0.1:56750 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:36:13: INFO:     127.0.0.1:56750 - "GET / HTTP/1.1" 200 OK
+2026-09-01 01:36:13: INFO:     127.0.0.1:56750 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:36:13: INFO:     127.0.0.1:56750 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:36:13: INFO:     127.0.0.1:56750 - "GET /favicon.ico HTTP/1.1" 200 OK
+2026-09-01 01:36:14: INFO:     127.0.0.1:56750 - "GET / HTTP/1.1" 200 OK
+2026-09-01 01:36:14: INFO:     127.0.0.1:56750 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:36:14: INFO:     127.0.0.1:45142 - "GET /favicon.ico HTTP/1.1" 200 OK
+2026-09-01 01:36:14: INFO:     127.0.0.1:56750 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:36:23: INFO:     127.0.0.1:41528 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:36:23: INFO:     127.0.0.1:41528 - "GET /gateway/env HTTP/1.1" 200 OK
+2026-09-01 01:36:24: INFO:     127.0.0.1:41528 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 01:36:25: INFO:     127.0.0.1:41528 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 01:36:29: INFO:     127.0.0.1:41528 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:36:29: INFO:     127.0.0.1:41528 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:36:29: INFO:     127.0.0.1:41528 - "GET / HTTP/1.1" 200 OK
+2026-09-01 01:36:29: INFO:     127.0.0.1:41528 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:36:29: INFO:     127.0.0.1:41528 - "GET /favicon.ico HTTP/1.1" 200 OK
+2026-09-01 01:36:29: INFO:     127.0.0.1:41534 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:36:43: 2026-09-01 01:36:43 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_read (category: filesystem)
+2026-09-01 01:36:43: 2026-09-01 01:36:43 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_write (category: filesystem)
+2026-09-01 01:36:43: 2026-09-01 01:36:43 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_list (category: filesystem)
+2026-09-01 01:36:43: 2026-09-01 01:36:43 [INFO] aeryn_core.platform.plugin_registry: Registered tool: terminal (category: system)
+2026-09-01 01:36:43: 2026-09-01 01:36:43 [INFO] aeryn_core.platform.plugin_registry: Registered tool: web_search (category: web)
+2026-09-01 01:36:43: 2026-09-01 01:36:43 [INFO] aeryn_core.platform.plugin_registry: Registered tool: web_fetch (category: web)
+2026-09-01 01:36:43: 2026-09-01 01:36:43 [INFO] aeryn_core.platform.plugin_registry: Registered tool: memory_search (category: memory)
+2026-09-01 01:36:44: INFO:     127.0.0.1:39074 - "POST /chat HTTP/1.1" 200 OK
+2026-09-01 01:36:44: INFO:     127.0.0.1:39074 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:36:44: INFO:     127.0.0.1:39074 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:36:56: INFO:     127.0.0.1:42818 - "POST /chat HTTP/1.1" 200 OK
+2026-09-01 01:36:59: INFO:     127.0.0.1:42818 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:36:59: INFO:     127.0.0.1:42818 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:37:05: INFO:     127.0.0.1:42818 - "POST /chat HTTP/1.1" 200 OK
+2026-09-01 01:37:14: INFO:     127.0.0.1:33942 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:37:14: INFO:     127.0.0.1:33942 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:37:23: INFO:     127.0.0.1:33950 - "POST /chat HTTP/1.1" 200 OK
+2026-09-01 01:37:29: INFO:     127.0.0.1:58482 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:37:29: INFO:     127.0.0.1:58482 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:37:37: INFO:     127.0.0.1:44976 - "GET /observability/traces?limit=3 HTTP/1.1" 200 OK
+2026-09-01 01:37:37: INFO:     127.0.0.1:44990 - "GET /plugins HTTP/1.1" 200 OK
+2026-09-01 01:37:37: INFO:     127.0.0.1:44996 - "GET /connectors HTTP/1.1" 200 OK
+2026-09-01 01:37:37: INFO:     127.0.0.1:45006 - "GET /divisions HTTP/1.1" 200 OK
+2026-09-01 01:37:37: INFO:     127.0.0.1:45018 - "GET /workflows HTTP/1.1" 200 OK
+2026-09-01 01:37:37: INFO:     127.0.0.1:45034 - "GET /capabilities/skills HTTP/1.1" 200 OK
+2026-09-01 01:37:44: INFO:     127.0.0.1:55798 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:37:44: INFO:     127.0.0.1:55798 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:37:48: INFO:     127.0.0.1:55798 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:37:48: INFO:     127.0.0.1:55798 - "GET /gateway/env HTTP/1.1" 200 OK
+2026-09-01 01:37:50: INFO:     127.0.0.1:55798 - "GET /observability/traces?limit=10 HTTP/1.1" 200 OK
+2026-09-01 01:37:53: INFO:     127.0.0.1:55798 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 01:37:59: INFO:     127.0.0.1:57704 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:37:59: INFO:     127.0.0.1:57704 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:38:12: INFO:     127.0.0.1:56816 - "GET / HTTP/1.1" 200 OK
+2026-09-01 01:38:12: INFO:     127.0.0.1:56816 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:38:13: INFO:     127.0.0.1:56816 - "GET /favicon.ico HTTP/1.1" 200 OK
+2026-09-01 01:38:13: INFO:     127.0.0.1:56820 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:38:28: INFO:     127.0.0.1:51432 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:38:28: INFO:     127.0.0.1:51432 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:38:43: INFO:     127.0.0.1:59458 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:38:43: INFO:     127.0.0.1:59458 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:38:58: INFO:     127.0.0.1:40992 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:38:58: INFO:     127.0.0.1:40992 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:39:13: INFO:     127.0.0.1:38274 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:39:13: INFO:     127.0.0.1:38274 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:42:09: INFO:     127.0.0.1:45718 - "GET /plugins HTTP/1.1" 200 OK
+2026-09-01 01:42:09: INFO:     127.0.0.1:45724 - "GET /observability/traces?limit=1 HTTP/1.1" 200 OK
+2026-09-01 01:42:46: INFO:     127.0.0.1:34332 - "GET / HTTP/1.1" 200 OK
+2026-09-01 01:42:46: INFO:     127.0.0.1:34342 - "GET / HTTP/1.1" 200 OK
+2026-09-01 01:43:19: INFO:     127.0.0.1:35104 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 01:43:19: INFO:     127.0.0.1:35112 - "GET /gateway/env HTTP/1.1" 200 OK
+2026-09-01 01:43:19: INFO:     127.0.0.1:35120 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 01:43:19: INFO:     127.0.0.1:35134 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 01:43:19: INFO:     127.0.0.1:35142 - "GET /self-improvement/stats HTTP/1.1" 200 OK
+2026-09-01 01:43:19: INFO:     127.0.0.1:35156 - "GET /self-improvement/patterns HTTP/1.1" 200 OK
+2026-09-01 01:43:19: INFO:     127.0.0.1:35160 - "GET /plugins HTTP/1.1" 200 OK
+2026-09-01 01:43:20: INFO:     127.0.0.1:35170 - "GET /plugins/discover?q=dashboard HTTP/1.1" 200 OK
+2026-09-01 01:43:20: INFO:     127.0.0.1:35172 - "GET /capabilities/skills HTTP/1.1" 200 OK
+2026-09-01 01:43:20: INFO:     127.0.0.1:35188 - "GET /memory/recall?q=test HTTP/1.1" 200 OK
+2026-09-01 01:43:20: INFO:     127.0.0.1:35198 - "GET /daemon/tasks HTTP/1.1" 200 OK
+2026-09-01 01:43:20: INFO:     127.0.0.1:35214 - "GET /connectors HTTP/1.1" 200 OK
+2026-09-01 01:43:20: INFO:     127.0.0.1:35216 - "GET /divisions HTTP/1.1" 200 OK
+2026-09-01 01:43:20: INFO:     127.0.0.1:35228 - "GET /workflows HTTP/1.1" 200 OK
+2026-09-01 02:09:51: 2026-09-01 02:09:51 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 02:09:55: 2026-09-01 02:09:55 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 02:09:55: 2026-09-01 02:09:55 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 02:10:04: INFO:     127.0.0.1:54408 - "GET / HTTP/1.1" 200 OK
+2026-09-01 02:10:04: INFO:     127.0.0.1:54416 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 02:10:20: INFO:     127.0.0.1:46770 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 02:10:20: 2026-09-01 02:10:20 [INFO] aeryn_core.platform.adaptive_gateway: AdaptiveGateway initialized: env=proot db=sqlite
+2026-09-01 02:10:20: INFO:     127.0.0.1:46772 - "GET /gateway/env HTTP/1.1" 200 OK
+2026-09-01 02:10:20: INFO:     127.0.0.1:46776 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 02:10:21: INFO:     127.0.0.1:46790 - "GET /self-improvement/stats HTTP/1.1" 200 OK
+2026-09-01 02:10:21: INFO:     127.0.0.1:46792 - "GET /plugins HTTP/1.1" 200 OK
+2026-09-01 02:10:22: INFO:     127.0.0.1:46796 - "GET /capabilities/skills HTTP/1.1" 200 OK
+2026-09-01 02:10:22: INFO:     127.0.0.1:46804 - "GET /daemon/tasks HTTP/1.1" 200 OK
+2026-09-01 02:10:22: INFO:     127.0.0.1:46820 - "GET /divisions HTTP/1.1" 200 OK
+2026-09-01 02:10:23: 2026-09-01 02:10:23 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_read (category: filesystem)
+2026-09-01 02:10:23: 2026-09-01 02:10:23 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_write (category: filesystem)
+2026-09-01 02:10:23: 2026-09-01 02:10:23 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_list (category: filesystem)
+2026-09-01 02:10:23: 2026-09-01 02:10:23 [INFO] aeryn_core.platform.plugin_registry: Registered tool: terminal (category: system)
+2026-09-01 02:10:23: 2026-09-01 02:10:23 [INFO] aeryn_core.platform.plugin_registry: Registered tool: web_search (category: web)
+2026-09-01 02:10:23: 2026-09-01 02:10:23 [INFO] aeryn_core.platform.plugin_registry: Registered tool: web_fetch (category: web)
+2026-09-01 02:10:23: 2026-09-01 02:10:23 [INFO] aeryn_core.platform.plugin_registry: Registered tool: memory_search (category: memory)
+2026-09-01 02:10:24: INFO:     127.0.0.1:46830 - "POST /chat HTTP/1.1" 200 OK
+2026-09-01 02:27:17: INFO:     127.0.0.1:48104 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 02:27:17: INFO:     127.0.0.1:48106 - "GET /favicon.ico HTTP/1.1" 200 OK
+2026-09-01 02:27:33: INFO:     127.0.0.1:58432 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 02:27:33: INFO:     127.0.0.1:58432 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 02:27:48: INFO:     127.0.0.1:34428 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 02:27:48: INFO:     127.0.0.1:34428 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 02:28:03: INFO:     127.0.0.1:49426 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 02:28:03: INFO:     127.0.0.1:49426 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 02:28:18: INFO:     127.0.0.1:54332 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 02:28:18: INFO:     127.0.0.1:54332 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 02:43:42: INFO:     127.0.0.1:48180 - "GET /openapi.json HTTP/1.1" 200 OK
+2026-09-01 02:44:04: INFO:     127.0.0.1:40832 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 02:44:04: INFO:     127.0.0.1:40834 - "GET /chat HTTP/1.1" 200 OK
+2026-09-01 02:44:04: INFO:     127.0.0.1:40850 - "GET /search HTTP/1.1" 422 Unprocessable Entity
+2026-09-01 02:44:04: INFO:     127.0.0.1:40858 - "GET /plugins HTTP/1.1" 200 OK
+2026-09-01 02:44:04: INFO:     127.0.0.1:40860 - "GET /divisions HTTP/1.1" 200 OK
+2026-09-01 02:44:05: INFO:     127.0.0.1:40872 - "GET /workflows HTTP/1.1" 200 OK
+2026-09-01 02:44:06: INFO:     127.0.0.1:40874 - "POST /chat HTTP/1.1" 200 OK
+2026-09-01 02:44:39: INFO:     127.0.0.1:48522 - "GET /search?q=aeryn HTTP/1.1" 200 OK
+2026-09-01 02:44:40: INFO:     127.0.0.1:48528 - "GET /memory/recall?q=dashboard HTTP/1.1" 200 OK
+2026-09-01 02:44:40: INFO:     127.0.0.1:48542 - "GET /self-improvement/stats HTTP/1.1" 200 OK
+2026-09-01 02:44:40: INFO:     127.0.0.1:48554 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 02:49:00: INFO:     127.0.0.1:59036 - "POST /chat HTTP/1.1" 422 Unprocessable Entity
+2026-09-01 02:49:00: INFO:     127.0.0.1:59050 - "GET /invalid_endpoint HTTP/1.1" 404 Not Found
+2026-09-01 02:49:00: INFO:     127.0.0.1:59054 - "GET / HTTP/1.1" 200 OK
+2026-09-01 02:49:00: INFO:     127.0.0.1:59064 - "GET / HTTP/1.1" 200 OK
+2026-09-01 02:54:50: INFO:     127.0.0.1:47192 - "POST /divisions/reasoning/execute HTTP/1.1" 200 OK
+2026-09-01 02:54:50: INFO:     127.0.0.1:47204 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 02:56:26: INFO:     127.0.0.1:53824 - "POST /workspaces HTTP/1.1" 200 OK
+2026-09-01 02:56:28: INFO:     127.0.0.1:53832 - "POST /run HTTP/1.1" 200 OK
+2026-09-01 02:56:29: INFO:     127.0.0.1:53840 - "POST /chat HTTP/1.1" 200 OK
+2026-09-01 02:56:30: INFO:     127.0.0.1:53846 - "POST /compile HTTP/1.1" 200 OK
+2026-09-01 02:56:45: INFO:     127.0.0.1:52276 - "POST /plugins/run HTTP/1.1" 422 Unprocessable Entity
+2026-09-01 02:56:45: INFO:     127.0.0.1:52288 - "GET /observability/traces?limit=3 HTTP/1.1" 200 OK
+2026-09-01 02:56:45: INFO:     127.0.0.1:52298 - "POST /vault/entries HTTP/1.1" 405 Method Not Allowed
+2026-09-01 02:56:45: INFO:     127.0.0.1:52306 - "GET /memory/recall?q=e2e_test HTTP/1.1" 200 OK
+2026-09-01 03:27:47: 2026-09-01 03:27:47 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 03:27:50: 2026-09-01 03:27:50 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 03:27:50: 2026-09-01 03:27:50 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 03:28:11: INFO:     127.0.0.1:47902 - "POST /plugins/run HTTP/1.1" 200 OK
+2026-09-01 03:28:41: 2026-09-01 03:28:41 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 03:28:43: 2026-09-01 03:28:43 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 03:28:43: 2026-09-01 03:28:43 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 03:28:54: INFO:     127.0.0.1:34940 - "POST /plugins/run HTTP/1.1" 200 OK
+2026-09-01 03:29:33: 2026-09-01 03:29:33 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 03:29:34: 2026-09-01 03:29:34 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 03:29:34: 2026-09-01 03:29:34 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 03:29:45: INFO:     127.0.0.1:32954 - "POST /plugins/run HTTP/1.1" 200 OK
+2026-09-01 03:30:28: 2026-09-01 03:30:28 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 03:30:30: 2026-09-01 03:30:30 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 03:30:30: 2026-09-01 03:30:30 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 03:30:42: INFO:     127.0.0.1:48530 - "POST /plugins/run HTTP/1.1" 200 OK
+2026-09-01 03:36:35: 2026-09-01 03:36:35 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 03:36:38: 2026-09-01 03:36:38 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 03:36:38: 2026-09-01 03:36:38 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 03:36:49: INFO:     127.0.0.1:32958 - "POST /plugins/run HTTP/1.1" 200 OK
+2026-09-01 03:36:49: INFO:     127.0.0.1:32970 - "GET /memory/recall?q=test HTTP/1.1" 200 OK
+2026-09-01 03:36:49: INFO:     127.0.0.1:32984 - "POST /observability/traces/test-spans HTTP/1.1" 405 Method Not Allowed
+2026-09-01 03:36:49: INFO:     127.0.0.1:32986 - "GET /observability/traces?limit=2 HTTP/1.1" 200 OK
+2026-09-01 03:37:17: 2026-09-01 03:37:17 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_read (category: filesystem)
+2026-09-01 03:37:17: 2026-09-01 03:37:17 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_write (category: filesystem)
+2026-09-01 03:37:17: 2026-09-01 03:37:17 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_list (category: filesystem)
+2026-09-01 03:37:17: 2026-09-01 03:37:17 [INFO] aeryn_core.platform.plugin_registry: Registered tool: terminal (category: system)
+2026-09-01 03:37:17: 2026-09-01 03:37:17 [INFO] aeryn_core.platform.plugin_registry: Registered tool: web_search (category: web)
+2026-09-01 03:37:17: 2026-09-01 03:37:17 [INFO] aeryn_core.platform.plugin_registry: Registered tool: web_fetch (category: web)
+2026-09-01 03:37:17: 2026-09-01 03:37:17 [INFO] aeryn_core.platform.plugin_registry: Registered tool: memory_search (category: memory)
+2026-09-01 03:37:18: INFO:     127.0.0.1:47580 - "POST /chat HTTP/1.1" 200 OK
+2026-09-01 03:37:18: INFO:     127.0.0.1:47592 - "POST /divisions/reasoning/execute HTTP/1.1" 200 OK
+2026-09-01 03:40:28: 2026-09-01 03:40:28 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 03:40:30: 2026-09-01 03:40:30 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 03:40:30: 2026-09-01 03:40:30 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 03:40:41: INFO:     127.0.0.1:50934 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 03:40:42: INFO:     127.0.0.1:50942 - "POST /plugins/run HTTP/1.1" 200 OK
+2026-09-01 03:40:42: INFO:     127.0.0.1:50952 - "GET /memory/recall?q=dashboard HTTP/1.1" 200 OK
+2026-09-01 03:43:31: INFO:     127.0.0.1:39040 - "GET /memory/recall?q=dashboard HTTP/1.1" 200 OK
+2026-09-01 03:43:31: INFO:     127.0.0.1:39048 - "POST /divisions/reasoning/execute HTTP/1.1" 200 OK
+2026-09-01 03:43:31: 2026-09-01 03:43:31 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_read (category: filesystem)
+2026-09-01 03:43:31: 2026-09-01 03:43:31 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_write (category: filesystem)
+2026-09-01 03:43:31: 2026-09-01 03:43:31 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_list (category: filesystem)
+2026-09-01 03:43:31: 2026-09-01 03:43:31 [INFO] aeryn_core.platform.plugin_registry: Registered tool: terminal (category: system)
+2026-09-01 03:43:31: 2026-09-01 03:43:31 [INFO] aeryn_core.platform.plugin_registry: Registered tool: web_search (category: web)
+2026-09-01 03:43:31: 2026-09-01 03:43:31 [INFO] aeryn_core.platform.plugin_registry: Registered tool: web_fetch (category: web)
+2026-09-01 03:43:31: 2026-09-01 03:43:31 [INFO] aeryn_core.platform.plugin_registry: Registered tool: memory_search (category: memory)
+2026-09-01 03:43:33: INFO:     127.0.0.1:39054 - "POST /chat HTTP/1.1" 200 OK
+2026-09-01 03:43:33: INFO:     127.0.0.1:56164 - "GET / HTTP/1.1" 200 OK
+2026-09-01 03:43:33: INFO:     127.0.0.1:56170 - "GET /observability/traces?limit=2 HTTP/1.1" 200 OK
+2026-09-01 03:47:42: 2026-09-01 03:47:42 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 03:47:46: 2026-09-01 03:47:46 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 03:47:46: 2026-09-01 03:47:46 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 03:47:57: 2026-09-01 03:47:57 [ERROR] aeryn: Exception in POST /divisions/reasoning/execute: 'coroutine' object is not a mapping | {"traceback": "Traceback (most recent call last):\n  File \"/home/sen/aeryn-core-agent/apps/api/routers/main.py\", line 91, in global_exception_handler\n    response = await call_next(request)\n               ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py\", line 168, in call_next\n    raise app_exc from app_exc.__cause__ or app_exc.__context__\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py\", line 144, in coro\n    await self.app(scope, receive_or_disconnect, send_no_error)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/cors.py\", line 88, in __call__\n    await self.app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/exceptions.py\", line 63, in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py\", line 18, in __call__\n    await self.app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py\", line 670, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 2734, in app\n    await route.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1281, in handle\n    await super().handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py\", line 280, in handle\n    await self.app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 158, in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 144, in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 706, in app\n    raw_response = await run_endpoint_function(\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 352, in run_endpoint_function\n    return await dependant.call(**values)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/apps/api/routers/main.py\", line 334, in execute_division\n    return {\"division\": name, **result}\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: 'coroutine' object is not a mapping\n"}
+2026-09-01 03:47:57: INFO:     127.0.0.1:43014 - "POST /divisions/reasoning/execute HTTP/1.1" 500 Internal Server Error
+2026-09-01 03:53:06: INFO:     127.0.0.1:58374 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 03:53:06: INFO:     127.0.0.1:58388 - "GET /favicon.ico HTTP/1.1" 200 OK
+2026-09-01 03:53:07: INFO:     127.0.0.1:58374 - "GET / HTTP/1.1" 200 OK
+2026-09-01 03:53:07: INFO:     127.0.0.1:58374 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 03:53:07: INFO:     127.0.0.1:58388 - "GET /favicon.ico HTTP/1.1" 200 OK
+2026-09-01 03:53:07: INFO:     127.0.0.1:58388 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 03:53:13: INFO:     127.0.0.1:48252 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 03:53:13: INFO:     127.0.0.1:48252 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 03:53:13: 2026-09-01 03:53:13 [INFO] aeryn_core.platform.adaptive_gateway: AdaptiveGateway initialized: env=proot db=sqlite
+2026-09-01 03:53:13: INFO:     127.0.0.1:48252 - "GET /gateway/env HTTP/1.1" 200 OK
+2026-09-01 03:53:14: INFO:     127.0.0.1:48252 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 03:53:17: INFO:     127.0.0.1:48252 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 03:53:17: INFO:     127.0.0.1:48252 - "GET /gateway/env HTTP/1.1" 200 OK
+2026-09-01 03:53:22: INFO:     127.0.0.1:48268 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 03:53:22: INFO:     127.0.0.1:48268 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 03:53:38: INFO:     127.0.0.1:46382 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 03:53:38: INFO:     127.0.0.1:46382 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 03:53:53: INFO:     127.0.0.1:40838 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 03:53:53: INFO:     127.0.0.1:40838 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 03:54:08: INFO:     127.0.0.1:51974 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 03:54:08: INFO:     127.0.0.1:51974 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 03:54:23: INFO:     127.0.0.1:54938 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 03:54:23: INFO:     127.0.0.1:54938 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 03:54:32: 2026-09-01 03:54:32 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 03:54:37: 2026-09-01 03:54:37 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 03:54:37: 2026-09-01 03:54:37 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 03:54:38: INFO:     127.0.0.1:42696 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 03:54:38: INFO:     127.0.0.1:42696 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 03:54:47: INFO:     127.0.0.1:51678 - "POST /divisions/reasoning/execute HTTP/1.1" 200 OK
+2026-09-01 03:54:47: 2026-09-01 03:54:47 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_read (category: filesystem)
+2026-09-01 03:54:47: 2026-09-01 03:54:47 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_write (category: filesystem)
+2026-09-01 03:54:47: 2026-09-01 03:54:47 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_list (category: filesystem)
+2026-09-01 03:54:47: 2026-09-01 03:54:47 [INFO] aeryn_core.platform.plugin_registry: Registered tool: terminal (category: system)
+2026-09-01 03:54:47: 2026-09-01 03:54:47 [INFO] aeryn_core.platform.plugin_registry: Registered tool: web_search (category: web)
+2026-09-01 03:54:47: 2026-09-01 03:54:47 [INFO] aeryn_core.platform.plugin_registry: Registered tool: web_fetch (category: web)
+2026-09-01 03:54:47: 2026-09-01 03:54:47 [INFO] aeryn_core.platform.plugin_registry: Registered tool: memory_search (category: memory)
+2026-09-01 03:54:48: INFO:     127.0.0.1:51680 - "POST /chat HTTP/1.1" 200 OK
+2026-09-01 03:54:49: INFO:     127.0.0.1:51686 - "POST /plugins/run HTTP/1.1" 200 OK
+2026-09-01 03:54:49: INFO:     127.0.0.1:51702 - "GET /memory/recall?q=test HTTP/1.1" 200 OK
+2026-09-01 03:54:49: INFO:     127.0.0.1:51714 - "GET / HTTP/1.1" 200 OK
+2026-09-01 03:54:53: INFO:     127.0.0.1:44014 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 03:54:53: INFO:     127.0.0.1:44014 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 03:55:08: INFO:     127.0.0.1:44808 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 03:55:08: INFO:     127.0.0.1:44808 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 03:59:43: INFO:     127.0.0.1:55944 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 03:59:43: INFO:     127.0.0.1:55944 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 03:59:53: INFO:     127.0.0.1:39456 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 03:59:53: INFO:     127.0.0.1:39456 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 04:00:08: INFO:     127.0.0.1:58748 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 04:00:08: INFO:     127.0.0.1:58748 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 04:00:23: INFO:     127.0.0.1:46972 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 04:00:23: INFO:     127.0.0.1:46972 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 04:00:38: INFO:     127.0.0.1:49546 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 04:00:38: INFO:     127.0.0.1:49546 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK

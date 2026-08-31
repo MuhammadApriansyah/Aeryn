@@ -296,35 +296,16 @@ async def trigger_adaptation():
     result = si.adapt()
     return result
 
-# --- Plugin Registry Endpoints ---
-@app.get("/plugins")
-async def list_plugins():
-    """List all registered plugins/tools (safe mode if DB unavailable)."""
-    try:
-        from aeryn_core.platform.plugin_registry import _get_registry_safe
-        reg = _get_registry_safe()
-        if reg:
-            return {"tools": reg.list_tools(), **reg.get_stats()}
-        return {"tools": [], "total_tools": 0, "categories": {}, "note": "Tool runtime disabled (shared_db unavailable)"}
-    except Exception as e:
-        return {"tools": [], "total_tools": 0, "categories": {}, "error": type(e).__name__}
+# --- Tool Registry Endpoints (from plugin_registry, not plugins_router) ---
+# Note: /plugins is handled by plugins_router from plugins.py
+# We prefix these to avoid operation ID collision
 
 @app.get("/plugins/discover")
 async def discover_plugins(q: str = "", limit: int = 5):
-    """Discover plugins matching a query."""
+    """Discover tools matching a query."""
     from aeryn_core.platform.plugin_registry import get_registry
     reg = get_registry()
     return {"query": q, "tools": reg.discover_tools(q, limit=limit)}
-
-@app.get("/plugins/{name}")
-async def get_plugin(name: str):
-    """Get plugin details."""
-    from aeryn_core.platform.plugin_registry import get_registry
-    reg = get_registry()
-    tool = reg.get(name)
-    if not tool:
-        return {"error": "Plugin not found"}
-    return tool.to_dict()
 
 # --- Division Management Endpoints (D8) ---
 @app.get("/divisions")
@@ -336,12 +317,21 @@ async def list_divisions():
 
 @app.post("/divisions/{name}/execute")
 async def execute_division(name: str, request: Request):
-    """Execute tasks on a division."""
+    """Execute tasks on a division. Accepts {tasks: [...]} or {goal: "..."} formats."""
     from aeryn_core.orchestration.crew_orchestrator import get_division_manager
     body = await request.json()
-    tasks = body.get("tasks", [])
+    
+    # Normalize: accept both {tasks: [...]} and {goal: "..."}
+    if "tasks" in body:
+        tasks = body["tasks"]
+    elif "goal" in body:
+        tasks = [{"goal": body["goal"], "model": body.get("model", "default"), "timeout": body.get("timeout", 30)}]
+    else:
+        tasks = [{"goal": str(body), "model": "default", "timeout": 30}]
+    
     dm = get_division_manager()
-    return dm.execute_division(name, tasks)
+    result = await dm.execute_division(name, tasks)
+    return {"division": name, **result}
 
 # --- Connector Management Endpoints (D9) ---
 @app.get("/connectors")

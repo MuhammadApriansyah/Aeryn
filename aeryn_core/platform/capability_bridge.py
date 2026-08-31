@@ -69,6 +69,22 @@ class SkillLoader:
         return list(self._skills.keys())
 
 
+class FallbackRecall:
+    """Fallback memory recall using vault search when episodes.jsonl unavailable."""
+    
+    def __init__(self):
+        from aeryn_core.memory.vault import AerynVault
+        self.vault = AerynVault()
+    
+    def recall(self, goal: str, k: int = 3) -> list:
+        """Search vault for relevant entries."""
+        try:
+            results = self.vault.search(goal, limit=k)
+            return [{"source": "vault", "path": r.get("path", ""), "preview": r.get("preview", "")} for r in results]
+        except Exception:
+            return []
+
+
 class MemoryTierBridge:
     """Bridges semantic_recall + memory_indexer to chat context."""
 
@@ -83,10 +99,15 @@ class MemoryTierBridge:
                     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                     "Personalisasi", "Database", "episodes.jsonl"
                 )
-                self._recall = SemanticRecall(episode_path)
+                # Fallback: if episodes.jsonl doesn't exist, use vault search
+                if not os.path.exists(episode_path):
+                    from aeryn_core.memory.vault import AerynVault
+                    self._recall = FallbackRecall()
+                else:
+                    self._recall = SemanticRecall(episode_path)
             except Exception as e:
                 logger.warning(f"SemanticRecall unavailable: {e}")
-                self._recall = False
+                self._recall = FallbackRecall()
         return self._recall
 
     def recall_context(self, goal: str, k: int = 3) -> List[Dict]:

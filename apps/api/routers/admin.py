@@ -229,9 +229,26 @@ async def list_plugins():
     return {"plugins": rt.list_plugins()}
 
 @router.post("/plugins/run")
-async def run_plugin(plugin_name: str, action: str, params: dict = None):
-    """Run a plugin."""
+async def run_plugin(body: dict = None):
+    """Run a plugin. Accepts {plugin_name, action, params} or {name, input} formats."""
+    if not body:
+        body = {}
+    
+    # Normalize: support both formats
+    actual_name = body.get("plugin_name") or body.get("name")
+    actual_action = body.get("action") or "analyze_code"
+    actual_params = body.get("params") or {}
+    if "input" in body:
+        actual_params["code"] = body["input"]
+    
+    if not actual_name:
+        return {"error": "Plugin name required (plugin_name or name field)"}
+    
     rt = get_plugin_runtime()
-    return rt.run_plugin(plugin_name, action, params)
+    result = rt.run_plugin(actual_name, actual_action, actual_params)
+    # Normalize response: always include status
+    if "error" in result:
+        return {"status": "error", "error": result["error"]}
+    return {"status": "ok", **result}
 
 # ── Phase 4 Endpoints ─────────────────────────

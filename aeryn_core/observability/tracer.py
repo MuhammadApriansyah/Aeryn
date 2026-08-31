@@ -122,6 +122,14 @@ class Tracer:
 
     def start_span(self, name: str, span_type: str, input: Any = None, parent_id: str = None, trace_id: str = None) -> Span:
         span = Span(name, span_type, input, parent_id)
+        
+        # Auto-assign to active trace if no trace_id given
+        if trace_id is None:
+            for tid, trace in reversed(list(self._traces.items())):
+                if trace.end_time is None:  # active trace
+                    trace_id = tid
+                    break
+        
         span.trace_id = trace_id
         self._active_spans[span.id] = span
         if trace_id and trace_id in self._traces:

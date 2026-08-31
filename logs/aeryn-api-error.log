@@ -466,3 +466,92 @@
 2026-09-01 00:16:43: INFO:     Waiting for application startup.
 2026-09-01 00:16:43: INFO:     Application startup complete.
 2026-09-01 00:16:43: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-01 00:52:47: INFO:     Shutting down
+2026-09-01 00:52:47: INFO:     Waiting for application shutdown.
+2026-09-01 00:52:47: INFO:     Application shutdown complete.
+2026-09-01 00:52:47: INFO:     Finished server process [31477]
+2026-09-01 00:52:49: INFO:     Started server process [20835]
+2026-09-01 00:52:49: INFO:     Waiting for application startup.
+2026-09-01 00:52:49: INFO:     Application startup complete.
+2026-09-01 00:52:49: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-01 02:09:51: INFO:     Shutting down
+2026-09-01 02:09:51: INFO:     Waiting for application shutdown.
+2026-09-01 02:09:51: INFO:     Application shutdown complete.
+2026-09-01 02:09:51: INFO:     Finished server process [20835]
+2026-09-01 02:09:55: INFO:     Started server process [23393]
+2026-09-01 02:09:55: INFO:     Waiting for application startup.
+2026-09-01 02:09:55: INFO:     Application startup complete.
+2026-09-01 02:09:55: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-01 02:43:42: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/openapi/utils.py:303: UserWarning: Duplicate Operation ID dashboard_dashboard_get for function dashboard at /home/sen/aeryn-core-agent/apps/api/routers/web_routes.py
+2026-09-01 02:43:42:   warnings.warn(message, stacklevel=1)
+2026-09-01 02:43:42: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/openapi/utils.py:303: UserWarning: Duplicate Operation ID list_plugins_plugins_get for function list_plugins at /home/sen/aeryn-core-agent/apps/api/routers/main.py
+2026-09-01 02:43:42:   warnings.warn(message, stacklevel=1)
+2026-09-01 03:27:47: INFO:     Shutting down
+2026-09-01 03:27:47: INFO:     Waiting for application shutdown.
+2026-09-01 03:27:47: INFO:     Application shutdown complete.
+2026-09-01 03:27:47: INFO:     Finished server process [23393]
+2026-09-01 03:27:50: INFO:     Started server process [17836]
+2026-09-01 03:27:50: INFO:     Waiting for application startup.
+2026-09-01 03:27:50: INFO:     Application startup complete.
+2026-09-01 03:27:50: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-01 03:28:41: INFO:     Shutting down
+2026-09-01 03:28:41: INFO:     Waiting for application shutdown.
+2026-09-01 03:28:41: INFO:     Application shutdown complete.
+2026-09-01 03:28:41: INFO:     Finished server process [17836]
+2026-09-01 03:28:43: INFO:     Started server process [18044]
+2026-09-01 03:28:43: INFO:     Waiting for application startup.
+2026-09-01 03:28:43: INFO:     Application startup complete.
+2026-09-01 03:28:43: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-01 03:29:33: INFO:     Shutting down
+2026-09-01 03:29:33: INFO:     Waiting for application shutdown.
+2026-09-01 03:29:33: INFO:     Application shutdown complete.
+2026-09-01 03:29:33: INFO:     Finished server process [18044]
+2026-09-01 03:29:34: INFO:     Started server process [18387]
+2026-09-01 03:29:34: INFO:     Waiting for application startup.
+2026-09-01 03:29:34: INFO:     Application startup complete.
+2026-09-01 03:29:34: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-01 03:30:28: INFO:     Shutting down
+2026-09-01 03:30:28: INFO:     Waiting for application shutdown.
+2026-09-01 03:30:28: INFO:     Application shutdown complete.
+2026-09-01 03:30:28: INFO:     Finished server process [18387]
+2026-09-01 03:30:30: INFO:     Started server process [18817]
+2026-09-01 03:30:30: INFO:     Waiting for application startup.
+2026-09-01 03:30:30: INFO:     Application startup complete.
+2026-09-01 03:30:30: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-01 03:36:35: INFO:     Shutting down
+2026-09-01 03:36:35: INFO:     Waiting for application shutdown.
+2026-09-01 03:36:35: INFO:     Application shutdown complete.
+2026-09-01 03:36:35: INFO:     Finished server process [18817]
+2026-09-01 03:36:38: INFO:     Started server process [25764]
+2026-09-01 03:36:38: INFO:     Waiting for application startup.
+2026-09-01 03:36:38: INFO:     Application startup complete.
+2026-09-01 03:36:38: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-01 03:40:27: INFO:     Shutting down
+2026-09-01 03:40:28: INFO:     Waiting for application shutdown.
+2026-09-01 03:40:28: INFO:     Application shutdown complete.
+2026-09-01 03:40:28: INFO:     Finished server process [25764]
+2026-09-01 03:40:30: INFO:     Started server process [26964]
+2026-09-01 03:40:30: INFO:     Waiting for application startup.
+2026-09-01 03:40:30: INFO:     Application startup complete.
+2026-09-01 03:40:30: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-01 03:43:31: /home/sen/aeryn-core-agent/aeryn_core/orchestration/crew_orchestrator.py:81: RuntimeWarning: coroutine 'AerynLLMClient.chat' was never awaited
+2026-09-01 03:43:31:   return {
+2026-09-01 03:43:31: RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+2026-09-01 03:47:42: INFO:     Shutting down
+2026-09-01 03:47:42: INFO:     Waiting for application shutdown.
+2026-09-01 03:47:42: INFO:     Application shutdown complete.
+2026-09-01 03:47:42: INFO:     Finished server process [26964]
+2026-09-01 03:47:46: INFO:     Started server process [32140]
+2026-09-01 03:47:46: INFO:     Waiting for application startup.
+2026-09-01 03:47:46: INFO:     Application startup complete.
+2026-09-01 03:47:46: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-01 03:54:32: INFO:     Shutting down
+2026-09-01 03:54:32: INFO:     Waiting for application shutdown.
+2026-09-01 03:54:32: INFO:     Application shutdown complete.
+2026-09-01 03:54:32: INFO:     Finished server process [32140]
+2026-09-01 03:54:32: sys:1: RuntimeWarning: coroutine 'DivisionManager.execute_division' was never awaited
+2026-09-01 03:54:32: RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+2026-09-01 03:54:37: INFO:     Started server process [8632]
+2026-09-01 03:54:37: INFO:     Waiting for application startup.
+2026-09-01 03:54:37: INFO:     Application startup complete.
+2026-09-01 03:54:37: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)

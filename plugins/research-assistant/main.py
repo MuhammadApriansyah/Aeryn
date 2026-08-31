@@ -105,3 +105,39 @@ TOOLS = {
 
 def get_tools():
     return TOOLS
+
+# CLI entry point for runtime
+if __name__ == "__main__":
+    import sys
+    import json
+    
+    if len(sys.argv) < 2:
+        print(json.dumps({"error": "No input provided"}))
+        sys.exit(1)
+    
+    try:
+        params = json.loads(sys.argv[1])
+    except json.JSONDecodeError:
+        print(json.dumps({"error": "Invalid JSON input"}))
+        sys.exit(1)
+    
+    # Determine action from params
+    action = params.get("action", "search_vault")
+    
+    if action == "search_vault":
+        query = params.get("query", "")
+        try:
+            result = asyncio.run(search_vault(query))
+        except RuntimeError:
+            # Fallback: run sync version
+            result = {"status": "error", "message": "Async runtime unavailable"}
+    elif action == "summarize":
+        text = params.get("text", "")
+        try:
+            result = asyncio.run(summarize(text))
+        except RuntimeError:
+            result = {"status": "error", "message": "Async runtime unavailable"}
+    else:
+        result = {"error": f"Unknown action: {action}"}
+    
+    print(json.dumps(result, indent=2))

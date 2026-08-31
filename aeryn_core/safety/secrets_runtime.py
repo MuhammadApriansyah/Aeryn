@@ -97,8 +97,15 @@ class PluginRuntime:
         with open(manifest_path) as f:
             manifest = json.load(f)
         
-        # Find the action
+        # Find the action - check both 'actions' and 'tools' keys
         actions = manifest.get("actions", {})
+        tools = manifest.get("tools", [])
+        
+        # If no actions, build from tools
+        if not actions and tools:
+            for tool in tools:
+                actions[tool["name"]] = tool
+        
         if action not in actions:
             return {"error": f"Action not found: {action}"}
         

@@ -1,1 +1,12 @@
 {"trace_id": "0846f336-dc4", "session_id": "b7ff5ce6-a3b", "user_id": "default", "span_count": 0, "total_duration_ms": 1624, "spans": [], "metadata": {}}
+{"trace_id": "4a07117c-72c", "session_id": "w_1788201389602", "user_id": "default", "span_count": 0, "total_duration_ms": 1436, "spans": [], "metadata": {}}
+{"trace_id": "43e2fcb0-d4f", "session_id": "w_1788201389602", "user_id": "default", "span_count": 0, "total_duration_ms": 1862, "spans": [], "metadata": {}}
+{"trace_id": "c4fd9188-e2c", "session_id": "w_1788201389602", "user_id": "default", "span_count": 0, "total_duration_ms": 1598, "spans": [], "metadata": {}}
+{"trace_id": "97b7d254-d2d", "session_id": "w_1788201389602", "user_id": "default", "span_count": 0, "total_duration_ms": 1532, "spans": [], "metadata": {}}
+{"trace_id": "c8d3ace4-021", "session_id": "3f55d6b2-9e1", "user_id": "default", "span_count": 0, "total_duration_ms": 1326, "spans": [], "metadata": {}}
+{"trace_id": "57015270-2d2", "session_id": "334bc18c-0cd", "user_id": "default", "span_count": 0, "total_duration_ms": 1489, "spans": [], "metadata": {}}
+{"trace_id": "29a374d0-ea8", "session_id": "a4a2bda8-515", "user_id": "default", "span_count": 1, "total_duration_ms": 1900, "spans": [{"id": "028d3698-005", "trace_id": "29a374d0-ea8", "parent_id": null, "name": "llm:chat", "type": "llm", "input": {"model": "default"}, "output": "Nih, fungsi Python sederhana buat ngecek apakah sebuah kata itu *palindrome* (dibaca dari depan atau belakang sama aja, kayak \"katak\"):\n\n```python\ndef is_palindrome(kata):\n    # Bersihin spasi dan jad", "duration_ms": 1899, "start_time": "2026-09-01T02:56:26.345843", "end_time": "2026-09-01T02:56:28.245423", "metadata": {}, "error": null}], "metadata": {}}
+{"trace_id": "f1a76a08-aca", "session_id": "8c5cee6a-bcb", "user_id": "default", "span_count": 0, "total_duration_ms": 1385, "spans": [], "metadata": {}}
+{"trace_id": "94e82641-ef9", "session_id": "3b7ce110-984", "user_id": "default", "span_count": 0, "total_duration_ms": 1264, "spans": [], "metadata": {}}
+{"trace_id": "92e961e8-a32", "session_id": "b2c36019-0dd", "user_id": "default", "span_count": 0, "total_duration_ms": 1405, "spans": [], "metadata": {}}
+{"trace_id": "983fb077-a74", "session_id": "dbc61be5-7d9", "user_id": "default", "span_count": 0, "total_duration_ms": 1349, "spans": [], "metadata": {}}

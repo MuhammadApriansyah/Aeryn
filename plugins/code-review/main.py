@@ -93,3 +93,23 @@ TOOLS = {
 
 def get_tools():
     return TOOLS
+
+# CLI entry point for runtime
+if __name__ == "__main__":
+    import sys
+    import json
+    
+    if len(sys.argv) < 2:
+        print(json.dumps({"error": "No input provided"}))
+        sys.exit(1)
+    
+    try:
+        params = json.loads(sys.argv[1])
+    except json.JSONDecodeError:
+        print(json.dumps({"error": "Invalid JSON input"}))
+        sys.exit(1)
+    
+    code = params.get("code", "")
+    filename = params.get("filename", "unknown.py")
+    result = analyze_code(code, filename)
+    print(json.dumps(result, indent=2))

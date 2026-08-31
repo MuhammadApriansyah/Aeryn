@@ -42,7 +42,7 @@ class Agent:
         self.status = "idle"
         self.results: List[Dict] = []
 
-    def execute(self, task: 'Task', context: Dict = None) -> Dict:
+    async def execute(self, task: 'Task', context: Dict = None) -> Dict:
         """Execute a task using LLM + tools."""
         self.status = "working"
         try:
@@ -62,7 +62,7 @@ class Agent:
                 {"role": "user", "content": task.description},
             ]
             
-            result = asyncio.run(router.llm.chat(messages))
+            result = await router.llm.chat(messages)
             output = result.get("content", "")
             
             task.completed = True
@@ -114,11 +114,11 @@ class Task:
         self.start_time = None
         self.end_time = None
 
-    def execute(self) -> Dict:
+    async def execute(self) -> Dict:
         if not self.agent:
             return {"error": "No agent assigned"}
         self.start_time = time.time()
-        result = self.agent.execute(self, self.context)
+        result = await self.agent.execute(self, self.context)
         self.end_time = time.time()
         result["duration_ms"] = int((self.end_time - self.start_time) * 1000) if self.end_time else 0
         return result
@@ -153,14 +153,14 @@ class Crew:
     def add_task(self, task: Task):
         self.tasks.append(task)
 
-    def kickoff(self) -> Dict:
+    async def kickoff(self) -> Dict:
         """Execute all tasks using the specified process."""
         start = time.time()
         self.results = []
 
         if self.process == "sequential":
             for task in self.tasks:
-                result = task.execute()
+                result = await task.execute()
                 self.results.append(result)
                 # Pass output as context to next task
                 if task.output:
@@ -171,7 +171,7 @@ class Crew:
             if master:
                 for task in self.tasks:
                     task.agent = master
-                    result = task.execute()
+                    result = await task.execute()
                     self.results.append(result)
 
         duration = int((time.time() - start) * 1000)
@@ -272,7 +272,7 @@ class DivisionManager:
     def list_divisions(self) -> List[str]:
         return list(self._divisions.keys())
 
-    def execute_division(self, name: str, tasks: List[Dict]) -> Dict:
+    async def execute_division(self, name: str, tasks: List[Dict]) -> Dict:
         """Execute tasks on a division."""
         division = self.get_division(name)
         if not division:
@@ -297,7 +297,7 @@ class DivisionManager:
             )
             division.add_task(task)
 
-        return division.kickoff()
+        return await division.kickoff()
 
     def get_status(self) -> Dict:
         return {
