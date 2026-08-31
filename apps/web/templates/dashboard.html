@@ -1,37 +1,186 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Aeryn Dashboard</title>
-  <meta name="description" content="Aeryn AI Personal Assistant — Single Page Dashboard"/>
-  <link rel="stylesheet" href="/web/static/css/dashboard.css"/>
+  <title>Aeryn Dashboard — AI Agent Platform</title>
+  <meta name="description" content="Aeryn AI Agent Platform — Dashboard for monitoring, tools, divisions, and workflows"/>
+  <link rel="stylesheet" href="/static/css/dashboard.css"/>
 </head>
-<body data-theme="dark">
-  <header class="top-nav">
-    <div class="logo">Aeryn</div>
-    <input type="text" id="search-input" class="search-input" placeholder="Search... (Ctrl+K)"/>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <header class="top-nav" role="banner">
+    <div class="logo" aria-label="Aeryn Logo">🤖 Aeryn</div>
+    
+    <nav class="nav-tabs" role="navigation" aria-label="Main navigation">
+      <button class="nav-tab active" data-tab="overview" aria-selected="true">Overview</button>
+      <button class="nav-tab" data-tab="chat" aria-selected="false">Chat</button>
+      <button class="nav-tab" data-tab="tools" aria-selected="false">Tools</button>
+      <button class="nav-tab" data-tab="divisions" aria-selected="false">Divisions</button>
+      <button class="nav-tab" data-tab="workflows" aria-selected="false">Workflows</button>
+      <button class="nav-tab" data-tab="observability" aria-selected="false">Traces</button>
+      <button class="nav-tab" data-tab="settings" aria-selected="false">Settings</button>
+    </nav>
+    
     <div class="top-actions">
-      <button class="btn-icon" id="theme-toggle" onclick="window.AerynApp.toggleTheme()" title="Toggle Theme (Ctrl+T)">🌙</button>
-      <button class="btn-icon" onclick="window.AerynApp.toggleCommandPalette()" title="Command Palette (Ctrl+Shift+P)">⌘</button>
-      <button class="btn-icon" onclick="window.AerynApp.markAllRead()" title="Notifications">
-        🔔<span id="notification-badge" class="badge">0</span>
-      </button>
+      <div class="search-box">
+        <input type="search" id="global-search" placeholder="Search... (Ctrl+K)" aria-label="Global search"/>
+      </div>
+      <button class="btn-icon" id="theme-toggle" onclick="AerynApp.toggleTheme()" aria-label="Toggle theme">🌙</button>
+      <button class="btn-icon" id="refresh-btn" onclick="AerynApp.refreshAll()" aria-label="Refresh data">🔄</button>
+      <div class="status-indicator" id="status-indicator" aria-live="polite">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="status-text">Connecting...</span>
+      </div>
     </div>
   </header>
 
-  <main class="dashboard-single" id="dashboard-content">
-    <section id="health-stats"></section>
-    <section id="quick-actions"></section>
-    <section id="section-projects"></section>
-    <section id="section-workspaces"></section>
-    <section id="section-plugins"></section>
-    <section id="section-audit"></section>
-    <section id="section-notifications"></section>
-    <section id="section-settings"></section>
+  <main id="main-content" class="dashboard-content" role="main">
+    
+    <!-- Overview Tab -->
+    <section class="tab-panel active" id="tab-overview" role="tabpanel" aria-label="Overview">
+      <div class="stats-grid" id="health-stats" aria-live="polite">
+        <div class="stat-card loading"><span class="stat-label">Loading...</span></div>
+      </div>
+      
+      <div class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div class="action-grid">
+          <button class="action-btn" onclick="AerynApp.switchTab('chat')" aria-label="Open Chat">
+            <span class="action-icon">💬</span>
+            <span class="action-label">Chat</span>
+          </button>
+          <button class="action-btn" onclick="AerynApp.quickRun()" aria-label="Quick Run">
+            <span class="action-icon">⚡</span>
+            <span class="action-label">Quick Run</span>
+          </button>
+          <button class="action-btn" onclick="AerynApp.switchTab('tools')" aria-label="Manage Tools">
+            <span class="action-icon">🔧</span>
+            <span class="action-label">Tools</span>
+          </button>
+          <button class="action-btn" onclick="AerynApp.switchTab('workflows')" aria-label="Create Workflow">
+            <span class="action-icon">📋</span>
+            <span class="action-label">Workflow</span>
+          </button>
+          <button class="action-btn" onclick="AerynApp.triggerAdapt()" aria-label="Trigger Self-Improvement">
+            <span class="action-icon">🧠</span>
+            <span class="action-label">Adapt</span>
+          </button>
+        </div>
+      </div>
+      
+      <div class="dashboard-grid">
+        <div class="card" id="recent-traces">
+          <h3>Recent Traces</h3>
+          <div class="card-content"><p class="muted">Loading...</p></div>
+        </div>
+        <div class="card" id="self-improvement-status">
+          <h3>Self-Improvement</h3>
+          <div class="card-content"><p class="muted">Loading...</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chat Tab -->
+    <section class="tab-panel" id="tab-chat" role="tabpanel" aria-label="Chat">
+      <div class="chat-container">
+        <div class="chat-messages" id="chat-messages" aria-live="polite" aria-label="Chat messages">
+          <div class="message system">
+            <div class="message-content">Welcome to Aeryn Chat. Type a message or goal below.</div>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <textarea id="chat-input" placeholder="Type your message... (Enter to send, Shift+Enter for newline)" aria-label="Chat input"></textarea>
+          <button class="btn-primary" id="chat-send" onclick="AerynApp.sendChat()" aria-label="Send message">Send</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tools Tab -->
+    <section class="tab-panel" id="tab-tools" role="tabpanel" aria-label="Tools & Plugins">
+      <div class="section-header">
+        <h2>Registered Tools</h2>
+        <div class="search-box">
+          <input type="search" id="tools-search" placeholder="Discover tools..." aria-label="Search tools"/>
+        </div>
+      </div>
+      <div class="tools-grid" id="tools-grid">
+        <p class="muted">Loading tools...</p>
+      </div>
+    </section>
+
+    <!-- Divisions Tab -->
+    <section class="tab-panel" id="tab-divisions" role="tabpanel" aria-label="Divisions">
+      <h2>5 Cognitive Divisions</h2>
+      <div class="divisions-grid" id="divisions-grid">
+        <p class="muted">Loading divisions...</p>
+      </div>
+    </section>
+
+    <!-- Workflows Tab -->
+    <section class="tab-panel" id="tab-workflows" role="tabpanel" aria-label="Workflows">
+      <div class="section-header">
+        <h2>Workflows</h2>
+        <button class="btn-primary" onclick="AerynApp.createWorkflow()" aria-label="Create new workflow">+ New Workflow</button>
+      </div>
+      <div class="workflows-list" id="workflows-list">
+        <p class="muted">No workflows yet. Create one to get started.</p>
+      </div>
+    </section>
+
+    <!-- Observability Tab -->
+    <section class="tab-panel" id="tab-observability" role="tabpanel" aria-label="Observability & Traces">
+      <div class="section-header">
+        <h2>Traces & Observability</h2>
+        <div class="header-actions">
+          <button class="btn-secondary" onclick="AerynApp.loadTraces()" aria-label="Refresh traces">Refresh</button>
+          <span id="trace-stats" class="badge">0 traces</span>
+        </div>
+      </div>
+      <div class="traces-list" id="traces-list">
+        <p class="muted">Loading traces...</p>
+      </div>
+    </section>
+
+    <!-- Settings Tab -->
+    <section class="tab-panel" id="tab-settings" role="tabpanel" aria-label="Settings">
+      <h2>Settings</h2>
+      <div class="settings-grid">
+        <div class="card">
+          <h3>Environment</h3>
+          <div class="card-content" id="env-info">
+            <p class="muted">Loading...</p>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Gateway Status</h3>
+          <div class="card-content" id="gateway-info">
+            <p class="muted">Loading...</p>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Self-Improvement</h3>
+          <div class="card-content">
+            <button class="btn-primary" onclick="AerynApp.triggerAdapt()">Trigger Adaptation</button>
+            <button class="btn-secondary" onclick="AerynApp.loadPatterns()">View Patterns</button>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <div id="toast-container" class="toast-container"></div>
-  <script src="/web/static/js/dashboard.js"></script>
+  <div id="toast-container" class="toast-container" aria-live="assertive" aria-atomic="true"></div>
+  <div id="modal-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-title">Modal</h3>
+        <button class="btn-icon" onclick="AerynApp.closeModal()" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="/static/js/dashboard.js"></script>
 </body>
 </html>
