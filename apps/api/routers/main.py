@@ -3,7 +3,12 @@
 
 import os, sys, json, asyncio, time
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+# Ensure project root is on sys.path (4 levels up: apps/api/routers/main.py -> /home/sen/aeryn-core-agent)
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.insert(0, _PROJECT_ROOT)
+if not os.path.exists(os.path.join(_PROJECT_ROOT, "aeryn_core")):
+    # Fallback: try cwd
+    sys.path.insert(0, os.getcwd())
 import aeryn_core.utils.patch_sqlite  # noqa
 
 from fastapi import FastAPI, Request, Response
@@ -28,6 +33,8 @@ from apps.api.routers.plugins import router as plugins_router
 from apps.api.routers.workspaces import router as workspaces_router
 from apps.api.routers.admin import router as admin_router
 from apps.api.routers.phase4 import router as phase4_router
+from apps.api.routers.shared import router as shared_router
+from apps.api.routers.web_routes import router as web_routes_router
 
 # --- Background tasks ---
 async def broadcast_loop():
@@ -150,6 +157,8 @@ app.include_router(plugins_router)     # Plugin marketplace
 app.include_router(workspaces_router)   # Workspace endpoints
 app.include_router(admin_router)        # Admin, SSO, SOC2
 app.include_router(phase4_router)     # Phase 4 + Browser + Vector + Monitoring
+app.include_router(shared_router)     # Shared DB, Vault, Reminders, Tasks
+app.include_router(web_routes_router) # SPA, redirects, static
 
 # --- Health Check ---
 @app.get("/health")
@@ -159,3 +168,13 @@ async def health():
     process = psutil.Process()
     mem_mb = process.memory_info().rss / 1024 / 1024
     return {"status": "healthy", "memory_mb": round(mem_mb, 1), "version": "61.0"}
+
+# --- Main Entry ---
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        app,
+        host=os.getenv("AERYN_HOST", "127.0.0.1"),
+        port=int(os.getenv("AERYN_PORT", "3010")),
+        log_level="info",
+    )

@@ -6,6 +6,7 @@ import aeryn_core.utils.patch_sqlite  # noqa
 
 from pydantic import BaseModel
 from aeryn_core.platform.workspace_manager import get_workspace_manager
+from aeryn_core.auth.auth import get_auth
 
 router = APIRouter()
 

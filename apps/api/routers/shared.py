@@ -6,139 +6,14 @@ import aeryn_core.utils.patch_sqlite  # noqa
 
 from aeryn_core.database.shared_db import get_shared_db
 from aeryn_core.memory.vault import AerynVault
+from aeryn_core.memory.social_memory import SocialMemory
+from aeryn_core.memory.hybrid_search import get_search_engine
 from aeryn_core.utils.logger import info, warn, error, log_exception
 
 router = APIRouter()
 _start_time = time.time()
 _request_count = 0
 _error_count = 0
-
-  // Keep max 50 lines
-  while (logViewer.children.length > 50) {
-    logViewer.removeChild(logViewer.firstChild);
-  }
-  
-  // Auto-scroll
-  logViewer.scrollTop = logViewer.scrollHeight;
-}
-
-// SSE for logs
-function connectLogStream() {
-  const evtSource = new EventSource('/dashboard/stream');
-  
-  evtSource.addEventListener('log', function(e) {
-    const data = JSON.parse(e.data);
-    addLogLine(data.level || 'info', data.message);
-  });
-  
-  return evtSource;
-}
-
-// ── Error Handling + Fallback ─────────────────
-let sseRetries = 0;
-const maxSseRetries = 3;
-let fallbackToPolling = false;
-
-function startFallbackPolling() {
-  if (fallbackToPolling) return;
-  fallbackToPolling = true;
-  showToast('warning', 'Using fallback polling mode');
-  
-  setInterval(async () => {
-    try {
-      const r = await fetch('/dashboard/stats');
-      const d = await r.json();
-      if (!d.error && d.system) {
-        const s = d.system;
-        document.getElementById('mem').innerHTML = s.memory_used_mb + '<span class="unit">MB</span>';
-        document.getElementById('mem-detail').textContent = s.memory_percent + '% of ' + s.memory_total_mb + ' MB';
-        const memBar = document.getElementById('mem-bar');
-        memBar.style.width = s.memory_percent + '%';
-        memBar.className = 'progress-fill' + (s.memory_percent > 85 ? ' warn' : '') + (s.memory_percent > 95 ? ' danger' : '');
-        
-        document.getElementById('disk').innerHTML = s.disk_free_gb + '<span class="unit">GB</span>';
-        document.getElementById('disk-detail').textContent = s.disk_percent + '% used';
-        const diskBar = document.getElementById('disk-bar');
-        diskBar.style.width = s.disk_percent + '%';
-        diskBar.className = 'progress-fill' + (s.disk_percent > 85 ? ' warn' : '') + (s.disk_percent > 95 ? ' danger' : '');
-        
-        document.getElementById('proc-mem').innerHTML = s.process_mem_mb + '<span class="unit">MB</span>';
-        const hrs = Math.floor(s.uptime_s / 3600);
-        const mins = Math.floor((s.uptime_s % 3600) / 60);
-        document.getElementById('uptime').textContent = hrs + 'h ' + mins + 'm uptime';
-        
-        document.getElementById('req-total').textContent = s.requests_total;
-        document.getElementById('err-detail').textContent = s.errors_total + ' errors';
-      }
-    } catch(e) {
-      console.error('Fallback poll failed:', e);
-    }
-  }, 5000);
-}
-
-// ── Offline Detection ─────────────────────────
-window.addEventListener('offline', () => {
-  document.body.classList.add('offline');
-  document.getElementById('offline-banner').style.display = 'block';
-});
-
-window.addEventListener('online', () => {
-  document.body.classList.remove('offline');
-  document.getElementById('offline-banner').style.display = 'none';
-  showToast('success', 'Connection restored');
-});
-
-// ── Card Expand ───────────────────────────────
-function setupCardExpand() {
-  document.querySelectorAll('.card').forEach(card => {
-    card.classList.add('expandable');
-    card.addEventListener('click', () => {
-      const label = card.querySelector('.label')?.textContent || 'Detail';
-      const value = card.querySelector('.value')?.textContent || '';
-      const detail = card.querySelector('.detail')?.textContent || '';
-      
-      const modal = document.getElementById('memory-modal');
-      const title = document.getElementById('modal-title');
-      const body = document.getElementById('modal-body');
-      
-      if (modal && title && body) {
-        title.textContent = label;
-        body.innerHTML = `<strong>${value}</strong><br><br>${detail}`;
-        modal.style.display = 'flex';
-      }
-    });
-  });
-}
-
-// ── Performance: Throttle sparkline redraw ────
-let sparklineThrottle = null;
-
-function throttledSparklineUpdate() {
-  if (sparklineThrottle) return;
-  sparklineThrottle = setTimeout(() => {
-    sparklineThrottle = null;
-  }, 1000); // Max 1 update per second
-}
-
-// ── Init ──────────────────────────────────────
-loadTheme();
-updateClock();
-setInterval(updateClock, 1000);
-connectSSE();
-connectWS();
-connectLogStream();
-loadVaultData();
-loadTasks();
-loadMemory();
-setupSearch();
-setupKeyboard();
-setupCollapsible();
-setupCardExpand();
-setInterval(loadTasks, 30000);
-setInterval(loadMemory, 60000); // Refresh vault data every 60s
-</script>
-</body>
-</html>"""
 
 @router.get("/dashboard/stats")
 async def dashboard_stats():

@@ -131,3 +131,311 @@
 2026-08-30 03:07:48:     fd_event_list = self._selector.poll(timeout)
 2026-08-30 03:07:48:                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 2026-08-30 03:07:48: KeyboardInterrupt
+2026-08-30 23:41:10: Traceback (most recent call last):
+2026-08-30 23:41:10:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:41:10:     
+2026-08-30 23:41:10: with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:41:10:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:41:10:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:41:10:     
+2026-08-30 23:41:10: self.server_bind()
+2026-08-30 23:41:10:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:41:10:     self.socket.bind(self.server_address)
+2026-08-30 23:41:10: OSError: [Errno 98] Address already in use
+2026-08-30 23:41:13: Traceback (most recent call last):
+2026-08-30 23:41:13:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:41:13:     
+2026-08-30 23:41:13: with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:41:13:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:41:13:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:41:13:     self.server_bind()
+2026-08-30 23:41:13:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:41:13:     self.socket.bind(self.server_address)
+2026-08-30 23:41:13: OSError: [Errno 98] Address already in use
+2026-08-30 23:41:15: Traceback (most recent call last):
+2026-08-30 23:41:15:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:41:15:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:41:15:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:41:15:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:41:15:     self.server_bind()
+2026-08-30 23:41:15:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:41:15:     self.socket.bind(self.server_address)
+2026-08-30 23:41:15: OSError: [Errno 98] Address already in use
+2026-08-30 23:41:17: Traceback (most recent call last):
+2026-08-30 23:41:17:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:41:17:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:41:17:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:41:17:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:41:17:     self.server_bind()
+2026-08-30 23:41:17:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:41:17:     self.socket.bind(self.server_address)
+2026-08-30 23:41:17: OSError: [Errno 98] Address already in use
+2026-08-30 23:41:20: Traceback (most recent call last):
+2026-08-30 23:41:20:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:41:20:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:41:20:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:41:20:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:41:20:     self.server_bind()
+2026-08-30 23:41:20:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:41:20:     self.socket.bind(self.server_address)
+2026-08-30 23:41:20: OSError: [Errno 98] Address already in use
+2026-08-30 23:41:22: Traceback (most recent call last):
+2026-08-30 23:41:22:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:41:22:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:41:22:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:41:22:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:41:22:     self.server_bind()
+2026-08-30 23:41:22:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:41:22:     self.socket.bind(self.server_address)
+2026-08-30 23:41:22: OSError: [Errno 98] Address already in use
+2026-08-30 23:41:24: Traceback (most recent call last):
+2026-08-30 23:41:24:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:41:24:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:41:24:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:41:24:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:41:24:     self.server_bind()
+2026-08-30 23:41:24:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:41:24:     self.socket.bind(self.server_address)
+2026-08-30 23:41:24: OSError: [Errno 98] Address already in use
+2026-08-30 23:41:26: Traceback (most recent call last):
+2026-08-30 23:41:26:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:41:26:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:41:26:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:41:26:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:41:26:     self.server_bind()
+2026-08-30 23:41:26:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:41:26:     self.socket.bind(self.server_address)
+2026-08-30 23:41:26: OSError: [Errno 98] Address already in use
+2026-08-30 23:41:28: Traceback (most recent call last):
+2026-08-30 23:41:28:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:41:28:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:41:28:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:41:28:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:41:29:     self.server_bind()
+2026-08-30 23:41:29:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:41:29:     self.socket.bind(self.server_address)
+2026-08-30 23:41:29: OSError: [Errno 98] Address already in use
+2026-08-30 23:41:31: Traceback (most recent call last):
+2026-08-30 23:41:31:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:41:31:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:41:31:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:41:31:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:41:31:     self.server_bind()
+2026-08-30 23:41:31:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:41:31:     self.socket.bind(self.server_address)
+2026-08-30 23:41:31: OSError: [Errno 98] Address already in use
+2026-08-30 23:54:39: Traceback (most recent call last):
+2026-08-30 23:54:39:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:54:39:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:54:39:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:54:39:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:54:39:     self.server_bind()
+2026-08-30 23:54:39:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:54:39:     
+2026-08-30 23:54:39: self.socket.bind(self.server_address)
+2026-08-30 23:54:39: OSError: [Errno 98] Address already in use
+2026-08-30 23:54:42: Traceback (most recent call last):
+2026-08-30 23:54:42:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:54:42:     
+2026-08-30 23:54:42: with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:54:42:          ^^^^^^^^
+2026-08-30 23:54:42: ^^^^^^^^^^
+2026-08-30 23:54:42: ^^^
+2026-08-30 23:54:42: ^
+2026-08-30 23:54:42: ^
+2026-08-30 23:54:42: ^
+2026-08-30 23:54:42: ^
+2026-08-30 23:54:42: ^^^^^
+2026-08-30 23:54:42: ^
+2026-08-30 23:54:42: ^^
+2026-08-30 23:54:42: ^^^^^^^^^^^^
+2026-08-30 23:54:42:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:54:42:     
+2026-08-30 23:54:42: self.server_bind()
+2026-08-30 23:54:42: 
+2026-08-30 23:54:42:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:54:42:     
+2026-08-30 23:54:42: self.socket.bind(self.server_address)
+2026-08-30 23:54:42: OSError: [Errno 98] Address already in use
+2026-08-30 23:54:44: Traceback (most recent call last):
+2026-08-30 23:54:44:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:54:44:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:54:44:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:54:44:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:54:44:     self.server_bind()
+2026-08-30 23:54:44:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:54:44:     self.socket.bind(self.server_address)
+2026-08-30 23:54:44: OSError: [Errno 98] Address already in use
+2026-08-30 23:54:46: Traceback (most recent call last):
+2026-08-30 23:54:46:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:54:46:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:54:46:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:54:46:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:54:46:     self.server_bind()
+2026-08-30 23:54:46:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:54:46:     self.socket.bind(self.server_address)
+2026-08-30 23:54:46: OSError: [Errno 98] Address already in use
+2026-08-30 23:54:49: Traceback (most recent call last):
+2026-08-30 23:54:49:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:54:49:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:54:49:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:54:49:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:54:49:     self.server_bind()
+2026-08-30 23:54:49:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:54:49:     self.socket.bind(self.server_address)
+2026-08-30 23:54:49: OSError: [Errno 98] Address already in use
+2026-08-30 23:54:51: Traceback (most recent call last):
+2026-08-30 23:54:51:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:54:51:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:54:51:  
+2026-08-30 23:54:51:         ^^^^^
+2026-08-30 23:54:51: ^^^
+2026-08-30 23:54:51: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:54:51:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:54:51:     
+2026-08-30 23:54:51: self.server_bind()
+2026-08-30 23:54:51: 
+2026-08-30 23:54:51:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:54:51:     
+2026-08-30 23:54:51: self.socket.bind(self.server_address)
+2026-08-30 23:54:51: OSError: [Errno 98] Address already in use
+2026-08-30 23:54:53: Traceback (most recent call last):
+2026-08-30 23:54:53:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:54:53:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:54:53:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:54:53:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:54:53:     self.server_bind()
+2026-08-30 23:54:53:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:54:53:     self.socket.bind(self.server_address)
+2026-08-30 23:54:53: OSError: [Errno 98] Address already in use
+2026-08-30 23:54:55: Traceback (most recent call last):
+2026-08-30 23:54:55:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:54:55:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:54:55:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:54:55:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:54:55:     self.server_bind()
+2026-08-30 23:54:55:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:54:55:     self.socket.bind(self.server_address)
+2026-08-30 23:54:55: OSError: [Errno 98] Address already in use
+2026-08-30 23:54:58: Traceback (most recent call last):
+2026-08-30 23:54:58:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:54:58:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:54:58:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:54:58:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:54:58:     self.server_bind()
+2026-08-30 23:54:58:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:54:58:     self.socket.bind(self.server_address)
+2026-08-30 23:54:58: OSError: [Errno 98] Address already in use
+2026-08-30 23:55:00: Traceback (most recent call last):
+2026-08-30 23:55:00:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:55:00:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:55:00:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:55:00:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:55:00:     
+2026-08-30 23:55:00: self.server_bind()
+2026-08-30 23:55:00:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:55:00:     self.socket.bind(self.server_address)
+2026-08-30 23:55:00: OSError: [Errno 98] Address already in use
+2026-08-30 23:56:13: Traceback (most recent call last):
+2026-08-30 23:56:13:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:56:13:     
+2026-08-30 23:56:13: with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:56:13:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:56:13:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:56:13:     self.server_bind()
+2026-08-30 23:56:13:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:56:13:     self.socket.bind(self.server_address)
+2026-08-30 23:56:13: OSError: [Errno 98] Address already in use
+2026-08-30 23:56:15: Traceback (most recent call last):
+2026-08-30 23:56:15:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:56:15:     
+2026-08-30 23:56:15: with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:56:15: 
+2026-08-30 23:56:15:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:56:15:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:56:15:     
+2026-08-30 23:56:15: self.server_bind()
+2026-08-30 23:56:15:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:56:15:     
+2026-08-30 23:56:15: self.socket.bind(self.server_address)
+2026-08-30 23:56:15: OSError
+2026-08-30 23:56:15: : [Errno 98] Address already in use
+2026-08-30 23:56:18: Traceback (most recent call last):
+2026-08-30 23:56:18:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:56:18:     
+2026-08-30 23:56:18: with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:56:18:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:56:18:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:56:18:     
+2026-08-30 23:56:18: self.server_bind()
+2026-08-30 23:56:18:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:56:18:     
+2026-08-30 23:56:18: self.socket.bind(self.server_address)
+2026-08-30 23:56:18: OSError: [Errno 98] Address already in use
+2026-08-30 23:56:20: Traceback (most recent call last):
+2026-08-30 23:56:20:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:56:20:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:56:20:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:56:20:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:56:20:     self.server_bind()
+2026-08-30 23:56:20:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:56:20:     self.socket.bind(self.server_address)
+2026-08-30 23:56:20: OSError: [Errno 98] Address already in use
+2026-08-30 23:56:22: Traceback (most recent call last):
+2026-08-30 23:56:22:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:56:22:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:56:22:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:56:22:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:56:22:     self.server_bind()
+2026-08-30 23:56:22:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:56:22:     self.socket.bind(self.server_address)
+2026-08-30 23:56:22: OSError: [Errno 98] Address already in use
+2026-08-30 23:56:25: Traceback (most recent call last):
+2026-08-30 23:56:25:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:56:25:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:56:25:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:56:25:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:56:25:     self.server_bind()
+2026-08-30 23:56:25:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:56:25:     self.socket.bind(self.server_address)
+2026-08-30 23:56:25: OSError: [Errno 98] Address already in use
+2026-08-30 23:56:27: Traceback (most recent call last):
+2026-08-30 23:56:27:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:56:27:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:56:27: ^^
+2026-08-30 23:56:27:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:56:27:     self.server_bind()
+2026-08-30 23:56:27:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:56:27:     self.socket.bind(self.server_address)
+2026-08-30 23:56:27: OSError: [Errno 98] Address already in use
+2026-08-30 23:56:29: Traceback (most recent call last):
+2026-08-30 23:56:29:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:56:29:     
+2026-08-30 23:56:29: with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:56:29:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:56:29:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:56:29:     
+2026-08-30 23:56:29: self.server_bind()
+2026-08-30 23:56:29:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:56:29:     
+2026-08-30 23:56:29: self.socket.bind(self.server_address)
+2026-08-30 23:56:29: 
+2026-08-30 23:56:29: OSError: [Errno 98] Address already in use
+2026-08-30 23:56:32: Traceback (most recent call last):
+2026-08-30 23:56:32:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:56:32:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:56:32:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:56:32:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:56:32:     self.server_bind()
+2026-08-30 23:56:32:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:56:32:     self.socket.bind(self.server_address)
+2026-08-30 23:56:32: OSError: [Errno 98] Address already in use
+2026-08-30 23:56:34: Traceback (most recent call last):
+2026-08-30 23:56:34:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 84, in <module>
+2026-08-30 23:56:34:     with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+2026-08-30 23:56:34:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:56:34:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 456, in __init__
+2026-08-30 23:56:34:     self.server_bind()
+2026-08-30 23:56:34:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 472, in server_bind
+2026-08-30 23:56:34:     self.socket.bind(self.server_address)
+2026-08-30 23:56:34: OSError: [Errno 98] Address already in use

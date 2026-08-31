@@ -1,0 +1,299 @@
+2026-08-30 23:54:39: Traceback (most recent call last):
+2026-08-30 23:54:39:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 7, in <module>
+2026-08-30 23:54:39:     import aeryn_core.utils.patch_sqlite  # noqa
+2026-08-30 23:54:39:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:54:39: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 23:54:44: Traceback (most recent call last):
+2026-08-30 23:54:44:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 7, in <module>
+2026-08-30 23:54:44:     import aeryn_core.utils.patch_sqlite  # noqa
+2026-08-30 23:54:44:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:54:44: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 23:54:48: Traceback (most recent call last):
+2026-08-30 23:54:48:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 7, in <module>
+2026-08-30 23:54:48:     import aeryn_core.utils.patch_sqlite  # noqa
+2026-08-30 23:54:48:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:54:48: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 23:54:52: Traceback (most recent call last):
+2026-08-30 23:54:52:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 7, in <module>
+2026-08-30 23:54:52:     import aeryn_core.utils.patch_sqlite  # noqa
+2026-08-30 23:54:52:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:54:52: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 23:54:57: Traceback (most recent call last):
+2026-08-30 23:54:57:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 7, in <module>
+2026-08-30 23:54:57:     import aeryn_core.utils.patch_sqlite  # noqa
+2026-08-30 23:54:57:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:54:57: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 23:55:01: Traceback (most recent call last):
+2026-08-30 23:55:01:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 7, in <module>
+2026-08-30 23:55:01:     import aeryn_core.utils.patch_sqlite  # noqa
+2026-08-30 23:55:01:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:55:01: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 23:55:05: Traceback (most recent call last):
+2026-08-30 23:55:05:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 7, in <module>
+2026-08-30 23:55:05:     import aeryn_core.utils.patch_sqlite  # noqa
+2026-08-30 23:55:05:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:55:05: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 23:55:10: Traceback (most recent call last):
+2026-08-30 23:55:10:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 7, in <module>
+2026-08-30 23:55:10:     import aeryn_core.utils.patch_sqlite  # noqa
+2026-08-30 23:55:10:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:55:10: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 23:55:14: Traceback (most recent call last):
+2026-08-30 23:55:14:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 7, in <module>
+2026-08-30 23:55:14:     import aeryn_core.utils.patch_sqlite  # noqa
+2026-08-30 23:55:14:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:55:14: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 23:55:18: Traceback (most recent call last):
+2026-08-30 23:55:18:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 7, in <module>
+2026-08-30 23:55:18:     import aeryn_core.utils.patch_sqlite  # noqa
+2026-08-30 23:55:18:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:55:18: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 23:55:23: Traceback (most recent call last):
+2026-08-30 23:55:23:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 7, in <module>
+2026-08-30 23:55:23:     
+2026-08-30 23:55:23: import aeryn_core.utils.patch_sqlite  # noqa
+2026-08-30 23:55:23: 
+2026-08-30 23:55:23:  
+2026-08-30 23:55:23:    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:55:23: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 23:55:27: Traceback (most recent call last):
+2026-08-30 23:55:27:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 7, in <module>
+2026-08-30 23:55:27:     import aeryn_core.utils.patch_sqlite  # noqa
+2026-08-30 23:55:27:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:55:27: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 23:55:31: Traceback (most recent call last):
+2026-08-30 23:55:31:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 7, in <module>
+2026-08-30 23:55:31:     import aeryn_core.utils.patch_sqlite  # noqa
+2026-08-30 23:55:31:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:55:31: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 23:55:36: Traceback (most recent call last):
+2026-08-30 23:55:36:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 7, in <module>
+2026-08-30 23:55:36:     import aeryn_core.utils.patch_sqlite  # noqa
+2026-08-30 23:55:36:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:55:36: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 23:55:40: Traceback (most recent call last):
+2026-08-30 23:55:40:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 7, in <module>
+2026-08-30 23:55:40:     import aeryn_core.utils.patch_sqlite  # noqa
+2026-08-30 23:55:40:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:55:40: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 23:55:44: Traceback (most recent call last):
+2026-08-30 23:55:44:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 7, in <module>
+2026-08-30 23:55:44:     _PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+2026-08-30 23:55:44:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:55:44: ModuleNotFoundError: No module named 'aeryn_core'
+2026-08-30 23:56:13: Traceback (most recent call last):
+2026-08-30 23:56:13:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-08-30 23:56:13:     from fastapi import FastAPI, Request, Response
+2026-08-30 23:56:13:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-08-30 23:56:13:     from .applications import FastAPI as FastAPI
+2026-08-30 23:56:13:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-08-30 23:56:13:     
+2026-08-30 23:56:13: from fastapi import routing
+2026-08-30 23:56:13:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-08-30 23:56:13:     from fastapi import params
+2026-08-30 23:56:13:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-08-30 23:56:13:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-08-30 23:56:13:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-08-30 23:56:13:     from pydantic import BaseModel, create_model
+2026-08-30 23:56:13:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 422, in <module>
+2026-08-30 23:56:13:     
+2026-08-30 23:56:13: _getattr_migration = getattr_migration(__name__)
+2026-08-30 23:56:13:                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-30 23:56:13:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_migration.py", line 262, in getattr_migration
+2026-08-30 23:56:13:     from .errors import PydanticImportError
+2026-08-30 23:56:13:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/errors.py", line 11, in <module>
+2026-08-30 23:56:13:     from pydantic._internal import _repr
+2026-08-30 23:56:13:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_repr.py", line 14, in <module>
+2026-08-30 23:56:13:     from . import _typing_extra
+2026-08-30 23:56:13:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_typing_extra.py", line 21, in <module>
+2026-08-30 23:56:13:     from ._namespace_utils import GlobalsNamespace, MappingNamespace, NsResolver, get_module_ns_of
+2026-08-30 23:56:13:   File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+2026-08-30 23:56:13:   File "<frozen importlib._bootstrap>", line 1138, in _find_and_load_unlocked
+2026-08-30 23:56:13:   File "<frozen importlib._bootstrap>", line 1078, in _find_spec
+2026-08-30 23:56:13:   File "<frozen importlib._bootstrap>", line 750, in find_spec
+2026-08-30 23:56:13: KeyboardInterrupt
+2026-08-30 23:57:49: INFO:     Started server process [7911]
+2026-08-30 23:57:49: INFO:     Waiting for application startup.
+2026-08-30 23:57:49: INFO:     Application startup complete.
+2026-08-30 23:57:49: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-30 23:57:53: INFO:     Shutting down
+2026-08-30 23:57:53: INFO:     Waiting for application shutdown.
+2026-08-30 23:57:53: INFO:     Application shutdown complete.
+2026-08-30 23:57:53: INFO:     Finished server process [7911]
+2026-08-30 23:57:55: INFO:     Started server process [7958]
+2026-08-30 23:57:55: INFO:     Waiting for application startup.
+2026-08-30 23:57:55: INFO:     Application startup complete.
+2026-08-30 23:57:55: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-30 23:59:11: INFO:     Shutting down
+2026-08-30 23:59:11: INFO:     Waiting for application shutdown.
+2026-08-30 23:59:11: INFO:     Application shutdown complete.
+2026-08-30 23:59:11: INFO:     Finished server process [7958]
+2026-08-30 23:59:13: Traceback (most recent call last):
+2026-08-30 23:59:13:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 36, in <module>
+2026-08-30 23:59:13:     from apps.api.routers.shared import router as shared_router
+2026-08-30 23:59:13:   File "/home/sen/aeryn-core-agent/apps/api/routers/shared.py", line 16
+2026-08-30 23:59:13:     // Keep max 50 lines
+2026-08-30 23:59:13: IndentationError: unexpected indent
+2026-08-30 23:59:19: Traceback (most recent call last):
+2026-08-30 23:59:19:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 36, in <module>
+2026-08-30 23:59:19:     from apps.api.routers.shared import router as shared_router
+2026-08-30 23:59:19:   File "/home/sen/aeryn-core-agent/apps/api/routers/shared.py", line 16
+2026-08-30 23:59:19:     // Keep max 50 lines
+2026-08-30 23:59:19: IndentationError: unexpected indent
+2026-08-30 23:59:24: Traceback (most recent call last):
+2026-08-30 23:59:24:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 36, in <module>
+2026-08-30 23:59:24:     from apps.api.routers.shared import router as shared_router
+2026-08-30 23:59:24:   File "/home/sen/aeryn-core-agent/apps/api/routers/shared.py", line 16
+2026-08-30 23:59:24:     // Keep max 50 lines
+2026-08-30 23:59:24: IndentationError: unexpected indent
+2026-08-30 23:59:30: Traceback (most recent call last):
+2026-08-30 23:59:30:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 36, in <module>
+2026-08-30 23:59:30:     from apps.api.routers.shared import router as shared_router
+2026-08-30 23:59:30:   File "/home/sen/aeryn-core-agent/apps/api/routers/shared.py", line 16
+2026-08-30 23:59:30:     // Keep max 50 lines
+2026-08-30 23:59:30: IndentationError: unexpected indent
+2026-08-30 23:59:35: Traceback (most recent call last):
+2026-08-30 23:59:35:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 36, in <module>
+2026-08-30 23:59:35:     from apps.api.routers.shared import router as shared_router
+2026-08-30 23:59:35:   File "/home/sen/aeryn-core-agent/apps/api/routers/shared.py", line 16
+2026-08-30 23:59:35:     // Keep max 50 lines
+2026-08-30 23:59:35: IndentationError: unexpected indent
+2026-08-30 23:59:41: Traceback (most recent call last):
+2026-08-30 23:59:41:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 36, in <module>
+2026-08-30 23:59:41:     from apps.api.routers.shared import router as shared_router
+2026-08-30 23:59:41:   File "/home/sen/aeryn-core-agent/apps/api/routers/shared.py", line 16
+2026-08-30 23:59:41:     // Keep max 50 lines
+2026-08-30 23:59:41: IndentationError: unexpected indent
+2026-08-30 23:59:47: Traceback (most recent call last):
+2026-08-30 23:59:47:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 36, in <module>
+2026-08-30 23:59:47:     from apps.api.routers.shared import router as shared_router
+2026-08-30 23:59:47:   File "/home/sen/aeryn-core-agent/apps/api/routers/shared.py", line 16
+2026-08-30 23:59:47:     // Keep max 50 lines
+2026-08-30 23:59:47: IndentationError: unexpected indent
+2026-08-30 23:59:52: Traceback (most recent call last):
+2026-08-30 23:59:52:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 36, in <module>
+2026-08-30 23:59:52:     from apps.api.routers.shared import router as shared_router
+2026-08-30 23:59:52:   File "/home/sen/aeryn-core-agent/apps/api/routers/shared.py", line 16
+2026-08-30 23:59:52:     // Keep max 50 lines
+2026-08-30 23:59:52: IndentationError: unexpected indent
+2026-08-30 23:59:58: Traceback (most recent call last):
+2026-08-30 23:59:58:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 36, in <module>
+2026-08-30 23:59:58:     from apps.api.routers.shared import router as shared_router
+2026-08-30 23:59:58:   File "/home/sen/aeryn-core-agent/apps/api/routers/shared.py", line 16
+2026-08-30 23:59:58:     // Keep max 50 lines
+2026-08-30 23:59:58: IndentationError: unexpected indent
+2026-08-31 00:00:03: Traceback (most recent call last):
+2026-08-31 00:00:03:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 36, in <module>
+2026-08-31 00:00:03:     from apps.api.routers.shared import router as shared_router
+2026-08-31 00:00:03:   File "/home/sen/aeryn-core-agent/apps/api/routers/shared.py", line 16
+2026-08-31 00:00:03:     // Keep max 50 lines
+2026-08-31 00:00:03: IndentationError: unexpected indent
+2026-08-31 00:00:09: Traceback (most recent call last):
+2026-08-31 00:00:09:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 36, in <module>
+2026-08-31 00:00:09: from apps.api.routers.shared import router as shared_router
+2026-08-31 00:00:09:   File "/home/sen/aeryn-core-agent/apps/api/routers/shared.py", line 16
+2026-08-31 00:00:09:     // Keep max 50 lines
+2026-08-31 00:00:09: IndentationError: unexpected indent
+2026-08-31 00:00:15: Traceback (most recent call last):
+2026-08-31 00:00:15:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 36, in <module>
+2026-08-31 00:00:15:     from apps.api.routers.shared import router as shared_router
+2026-08-31 00:00:15:   File "/home/sen/aeryn-core-agent/apps/api/routers/shared.py", line 16
+2026-08-31 00:00:15:     // Keep max 50 lines
+2026-08-31 00:00:15: IndentationError: unexpected indent
+2026-08-31 00:00:20: Traceback (most recent call last):
+2026-08-31 00:00:20:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 36, in <module>
+2026-08-31 00:00:20:     from apps.api.routers.shared import router as shared_router
+2026-08-31 00:00:20:   File "/home/sen/aeryn-core-agent/apps/api/routers/shared.py", line 16
+2026-08-31 00:00:20:     // Keep max 50 lines
+2026-08-31 00:00:20: IndentationError: unexpected indent
+2026-08-31 00:00:26: INFO:     Started server process [9669]
+2026-08-31 00:00:26: INFO:     Waiting for application startup.
+2026-08-31 00:00:26: INFO:     Application startup complete.
+2026-08-31 00:00:26: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 00:00:29: INFO:     Shutting down
+2026-08-31 00:00:30: INFO:     Waiting for application shutdown.
+2026-08-31 00:00:30: INFO:     Application shutdown complete.
+2026-08-31 00:00:30: INFO:     Finished server process [9669]
+2026-08-31 00:00:31: INFO:     Started server process [9733]
+2026-08-31 00:00:31: INFO:     Waiting for application startup.
+2026-08-31 00:00:31: INFO:     Application startup complete.
+2026-08-31 00:00:31: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 00:01:52: INFO:     Shutting down
+2026-08-31 00:01:53: INFO:     Waiting for application shutdown.
+2026-08-31 00:01:53: INFO:     Application shutdown complete.
+2026-08-31 00:01:53: INFO:     Finished server process [9733]
+2026-08-31 00:01:54: Traceback (most recent call last):
+2026-08-31 00:01:54:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 37, in <module>
+2026-08-31 00:01:54:     from apps.api.routers.web_routes import router as web_routes_router
+2026-08-31 00:01:54:   File "/home/sen/aeryn-core-agent/apps/api/routers/web_routes.py", line 2, in <module>
+2026-08-31 00:01:54:     
+2026-08-31 00:01:54: from fastapi import APIRouter, RedirectResponse
+2026-08-31 00:01:54: ImportError: cannot import name 'RedirectResponse' from 'fastapi' (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-08-31 00:02:00: Traceback (most recent call last):
+2026-08-31 00:02:00:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 37, in <module>
+2026-08-31 00:02:00:     from apps.api.routers.web_routes import router as web_routes_router
+2026-08-31 00:02:00:   File "/home/sen/aeryn-core-agent/apps/api/routers/web_routes.py", line 2, in <module>
+2026-08-31 00:02:00:     from fastapi import APIRouter, RedirectResponse
+2026-08-31 00:02:00: ImportError: cannot import name 'RedirectResponse' from 'fastapi' (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-08-31 00:02:06: Traceback (most recent call last):
+2026-08-31 00:02:06:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 37, in <module>
+2026-08-31 00:02:06:     from apps.api.routers.web_routes import router as web_routes_router
+2026-08-31 00:02:06:   File "/home/sen/aeryn-core-agent/apps/api/routers/web_routes.py", line 2, in <module>
+2026-08-31 00:02:06:     from fastapi import APIRouter, RedirectResponse
+2026-08-31 00:02:06: ImportError: cannot import name 'RedirectResponse' from 'fastapi' (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-08-31 00:02:11: Traceback (most recent call last):
+2026-08-31 00:02:11:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 37, in <module>
+2026-08-31 00:02:11:     from apps.api.routers.web_routes import router as web_routes_router
+2026-08-31 00:02:11:   File "/home/sen/aeryn-core-agent/apps/api/routers/web_routes.py", line 2, in <module>
+2026-08-31 00:02:11:     from fastapi import APIRouter, RedirectResponse
+2026-08-31 00:02:11: ImportError: cannot import name 'RedirectResponse' from 'fastapi' (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-08-31 00:02:17: Traceback (most recent call last):
+2026-08-31 00:02:17:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 37, in <module>
+2026-08-31 00:02:17:     from apps.api.routers.web_routes import router as web_routes_router
+2026-08-31 00:02:17:   File "/home/sen/aeryn-core-agent/apps/api/routers/web_routes.py", line 2, in <module>
+2026-08-31 00:02:17:     from fastapi import APIRouter, RedirectResponse
+2026-08-31 00:02:17: ImportError: cannot import name 'RedirectResponse' from 'fastapi' (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-08-31 00:02:22: INFO:     Started server process [10884]
+2026-08-31 00:02:22: INFO:     Waiting for application startup.
+2026-08-31 00:02:22: INFO:     Application startup complete.
+2026-08-31 00:02:22: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 00:02:29: INFO:     Shutting down
+2026-08-31 00:02:29: INFO:     Waiting for application shutdown.
+2026-08-31 00:02:30: INFO:     Application shutdown complete.
+2026-08-31 00:02:30: INFO:     Finished server process [10884]
+2026-08-31 00:02:31: INFO:     Started server process [11023]
+2026-08-31 00:02:31: INFO:     Waiting for application startup.
+2026-08-31 00:02:31: INFO:     Application startup complete.
+2026-08-31 00:02:31: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 00:04:04: INFO:     Shutting down
+2026-08-31 00:04:04: INFO:     Waiting for application shutdown.
+2026-08-31 00:04:05: INFO:     Application shutdown complete.
+2026-08-31 00:04:05: INFO:     Finished server process [11023]
+2026-08-31 00:04:06: INFO:     Started server process [11885]
+2026-08-31 00:04:06: INFO:     Waiting for application startup.
+2026-08-31 00:04:06: INFO:     Application startup complete.
+2026-08-31 00:04:06: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 00:05:36: INFO:     Shutting down
+2026-08-31 00:05:36: INFO:     Waiting for application shutdown.
+2026-08-31 00:05:36: INFO:     Application shutdown complete.
+2026-08-31 00:05:36: INFO:     Finished server process [11885]
+2026-08-31 00:05:38: INFO:     Started server process [12646]
+2026-08-31 00:05:38: INFO:     Waiting for application startup.
+2026-08-31 00:05:38: INFO:     Application startup complete.
+2026-08-31 00:05:38: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 00:06:53: INFO:     Shutting down
+2026-08-31 00:06:54: INFO:     Waiting for application shutdown.
+2026-08-31 00:06:54: INFO:     Application shutdown complete.
+2026-08-31 00:06:54: INFO:     Finished server process [12646]
+2026-08-31 00:06:55: INFO:     Started server process [13109]
+2026-08-31 00:06:55: INFO:     Waiting for application startup.
+2026-08-31 00:06:55: INFO:     Application startup complete.
+2026-08-31 00:06:55: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 00:07:50: INFO:     Shutting down
+2026-08-31 00:07:50: INFO:     Waiting for application shutdown.
+2026-08-31 00:07:50: INFO:     Application shutdown complete.
+2026-08-31 00:07:50: INFO:     Finished server process [13109]
+2026-08-31 00:07:52: INFO:     Started server process [13398]
+2026-08-31 00:07:52: INFO:     Waiting for application startup.
+2026-08-31 00:07:52: INFO:     Application startup complete.
+2026-08-31 00:07:52: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)

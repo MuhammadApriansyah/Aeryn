@@ -98,7 +98,7 @@ PLUGIN_INFO = {
     "description": "Search vault entries and summarize findings",
 }
 
-TOOL = {
+TOOLS = {
     "search_vault": search_vault,
     "summarize": summarize,
 }

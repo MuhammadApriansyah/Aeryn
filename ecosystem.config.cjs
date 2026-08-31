@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "aeryn-api",
-      script: "apps/api/aeryn_api.py",
+      script: "apps/api/routers/main.py",
       interpreter: "./venv-proot/bin/python",
       cwd: "/home/sen/aeryn-core-agent",
       watch: false,

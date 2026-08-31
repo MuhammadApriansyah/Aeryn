@@ -224,11 +224,6 @@ async def install_plugin(source_dir: str):
     if plugin: return {"status": "installed", "plugin": plugin.name}
     return {"status": "error", "error": "Failed to install plugin"}
 
-@router.get("/plugins/installed")
-async def list_plugins():
-    manager = get_plugin_manager()
-    return {"plugins": manager.list_plugins()}
-
 @router.delete("/plugins/{name}")
 async def uninstall_plugin(name: str):
     manager = get_plugin_manager()

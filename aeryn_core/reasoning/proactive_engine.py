@@ -38,6 +38,16 @@ class ProactiveEngine:
     
     def _init_db(self):
         conn = sqlite3.connect(self.db_path)
+        # Check if table exists with correct schema
+        try:
+            cursor = conn.execute("PRAGMA table_info(suggestions)")
+            cols = [row[1] for row in cursor.fetchall()]
+            expected = {"id", "user_id", "suggestion_type", "title", "description", "priority", "metadata", "is_read", "created_at"}
+            if not expected.issubset(set(cols)):
+                # Schema mismatch — recreate table (dev environment)
+                conn.execute("DROP TABLE IF EXISTS suggestions")
+        except Exception:
+            pass
         conn.executescript("""
             CREATE TABLE IF NOT EXISTS suggestions (
                 id TEXT PRIMARY KEY,

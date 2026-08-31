@@ -13,6 +13,12 @@ router = APIRouter()
 
 # ── Plugin Marketplace Endpoints ──────────────
 
+@router.get("/plugins/installed")
+async def list_installed():
+    """List installed plugins."""
+    pm = get_plugin_manager()
+    return {"plugins": pm.list_plugins(), "count": len(pm.list_plugins())}
+
 class PublishPluginRequest(BaseModel):
     name: str
     source_code: str

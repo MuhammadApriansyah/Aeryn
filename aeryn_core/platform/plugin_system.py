@@ -64,7 +64,10 @@ class Plugin:
     def get_tools(self) -> List[Dict]:
         """Get tools provided by this plugin."""
         if self.module and hasattr(self.module, "get_tools"):
-            return self.module.get_tools()
+            result = self.module.get_tools()
+            if isinstance(result, dict):
+                return [{"name": k, "func": v, **({"description": v.__doc__} if v.__doc__ else {})} for k, v in result.items()]
+            return result
         return []
     
     def execute_tool(self, tool_name: str, **kwargs):
@@ -129,7 +132,10 @@ class PluginManager:
         self._plugins[plugin.name] = plugin
         
         # Register tools
-        for tool in plugin.get_tools():
+        tools_list = plugin.get_tools()
+        if isinstance(tools_list, dict):
+            tools_list = list(tools_list.values())
+        for tool in tools_list:
             tool_name = tool.get("name", "")
             if tool_name:
                 self._tools[tool_name] = (plugin.name, tool)
@@ -241,6 +247,9 @@ def get_plugin_manager() -> PluginManager:
     global _plugin_manager
     if _plugin_manager is None:
         _plugin_manager = PluginManager()
+        # Auto-discover and load plugins
+        for plugin_dir in _plugin_manager.discover_plugins():
+            _plugin_manager.load_plugin(plugin_dir)
     return _plugin_manager
 
 
