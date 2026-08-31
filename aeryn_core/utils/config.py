@@ -2,8 +2,8 @@
 
 import os
 
-# Base paths
-BASE_DIR = os.path.expanduser("~/aeryn-core-agent")
+# Base paths (adaptive: AERYN_BASE_DIR override for portability)
+BASE_DIR = os.path.expanduser(os.environ.get("AERYN_BASE_DIR", "~/aeryn-core-agent"))
 VAULT_DIR = os.path.join(BASE_DIR, "Personalisasi", "Vault")
 DATABASE_DIR = os.path.join(BASE_DIR, "Personalisasi", "Database")
 TRAINING_DIR = os.path.join(DATABASE_DIR, "training")

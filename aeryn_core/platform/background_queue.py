@@ -119,6 +119,17 @@ class BackgroundTaskQueue:
     def get_running_count(self) -> int:
         return sum(1 for t in self._tasks.values() if t.status == TaskStatus.RUNNING)
 
+    def _update_status(self, task_id: str, status: str, result: str = None) -> bool:
+        """Update task status (used by AgentDaemon). Real method, not stub."""
+        task = self._tasks.get(task_id)
+        if not task:
+            return False
+        task.status = TaskStatus(status.lower())
+        if result is not None:
+            task.result = result
+        task.updated_at = time.time()
+        return True
+
 
 # ── Singleton ─────────────────────────────────
 

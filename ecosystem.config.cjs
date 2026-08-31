@@ -12,6 +12,7 @@ module.exports = {
         AERYN_MODE: "standalone",
         AERYN_PORT: "3010",
         AERYN_HOST: "127.0.0.1",
+        AERYN_ENV: "proot",
         PYTHONUNBUFFERED: "1",
         TZ: "Asia/Jakarta",
       },

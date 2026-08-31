@@ -128,20 +128,18 @@ class ToolRuntime:
             return ToolResult(ok=False, error=f"Blocked: {msg}", tool="terminal")
         
         try:
-            # Use sh -c for simple commands (safer than REDACTED)
-            proc = await asyncio.create_subprocess_exec(
-                "sh", "-c", command,
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE,
-                cwd=BASE_DIR,
-            )
-            stdout, stderr = await asyncio.wait_for(
-                proc.communicate(), timeout=timeout
-            )
+            # Use EnhancedSandbox for real containment (resource limits + path isolation)
+            from aeryn_core.safety.enhanced_sandbox import get_enhanced_sandbox
+            sb = get_enhanced_sandbox()
+            session_id = sb.create_session("default", None)
+            sand_result = sb.execute(session_id, command, user_id="default")
+            sb.cleanup_session(session_id)
+            if not sand_result.get("ok"):
+                return ToolResult(ok=False, error=sand_result.get("error", "Sandbox blocked"), tool="terminal")
             return ToolResult(
-                ok=proc.returncode == 0,
-                output=stdout.decode(errors="replace")[:50000],
-                error=stderr.decode(errors="replace")[:10000],
+                ok=True,
+                output=sand_result.get("stdout", "")[:50000],
+                error=sand_result.get("stderr", "")[:10000],
                 tool="terminal",
             )
         except asyncio.TimeoutError:

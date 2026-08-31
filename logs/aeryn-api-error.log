@@ -1,0 +1,348 @@
+2026-08-31 08:08:01: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/openapi/utils.py:303: UserWarning: Duplicate Operation ID spa_root__get for function spa_root at /home/sen/aeryn-core-agent/apps/api/routers/web_routes.py
+2026-08-31 08:08:01:   warnings.warn(message, stacklevel=1)
+2026-08-31 08:08:01: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/openapi/utils.py:303: UserWarning: Duplicate Operation ID spa_fallback_app__spa__get for function spa_fallback at /home/sen/aeryn-core-agent/apps/api/routers/web_routes.py
+2026-08-31 08:08:01:   warnings.warn(message, stacklevel=1)
+2026-08-31 08:08:01: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/openapi/utils.py:303: UserWarning: Duplicate Operation ID health_health_get for function health at /home/sen/aeryn-core-agent/apps/api/routers/main.py
+2026-08-31 08:08:01:   warnings.warn(message, stacklevel=1)
+2026-08-31 08:54:40: INFO:     Shutting down
+2026-08-31 08:54:40: INFO:     Waiting for application shutdown.
+2026-08-31 08:54:40: INFO:     Application shutdown complete.
+2026-08-31 08:54:40: INFO:     Finished server process [31504]
+2026-08-31 08:54:44: INFO:     Started server process [16485]
+2026-08-31 08:54:44: INFO:     Waiting for application startup.
+2026-08-31 08:54:44: INFO:     Application startup complete.
+2026-08-31 08:54:44: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 08:55:17: INFO:     Shutting down
+2026-08-31 08:55:17: INFO:     Waiting for application shutdown.
+2026-08-31 08:55:17: INFO:     Application shutdown complete.
+2026-08-31 08:55:17: INFO:     Finished server process [16485]
+2026-08-31 08:55:18: INFO:     Started server process [16592]
+2026-08-31 08:55:18: INFO:     Waiting for application startup.
+2026-08-31 08:55:18: INFO:     Application startup complete.
+2026-08-31 08:55:18: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 08:55:51: INFO:     Shutting down
+2026-08-31 08:55:51: INFO:     Waiting for application shutdown.
+2026-08-31 08:55:51: INFO:     Application shutdown complete.
+2026-08-31 08:55:51: INFO:     Finished server process [16592]
+2026-08-31 08:55:53: INFO:     Started server process [16726]
+2026-08-31 08:55:53: INFO:     Waiting for application startup.
+2026-08-31 08:55:53: INFO:     Application startup complete.
+2026-08-31 08:55:53: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 08:57:43: INFO:     Shutting down
+2026-08-31 08:57:43: INFO:     Waiting for application shutdown.
+2026-08-31 08:57:43: INFO:     Application shutdown complete.
+2026-08-31 08:57:43: INFO:     Finished server process [16726]
+2026-08-31 08:57:44: INFO:     Started server process [17325]
+2026-08-31 08:57:44: INFO:     Waiting for application startup.
+2026-08-31 08:57:44: INFO:     Application startup complete.
+2026-08-31 08:57:44: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 08:58:30: INFO:     Shutting down
+2026-08-31 08:58:30: INFO:     Waiting for application shutdown.
+2026-08-31 08:58:30: INFO:     Application shutdown complete.
+2026-08-31 08:58:30: INFO:     Finished server process [17325]
+2026-08-31 08:58:32: INFO:     Started server process [17542]
+2026-08-31 08:58:32: INFO:     Waiting for application startup.
+2026-08-31 08:58:32: INFO:     Application startup complete.
+2026-08-31 08:58:32: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 08:59:46: INFO:     Shutting down
+2026-08-31 08:59:46: INFO:     Waiting for application shutdown.
+2026-08-31 08:59:46: INFO:     Application shutdown complete.
+2026-08-31 08:59:46: INFO:     Finished server process [17542]
+2026-08-31 08:59:48: INFO:     Started server process [18767]
+2026-08-31 08:59:48: INFO:     Waiting for application startup.
+2026-08-31 08:59:48: INFO:     Application startup complete.
+2026-08-31 08:59:48: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 09:01:09: INFO:     Shutting down
+2026-08-31 09:01:09: INFO:     Waiting for application shutdown.
+2026-08-31 09:01:09: INFO:     Application shutdown complete.
+2026-08-31 09:01:09: INFO:     Finished server process [18767]
+2026-08-31 09:01:11: INFO:     Started server process [19345]
+2026-08-31 09:01:11: INFO:     Waiting for application startup.
+2026-08-31 09:01:11: INFO:     Application startup complete.
+2026-08-31 09:01:11: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 09:02:03: INFO:     Shutting down
+2026-08-31 09:02:04: INFO:     Waiting for application shutdown.
+2026-08-31 09:02:04: INFO:     Application shutdown complete.
+2026-08-31 09:02:04: INFO:     Finished server process [19345]
+2026-08-31 09:02:05: INFO:     Started server process [19769]
+2026-08-31 09:02:05: INFO:     Waiting for application startup.
+2026-08-31 09:02:05: INFO:     Application startup complete.
+2026-08-31 09:02:05: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 09:02:52: INFO:     Shutting down
+2026-08-31 09:02:52: INFO:     Waiting for application shutdown.
+2026-08-31 09:02:52: INFO:     Application shutdown complete.
+2026-08-31 09:02:52: INFO:     Finished server process [19769]
+2026-08-31 09:02:57: INFO:     Started server process [20113]
+2026-08-31 09:02:57: INFO:     Waiting for application startup.
+2026-08-31 09:02:57: INFO:     Application startup complete.
+2026-08-31 09:02:57: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 09:03:42: INFO:     Shutting down
+2026-08-31 09:03:43: INFO:     Waiting for application shutdown.
+2026-08-31 09:03:43: INFO:     Application shutdown complete.
+2026-08-31 09:03:43: INFO:     Finished server process [20113]
+2026-08-31 09:03:48: INFO:     Started server process [20424]
+2026-08-31 09:03:48: INFO:     Waiting for application startup.
+2026-08-31 09:03:48: INFO:     Application startup complete.
+2026-08-31 09:03:48: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 09:04:19: INFO:     Shutting down
+2026-08-31 09:04:19: INFO:     Waiting for application shutdown.
+2026-08-31 09:04:19: INFO:     Application shutdown complete.
+2026-08-31 09:04:19: INFO:     Finished server process [20424]
+2026-08-31 09:04:24: INFO:     Started server process [20800]
+2026-08-31 09:04:24: INFO:     Waiting for application startup.
+2026-08-31 09:04:24: INFO:     Application startup complete.
+2026-08-31 09:04:24: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 09:08:49: INFO:     Shutting down
+2026-08-31 09:08:49: INFO:     Waiting for application shutdown.
+2026-08-31 09:08:49: INFO:     Application shutdown complete.
+2026-08-31 09:08:49: INFO:     Finished server process [20800]
+2026-08-31 09:08:51: Traceback (most recent call last):
+2026-08-31 09:08:51:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:08:51:     _V1 = APIRouter()
+2026-08-31 09:08:51:           ^^^^^^^^^
+2026-08-31 09:08:51: NameError: name 'APIRouter' is not defined
+2026-08-31 09:08:57: Traceback (most recent call last):
+2026-08-31 09:08:57:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:08:57:     
+2026-08-31 09:08:57: _V1 = APIRouter()
+2026-08-31 09:08:57:           ^^^^^^^^^
+2026-08-31 09:08:57: NameError: name 'APIRouter' is not defined
+2026-08-31 09:09:03: Traceback (most recent call last):
+2026-08-31 09:09:03:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:09:03:     _V1 = APIRouter()
+2026-08-31 09:09:03:           ^^^^^^^^^
+2026-08-31 09:09:03: NameError: name 'APIRouter' is not defined
+2026-08-31 09:09:08: Traceback (most recent call last):
+2026-08-31 09:09:08:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:09:08:     _V1 = APIRouter()
+2026-08-31 09:09:08:           ^^^^^^^^^
+2026-08-31 09:09:08: NameError: name 'APIRouter' is not defined
+2026-08-31 09:09:14: Traceback (most recent call last):
+2026-08-31 09:09:14:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:09:14:     
+2026-08-31 09:09:14: _V1 = APIRouter()
+2026-08-31 09:09:14:           ^^^^^^^^^
+2026-08-31 09:09:14: NameError: name 'APIRouter' is not defined
+2026-08-31 09:09:19: Traceback (most recent call last):
+2026-08-31 09:09:19:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:09:19:     _V1 = APIRouter()
+2026-08-31 09:09:19:           ^^^^^^^^^
+2026-08-31 09:09:19: NameError: name 'APIRouter' is not defined
+2026-08-31 09:09:25: Traceback (most recent call last):
+2026-08-31 09:09:25:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:09:25:     _V1 = APIRouter()
+2026-08-31 09:09:25:           ^^^^^^^^^
+2026-08-31 09:09:25: NameError: name 'APIRouter' is not defined
+2026-08-31 09:09:30: Traceback (most recent call last):
+2026-08-31 09:09:30:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:09:30:     _V1 = APIRouter()
+2026-08-31 09:09:30:           ^^^^^^^^^
+2026-08-31 09:09:30: NameError: name 'APIRouter' is not defined
+2026-08-31 09:09:36: Traceback (most recent call last):
+2026-08-31 09:09:36:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:09:36:     _V1 = APIRouter()
+2026-08-31 09:09:36:           ^^^^^^^^^
+2026-08-31 09:09:36: NameError: name 'APIRouter' is not defined
+2026-08-31 09:09:41: Traceback (most recent call last):
+2026-08-31 09:09:41:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:09:41:     _V1 = APIRouter()
+2026-08-31 09:09:41:           ^^^^^^^^^
+2026-08-31 09:09:41: NameError: name 'APIRouter' is not defined
+2026-08-31 09:09:47: Traceback (most recent call last):
+2026-08-31 09:09:47:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:09:47:     _V1 = APIRouter()
+2026-08-31 09:09:47:           ^^^^^^^^^
+2026-08-31 09:09:47: NameError: name 'APIRouter' is not defined
+2026-08-31 09:09:52: Traceback (most recent call last):
+2026-08-31 09:09:52:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:09:52:     _V1 = APIRouter()
+2026-08-31 09:09:52:           ^^^^^^^^^
+2026-08-31 09:09:52: NameError: name 'APIRouter' is not defined
+2026-08-31 09:09:58: Traceback (most recent call last):
+2026-08-31 09:09:58:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:09:58:     _V1 = APIRouter()
+2026-08-31 09:09:58:           ^^^^^^^^^
+2026-08-31 09:09:58: NameError: name 'APIRouter' is not defined
+2026-08-31 09:10:03: Traceback (most recent call last):
+2026-08-31 09:10:03:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:10:03:     _V1 = APIRouter()
+2026-08-31 09:10:03:           ^^^^^^^^^
+2026-08-31 09:10:03: NameError: name 'APIRouter' is not defined
+2026-08-31 09:10:09: Traceback (most recent call last):
+2026-08-31 09:10:09:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:10:09:     _V1 = APIRouter()
+2026-08-31 09:10:09:           ^^^^^^^^^
+2026-08-31 09:10:09: NameError: name 'APIRouter' is not defined
+2026-08-31 09:10:14: Traceback (most recent call last):
+2026-08-31 09:10:14:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:10:14:     _V1 = APIRouter()
+2026-08-31 09:10:14:           ^^^^^^^^^
+2026-08-31 09:10:14: NameError: name 'APIRouter' is not defined
+2026-08-31 09:10:20: Traceback (most recent call last):
+2026-08-31 09:10:20:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:10:20:     _V1 = APIRouter()
+2026-08-31 09:10:20:           ^^^^^^^^^
+2026-08-31 09:10:20: NameError: name 'APIRouter' is not defined
+2026-08-31 09:10:25: Traceback (most recent call last):
+2026-08-31 09:10:25:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:10:25:     _V1 = APIRouter()
+2026-08-31 09:10:25:           ^^^^^^^^^
+2026-08-31 09:10:25: NameError: name 'APIRouter' is not defined
+2026-08-31 09:10:31: Traceback (most recent call last):
+2026-08-31 09:10:31:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:10:31:     _V1 = APIRouter()
+2026-08-31 09:10:31:           ^^^^^^^^^
+2026-08-31 09:10:31: NameError: name 'APIRouter' is not defined
+2026-08-31 09:10:36: Traceback (most recent call last):
+2026-08-31 09:10:36:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 171, in <module>
+2026-08-31 09:10:36:     _V1 = APIRouter()
+2026-08-31 09:10:36:           ^^^^^^^^^
+2026-08-31 09:10:36: NameError: name 'APIRouter' is not defined
+2026-08-31 09:14:09: INFO:     Started server process [23350]
+2026-08-31 09:14:09: INFO:     Waiting for application startup.
+2026-08-31 09:14:09: INFO:     Application startup complete.
+2026-08-31 09:14:09: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 10:00:16: INFO:     Shutting down
+2026-08-31 10:00:16: INFO:     Waiting for application shutdown.
+2026-08-31 10:00:16: INFO:     Application shutdown complete.
+2026-08-31 10:00:16: INFO:     Finished server process [23350]
+2026-08-31 10:00:23: INFO:     Started server process [22671]
+2026-08-31 10:00:23: INFO:     Waiting for application startup.
+2026-08-31 10:00:23: INFO:     Application startup complete.
+2026-08-31 10:00:23: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 10:26:11: INFO:     Shutting down
+2026-08-31 10:26:12: INFO:     Waiting for application shutdown.
+2026-08-31 10:26:12: INFO:     Application shutdown complete.
+2026-08-31 10:26:12: INFO:     Finished server process [22671]
+2026-08-31 10:26:28: INFO:     Started server process [11644]
+2026-08-31 10:26:28: INFO:     Waiting for application startup.
+2026-08-31 10:26:28: INFO:     Application startup complete.
+2026-08-31 10:26:28: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 10:47:51: INFO:     Shutting down
+2026-08-31 10:47:51: INFO:     Waiting for application shutdown.
+2026-08-31 10:47:52: INFO:     Application shutdown complete.
+2026-08-31 10:47:52: INFO:     Finished server process [11644]
+2026-08-31 10:47:58: INFO:     Started server process [25211]
+2026-08-31 10:47:58: INFO:     Waiting for application startup.
+2026-08-31 10:47:58: INFO:     Application startup complete.
+2026-08-31 10:47:58: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 10:54:18: INFO:     Shutting down
+2026-08-31 10:54:18: INFO:     Waiting for application shutdown.
+2026-08-31 10:54:18: INFO:     Application shutdown complete.
+2026-08-31 10:54:18: INFO:     Finished server process [25211]
+2026-08-31 10:54:27: INFO:     Started server process [27380]
+2026-08-31 10:54:27: INFO:     Waiting for application startup.
+2026-08-31 10:54:27: INFO:     Application startup complete.
+2026-08-31 10:54:27: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 11:00:03: INFO:     Shutting down
+2026-08-31 11:00:04: INFO:     Waiting for application shutdown.
+2026-08-31 11:00:04: INFO:     Application shutdown complete.
+2026-08-31 11:00:04: INFO:     Finished server process [27380]
+2026-08-31 11:00:08: INFO:     Started server process [30517]
+2026-08-31 11:00:08: INFO:     Waiting for application startup.
+2026-08-31 11:00:08: INFO:     Application startup complete.
+2026-08-31 11:00:08: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 11:08:51: INFO:     Shutting down
+2026-08-31 11:08:51: INFO:     Waiting for application shutdown.
+2026-08-31 11:08:51: INFO:     Application shutdown complete.
+2026-08-31 11:08:51: INFO:     Finished server process [30517]
+2026-08-31 11:08:54: INFO:     Started server process [5152]
+2026-08-31 11:08:54: INFO:     Waiting for application startup.
+2026-08-31 11:08:54: INFO:     Application startup complete.
+2026-08-31 11:08:54: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 11:13:44: INFO:     Shutting down
+2026-08-31 11:13:45: INFO:     Waiting for application shutdown.
+2026-08-31 11:13:45: INFO:     Application shutdown complete.
+2026-08-31 11:13:45: INFO:     Finished server process [5152]
+2026-08-31 11:13:50: INFO:     Started server process [11246]
+2026-08-31 11:13:50: INFO:     Waiting for application startup.
+2026-08-31 11:13:50: INFO:     Application startup complete.
+2026-08-31 11:13:50: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 11:16:50: INFO:     Shutting down
+2026-08-31 11:16:50: INFO:     Waiting for application shutdown.
+2026-08-31 11:16:50: INFO:     Application shutdown complete.
+2026-08-31 11:16:50: INFO:     Finished server process [11246]
+2026-08-31 11:16:57: INFO:     Started server process [14323]
+2026-08-31 11:16:58: INFO:     Waiting for application startup.
+2026-08-31 11:16:58: INFO:     Application startup complete.
+2026-08-31 11:16:58: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 11:23:06: INFO:     Shutting down
+2026-08-31 11:23:06: INFO:     Waiting for application shutdown.
+2026-08-31 11:23:06: INFO:     Application shutdown complete.
+2026-08-31 11:23:06: INFO:     Finished server process [14323]
+2026-08-31 11:23:12: INFO:     Started server process [22235]
+2026-08-31 11:23:12: INFO:     Waiting for application startup.
+2026-08-31 11:23:12: INFO:     Application startup complete.
+2026-08-31 11:23:12: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 11:31:54: INFO:     Shutting down
+2026-08-31 11:31:54: INFO:     Waiting for application shutdown.
+2026-08-31 11:31:54: INFO:     Application shutdown complete.
+2026-08-31 11:31:54: INFO:     Finished server process [22235]
+2026-08-31 11:32:00: INFO:     Started server process [31840]
+2026-08-31 11:32:00: INFO:     Waiting for application startup.
+2026-08-31 11:32:00: INFO:     Application startup complete.
+2026-08-31 11:32:00: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 11:37:12: INFO:     Shutting down
+2026-08-31 11:37:12: INFO:     Waiting for application shutdown.
+2026-08-31 11:37:12: INFO:     Application shutdown complete.
+2026-08-31 11:37:12: INFO:     Finished server process [31840]
+2026-08-31 11:37:29: INFO:     Started server process [5191]
+2026-08-31 11:37:29: INFO:     Waiting for application startup.
+2026-08-31 11:37:29: INFO:     Application startup complete.
+2026-08-31 11:37:29: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 11:42:44: INFO:     Shutting down
+2026-08-31 11:42:44: INFO:     Waiting for application shutdown.
+2026-08-31 11:42:44: INFO:     Application shutdown complete.
+2026-08-31 11:42:44: INFO:     Finished server process [5191]
+2026-08-31 11:42:51: INFO:     Started server process [6876]
+2026-08-31 11:42:51: INFO:     Waiting for application startup.
+2026-08-31 11:42:51: INFO:     Application startup complete.
+2026-08-31 11:42:51: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 11:54:07: INFO:     Shutting down
+2026-08-31 11:54:07: INFO:     Waiting for application shutdown.
+2026-08-31 11:54:08: INFO:     Application shutdown complete.
+2026-08-31 11:54:08: INFO:     Finished server process [6876]
+2026-08-31 11:54:23: INFO:     Started server process [15308]
+2026-08-31 11:54:23: INFO:     Waiting for application startup.
+2026-08-31 11:54:23: INFO:     Application startup complete.
+2026-08-31 11:54:23: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 11:59:19: INFO:     Shutting down
+2026-08-31 11:59:19: INFO:     Waiting for application shutdown.
+2026-08-31 11:59:19: INFO:     Application shutdown complete.
+2026-08-31 11:59:19: INFO:     Finished server process [15308]
+2026-08-31 11:59:27: INFO:     Started server process [17327]
+2026-08-31 11:59:27: INFO:     Waiting for application startup.
+2026-08-31 11:59:27: INFO:     Application startup complete.
+2026-08-31 11:59:27: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 12:03:17: INFO:     Started server process [19456]
+2026-08-31 12:03:17: INFO:     Waiting for application startup.
+2026-08-31 12:03:17: INFO:     Application startup complete.
+2026-08-31 12:03:17: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 12:44:52: INFO:     Started server process [25569]
+2026-08-31 12:44:52: INFO:     Waiting for application startup.
+2026-08-31 12:44:52: INFO:     Application startup complete.
+2026-08-31 12:44:52: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 12:46:59: INFO:     Shutting down
+2026-08-31 12:46:59: INFO:     Waiting for application shutdown.
+2026-08-31 12:46:59: INFO:     Application shutdown complete.
+2026-08-31 12:46:59: INFO:     Finished server process [25569]
+2026-08-31 12:47:04: INFO:     Started server process [28159]
+2026-08-31 12:47:04: INFO:     Waiting for application startup.
+2026-08-31 12:47:04: INFO:     Application startup complete.
+2026-08-31 12:47:04: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 12:52:04: INFO:     Shutting down
+2026-08-31 12:52:04: INFO:     Waiting for application shutdown.
+2026-08-31 12:52:04: INFO:     Application shutdown complete.
+2026-08-31 12:52:04: INFO:     Finished server process [28159]
+2026-08-31 13:32:34: INFO:     Started server process [5386]
+2026-08-31 13:32:34: INFO:     Waiting for application startup.
+2026-08-31 13:32:34: INFO:     Application startup complete.
+2026-08-31 13:32:34: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 13:36:34: INFO:     Shutting down
+2026-08-31 13:36:34: INFO:     Waiting for application shutdown.
+2026-08-31 13:36:34: INFO:     Application shutdown complete.
+2026-08-31 13:36:34: INFO:     Finished server process [5386]
+2026-08-31 13:38:42: INFO:     Started server process [11925]
+2026-08-31 13:38:42: INFO:     Waiting for application startup.
+2026-08-31 13:38:42: INFO:     Application startup complete.
+2026-08-31 13:38:42: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)

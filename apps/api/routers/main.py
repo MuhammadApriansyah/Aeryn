@@ -14,6 +14,7 @@ import aeryn_core.utils.patch_sqlite  # noqa
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import APIRouter
 from contextlib import asynccontextmanager
 
 # Import shared state modules
@@ -22,6 +23,7 @@ from aeryn_core.utils.llm_client import get_mode_router
 from aeryn_core.auth.rate_limiter import get_rate_limiter
 from aeryn_core.utils.error_recovery import get_error_recovery
 from aeryn_core.platform.realtime import get_emitter
+from aeryn_core.platform.adaptive_gateway import get_gateway
 
 # Import routers
 from apps.api.routers.chat import router as chat_router
@@ -54,8 +56,13 @@ async def lifespan(app: FastAPI):
     """Manage background tasks."""
     info("Aeryn API starting", version="61.0")
     task = asyncio.create_task(broadcast_loop())
+    # Start Agent Daemon (autonomy loop)
+    from aeryn_core.platform.agent_daemon import get_agent_daemon
+    daemon = get_agent_daemon()
+    await daemon.start()
     yield
     task.cancel()
+    await daemon.stop()
 
 # --- App ---
 app = FastAPI(
@@ -159,6 +166,95 @@ app.include_router(admin_router)        # Admin, SSO, SOC2
 app.include_router(phase4_router)     # Phase 4 + Browser + Vector + Monitoring
 app.include_router(shared_router)     # Shared DB, Vault, Reminders, Tasks
 app.include_router(web_routes_router) # SPA, redirects, static
+
+# --- API Versioning: /v1/ alias for all routers (backward-compatible) ---
+# Mount all routers under /v1 prefix as well (old paths still work)
+_V1 = APIRouter()
+_V1.include_router(chat_router)
+_V1.include_router(dashboard_router)
+_V1.include_router(notifications_router)
+_V1.include_router(tools_router)
+_V1.include_router(auth_router)
+_V1.include_router(plugins_router)
+_V1.include_router(workspaces_router)
+_V1.include_router(admin_router)
+_V1.include_router(phase4_router)
+_V1.include_router(shared_router)
+app.include_router(_V1, prefix="/v1")
+
+# --- Adaptive Gateway Endpoint ---
+@app.get("/gateway/env")
+async def gateway_env():
+    """Expose detected environment + gateway status."""
+    gw = get_gateway()
+    return {
+        "environment": gw.get_env_info(),
+        "auth_enabled": gw.auth is not None,
+        "rate_limiter_enabled": gw.rate_limiter is not None,
+        "error_recovery_enabled": gw.error_recovery is not None,
+        "circuit_breakers": {
+            "chat": gw.get_circuit_breaker_state("chat"),
+            "llm": gw.get_circuit_breaker_state("llm"),
+        },
+    }
+
+# --- Agent Daemon Endpoints ---
+@app.post("/daemon/tasks")
+async def submit_task(request: Request):
+    """Submit a task for autonomous execution."""
+    from aeryn_core.platform.background_queue import get_task_queue
+    body = await request.json()
+    name = body.get("goal") or body.get("name") or "untitled"
+    queue = get_task_queue()
+    # Wrap as async no-op func (daemon executes via _tick)
+    task_id = await queue.submit(name, lambda: None)
+    return {"task_id": task_id, "status": "pending", "name": name}
+
+@app.get("/daemon/tasks")
+async def list_tasks():
+    """List all daemon tasks."""
+    from aeryn_core.platform.background_queue import get_task_queue
+    queue = get_task_queue()
+    return {"tasks": queue.get_all_tasks(), "pending": queue.get_pending_count()}
+
+# --- Capability Bridge Endpoints (Hermes-style skills + memory tier) ---
+@app.get("/skills")
+async def list_skills():
+    """List dynamically loaded skills."""
+    import os
+    # Bulletproof: try multiple resolution strategies
+    candidates = []
+    # 1. Env override
+    if os.environ.get("AERYN_BASE_DIR"):
+        candidates.append(os.path.join(os.path.expanduser(os.environ["AERYN_BASE_DIR"]), "aeryn_core", "skills"))
+    # 2. Relative to this file (3 levels up)
+    _here = os.path.dirname(os.path.abspath(__file__))
+    candidates.append(os.path.abspath(os.path.join(_here, "..", "..", "..", "aeryn_core", "skills")))
+    # 3. CWD-based
+    candidates.append(os.path.join(os.getcwd(), "aeryn_core", "skills"))
+    # 4. Known absolute
+    candidates.append("/home/sen/aeryn-core-agent/aeryn_core/skills")
+
+    skills_dir = None
+    for c in candidates:
+        if os.path.isdir(c):
+            skills_dir = c
+            break
+    skills = []
+    if skills_dir:
+        for name in os.listdir(skills_dir):
+            full = os.path.join(skills_dir, name)
+            if os.path.isdir(full) and os.path.exists(os.path.join(full, "SKILL.md")):
+                skills.append(name)
+    return {"skills": skills, "count": len(skills), "dir_used": skills_dir}
+
+@app.get("/memory/recall")
+async def memory_recall(q: str = "", k: int = 3):
+    """Semantic memory recall for context."""
+    from aeryn_core.platform.capability_bridge import get_memory_bridge
+    bridge = get_memory_bridge()
+    results = bridge.recall_context(q, k=k)
+    return {"query": q, "results": results, "count": len(results)}
 
 # --- Health Check ---
 @app.get("/health")
