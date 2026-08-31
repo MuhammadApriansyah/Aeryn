@@ -1,422 +1,1322 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aeryn — AI Agent Platform</title>
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 14px; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #0a0a0f; color: #e4e4e7; line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-a { color: inherit; text-decoration: none; }
-button { cursor: pointer; font-family: inherit; border: none; background: none; color: inherit; }
-input, textarea { font-family: inherit; font-size: inherit; color: inherit; }
-
-/* ── Fixed Header ── */
-.hdr {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; gap: 24px;
-  padding: 16px 32px; background: rgba(10,10,15,0.85); backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.hdr-logo { font-size: 18px; font-weight: 700; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
-.hdr-nav { display: flex; gap: 20px; }
-.hdr-nav a { font-size: 13px; color: #a1a1aa; transition: color 0.2s; }
-.hdr-nav a:hover, .hdr-nav a.ac { color: #fff; }
-.hdr-r { margin-left: auto; display: flex; align-items: center; gap: 12px; }
-.hdr-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; }
-.hdr-dot.ok { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
-.hdr-status { font-size: 12px; color: #a1a1aa; }
-.hdr-btn { padding: 6px 12px; border-radius: 8px; font-size: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
-.hdr-btn:hover { background: rgba(255,255,255,0.1); }
-
-/* ── Main Content ── */
-.main { margin-top: 60px; display: flex; min-height: calc(100vh - 60px); }
-
-/* ── Sidebar (Collapsible) ── */
-.sb {
-  width: 260px; background: #12121a; border-right: 1px solid #2a2a3a;
-  display: flex; flex-direction: column; position: fixed; top: 60px; bottom: 0; left: 0; z-index: 50;
-  transition: transform 0.3s;
-}
-.sb.collapsed { transform: translateX(-260px); }
-.sb-h { padding: 16px 20px; border-bottom: 1px solid #2a2a3a; display: flex; align-items: center; gap: 10px; }
-.sb-l { font-size: 16px; font-weight: 700; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.sb-n { flex: 1; padding: 8px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; }
-.nv { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; color: #a1a1aa; font-weight: 500; font-size: 13px; transition: all 0.15s; width: 100%; text-align: left; }
-.nv:hover { background: #1a1a25; color: #fff; }
-.nv.ac { background: rgba(99,102,241,0.1); color: #818cf8; }
-.nv i { width: 20px; text-align: center; font-style: normal; font-size: 16px; }
-.sb-f { padding: 12px; border-top: 1px solid #2a2a3a; }
-.sb-t { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #1a1a25; border-radius: 8px; font-size: 12px; }
-.sb-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; }
-.sb-dot.ok { background: #22c55e; }
-
-/* ── Content Area ── */
-.ct { flex: 1; margin-left: 260px; display: flex; flex-direction: column; transition: margin-left 0.3s; }
-.sb.collapsed + .ct { margin-left: 0; }
-
-/* ── Hero ── */
-.hero { padding: 80px 40px; text-align: center; border-bottom: 1px solid #2a2a3a; }
-.hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); font-size: 13px; color: #818cf8; margin-bottom: 24px; }
-.hero h1 { font-size: clamp(36px, 6vw, 64px); font-weight: 800; line-height: 1.1; letter-spacing: -2px; max-width: 800px; margin: 0 auto 20px; }
-.hero h1 span { background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.hero p { font-size: 16px; color: #a1a1aa; max-width: 500px; margin: 0 auto 32px; }
-.hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-.btn { padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 14px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
-.btn-p { background: linear-gradient(135deg, #6366f1, #7c3aed); color: #fff; }
-.btn-p:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99,102,241,0.4); }
-.btn-s { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
-.btn-s:hover { background: rgba(255,255,255,0.1); }
-
-/* ── Stats Bar ── */
-.stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; padding: 24px 40px; border-bottom: 1px solid #2a2a3a; }
-.stat { text-align: center; padding: 16px; background: #12121a; border-radius: 12px; border: 1px solid #2a2a3a; }
-.stat-v { font-size: 24px; font-weight: 700; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.stat-l { font-size: 12px; color: #a1a1aa; margin-top: 4px; }
-
-/* ── Capabilities ── */
-.cap { padding: 60px 40px; border-bottom: 1px solid #2a2a3a; }
-.cap-h { margin-bottom: 40px; }
-.cap-n { font-size: 12px; color: #6366f1; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
-.cap-t { font-size: clamp(28px, 4vw, 48px); font-weight: 800; line-height: 1.1; letter-spacing: -1px; }
-.cap-t span { background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.cap-g { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-.cap-c { background: #12121a; border: 1px solid #2a2a3a; border-radius: 16px; padding: 24px; transition: all 0.3s; }
-.cap-c:hover { border-color: rgba(99,102,241,0.3); transform: translateY(-4px); }
-.cap-num { font-size: 12px; color: #6366f1; font-weight: 600; margin-bottom: 12px; }
-.cap-ic { font-size: 36px; margin-bottom: 12px; }
-.cap-c h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-.cap-c p { font-size: 13px; color: #a1a1aa; }
-
-/* ── Chat Section ── */
-.chat { padding: 40px; flex: 1; display: flex; flex-direction: column; }
-.chat-h { margin-bottom: 20px; }
-.chat-t { font-size: 24px; font-weight: 700; }
-.chat-bx { flex: 1; display: flex; flex-direction: column; background: #12121a; border: 1px solid #2a2a3a; border-radius: 16px; overflow: hidden; }
-.chat-m { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; min-height: 400px; max-height: 60vh; }
-.msg { max-width: 75%; padding: 12px 18px; border-radius: 14px; }
-.msg.u { align-self: flex-end; background: linear-gradient(135deg, #6366f1, #7c3aed); color: #fff; }
-.msg.a { align-self: flex-start; background: #1a1a25; border: 1px solid #2a2a3a; }
-.msg.s { align-self: center; font-size: 12px; color: #71717a; background: transparent; }
-.chat-i { display: flex; gap: 12px; padding: 16px; border-top: 1px solid #2a2a3a; }
-.chat-i textarea { flex: 1; background: #1a1a25; border: 1px solid #2a2a3a; color: #e4e4e7; padding: 12px 16px; border-radius: 10px; resize: none; min-height: 44px; max-height: 120px; }
-.chat-i textarea:focus { outline: none; border-color: #6366f1; }
-
-/* ── Right Panel ── */
-.rp { width: 300px; background: #12121a; border-left: 1px solid #2a2a3a; display: flex; flex-direction: column; position: fixed; top: 60px; right: 0; bottom: 0; z-index: 40; transition: transform 0.3s; }
-.rp.collapsed { transform: translateX(300px); }
-.rp-h { padding: 12px 16px; border-bottom: 1px solid #2a2a3a; display: flex; align-items: center; gap: 8px; }
-.rp-t { font-size: 13px; font-weight: 600; }
-.rp-n { margin-left: auto; }
-.rp-tab { padding: 8px 12px; font-size: 11px; background: #1a1a25; border-radius: 6px; }
-.rp-tab.ac { background: #6366f1; color: #fff; }
-.rp-c { flex: 1; overflow-y: auto; padding: 12px; }
-.rp-item { padding: 10px 12px; background: #1a1a25; border-radius: 8px; margin-bottom: 8px; font-size: 12px; }
-.rp-item-h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-.rp-item-id { font-family: monospace; color: #818cf8; font-size: 11px; }
-.rp-item-d { font-size: 11px; color: #71717a; }
-
-/* ── Modal Full-Screen ── */
-.md-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 200; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-.md-overlay.ac { display: flex; }
-.md { background: #12121a; border: 1px solid #2a2a3a; border-radius: 16px; width: 95vw; height: 90vh; max-width: 1200px; display: flex; flex-direction: column; }
-.md-h { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid #2a2a3a; }
-.md-t { font-size: 16px; font-weight: 600; }
-.md-x { padding: 6px 12px; background: #1a1a25; border-radius: 8px; font-size: 12px; }
-.md-b { flex: 1; overflow-y: auto; padding: 20px; }
-.md-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
-.md-tab { padding: 8px 16px; border-radius: 8px; font-size: 13px; background: #1a1a25; }
-.md-tab.ac { background: #6366f1; color: #fff; }
-.md-section { margin-bottom: 24px; }
-.md-section h3 { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #818cf8; }
-.md-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: #1a1a25; border-radius: 8px; margin-bottom: 6px; font-size: 13px; }
-.md-row-l { color: #a1a1aa; }
-.md-row-r { font-weight: 500; }
-.md-btn { padding: 6px 12px; font-size: 12px; background: #2a2a3a; border-radius: 6px; }
-.md-btn:hover { background: #6366f1; }
-.md-log { background: #0a0a0f; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 11px; max-height: 200px; overflow-y: auto; white-space: pre-wrap; }
-
-/* ── Toast ── */
-.toast { position: fixed; bottom: 16px; right: 16px; z-index: 300; padding: 12px 20px; background: #1a1a25; border: 1px solid #2a2a3a; border-radius: 10px; font-size: 13px; animation: slideIn 0.3s; }
-@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-/* ── Responsive ── */
-@media (max-width: 1024px) {
-  .sb { display: none; }
-  .ct { margin-left: 0; }
-  .rp { display: none; }
-  .stats { grid-template-columns: repeat(3, 1fr); }
-}
-@media (max-width: 768px) {
-  .hdr-nav { display: none; }
-  .stats { grid-template-columns: repeat(2, 1fr); }
-  .hero { padding: 40px 20px; }
-  .cap { padding: 40px 20px; }
-  .chat { padding: 20px; }
-}
-</style>
-</head>
-<body>
-
-<!-- Header -->
-<header class="hdr">
-  <div class="hdr-logo">🤖 Aeryn</div>
-  <nav class="hdr-nav">
-    <a href="#hero" class="ac">Overview</a>
-    <a href="#capabilities">Capabilities</a>
-    <a href="#chat">Chat</a>
-    <a href="#" onclick="openCmdCenter()">Command Center</a>
-  </nav>
-  <div class="hdr-r">
-    <span class="hdr-dot" id="hdrDot"></span>
-    <span class="hdr-status" id="hdrStatus">Checking...</span>
-    <button class="hdr-btn" onclick="openCmdCenter()">⌘K</button>
-  </div>
-</header>
-
-<div class="main">
-  <!-- Sidebar -->
-  <aside class="sb" id="sidebar">
-    <div class="sb-h"><div class="sb-l">Aeryn</div></div>
-    <nav class="sb-n">
-      <button class="nv ac" data-p="overview"><i>📊</i> Overview</button>
-      <button class="nv" data-p="chat"><i>💬</i> Chat</button>
-      <button class="nv" data-p="tools"><i>🔧</i> Tools</button>
-      <button class="nv" data-p="divisions"><i>🏢</i> Divisions</button>
-      <button class="nv" data-p="workflows"><i>📋</i> Workflows</button>
-      <button class="nv" data-p="traces"><i>🔍</i> Traces</button>
-      <button class="nv" data-p="settings"><i>⚙️</i> Settings</button>
-    </nav>
-    <div class="sb-f"><div class="sb-t"><span class="sb-dot" id="sbDot"></span><span id="sbStatus">Checking...</span></div></div>
-  </aside>
-
-  <!-- Content -->
-  <main class="ct">
-    <!-- Hero -->
-    <section class="hero" id="hero">
-      <div class="hero-badge"><span class="hdr-dot ok" id="heroDot"></span><span id="heroStatus">System Online</span></div>
-      <h1>Your <span>AI Agent</span> Platform</h1>
-      <p>Adaptive, self-improving, multi-agent system that learns from experience. Built for teams who want working systems, not slideware.</p>
-      <div class="hero-cta">
-        <a href="#chat" class="btn btn-p">💬 Start Chat</a>
-        <a href="#capabilities" class="btn btn-s">Explore Capabilities</a>
-      </div>
-    </section>
-
-    <!-- Stats -->
-    <section class="stats" id="stats">
-      <div class="stat"><div class="stat-v" id="sStatus">—</div><div class="stat-l">Status</div></div>
-      <div class="stat"><div class="stat-v" id="sMem">—</div><div class="stat-l">Memory (MB)</div></div>
-      <div class="stat"><div class="stat-v" id="sVer">—</div><div class="stat-l">Version</div></div>
-      <div class="stat"><div class="stat-v" id="sTraces">0</div><div class="stat-l">Traces</div></div>
-      <div class="stat"><div class="stat-v" id="sUptime">—</div><div class="stat-l">Uptime</div></div>
-    </section>
-
-    <!-- Capabilities -->
-    <section class="cap" id="capabilities">
-      <div class="cap-h">
-        <div class="cap-n">What I Can Do</div>
-        <h2 class="cap-t">Five capabilities, <span>one system</span></h2>
-      </div>
-      <div class="cap-g">
-        <div class="cap-c"><div class="cap-num">01</div><div class="cap-ic">🧠</div><h3>AI & Automation</h3><p>Put AI on the work that's bleeding you. Automate the repetitive, aim at what costs time and money.</p></div>
-        <div class="cap-c"><div class="cap-num">02</div><div class="cap-ic">⚙️</div><h3>Custom Software</h3><p>Working products, not slideware. Internal tools, dashboards, client apps that move the needle.</p></div>
-        <div class="cap-c"><div class="cap-num">03</div><div class="cap-ic">🔗</div><h3>Integrations</h3><p>Make the tools you already pay for talk. Your stack, finally working as one system.</p></div>
-        <div class="cap-c"><div class="cap-num">04</div><div class="cap-ic">📊</div><h3>Data into Decisions</h3><p>Turn numbers into next moves. Reporting that tells you what to do, not just what happened.</p></div>
-        <div class="cap-c"><div class="cap-num">05</div><div class="cap-ic">🔄</div><h3>Self-Improving</h3><p>Learns from every interaction. Gets better at tool selection, routing, and responses over time.</p></div>
-      </div>
-    </section>
-
-    <!-- Chat -->
-    <section class="chat" id="chat">
-      <div class="chat-h"><h2 class="chat-t">💬 Chat with Aeryn</h2></div>
-      <div class="chat-bx">
-        <div class="chat-m" id="chatMsg"><div class="msg s">Welcome. Type a message to begin.</div></div>
-        <div class="chat-i">
-          <textarea id="chatInput" placeholder="Type your message... (Enter to send, Shift+Enter for newline)"></textarea>
-          <button class="btn btn-p" onclick="sendChat()">Send</button>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Right Panel -->
-  <aside class="rp" id="rightPanel">
-    <div class="rp-h">
-      <span class="rp-t">Activity</span>
-      <div class="rp-n">
-        <button class="rp-tab ac" data-tab="traces">Traces</button>
-        <button class="rp-tab" data-tab="tools">Tools</button>
-        <button class="rp-tab" data-tab="memory">Memory</button>
-      </div>
-    </div>
-    <div class="rp-c" id="rpContent"></div>
-  </aside>
-</div>
-
-<!-- Command Center Modal -->
-<div class="md-overlay" id="cmdCenter">
-  <div class="md">
-    <div class="md-h">
-      <h2 class="md-t">⌘ Command Center</h2>
-      <button class="md-x" onclick="closeCmdCenter()">✕ Close</button>
-    </div>
-    <div class="md-b">
-      <div class="md-tabs">
-        <button class="md-tab ac" data-cc="sessions">Sessions</button>
-        <button class="md-tab" data-cc="system">System</button>
-        <button class="md-tab" data-cc="usage">Usage</button>
-        <button class="md-tab" data-cc="maintenance">Maintenance</button>
-      </div>
-      <div id="ccContent"></div>
-    </div>
-  </div>
-</div>
-
-<!-- Toast Container -->
-<div id="toastC" style="position:fixed;bottom:16px;right:16px;z-index:300;display:flex;flex-direction:column;gap:8px;"></div>
-
-<script>
-const A = { h:'/health', g:'/gateway/env', tr:'/observability/traces', trs:'/observability/stats', si:'/self-improvement/stats', sip:'/self-improvement/patterns', sa:'/self-improvement/adapt', pl:'/plugins', dn:'/divisions', de:n=>`/divisions/${n}/execute`, wf:'/workflows', ws:i=>`/workflows/${i}/step`, wa:i=>`/workflows/${i}/approve`, ch:'/chat', ru:'/run', se:'/search?q=', sk:'/capabilities/skills', mr:'/memory/recall?q=', tk:'/daemon/tasks', cn:'/connectors' };
-const S = { sid:'w_'+Date.now(), traces:[], workflows:[], tools:[], start:Date.now() };
-
-async function api(u, o={}) { try { const r = await fetch(u, { headers:{'Content-Type':'application/json'}, ...o }); return await r.json(); } catch(e) { return {error:e.message}; } }
-function toast(m) { const c=document.getElementById('toastC'),d=document.createElement('div');d.className='toast';d.textContent=m;c.appendChild(d);setTimeout(()=>d.remove(),2500); }
-
-// Load status
-async function loadStatus() {
-  const h = await api(A.h);
-  document.getElementById('sStatus').textContent = h.status || '—';
-  document.getElementById('sMem').textContent = h.memory_mb || '—';
-  document.getElementById('sVer').textContent = h.version || '—';
-  const uptime = Math.floor((Date.now()-S.start)/1000);
-  document.getElementById('sUptime').textContent = uptime < 60 ? uptime+'s' : Math.floor(uptime/60)+'m';
-  const online = h.status === 'healthy';
-  document.getElementById('hdrDot').className = 'hdr-dot '+(online?'ok':'');
-  document.getElementById('sbDot').className = 'sb-dot '+(online?'ok':'');
-  document.getElementById('hdrStatus').textContent = online ? 'Online' : 'Offline';
-  document.getElementById('sbStatus').textContent = online ? 'Online' : 'Offline';
-  document.getElementById('heroStatus').textContent = online ? 'System Online' : 'System Offline';
-  document.getElementById('heroDot').style.background = online ? '#22c55e' : '#ef4444';
-  loadTraces();
-}
-
-async function loadTraces() {
-  const r = await api(A.tr+'?limit=5');
-  S.traces = r.traces || [];
-  document.getElementById('sTraces').textContent = S.traces.length;
-  renderTraces();
-}
-
-function renderTraces() {
-  const el = document.getElementById('rpContent');
-  if (!el) return;
-  el.innerHTML = S.traces.length ? S.traces.map(t => `<div class="rp-item"><div class="rp-item-h"><span class="rp-item-id">${t.id}</span><span>${t.spans||0} spans</span></div><div class="rp-item-d">${t.duration||'—'}</div></div>`).join('') : '<div class="rp-item">No traces yet</div>';
-}
-
-// Chat
-async function sendChat() {
-  const i = document.getElementById('chatInput'), m = i.value.trim();
-  if (!m) return;
-  addMsg('user', m); i.value = '';
-  const r = await api(A.ch, { method:'POST', body: JSON.stringify({ goal:m, session_id:S.sid }) });
-  if (r.response) {
-    addMsg('assistant', r.response);
-    if (r.tool_used || r.division) addMsg('system', '🔧 '+(r.tool_used||'—')+' | 📂 '+(r.division||'—'));
-  } else addMsg('system', 'Error: '+r.error);
-}
-
-function addMsg(role, text) {
-  const c = document.getElementById('chatMsg'), d = document.createElement('div');
-  d.className = 'msg '+role[0]; d.textContent = text;
-  c.appendChild(d); c.scrollTop = c.scrollHeight;
-}
-
-document.getElementById('chatInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
-});
-
-// Command Center
-function openCmdCenter() { document.getElementById('cmdCenter').classList.add('ac'); loadCC('sessions'); }
-function closeCmdCenter() { document.getElementById('cmdCenter').classList.remove('ac'); }
-
-async function loadCC(tab) {
-  document.querySelectorAll('.md-tab').forEach(t => t.classList.toggle('ac', t.dataset.cc === tab));
-  const el = document.getElementById('ccContent');
-  if (tab === 'sessions') {
-    el.innerHTML = `<div class="md-section"><h3>Active Sessions</h3><div class="md-row"><span class="md-row-l">Current</span><span class="md-row-r">${S.sid}</span></div><div class="md-row"><span class="md-row-l">Started</span><span class="md-row-r">${new Date(S.start).toLocaleString()}</span></div></div>`;
-  } else if (tab === 'system') {
-    const h = await api(A.h), g = await api(A.g);
-    el.innerHTML = `<div class="md-section"><h3>Health</h3><div class="md-row"><span class="md-row-l">Status</span><span class="md-row-r">${h.status}</span></div><div class="md-row"><span class="md-row-l">Memory</span><span class="md-row-r">${h.memory_mb} MB</span></div><div class="md-row"><span class="md-row-l">Version</span><span class="md-row-r">${h.version}</span></div></div><div class="md-section"><h3>Environment</h3><div class="md-row"><span class="md-row-l">Type</span><span class="md-row-r">${g.environment?.type}</span></div><div class="md-row"><span class="md-row-l">DB</span><span class="md-row-r">${g.environment?.db}</span></div><div class="md-row"><span class="md-row-l">Auth</span><span class="md-row-r">${g.auth_enabled ? '✅' : '❌'}</span></div></div><div class="md-section"><h3>Logs</h3><button class="md-btn" onclick="refreshLogs()">Refresh Logs</button><div class="md-log" id="mdLogs">Click refresh to load logs...</div></div>`;
-  } else if (tab === 'usage') {
-    const s = await api(A.trs);
-    el.innerHTML = `<div class="md-section"><h3>Observability Stats</h3><div class="md-row"><span class="md-row-l">Total Traces</span><span class="md-row-r">${s.total_traces||0}</span></div><div class="md-row"><span class="md-row-l">Avg Duration</span><span class="md-row-r">${s.avg_duration||'—'}</span></div></div><div class="md-section"><h3>Self-Improvement</h3><div class="md-row"><span class="md-row-l">Learnings</span><span class="md-row-r">${s.total_learnings||0}</span></div><div class="md-row"><span class="md-row-l">Improvements</span><span class="md-row-r">${s.total_improvements||0}</span></div></div>`;
-  } else if (tab === 'maintenance') {
-    el.innerHTML = `<div class="md-section"><h3>Actions</h3><button class="md-btn" onclick="triggerAdapt()">Trigger Self-Improvement</button> <button class="md-btn" onclick="exportData()">Export Data (JSON)</button></div>`;
-  }
-}
-
-async function refreshLogs() {
-  const el = document.getElementById('mdLogs');
-  el.textContent = 'Loading...';
-  const r = await api(A.tr+'?limit=10');
-  el.textContent = JSON.stringify(r, null, 2);
-}
-
-async function triggerAdapt() {
-  const r = await api(A.sa, { method:'POST' });
-  toast(`Adapted: ${r.changes?.length||0} changes`);
-  loadCC('usage');
-}
-
-function exportData() {
-  const data = { traces: S.traces, workflows: S.workflows, tools: S.tools, exported: new Date().toISOString() };
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = 'aeryn-export.json'; a.click();
-  URL.revokeObjectURL(url);
-  toast('Exported to JSON');
-}
-
-// Modal tabs
-document.querySelectorAll('.md-tab').forEach(t => t.onclick = () => loadCC(t.dataset.cc));
-
-// Right panel tabs
-document.querySelectorAll('.rp-tab').forEach(t => t.onclick = () => {
-  document.querySelectorAll('.rp-tab').forEach(x => x.classList.remove('ac'));
-  t.classList.add('ac');
-  if (t.dataset.tab === 'traces') renderTraces();
-  else if (t.dataset.tab === 'tools') loadToolsRP();
-  else if (t.dataset.tab === 'memory') loadMemoryRP();
-});
-
-async function loadToolsRP() {
-  const r = await api(A.pl);
-  S.tools = r.tools || [];
-  const el = document.getElementById('rpContent');
-  el.innerHTML = S.tools.length ? S.tools.map(t => `<div class="rp-item"><div class="rp-item-h"><span class="rp-item-id">${t.name}</span></div><div class="rp-item-d">${t.description||''}</div></div>`).join('') : '<div class="rp-item">No tools</div>';
-}
-
-async function loadMemoryRP() {
-  const r = await api(A.mr+'dashboard');
-  const el = document.getElementById('rpContent');
-  el.innerHTML = '<div class="rp-item"><div class="rp-item-h"><span class="rp-item-id">Memory Search</span></div><div class="rp-item-d">Use Ctrl+K to search memory</div></div>';
-}
-
-// Keyboard shortcuts
-document.addEventListener('keydown', e => {
-  if (e.ctrlKey && e.key === 'k') { e.preventDefault(); document.getElementById('cmdCenter').classList.toggle('ac'); }
-  if (e.key === 'Escape') { document.getElementById('cmdCenter').classList.remove('ac'); }
-});
-
-// Init
-loadStatus();
-setInterval(loadStatus, 15000);
-</script>
-</body>
-</html>
+1|<!DOCTYPE html>
+2|<html lang="id" data-theme="dark">
+3|<head>
+4|<meta charset="UTF-8">
+5|<meta name="viewport" content="width=device-width, initial-scale=1.0">
+6|<title>Aeryn — AI Agent Platform</title>
+7|<style>
+8|:root {
+9|  --bg: #0a0a0f;
+10|  --bg2: #12121a;
+11|  --bg3: #1a1a25;
+12|  --border: #2a2a3a;
+13|  --text: #e4e4e7;
+14|  --text2: #a1a1aa;
+15|  --primary: #6366f1;
+16|  --primary2: #818cf8;
+17|  --success: #22c55e;
+18|  --warning: #eab308;
+19|  --danger: #ef4444;
+20|  --info: #3b82f6;
+21|  --radius: 12px;
+22|  --radius-sm: 8px;
+23|  --shadow: 0 4px 20px rgba(0,0,0,0.3);
+24|  --transition: all 0.2s ease;
+25|}
+26|
+27|[data-theme="light"] {
+28|  --bg: #ffffff;
+29|  --bg2: #f8fafc;
+30|  --bg3: #f1f5f9;
+31|  --border: #e2e8f0;
+32|  --text: #1e293b;
+33|  --text2: #64748b;
+34|}
+35|
+36|* { box-sizing: border-box; margin: 0; padding: 0; }
+37|html { scroll-behavior: smooth; font-size: 14px; }
+38|body {
+39|  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+40|  background: var(--bg);
+41|  color: var(--text);
+42|  line-height: 1.6;
+43|  -webkit-font-smoothing: antialiased;
+44|}
+45|
+46|a { color: inherit; text-decoration: none; }
+47|button { cursor: pointer; font-family: inherit; border: none; background: none; color: inherit; }
+48|input, textarea, select { font-family: inherit; font-size: inherit; color: inherit; }
+49|
+50|/* ── Accessibility ── */
+51|.skip-link {
+52|  position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+53|  padding: 12px 24px; background: var(--primary); color: white;
+54|  border-radius: var(--radius-sm); z-index: 1000; font-weight: 600;
+55|  transition: top 0.3s;
+56|}
+57|.skip-link:focus { top: 16px; }
+58|
+59|.sr-only {
+60|  position: absolute; width: 1px; height: 1px; padding: 0;
+61|  margin: -1px; overflow: hidden; clip: rect(0,0,0,0);
+62|  white-space: nowrap; border: 0;
+63|}
+64|
+65|:focus-visible {
+66|  outline: 2px solid var(--primary);
+67|  outline-offset: 2px;
+68|}
+69|
+70|/* ── Layout ── */
+71|.app {
+72|  display: grid;
+73|  grid-template-columns: 260px 1fr;
+74|  min-height: 100vh;
+75|}
+76|
+77|/* ── Sidebar ── */
+78|.sidebar {
+79|  background: var(--bg2);
+80|  border-right: 1px solid var(--border);
+81|  display: flex;
+82|  flex-direction: column;
+83|  position: fixed;
+84|  top: 0; bottom: 0; left: 0;
+85|  width: 260px;
+86|  z-index: 50;
+87|  transition: transform 0.3s;
+88|}
+89|.sidebar.collapsed { transform: translateX(-260px); }
+90|
+91|.sidebar-header {
+92|  padding: 20px;
+93|  border-bottom: 1px solid var(--border);
+94|  display: flex;
+95|  align-items: center;
+96|  gap: 12px;
+97|}
+98|.sidebar-logo {
+99|  font-size: 20px;
+100|  font-weight: 700;
+101|  background: linear-gradient(135deg, var(--primary), #a855f7);
+102|  -webkit-background-clip: text;
+103|  -webkit-text-fill-color: transparent;
+104|}
+105|.sidebar-toggle {
+106|  margin-left: auto;
+107|  padding: 6px;
+108|  border-radius: var(--radius-sm);
+109|  color: var(--text2);
+110|}
+111|.sidebar-toggle:hover { background: var(--bg3); color: var(--text); }
+112|
+113|.sidebar-nav {
+114|  flex: 1;
+115|  padding: 12px;
+116|  overflow-y: auto;
+117|  display: flex;
+118|  flex-direction: column;
+119|  gap: 4px;
+120|}
+121|
+122|.nav-section {
+123|  margin-bottom: 16px;
+124|}
+125|.nav-section-title {
+126|  font-size: 11px;
+127|  font-weight: 600;
+128|  text-transform: uppercase;
+129|  letter-spacing: 1px;
+130|  color: var(--text2);
+131|  padding: 8px 12px;
+132|}
+133|
+134|.nav-item {
+135|  display: flex;
+136|  align-items: center;
+137|  gap: 10px;
+138|  padding: 10px 14px;
+139|  border-radius: var(--radius-sm);
+140|  color: var(--text2);
+141|  font-weight: 500;
+142|  font-size: 13px;
+143|  transition: var(--transition);
+144|  width: 100%;
+145|  text-align: left;
+146|}
+147|.nav-item:hover { background: var(--bg3); color: var(--text); }
+148|.nav-item.active {
+149|  background: rgba(99,102,241,0.1);
+150|  color: var(--primary2);
+151|}
+152|.nav-item i {
+153|  width: 20px;
+154|  text-align: center;
+155|  font-style: normal;
+156|  font-size: 16px;
+157|}
+158|.nav-badge {
+159|  margin-left: auto;
+160|  padding: 2px 8px;
+161|  border-radius: 10px;
+162|  font-size: 11px;
+163|  font-weight: 600;
+164|  background: var(--primary);
+165|  color: white;
+166|}
+167|
+168|.sidebar-footer {
+169|  padding: 16px;
+170|  border-top: 1px solid var(--border);
+171|}
+172|.sidebar-status {
+173|  display: flex;
+174|  align-items: center;
+175|  gap: 8px;
+176|  padding: 10px 12px;
+177|  background: var(--bg3);
+178|  border-radius: var(--radius-sm);
+179|  font-size: 12px;
+180|}
+181|.status-dot {
+182|  width: 8px;
+183|  height: 8px;
+184|  border-radius: 50%;
+185|  background: var(--danger);
+186|}
+187|.status-dot.online { background: var(--success); box-shadow: 0 0 8px var(--success); }
+188|
+189|/* ── Main Content ── */
+190|.main {
+191|  grid-column: 2;
+192|  display: flex;
+193|  flex-direction: column;
+194|  min-height: 100vh;
+195|}
+196|
+197|/* ── Header ── */
+198|.header {
+199|  position: sticky;
+200|  top: 0;
+201|  z-index: 40;
+202|  display: flex;
+203|  align-items: center;
+204|  gap: 16px;
+205|  padding: 16px 24px;
+206|  background: rgba(10,10,15,0.85);
+207|  backdrop-filter: blur(12px);
+208|  border-bottom: 1px solid var(--border);
+209|}
+210|.header-title {
+211|  font-size: 18px;
+212|  font-weight: 700;
+213|}
+214|.header-actions {
+215|  margin-left: auto;
+216|  display: flex;
+217|  align-items: center;
+218|  gap: 8px;
+219|}
+220|.header-btn {
+221|  padding: 8px 12px;
+222|  border-radius: var(--radius-sm);
+223|  font-size: 13px;
+224|  color: var(--text2);
+225|  transition: var(--transition);
+226|}
+227|.header-btn:hover { background: var(--bg3); color: var(--text); }
+228|
+229|/* ── Content ── */
+230|.content {
+231|  flex: 1;
+232|  padding: 24px;
+233|  max-width: 1400px;
+234|  margin: 0 auto;
+235|  width: 100%;
+236|}
+237|
+238|/* ── Section ── */
+239|.section { display: none; }
+240|.section.active { display: block; }
+241|
+242|.section-header {
+243|  margin-bottom: 24px;
+244|}
+245|.section-title {
+246|  font-size: 28px;
+247|  font-weight: 800;
+248|  margin-bottom: 8px;
+249|}
+250|.section-desc {
+251|  color: var(--text2);
+252|  font-size: 14px;
+253|}
+254|
+255|/* ── Grid ── */
+256|.grid {
+257|  display: grid;
+258|  gap: 16px;
+259|}
+260|.grid-2 { grid-template-columns: repeat(2, 1fr); }
+261|.grid-3 { grid-template-columns: repeat(3, 1fr); }
+262|.grid-4 { grid-template-columns: repeat(4, 1fr); }
+263|.grid-5 { grid-template-columns: repeat(5, 1fr); }
+264|@media (max-width: 1200px) {
+265|  .grid-4, .grid-5 { grid-template-columns: repeat(3, 1fr); }
+266|}
+267|@media (max-width: 900px) {
+268|  .grid-3, .grid-4, .grid-5 { grid-template-columns: repeat(2, 1fr); }
+269|}
+270|@media (max-width: 600px) {
+271|  .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
+272|}
+273|
+274|/* ── Card ── */
+275|.card {
+276|  background: var(--bg2);
+277|  border: 1px solid var(--border);
+278|  border-radius: var(--radius);
+279|  padding: 20px;
+280|  transition: var(--transition);
+281|}
+282|.card:hover { border-color: rgba(99,102,241,0.3); }
+283|.card-header {
+284|  display: flex;
+285|  align-items: center;
+286|  gap: 12px;
+287|  margin-bottom: 16px;
+288|}
+289|.card-icon {
+290|  width: 40px;
+291|  height: 40px;
+292|  border-radius: var(--radius-sm);
+293|  display: flex;
+294|  align-items: center;
+295|  justify-content: center;
+296|  font-size: 20px;
+297|}
+298|.card-title {
+299|  font-size: 16px;
+300|  font-weight: 600;
+301|}
+302|.card-subtitle {
+303|  font-size: 12px;
+304|  color: var(--text2);
+305|}
+306|.card-value {
+307|  font-size: 32px;
+308|  font-weight: 800;
+309|  background: linear-gradient(135deg, var(--primary), #a855f7);
+310|  -webkit-background-clip: text;
+311|  -webkit-text-fill-color: transparent;
+312|}
+313|.card-label {
+314|  font-size: 12px;
+315|  color: var(--text2);
+316|  margin-top: 4px;
+317|}
+318|
+319|/* ── Button ── */
+320|.btn {
+321|  display: inline-flex;
+322|  align-items: center;
+323|  gap: 8px;
+324|  padding: 10px 18px;
+325|  border-radius: var(--radius-sm);
+326|  font-weight: 600;
+327|  font-size: 13px;
+328|  transition: var(--transition);
+329|}
+330|.btn-primary {
+331|  background: linear-gradient(135deg, var(--primary), #7c3aed);
+332|  color: white;
+333|}
+334|.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99,102,241,0.4); }
+335|.btn-secondary {
+336|  background: var(--bg3);
+337|  border: 1px solid var(--border);
+338|}
+339|.btn-secondary:hover { background: var(--border); }
+340|.btn-success { background: var(--success); color: white; }
+341|.btn-danger { background: var(--danger); color: white; }
+342|.btn-sm {
+343|  padding: 6px 12px;
+344|  font-size: 12px;
+345|}
+346|
+347|/* ── Input ── */
+348|.input, .textarea, .select {
+349|  width: 100%;
+350|  padding: 10px 14px;
+351|  background: var(--bg3);
+352|  border: 1px solid var(--border);
+353|  border-radius: var(--radius-sm);
+354|  transition: var(--transition);
+355|}
+356|.input:focus, .textarea:focus, .select:focus {
+357|  outline: none;
+358|  border-color: var(--primary);
+359|}
+360|.textarea { resize: vertical; min-height: 100px; }
+361|
+362|/* ── Badge ── */
+363|.badge {
+364|  display: inline-flex;
+365|  align-items: center;
+366|  gap: 4px;
+367|  padding: 4px 10px;
+368|  border-radius: 20px;
+369|  font-size: 11px;
+370|  font-weight: 600;
+371|}
+372|.badge-success { background: rgba(34,197,94,0.1); color: var(--success); }
+373|.badge-warning { background: rgba(234,179,8,0.1); color: var(--warning); }
+374|.badge-danger { background: rgba(239,68,68,0.1); color: var(--danger); }
+375|.badge-info { background: rgba(59,130,246,0.1); color: var(--info); }
+376|.badge-primary { background: rgba(99,102,241,0.1); color: var(--primary); }
+377|
+378|/* ── Table ── */
+379|.table-container {
+380|  overflow-x: auto;
+381|}
+382|.table {
+383|  width: 100%;
+384|  border-collapse: collapse;
+385|}
+386|.table th, .table td {
+387|  padding: 12px 16px;
+388|  text-align: left;
+389|  border-bottom: 1px solid var(--border);
+390|}
+391|.table th {
+392|  font-size: 12px;
+393|  font-weight: 600;
+394|  text-transform: uppercase;
+395|  letter-spacing: 0.5px;
+396|  color: var(--text2);
+397|}
+398|.table tr:hover td { background: var(--bg3); }
+399|
+400|/* ── Modal ── */
+401|.modal-overlay {
+402|  position: fixed;
+403|  inset: 0;
+404|  background: rgba(0,0,0,0.8);
+405|  z-index: 200;
+406|  display: none;
+407|  align-items: center;
+408|  justify-content: center;
+409|  backdrop-filter: blur(4px);
+410|}
+411|.modal-overlay.active { display: flex; }
+412|.modal {
+413|  background: var(--bg2);
+414|  border: 1px solid var(--border);
+415|  border-radius: var(--radius);
+416|  width: 90vw;
+417|  max-width: 600px;
+418|  max-height: 80vh;
+419|  display: flex;
+420|  flex-direction: column;
+421|}
+422|.modal-header {
+423|  display: flex;
+424|  justify-content: space-between;
+425|  align-items: center;
+426|  padding: 16px 20px;
+427|  border-bottom: 1px solid var(--border);
+428|}
+429|.modal-title { font-size: 16px; font-weight: 600; }
+430|.modal-close {
+431|  padding: 6px 12px;
+432|  background: var(--bg3);
+433|  border-radius: var(--radius-sm);
+434|  font-size: 12px;
+435|}
+436|.modal-body {
+437|  flex: 1;
+438|  overflow-y: auto;
+439|  padding: 20px;
+440|}
+441|.modal-footer {
+442|  padding: 16px 20px;
+443|  border-top: 1px solid var(--border);
+444|  display: flex;
+445|  justify-content: flex-end;
+446|  gap: 8px;
+447|}
+448|
+449|/* ── Toast ── */
+450|.toast-container {
+451|  position: fixed;
+452|  bottom: 16px;
+453|  right: 16px;
+454|  z-index: 300;
+455|  display: flex;
+456|  flex-direction: column;
+457|  gap: 8px;
+458|}
+459|.toast {
+460|  padding: 12px 20px;
+461|  background: var(--bg2);
+462|  border: 1px solid var(--border);
+463|  border-radius: var(--radius-sm);
+464|  font-size: 13px;
+465|  box-shadow: var(--shadow);
+466|  animation: slideIn 0.3s;
+467|}
+468|.toast-success { border-left: 3px solid var(--success); }
+469|.toast-error { border-left: 3px solid var(--danger); }
+470|.toast-warning { border-left: 3px solid var(--warning); }
+471|.toast-info { border-left: 3px solid var(--info); }
+472|@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+473|
+474|/* ── Loading ── */
+475|.loading {
+476|  display: flex;
+477|  align-items: center;
+478|  justify-content: center;
+479|  padding: 40px;
+480|  color: var(--text2);
+481|}
+482|.spinner {
+483|  width: 24px;
+484|  height: 24px;
+485|  border: 2px solid var(--border);
+486|  border-top-color: var(--primary);
+487|  border-radius: 50%;
+488|  animation: spin 0.8s linear infinite;
+489|  margin-right: 12px;
+490|}
+491|@keyframes spin { to { transform: rotate(360deg); } }
+492|
+493|/* ── Code Block ── */
+494|.code-block {
+495|  background: var(--bg);
+496|  border: 1px solid var(--border);
+497|  border-radius: var(--radius-sm);
+498|  padding: 16px;
+499|  font-family: 'Fira Code', monospace;
+500|  font-size: 12px;
+501|  overflow-x: auto;
+502|  white-space: pre-wrap;
+503|  word-break: break-word;
+504|}
+505|
+506|/* ── Chat ── */
+507|.chat-container {
+508|  display: flex;
+509|  flex-direction: column;
+510|  height: 600px;
+511|  background: var(--bg2);
+512|  border: 1px solid var(--border);
+513|  border-radius: var(--radius);
+514|}
+515|.chat-messages {
+516|  flex: 1;
+517|  overflow-y: auto;
+518|  padding: 20px;
+519|  display: flex;
+520|  flex-direction: column;
+521|  gap: 12px;
+522|}
+523|.chat-message {
+524|  max-width: 75%;
+525|  padding: 12px 18px;
+526|  border-radius: 14px;
+527|}
+528|.chat-message.user {
+529|  align-self: flex-end;
+530|  background: linear-gradient(135deg, var(--primary), #7c3aed);
+531|  color: white;
+532|}
+533|.chat-message.assistant {
+534|  align-self: flex-start;
+535|  background: var(--bg3);
+536|  border: 1px solid var(--border);
+537|}
+538|.chat-message.system {
+539|  align-self: center;
+540|  font-size: 12px;
+541|  color: var(--text2);
+542|  background: transparent;
+543|}
+544|.chat-input-container {
+545|  display: flex;
+546|  gap: 12px;
+547|  padding: 16px;
+548|  border-top: 1px solid var(--border);
+549|}
+550|.chat-input-container textarea {
+551|  flex: 1;
+552|  background: var(--bg3);
+553|  border: 1px solid var(--border);
+554|  color: var(--text);
+555|  padding: 12px 16px;
+556|  border-radius: var(--radius-sm);
+557|  resize: none;
+558|  min-height: 44px;
+559|  max-height: 120px;
+560|}
+561|
+562|/* ── Scrollbar ── */
+563|::-webkit-scrollbar { width: 6px; height: 6px; }
+564|::-webkit-scrollbar-track { background: var(--bg); }
+565|::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+566|::-webkit-scrollbar-thumb:hover { background: var(--text2); }
+567|
+568|/* ── Responsive ── */
+569|@media (max-width: 768px) {
+570|  .app { grid-template-columns: 1fr; }
+571|  .sidebar { display: none; }
+572|  .sidebar.mobile-open { display: flex; transform: translateX(0); }
+573|  .header { padding: 12px 16px; }
+574|  .content { padding: 16px; }
+575|  .section-title { font-size: 22px; }
+576|}
+577|</style>
+578|</head>
+579|<body>
+580|<a href="#main-content" class="skip-link">Skip to main content</a>
+581|<div class="toast-container" id="toast-container" role="status" aria-live="polite"></div>
+582|
+583|<div class="app">
+584|  <!-- Sidebar -->
+585|  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+586|    <div class="sidebar-header">
+587|      <span class="sidebar-logo">🤖 Aeryn</span>
+588|      <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">☰</button>
+589|    </div>
+590|    <nav class="sidebar-nav">
+591|      <div class="nav-section">
+592|        <div class="nav-section-title">Main</div>
+593|        <button class="nav-item active" data-section="overview"><i>📊</i> Overview</button>
+594|        <button class="nav-item" data-section="chat"><i>💬</i> Chat</button>
+595|        <button class="nav-item" data-section="divisions"><i>🧠</i> Divisions</button>
+596|      </div>
+597|      <div class="nav-section">
+598|        <div class="nav-section-title">Workspace</div>
+599|        <button class="nav-item" data-section="workspaces"><i>🏢</i> Workspaces</button>
+600|        <button class="nav-item" data-section="projects"><i>📁</i> Projects</button>
+601|        <button class="nav-item" data-section="workflows"><i>⚡</i> Workflows</button>
+602|      </div>
+603|      <div class="nav-section">
+604|        <div class="nav-section-title">Intelligence</div>
+605|        <button class="nav-item" data-section="plugins"><i>🔌</i> Plugins <span class="nav-badge" id="plugin-count">2</span></button>
+606|        <button class="nav-item" data-section="memory"><i>🧩</i> Memory</button>
+607|        <button class="nav-item" data-section="tools"><i>🔧</i> Tools</button>
+608|        <button class="nav-item" data-section="agents"><i>🤖</i> Agents</button>
+609|      </div>
+610|      <div class="nav-section">
+611|        <div class="nav-section-title">System</div>
+612|        <button class="nav-item" data-section="observability"><i>📈</i> Observability</button>
+613|        <button class="nav-item" data-section="billing"><i>💰</i> Billing</button>
+614|        <button class="nav-item" data-section="notifications"><i>🔔</i> Notifications <span class="nav-badge" id="notif-count">0</span></button>
+615|        <button class="nav-item" data-section="settings"><i>⚙️</i> Settings</button>
+616|        <button class="nav-item" data-section="admin"><i>🛡️</i> Admin</button>
+617|      </div>
+618|    </nav>
+619|    <div class="sidebar-footer">
+620|      <div class="sidebar-status">
+621|        <span class="status-dot online" id="status-dot"></span>
+622|        <span id="status-text">Online</span>
+623|      </div>
+624|    </div>
+625|  </aside>
+626|
+627|  <!-- Main -->
+628|  <main class="main" id="main-content">
+629|    <header class="header">
+630|      <h1 class="header-title" id="page-title">Overview</h1>
+631|      <div class="header-actions">
+632|        <button class="header-btn" onclick="toggleTheme()" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+633|        <button class="header-btn" onclick="refreshAll()" aria-label="Refresh data">🔄</button>
+634|      </div>
+635|    </header>
+636|
+637|    <div class="content">
+638|1|
+2|      <!-- ═══════════════════════════════════════════════════════════════ -->
+3|      <!-- OVERVIEW SECTION -->
+4|      <!-- ═══════════════════════════════════════════════════════════════ -->
+5|      <section class="section active" id="section-overview" role="region" aria-label="Overview">
+6|        <div class="section-header">
+7|          <h2 class="section-title">Overview</h2>
+8|          <p class="section-desc">Monitor your Aeryn AI platform at a glance</p>
+9|        </div>
+10|        <div class="grid grid-4" style="margin-bottom: 24px;">
+11|          <div class="card">
+12|            <div class="card-header">
+13|              <div class="card-icon" style="background: rgba(34,197,94,0.1);">✅</div>
+14|              <div>
+15|                <div class="card-title">System Status</div>
+16|                <div class="card-subtitle" id="ov-status">Checking...</div>
+17|              </div>
+18|            </div>
+19|          </div>
+20|          <div class="card">
+21|            <div class="card-header">
+22|              <div class="card-icon" style="background: rgba(99,102,241,0.1);">🧠</div>
+23|              <div>
+24|                <div class="card-title">Memory Usage</div>
+25|                <div class="card-subtitle" id="ov-memory">— MB</div>
+26|              </div>
+27|            </div>
+28|          </div>
+29|          <div class="card">
+30|            <div class="card-header">
+31|              <div class="card-icon" style="background: rgba(234,179,8,0.1);">📊</div>
+32|              <div>
+33|                <div class="card-title">Traces</div>
+34|                <div class="card-subtitle" id="ov-traces">—</div>
+35|              </div>
+36|            </div>
+37|          </div>
+38|          <div class="card">
+39|            <div class="card-header">
+40|              <div class="card-icon" style="background: rgba(168,85,247,0.1);">🔧</div>
+41|              <div>
+42|                <div class="card-title">Plugins</div>
+43|                <div class="card-subtitle" id="ov-plugins">—</div>
+44|              </div>
+45|            </div>
+46|          </div>
+47|        </div>
+48|        <div class="grid grid-2">
+49|          <div class="card">
+50|            <div class="card-header">
+51|              <div class="card-icon">🚀</div>
+52|              <div>
+53|                <div class="card-title">Quick Actions</div>
+54|                <div class="card-subtitle">Common tasks at your fingertips</div>
+55|              </div>
+56|            </div>
+57|            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+58|              <button class="btn btn-primary" onclick="switchSection('chat')">💬 Chat</button>
+59|              <button class="btn btn-secondary" onclick="switchSection('divisions')">🧠 Divisions</button>
+60|              <button class="btn btn-secondary" onclick="switchSection('plugins')">🔌 Plugins</button>
+61|              <button class="btn btn-secondary" onclick="switchSection('workflows')">⚡ Workflows</button>
+62|              <button class="btn btn-secondary" onclick="switchSection('memory')">🧩 Memory</button>
+63|            </div>
+64|          </div>
+65|          <div class="card">
+66|            <div class="card-header">
+67|              <div class="card-icon">📈</div>
+68|              <div>
+69|                <div class="card-title">System Health</div>
+70|                <div class="card-subtitle">Real-time monitoring</div>
+71|              </div>
+72|            </div>
+73|            <div id="ov-health-details">Loading...</div>
+74|          </div>
+75|        </div>
+76|      </section>
+77|
+78|      <!-- ═══════════════════════════════════════════════════════════════ -->
+79|      <!-- CHAT SECTION -->
+80|      <!-- ═══════════════════════════════════════════════════════════════ -->
+81|      <section class="section" id="section-chat" role="region" aria-label="Chat">
+82|        <div class="section-header">
+83|          <h2 class="section-title">Chat</h2>
+84|          <p class="section-desc">Conversational AI with tool execution and division routing</p>
+85|        </div>
+86|        <div class="grid grid-2">
+87|          <div class="card">
+88|            <div class="card-header">
+89|              <div class="card-icon">💬</div>
+90|              <div>
+91|                <div class="card-title">Conversation</div>
+92|                <div class="card-subtitle">Chat with Aeryn AI</div>
+93|              </div>
+94|            </div>
+95|            <div class="chat-container">
+96|              <div class="chat-messages" id="chat-messages">
+97|                <div class="chat-message system">Welcome! Ask me anything or try a command.</div>
+98|              </div>
+99|              <div class="chat-input-container">
+100|                <textarea id="chat-input" placeholder="Type your message... (Enter to send, Shift+Enter for new line)" aria-label="Chat message"></textarea>
+101|                <button class="btn btn-primary" onclick="sendChat()">Send</button>
+102|              </div>
+103|            </div>
+104|          </div>
+105|          <div class="card">
+106|            <div class="card-header">
+107|              <div class="card-icon">⚡</div>
+108|              <div>
+109|                <div class="card-title">Quick Run</div>
+110|                <div class="card-subtitle">Execute a task directly</div>
+111|              </div>
+112|            </div>
+113|            <div style="display: flex; flex-direction: column; gap: 12px;">
+114|              <textarea id="run-input" class="textarea" placeholder="Enter your goal or task..."></textarea>
+115|              <button class="btn btn-primary" onclick="runTask()">Run Task</button>
+116|              <div id="run-result"></div>
+117|            </div>
+118|          </div>
+119|        </div>
+120|      </section>
+121|
+122|      <!-- ═══════════════════════════════════════════════════════════════ -->
+123|      <!-- DIVISIONS SECTION -->
+124|      <!-- ═══════════════════════════════════════════════════════════════ -->
+125|      <section class="section" id="section-divisions" role="region" aria-label="Divisions">
+126|        <div class="section-header">
+127|          <h2 class="section-title">Cognitive Divisions</h2>
+128|          <p class="section-desc">5 specialized AI divisions for different tasks</p>
+129|        </div>
+130|        <div class="grid grid-3" id="divisions-grid">
+131|          <div class="card">
+132|            <div class="card-header">
+133|              <div class="card-icon" style="background: rgba(239,68,68,0.1);">🎨</div>
+134|              <div>
+135|                <div class="card-title">Creative</div>
+136|                <div class="card-subtitle">POV, Style, Master</div>
+137|              </div>
+138|            </div>
+139|            <p style="color: var(--text2); font-size: 13px; margin-bottom: 12px;">Content generation, creative writing, stylistic adaptation</p>
+140|            <button class="btn btn-sm btn-primary" onclick="executeDivision('creative')">Execute</button>
+141|          </div>
+142|          <div class="card">
+143|            <div class="card-header">
+144|              <div class="card-icon" style="background: rgba(59,130,246,0.1);">🧠</div>
+145|              <div>
+146|                <div class="card-title">Psychology</div>
+147|                <div class="card-subtitle">Sub-agents, Master</div>
+148|              </div>
+149|            </div>
+150|            <p style="color: var(--text2); font-size: 13px; margin-bottom: 12px;">Emotional intelligence, behavioral analysis, mood detection</p>
+151|            <button class="btn btn-sm btn-primary" onclick="executeDivision('psych')">Execute</button>
+152|          </div>
+153|          <div class="card">
+154|            <div class="card-header">
+155|              <div class="card-icon" style="background: rgba(34,197,94,0.1);">🔬</div>
+156|              <div>
+157|                <div class="card-title">Reasoning</div>
+158|                <div class="card-subtitle">MCTS, FOL, Critique, Graph</div>
+159|              </div>
+160|            </div>
+161|            <p style="color: var(--text2); font-size: 13px; margin-bottom: 12px;">Logical reasoning, planning, theorem proving, verification</p>
+162|            <button class="btn btn-sm btn-primary" onclick="executeDivision('reasoning')">Execute</button>
+163|          </div>
+164|          <div class="card">
+165|            <div class="card-header">
+166|              <div class="card-icon" style="background: rgba(234,179,8,0.1);">🏛️</div>
+167|              <div>
+168|                <div class="card-title">Governance</div>
+169|                <div class="card-subtitle">Sub-agents, Master</div>
+170|              </div>
+171|            </div>
+172|            <p style="color: var(--text2); font-size: 13px; margin-bottom: 12px;">Compliance enforcement, policy management, audit trails</p>
+173|            <button class="btn btn-sm btn-primary" onclick="executeDivision('gov')">Execute</button>
+174|          </div>
+175|          <div class="card">
+176|            <div class="card-header">
+177|              <div class="card-icon" style="background: rgba(168,85,247,0.1);">⚙️</div>
+178|              <div>
+179|                <div class="card-title">Infrastructure</div>
+180|                <div class="card-subtitle">Sync, Validator, Master</div>
+181|              </div>
+182|            </div>
+183|            <p style="color: var(--text2); font-size: 13px; margin-bottom: 12px;">System synchronization, data validation, health monitoring</p>
+184|            <button class="btn btn-sm btn-primary" onclick="executeDivision('infra')">Execute</button>
+185|          </div>
+186|        </div>
+187|      </section>
+188|
+189|      <!-- ═══════════════════════════════════════════════════════════════ -->
+190|      <!-- WORKSPACES SECTION -->
+191|      <!-- ═══════════════════════════════════════════════════════════════ -->
+192|      <section class="section" id="section-workspaces" role="region" aria-label="Workspaces">
+193|        <div class="section-header">
+194|          <h2 class="section-title">Workspaces</h2>
+195|          <p class="section-desc">Multi-tenant workspace management</p>
+196|        </div>
+197|        <div class="grid grid-2">
+198|          <div class="card">
+199|            <div class="card-header">
+200|              <div class="card-icon">🏢</div>
+201|              <div>
+202|                <div class="card-title">Your Workspaces</div>
+203|                <div class="card-subtitle">Manage your team workspaces</div>
+204|              </div>
+205|            </div>
+206|            <div id="workspaces-list">
+207|              <div class="loading"><div class="spinner"></div> Loading...</div>
+208|            </div>
+209|          </div>
+210|          <div class="card">
+211|            <div class="card-header">
+212|              <div class="card-icon">➕</div>
+213|              <div>
+214|                <div class="card-title">Create Workspace</div>
+215|                <div class="card-subtitle">Set up a new workspace</div>
+216|              </div>
+217|            </div>
+218|            <div style="display: flex; flex-direction: column; gap: 12px;">
+219|              <input type="text" class="input" id="ws-name" placeholder="Workspace name">
+220|              <textarea class="textarea" id="ws-desc" placeholder="Description"></textarea>
+221|              <button class="btn btn-primary" onclick="createWorkspace()">Create</button>
+222|            </div>
+223|          </div>
+224|        </div>
+225|      </section>
+226|
+227|      <!-- ═══════════════════════════════════════════════════════════════ -->
+228|      <!-- PROJECTS SECTION -->
+229|      <!-- ═══════════════════════════════════════════════════════════════ -->
+230|      <section class="section" id="section-projects" role="region" aria-label="Projects">
+231|        <div class="section-header">
+232|          <h2 class="section-title">Projects</h2>
+233|          <p class="section-desc">Manage your AI projects and tasks</p>
+234|        </div>
+235|        <div class="grid grid-3" id="projects-grid">
+236|          <div class="card">
+237|            <div class="card-header">
+238|              <div class="card-icon">📋</div>
+239|              <div>
+240|                <div class="card-title">Planning Tasks</div>
+241|                <div class="card-subtitle" id="planning-count">—</div>
+242|              </div>
+243|            </div>
+244|            <div id="planning-list">Loading...</div>
+245|          </div>
+246|          <div class="card">
+247|            <div class="card-header">
+248|              <div class="card-icon">📝</div>
+249|              <div>
+250|                <div class="card-title">Shared Tasks</div>
+251|                <div class="card-subtitle" id="shared-count">—</div>
+252|              </div>
+253|            </div>
+254|            <div id="shared-tasks-list">Loading...</div>
+255|          </div>
+256|          <div class="card">
+257|            <div class="card-header">
+258|              <div class="card-icon">⏰</div>
+259|              <div>
+260|                <div class="card-title">Reminders</div>
+261|                <div class="card-subtitle" id="reminders-count">—</div>
+262|              </div>
+263|            </div>
+264|            <div id="reminders-list">Loading...</div>
+265|          </div>
+266|        </div>
+267|      </section>
+268|
+269|      <!-- ═══════════════════════════════════════════════════════════════ -->
+270|      <!-- WORKFLOWS SECTION -->
+271|      <!-- ═══════════════════════════════════════════════════════════════ -->
+272|      <section class="section" id="section-workflows" role="region" aria-label="Workflows">
+273|        <div class="section-header">
+274|          <h2 class="section-title">Workflows</h2>
+275|          <p class="section-desc">Multi-step automation workflows</p>
+276|        </div>
+277|        <div class="grid grid-2">
+278|          <div class="card">
+279|            <div class="card-header">
+280|              <div class="card-icon">⚡</div>
+281|              <div>
+282|                <div class="card-title">Active Workflows</div>
+283|                <div class="card-subtitle">Manage running workflows</div>
+284|              </div>
+285|            </div>
+286|            <div id="workflows-list">
+287|              <div class="loading"><div class="spinner"></div> Loading...</div>
+288|            </div>
+289|          </div>
+290|          <div class="card">
+291|            <div class="card-header">
+292|              <div class="card-icon">➕</div>
+293|              <div>
+294|                <div class="card-title">Create Workflow</div>
+295|                <div class="card-subtitle">Start a new workflow</div>
+296|              </div>
+297|            </div>
+298|            <div style="display: flex; flex-direction: column; gap: 12px;">
+299|              <input type="text" class="input" id="wf-name" placeholder="Workflow name">
+300|              <textarea class="textarea" id="wf-idea" placeholder="Describe your SaaS idea or workflow goal..."></textarea>
+301|              <button class="btn btn-primary" onclick="createWorkflow()">Create Workflow</button>
+302|            </div>
+303|          </div>
+304|        </div>
+305|      </section>
+306|
+307|      <!-- ═══════════════════════════════════════════════════════════════ -->
+308|      <!-- PLUGINS SECTION -->
+309|      <!-- ═══════════════════════════════════════════════════════════════ -->
+310|      <section class="section" id="section-plugins" role="region" aria-label="Plugins">
+311|        <div class="section-header">
+312|          <h2 class="section-title">Plugins</h2>
+313|          <p class="section-desc">Extend Aeryn with powerful plugins</p>
+314|        </div>
+315|        <div class="grid grid-3" id="plugins-grid">
+316|          <div class="card">
+317|            <div class="card-header">
+318|              <div class="card-icon">🔍</div>
+319|              <div>
+320|                <div class="card-title">Code Review</div>
+321|                <div class="card-subtitle">Analyze Python code</div>
+322|              </div>
+323|            </div>
+324|            <textarea class="textarea" id="plugin-code-review-input" placeholder="Paste your Python code here..." style="min-height: 80px;"></textarea>
+325|            <button class="btn btn-sm btn-primary" style="margin-top: 8px;" onclick="runPlugin('code-review')">Analyze</button>
+326|            <div id="plugin-code-review-output" style="margin-top: 8px;"></div>
+327|          </div>
+328|          <div class="card">
+329|            <div class="card-header">
+330|              <div class="card-icon">🔎</div>
+331|              <div>
+332|                <div class="card-title">Research Assistant</div>
+333|                <div class="card-subtitle">Search vault & summarize</div>
+334|              </div>
+335|            </div>
+336|            <input type="text" class="input" id="plugin-research-input" placeholder="Search query...">
+337|            <button class="btn btn-sm btn-primary" style="margin-top: 8px;" onclick="runPlugin('research-assistant')">Search</button>
+338|            <div id="plugin-research-output" style="margin-top: 8px;"></div>
+339|          </div>
+340|          <div class="card">
+341|            <div class="card-header">
+342|              <div class="card-icon">📦</div>
+343|              <div>
+344|                <div class="card-title">Installed Plugins</div>
+345|                <div class="card-subtitle" id="installed-plugins-count">—</div>
+346|              </div>
+347|            </div>
+348|            <div id="installed-plugins-list">Loading...</div>
+349|          </div>
+350|        </div>
+351|      </section>
+352|
+353|      <!-- ═══════════════════════════════════════════════════════════════ -->
+354|      <!-- MEMORY SECTION -->
+355|      <!-- ═══════════════════════════════════════════════════════════════ -->
+356|      <section class="section" id="section-memory" role="region" aria-label="Memory">
+357|        <div class="section-header">
+358|          <h2 class="section-title">Memory</h2>
+359|          <p class="section-desc">PostgreSQL-backed semantic memory system</p>
+360|        </div>
+361|        <div class="grid grid-4" style="margin-bottom: 24px;">
+362|          <div class="card">
+363|            <div class="card-value" id="mem-sessions">—</div>
+364|            <div class="card-label">Sessions</div>
+365|          </div>
+366|          <div class="card">
+367|            <div class="card-value" id="mem-total">—</div>
+368|            <div class="card-label">Total Memories</div>
+369|          </div>
+370|          <div class="card">
+371|            <div class="card-value" id="mem-hot">—</div>
+372|            <div class="card-label">Hot</div>
+373|          </div>
+374|          <div class="card">
+375|            <div class="card-value" id="mem-warm">—</div>
+376|            <div class="card-label">Warm</div>
+377|          </div>
+378|        </div>
+379|        <div class="grid grid-2">
+380|          <div class="card">
+381|            <div class="card-header">
+382|              <div class="card-icon">🔍</div>
+383|              <div>
+384|                <div class="card-title">Search Memories</div>
+385|                <div class="card-subtitle">Semantic search across all memories</div>
+386|              </div>
+387|            </div>
+388|            <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+389|              <input type="text" class="input" id="mem-search-input" placeholder="Search...">
+390|              <button class="btn btn-primary" onclick="searchMemories()">Search</button>
+391|            </div>
+392|            <div id="mem-search-results"></div>
+393|          </div>
+394|          <div class="card">
+395|            <div class="card-header">
+396|              <div class="card-icon">➕</div>
+397|              <div>
+398|                <div class="card-title">Store Memory</div>
+399|                <div class="card-subtitle">Add a new memory entry</div>
+400|              </div>
+401|            </div>
+402|            <div style="display: flex; flex-direction: column; gap: 8px;">
+403|              <input type="text" class="input" id="mem-key" placeholder="Key">
+404|              <textarea class="textarea" id="mem-value" placeholder="Value..." style="min-height: 80px;"></textarea>
+405|              <select class="select" id="mem-type">
+406|                <option value="fact">Fact</option>
+407|                <option value="lesson">Lesson</option>
+408|                <option value="preference">Preference</option>
+409|                <option value="task">Task</option>
+410|              </select>
+411|              <button class="btn btn-primary" onclick="storeMemory()">Store</button>
+412|            </div>
+413|          </div>
+414|        </div>
+415|      </section>
+416|
+417|      <!-- ═══════════════════════════════════════════════════════════════ -->
+418|      <!-- TOOLS SECTION -->
+419|      <!-- ═══════════════════════════════════════════════════════════════ -->
+420|      <section class="section" id="section-tools" role="region" aria-label="Tools">
+421|        <div class="section-header">
+422|          <h2 class="section-title">Tools</h2>
+423|          <p class="section-desc">Discover and execute available tools</p>
+424|        </div>
+425|        <div class="grid grid-2">
+426|          <div class="card">
+427|            <div class="card-header">
+428|              <div class="card-icon">🔧</div>
+429|              <div>
+430|                <div class="card-title">Available Tools</div>
+431|                <div class="card-subtitle" id="tools-count">—</div>
+432|              </div>
+433|            </div>
+434|            <div id="tools-list">Loading...</div>
+435|          </div>
+436|          <div class="card">
+437|            <div class="card-header">
+438|              <div class="card-icon">⚡</div>
+439|              <div>
+440|                <div class="card-title">Execute Tool</div>
+441|                <div class="card-subtitle">Run a tool directly</div>
+442|              </div>
+443|            </div>
+444|            <div style="display: flex; flex-direction: column; gap: 8px;">
+445|              <select class="select" id="tool-select"></select>
+446|              <textarea class="textarea" id="tool-input" placeholder='JSON input, e.g.: {"query": "test"}'></textarea>
+447|              <button class="btn btn-primary" onclick="executeTool()">Execute</button>
+448|              <div id="tool-output"></div>
+449|            </div>
+450|          </div>
+451|        </div>
+452|      </section>
+453|
+454|      <!-- ═══════════════════════════════════════════════════════════════ -->
+455|      <!-- AGENTS SECTION -->
+456|      <!-- ═══════════════════════════════════════════════════════════════ -->
+457|      <section class="section" id="section-agents" role="region" aria-label="Agents">
+458|        <div class="section-header">
+459|          <h2 class="section-title">Agents</h2>
+460|          <p class="section-desc">Manage and monitor AI agents</p>
+461|        </div>
+462|        <div class="grid grid-2">
+463|          <div class="card">
+464|            <div class="card-header">
+465|              <div class="card-icon">🤖</div>
+466|              <div>
+467|                <div class="card-title">Registered Agents</div>
+468|                <div class="card-subtitle" id="agents-count">—</div>
+469|              </div>
+470|            </div>
+471|            <div id="agents-list">Loading...</div>
+472|          </div>
+473|          <div class="card">
+474|            <div class="card-header">
+475|              <div class="card-icon">📋</div>
+476|              <div>
+477|                <div class="card-title">Agent Tasks</div>
+478|                <div class="card-subtitle" id="agent-tasks-count">—</div>
+479|              </div>
+480|            </div>
+481|            <div id="agent-tasks-list">Loading...</div>
+482|          </div>
+483|        </div>
+484|      </section>
+485|
+486|      <!-- ═══════════════════════════════════════════════════════════════ -->
+487|      <!-- OBSERVABILITY SECTION -->
+488|      <!-- ═══════════════════════════════════════════════════════════════ -->
+489|      <section class="section" id="section-observability" role="region" aria-label="Observability">
+490|        <div class="section-header">
+491|          <h2 class="section-title">Observability</h2>
+492|          <p class="section-desc">Monitor traces, metrics, and system health</p>
+493|        </div>
+494|        <div class="grid grid-3" style="margin-bottom: 24px;">
+495|          <div class="card">
+496|            <div class="card-value" id="obs-traces">—</div>
+497|            <div class="card-label">Total Traces</div>
+498|          </div>
+499|          <div class="card">
+500|            <div class="card-value" id="obs-spans">—</div>
+501|            <div class="card-label">Total Spans</div>
+502|          </div>
+503|          <div class="card">
+504|            <div class="card-value" id="obs-avg">—</div>
+505|            <div class="card-label">Avg Duration</div>
+506|          </div>
+507|        </div>
+508|        <div class="grid grid-2">
+509|          <div class="card">
+510|            <div class="card-header">
+511|              <div class="card-icon">📊</div>
+512|              <div>
+513|                <div class="card-title">Recent Traces</div>
+514|                <div class="card-subtitle">Latest execution traces</div>
+515|              </div>
+516|            </div>
+517|            <div id="traces-list">Loading...</div>
+518|          </div>
+519|          <div class="card">
+520|            <div class="card-header">
+521|              <div class="card-icon">⚡</div>
+522|              <div>
+523|                <div class="card-title">Performance</div>
+524|                <div class="card-subtitle">System performance metrics</div>
+525|              </div>
+526|            </div>
+527|            <div id="performance-metrics">Loading...</div>
+528|          </div>
+529|        </div>
+530|      </section>
+531|
+532|      <!-- ═══════════════════════════════════════════════════════════════ -->
+533|      <!-- BILLING SECTION -->
+534|      <!-- ═══════════════════════════════════════════════════════════════ -->
+535|      <section class="section" id="section-billing" role="region" aria-label="Billing">
+536|        <div class="section-header">
+537|          <h2 class="section-title">Billing & Usage</h2>
+538|          <p class="section-desc">Track usage and manage billing</p>
+539|        </div>
+540|        <div class="grid grid-3">
+541|          <div class="card">
+542|            <div class="card-value" id="billing-plan">—</div>
+543|            <div class="card-label">Current Plan</div>
+544|          </div>
+545|          <div class="card">
+546|            <div class="card-value" id="billing-quota">—</div>
+547|            <div class="card-label">Quota Used</div>
+548|          </div>
+549|          <div class="card">
+550|            <div class="card-value" id="billing-cost">—</div>
+551|            <div class="card-label">Est. Cost</div>
+552|          </div>
+553|        </div>
+554|        <div class="card" style="margin-top: 16px;">
+555|          <div class="card-header">
+556|            <div class="card-icon">💰</div>
+557|            <div>
+558|              <div class="card-title">Pricing Plans</div>
+559|              <div class="card-subtitle">Available subscription plans</div>
+560|            </div>
+561|          </div>
+562|          <div id="pricing-plans">Loading...</div>
+563|        </div>
+564|      </section>
+565|
+566|      <!-- ═══════════════════════════════════════════════════════════════ -->
+567|      <!-- NOTIFICATIONS SECTION -->
+568|      <!-- ═══════════════════════════════════════════════════════════════ -->
+569|      <section class="section" id="section-notifications" role="region" aria-label="Notifications">
+570|        <div class="section-header">
+571|          <h2 class="section-title">Notifications</h2>
+572|          <p class="section-desc">Manage your notifications and alerts</p>
+573|        </div>
+574|        <div class="grid grid-2">
+575|          <div class="card">
+576|            <div class="card-header">
+577|              <div class="card-icon">🔔</div>
+578|              <div>
+579|                <div class="card-title">Pending Notifications</div>
+580|                <div class="card-subtitle" id="pending-notifs-count">—</div>
+581|              </div>
+582|            </div>
+583|            <div id="pending-notifs-list">Loading...</div>
+584|          </div>
+585|          <div class="card">
+586|            <div class="card-header">
+587|              <div class="card-icon">➕</div>
+588|              <div>
+589|                <div class="card-title">Create Notification</div>
+590|                <div class="card-subtitle">Add a new notification</div>
+591|              </div>
+592|            </div>
+593|            <div style="display: flex; flex-direction: column; gap: 8px;">
+594|              <input type="text" class="input" id="notif-title" placeholder="Title">
+595|              <textarea class="textarea" id="notif-content" placeholder="Content..." style="min-height: 60px;"></textarea>
+596|              <button class="btn btn-primary" onclick="createNotification()">Create</button>
+597|            </div>
+598|          </div>
+599|        </div>
+600|      </section>
+601|
+602|      <!-- ═══════════════════════════════════════════════════════════════ -->
+603|      <!-- SETTINGS SECTION -->
+604|      <!-- ═══════════════════════════════════════════════════════════════ -->
+605|      <section class="section" id="section-settings" role="region" aria-label="Settings">
+606|        <div class="section-header">
+607|          <h2 class="section-title">Settings</h2>
+608|          <p class="section-desc">Configure your Aeryn platform</p>
+609|        </div>
+610|        <div class="grid grid-2">
+611|          <div class="card">
+612|            <div class="card-header">
+613|              <div class="card-icon">🌐</div>
+614|              <div>
+615|                <div class="card-title">Environment</div>
+616|                <div class="card-subtitle">Runtime configuration</div>
+617|              </div>
+618|            </div>
+619|            <div id="env-info">Loading...</div>
+620|          </div>
+621|          <div class="card">
+622|            <div class="card-header">
+623|              <div class="card-icon">🔒</div>
+624|              <div>
+625|                <div class="card-title">Security</div>
+626|                <div class="card-subtitle">Security controls and status</div>
+627|              </div>
+628|            </div>
+629|            <div id="security-info">Loading...</div>
+630|          </div>
+631|        </div>
+632|      </section>
+633|
+634|      <!-- ═══════════════════════════════════════════════════════════════ -->
+635|      <!-- ADMIN SECTION -->
+636|      <!-- ═══════════════════════════════════════════════════════════════ -->
+637|      <section class="section" id="section-admin" role="region" aria-label="Admin">
+638|        <div class="section-header">
+639|          <h2 class="section-title">Admin</h2>
+640|          <p class="section-desc">System administration and monitoring</p>
+641|        </div>
+642|        <div class="grid grid-3">
+643|          <div class="card">
+644|            <div class="card-value" id="admin-users">—</div>
+645|            <div class="card-label">Users</div>
+646|          </div>
+647|          <div class="card">
+648|            <div class="card-value" id="admin-stats">—</div>
+649|            <div class="card-label">Sessions</div>
+650|          </div>
+651|          <div class="card">
+652|            <div class="card-value" id="admin-health">—</div>
+653|            <div class="card-label">Health</div>
+654|          </div>
+655|        </div>
+656|        <div class="card" style="margin-top: 16px;">
+657|          <div class="card-header">
+658|            <div class="card-icon">🛡️</div>
+659|            <div>
+660|              <div class="card-title">Compliance</div>
+661|              <div class="card-subtitle">Compliance and audit</div>
+662|            </div>
+663|          </div>
+664|          <div id="compliance-info">Loading...</div>
+665|        </div>
+666|      </section>
+667|
+668|    </div>
+669|  </main>
+670|</div>
+671|
+672|<!-- Modal -->
+673|<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+674|  <div class="modal">
+675|    <div class="modal-header">
+676|      <h3 class="modal-title" id="modal-title">Modal</h3>
+677|      <button class="modal-close" onclick="closeModal()" aria-label="Close modal">Close</button>
+678|    </div>
+679|    <div class="modal-body" id="modal-body"></div>
+680|    <div class="modal-footer">
+681|      <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+682|    </div>
+683|  </div>
+684|</div>
+685|
