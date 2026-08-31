@@ -1012,3 +1012,46 @@
 2026-09-01 04:43:36: 2026-09-01 04:43:36 [INFO] aeryn_core.platform.plugin_registry: Registered tool: memory_search (category: memory)
 2026-09-01 04:43:38: INFO:     127.0.0.1:54692 - "POST /chat HTTP/1.1" 200 OK
 2026-09-01 04:43:39: INFO:     127.0.0.1:54704 - "POST /divisions/reasoning/execute HTTP/1.1" 200 OK
+2026-09-01 04:44:47: INFO:     127.0.0.1:32974 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 05:00:18: 2026-09-01 05:00:18 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 05:00:22: 2026-09-01 05:00:22 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-01 05:00:22: 2026-09-01 05:00:22 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-01 05:00:22: 2026-09-01 05:00:22 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 05:00:22: 2026-09-01 05:00:22 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 05:00:32: 2026-09-01 05:00:32 [INFO] plugins.messaging_gateway: Platform registered: discord
+2026-09-01 05:00:32: INFO:     127.0.0.1:56664 - "GET /v1/messaging/status HTTP/1.1" 200 OK
+2026-09-01 05:02:39: 2026-09-01 05:02:39 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 05:02:49: 2026-09-01 05:02:49 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-01 05:02:49: 2026-09-01 05:02:49 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-01 05:02:49: 2026-09-01 05:02:49 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-01 05:02:49: 2026-09-01 05:02:49 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 05:02:49: 2026-09-01 05:02:49 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 05:02:54: INFO:     127.0.0.1:51372 - "GET /v1/experience/status HTTP/1.1" 200 OK
+2026-09-01 05:02:54: 2026-09-01 05:02:54 [ERROR] plugins.experience_transfer: Pattern extraction failed: no such column: s.session_id
+2026-09-01 05:02:54: INFO:     127.0.0.1:51382 - "GET /v1/experience/lessons?limit=5 HTTP/1.1" 200 OK
+2026-09-01 05:09:02: 2026-09-01 05:09:02 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 05:09:06: 2026-09-01 05:09:06 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-01 05:09:06: 2026-09-01 05:09:06 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-01 05:09:06: 2026-09-01 05:09:06 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-01 05:09:07: 2026-09-01 05:09:07 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 05:09:07: 2026-09-01 05:09:07 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 05:09:19: 2026-09-01 05:09:19 [INFO] plugins.experience_transfer: Extracted 1 patterns from 1 sessions
+2026-09-01 05:09:19: INFO:     127.0.0.1:35042 - "GET /v1/experience/lessons?limit=5 HTTP/1.1" 200 OK
+2026-09-01 05:09:28: 2026-09-01 05:09:28 [INFO] plugins.experience_transfer: Initializing Aeryn fine-tuning...
+2026-09-01 05:09:28: 2026-09-01 05:09:28 [INFO] plugins.experience_transfer: Extracted 18 patterns from 1 sessions
+2026-09-01 05:09:28: 2026-09-01 05:09:28 [INFO] plugins.experience_transfer: Extracted 18 patterns from 1 sessions
+2026-09-01 05:09:28: 2026-09-01 05:09:28 [INFO] plugins.postgres_memory: PostgreSQL pool created: localhost:5432/sen
+2026-09-01 05:09:29: 2026-09-01 05:09:29 [INFO] plugins.experience_transfer: Loaded 18 lessons from Hermes experience
+2026-09-01 05:09:29: INFO:     127.0.0.1:34438 - "POST /v1/experience/initialize HTTP/1.1" 200 OK
+2026-09-01 05:12:10: 2026-09-01 05:12:10 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 05:12:14: 2026-09-01 05:12:14 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-01 05:12:14: 2026-09-01 05:12:14 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-01 05:12:14: 2026-09-01 05:12:14 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-01 05:12:15: 2026-09-01 05:12:15 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 05:12:15: 2026-09-01 05:12:15 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 05:12:24: INFO:     127.0.0.1:44650 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 05:12:24: 2026-09-01 05:12:24 [INFO] plugins.postgres_memory: PostgreSQL pool created: localhost:5432/sen
+2026-09-01 05:12:24: INFO:     127.0.0.1:44654 - "GET /v1/postgres-memory/stats HTTP/1.1" 200 OK
+2026-09-01 05:12:25: 2026-09-01 05:12:25 [INFO] plugins.messaging_gateway: Platform registered: discord
+2026-09-01 05:12:25: INFO:     127.0.0.1:44660 - "GET /v1/messaging/status HTTP/1.1" 200 OK
+2026-09-01 05:12:25: INFO:     127.0.0.1:44672 - "GET /v1/experience/status HTTP/1.1" 200 OK

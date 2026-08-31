@@ -179,6 +179,26 @@ except ImportError as e:
     import logging
     logging.warning(f"PostgreSQL Memory Plugin not loaded: {e}")
 
+# Messaging Gateway (optional)
+try:
+    from plugins.messaging_gateway.api import router as messaging_router
+    app.include_router(messaging_router, prefix="/v1")
+    import logging
+    logging.info("Messaging Gateway loaded at /v1/messaging/*")
+except ImportError as e:
+    import logging
+    logging.warning(f"Messaging Gateway not loaded: {e}")
+
+# Experience Transfer (optional)
+try:
+    from plugins.experience_transfer.api import router as experience_router
+    app.include_router(experience_router, prefix="/v1")
+    import logging
+    logging.info("Experience Transfer loaded at /v1/experience/*")
+except ImportError as e:
+    import logging
+    logging.warning(f"Experience Transfer not loaded: {e}")
+
 
 # Mount static files for dashboard
 import os as _os
