@@ -1187,3 +1187,73 @@
 2026-09-01 06:29:58: 2026-09-01 06:29:58 [INFO] root: Experience Transfer loaded at /v1/experience/*
 2026-09-01 06:29:59: 2026-09-01 06:29:59 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
 2026-09-01 06:29:59: 2026-09-01 06:29:59 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 06:30:53: INFO:     127.0.0.1:45892 - "GET / HTTP/1.1" 200 OK
+2026-09-01 06:30:53: INFO:     127.0.0.1:45924 - "GET /static/js/dashboard.js HTTP/1.1" 200 OK
+2026-09-01 06:30:53: INFO:     127.0.0.1:45892 - "GET /static/css/dashboard.css HTTP/1.1" 200 OK
+2026-09-01 06:30:54: INFO:     127.0.0.1:45924 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 06:30:54: INFO:     127.0.0.1:45892 - "GET /divisions HTTP/1.1" 200 OK
+2026-09-01 06:30:54: INFO:     127.0.0.1:45936 - "GET /plugins HTTP/1.1" 200 OK
+2026-09-01 06:30:54: INFO:     127.0.0.1:45952 - "GET /tools/discover?q= HTTP/1.1" 404 Not Found
+2026-09-01 06:30:54: INFO:     127.0.0.1:45966 - "GET /observability/traces?limit=10 HTTP/1.1" 200 OK
+2026-09-01 06:30:54: INFO:     127.0.0.1:45924 - "GET /performance/stats HTTP/1.1" 200 OK
+2026-09-01 06:30:54: INFO:     127.0.0.1:45892 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 06:30:54: INFO:     127.0.0.1:45936 - "GET /favicon.ico HTTP/1.1" 200 OK
+2026-09-01 06:30:54: 2026-09-01 06:30:54 [INFO] plugins.postgres_memory: PostgreSQL pool created: localhost:5432/sen
+2026-09-01 06:30:54: INFO:     127.0.0.1:45966 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 06:30:54: INFO:     127.0.0.1:45944 - "GET /v1/postgres-memory/stats HTTP/1.1" 200 OK
+2026-09-01 06:31:07: INFO:     127.0.0.1:51694 - "GET / HTTP/1.1" 200 OK
+2026-09-01 06:31:07: INFO:     127.0.0.1:51694 - "GET /static/css/dashboard.css HTTP/1.1" 304 Not Modified
+2026-09-01 06:31:07: INFO:     127.0.0.1:51708 - "GET /static/js/dashboard.js HTTP/1.1" 304 Not Modified
+2026-09-01 06:31:07: INFO:     127.0.0.1:51708 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 06:31:07: INFO:     127.0.0.1:51694 - "GET /divisions HTTP/1.1" 200 OK
+2026-09-01 06:31:07: INFO:     127.0.0.1:51710 - "GET /plugins HTTP/1.1" 200 OK
+2026-09-01 06:31:07: INFO:     127.0.0.1:51726 - "GET /tools/discover?q= HTTP/1.1" 404 Not Found
+2026-09-01 06:31:07: INFO:     127.0.0.1:51730 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 06:31:07: INFO:     127.0.0.1:51708 - "GET /observability/traces?limit=10 HTTP/1.1" 200 OK
+2026-09-01 06:31:07: INFO:     127.0.0.1:51694 - "GET /performance/stats HTTP/1.1" 200 OK
+2026-09-01 06:31:07: INFO:     127.0.0.1:51710 - "GET /favicon.ico HTTP/1.1" 200 OK
+2026-09-01 06:31:07: INFO:     127.0.0.1:51726 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 06:31:07: INFO:     127.0.0.1:51716 - "GET /v1/postgres-memory/stats HTTP/1.1" 200 OK
+2026-09-01 06:31:25: INFO:     127.0.0.1:59586 - "GET /favicon.ico HTTP/1.1" 200 OK
+2026-09-01 06:31:26: INFO:     127.0.0.1:59586 - "GET / HTTP/1.1" 200 OK
+2026-09-01 06:31:27: INFO:     127.0.0.1:59586 - "GET /static/css/dashboard.css HTTP/1.1" 200 OK
+2026-09-01 06:31:27: INFO:     127.0.0.1:59594 - "GET /static/js/dashboard.js HTTP/1.1" 200 OK
+2026-09-01 06:31:27: INFO:     127.0.0.1:59586 - "GET /tools/discover?q= HTTP/1.1" 404 Not Found
+2026-09-01 06:31:27: INFO:     127.0.0.1:59610 - "GET /performance/stats HTTP/1.1" 200 OK
+2026-09-01 06:31:27: INFO:     127.0.0.1:59612 - "GET /favicon.ico HTTP/1.1" 200 OK
+2026-09-01 06:31:27: INFO:     127.0.0.1:59628 - "GET /divisions HTTP/1.1" 200 OK
+2026-09-01 06:31:27: INFO:     127.0.0.1:59630 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 06:31:27: INFO:     127.0.0.1:59586 - "GET /plugins HTTP/1.1" 200 OK
+2026-09-01 06:31:27: INFO:     127.0.0.1:59612 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 06:31:27: INFO:     127.0.0.1:59610 - "GET /observability/traces?limit=10 HTTP/1.1" 200 OK
+2026-09-01 06:31:27: INFO:     127.0.0.1:59594 - "GET /v1/postgres-memory/stats HTTP/1.1" 200 OK
+2026-09-01 06:31:27: INFO:     127.0.0.1:59586 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 06:31:42: INFO:     127.0.0.1:52494 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 06:31:42: INFO:     127.0.0.1:52494 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 06:31:57: INFO:     127.0.0.1:60690 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 06:31:57: INFO:     127.0.0.1:60690 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 06:32:00: INFO:     127.0.0.1:60690 - "GET / HTTP/1.1" 200 OK
+2026-09-01 06:32:00: INFO:     127.0.0.1:60690 - "GET /static/js/dashboard.js HTTP/1.1" 304 Not Modified
+2026-09-01 06:32:00: INFO:     127.0.0.1:60704 - "GET /static/css/dashboard.css HTTP/1.1" 304 Not Modified
+2026-09-01 06:32:00: INFO:     127.0.0.1:60704 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 06:32:01: INFO:     127.0.0.1:60690 - "GET /divisions HTTP/1.1" 200 OK
+2026-09-01 06:32:01: INFO:     127.0.0.1:60714 - "GET /plugins HTTP/1.1" 200 OK
+2026-09-01 06:32:01: INFO:     127.0.0.1:60740 - "GET /tools/discover?q= HTTP/1.1" 404 Not Found
+2026-09-01 06:32:01: INFO:     127.0.0.1:60744 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 06:32:01: INFO:     127.0.0.1:60704 - "GET /observability/traces?limit=10 HTTP/1.1" 200 OK
+2026-09-01 06:32:01: INFO:     127.0.0.1:60724 - "GET /v1/postgres-memory/stats HTTP/1.1" 200 OK
+2026-09-01 06:32:01: INFO:     127.0.0.1:60690 - "GET /performance/stats HTTP/1.1" 200 OK
+2026-09-01 06:32:01: INFO:     127.0.0.1:60714 - "GET /favicon.ico HTTP/1.1" 200 OK
+2026-09-01 06:32:01: INFO:     127.0.0.1:60704 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 06:36:40: INFO:     127.0.0.1:42652 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 06:36:41: INFO:     127.0.0.1:42656 - "GET /favicon.ico HTTP/1.1" 200 OK
+2026-09-01 06:36:56: INFO:     127.0.0.1:49018 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 06:36:56: INFO:     127.0.0.1:49018 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 06:37:11: INFO:     127.0.0.1:38288 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 06:37:11: INFO:     127.0.0.1:38288 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 06:37:26: INFO:     127.0.0.1:52428 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 06:37:26: INFO:     127.0.0.1:52428 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 06:37:41: INFO:     127.0.0.1:55622 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 06:37:41: INFO:     127.0.0.1:55622 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 06:37:56: INFO:     127.0.0.1:40662 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 06:37:56: INFO:     127.0.0.1:40662 - "GET /observability/stats HTTP/1.1" 200 OK
