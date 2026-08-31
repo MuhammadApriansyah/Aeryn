@@ -38,7 +38,7 @@ module.exports = {
       max_memory_restart: "256M",
       env: {
         PYTHONPATH: "/home/sen/aeryn-core-agent",
-        AERYN_DASHBOARD_PORT: "3020",
+        AERYN_DASHBOARD_PORT: "3021",
         AERYN_DASHBOARD_HOST: "127.0.0.1",
         PYTHONUNBUFFERED: "1",
         TZ: "Asia/Jakarta",

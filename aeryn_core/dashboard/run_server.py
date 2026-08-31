@@ -80,7 +80,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
     def log_message(self, format, *args):
         pass
 
+class ReusableTCPServer(socketserver.TCPServer):
+    allow_reuse_address = True
+    daemon_threads = True
+
 if __name__ == "__main__":
-    with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
+    with ReusableTCPServer((HOST, PORT), Handler) as httpd:
         print(f"Dashboard running at http://{HOST}:{PORT}")
         httpd.serve_forever()
