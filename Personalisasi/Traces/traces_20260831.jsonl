@@ -3,3 +3,10 @@
 {"trace_id": "6962f715-22f", "session_id": "35878ef4-fe2", "user_id": "default", "span_count": 0, "total_duration_ms": 1729, "spans": [], "metadata": {}}
 {"trace_id": "c02b2014-343", "session_id": "c741571d-8b6", "user_id": "default", "span_count": 0, "total_duration_ms": 3227, "spans": [], "metadata": {}}
 {"trace_id": "a7cdb3ff-24b", "session_id": "20abf741-bac", "user_id": "default", "span_count": 0, "total_duration_ms": 1701, "spans": [], "metadata": {}}
+{"trace_id": "b07d6954-765", "session_id": "web_1788181376334", "user_id": "default", "span_count": 0, "total_duration_ms": 1825, "spans": [], "metadata": {}}
+{"trace_id": "b6c10381-782", "session_id": "web_1788181376334", "user_id": "default", "span_count": 0, "total_duration_ms": 1720, "spans": [], "metadata": {}}
+{"trace_id": "0a77a216-6ed", "session_id": "web_1788181376334", "user_id": "default", "span_count": 0, "total_duration_ms": 1990, "spans": [], "metadata": {}}
+{"trace_id": "389740e1-6cc", "session_id": "web_1788181376334", "user_id": "default", "span_count": 0, "total_duration_ms": 1689, "spans": [], "metadata": {}}
+{"trace_id": "e54e3e58-ed0", "session_id": "web_1788181376334", "user_id": "default", "span_count": 0, "total_duration_ms": 1718, "spans": [], "metadata": {}}
+{"trace_id": "e11197cc-f97", "session_id": "web_1788181376334", "user_id": "default", "span_count": 0, "total_duration_ms": 2030, "spans": [], "metadata": {}}
+{"trace_id": "f9016f28-967", "session_id": "8cf6d7ae-848", "user_id": "default", "span_count": 0, "total_duration_ms": 1617, "spans": [], "metadata": {}}

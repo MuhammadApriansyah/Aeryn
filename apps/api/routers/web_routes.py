@@ -4,7 +4,6 @@ from fastapi.responses import HTMLResponse, FileResponse
 import os
 
 router = APIRouter()
-# Go up to project root: apps/api/routers/web_routes.py -> /home/sen/aeryn-core-agent
 BASE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 TEMPLATE = os.path.join(BASE, "apps", "web", "templates")
 STATIC = os.path.join(BASE, "apps", "web", "static")
@@ -20,17 +19,11 @@ async def dashboard():
 
 @router.get("/static/css/{f:path}")
 async def css(f: str):
-    fp = os.path.join(STATIC, "css", f)
-    if os.path.exists(fp):
-        return FileResponse(fp)
-    return HTMLResponse("/* not found */", status_code=404)
+    return FileResponse(os.path.join(STATIC, "css", f))
 
 @router.get("/static/js/{f:path}")
 async def js(f: str):
-    fp = os.path.join(STATIC, "js", f)
-    if os.path.exists(fp):
-        return FileResponse(fp)
-    return HTMLResponse("// not found", status_code=404)
+    return FileResponse(os.path.join(STATIC, "js", f))
 
 @router.get("/favicon.ico")
 async def favicon():

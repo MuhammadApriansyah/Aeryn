@@ -5,408 +5,280 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aeryn — AI Agent Platform</title>
 <style>
-:root {
-  --bg: #0a0a0f; --surface: #12121a; --surface2: #1a1a25; --surface3: #222233;
-  --border: #2a2a3a; --border2: #3a3a4a;
-  --text: #e4e4e7; --text2: #a1a1aa; --text3: #71717a;
-  --accent: #6366f1; --accent2: #818cf8; --accent-bg: rgba(99,102,241,0.1);
-  --green: #22c55e; --green-bg: rgba(34,197,94,0.1);
-  --yellow: #eab308; --yellow-bg: rgba(234,179,8,0.1);
-  --red: #ef4444; --red-bg: rgba(239,68,68,0.1);
-  --blue: #3b82f6; --blue-bg: rgba(59,130,246,0.1);
-  --purple: #a855f7; --purple-bg: rgba(168,85,247,0.1);
-  --radius: 14px; --radius-sm: 10px; --radius-xs: 6px;
-  --shadow: 0 4px 24px rgba(0,0,0,0.4);
-  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-[data-theme="light"] {
-  --bg: #f8fafc; --surface: #fff; --surface2: #f1f5f9; --surface3: #e2e8f0;
-  --border: #e2e8f0; --border2: #cbd5e1;
-  --text: #0f172a; --text2: #475569; --text3: #94a3b8;
-  --accent-bg: rgba(99,102,241,0.08);
-  --green-bg: rgba(34,197,94,0.08);
-  --yellow-bg: rgba(234,179,8,0.08);
-  --red-bg: rgba(239,68,68,0.08);
-  --blue-bg: rgba(59,130,246,0.08);
-  --purple-bg: rgba(168,85,247,0.08);
-  --shadow: 0 4px 24px rgba(0,0,0,0.08);
-}
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 14px; scroll-behavior: smooth; }
+html { scroll-behavior: smooth; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
-  background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #0a0a0f; color: #e4e4e7; line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
+a { color: inherit; text-decoration: none; }
 button { cursor: pointer; font-family: inherit; border: none; background: none; color: inherit; }
-input, textarea, select { font-family: inherit; font-size: inherit; color: inherit; }
-a { color: var(--accent2); text-decoration: none; }
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text3); }
 
-/* ── Layout ── */
-.app { display: flex; min-height: 100vh; }
-.sidebar {
-  width: 260px; background: var(--surface); border-right: 1px solid var(--border);
-  display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 100;
-  transition: transform 0.3s;
+/* ── Navigation ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 40px; background: rgba(10,10,15,0.8); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
 }
-.sidebar.collapsed { transform: translateX(-260px); }
-.sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
-.sidebar-logo { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.sidebar-nav { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; }
-.nav-item {
-  display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: var(--radius-sm);
-  color: var(--text2); transition: var(--transition); font-weight: 500; font-size: 13px;
-  width: 100%; text-align: left;
-}
-.nav-item:hover { background: var(--surface2); color: var(--text); }
-.nav-item.active { background: var(--accent-bg); color: var(--accent2); border: 1px solid rgba(99,102,241,0.2); }
-.nav-icon { font-size: 16px; width: 22px; text-align: center; }
-.nav-badge { margin-left: auto; background: var(--accent); color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 20px; }
-.sidebar-footer { padding: 12px; border-top: 1px solid var(--border); }
-.status-badge { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--surface2); border-radius: var(--radius-sm); font-size: 12px; }
-.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); transition: all 0.3s; }
-.status-dot.online { background: var(--green); box-shadow: 0 0 8px var(--green); }
-.status-dot.loading { background: var(--yellow); animation: pulse 1.5s infinite; }
-@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.nav-logo { font-size: 20px; font-weight: 700; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.nav-links { display: flex; gap: 32px; }
+.nav-links a { font-size: 14px; color: #a1a1aa; transition: color 0.2s; }
+.nav-links a:hover { color: #fff; }
+.nav-status { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #a1a1aa; }
+.nav-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; }
+.nav-dot.online { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
 
-.main { flex: 1; margin-left: 260px; display: flex; flex-direction: column; transition: margin-left 0.3s; }
-.sidebar.collapsed + .main { margin-left: 0; }
-.topbar {
-  background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 28px;
-  display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 50;
-  backdrop-filter: blur(12px); background: rgba(18,18,26,0.85);
+/* ── Hero ── */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 120px 40px 80px;
 }
-.topbar-title { font-size: 18px; font-weight: 700; }
-.topbar-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
-.search-box { position: relative; }
-.search-box input {
-  background: var(--surface2); border: 1px solid var(--border); color: var(--text);
-  padding: 8px 12px 8px 36px; border-radius: var(--radius-sm); width: 280px; transition: var(--transition);
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px;
+  background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2);
+  font-size: 13px; color: #818cf8; margin-bottom: 32px;
 }
-.search-box input:focus { border-color: var(--accent); width: 360px; outline: none; }
-.search-box::before { content: "🔍"; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; }
-.btn { padding: 8px 18px; border-radius: var(--radius-sm); font-weight: 600; transition: var(--transition); display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
-.btn-primary { background: var(--accent); color: #fff; }
-.btn-primary:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(99,102,241,0.4); }
-.btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-.btn-secondary:hover { border-color: var(--accent); }
-.btn-ghost { background: transparent; color: var(--text2); }
-.btn-ghost:hover { background: var(--surface2); color: var(--text); }
-.btn-sm { padding: 6px 12px; font-size: 12px; }
-.btn-icon { padding: 8px; background: var(--surface2); border-radius: var(--radius-sm); color: var(--text); transition: var(--transition); }
-.btn-icon:hover { background: var(--accent-bg); color: var(--accent2); }
+.hero h1 {
+  font-size: clamp(40px, 8vw, 80px); font-weight: 800; line-height: 1.1; letter-spacing: -2px;
+  max-width: 900px; margin-bottom: 24px;
+}
+.hero h1 span { background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p { font-size: 18px; color: #a1a1aa; max-width: 600px; margin-bottom: 40px; }
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.btn {
+  padding: 14px 28px; border-radius: 12px; font-weight: 600; font-size: 15px;
+  transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-primary { background: linear-gradient(135deg, #6366f1, #7c3aed); color: #fff; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99,102,241,0.4); }
+.btn-secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #e4e4e7; }
+.btn-secondary:hover { background: rgba(255,255,255,0.1); }
 
-.content { flex: 1; padding: 28px; overflow-y: auto; }
-.page { display: none; animation: fadeIn 0.3s; }
-.page.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* ── Sections ── */
+.section { padding: 100px 40px; max-width: 1200px; margin: 0 auto; }
+.section-header { margin-bottom: 60px; }
+.section-number { font-size: 13px; color: #6366f1; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+.section-title { font-size: clamp(32px, 5vw, 56px); font-weight: 800; line-height: 1.1; letter-spacing: -1px; }
+.section-title span { background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.section-desc { font-size: 16px; color: #a1a1aa; max-width: 500px; margin-top: 16px; }
 
-/* ── Cards ── */
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; transition: var(--transition); }
-.card:hover { border-color: var(--border2); }
-.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.card-title { font-size: 16px; font-weight: 700; }
-.card-subtitle { font-size: 13px; color: var(--text2); }
+/* ── Capabilities Grid ── */
+.capabilities { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+.capability {
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px;
+  padding: 32px; transition: all 0.3s;
+}
+.capability:hover { border-color: rgba(99,102,241,0.3); transform: translateY(-4px); }
+.capability-num { font-size: 13px; color: #6366f1; font-weight: 600; margin-bottom: 16px; }
+.capability-icon { font-size: 40px; margin-bottom: 16px; }
+.capability h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.capability p { font-size: 14px; color: #a1a1aa; }
 
 /* ── Stats ── */
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 28px; }
-.stat-card {
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 24px; transition: var(--transition); position: relative; overflow: hidden;
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; }
+.stat { text-align: center; padding: 32px; background: rgba(255,255,255,0.02); border-radius: 16px; border: 1px solid rgba(255,255,255,0.06); }
+.stat-value { font-size: 48px; font-weight: 800; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.stat-label { font-size: 14px; color: #a1a1aa; margin-top: 8px; }
+
+/* ── Chat Section ── */
+.chat-section { max-width: 800px; margin: 0 auto; }
+.chat-box {
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px;
+  overflow: hidden;
 }
-.stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
-.stat-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
-.stat-card:nth-child(1)::before { background: linear-gradient(90deg, var(--accent), var(--purple)); }
-.stat-card:nth-child(2)::before { background: linear-gradient(90deg, var(--green), #34d399); }
-.stat-card:nth-child(3)::before { background: linear-gradient(90deg, var(--yellow), #fbbf24); }
-.stat-card:nth-child(4)::before { background: linear-gradient(90deg, var(--blue), #60a5fa); }
-.stat-value { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; }
-.stat-label { font-size: 13px; color: var(--text2); margin-top: 4px; }
+.chat-messages { height: 400px; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+.message { max-width: 75%; padding: 12px 18px; border-radius: 16px; }
+.message.user { align-self: flex-end; background: linear-gradient(135deg, #6366f1, #7c3aed); color: #fff; }
+.message.assistant { align-self: flex-start; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); }
+.message.system { align-self: center; font-size: 12px; color: #71717a; background: transparent; }
+.chat-input { display: flex; gap: 12px; padding: 20px; border-top: 1px solid rgba(255,255,255,0.06); }
+.chat-input textarea {
+  flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+  color: #e4e4e7; padding: 12px 16px; border-radius: 12px; resize: none; min-height: 48px; font-family: inherit;
+}
+.chat-input textarea:focus { outline: none; border-color: #6366f1; }
 
-/* ── Grid ── */
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-@media (max-width: 1200px) { .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 768px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
-
-/* ── Chat ── */
-.chat-container { display: flex; flex-direction: column; height: calc(100vh - 220px); min-height: 500px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-.chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
-.message { max-width: 75%; padding: 14px 18px; border-radius: var(--radius); animation: msgIn 0.3s; }
-@keyframes msgIn { from { opacity: 0; transform: translateY(12px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
-.message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent), #7c3aed); color: #fff; border-radius: var(--radius) var(--radius-xs) var(--radius) var(--radius); }
-.message.assistant { align-self: flex-start; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-xs) var(--radius) var(--radius) var(--radius); }
-.message.system { align-self: center; font-size: 12px; color: var(--text3); background: transparent; padding: 8px 16px; }
-.chat-input { display: flex; gap: 12px; padding: 16px 20px; border-top: 1px solid var(--border); background: var(--surface); }
-.chat-input textarea { flex: 1; background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 12px 16px; border-radius: var(--radius-sm); resize: none; min-height: 48px; max-height: 150px; transition: var(--transition); }
-.chat-input textarea:focus { border-color: var(--accent); outline: none; }
-
-/* ── Tools ── */
-.tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
-.tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; transition: var(--transition); }
-.tool-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
-.tool-name { font-weight: 700; font-size: 15px; margin-bottom: 4px; color: var(--accent2); }
-.tool-desc { font-size: 13px; color: var(--text2); margin-bottom: 10px; }
-.tool-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-.tag { background: var(--surface2); padding: 3px 10px; border-radius: 20px; font-size: 11px; color: var(--text2); border: 1px solid var(--border); }
-
-/* ── Divisions ── */
-.division-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; text-align: center; transition: var(--transition); }
-.division-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-.division-icon { font-size: 40px; margin-bottom: 12px; }
-.division-name { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
-.division-desc { font-size: 12px; color: var(--text2); margin-bottom: 12px; }
-
-/* ── Workflows ── */
-.workflow-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-.workflow-info { display: flex; flex-direction: column; gap: 4px; }
-.workflow-name { font-weight: 600; }
-.workflow-status { font-size: 12px; color: var(--text2); }
-.workflow-actions { display: flex; gap: 8px; }
-
-/* ── Traces ── */
-.trace-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 10px; transition: var(--transition); }
-.trace-item:hover { border-color: var(--accent); }
-.trace-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.trace-id { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent2); }
-.trace-meta { display: flex; gap: 16px; font-size: 12px; color: var(--text3); }
-
-/* ── Charts ── */
-.chart-container { position: relative; height: 200px; }
-.chart-bar { display: flex; align-items: flex-end; gap: 8px; height: 160px; padding: 0 8px; }
-.bar { flex: 1; background: linear-gradient(180deg, var(--accent), var(--purple)); border-radius: 6px 6px 0 0; min-height: 4px; transition: all 0.5s; position: relative; }
-.bar:hover { opacity: 0.8; }
-.bar-label { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--text3); white-space: nowrap; }
-
-/* ── Toast ── */
-.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; }
-.toast { background: var(--surface); border: 1px solid var(--border); padding: 14px 24px; border-radius: var(--radius-sm); box-shadow: var(--shadow); animation: slideIn 0.3s; display: flex; align-items: center; gap: 10px; min-width: 280px; }
-.toast.success { border-left: 3px solid var(--green); }
-.toast.error { border-left: 3px solid var(--red); }
-.toast.info { border-left: 3px solid var(--blue); }
-@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-/* ── Modal ── */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 200; backdrop-filter: blur(4px); }
-.modal-overlay.active { display: flex; }
-.modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); max-width: 700px; width: 90%; max-height: 85vh; overflow: auto; box-shadow: 0 24px 48px rgba(0,0,0,0.5); }
-.modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid var(--border); }
-.modal-body { padding: 24px; }
-.modal-body pre { background: var(--bg); padding: 16px; border-radius: var(--radius-sm); overflow: auto; font-size: 12px; max-height: 60vh; }
-
-/* ── Command Palette ── */
-.cmd-palette { position: fixed; top: 20%; left: 50%; transform: translateX(-50%); width: 90%; max-width: 600px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: 0 24px 48px rgba(0,0,0,0.5); z-index: 300; display: none; }
-.cmd-palette.active { display: block; }
-.cmd-input { width: 100%; padding: 16px 20px; background: transparent; border: none; border-bottom: 1px solid var(--border); font-size: 16px; }
-.cmd-input:focus { outline: none; }
-.cmd-results { max-height: 400px; overflow-y: auto; }
-.cmd-item { padding: 12px 20px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: var(--transition); }
-.cmd-item:hover, .cmd-item.active { background: var(--surface2); }
-
-/* ── Loading ── */
-.loading { display: inline-block; width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
+/* ── Footer ── */
+.footer { padding: 60px 40px; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); }
+.footer p { font-size: 14px; color: #71717a; }
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
-  .sidebar { width: 60px; }
-  .sidebar .nav-label, .sidebar .sidebar-logo { display: none; }
-  .sidebar-header { padding: 12px; justify-content: center; }
-  .main { margin-left: 60px; }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .search-box input { width: 140px; }
-  .search-box input:focus { width: 180px; }
+  .nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 100px 20px 60px; }
+  .section { padding: 60px 20px; }
+  .capabilities { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ── Animations ── */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeInUp 0.6s ease forwards; }
 </style>
 </head>
 <body>
-<div class="app">
-  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
-    <div class="sidebar-header">
-      <div class="sidebar-logo">🤖 Aeryn</div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-logo">🤖 Aeryn</div>
+  <div class="nav-links">
+    <a href="#capabilities">Capabilities</a>
+    <a href="#status">Status</a>
+    <a href="#chat">Chat</a>
+  </div>
+  <div class="nav-status">
+    <span class="nav-dot" id="navDot"></span>
+    <span id="navStatus">Checking...</span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="nav-dot online" id="heroDot" style="background:#22c55e;box-shadow:0 0 8px #22c55e"></span>
+    <span id="heroStatus">System Online</span>
+  </div>
+  <h1>Your <span>AI Agent</span> Platform</h1>
+  <p>Adaptive, self-improving, multi-agent system that learns from experience. Built for teams who want working systems, not slideware.</p>
+  <div class="hero-actions">
+    <a href="#chat" class="btn btn-primary">💬 Start Chat</a>
+    <a href="#capabilities" class="btn btn-secondary">Explore Capabilities</a>
+  </div>
+</section>
+
+<!-- Capabilities -->
+<section class="section" id="capabilities">
+  <div class="section-header">
+    <div class="section-number">What I Can Do</div>
+    <h2 class="section-title">Five capabilities, <span>one system</span></h2>
+    <p class="section-desc">Each capability works alone or together. No handoffs, no decks about decks.</p>
+  </div>
+  <div class="capabilities">
+    <div class="capability fade-in">
+      <div class="capability-num">01</div>
+      <div class="capability-icon">🧠</div>
+      <h3>AI & Automation</h3>
+      <p>Put AI on the work that's bleeding you. Automate the repetitive, aim at what costs time and money.</p>
     </div>
-    <nav class="sidebar-nav">
-      <button class="nav-item active" data-page="overview" aria-current="page"><span class="nav-icon">📊</span><span class="nav-label">Overview</span></button>
-      <button class="nav-item" data-page="chat"><span class="nav-icon">💬</span><span class="nav-label">Chat</span></button>
-      <button class="nav-item" data-page="tools"><span class="nav-icon">🔧</span><span class="nav-label">Tools</span><span class="nav-badge" id="toolCount">0</span></button>
-      <button class="nav-item" data-page="divisions"><span class="nav-icon">🏢</span><span class="nav-label">Divisions</span></button>
-      <button class="nav-item" data-page="workflows"><span class="nav-icon">📋</span><span class="nav-label">Workflows</span></button>
-      <button class="nav-item" data-page="traces"><span class="nav-icon">🔍</span><span class="nav-label">Traces</span></button>
-      <button class="nav-item" data-page="settings"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
-    </nav>
-    <div class="sidebar-footer">
-      <div class="status-badge">
-        <span class="status-dot" id="statusDot"></span>
-        <span id="statusText">Checking...</span>
-      </div>
+    <div class="capability fade-in">
+      <div class="capability-num">02</div>
+      <div class="capability-icon">⚙️</div>
+      <h3>Custom Software</h3>
+      <p>Working products, not slideware. Internal tools, dashboards, client apps that move the needle.</p>
     </div>
-  </aside>
+    <div class="capability fade-in">
+      <div class="capability-num">03</div>
+      <div class="capability-icon">🔗</div>
+      <h3>Integrations</h3>
+      <p>Make the tools you already pay for talk. Your stack, finally working as one system.</p>
+    </div>
+    <div class="capability fade-in">
+      <div class="capability-num">04</div>
+      <div class="capability-icon">📊</div>
+      <h3>Data into Decisions</h3>
+      <p>Turn numbers into next moves. Reporting that tells you what to do, not just what happened.</p>
+    </div>
+    <div class="capability fade-in">
+      <div class="capability-num">05</div>
+      <div class="capability-icon">🔄</div>
+      <h3>Self-Improving</h3>
+      <p>Learns from every interaction. Gets better at tool selection, routing, and responses over time.</p>
+    </div>
+  </div>
+</section>
 
-  <main class="main">
-    <header class="topbar">
-      <h1 class="topbar-title" id="pageTitle">Overview</h1>
-      <div class="topbar-actions">
-        <div class="search-box">
-          <input type="search" id="globalSearch" placeholder="Search... (Ctrl+K)" aria-label="Global search"/>
-        </div>
-        <button class="btn btn-secondary btn-sm" onclick="refreshAll()" title="Refresh (R)">🔄</button>
-        <button class="btn-icon" onclick="toggleTheme()" title="Toggle theme (T)" id="themeBtn">🌙</button>
+<!-- Status -->
+<section class="section" id="status">
+  <div class="section-header">
+    <div class="section-number">System Status</div>
+    <h2 class="section-title">Live <span>metrics</span></h2>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-value" id="statStatus">—</div><div class="stat-label">Status</div></div>
+    <div class="stat"><div class="stat-value" id="statMem">—</div><div class="stat-label">Memory (MB)</div></div>
+    <div class="stat"><div class="stat-value" id="statVer">—</div><div class="stat-label">Version</div></div>
+    <div class="stat"><div class="stat-value" id="statTraces">0</div><div class="stat-label">Traces</div></div>
+  </div>
+</section>
+
+<!-- Chat -->
+<section class="section" id="chat">
+  <div class="section-header">
+    <div class="section-number">Start a Conversation</div>
+    <h2 class="section-title">Tell me <span>what you need</span></h2>
+  </div>
+  <div class="chat-section">
+    <div class="chat-box">
+      <div class="chat-messages" id="chatMsg">
+        <div class="message system">Welcome. Type a message to begin.</div>
       </div>
-    </header>
-
-    <div class="content">
-      <!-- Overview -->
-      <div class="page active" id="page-overview">
-        <div class="stats-grid" id="statsGrid">
-          <div class="stat-card"><div class="stat-value" id="sStatus">—</div><div class="stat-label">Status</div></div>
-          <div class="stat-card"><div class="stat-value" id="sMem">—</div><div class="stat-label">Memory (MB)</div></div>
-          <div class="stat-card"><div class="stat-value" id="sVer">—</div><div class="stat-label">Version</div></div>
-          <div class="stat-card"><div class="stat-value" id="sTraces">—</div><div class="stat-label">Traces</div></div>
-        </div>
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-header"><span class="card-title">Activity</span></div>
-            <div class="chart-container"><div class="chart-bar" id="activityChart"></div></div>
-          </div>
-          <div class="card">
-            <div class="card-header"><span class="card-title">Self-Improvement</span><button class="btn btn-sm btn-primary" onclick="triggerAdapt()">Adapt</button></div>
-            <div id="siContent"><p style="color:var(--text2)">Loading...</p></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header"><span class="card-title">Recent Traces</span><button class="btn btn-sm btn-secondary" onclick="loadTraces()">Refresh</button></div>
-          <div id="recentTraces"><p style="color:var(--text2)">Loading...</p></div>
-        </div>
-      </div>
-
-      <!-- Chat -->
-      <div class="page" id="page-chat">
-        <div class="card chat-container">
-          <div class="chat-messages" id="chatMsg">
-            <div class="message system">Welcome to Aeryn Chat. Type a message to begin.</div>
-          </div>
-          <div class="chat-input">
-            <textarea id="chatInput" placeholder="Type your message... (Enter to send, Shift+Enter for newline)" rows="1"></textarea>
-            <button class="btn btn-primary" onclick="sendChat()">Send</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tools -->
-      <div class="page" id="page-tools">
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">Registered Tools</span>
-            <input type="search" id="toolsSearch" placeholder="Discover tools..." style="padding:6px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;width:200px"/>
-          </div>
-          <div class="tools-grid" id="toolsGrid"><p style="color:var(--text2)">Loading...</p></div>
-        </div>
-      </div>
-
-      <!-- Divisions -->
-      <div class="page" id="page-divisions">
-        <div class="card">
-          <div class="card-header"><span class="card-title">5 Cognitive Divisions</span></div>
-          <div class="tools-grid" id="divisionsGrid"><p style="color:var(--text2)">Loading...</p></div>
-        </div>
-      </div>
-
-      <!-- Workflows -->
-      <div class="page" id="page-workflows">
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">Workflows</span>
-            <button class="btn btn-primary btn-sm" onclick="createWorkflow()">+ New</button>
-          </div>
-          <div id="wfList"><p style="color:var(--text2)">No workflows yet.</p></div>
-        </div>
-      </div>
-
-      <!-- Traces -->
-      <div class="page" id="page-traces">
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">Observability Traces</span>
-            <button class="btn btn-secondary btn-sm" onclick="loadTraces()">Refresh</button>
-          </div>
-          <div id="tracesList"><p style="color:var(--text2)">Loading...</p></div>
-        </div>
-      </div>
-
-      <!-- Settings -->
-      <div class="page" id="page-settings">
-        <div class="grid-2">
-          <div class="card"><div class="card-header"><span class="card-title">Environment</span></div><div id="envInfo"><p style="color:var(--text2)">Loading...</p></div></div>
-          <div class="card"><div class="card-header"><span class="card-title">Gateway</span></div><div id="gwInfo"><p style="color:var(--text2)">Loading...</p></div></div>
-        </div>
+      <div class="chat-input">
+        <textarea id="chatInput" placeholder="Type your message... (Enter to send)" rows="1"></textarea>
+        <button class="btn btn-primary" onclick="sendChat()">Send</button>
       </div>
     </div>
-  </main>
-</div>
+  </div>
+</section>
 
-<div class="toast-container" id="toasts"></div>
-<div class="modal-overlay" id="modal"><div class="modal"><div class="modal-header"><h3 id="modalTitle">Modal</h3><button class="btn-icon" onclick="closeModal()">✕</button></div><div class="modal-body" id="modalBody"></div></div></div>
-<div class="cmd-palette" id="cmdPalette"><input class="cmd-input" id="cmdInput" placeholder="Type a command..."/><div class="cmd-results" id="cmdResults"></div></div>
+<!-- Footer -->
+<footer class="footer">
+  <p>Aeryn AI Agent Platform — Adaptive, Self-Improving, Multi-Agent</p>
+</footer>
 
 <script>
-const API = { health:'/health', gateway:'/gateway/env', traces:'/observability/traces', traceStats:'/observability/stats', siStats:'/self-improvement/stats', siAdapt:'/self-improvement/adapt', siPatterns:'/self-improvement/patterns', plugins:'/plugins', discover:q=>`/plugins/discover?q=${encodeURIComponent(q)}`, divisions:'/divisions', execDiv:n=>`/divisions/${n}/execute`, workflows:'/workflows', workflow:id=>`/workflows/${w.id}`, wfStep:id=>`/workflows/${id}/step`, wfApprove:id=>`/workflows/${id}/approve`, chat:'/chat', run:'/run', search:q=>`/search?q=${encodeURIComponent(q)}` };
-const S = { sid:'web_'+Date.now(), traces:[], workflows:[], tools:[] };
+const A = { h: '/health', g: '/gateway/env', tr: '/observability/traces', ch: '/chat' };
+const S = { sid: 'w_' + Date.now() };
 
-async function api(u,o={}){try{const r=await fetch(u,{headers:{'Content-Type':'application/json'},...o});return await r.json()}catch(e){return{error:e.message}}}
-function toast(m,t='info'){const c=document.getElementById('toasts'),d=document.createElement('div');d.className=`toast ${t}`;d.textContent=m;c.appendChild(d);setTimeout(()=>d.remove(),3000)}
-function modal(t,c){document.getElementById('modalTitle').textContent=t;document.getElementById('modalBody').innerHTML=`<pre>${c}</pre>`;document.getElementById('modal').classList.add('active')}
-function closeModal(){document.getElementById('modal').classList.remove('active')}
-function toggleTheme(){const h=document.documentElement,t=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',t);document.getElementById('themeBtn').textContent=t==='dark'?'🌙':'☀️'}
-
-// Navigation
-document.querySelectorAll('.nav-item').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));b.classList.add('active');
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+b.dataset.page).classList.add('active');
-  document.getElementById('pageTitle').textContent=b.querySelector('.nav-label').textContent;
-  ({overview:loadOverview,chat:()=>{},tools:loadTools,divisions:loadDivisions,workflows:loadWorkflows,traces:loadTraces,settings:loadSettings})[b.dataset.page]?.();
-});
-
-async function loadOverview(){
-  const h=await api(API.health);
-  document.getElementById('sStatus').textContent=h.status||'—';
-  document.getElementById('sMem').textContent=h.memory_mb||'—';
-  document.getElementById('sVer').textContent=h.version||'—';
-  document.getElementById('statusDot').className='status-dot '+(h.status==='healthy'?'online':'offline');
-  document.getElementById('statusText').textContent=h.status==='healthy'?'Online':'Offline';
-  loadTraces();loadSI();
+async function api(u, o = {}) {
+  try { const r = await fetch(u, { headers: { 'Content-Type': 'application/json' }, ...o }); return await r.json(); }
+  catch (e) { return { error: e.message }; }
 }
-async function loadSI(){const s=await api(API.siStats);document.getElementById('siContent').innerHTML=`<div class="grid-4"><div><div class="stat-value" style="font-size:24px">${s.total_learnings||0}</div><div class="stat-label">Learnings</div></div><div><div class="stat-value" style="font-size:24px">${s.total_improvements||0}</div><div class="stat-label">Improvements</div></div></div>`}
-async function triggerAdapt(){const r=await api(API.siAdapt,{method:'POST'});toast(`${r.changes?.length||0} changes`,'success');loadSI()}
-async function loadTraces(){const r=await api(API.traces+'?limit=10');S.traces=r.traces||[];document.getElementById('sTraces').textContent=S.traces.length;const h=S.traces.length?S.traces.map(t=>`<div class="trace-item"><div class="trace-header"><span class="trace-id">${t.id}</span><span>${t.spans||0} spans</span></div></div>`).join(''):'<p style="color:var(--text2)">No traces</p>';const e=document.getElementById('recentTraces');if(e)e.innerHTML=h;const t=document.getElementById('tracesList');if(t)t.innerHTML=h}
-async function loadTools(){const r=await api(API.plugins);S.tools=r.tools||[];document.getElementById('toolCount').textContent=S.tools.length;document.getElementById('toolsGrid').innerHTML=S.tools.length?S.tools.map(t=>`<div class="tool-card"><div class="tool-name">${t.name}</div><div class="tool-desc">${t.description||''}</div><div class="tool-tags">${(t.tags||[]).map(g=>`<span class="tag">${g}</span>`).join('')}</div></div>`).join(''):'<p style="color:var(--text2)">No tools</p>'}
-document.getElementById('toolsSearch')?.addEventListener('input',async e=>{const r=await api(API.discover(e.target.value));document.getElementById('toolsGrid').innerHTML=(r.tools||[]).map(t=>`<div class="tool-card"><div class="tool-name">${t.name} <small>(${t.score})</small></div><div class="tool-desc">${t.description||''}</div></div>`).join('')});
-async function loadDivisions(){const r=await api(API.divisions);const d=r.divisions||[],i={creative:'🎨',psych:'🧠',reasoning:'⚙️',gov:'🛡️',infra:'🚀'};document.getElementById('divisionsGrid').innerHTML=d.map(x=>`<div class="division-card"><div class="division-icon">${i[x]||'📦'}</div><div class="division-name">${x}</div><button class="btn btn-sm btn-secondary" onclick="execDiv('${x}')">Execute</button></div>`).join('')}
-async function execDiv(n){const r=await api(API.execDiv(n),{method:'POST',body:JSON.stringify({tasks:[{name:'q',description:`Quick ${n}`}]})});toast(`${n}: ${r.completed}/${r.tasks}`,'success')}
-async function loadWorkflows(){const r=await api(API.workflows);S.workflows=r.workflows||[];document.getElementById('wfList').innerHTML=S.workflows.length?S.workflows.map(w=>`<div class="workflow-card"><div><div class="workflow-name">${w.name}</div><div class="workflow-status">${w.status}</div></div><div class="workflow-actions"><button class="btn btn-sm" onclick="stepWf('${w.id}')">Step</button></div></div>`).join(''):'<p style="color:var(--text2)">No workflows</p>'}
-async function createWorkflow(){const idea=prompt('SaaS idea:');if(!idea)return;const r=await api(API.workflows,{method:'POST',body:JSON.stringify({name:'saas',idea})});toast(`Created: ${r.id}`,'success');loadWorkflows()}
-async function stepWf(id){const r=await api(API.wfStep(id),{method:'POST'});if(r.status==='waiting_approval'&&confirm('Approve?'))await api(API.wfApprove(id),{method:'POST',body:JSON.stringify({step_name:'',option:'approve'})});toast(r.status);loadWorkflows()}
-async function loadSettings(){const e=await api(API.gateway);document.getElementById('envInfo').innerHTML=`<p>Env: <strong>${e.environment?.type}</strong></p><p>DB: <strong>${e.environment?.db}</strong></p><p>Auth: <strong>${e.auth_enabled?'✅':'❌'}</strong></p>`;document.getElementById('gwInfo').innerHTML=`<p>Chat CB: ${e.circuit_breakers?.chat?.state}</p><p>LLM CB: ${e.circuit_breakers?.llm?.state}</p>`}
-async function sendChat(){const i=document.getElementById('chatInput'),m=i.value.trim();if(!m)return;addMsg('user',m);i.value='';const r=await api(API.chat,{method:'POST',body:JSON.stringify({goal:m,session_id:S.sid})});if(r.response){addMsg('assistant',r.response);if(r.tool_used||r.division)addMsg('system',`🔧 ${r.tool_used||'—'} | 📂 ${r.division||'—'}`)}else addMsg('system',`Error: ${r.error}`)}
-function addMsg(role,text){const c=document.getElementById('chatMsg'),d=document.createElement('div');d.className=`message ${role}`;d.innerHTML=`<div>${text.replace(/\n/g,'<br>')}</div>`;c.appendChild(d);c.scrollTop=c.scrollHeight}
-function refreshAll(){loadOverview();toast('Refreshed','success')}
 
-// Keyboard shortcuts
-document.addEventListener('keydown',e=>{
-  if(e.ctrlKey&&e.key==='k'){e.preventDefault();const p=document.getElementById('cmdPalette');p.classList.toggle('active');document.getElementById('cmdInput').focus()}
-  if(e.key==='Escape'){document.getElementById('cmdPalette').classList.remove('active');closeModal()}
-  if(e.ctrlKey&&e.key==='t'){e.preventDefault();toggleTheme()}
-  if(e.key==='r'&&!e.ctrlKey)refreshAll();
+async function loadStatus() {
+  const h = await api(A.h);
+  document.getElementById('statStatus').textContent = h.status || '—';
+  document.getElementById('statMem').textContent = h.memory_mb || '—';
+  document.getElementById('statVer').textContent = h.version || '—';
+  const online = h.status === 'healthy';
+  document.getElementById('navDot').className = 'nav-dot ' + (online ? 'online' : '');
+  document.getElementById('navStatus').textContent = online ? 'Online' : 'Offline';
+  document.getElementById('heroStatus').textContent = online ? 'System Online' : 'System Offline';
+  document.getElementById('heroDot').style.background = online ? '#22c55e' : '#ef4444';
+  loadTraces();
+}
+
+async function loadTraces() {
+  const r = await api(A.tr + '?limit=5');
+  document.getElementById('statTraces').textContent = (r.traces || []).length;
+}
+
+async function sendChat() {
+  const i = document.getElementById('chatInput'), m = i.value.trim();
+  if (!m) return;
+  addMsg('user', m); i.value = '';
+  const r = await api(A.ch, { method: 'POST', body: JSON.stringify({ goal: m, session_id: S.sid }) });
+  if (r.response) {
+    addMsg('assistant', r.response);
+    if (r.tool_used || r.division) addMsg('system', '🔧 ' + (r.tool_used || '—') + ' | 📂 ' + (r.division || '—'));
+  } else addMsg('system', 'Error: ' + r.error);
+}
+
+function addMsg(role, text) {
+  const c = document.getElementById('chatMsg'), d = document.createElement('div');
+  d.className = 'message ' + role; d.textContent = text;
+  c.appendChild(d); c.scrollTop = c.scrollHeight;
+}
+
+document.getElementById('chatInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
 });
-document.getElementById('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat()}});
-document.getElementById('globalSearch').addEventListener('keydown',async e=>{if(e.key==='Enter'){const r=await api(API.search(e.target.value));modal('Search Results',JSON.stringify(r,null,2))}});
 
 // Init
-loadOverview();setInterval(loadOverview,15000);
+loadStatus();
+setInterval(loadStatus, 15000);
 </script>
 </body>
 </html>
