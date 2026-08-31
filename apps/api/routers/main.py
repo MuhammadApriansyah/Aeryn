@@ -169,6 +169,17 @@ app.include_router(phase4_router)     # Phase 4 + Browser + Vector + Monitoring
 app.include_router(shared_router)     # Shared DB, Vault, Reminders, Tasks
 app.include_router(web_routes_router) # SPA, redirects, static
 
+# PostgreSQL Memory Plugin (optional)
+try:
+    from plugins.postgres_memory.api import router as pg_memory_router
+    app.include_router(pg_memory_router, prefix="/v1")
+    import logging
+    logging.info("PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*")
+except ImportError as e:
+    import logging
+    logging.warning(f"PostgreSQL Memory Plugin not loaded: {e}")
+
+
 # Mount static files for dashboard
 import os as _os
 _STATIC_DIR = _os.path.join(_os.getcwd(), "apps", "web", "static")

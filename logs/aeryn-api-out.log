@@ -937,3 +937,78 @@
 2026-09-01 04:00:23: INFO:     127.0.0.1:46972 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
 2026-09-01 04:00:38: INFO:     127.0.0.1:49546 - "GET /health HTTP/1.1" 200 OK
 2026-09-01 04:00:38: INFO:     127.0.0.1:49546 - "GET /observability/traces?limit=5 HTTP/1.1" 200 OK
+2026-09-01 04:32:50: 2026-09-01 04:32:50 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 04:32:55: 2026-09-01 04:32:55 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-01 04:32:55: 2026-09-01 04:32:55 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 04:32:55: 2026-09-01 04:32:55 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 04:33:04: 2026-09-01 04:33:04 [INFO] plugins.postgres_memory: PostgreSQL pool created: localhost:5432/sen
+2026-09-01 04:33:04: INFO:     127.0.0.1:39936 - "GET /v1/postgres-memory/stats HTTP/1.1" 200 OK
+2026-09-01 04:33:52: 2026-09-01 04:33:52 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-01 04:33:53: 2026-09-01 04:33:53 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 04:33:53: 2026-09-01 04:33:53 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 04:34:25: 2026-09-01 04:34:25 [INFO] plugins.postgres_memory: PostgreSQL pool created: localhost:5432/sen
+2026-09-01 04:35:54: 2026-09-01 04:35:54 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-09-01 04:35:54: 2026-09-01 04:35:54 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-09-01 04:35:54: 2026-09-01 04:35:54 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-09-01 04:35:55: 2026-09-01 04:35:55 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-09-01 04:35:55: 2026-09-01 04:35:55 [INFO] sentence_transformers.base.model: Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-09-01 04:35:55: 2026-09-01 04:35:55 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-09-01 04:35:55: 2026-09-01 04:35:55 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-09-01 04:35:55: 2026-09-01 04:35:55 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-09-01 04:35:56: 2026-09-01 04:35:56 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+2026-09-01 04:35:56: 2026-09-01 04:35:56 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-09-01 04:35:56: 2026-09-01 04:35:56 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-09-01 04:35:56: 2026-09-01 04:35:56 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-09-01 04:35:57: 2026-09-01 04:35:57 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-09-01 04:35:57: 2026-09-01 04:35:57 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-09-01 04:35:57: 2026-09-01 04:35:57 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-09-01 04:35:58: 2026-09-01 04:35:58 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-09-01 04:35:59: 2026-09-01 04:35:59 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-09-01 04:36:00: 2026-09-01 04:36:00 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-09-01 04:36:00: 2026-09-01 04:36:00 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-09-01 04:36:00: 2026-09-01 04:36:00 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-09-01 04:36:00: 2026-09-01 04:36:00 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-09-01 04:36:01: 2026-09-01 04:36:01 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-09-01 04:36:01: 2026-09-01 04:36:01 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-09-01 04:36:01: 2026-09-01 04:36:01 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-09-01 04:36:01: 2026-09-01 04:36:01 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-09-01 04:36:01: 2026-09-01 04:36:01 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-09-01 04:36:02: 2026-09-01 04:36:02 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-09-01 04:36:02: 2026-09-01 04:36:02 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-09-01 04:36:02: 2026-09-01 04:36:02 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-09-01 04:36:03: 2026-09-01 04:36:03 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-09-01 04:36:03: 2026-09-01 04:36:03 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-09-01 04:36:04: 2026-09-01 04:36:04 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-09-01 04:36:04: 2026-09-01 04:36:04 [INFO] httpx: HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/2_Normalize/config.json "HTTP/1.1 404 Not Found"
+2026-09-01 04:36:05: 2026-09-01 04:36:05 [INFO] httpx: HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+2026-09-01 04:36:10: 2026-09-01 04:36:10 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 04:36:21: 2026-09-01 04:36:21 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-01 04:36:21: 2026-09-01 04:36:21 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 04:36:21: 2026-09-01 04:36:21 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 04:36:42: 2026-09-01 04:36:42 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 04:36:49: 2026-09-01 04:36:49 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-01 04:36:49: 2026-09-01 04:36:49 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 04:36:49: 2026-09-01 04:36:49 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 04:42:18: 2026-09-01 04:42:18 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 04:42:38: 2026-09-01 04:42:38 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-01 04:42:38: 2026-09-01 04:42:38 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 04:42:38: 2026-09-01 04:42:38 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 04:42:56: 2026-09-01 04:42:56 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 04:43:06: 2026-09-01 04:43:06 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-01 04:43:06: 2026-09-01 04:43:06 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 04:43:06: 2026-09-01 04:43:06 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 04:43:20: INFO:     127.0.0.1:48852 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 04:43:33: 2026-09-01 04:43:33 [INFO] plugins.postgres_memory: PostgreSQL pool created: localhost:5432/sen
+2026-09-01 04:43:33: INFO:     127.0.0.1:54654 - "POST /v1/postgres-memory/remember HTTP/1.1" 200 OK
+2026-09-01 04:43:33: INFO:     127.0.0.1:54658 - "GET /v1/postgres-memory/stats HTTP/1.1" 200 OK
+2026-09-01 04:43:34: INFO:     127.0.0.1:54666 - "GET /memory/recall?q=test HTTP/1.1" 200 OK
+2026-09-01 04:43:36: INFO:     127.0.0.1:54676 - "POST /plugins/run HTTP/1.1" 200 OK
+2026-09-01 04:43:36: 2026-09-01 04:43:36 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_read (category: filesystem)
+2026-09-01 04:43:36: 2026-09-01 04:43:36 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_write (category: filesystem)
+2026-09-01 04:43:36: 2026-09-01 04:43:36 [INFO] aeryn_core.platform.plugin_registry: Registered tool: fs_list (category: filesystem)
+2026-09-01 04:43:36: 2026-09-01 04:43:36 [INFO] aeryn_core.platform.plugin_registry: Registered tool: terminal (category: system)
+2026-09-01 04:43:36: 2026-09-01 04:43:36 [INFO] aeryn_core.platform.plugin_registry: Registered tool: web_search (category: web)
+2026-09-01 04:43:36: 2026-09-01 04:43:36 [INFO] aeryn_core.platform.plugin_registry: Registered tool: web_fetch (category: web)
+2026-09-01 04:43:36: 2026-09-01 04:43:36 [INFO] aeryn_core.platform.plugin_registry: Registered tool: memory_search (category: memory)
+2026-09-01 04:43:38: INFO:     127.0.0.1:54692 - "POST /chat HTTP/1.1" 200 OK
+2026-09-01 04:43:39: INFO:     127.0.0.1:54704 - "POST /divisions/reasoning/execute HTTP/1.1" 200 OK

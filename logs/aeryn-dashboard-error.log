@@ -151,3 +151,24 @@
 2026-08-31 13:56:11:     fd_event_list = self._selector.poll(timeout)
 2026-08-31 13:56:11:        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 2026-08-31 13:56:11: KeyboardInterrupt
+2026-09-01 04:42:18: Traceback (most recent call last):
+2026-09-01 04:42:18:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 90, in <module>
+2026-09-01 04:42:18:     httpd.serve_forever()
+2026-09-01 04:42:18:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 233, in serve_forever
+2026-09-01 04:42:18:     ready = selector.select(poll_interval)
+2026-09-01 04:42:18:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-01 04:42:18:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/selectors.py", line 415, in select
+2026-09-01 04:42:18:     fd_event_list = self._selector.poll(timeout)
+2026-09-01 04:42:18:                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-01 04:42:18: KeyboardInterrupt
+2026-09-01 04:42:56: Traceback (most recent call last):
+2026-09-01 04:42:56:   File "/home/sen/aeryn-core-agent/aeryn_core/dashboard/run_server.py", line 90, in <module>
+2026-09-01 04:42:56:     httpd.serve_forever()
+2026-09-01 04:42:56:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/socketserver.py", line 233, in serve_forever
+2026-09-01 04:42:56:     ready = selector.select(poll_interval)
+2026-09-01 04:42:56:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-01 04:42:56:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/selectors.py", line 415, in select
+2026-09-01 04:42:56:     fd_event_list = self._selector.poll(timeout)
+2026-09-01 04:42:56:                     ^^^^^^^^^^^^^^^^^^^^^^
+2026-09-01 04:42:56: ^^^^^^
+2026-09-01 04:42:56: KeyboardInterrupt

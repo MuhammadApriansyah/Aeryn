@@ -10,3 +10,4 @@
 {"trace_id": "94e82641-ef9", "session_id": "3b7ce110-984", "user_id": "default", "span_count": 0, "total_duration_ms": 1264, "spans": [], "metadata": {}}
 {"trace_id": "92e961e8-a32", "session_id": "b2c36019-0dd", "user_id": "default", "span_count": 0, "total_duration_ms": 1405, "spans": [], "metadata": {}}
 {"trace_id": "983fb077-a74", "session_id": "dbc61be5-7d9", "user_id": "default", "span_count": 0, "total_duration_ms": 1349, "spans": [], "metadata": {}}
+{"trace_id": "7cb1cd27-53d", "session_id": "04f05f17-e83", "user_id": "default", "span_count": 0, "total_duration_ms": 1584, "spans": [], "metadata": {}}

@@ -555,3 +555,53 @@
 2026-09-01 03:54:37: INFO:     Waiting for application startup.
 2026-09-01 03:54:37: INFO:     Application startup complete.
 2026-09-01 03:54:37: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-01 04:32:50: INFO:     Shutting down
+2026-09-01 04:32:50: INFO:     Waiting for application shutdown.
+2026-09-01 04:32:50: INFO:     Application shutdown complete.
+2026-09-01 04:32:50: INFO:     Finished server process [8632]
+2026-09-01 04:32:55: INFO:     Started server process [29176]
+2026-09-01 04:32:55: INFO:     Waiting for application startup.
+2026-09-01 04:32:55: INFO:     Application startup complete.
+2026-09-01 04:32:55: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-01 04:33:41: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/joblib/_multiprocessing_helpers.py:44: UserWarning: [Errno 2] No such file or directory.  joblib will operate in serial mode
+2026-09-01 04:33:41:   warnings.warn("%s.  joblib will operate in serial mode" % (e,))
+2026-09-01 04:33:53: INFO:     Started server process [29960]
+2026-09-01 04:33:53: INFO:     Waiting for application startup.
+2026-09-01 04:33:53: INFO:     Application startup complete.
+2026-09-01 04:33:53: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-01 04:35:15: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/joblib/_multiprocessing_helpers.py:44: UserWarning: [Errno 2] No such file or directory.  joblib will operate in serial mode
+2026-09-01 04:35:15:   warnings.warn("%s.  joblib will operate in serial mode" % (e,))
+2026-09-01 04:35:59: Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]
+2026-09-01 04:35:59: Loading weights: 100%|██████████| 103/103 [00:00<00:00, 1484.83it/s]
+2026-09-01 04:36:10: INFO:     Shutting down
+2026-09-01 04:36:10: INFO:     Waiting for application shutdown.
+2026-09-01 04:36:10: INFO:     Application shutdown complete.
+2026-09-01 04:36:10: INFO:     Finished server process [29960]
+2026-09-01 04:36:21: INFO:     Started server process [32498]
+2026-09-01 04:36:21: INFO:     Waiting for application startup.
+2026-09-01 04:36:21: INFO:     Application startup complete.
+2026-09-01 04:36:21: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-01 04:36:42: INFO:     Shutting down
+2026-09-01 04:36:42: INFO:     Waiting for application shutdown.
+2026-09-01 04:36:42: INFO:     Application shutdown complete.
+2026-09-01 04:36:42: INFO:     Finished server process [32498]
+2026-09-01 04:36:49: INFO:     Started server process [4541]
+2026-09-01 04:36:49: INFO:     Waiting for application startup.
+2026-09-01 04:36:49: INFO:     Application startup complete.
+2026-09-01 04:36:49: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-01 04:42:18: INFO:     Shutting down
+2026-09-01 04:42:18: INFO:     Waiting for application shutdown.
+2026-09-01 04:42:18: INFO:     Application shutdown complete.
+2026-09-01 04:42:18: INFO:     Finished server process [4541]
+2026-09-01 04:42:38: INFO:     Started server process [12948]
+2026-09-01 04:42:38: INFO:     Waiting for application startup.
+2026-09-01 04:42:38: INFO:     Application startup complete.
+2026-09-01 04:42:38: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-01 04:42:56: INFO:     Shutting down
+2026-09-01 04:42:56: INFO:     Waiting for application shutdown.
+2026-09-01 04:42:56: INFO:     Application shutdown complete.
+2026-09-01 04:42:56: INFO:     Finished server process [12948]
+2026-09-01 04:43:06: INFO:     Started server process [13166]
+2026-09-01 04:43:06: INFO:     Waiting for application startup.
+2026-09-01 04:43:06: INFO:     Application startup complete.
+2026-09-01 04:43:06: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
