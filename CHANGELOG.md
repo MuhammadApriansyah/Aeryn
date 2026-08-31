@@ -13,8 +13,27 @@ All notable changes to Aeryn will be documented in this file.
 - **P2 Postgres Adapter**: `db_adapter.py` verified routing to PostgreSQL. FTS5 blocker documented (hybrid_search uses SQLite virtual tables).
 - **P3 Consolidation**: Removed orphan `orchestrator_v2.py`.
 - **P4 Stub Audit**: `AUDIT_STUBS.md` — 69 small files documented as package markers / intentional scaffolds.
-- **P5 API Versioning + Portability**: `/v1/` prefix alias for all routers (backward-compatible). `AERYN_BASE_DIR` env override.
+- **P5 API Versioning + Portability**: `/v1/` prefix alias, `AERYN_BASE_DIR` env override.
 - **P6 Capability Bridge**: `capability_bridge.py` — dynamic skill loader + semantic memory recall. Endpoints `/skills`, `/memory/recall`.
+
+### Added — Dimension Transfer & Analysis (D7–D11)
+- **D7 Observability/Tracing**: `aeryn_core/observability/tracer.py` — Trace, Span, Tracer classes. Endpoints `/observability/traces`, `/observability/stats`.
+- **D10 Dynamic Tool Routing**: `aeryn_core/platform/plugin_registry.py` — PluginRegistry with discover_tools(), call_tool(), load_plugins_from_dir(). Endpoints `/plugins`, `/plugins/discover`.
+- **D2 Complete Tool Exec**: Wired `tool_runtime` + `PluginRegistry` to `/run` and `/chat` endpoints. Auto-executes tools when intent matches.
+- **D3 Delegation 5 Divisi**: `_route_to_division()` in chat.py routes to creative/psych/reasoning/gov/infra based on intent.
+- **D8 Multi-Agent Orchestration**: `aeryn_core/orchestration/crew_orchestrator.py` — Crew/Agent/Task/Process pattern (crewAI-style). DivisionManager with 5 divisions.
+- **D4 Ease of Access**: `aeryn_core/launcher.py` — `python -m aeryn_core.launcher start|stop|status|env`. Auto-detects env, generates ecosystem.config.cjs.
+- **D9 Enterprise RAG Connectors**: `aeryn_core/connectors/vault_connector.py` — FileSystemConnector, WebConnector, GitHubConnector. Sync external data to Vault.
+- **D11 Phase-Gated Workflow**: `aeryn_core/workflow/phase_workflow.py` — Workflow/WorkflowStep/Checkpoint/WorkflowBuilder. 8-phase SaaS workflow with approval gates.
+
+### Verification
+- All 11 dimensions (D1–D11) verified via direct function calls (no test doubles).
+- 8 external sources analyzed (crewAI, Langfuse, Onyx, voltagent, Gravity, SaaSPilot, AaaS, Agent-Startup-Skills).
+- 168+ OpenAPI paths, 14 modular routers, 20+ memory systems, 16 reasoning engines.
+
+### Known Limitations
+- PM2 in proot has module-reload quirk; restart via `pm2 kill` + fresh `start` recommended.
+- Postgres not default (FTS5 dependency); SQLite remains stable default.
 
 ### Verified
 - All P0a–P6 logic verified via direct function calls (no test doubles).

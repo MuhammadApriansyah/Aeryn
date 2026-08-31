@@ -24,6 +24,7 @@ from aeryn_core.auth.rate_limiter import get_rate_limiter
 from aeryn_core.utils.error_recovery import get_error_recovery
 from aeryn_core.platform.realtime import get_emitter
 from aeryn_core.platform.adaptive_gateway import get_gateway
+from aeryn_core.observability.tracer import get_tracer
 
 # Import routers
 from apps.api.routers.chat import router as chat_router
@@ -240,6 +241,53 @@ async def memory_recall(q: str = "", k: int = 3):
     bridge = get_memory_bridge()
     results = bridge.recall_context(q, k=k)
     return {"query": q, "results": results, "count": len(results)}
+
+# --- Observability Endpoints ---
+@app.get("/observability/traces")
+async def list_traces(limit: int = 10):
+    """List recent traces."""
+    tracer = get_tracer()
+    return {"traces": tracer.get_recent_traces(limit=limit)}
+
+@app.get("/observability/traces/{trace_id}")
+async def get_trace(trace_id: str):
+    """Get trace by ID."""
+    tracer = get_tracer()
+    trace = tracer.get_trace(trace_id)
+    if not trace:
+        return {"error": "Trace not found"}
+    return trace.to_dict()
+
+@app.get("/observability/stats")
+async def observability_stats():
+    """Get observability statistics."""
+    tracer = get_tracer()
+    return tracer.get_stats()
+
+# --- Plugin Registry Endpoints ---
+@app.get("/plugins")
+async def list_plugins():
+    """List all registered plugins/tools."""
+    from aeryn_core.platform.plugin_registry import get_registry
+    reg = get_registry()
+    return {"tools": reg.list_tools(), **reg.get_stats()}
+
+@app.get("/plugins/discover")
+async def discover_plugins(q: str = "", limit: int = 5):
+    """Discover plugins matching a query."""
+    from aeryn_core.platform.plugin_registry import get_registry
+    reg = get_registry()
+    return {"query": q, "tools": reg.discover_tools(q, limit=limit)}
+
+@app.get("/plugins/{name}")
+async def get_plugin(name: str):
+    """Get plugin details."""
+    from aeryn_core.platform.plugin_registry import get_registry
+    reg = get_registry()
+    tool = reg.get(name)
+    if not tool:
+        return {"error": "Plugin not found"}
+    return tool.to_dict()
 
 # --- Health Check ---
 @app.get("/health")

@@ -1,4 +1,4 @@
-"""V61.0 — Chat router for Aeryn API."""
+"""V61.1 — Chat router for Aeryn API (with D2+D3 integration)."""
 from fastapi import APIRouter
 from fastapi.responses import Response, JSONResponse, HTMLResponse, FileResponse
 from pydantic import BaseModel, Field
@@ -19,6 +19,44 @@ from aeryn_core.utils.error_recovery import get_error_recovery
 from aeryn_core.utils.logger import info, warn, error, log_exception
 
 router = APIRouter()
+
+
+def _route_to_division(goal: str):
+    """Route goal to one of 5 Aeryn divisions based on intent."""
+    goal_lower = goal.lower()
+    if any(w in goal_lower for w in ["design", "creative", "style", "content", "write", "story", "art", "ui", "ux", "brand"]):
+        return {"name": "creative", "description": "Creative & Design Division"}
+    if any(w in goal_lower for w in ["analyze", "psychology", "emotion", "behavior", "sentiment", "feel", "mood", "personality"]):
+        return {"name": "psych", "description": "Psychology & Analysis Division"}
+    if any(w in goal_lower for w in ["reason", "logic", "math", "research", "code", "algorithm", "solve", "calculate", "debug", "explain"]):
+        return {"name": "reasoning", "description": "Reasoning & Research Division"}
+    if any(w in goal_lower for w in ["compliance", "security", "governance", "policy", "audit", "risk", "legal", "regulate"]):
+        return {"name": "gov", "description": "Governance & Compliance Division"}
+    if any(w in goal_lower for w in ["deploy", "infrastructure", "devops", "server", "docker", "kubernetes", "ci/cd", "monitor", "scale"]):
+        return {"name": "infra", "description": "Infrastructure & DevOps Division"}
+    return None
+
+
+def _extract_tool_args(goal: str, tool_name: str):
+    """Extract tool arguments from natural language goal."""
+    args = {}
+    goal_lower = goal.lower()
+    if tool_name == "web_search":
+        args["query"] = goal
+    elif tool_name == "fs_read":
+        import re
+        match = re.search(r'(?:read|file|open)\s+(\S+)', goal_lower)
+        if match:
+            args["path"] = match.group(1)
+    elif tool_name == "fs_list":
+        args["path"] = "."
+    elif tool_name == "terminal":
+        args["command"] = goal
+    elif tool_name == "memory_search":
+        args["query"] = goal
+        args["limit"] = 5
+    return args
+
 
 class CompileRequest(BaseModel):
     session_id: str = "default"
@@ -42,9 +80,9 @@ async def health():
         import psutil
         process = psutil.Process()
         mem_mb = process.memory_info().rss / 1024 / 1024
-        return {"status": "healthy", "memory_mb": round(mem_mb, 1), "version": "61.0"}
+        return {"status": "healthy", "memory_mb": round(mem_mb, 1), "version": "61.1"}
     except ImportError:
-        return {"status": "healthy", "version": "61.0"}
+        return {"status": "healthy", "version": "61.1"}
 
 @router.post("/compile")
 async def compile(req: CompileRequest):
@@ -87,22 +125,59 @@ async def run(req: RunRequest):
     adapter = get_active_adapter(req.goal)
     persona = load_persona()
     
+    # D2: Dynamic Tool Execution — detect intent & execute tool if matched
+    from aeryn_core.platform.plugin_registry import get_registry
+    from aeryn_core.observability.tracer import get_tracer
+    
+    tracer = get_tracer()
+    registry = get_registry()
+    trace = tracer.start_trace(req.session_id)
+    
+    # Discover tools matching the goal
+    matched_tools = registry.discover_tools(req.goal, limit=3)
+    tool_result = None
+    division_used = None
+    
+    # D3: Route to 5 divisions based on intent
+    division = _route_to_division(req.goal)
+    if division:
+        division_used = division["name"]
+        persona = f"{persona}\n\n[Division: {division['name']} — {division['description']}]"
+    
+    # Execute top tool if confidence high enough
+    if matched_tools and matched_tools[0].get("score", 0) >= 5:
+        top_tool = matched_tools[0]
+        span = tracer.start_span(f"tool:{top_tool['name']}", "tool", {"goal": req.goal}, trace_id=trace.id)
+        try:
+            args = _extract_tool_args(req.goal, top_tool["name"])
+            tool_result = registry.call_tool(top_tool["name"], **args)
+            tracer.finish_span(span.id, output=str(tool_result)[:500])
+        except Exception as e:
+            tracer.finish_span(span.id, error=str(e))
+            tool_result = {"ok": False, "error": str(e)}
+    
     # Build prompt
     prompt = f"{persona}\n\nUser: {req.goal}"
     if adapter: prompt += f"\n{render_adapter_context(req.goal)}"
+    if tool_result and tool_result.get("ok"):
+        prompt += f"\n\n[Tool Result from {matched_tools[0]['name']}]: {str(tool_result.get('output', ''))[:1000]}"
+    if division_used:
+        prompt += f"\n\n[Routed to: {division_used} division]"
     
     # Get mode router
     router = get_mode_router()
     
     if router.is_standalone():
-        # Standalone mode: call LLM directly
         try:
             messages = [
                 {"role": "system", "content": persona},
                 {"role": "user", "content": req.goal},
             ]
+            llm_span = tracer.start_span("llm:chat", "llm", {"model": "default"}, trace_id=trace.id)
             result = await router.llm.chat(messages)
+            tracer.finish_span(llm_span.id, output=result.get("content", "")[:200])
             response = result["content"]
+            tracer.finish_trace(trace.id)
             return {
                 "status": "ok",
                 "session_id": req.session_id,
@@ -112,27 +187,28 @@ async def run(req: RunRequest):
                 "response": sanitize_output(response),
                 "provider": result.get("provider"),
                 "model": result.get("model"),
+                "tool_used": matched_tools[0]["name"] if tool_result else None,
+                "tool_result": tool_result,
+                "division": division_used,
             }
         except Exception as e:
-            return {
-                "status": "error",
-                "error": str(e),
-                "session_id": req.session_id,
-            }
+            tracer.finish_trace(trace.id)
+            return {"status": "error", "error": str(e), "session_id": req.session_id}
     else:
-        # Plugin mode: return prompt for Hermes to process
         response = f"Processing: {req.goal[:200]}"
         if adapter: response += f"\n[Adapter: {adapter.name}]"
         if research: response += "\n[Research needed]"
+        if tool_result: response += f"\n[Tool: {matched_tools[0]['name']}]"
+        if division_used: response += f"\n[Division: {division_used}]"
+        tracer.finish_trace(trace.id)
         return {
             "status": "ok",
             "session_id": req.session_id,
             "safety": safety.to_dict(),
-            "adapter": adapter.name if adapter else None,
-            "needs_research": research,
-            "response": sanitize_output(response),
+            "response": response,
+            "tool_used": matched_tools[0]["name"] if tool_result else None,
+            "division": division_used,
         }
-
 
 @router.post("/chat")
 async def chat(req: RunRequest):
@@ -151,22 +227,57 @@ async def chat(req: RunRequest):
     if not safety.safe:
         return {"status": "blocked", "safety": safety.to_dict()}
     
+    # D2: Dynamic Tool Execution in chat
+    from aeryn_core.platform.plugin_registry import get_registry
+    from aeryn_core.observability.tracer import get_tracer
+    tracer = get_tracer()
+    registry = get_registry()
+    trace = tracer.start_trace(req.session_id)
+    
+    # Discover & execute tool
+    matched_tools = registry.discover_tools(req.goal, limit=3)
+    tool_result = None
+    division_used = None
+    
+    division = _route_to_division(req.goal)
+    if division:
+        division_used = division["name"]
+    
+    if matched_tools and matched_tools[0].get("score", 0) >= 5:
+        top_tool = matched_tools[0]
+        span = tracer.start_span(f"tool:{top_tool['name']}", "tool", {"goal": req.goal}, trace_id=trace.id)
+        try:
+            args = _extract_tool_args(req.goal, top_tool["name"])
+            tool_result = registry.call_tool(top_tool["name"], **args)
+            tracer.finish_span(span.id, output=str(tool_result)[:500])
+        except Exception as e:
+            tracer.finish_span(span.id, error=str(e))
+            tool_result = {"ok": False, "error": str(e)}
+    
     # Add user message
     session.add_message("user", req.goal)
     
-    # Get context window
-    messages = [
-        {"role": "system", "content": load_persona()},
-    ] + session.get_context_window()
+    # Get context window with persona + tool result + division context
+    persona = load_persona()
+    if division_used:
+        persona = f"{persona}\n\n[Division: {division['name']}]"
+    
+    system_msg = {"role": "system", "content": persona}
+    messages = [system_msg] + session.get_context_window()
+    
+    # Add tool result to context
+    if tool_result and tool_result.get("ok"):
+        messages.append({"role": "assistant", "content": f"[Tool {matched_tools[0]['name']} executed]: {str(tool_result.get('output', ''))[:500]}"})
     
     # Call LLM
     try:
         result = await router.llm.chat(messages)
         response = result["content"]
         reasoning = result.get("reasoning", [])
-
+        
         # Store response
         session.add_message("assistant", response, json.dumps(reasoning))
+        tracer.finish_trace(trace.id)
         
         return {
             "status": "ok",
@@ -174,8 +285,11 @@ async def chat(req: RunRequest):
             "response": response,
             "provider": result.get("provider"),
             "model": result.get("model"),
+            "tool_used": matched_tools[0]["name"] if tool_result else None,
+            "division": division_used,
         }
     except Exception as e:
+        tracer.finish_trace(trace.id)
         return {"status": "error", "error": str(e)}
 
 @router.get("/search")
@@ -192,10 +306,7 @@ async def dashboard():
 @router.get("/chat")
 async def web_chat():
     """Serve web chat interface."""
-    return Response(
-        content=WEB_CHAT_HTML,
-        media_type="text/html",
-    )
+    return Response(content=WEB_CHAT_HTML, media_type="text/html")
 
 WEB_CHAT_HTML = """<!DOCTYPE html>
 <html lang="id">
