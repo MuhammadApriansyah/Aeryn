@@ -264,6 +264,31 @@ async def observability_stats():
     tracer = get_tracer()
     return tracer.get_stats()
 
+# --- Self-Improvement Endpoints ---
+@app.get("/self-improvement/stats")
+async def self_improvement_stats():
+    """Get self-improvement statistics."""
+    from aeryn_core.self_improvement.engine import get_self_improvement
+    si = get_self_improvement()
+    return si.generate_improvement_report()
+
+@app.get("/self-improvement/patterns")
+async def self_improvement_patterns(pattern_type: str = "tool_selection", min_rate: float = 0.7):
+    """Get reliable or problematic patterns."""
+    from aeryn_core.self_improvement.engine import get_self_improvement
+    si = get_self_improvement()
+    if min_rate >= 0.5:
+        return {"patterns": si.get_reliable_patterns(pattern_type, min_rate)}
+    return {"patterns": si.get_problematic_patterns(pattern_type, min_rate)}
+
+@app.post("/self-improvement/adapt")
+async def trigger_adaptation():
+    """Trigger self-improvement adaptation cycle."""
+    from aeryn_core.self_improvement.engine import get_self_improvement
+    si = get_self_improvement()
+    result = si.adapt()
+    return result
+
 # --- Plugin Registry Endpoints ---
 @app.get("/plugins")
 async def list_plugins():
@@ -288,6 +313,93 @@ async def get_plugin(name: str):
     if not tool:
         return {"error": "Plugin not found"}
     return tool.to_dict()
+
+# --- Division Management Endpoints (D8) ---
+@app.get("/divisions")
+async def list_divisions():
+    """List all 5 Aeryn divisions."""
+    from aeryn_core.orchestration.crew_orchestrator import get_division_manager
+    dm = get_division_manager()
+    return {"divisions": dm.list_divisions(), **dm.get_status()}
+
+@app.post("/divisions/{name}/execute")
+async def execute_division(name: str, request: Request):
+    """Execute tasks on a division."""
+    from aeryn_core.orchestration.crew_orchestrator import get_division_manager
+    body = await request.json()
+    tasks = body.get("tasks", [])
+    dm = get_division_manager()
+    return dm.execute_division(name, tasks)
+
+# --- Connector Management Endpoints (D9) ---
+@app.get("/connectors")
+async def list_connectors():
+    """List all registered connectors."""
+    from aeryn_core.connectors.vault_connector import get_connector_manager
+    cm = get_connector_manager()
+    return {"connectors": cm.list_connectors()}
+
+@app.post("/connectors/{name}/sync")
+async def sync_connector(name: str):
+    """Sync a connector."""
+    from aeryn_core.connectors.vault_connector import get_connector_manager
+    cm = get_connector_manager()
+    return cm.sync_one(name)
+
+@app.post("/connectors/sync-all")
+async def sync_all_connectors():
+    """Sync all connectors."""
+    from aeryn_core.connectors.vault_connector import get_connector_manager
+    cm = get_connector_manager()
+    return cm.sync_all()
+
+# --- Workflow Endpoints (D11) ---
+@app.post("/workflows")
+async def create_workflow(request: Request):
+    """Create a new workflow."""
+    from aeryn_core.workflow.phase_workflow import create_workflow
+    body = await request.json()
+    name = body.get("name", "saas")
+    idea = body.get("idea", "")
+    wf = create_workflow(name, idea)
+    return wf.to_dict()
+
+@app.get("/workflows")
+async def list_workflows():
+    """List all workflows."""
+    from aeryn_core.workflow.phase_workflow import list_workflows
+    return {"workflows": list_workflows()}
+
+@app.get("/workflows/{wf_id}")
+async def get_workflow(wf_id: str):
+    """Get workflow status."""
+    from aeryn_core.workflow.phase_workflow import get_workflow
+    wf = get_workflow(wf_id)
+    if not wf:
+        return {"error": "Workflow not found"}
+    return wf.to_dict()
+
+@app.post("/workflows/{wf_id}/step")
+async def execute_workflow_step(wf_id: str):
+    """Execute next step in workflow."""
+    from aeryn_core.workflow.phase_workflow import get_workflow
+    wf = get_workflow(wf_id)
+    if not wf:
+        return {"error": "Workflow not found"}
+    return wf.execute_next()
+
+@app.post("/workflows/{wf_id}/approve")
+async def approve_checkpoint(wf_id: str, request: Request):
+    """Approve a checkpoint."""
+    from aeryn_core.workflow.phase_workflow import get_workflow
+    body = await request.json()
+    step_name = body.get("step_name", "")
+    option = body.get("option", "approve")
+    wf = get_workflow(wf_id)
+    if not wf:
+        return {"error": "Workflow not found"}
+    wf.approve_checkpoint(step_name, option)
+    return {"status": "approved", "workflow": wf.to_dict()}
 
 # --- Health Check ---
 @app.get("/health")

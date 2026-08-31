@@ -74,15 +74,7 @@ class RunRequest(BaseModel):
     goal: str = Field(..., min_length=1, max_length=4000)
     session_id: str = Field(default_factory=lambda: str(uuid.uuid4())[:12])
 
-@router.get("/health")
-async def health():
-    try:
-        import psutil
-        process = psutil.Process()
-        mem_mb = process.memory_info().rss / 1024 / 1024
-        return {"status": "healthy", "memory_mb": round(mem_mb, 1), "version": "61.1"}
-    except ImportError:
-        return {"status": "healthy", "version": "61.1"}
+
 
 @router.post("/compile")
 async def compile(req: CompileRequest):
@@ -121,6 +113,7 @@ async def run(req: RunRequest):
     safety = eng.check_input(req.goal)
     if not safety.safe: return {"status": "blocked", "safety": safety.to_dict()}
     
+    start_time = time.time()
     research = needs_research(req.goal)
     adapter = get_active_adapter(req.goal)
     persona = load_persona()
@@ -128,9 +121,11 @@ async def run(req: RunRequest):
     # D2: Dynamic Tool Execution — detect intent & execute tool if matched
     from aeryn_core.platform.plugin_registry import get_registry
     from aeryn_core.observability.tracer import get_tracer
+    from aeryn_core.self_improvement.engine import get_self_improvement
     
     tracer = get_tracer()
     registry = get_registry()
+    si = get_self_improvement()
     trace = tracer.start_trace(req.session_id)
     
     # Discover tools matching the goal
@@ -145,22 +140,34 @@ async def run(req: RunRequest):
         persona = f"{persona}\n\n[Division: {division['name']} — {division['description']}]"
     
     # Execute top tool if confidence high enough
+    tool_name_used = None
     if matched_tools and matched_tools[0].get("score", 0) >= 5:
         top_tool = matched_tools[0]
+        tool_name_used = top_tool["name"]
         span = tracer.start_span(f"tool:{top_tool['name']}", "tool", {"goal": req.goal}, trace_id=trace.id)
         try:
             args = _extract_tool_args(req.goal, top_tool["name"])
             tool_result = registry.call_tool(top_tool["name"], **args)
             tracer.finish_span(span.id, output=str(tool_result)[:500])
+            
+            # Record learning: tool selection outcome
+            si.record_outcome("tool_selection", top_tool["name"], tool_result.get("ok", False), 
+                            duration_ms=int((time.time() - start_time) * 1000))
         except Exception as e:
             tracer.finish_span(span.id, error=str(e))
             tool_result = {"ok": False, "error": str(e)}
+            si.record_outcome("tool_selection", top_tool["name"], False)
+    
+    # Record division routing outcome
+    if division_used:
+        si.record_learning("division_routing", req.goal[:100], division_used, "routed", 
+                          metadata={"goal": req.goal[:200]})
     
     # Build prompt
     prompt = f"{persona}\n\nUser: {req.goal}"
     if adapter: prompt += f"\n{render_adapter_context(req.goal)}"
     if tool_result and tool_result.get("ok"):
-        prompt += f"\n\n[Tool Result from {matched_tools[0]['name']}]: {str(tool_result.get('output', ''))[:1000]}"
+        prompt += f"\n\n[Tool Result from {tool_name_used}]: {str(tool_result.get('output', ''))[:1000]}"
     if division_used:
         prompt += f"\n\n[Routed to: {division_used} division]"
     
@@ -178,6 +185,11 @@ async def run(req: RunRequest):
             tracer.finish_span(llm_span.id, output=result.get("content", "")[:200])
             response = result["content"]
             tracer.finish_trace(trace.id)
+            
+            # Record successful LLM call
+            si.record_outcome("llm_call", result.get("provider", "unknown"), True,
+                            duration_ms=int((time.time() - start_time) * 1000))
+            
             return {
                 "status": "ok",
                 "session_id": req.session_id,
@@ -187,18 +199,19 @@ async def run(req: RunRequest):
                 "response": sanitize_output(response),
                 "provider": result.get("provider"),
                 "model": result.get("model"),
-                "tool_used": matched_tools[0]["name"] if tool_result else None,
+                "tool_used": tool_name_used,
                 "tool_result": tool_result,
                 "division": division_used,
             }
         except Exception as e:
             tracer.finish_trace(trace.id)
+            si.record_outcome("llm_call", "unknown", False)
             return {"status": "error", "error": str(e), "session_id": req.session_id}
     else:
         response = f"Processing: {req.goal[:200]}"
         if adapter: response += f"\n[Adapter: {adapter.name}]"
         if research: response += "\n[Research needed]"
-        if tool_result: response += f"\n[Tool: {matched_tools[0]['name']}]"
+        if tool_result: response += f"\n[Tool: {tool_name_used}]"
         if division_used: response += f"\n[Division: {division_used}]"
         tracer.finish_trace(trace.id)
         return {
@@ -206,7 +219,7 @@ async def run(req: RunRequest):
             "session_id": req.session_id,
             "safety": safety.to_dict(),
             "response": response,
-            "tool_used": matched_tools[0]["name"] if tool_result else None,
+            "tool_used": tool_name_used,
             "division": division_used,
         }
 
