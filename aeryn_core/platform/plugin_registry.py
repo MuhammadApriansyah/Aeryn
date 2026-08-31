@@ -155,55 +155,63 @@ def get_registry() -> PluginRegistry:
 
 def _register_builtin_tools(registry: PluginRegistry):
     """Register Aeryn's built-in tools."""
-    from aeryn_core.platform.tool_runtime import get_tool_runtime
+    # Lazy import to avoid DB connection at startup
+    try:
+        from aeryn_core.platform.tool_runtime import get_tool_runtime
+        runtime = get_tool_runtime()
+    except Exception:
+        runtime = None
 
-    runtime = get_tool_runtime()
+    def _safe_exec(tool_name, **kwargs):
+        if runtime is None:
+            return {"ok": False, "error": "Tool runtime unavailable"}
+        return runtime.execute(tool_name, kwargs)
 
     registry.register(
         "fs_read", "Read file content",
-        handler=lambda path, **kw: runtime.execute("fs_read", {"path": path}),
+        handler=lambda path, **kw: _safe_exec("fs_read", path=path),
         parameters={"type": "object", "properties": {"path": {"type": "string"}}},
         tags=["file", "read", "io"],
         category="filesystem"
     )
     registry.register(
         "fs_write", "Write content to file",
-        handler=lambda path, content, **kw: runtime.execute("fs_write", {"path": path, "content": content}),
+        handler=lambda path, content, **kw: _safe_exec("fs_write", path=path, content=content),
         parameters={"type": "object", "properties": {"path": {"type": "string"}, "content": {"type": "string"}}},
         tags=["file", "write", "io"],
         category="filesystem"
     )
     registry.register(
         "fs_list", "List directory contents",
-        handler=lambda path=".", **kw: runtime.execute("fs_list", {"path": path}),
+        handler=lambda path=".", **kw: _safe_exec("fs_list", path=path),
         parameters={"type": "object", "properties": {"path": {"type": "string"}}},
         tags=["file", "list", "directory"],
         category="filesystem"
     )
     registry.register(
         "terminal", "Execute shell command (sandboxed)",
-        handler=lambda command, timeout=30, **kw: runtime.execute("terminal", {"command": command, "timeout": timeout}),
+        handler=lambda command, timeout=30, **kw: _safe_exec("terminal", command=command, timeout=timeout),
         parameters={"type": "object", "properties": {"command": {"type": "string"}, "timeout": {"type": "integer"}}},
         tags=["shell", "exec", "command"],
         category="system"
     )
     registry.register(
         "web_search", "Search the web",
-        handler=lambda query, **kw: runtime.execute("web_search", {"query": query}),
+        handler=lambda query, **kw: _safe_exec("web_search", query=query),
         parameters={"type": "object", "properties": {"query": {"type": "string"}}},
         tags=["web", "search", "internet"],
         category="web"
     )
     registry.register(
         "web_fetch", "Fetch URL content",
-        handler=lambda url, **kw: runtime.execute("web_fetch", {"url": url}),
+        handler=lambda url, **kw: _safe_exec("web_fetch", url=url),
         parameters={"type": "object", "properties": {"url": {"type": "string"}}},
         tags=["web", "fetch", "http"],
         category="web"
     )
     registry.register(
         "memory_search", "Search memory/vault",
-        handler=lambda query, limit=5, **kw: runtime.execute("memory_search", {"query": query, "limit": limit}),
+        handler=lambda query, limit=5, **kw: _safe_exec("memory_search", query=query, limit=limit),
         parameters={"type": "object", "properties": {"query": {"type": "string"}, "limit": {"type": "integer"}}},
         tags=["memory", "search", "vault"],
         category="memory"

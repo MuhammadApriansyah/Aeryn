@@ -15,6 +15,7 @@ from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import APIRouter
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 
 # Import shared state modules
@@ -168,6 +169,12 @@ app.include_router(phase4_router)     # Phase 4 + Browser + Vector + Monitoring
 app.include_router(shared_router)     # Shared DB, Vault, Reminders, Tasks
 app.include_router(web_routes_router) # SPA, redirects, static
 
+# Mount static files for dashboard
+import os as _os
+_STATIC_DIR = _os.path.join(_os.getcwd(), "apps", "web", "static")
+if _os.path.isdir(_STATIC_DIR):
+    app.mount("/static", StaticFiles(directory=_STATIC_DIR), name="static")
+
 # --- API Versioning: /v1/ alias for all routers (backward-compatible) ---
 # Mount all routers under /v1 prefix as well (old paths still work)
 _V1 = APIRouter()
@@ -293,9 +300,19 @@ async def trigger_adaptation():
 @app.get("/plugins")
 async def list_plugins():
     """List all registered plugins/tools."""
-    from aeryn_core.platform.plugin_registry import get_registry
-    reg = get_registry()
-    return {"tools": reg.list_tools(), **reg.get_stats()}
+    try:
+        from aeryn_core.platform.plugin_registry import get_registry
+        reg = get_registry()
+        return {"tools": reg.list_tools(), **reg.get_stats()}
+    except Exception as e:
+        # Return basic info if registry fails to initialize
+        return {
+            "error": f"Registry init failed: {type(e).__name__}",
+            "tools": [],
+            "total_tools": 0,
+            "categories": {},
+            "hint": "Tool runtime requires shared_db (SQLite). Check Personalisasi/Database/ exists."
+        }
 
 @app.get("/plugins/discover")
 async def discover_plugins(q: str = "", limit: int = 5):
