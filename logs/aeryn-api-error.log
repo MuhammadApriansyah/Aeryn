@@ -362,3 +362,19 @@
 2026-08-31 13:56:14: INFO:     Waiting for application startup.
 2026-08-31 13:56:14: INFO:     Application startup complete.
 2026-08-31 13:56:14: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-08-31 15:45:49: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/openapi/utils.py:303: UserWarning: Duplicate Operation ID spa_root__get for function spa_root at /home/sen/aeryn-core-agent/apps/api/routers/web_routes.py
+2026-08-31 15:45:49:   warnings.warn(message, stacklevel=1)
+2026-08-31 15:45:49: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/openapi/utils.py:303: UserWarning: Duplicate Operation ID spa_fallback_app__spa__get for function spa_fallback at /home/sen/aeryn-core-agent/apps/api/routers/web_routes.py
+2026-08-31 15:45:49:   warnings.warn(message, stacklevel=1)
+2026-08-31 15:45:49: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/openapi/utils.py:303: UserWarning: Duplicate Operation ID list_skills_skills_get for function list_skills at /home/sen/aeryn-core-agent/apps/api/routers/main.py
+2026-08-31 15:45:49:   warnings.warn(message, stacklevel=1)
+2026-08-31 15:45:49: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/openapi/utils.py:303: UserWarning: Duplicate Operation ID health_health_get for function health at /home/sen/aeryn-core-agent/apps/api/routers/main.py
+2026-08-31 15:45:49:   warnings.warn(message, stacklevel=1)
+2026-08-31 15:53:08: INFO:     Shutting down
+2026-08-31 15:53:08: INFO:     Waiting for application shutdown.
+2026-08-31 15:53:08: INFO:     Application shutdown complete.
+2026-08-31 15:53:08: INFO:     Finished server process [26870]
+2026-08-31 15:53:13: INFO:     Started server process [17598]
+2026-08-31 15:53:13: INFO:     Waiting for application startup.
+2026-08-31 15:53:13: INFO:     Application startup complete.
+2026-08-31 15:53:13: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)

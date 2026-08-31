@@ -218,35 +218,20 @@ async def list_tasks():
     return {"tasks": queue.get_all_tasks(), "pending": queue.get_pending_count()}
 
 # --- Capability Bridge Endpoints (Hermes-style skills + memory tier) ---
-@app.get("/skills")
-async def list_skills():
-    """List dynamically loaded skills."""
+@app.get("/capabilities/skills")
+async def list_capabilities_skills():
+    """List dynamically loaded skills (canonical, no conflict)."""
     import os
-    # Bulletproof: try multiple resolution strategies
-    candidates = []
-    # 1. Env override
-    if os.environ.get("AERYN_BASE_DIR"):
-        candidates.append(os.path.join(os.path.expanduser(os.environ["AERYN_BASE_DIR"]), "aeryn_core", "skills"))
-    # 2. Relative to this file (3 levels up)
     _here = os.path.dirname(os.path.abspath(__file__))
-    candidates.append(os.path.abspath(os.path.join(_here, "..", "..", "..", "aeryn_core", "skills")))
-    # 3. CWD-based
-    candidates.append(os.path.join(os.getcwd(), "aeryn_core", "skills"))
-    # 4. Known absolute
-    candidates.append("/home/sen/aeryn-core-agent/aeryn_core/skills")
-
-    skills_dir = None
-    for c in candidates:
-        if os.path.isdir(c):
-            skills_dir = c
-            break
+    _root = os.path.abspath(os.path.join(_here, "..", "..", ".."))
+    skills_dir = os.path.join(_root, "aeryn_core", "skills")
     skills = []
-    if skills_dir:
+    if os.path.isdir(skills_dir):
         for name in os.listdir(skills_dir):
             full = os.path.join(skills_dir, name)
             if os.path.isdir(full) and os.path.exists(os.path.join(full, "SKILL.md")):
                 skills.append(name)
-    return {"skills": skills, "count": len(skills), "dir_used": skills_dir}
+    return {"skills": skills, "count": len(skills), "dir": skills_dir}
 
 @app.get("/memory/recall")
 async def memory_recall(q: str = "", k: int = 3):

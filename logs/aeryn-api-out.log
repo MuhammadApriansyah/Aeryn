@@ -170,3 +170,31 @@
 2026-08-31 13:56:14: 2026-08-31 13:56:14 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
 2026-08-31 13:56:14: 2026-08-31 13:56:14 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
 2026-08-31 13:56:30: INFO:     127.0.0.1:39888 - "GET /skills HTTP/1.1" 200 OK
+2026-08-31 15:30:03: INFO:     127.0.0.1:39412 - "GET /health HTTP/1.1" 200 OK
+2026-08-31 15:30:03: 2026-08-31 15:30:03 [INFO] aeryn_core.platform.adaptive_gateway: AdaptiveGateway initialized: env=proot db=sqlite
+2026-08-31 15:30:03: INFO:     127.0.0.1:39424 - "GET /gateway/env HTTP/1.1" 200 OK
+2026-08-31 15:30:03: INFO:     127.0.0.1:39440 - "GET /v1/health HTTP/1.1" 200 OK
+2026-08-31 15:30:03: INFO:     127.0.0.1:39454 - "GET /skills HTTP/1.1" 200 OK
+2026-08-31 15:30:58: INFO:     127.0.0.1:50212 - "GET /skills HTTP/1.1" 200 OK
+2026-08-31 15:30:58: INFO:     127.0.0.1:50222 - "GET /gateway/env HTTP/1.1" 200 OK
+2026-08-31 15:31:45: INFO:     127.0.0.1:56558 - "GET /skills HTTP/1.1" 200 OK
+2026-08-31 15:31:46: INFO:     127.0.0.1:56562 - "GET /skills HTTP/1.1" 200 OK
+2026-08-31 15:45:50: INFO:     127.0.0.1:60136 - "GET /openapi.json HTTP/1.1" 200 OK
+2026-08-31 15:53:08: 2026-08-31 15:53:08 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-08-31 15:53:13: 2026-08-31 15:53:13 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-08-31 15:53:13: 2026-08-31 15:53:13 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-08-31 15:53:22: INFO:     127.0.0.1:33910 - "GET /capabilities/skills HTTP/1.1" 200 OK
+2026-08-31 15:53:23: 2026-08-31 15:53:23 [INFO] aeryn_core.platform.adaptive_gateway: AdaptiveGateway initialized: env=proot db=sqlite
+2026-08-31 15:53:23: INFO:     127.0.0.1:42336 - "GET /gateway/env HTTP/1.1" 200 OK
+2026-08-31 15:53:40: INFO:     127.0.0.1:43742 - "GET /health HTTP/1.1" 200 OK
+2026-08-31 15:53:40: INFO:     127.0.0.1:43748 - "GET /gateway/env HTTP/1.1" 200 OK
+2026-08-31 15:53:40: INFO:     127.0.0.1:43760 - "GET /v1/health HTTP/1.1" 200 OK
+2026-08-31 15:53:40: INFO:     127.0.0.1:43772 - "GET /v1/chat HTTP/1.1" 200 OK
+2026-08-31 15:53:41: INFO:     127.0.0.1:43788 - "GET /capabilities/skills HTTP/1.1" 200 OK
+2026-08-31 15:53:41: INFO:     127.0.0.1:43804 - "GET /daemon/tasks HTTP/1.1" 200 OK
+2026-08-31 15:53:41: INFO:     127.0.0.1:43816 - "GET /memory/recall HTTP/1.1" 200 OK
+2026-08-31 15:53:42: INFO:     127.0.0.1:43822 - "POST /tools/execute?tool=terminal HTTP/1.1" 200 OK
+2026-08-31 15:53:55: INFO:     127.0.0.1:42442 - "POST /daemon/tasks HTTP/1.1" 200 OK
+2026-08-31 15:53:58: 2026-08-31 15:53:58 [INFO] aeryn_core.platform.agent_daemon: Task b4bf0e2b-127 completed
+2026-08-31 15:54:04: INFO:     127.0.0.1:49408 - "GET /daemon/tasks HTTP/1.1" 200 OK
+2026-08-31 15:54:04: INFO:     127.0.0.1:49416 - "GET /gateway/env HTTP/1.1" 200 OK
