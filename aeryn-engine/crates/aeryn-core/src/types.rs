@@ -5,7 +5,6 @@
 
 use std::collections::HashMap;
 use std::fmt;
-use std::sync::Arc;
 
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
@@ -571,7 +570,7 @@ impl ProcessedFile {
 }
 
 /// Supported file types.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum FileType {
     Text,
     Markdown,

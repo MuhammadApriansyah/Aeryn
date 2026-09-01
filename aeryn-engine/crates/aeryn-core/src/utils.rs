@@ -4,10 +4,10 @@
 
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
-use std::sync::Arc;
 
 use rayon::prelude::*;
 use sha2::{Digest, Sha256};
+use unicode_segmentation::UnicodeSegmentation;
 
 /// Compute a stable hash for any hashable value.
 pub fn stable_hash<T: Hash>(value: &T) -> u64 {
@@ -315,25 +315,24 @@ pub fn detect_language(text: &str) -> &'static str {
     }
 }
 
-/// Retry a function with exponential backoff.
-pub async fn retry_with_backoff<F, Fut, T>(
+/// Retry a function with exponential backoff (synchronous).
+pub fn retry_with_backoff<F, T>(
     mut f: F,
     max_retries: u32,
     base_delay_ms: u64,
 ) -> crate::AerynResult<T>
 where
-    F: FnMut() -> Fut,
-    Fut: std::future::Future<Output = crate::AerynResult<T>>,
+    F: FnMut() -> crate::AerynResult<T>,
 {
     let mut last_error = None;
     for attempt in 0..=max_retries {
-        match f().await {
+        match f() {
             Ok(result) => return Ok(result),
             Err(e) => {
                 last_error = Some(e);
                 if attempt < max_retries {
                     let delay = base_delay_ms * 2u64.pow(attempt);
-                    tokio::time::sleep(tokio::time::Duration::from_millis(delay)).await;
+                    std::thread::sleep(std::time::Duration::from_millis(delay));
                 }
             }
         }

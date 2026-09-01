@@ -2541,3 +2541,12 @@
 2026-09-02 02:08:11: 2026-09-02 02:08:11 [INFO] root: Experience Transfer loaded at /v1/experience/*
 2026-09-02 02:08:12: 2026-09-02 02:08:12 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
 2026-09-02 02:08:12: 2026-09-02 02:08:12 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 05:54:00: INFO:     127.0.0.1:39218 - "GET /health HTTP/1.1" 200 OK
+2026-09-02 05:55:59: INFO:     127.0.0.1:39280 - "GET /health HTTP/1.1" 200 OK
+2026-09-02 05:55:59: INFO:     127.0.0.1:39288 - "GET /v1/dashboard/stats HTTP/1.1" 200 OK
+2026-09-02 05:56:00: INFO:     127.0.0.1:39290 - "GET /v1/chat HTTP/1.1" 200 OK
+2026-09-02 05:56:00: INFO:     127.0.0.1:39298 - "GET /v1/agents HTTP/1.1" 200 OK
+2026-09-02 05:56:01: INFO:     127.0.0.1:39306 - "GET /v1/plugins HTTP/1.1" 200 OK
+2026-09-02 05:56:02: INFO:     127.0.0.1:39312 - "GET /v1/memory/entities HTTP/1.1" 200 OK
+2026-09-02 05:56:02: INFO:     127.0.0.1:39320 - "GET /v1/workspaces HTTP/1.1" 200 OK
+2026-09-02 05:56:02: INFO:     127.0.0.1:39336 - "GET /v1/brain HTTP/1.1" 404 Not Found

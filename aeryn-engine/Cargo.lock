@@ -267,7 +267,10 @@ name = "aeryn-splitter"
 version = "0.1.0"
 dependencies = [
  "aeryn-core",
+ "hashbrown 0.14.5",
+ "lru",
  "memchr",
+ "parking_lot",
  "regex",
  "serde",
  "thiserror",
@@ -280,8 +283,11 @@ name = "aeryn-tokenizer"
 version = "0.1.0"
 dependencies = [
  "aeryn-core",
+ "hashbrown 0.14.5",
  "lazy_static",
+ "lru",
  "memchr",
+ "parking_lot",
  "regex",
  "serde",
  "thiserror",

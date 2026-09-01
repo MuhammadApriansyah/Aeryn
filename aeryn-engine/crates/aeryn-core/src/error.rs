@@ -8,7 +8,7 @@ use thiserror::Error;
 pub type AerynResult<T> = Result<T, AerynError>;
 
 /// Error type for all Aeryn operations.
-#[derive(Error, Debug, Clone)]
+#[derive(Error, Debug)]
 pub enum AerynError {
     #[error("IO error: {0}")]
     Io(String),
@@ -59,7 +59,7 @@ pub enum AerynError {
     NotImplemented(String),
 
     #[error("External error: {source}")]
-    External { source: String },
+    External { source: std::sync::Arc<dyn std::error::Error + Send + Sync> },
 }
 
 impl From<io::Error> for AerynError {
