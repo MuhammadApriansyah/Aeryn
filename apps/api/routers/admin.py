@@ -252,3 +252,66 @@ async def run_plugin(body: dict = None):
     return {"status": "ok", **result}
 
 # ── Phase 4 Endpoints ─────────────────────────
+
+# ── SSO Endpoints ─────────────────────────────
+
+@router.get("/auth/sso/google")
+async def google_sso_url():
+    """Get Google SSO URL."""
+    sso = get_sso_manager()
+    return {"url": sso.get_google_auth_url()}
+
+@router.get("/auth/sso/github")
+async def github_sso_url():
+    """Get GitHub SSO URL."""
+    sso = get_sso_manager()
+    return {"url": sso.get_github_auth_url()}
+
+@router.get("/auth/callback/google")
+async def google_callback(code: str):
+    """Google OAuth callback."""
+    sso = get_sso_manager()
+    result = await sso.handle_google_callback(code)
+    if not result:
+        return {"error": "Authentication failed"}
+    return {"status": "ok", "user": result}
+
+@router.get("/auth/callback/github")
+async def github_callback(code: str):
+    """GitHub OAuth callback."""
+    sso = get_sso_manager()
+    result = await sso.handle_github_callback(code)
+    if not result:
+        return {"error": "Authentication failed"}
+    return {"status": "ok", "user": result}
+
+@router.get("/auth/sso/accounts")
+async def list_sso_accounts(authorization: str = Header(None)):
+    """List user's linked SSO accounts."""
+    auth = get_auth()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    sso = get_sso_manager()
+    return {"accounts": sso.get_user_sso_accounts(user["id"])}
+
+@router.delete("/auth/sso/{provider}")
+async def unlink_sso_account(provider: str, authorization: str = Header(None)):
+    """Unlink SSO account."""
+    auth = get_auth()
+    
+    if not authorization or not authorization.startswith("Bearer "):
+        return {"error": "Authorization required"}
+    token = authorization.replace("Bearer ", "")
+    user = auth.validate_token(token)
+    if not user:
+        return {"error": "Invalid token"}
+    
+    sso = get_sso_manager()
+    sso.unlink_sso(user["id"], provider)
+    return {"status": "ok"}

@@ -1,10 +1,19 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 
+const API_BASE = '/v1'
+
 function App() {
   const [scrolled, setScrolled] = React.useState(false)
   const [stats, setStats] = React.useState({ requests: 0, uptime: 0, tokens: 0 })
   const [beingProc, setBeingProc] = React.useState(0)
+  const [plugins, setPlugins] = React.useState([])
+  const [memories, setMemories] = React.useState([])
+  const [chatMessages, setChatMessages] = React.useState([
+    { type: 'sys', text: 'Halo! Saya Aeryn v61.5. Saya punya 12 tools dan 5 divisi kognitif. Apa yang mau kerjakan hari ini?' }
+  ])
+  const [chatInput, setChatInput] = React.useState('')
+  const chatWinRef = React.useRef(null)
 
   React.useEffect(() => {
     const h = () => setScrolled(window.scrollY > 50)
@@ -15,7 +24,7 @@ function App() {
   React.useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch('/v1/dashboard/stats')
+        const res = await fetch(`${API_BASE}/dashboard/stats`)
         if (res.ok) {
           const data = await res.json()
           setStats(s => ({
@@ -32,11 +41,28 @@ function App() {
   }, [])
 
   React.useEffect(() => {
-    const interval = setInterval(() => {
-      setBeingProc(p => p + Math.floor(Math.random() * 50))
-    }, 1000)
+    const interval = setInterval(() => setBeingProc(p => p + Math.floor(Math.random() * 50)), 1000)
     return () => clearInterval(interval)
   }, [])
+
+  React.useEffect(() => {
+    const fetchPlugins = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/plugins`)
+        if (res.ok) {
+          const data = await res.json()
+          setPlugins(data.plugins || [])
+        }
+      } catch (e) {}
+    }
+    fetchPlugins()
+  }, [])
+
+  React.useEffect(() => {
+    if (chatWinRef.current) {
+      chatWinRef.current.scrollTop = chatWinRef.current.scrollHeight
+    }
+  }, [chatMessages])
 
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -53,13 +79,42 @@ function App() {
     return `${sec}s`
   }
 
+  const handleChatSubmit = async (e) => {
+    e.preventDefault()
+    if (!chatInput.trim()) return
+    
+    const userMsg = { type: 'user', text: chatInput }
+    setChatMessages(prev => [...prev, userMsg])
+    setChatInput('')
+    
+    // Add typing indicator
+    setChatMessages(prev => [...prev, { type: 'asst', text: 'Typing...' }])
+    
+    try {
+      const res = await fetch(`${API_BASE}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ goal: chatInput })
+      })
+      const data = await res.json()
+      setChatMessages(prev => {
+        const filtered = prev.filter(m => m.text !== 'Typing...')
+        return [...filtered, { type: 'asst', text: data.response || 'No response' }]
+      })
+    } catch (err) {
+      setChatMessages(prev => {
+        const filtered = prev.filter(m => m.text !== 'Typing...')
+        return [...filtered, { type: 'asst', text: 'Sorry, error occurred.' }]
+      })
+    }
+  }
+
+  const toggleWork = (e) => {
+    e.currentTarget.classList.toggle('open')
+  }
+
   return (
     <div className="app">
-      {/* Cursor */}
-      <div className="cursor-outer" id="cursor-outer">
-        <div className="cursor-inner" id="cursor-inner"></div>
-      </div>
-
       {/* Nav */}
       <nav className={`top-nav ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav-inner">
@@ -101,26 +156,10 @@ function App() {
             <span className="title-line">not improvised.</span>
           </h1>
           <div className="cover-stats">
-            <div className="stat-card">
-              <div className="stat-ico">⚡</div>
-              <div className="stat-val">{stats.requests}</div>
-              <div className="stat-lbl">Requests</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-ico">👥</div>
-              <div className="stat-val">5</div>
-              <div className="stat-lbl">Divisions</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-ico">⏱️</div>
-              <div className="stat-val">{fmtDur(stats.uptime)}</div>
-              <div className="stat-lbl">Uptime</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-ico">🎯</div>
-              <div className="stat-val">{stats.tokens}</div>
-              <div className="stat-lbl">Tokens</div>
-            </div>
+            <div className="stat-card"><div className="stat-ico">⚡</div><div className="stat-val">{stats.requests}</div><div className="stat-lbl">Requests</div></div>
+            <div className="stat-card"><div className="stat-ico">👥</div><div className="stat-val">5</div><div className="stat-lbl">Divisions</div></div>
+            <div className="stat-card"><div className="stat-ico">⏱️</div><div className="stat-val">{fmtDur(stats.uptime)}</div><div className="stat-lbl">Uptime</div></div>
+            <div className="stat-card"><div className="stat-ico">🎯</div><div className="stat-val">{stats.tokens}</div><div className="stat-lbl">Tokens</div></div>
           </div>
           <div className="cover-live"><span className="dot"></span> LIVE — 0 req/s · 0ms · 0MB</div>
           <div className="cover-being">BEING PROCESSED AS YOU READ: <b>{beingProc}</b> tokens</div>
@@ -132,17 +171,17 @@ function App() {
         <div className="cover-scroll"><span>SCROLL TO EXPLORE</span><div className="scroll-line"></div></div>
       </section>
 
-      {/* SYSTEMS / PRACTICE */}
+      {/* SYSTEMS */}
       <section className="sec-systems" id="systems" data-section="systems">
         <div className="container">
           <div className="hdr"><div className="num">01</div><h2>The Systems</h2><p>A private firm, holding a limited number of engagements.</p></div>
           <div className="systems-grid">
-            <div className="system-card"><div className="system-icon">⚡</div><h3>API Gateway</h3><p>FastAPI backend with 200+ endpoints</p><span className="badge on">● Operational</span></div>
-            <div className="system-card"><div className="system-icon">🧠</div><h3>LLM Engine</h3><p>Multi-model routing with Gemini, Claude, OpenAI</p><span className="badge on">● Operational</span></div>
-            <div className="system-card"><div className="system-icon">🧩</div><h3>Memory Vault</h3><p>PostgreSQL + pgvector semantic search</p><span className="badge on">● Operational</span></div>
-            <div className="system-card"><div className="system-icon">🔌</div><h3>Plugin System</h3><p>Extensible architecture with auto-discovery</p><span className="badge on">● Operational</span></div>
-            <div className="system-card"><div className="system-icon">👥</div><h3>5 Divisions</h3><p>Creative, Psychology, Reasoning, Governance, Infrastructure</p><span className="badge on">● Operational</span></div>
-            <div className="system-card"><div className="system-icon">📈</div><h3>Observability</h3><p>Langfuse-style tracing with spans and metrics</p><span className="badge on">● Operational</span></div>
+            <div className="system-card"><div className="system-icon">⚡</div><h3>API Gateway</h3><p>FastAPI backend with 200+ endpoints, WebSocket streaming, and real-time observability.</p><span className="badge on">● Operational</span></div>
+            <div className="system-card"><div className="system-icon">🧠</div><h3>LLM Engine</h3><p>Multi-model routing with Gemini, Claude, OpenAI, Mistral. Adaptive fallback.</p><span className="badge on">● Operational</span></div>
+            <div className="system-card"><div className="system-icon">🧩</div><h3>Memory Vault</h3><p>PostgreSQL + pgvector semantic search. Long-term knowledge with entity resolution.</p><span className="badge on">● Operational</span></div>
+            <div className="system-card"><div className="system-icon">🔌</div><h3>Plugin System</h3><p>Extensible architecture with auto-discovery, auto-loading, and marketplace.</p><span className="badge on">● Operational</span></div>
+            <div className="system-card"><div className="system-icon">👥</div><h3>5 Divisions</h3><p>Creative, Psychology, Reasoning, Governance, Infrastructure — specialized cognitive agents.</p><span className="badge on">● Operational</span></div>
+            <div className="system-card"><div className="system-icon">📈</div><h3>Observability</h3><p>Langfuse-style tracing with spans, metrics, and real-time performance monitoring.</p><span className="badge on">● Operational</span></div>
           </div>
         </div>
       </section>
@@ -152,7 +191,7 @@ function App() {
         <div className="container">
           <div className="hdr"><div className="num">02</div><h2>The Work</h2><p>Real products, live in days — and then in motion.</p></div>
           <div className="work-list">
-            <div className="work-item" onClick={(e) => e.currentTarget.classList.toggle('open')}>
+            <div className="work-item" onClick={toggleWork}>
               <div className="work-header"><div className="work-title">Chat</div><div className="work-toggle">+</div></div>
               <div className="work-detail">
                 <div className="chat-demo">
@@ -163,18 +202,25 @@ function App() {
                 <div className="tags"><span>Conversational AI</span><span>Tool Execution</span><span>Memory Recall</span></div>
               </div>
             </div>
-            <div className="work-item" onClick={(e) => e.currentTarget.classList.toggle('open')}>
+            <div className="work-item" onClick={toggleWork}>
               <div className="work-header"><div className="work-title">Divisions</div><div className="work-toggle">+</div></div>
               <div className="work-detail">
                 <div className="div-icons"><span title="Creative">🎨</span><span title="Psychology">🧠</span><span title="Reasoning">🔍</span><span title="Governance">🏛️</span><span title="Infrastructure">⚙️</span></div>
                 <div className="tags"><span>Creative</span><span>Psychology</span><span>Reasoning</span><span>Governance</span><span>Infrastructure</span></div>
               </div>
             </div>
-            <div className="work-item" onClick={(e) => e.currentTarget.classList.toggle('open')}>
+            <div className="work-item" onClick={toggleWork}>
               <div className="work-header"><div className="work-title">Plugins</div><div className="work-toggle">+</div></div>
               <div className="work-detail">
                 <div className="plugin-g"><div className="plugin-c">🔍 Code Review</div><div className="plugin-c">📚 Research Assistant</div><div className="plugin-c">🧩 Memory Vault</div><div className="plugin-c">🔗 Integrations</div></div>
                 <div className="tags"><span>Extensible</span><span>Marketplace</span><span>Custom</span></div>
+              </div>
+            </div>
+            <div className="work-item" onClick={toggleWork}>
+              <div className="work-header"><div className="work-title">Memory</div><div className="work-toggle">+</div></div>
+              <div className="work-detail">
+                <div className="mem-viz"><span className="m-node">Entity</span><span className="m-edge">→</span><span className="m-node">Relation</span><span className="m-edge">→</span><span className="m-node">Recall</span></div>
+                <div className="tags"><span>PostgreSQL</span><span>pgvector</span><span>Semantic Search</span></div>
               </div>
             </div>
           </div>
@@ -199,11 +245,19 @@ function App() {
         <div className="container">
           <div className="hdr"><div className="num">04</div><h2>Ask Aeryn</h2><p>The intelligence engine. Ask anything.</p></div>
           <div className="chat-box">
-            <div className="chat-win">
-              <div className="msg sys"><div className="bubble">Halo! Saya Aeryn v61.5. Saya punya 12 tools dan 5 divisi kognitif. Apa yang mau kerjakan hari ini?</div></div>
+            <div className="chat-win" ref={chatWinRef}>
+              {chatMessages.map((msg, i) => (
+                <div key={i} className={`msg ${msg.type}`}><div className="bubble">{msg.text}</div></div>
+              ))}
             </div>
-            <form className="chat-form" onSubmit={(e) => e.preventDefault()}>
-              <textarea placeholder="Tulis pesan..." rows={1}></textarea>
+            <form className="chat-form" onSubmit={handleChatSubmit}>
+              <textarea 
+                placeholder="Tulis pesan... (Ctrl+Enter)" 
+                rows={1} 
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter' && e.ctrlKey) { e.preventDefault(); handleChatSubmit(e); } }}
+              ></textarea>
               <button type="submit" className="chat-btn">📤</button>
             </form>
           </div>
@@ -213,13 +267,13 @@ function App() {
       {/* DIVISIONS */}
       <section className="sec-divisions" id="divisions" data-section="divisions">
         <div className="container">
-          <div className="hdr"><div className="num">05</div><h2>Cognitive Divisions</h2><p>5 specialized AI agents.</p></div>
+          <div className="hdr"><div className="num">05</div><h2>Cognitive Divisions</h2><p>5 specialized AI agents handling different aspects of reasoning.</p></div>
           <div className="div-grid">
-            <div className="div-card"><div className="div-ico">🎨</div><h4>Creative</h4><p>Design, storytelling</p><button className="btn-exec">Execute</button></div>
-            <div className="div-card"><div className="div-ico">🧠</div><h4>Psychology</h4><p>Emotional intelligence</p><button className="btn-exec">Execute</button></div>
-            <div className="div-card"><div className="div-ico">🔍</div><h4>Reasoning</h4><p>Logic, problem solving</p><button className="btn-exec">Execute</button></div>
-            <div className="div-card"><div className="div-ico">🏛️</div><h4>Governance</h4><p>Rules, ethics, compliance</p><button className="btn-exec">Execute</button></div>
-            <div className="div-card"><div className="div-ico">⚙️</div><h4>Infrastructure</h4><p>Deployment, monitoring</p><button className="btn-exec">Execute</button></div>
+            <div className="div-card"><div className="div-ico">🎨</div><h4>Creative</h4><p>Design, storytelling</p><div className="div-agents"><span>POV</span><span>Style</span></div><button className="btn-exec">Execute</button></div>
+            <div className="div-card"><div className="div-ico">🧠</div><h4>Psychology</h4><p>Emotional intelligence</p><div className="div-agents"><span>Emotion</span><span>Cognitive</span></div><button className="btn-exec">Execute</button></div>
+            <div className="div-card"><div className="div-ico">🔍</div><h4>Reasoning</h4><p>Logic, problem solving</p><div className="div-agents"><span>MCTS</span><span>FOL</span></div><button className="btn-exec">Execute</button></div>
+            <div className="div-card"><div className="div-ico">🏛️</div><h4>Governance</h4><p>Rules, ethics, compliance</p><div className="div-agents"><span>Safety</span></div><button className="btn-exec">Execute</button></div>
+            <div className="div-card"><div className="div-ico">⚙️</div><h4>Infrastructure</h4><p>Deployment, monitoring</p><div className="div-agents"><span>Sync</span><span>Validator</span></div><button className="btn-exec">Execute</button></div>
           </div>
         </div>
       </section>
@@ -227,23 +281,23 @@ function App() {
       {/* PLUGINS */}
       <section className="sec-plugins" id="plugins" data-section="plugins">
         <div className="container">
-          <div className="hdr"><div className="num">06</div><h2>Plugins</h2><p>Installed and discoverable plugins.</p></div>
+          <div className="hdr"><div className="num">06</div><h2>Plugins</h2><p>Installed and discoverable plugins for extended functionality.</p></div>
           <div className="plugins-layout">
             <div className="plugins-installed">
               <h3 className="sub-title">Installed</h3>
               <div className="plugin-list">
-                <div className="plugin-row"><span className="plugin-ico">🔍</span><div className="plugin-info"><span className="plugin-name">Code Review</span><span className="plugin-desc">Analyze Python code</span></div><button className="btn-run">Run</button></div>
-                <div className="plugin-row"><span className="plugin-ico">📚</span><div className="plugin-info"><span className="plugin-name">Research Assistant</span><span className="plugin-desc">Search and summarize</span></div><button className="btn-run">Run</button></div>
-                <div className="plugin-row"><span className="plugin-ico">🧩</span><div className="plugin-info"><span className="plugin-name">Memory Vault</span><span className="plugin-desc">PostgreSQL search</span></div><button className="btn-run">Run</button></div>
+                <div className="plugin-row"><span className="plugin-ico">🔍</span><div className="plugin-info"><span className="plugin-name">Code Review</span><span className="plugin-desc">Analyze Python code for bugs</span></div><button className="btn-run">Run</button></div>
+                <div className="plugin-row"><span className="plugin-ico">📚</span><div className="plugin-info"><span className="plugin-name">Research Assistant</span><span className="plugin-desc">Search vault and summarize</span></div><button className="btn-run">Run</button></div>
+                <div className="plugin-row"><span className="plugin-ico">🧩</span><div className="plugin-info"><span className="plugin-name">Memory Vault</span><span className="plugin-desc">PostgreSQL semantic search</span></div><button className="btn-run">Run</button></div>
                 <div className="plugin-row"><span className="plugin-ico">🔗</span><div className="plugin-info"><span className="plugin-name">Messaging Gateway</span><span className="plugin-desc">Telegram, Discord, Slack</span></div><button className="btn-run">Run</button></div>
               </div>
             </div>
             <div className="plugins-market">
               <h3 className="sub-title">Marketplace</h3>
               <div className="market-grid">
-                <div className="market-card"><span className="market-ico">📊</span><h4>Analytics Pro</h4><span className="market-price">Free</span></div>
-                <div className="market-card"><span className="market-ico">🔐</span><h4>Security Scanner</h4><span className="market-price">Free</span></div>
-                <div className="market-card"><span className="market-ico">🌐</span><h4>Web Scraper</h4><span className="market-price">Free</span></div>
+                <div className="market-card"><span className="market-ico">📊</span><h4>Analytics Pro</h4><p>Advanced analytics</p><span className="market-price">Free</span></div>
+                <div className="market-card"><span className="market-ico">🔐</span><h4>Security Scanner</h4><p>OWASP audit</p><span className="market-price">Free</span></div>
+                <div className="market-card"><span className="market-ico">🌐</span><h4>Web Scraper</h4><p>Extract web content</p><span className="market-price">Free</span></div>
               </div>
             </div>
           </div>
@@ -256,7 +310,7 @@ function App() {
           <div className="hdr"><div className="num">07</div><h2>Memory Vault</h2><p>Long-term knowledge storage with semantic search.</p></div>
           <div className="mem-layout">
             <div className="mem-search-panel">
-              <div className="search-bar"><input type="text" className="search-in" placeholder="Search memories..." /><button className="btn-search">Search</button></div>
+              <div className="search-bar"><input type="text" className="search-in" placeholder="Search memories semantically..." /><button className="btn-search">Search</button></div>
               <div className="store-bar"><input type="text" className="store-in" placeholder="Key" /><input type="text" className="store-in" placeholder="Value" /><button className="btn-store">Store</button></div>
             </div>
             <div className="mem-results-panel">
@@ -306,5 +360,3 @@ function App() {
 
 const root = createRoot(document.getElementById('root'))
 root.render(<App />)
-
-// rebuild 1788269736.7005107

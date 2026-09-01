@@ -3,7 +3,7 @@ module.exports = {
     {
       name: "aeryn-api",
       script: "apps/api/routers/main.py",
-      interpreter: "./venv-proot/bin/python",
+      interpreter: "/home/sen/aeryn-core-agent/venv-proot/bin/python",
       cwd: "/home/sen/aeryn-core-agent",
       watch: false,
       max_memory_restart: "512M",
@@ -33,7 +33,7 @@ module.exports = {
     {
       name: "aeryn-dashboard",
       script: "aeryn_core/dashboard/run_server.py",
-      interpreter: "./venv-proot/bin/python",
+      interpreter: "/home/sen/aeryn-core-agent/venv-proot/bin/python",
       cwd: "/home/sen/aeryn-core-agent",
       watch: false,
       max_memory_restart: "256M",

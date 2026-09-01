@@ -4275,12 +4275,7 @@ async def monitoring_stats():
 from apps.web.server import router as dashboard_router
 app.include_router(dashboard_router, prefix="/web")
 
-# SPA routes — serve dashboard HTML for client-side routing routes
-@app.get("/", response_class=HTMLResponse)
-async def spa_root():
-    """Serve dashboard HTML for client-side routing pages."""
-    from apps.web.server import _serve_dashboard
-    return _serve_dashboard()
+# SPA routes — handled by web_routes_router (include above)
 
 # Redirect all old SPA routes to single dashboard
 for _route in ["/projects", "/workspaces", "/chat", "/audit", "/settings", "/notifications"]:
