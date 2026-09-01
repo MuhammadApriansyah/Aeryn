@@ -8,20 +8,27 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r170/three.min.js"></script>
 <link rel="stylesheet" href="/static/css/dashboard.css">
 </head>
 <body data-section="cover">
 <a href="#main" class="skip-link">Skip to main content</a>
 
-<div class="cursor" id="cursor" aria-hidden="true"></div>
-<div class="cursor-trail" id="cursor-trail" aria-hidden="true"></div>
+<!-- Magnetic Cursor -->
+<div class="cursor-outer" id="cursor-outer" aria-hidden="true">
+  <div class="cursor-inner" id="cursor-inner">
+    <span class="cursor-label" id="cursor-label"></span>
+  </div>
+</div>
+
+<!-- Toast Container -->
 <div class="toast-container" id="toast-container" role="status" aria-live="polite"></div>
 
-<!-- Three.js Canvas Background -->
+<!-- Three.js Canvas -->
 <div class="cover-3d" id="cover-3d"></div>
 
-<!-- ══ COVER: sly.systems + audit.devoco.studio ══ -->
+<!-- ══ COVER ══ -->
 <section class="sec-cover" data-section="cover">
   <div class="cover-bg">
     <div class="grid-overlay"></div>
@@ -41,39 +48,55 @@
       <span class="title-line">not improvised.</span>
     </h1>
     <div class="cover-stats">
-      <div class="stat-card"><div class="stat-ico">⚡</div><div class="stat-val" id="s-req">0</div><div class="stat-lbl">Requests</div></div>
-      <div class="stat-card"><div class="stat-ico">👥</div><div class="stat-val" id="s-agt">5</div><div class="stat-lbl">Divisions</div></div>
-      <div class="stat-card"><div class="stat-ico">⏱️</div><div class="stat-val" id="s-up">0s</div><div class="stat-lbl">Uptime</div></div>
-      <div class="stat-card"><div class="stat-ico">🎯</div><div class="stat-val" id="s-tok">0</div><div class="stat-lbl">Tokens</div></div>
+      <div class="stat-card" data-cursor-hover="Explore">
+        <div class="stat-ico">⚡</div>
+        <div class="stat-val" id="s-req">0</div>
+        <div class="stat-lbl">Requests</div>
+      </div>
+      <div class="stat-card" data-cursor-hover="Explore">
+        <div class="stat-ico">👥</div>
+        <div class="stat-val" id="s-agt">5</div>
+        <div class="stat-lbl">Divisions</div>
+      </div>
+      <div class="stat-card" data-cursor-hover="Explore">
+        <div class="stat-ico">⏱️</div>
+        <div class="stat-val" id="s-up">0s</div>
+        <div class="stat-lbl">Uptime</div>
+      </div>
+      <div class="stat-card" data-cursor-hover="Explore">
+        <div class="stat-ico">🎯</div>
+        <div class="stat-val" id="s-tok">0</div>
+        <div class="stat-lbl">Tokens</div>
+      </div>
     </div>
     <div class="cover-live"><span class="dot"></span> LIVE — <span id="l-rps">0</span> req/s · <span id="l-lat">0</span>ms · <span id="l-mem">0</span>MB</div>
     <div class="cover-being">BEING PROCESSED AS YOU READ: <b id="b-proc">0</b> tokens</div>
     <div class="cover-cta">
-      <button class="btn-pri" onclick="scrollTo('systems')">Enter the Systems →</button>
-      <button class="btn-sec" onclick="scrollTo('work')">See the Work</button>
+      <button class="btn-pri" onclick="scrollTo('systems')" data-cursor-hover="Enter">Enter the Systems →</button>
+      <button class="btn-sec" onclick="scrollTo('work')" data-cursor-hover="View">See the Work</button>
     </div>
   </div>
   <div class="cover-scroll"><span>SCROLL TO EXPLORE</span><div class="scroll-line"></div></div>
 </section>
 
-<!-- ══ PRACTICE: sly.systems ══ -->
+<!-- ══ PRACTICE ══ -->
 <section class="sec-practice" data-section="systems" id="systems">
   <div class="container">
-    <div class="hdr"><div class="num">01</div><h2>The Practice</h2><p>A private firm, holding a limited number of engagements. For each, we design, build and manage the systems the business runs on — the software, the intelligence, and the operations around them.</p></div>
+    <div class="hdr"><div class="num">01</div><h2>The Practice</h2><p>A private firm, holding a limited number of engagements. For each, we design, build and manage the systems the business runs on.</p></div>
     <div class="practice-grid">
-      <div class="practice-card"><div class="practice-ico">🎯</div><h3>Engagement</h3><p>We hold a limited number of engagements to ensure quality and attention to detail.</p></div>
-      <div class="practice-card"><div class="practice-ico">🏗️</div><h3>Design & Build</h3><p>For each engagement, we design, build and manage the systems from scratch.</p></div>
-      <div class="practice-card"><div class="practice-ico">🔧</div><h3>Manage</h3><p>We don't just ship — we manage the software, the intelligence, and the operations.</p></div>
+      <div class="practice-card" data-cursor-hover="Learn"><div class="practice-ico">🎯</div><h3>Engagement</h3><p>We hold a limited number of engagements to ensure quality and attention to detail.</p></div>
+      <div class="practice-card" data-cursor-hover="Learn"><div class="practice-ico">🏗️</div><h3>Design & Build</h3><p>For each engagement, we design, build and manage the systems from scratch.</p></div>
+      <div class="practice-card" data-cursor-hover="Learn"><div class="practice-ico">🔧</div><h3>Manage</h3><p>We don't just ship — we manage the software, the intelligence, and the operations.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ══ WORK: acid-crunch.com + sly.systems ══ -->
+<!-- ══ WORK ══ -->
 <section class="sec-work" data-section="work" id="work">
   <div class="container">
     <div class="hdr"><div class="num">02</div><h2>The Work</h2><p>Real products, live in days — and then in motion.</p></div>
     <div class="work-list">
-      <div class="work-item" onclick="toggleWork(this)">
+      <div class="work-item" onclick="toggleWork(this)" data-cursor-hover="Open">
         <div class="work-header"><div class="work-title">Chat</div><div class="work-toggle">+</div></div>
         <div class="work-detail">
           <div class="chat-demo">
@@ -84,14 +107,14 @@
           <div class="tags"><span>Conversational AI</span><span>Tool Execution</span><span>Memory Recall</span></div>
         </div>
       </div>
-      <div class="work-item" onclick="toggleWork(this)">
+      <div class="work-item" onclick="toggleWork(this)" data-cursor-hover="Open">
         <div class="work-header"><div class="work-title">Divisions</div><div class="work-toggle">+</div></div>
         <div class="work-detail">
           <div class="div-icons"><span title="Creative">🎨</span><span title="Psychology">🧠</span><span title="Reasoning">🔍</span><span title="Governance">🏛️</span><span title="Infrastructure">⚙️</span></div>
           <div class="tags"><span>Creative</span><span>Psychology</span><span>Reasoning</span><span>Governance</span><span>Infrastructure</span></div>
         </div>
       </div>
-      <div class="work-item" onclick="toggleWork(this)">
+      <div class="work-item" onclick="toggleWork(this)" data-cursor-hover="Open">
         <div class="work-header"><div class="work-title">Plugins</div><div class="work-toggle">+</div></div>
         <div class="work-detail">
           <div class="plugin-g"><div class="plugin-c">🔍 Code Review</div><div class="plugin-c">📚 Research Assistant</div><div class="plugin-c">🧩 Memory Vault</div><div class="plugin-c">🔗 Integrations</div></div>
@@ -102,60 +125,60 @@
   </div>
 </section>
 
-<!-- ══ STACK: sly.systems ══ -->
+<!-- ══ STACK ══ -->
 <section class="sec-stack" data-section="stack" id="stack">
   <div class="container">
-    <div class="hdr"><div class="num">03</div><h2>The Stack</h2><p>We don't sell one tool. We direct the whole stack — the platforms, models and studios the work is built with.</p></div>
+    <div class="hdr"><div class="num">03</div><h2>The Stack</h2><p>We don't sell one tool. We direct the whole stack.</p></div>
     <div class="stack-grid">
-      <div class="stack-cat"><h4>Backend</h4><div class="stack-items"><span>FastAPI</span><span>Python 3.11</span><span>SQLite</span><span>PostgreSQL</span><span>Redis</span></div></div>
-      <div class="stack-cat"><h4>AI / LLM</h4><div class="stack-items"><span>Gemini</span><span>Claude</span><span>OpenAI</span><span>Mistral</span><span>Perplexity</span></div></div>
-      <div class="stack-cat"><h4>Frontend</h4><div class="stack-items"><span>Vanilla JS</span><span>GSAP</span><span>Three.js</span><span>WebGL</span><span>D3.js</span></div></div>
-      <div class="stack-cat"><h4>Infrastructure</h4><div class="stack-items"><span>PM2</span><span>Docker</span><span>Nginx</span><span>Cloudflare</span><span>GitHub</span></div></div>
+      <div class="stack-cat" data-cursor-hover="Tech"><h4>Backend</h4><div class="stack-items"><span>FastAPI</span><span>Python 3.11</span><span>SQLite</span><span>PostgreSQL</span><span>Redis</span></div></div>
+      <div class="stack-cat" data-cursor-hover="Tech"><h4>AI / LLM</h4><div class="stack-items"><span>Gemini</span><span>Claude</span><span>OpenAI</span><span>Mistral</span><span>Perplexity</span></div></div>
+      <div class="stack-cat" data-cursor-hover="Tech"><h4>Frontend</h4><div class="stack-items"><span>Vanilla JS</span><span>GSAP</span><span>Three.js</span><span>WebGL</span><span>D3.js</span></div></div>
+      <div class="stack-cat" data-cursor-hover="Tech"><h4>Infrastructure</h4><div class="stack-items"><span>PM2</span><span>Docker</span><span>Nginx</span><span>Cloudflare</span><span>GitHub</span></div></div>
     </div>
   </div>
 </section>
 
-<!-- ══ CHAT: Interactive ══ -->
+<!-- ══ CHAT ══ -->
 <section class="sec-chat" data-section="chat" id="chat">
   <div class="container">
-    <div class="hdr"><div class="num">04</div><h2>Ask Aeryn</h2><p>The intelligence engine. Ask anything — I have 12 tools and 5 cognitive divisions ready to help.</p></div>
+    <div class="hdr"><div class="num">04</div><h2>Ask Aeryn</h2><p>The intelligence engine. Ask anything.</p></div>
     <div class="chat-box">
       <div class="chat-win" id="chat-win">
         <div class="msg sys"><div class="bubble">Halo! Saya Aeryn v61.5. Saya punya 12 tools dan 5 divisi kognitif. Apa yang mau kerjakan hari ini?</div></div>
       </div>
       <form class="chat-form" id="chat-form">
         <textarea id="chat-in" placeholder="Tulis pesan... (Ctrl+Enter)" rows="1"></textarea>
-        <button type="submit" class="chat-btn">📤</button>
+        <button type="submit" class="chat-btn" data-cursor-hover="Send">📤</button>
       </form>
     </div>
   </div>
 </section>
 
-<!-- ══ DIVISIONS: 5 agents ══ -->
+<!-- ══ DIVISIONS ══ -->
 <section class="sec-divisions" data-section="divisions" id="divisions">
   <div class="container">
     <div class="hdr"><div class="num">05</div><h2>Cognitive Divisions</h2><p>5 specialized AI agents handling different aspects of reasoning.</p></div>
     <div class="div-grid">
-      <div class="div-card" onclick="execDiv('creative')"><div class="div-ico">🎨</div><h4>Creative</h4><p>Design, storytelling</p><div class="div-agents"><span>POV</span><span>Style</span></div><button class="btn-exec">Execute</button></div>
-      <div class="div-card" onclick="execDiv('psych')"><div class="div-ico">🧠</div><h4>Psychology</h4><p>Emotional intelligence</p><div class="div-agents"><span>Emotion</span><span>Cognitive</span></div><button class="btn-exec">Execute</button></div>
-      <div class="div-card" onclick="execDiv('reasoning')"><div class="div-ico">🔍</div><h4>Reasoning</h4><p>Logic, problem solving</p><div class="div-agents"><span>MCTS</span><span>FOL</span></div><button class="btn-exec">Execute</button></div>
-      <div class="div-card" onclick="execDiv('gov')"><div class="div-ico">🏛️</div><h4>Governance</h4><p>Rules, ethics, compliance</p><div class="div-agents"><span>Safety</span></div><button class="btn-exec">Execute</button></div>
-      <div class="div-card" onclick="execDiv('infra')"><div class="div-ico">⚙️</div><h4>Infrastructure</h4><p>Deployment, monitoring</p><div class="div-agents"><span>Sync</span><span>Validator</span></div><button class="btn-exec">Execute</button></div>
+      <div class="div-card" onclick="execDiv('creative')" data-cursor-hover="Execute"><div class="div-ico">🎨</div><h4>Creative</h4><p>Design, storytelling</p><div class="div-agents"><span>POV</span><span>Style</span></div><button class="btn-exec">Execute</button></div>
+      <div class="div-card" onclick="execDiv('psych')" data-cursor-hover="Execute"><div class="div-ico">🧠</div><h4>Psychology</h4><p>Emotional intelligence</p><div class="div-agents"><span>Emotion</span><span>Cognitive</span></div><button class="btn-exec">Execute</button></div>
+      <div class="div-card" onclick="execDiv('reasoning')" data-cursor-hover="Execute"><div class="div-ico">🔍</div><h4>Reasoning</h4><p>Logic, problem solving</p><div class="div-agents"><span>MCTS</span><span>FOL</span></div><button class="btn-exec">Execute</button></div>
+      <div class="div-card" onclick="execDiv('gov')" data-cursor-hover="Execute"><div class="div-ico">🏛️</div><h4>Governance</h4><p>Rules, ethics, compliance</p><div class="div-agents"><span>Safety</span></div><button class="btn-exec">Execute</button></div>
+      <div class="div-card" onclick="execDiv('infra')" data-cursor-hover="Execute"><div class="div-ico">⚙️</div><h4>Infrastructure</h4><p>Deployment, monitoring</p><div class="div-agents"><span>Sync</span><span>Validator</span></div><button class="btn-exec">Execute</button></div>
     </div>
   </div>
 </section>
 
-<!-- ══ DOSSIER: audit.devoco.studio ══ -->
+<!-- ══ DOSSIER ══ -->
 <section class="sec-dossier" data-section="dossier" id="dossier">
   <div class="container">
     <div class="hdr"><div class="num">06</div><h2>Dossier</h2><p>Subject: Aeryn AI Platform. Classification: Production.</p></div>
     <div class="dossier-grid">
-      <div class="dossier-card"><div class="dossier-lbl">Status</div><div class="dossier-val">Production</div></div>
-      <div class="dossier-card"><div class="dossier-lbl">Version</div><div class="dossier-val">v61.5</div></div>
-      <div class="dossier-card"><div class="dossier-lbl">Uptime</div><div class="dossier-val" id="dos-up">0s</div></div>
-      <div class="dossier-card"><div class="dossier-lbl">Requests</div><div class="dossier-val" id="dos-req">0</div></div>
-      <div class="dossier-card"><div class="dossier-lbl">Agents</div><div class="dossier-val">5 Divisions</div></div>
-      <div class="dossier-card"><div class="dossier-lbl">Plugins</div><div class="dossier-val">4</div></div>
+      <div class="dossier-card" data-cursor-hover="View"><div class="dossier-lbl">Status</div><div class="dossier-val">Production</div></div>
+      <div class="dossier-card" data-cursor-hover="View"><div class="dossier-lbl">Version</div><div class="dossier-val">v61.5</div></div>
+      <div class="dossier-card" data-cursor-hover="View"><div class="dossier-lbl">Uptime</div><div class="dossier-val" id="dos-up">0s</div></div>
+      <div class="dossier-card" data-cursor-hover="View"><div class="dossier-lbl">Requests</div><div class="dossier-val" id="dos-req">0</div></div>
+      <div class="dossier-card" data-cursor-hover="View"><div class="dossier-lbl">Agents</div><div class="dossier-val">5 Divisions</div></div>
+      <div class="dossier-card" data-cursor-hover="View"><div class="dossier-lbl">Plugins</div><div class="dossier-val">4</div></div>
     </div>
   </div>
 </section>
@@ -182,8 +205,8 @@
       <a href="#chat">Chat</a><a href="#dossier">Dossier</a>
     </div>
     <div class="nav-actions">
-      <button id="theme-btn">🌙</button>
-      <button id="lang-btn">ID</button>
+      <button id="theme-btn" class="nav-btn" data-cursor-hover="Toggle">🌙</button>
+      <button id="lang-btn" class="nav-btn" data-cursor-hover="Lang">ID</button>
     </div>
   </div>
 </nav>

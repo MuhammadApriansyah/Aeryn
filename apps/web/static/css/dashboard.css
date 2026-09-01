@@ -1,8 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════ */
-/* AERYN — Design System v4 (Final)                                  */
-/* Concept: sly.systems + seunghyuk + acid-crunch + wip + tamaki    */
-/*         + audit.devoco.studio                                     */
-/* Tech: Three.js + GSAP + Vanilla JS (no build step)                */
+/* AERYN — Design System v5 (Advanced)                               */
 /* ═══════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -38,6 +35,7 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  cursor: none;
 }
 
 /* ── Skip link ── */
@@ -50,29 +48,59 @@ body {
 }
 .skip-link:focus { top: 0; }
 
-/* ── Custom Cursor ── */
-.cursor {
+/* ═══════════════════════════════════════════════════════════════════ */
+/* MAGNETIC CURSOR                                                    */
+/* ═══════════════════════════════════════════════════════════════════ */
+
+.cursor-outer {
   position: fixed;
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   border: 2px solid var(--accent);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
-  transition: width 0.3s, height 0.3s, border-color 0.3s;
+  transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s;
   mix-blend-mode: difference;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.cursor-trail {
+
+.cursor-outer.hovering {
+  width: 70px;
+  height: 70px;
+  border-color: var(--accent2);
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.cursor-inner {
   position: fixed;
   width: 8px;
   height: 8px;
-  background: var(--accent-glow);
+  background: var(--accent);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9998;
+  z-index: 10000;
   transform: translate(-50%, -50%);
-  transition: transform 0.1s linear;
+  transition: width 0.2s, height 0.2s, background 0.2s;
+}
+
+.cursor-label {
+  position: absolute;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--fg);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cursor-outer.hovering .cursor-label {
+  opacity: 1;
 }
 
 /* ── Toast ── */
@@ -145,7 +173,7 @@ section { padding: 6rem 0; scroll-snap-align: start; }
 .hdr p { font-size: 1.1rem; color: var(--fg2); max-width: 600px; }
 
 /* ═══════════════════════════════════════════════════════════════════ */
-/* COVER SECTION — sly.systems + audit.devoco.studio                 */
+/* COVER                                                              */
 /* ═══════════════════════════════════════════════════════════════════ */
 .sec-cover {
   min-height: 100vh;
@@ -347,7 +375,7 @@ section { padding: 6rem 0; scroll-snap-align: start; }
 @keyframes bounce { 0%, 100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(10px); opacity: 0.5; } }
 
 /* ═══════════════════════════════════════════════════════════════════ */
-/* PRACTICE SECTION — sly.systems                                     */
+/* PRACTICE                                                           */
 /* ═══════════════════════════════════════════════════════════════════ */
 .practice-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
 .practice-card {
@@ -363,7 +391,7 @@ section { padding: 6rem 0; scroll-snap-align: start; }
 .practice-card p { font-size: 0.9rem; color: var(--fg2); line-height: 1.5; }
 
 /* ═══════════════════════════════════════════════════════════════════ */
-/* WORK SECTION — acid.crunch.com giant typography                    */
+/* WORK — acid-crunch.com giant typography                            */
 /* ═══════════════════════════════════════════════════════════════════ */
 .work-list { display: flex; flex-direction: column; }
 .work-item {
@@ -416,7 +444,7 @@ section { padding: 6rem 0; scroll-snap-align: start; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════ */
-/* STACK SECTION — sly.systems tech grid                             */
+/* STACK — sly.systems tech grid                                     */
 /* ═══════════════════════════════════════════════════════════════════ */
 .stack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
 .stack-cat { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
@@ -431,7 +459,7 @@ section { padding: 6rem 0; scroll-snap-align: start; }
 .stack-items span:hover { border-color: var(--accent); color: var(--fg); }
 
 /* ═══════════════════════════════════════════════════════════════════ */
-/* CHAT SECTION — Interactive AI                                      */
+/* CHAT                                                               */
 /* ═══════════════════════════════════════════════════════════════════ */
 .chat-box { max-width: 700px; margin: 0 auto; }
 .chat-win {
@@ -465,7 +493,7 @@ section { padding: 6rem 0; scroll-snap-align: start; }
 .chat-btn:hover { background: var(--accent2); transform: scale(1.05); }
 
 /* ═══════════════════════════════════════════════════════════════════ */
-/* DIVISIONS — 5 cognitive agents                                     */
+/* DIVISIONS                                                          */
 /* ═══════════════════════════════════════════════════════════════════ */
 .div-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; }
 .div-card {
@@ -504,7 +532,7 @@ section { padding: 6rem 0; scroll-snap-align: start; }
 .btn-exec:hover { background: var(--accent); border-color: var(--accent); }
 
 /* ═══════════════════════════════════════════════════════════════════ */
-/* DOSSIER — audit.devoco.studio editorial dossier                   */
+/* DOSSIER — audit.devoco.studio                                     */
 /* ═══════════════════════════════════════════════════════════════════ */
 .dossier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
 .dossier-card {
@@ -568,4 +596,6 @@ section { padding: 6rem 0; scroll-snap-align: start; }
   .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
   .div-grid { grid-template-columns: repeat(2, 1fr); }
   .cover-case { font-size: 0.65rem; gap: 0.75rem; }
+  body { cursor: auto; }
+  .cursor-outer, .cursor-inner { display: none; }
 }

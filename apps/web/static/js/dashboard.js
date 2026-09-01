@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════ */
-/* AERYN — Frontend Engine v4                                         */
-/* Tech: Three.js + GSAP + Vanilla JS                                 */
+/* AERYN — Frontend Engine v5 (Advanced)                              */
+/* Tech: Three.js + GSAP ScrollTrigger + Magnetic Cursor              */
 /* ═══════════════════════════════════════════════════════════════════ */
 
 (() => {
@@ -19,9 +19,62 @@
   const $$ = (s) => document.querySelectorAll(s);
 
   /* ═══════════════════════════════════════════════════════════════════ */
-  /* THREE.JS PARTICLE FIELD — Cover background                        */
+  /* MAGNETIC CURSOR — Interactive hover effect                         */
   /* ═══════════════════════════════════════════════════════════════════ */
-  
+
+  const cursorOuter = document.getElementById('cursor-outer');
+  const cursorInner = document.getElementById('cursor-inner');
+  const cursorLabel = document.getElementById('cursor-label');
+  let mouseX = 0, mouseY = 0;
+  let outerX = 0, outerY = 0;
+  let innerX = 0, innerY = 0;
+  let isHovering = false;
+  let hoverLabel = '';
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  // Hover detection for magnetic effect
+  $$('[data-cursor-hover]').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      isHovering = true;
+      hoverLabel = el.getAttribute('data-cursor-hover') || '';
+      if (cursorLabel) cursorLabel.textContent = hoverLabel;
+      if (cursorOuter) cursorOuter.classList.add('hovering');
+    });
+    el.addEventListener('mouseleave', () => {
+      isHovering = false;
+      hoverLabel = '';
+      if (cursorLabel) cursorLabel.textContent = '';
+      if (cursorOuter) cursorOuter.classList.remove('hovering');
+    });
+  });
+
+  (function animateCursor() {
+    // Outer cursor follows with delay (magnetic effect)
+    outerX += (mouseX - outerX) * 0.12;
+    outerY += (mouseY - outerY) * 0.12;
+    // Inner cursor follows faster
+    innerX += (mouseX - innerX) * 0.25;
+    innerY += (mouseY - innerY) * 0.25;
+
+    if (cursorOuter) {
+      cursorOuter.style.left = outerX + 'px';
+      cursorOuter.style.top = outerY + 'px';
+    }
+    if (cursorInner) {
+      cursorInner.style.left = innerX + 'px';
+      cursorInner.style.top = innerY + 'px';
+    }
+    requestAnimationFrame(animateCursor);
+  })();
+
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* THREE.JS — Advanced particle field with post-processing           */
+  /* ═══════════════════════════════════════════════════════════════════ */
+
   function initThreeJS() {
     const container = document.getElementById('cover-3d');
     if (!container || typeof THREE === 'undefined') return;
@@ -34,56 +87,62 @@
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
 
-    // Create particle geometry
-    const particleCount = 3000;
+    // Create particle geometry - 5000 particles
+    const particleCount = 5000;
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
+    const sizes = new Float32Array(particleCount);
 
     for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 15;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 15;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 15;
+      positions[i * 3] = (Math.random() - 0.5) * 20;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 20;
 
-      // Color gradient from indigo to cyan
+      // Color gradient from indigo to cyan to pink
       const t = Math.random();
-      colors[i * 3] = 0.39 + t * 0.4;     // R
-      colors[i * 3 + 1] = 0.4 + t * 0.4;  // G
-      colors[i * 3 + 2] = 0.95;           // B
+      if (t < 0.33) {
+        colors[i * 3] = 0.39; colors[i * 3 + 1] = 0.4; colors[i * 3 + 2] = 0.95;
+      } else if (t < 0.66) {
+        colors[i * 3] = 0.02; colors[i * 3 + 1] = 0.71; colors[i * 3 + 2] = 0.83;
+      } else {
+        colors[i * 3] = 0.92; colors[i * 3 + 1] = 0.28; colors[i * 3 + 2] = 0.6;
+      }
+
+      sizes[i] = Math.random() * 3 + 1;
     }
 
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
     const material = new THREE.PointsMaterial({
-      size: 0.03,
+      size: 0.04,
       vertexColors: true,
       transparent: true,
-      opacity: 0.6,
-      blending: THREE.AdditiveBlending
+      opacity: 0.7,
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true
     });
 
     const particles = new THREE.Points(geometry, material);
     scene.add(particles);
 
-    // Add connecting lines
-    const lineGeometry = new THREE.BufferGeometry();
-    const linePositions = new Float32Array(500 * 6);
-    lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
-    
-    const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0x6366f1,
-      transparent: true,
-      opacity: 0.1
-    });
-    
-    const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
-    scene.add(lines);
+    // Add ambient light
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
 
-    camera.position.z = 5;
+    // Add point light
+    const pointLight = new THREE.PointLight(0x6366f1, 1, 100);
+    pointLight.position.set(5, 5, 5);
+    scene.add(pointLight);
+
+    camera.position.z = 8;
 
     // Mouse interaction
     let mouseX = 0, mouseY = 0;
+    let targetRotationX = 0, targetRotationY = 0;
+    
     document.addEventListener('mousemove', (e) => {
       mouseX = (e.clientX / window.innerWidth) * 2 - 1;
       mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -93,31 +152,21 @@
     function animate() {
       requestAnimationFrame(animate);
 
-      particles.rotation.x += 0.0003;
-      particles.rotation.y += 0.0005;
-      
-      // Subtle mouse influence
-      particles.rotation.x += mouseY * 0.0005;
-      particles.rotation.y += mouseX * 0.0005;
+      // Smooth rotation based on mouse
+      targetRotationX += (mouseY * 0.3 - targetRotationX) * 0.05;
+      targetRotationY += (mouseX * 0.3 - targetRotationY) * 0.05;
 
-      // Update connecting lines
+      particles.rotation.x += 0.0002;
+      particles.rotation.y += 0.0003;
+      particles.rotation.x += targetRotationX * 0.001;
+      particles.rotation.y += targetRotationY * 0.001;
+
+      // Animate particle positions slightly
       const positions = particles.geometry.attributes.position.array;
-      const linePos = lines.geometry.attributes.position.array;
-      
-      for (let i = 0; i < 500; i++) {
-        const i3 = i * 6;
-        const p1 = Math.floor(Math.random() * particleCount);
-        const p2 = Math.floor(Math.random() * particleCount);
-        
-        linePos[i3] = positions[p1 * 3];
-        linePos[i3 + 1] = positions[p1 * 3 + 1];
-        linePos[i3 + 2] = positions[p1 * 3 + 2];
-        linePos[i3 + 3] = positions[p2 * 3];
-        linePos[i3 + 4] = positions[p2 * 3 + 1];
-        linePos[i3 + 5] = positions[p2 * 3 + 2];
+      for (let i = 0; i < particleCount; i++) {
+        positions[i * 3 + 1] += Math.sin(Date.now() * 0.001 + i) * 0.001;
       }
-      
-      lines.geometry.attributes.position.needsUpdate = true;
+      particles.geometry.attributes.position.needsUpdate = true;
 
       renderer.render(scene, camera);
     }
@@ -133,119 +182,106 @@
   }
 
   /* ═══════════════════════════════════════════════════════════════════ */
-  /* CUSTOM CURSOR                                                      */
-  /* ═══════════════════════════════════════════════════════════════════ */
-
-  const cursor = $('#cursor');
-  const trail = $('#cursor-trail');
-  let mx = 0, my = 0, cx = 0, cy = 0;
-
-  document.addEventListener('mousemove', (e) => {
-    mx = e.clientX;
-    my = e.clientY;
-    if (trail) {
-      trail.style.left = mx + 'px';
-      trail.style.top = my + 'px';
-    }
-  });
-
-  (function animateCursor() {
-    cx += (mx - cx) * 0.15;
-    cy += (my - cy) * 0.15;
-    if (cursor) {
-      cursor.style.left = cx + 'px';
-      cursor.style.top = cy + 'px';
-    }
-    requestAnimationFrame(animateCursor);
-  })();
-
-  $$('a, button, .stat-card, .work-item, .stack-item, .nav-link, .div-card, .tool-card, .practice-card, .dossier-card').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      if (cursor) { cursor.style.width = '40px'; cursor.style.height = '40px'; }
-    });
-    el.addEventListener('mouseleave', () => {
-      if (cursor) { cursor.style.width = '20px'; cursor.style.height = '20px'; }
-    });
-  });
-
-  /* ═══════════════════════════════════════════════════════════════════ */
-  /* GSAP ANIMATIONS                                                    */
+  /* GSAP SCROLLTRIGGER — Scroll-driven animations                      */
   /* ═══════════════════════════════════════════════════════════════════ */
 
   function initGSAP() {
     if (typeof gsap === 'undefined') return;
+    if (typeof ScrollTrigger !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger);
+    }
 
     // Cover title animation
     gsap.from('.title-line', {
-      y: 100,
+      y: 120,
       opacity: 0,
-      duration: 1.2,
-      stagger: 0.15,
+      duration: 1.4,
+      stagger: 0.2,
       ease: 'power4.out',
       delay: 0.3
     });
 
     // Stats animation
     gsap.from('.stat-card', {
-      y: 60,
+      y: 80,
       opacity: 0,
       duration: 1,
-      stagger: 0.1,
-      delay: 0.8,
+      stagger: 0.15,
+      delay: 1,
       ease: 'power3.out'
     });
 
     // Scroll-triggered animations for each section
     const sections = $$('section');
-    sections.forEach(section => {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const section = entry.target;
-            
-            // Animate headers
-            const header = section.querySelector('.hdr');
-            if (header) {
-              gsap.from(header, {
-                y: 40,
-                opacity: 0,
-                duration: 0.8,
-                ease: 'power3.out'
-              });
-            }
+    sections.forEach((section, index) => {
+      if (index === 0) return; // Skip cover
 
-            // Animate cards
-            const cards = section.querySelectorAll('.practice-card, .stack-cat, .div-card, .tool-card, .dossier-card');
-            if (cards.length > 0) {
-              gsap.from(cards, {
-                y: 50,
-                opacity: 0,
-                duration: 0.8,
-                stagger: 0.1,
-                delay: 0.2,
-                ease: 'power3.out'
-              });
-            }
+      const header = section.querySelector('.hdr');
+      const cards = section.querySelectorAll('.practice-card, .stack-cat, .div-card, .tool-card, .dossier-card, .stat-card');
+      const workItems = section.querySelectorAll('.work-item');
 
-            // Animate work items
-            const workItems = section.querySelectorAll('.work-item');
-            if (workItems.length > 0) {
-              gsap.from(workItems, {
-                x: -30,
-                opacity: 0,
-                duration: 0.6,
-                stagger: 0.1,
-                delay: 0.2,
-                ease: 'power3.out'
-              });
-            }
-
-            observer.unobserve(section);
-          }
+      if (header) {
+        gsap.from(header, {
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 80%',
+            end: 'top 20%',
+            scrub: 1
+          },
+          y: 60,
+          opacity: 0,
+          duration: 1,
+          ease: 'power3.out'
         });
-      }, { threshold: 0.2 });
+      }
 
-      observer.observe(section);
+      if (cards.length > 0) {
+        gsap.from(cards, {
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 70%',
+            end: 'top 30%',
+            scrub: 1
+          },
+          y: 80,
+          opacity: 0,
+          duration: 1,
+          stagger: 0.1,
+          ease: 'power3.out'
+        });
+      }
+
+      if (workItems.length > 0) {
+        gsap.from(workItems, {
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 70%',
+            end: 'top 30%',
+            scrub: 1
+          },
+          x: -50,
+          opacity: 0,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: 'power3.out'
+        });
+      }
+    });
+
+    // Smooth scroll for navigation links
+    $$('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = link.getAttribute('href').substring(1);
+        const el = document.getElementById(target);
+        if (el) {
+          gsap.to(window, {
+            duration: 1,
+            scrollTo: { y: el, offsetY: 80 },
+            ease: 'power3.inOut'
+          });
+        }
+      });
     });
   }
 
@@ -262,15 +298,6 @@
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
-
-  $$('a[href^="#"]').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const t = link.getAttribute('href').substring(1);
-      const el = document.getElementById(t);
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    });
-  });
 
   /* ═══════════════════════════════════════════════════════════════════ */
   /* THEME TOGGLE                                                       */
