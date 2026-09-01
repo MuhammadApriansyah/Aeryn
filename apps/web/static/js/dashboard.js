@@ -1,185 +1,286 @@
 /* ═══════════════════════════════════════════════════════════════════ */
-/* AERYN — Frontend Engine                                            */
-/* Tech: Vanilla JS + IntersectionObserver + WebSocket + Fetch API     */
+/* AERYN — Frontend Engine v2                                         */
 /* ═══════════════════════════════════════════════════════════════════ */
 
 (() => {
   'use strict';
 
-  /* ── State ── */
   const state = {
     theme: localStorage.getItem('aery-theme') || 'dark',
     lang: localStorage.getItem('aery-lang') || 'id',
-    ws: null,
     uptimeStart: Date.now(),
     requests: 0,
-    traces: 0,
     tokens: 0,
     chatHistory: []
   };
 
-  /* ── DOM Refs ── */
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => document.querySelectorAll(s);
 
-  /* ═══════════════════════════════════════════════════════════════════ */
-  /* CURSOR TRACKING — wip.workoholics.es concept                     */
-  /* ═══════════════════════════════════════════════════════════════════ */
-
+  /* ── Cursor ── */
   const cursor = $('#cursor');
   const trail = $('#cursor-trail');
-  let mouseX = 0, mouseY = 0;
-  let cursorX = 0, cursorY = 0;
+  let mx = 0, my = 0, cx = 0, cy = 0;
 
   document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    trail.style.left = mouseX + 'px';
-    trail.style.top = mouseY + 'px';
+    mx = e.clientX; my = e.clientY;
+    trail.style.left = mx + 'px';
+    trail.style.top = my + 'px';
   });
 
-  function animateCursor() {
-    cursorX += (mouseX - cursorX) * 0.15;
-    cursorY += (mouseY - cursorY) * 0.15;
-    cursor.style.left = cursorX + 'px';
-    cursor.style.top = cursorY + 'px';
-    requestAnimationFrame(animateCursor);
-  }
-  animateCursor();
+  (function animate() {
+    cx += (mx - cx) * 0.15;
+    cy += (my - cy) * 0.15;
+    cursor.style.left = cx + 'px';
+    cursor.style.top = cy + 'px';
+    requestAnimationFrame(animate);
+  })();
 
-  /* ── Hover detection for cursor expansion ── */
-  $$('a, button, .system-card, .work-item, .stack-item, .nav-link').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.style.width = '40px';
-      cursor.style.height = '40px';
-    });
-    el.addEventListener('mouseleave', () => {
-      cursor.style.width = '20px';
-      cursor.style.height = '20px';
-    });
+  $$('a,button,.card-sys,.work-item,.stack-item,.nav-link,.div-card,.tool-card,.ws-card,.int-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.width = '40px'; cursor.style.height = '40px'; });
+    el.addEventListener('mouseleave', () => { cursor.style.width = '20px'; cursor.style.height = '20px'; });
   });
 
-  /* ═══════════════════════════════════════════════════════════════════ */
-  /* SCROLL SNAP + REVEAL — IntersectionObserver                        */
-  /* ═══════════════════════════════════════════════════════════════════ */
-
+  /* ── Scroll reveal ── */
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('revealed');
-        const section = entry.target.getAttribute('data-section');
-        if (section) updateNavActive(section);
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('revealed');
+        const sec = e.target.getAttribute('data-section');
+        if (sec) $$('.nav-link').forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#${sec}`));
       }
     });
-  }, { threshold: 0.2, rootMargin: '-50px' });
+  }, { threshold: 0.15 });
 
   $$('section').forEach(s => observer.observe(s));
 
-  function updateNavActive(section) {
-    $$('.nav-link').forEach(link => {
-      link.classList.toggle('active', link.getAttribute('href') === `#section-${section}`);
-    });
-  }
-
-  /* ═══════════════════════════════════════════════════════════════════ */
-  /* SMOOTH SCROLL — seunghyuk.com concept                             */
-  /* ═══════════════════════════════════════════════════════════════════ */
-
-  window.scrollToSection = (id) => {
-    const el = document.getElementById(`section-${id}`);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  /* ── Smooth scroll ── */
+  window.scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
-  $$('a[href^="^#"]').forEach(link => {
+  $$('a[href^="#"]').forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
-      const target = link.getAttribute('href').substring(1);
-      scrollToSection(target);
+      const t = link.getAttribute('href').substring(1);
+      scrollTo(t);
     });
   });
 
-  /* ── Navbar scroll effect ── */
-  let lastScroll = 0;
+  /* ── Nav scroll ── */
   window.addEventListener('scroll', () => {
-    const nav = $('#top-nav');
-    if (window.scrollY > 50) {
-      nav.classList.add('scrolled');
-    } else {
-      nav.classList.remove('scrolled');
-    }
-    lastScroll = window.scrollY;
+    $('#top-nav').classList.toggle('scrolled', window.scrollY > 50);
   }, { passive: true });
 
-  /* ═══════════════════════════════════════════════════════════════════ */
-  /* THEME TOGGLE                                                       */
-  /* ═══════════════════════════════════════════════════════════════════ */
-
+  /* ── Theme ── */
   function applyTheme() {
     document.documentElement.setAttribute('data-theme', state.theme);
     localStorage.setItem('aery-theme', state.theme);
-    const btn = $('#theme-toggle');
-    if (btn) btn.textContent = state.theme === 'dark' ? '☀️' : '🌙';
+    $('#theme-btn').textContent = state.theme === 'dark' ? '☀️' : '🌙';
   }
-
-  $('#theme-toggle').addEventListener('click', () => {
+  $('#theme-btn').addEventListener('click', () => {
     state.theme = state.theme === 'dark' ? 'light' : 'dark';
     applyTheme();
     showToast(`Theme: ${state.theme}`, 'success');
   });
-
   applyTheme();
 
-  /* ═══════════════════════════════════════════════════════════════════ */
-  /* LANGUAGE TOGGLE                                                    */
-  /* ═══════════════════════════════════════════════════════════════════ */
-
-  $('#lang-toggle').addEventListener('click', () => {
+  /* ── Lang ── */
+  $('#lang-btn').addEventListener('click', () => {
     state.lang = state.lang === 'id' ? 'en' : 'id';
     localStorage.setItem('aery-lang', state.lang);
-    $('#lang-toggle').textContent = state.lang.toUpperCase();
+    $('#lang-btn').textContent = state.lang.toUpperCase();
     showToast(`Language: ${state.lang}`, 'success');
   });
 
-  /* ═══════════════════════════════════════════════════════════════════ */
-  /* LIVE DATA FETCHER — API polling                                   */
-  /* ═══════════════════════════════════════════════════════════════════ */
+  /* ── Toast ── */
+  function showToast(msg, type = 'info') {
+    const c = $('#toast-container');
+    if (!c) return;
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.textContent = msg;
+    c.appendChild(t);
+    setTimeout(() => {
+      t.style.opacity = '0';
+      t.style.transform = 'translateX(100%)';
+      t.style.transition = 'all 0.3s ease';
+      setTimeout(() => t.remove(), 300);
+    }, 3000);
+  }
+  window.toast = showToast;
 
+  /* ── Work items toggle ── */
+  window.toggleWork = (el) => {
+    el.classList.toggle('open');
+  };
+
+  /* ── Divisions execute ── */
+  window.execDiv = async (div) => {
+    showToast(`Executing ${div} division...`, 'info');
+    try {
+      const res = await fetch(`/divisions/${div}/execute`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ goal: `Execute ${div} task` })
+      });
+      const data = await res.json();
+      showToast(`${div} completed: ${data.status || 'ok'}`, 'success');
+    } catch (e) {
+      showToast(`Error: ${e.message}`, 'error');
+    }
+  };
+
+  /* ── Plugins run ── */
+  window.runPlugin = async (name) => {
+    showToast(`Running ${name}...`, 'info');
+    try {
+      const res = await fetch('/plugins/run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, input: 'test' })
+      });
+      const data = await res.json();
+      showToast(`${name}: ${data.status || 'ok'}`, 'success');
+    } catch (e) {
+      showToast(`Error: ${e.message}`, 'error');
+    }
+  };
+
+  /* ── Memory search ── */
+  window.searchMem = async () => {
+    const q = $('#mem-search').value.trim();
+    if (!q) return showToast('Enter search query', 'warning');
+    showToast(`Searching: ${q}...`, 'info');
+    try {
+      const res = await fetch(`/memory/recall?q=${encodeURIComponent(q)}`);
+      const data = await res.json();
+      const results = data.results || [];
+      const container = $('#mem-results');
+      if (results.length === 0) {
+        container.innerHTML = '<div style="color:var(--fg3)">No results found</div>';
+      } else {
+        container.innerHTML = results.map(r => `
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:0.5rem">
+            <div style="font-weight:600;margin-bottom:0.25rem">${r.key || r.source || 'memory'}</div>
+            <div style="color:var(--fg2);font-size:0.85rem">${(r.value || r.content || '').substring(0, 100)}</div>
+          </div>
+        `).join('');
+      }
+      showToast(`Found ${results.length} results`, 'success');
+    } catch (e) {
+      showToast(`Error: ${e.message}`, 'error');
+    }
+  };
+
+  /* ── Memory store ── */
+  window.storeMem = async () => {
+    const key = $('#mem-key').value.trim();
+    const val = $('#mem-val').value.trim();
+    if (!key || !val) return showToast('Enter key and value', 'warning');
+    showToast(`Storing: ${key}...`, 'info');
+    try {
+      const res = await fetch('/memory/store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key, value: val })
+      });
+      const data = await res.json();
+      showToast(`Stored: ${key}`, 'success');
+      $('#mem-key').value = '';
+      $('#mem-val').value = '';
+    } catch (e) {
+      showToast(`Error: ${e.message}`, 'error');
+    }
+  };
+
+  /* ── Chat ── */
+  const chatForm = $('#chat-form');
+  const chatWin = $('#chat-win');
+  const chatIn = $('#chat-in');
+
+  function appendMsg(type, text) {
+    const msg = document.createElement('div');
+    msg.className = `msg ${type}`;
+    msg.innerHTML = `<div class="bubble">${escapeHtml(text)}</div>`;
+    chatWin.appendChild(msg);
+    chatWin.scrollTop = chatWin.scrollHeight;
+    state.chatHistory.push({ type, text, time: Date.now() });
+  }
+
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  if (chatForm) {
+    chatForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = chatIn.value.trim();
+      if (!msg) return;
+      appendMsg('user', msg);
+      chatIn.value = '';
+      chatIn.style.height = 'auto';
+
+      const typing = document.createElement('div');
+      typing.className = 'msg asst';
+      typing.innerHTML = '<div class="bubble">Typing...</div>';
+      chatWin.appendChild(typing);
+      chatWin.scrollTop = chatWin.scrollHeight;
+
+      try {
+        const res = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ goal: msg })
+        });
+        const data = await res.json();
+        typing.remove();
+        appendMsg('asst', data.response || data.error || 'No response');
+      } catch (err) {
+        typing.remove();
+        appendMsg('asst', 'Sorry, error occurred.');
+      }
+    });
+
+    chatIn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.ctrlKey) {
+        e.preventDefault();
+        chatForm.dispatchEvent(new Event('submit'));
+      }
+    });
+
+    chatIn.addEventListener('input', () => {
+      chatIn.style.height = 'auto';
+      chatIn.style.height = Math.min(chatIn.scrollHeight, 120) + 'px';
+    });
+  }
+
+  /* ── Stats fetcher ── */
   async function fetchStats() {
     try {
       const res = await fetch('/dashboard/stats');
       if (!res.ok) return;
       const data = await res.json();
-      
-      // Update big stats
-      const req = data.requests || 0;
+      const req = data.requests || state.requests;
       const tok = data.tokens || state.tokens + Math.floor(Math.random() * 1000);
-      
-      animateValue('stat-requests', state.requests, req, 1000);
+      animateVal('s-req', state.requests, req, 1000);
       state.requests = req;
-      
-      animateValue('stat-tokens', state.tokens, tok, 1000);
+      animateVal('s-tok', state.tokens, tok, 1000);
       state.tokens = tok;
-
-      // Update live counters
-      const rps = (Math.random() * 5).toFixed(1);
-      const lat = Math.floor(Math.random() * 150 + 50);
-      const mem = (Math.random() * 50 + 400).toFixed(0);
-
-      $('#live-rps').textContent = rps;
-      $('#live-latency').textContent = lat;
-      $('#live-memory').textContent = mem;
-
-      // Update uptime
-      const uptime = Math.floor((Date.now() - state.uptimeStart) / 1000);
-      $('#stat-uptime').textContent = formatDuration(uptime);
-      $('#dossier-uptime').textContent = formatDuration(uptime);
-      $('#dossier-requests').textContent = state.requests;
-    } catch (e) {
-      // Silently fail
-    }
+      $('#l-rps').textContent = (Math.random() * 5).toFixed(1);
+      $('#l-lat').textContent = Math.floor(Math.random() * 150 + 50);
+      $('#l-mem').textContent = (Math.random() * 50 + 400).toFixed(0);
+      const up = Math.floor((Date.now() - state.uptimeStart) / 1000);
+      $('#s-up').textContent = fmtDur(up);
+      $('#dos-up').textContent = fmtDur(up);
+      $('#dos-req').textContent = state.requests;
+    } catch (e) { /* silent */ }
   }
 
-  function formatDuration(s) {
+  function fmtDur(s) {
     const d = Math.floor(s / 86400);
     const h = Math.floor((s % 86400) / 3600);
     const m = Math.floor((s % 3600) / 60);
@@ -190,238 +291,51 @@
     return `${sec}s`;
   }
 
-  /* ── Countdown timer (wip concept) ── */
-  function updateCountdown() {
-    const elapsed = Math.floor((Date.now() - state.uptimeStart) / 1000);
-    const d = Math.floor(elapsed / 86400);
-    const h = Math.floor((elapsed % 86400) / 3600);
-    const m = Math.floor((elapsed % 3600) / 60);
-    const s = elapsed % 60;
-    $('#cd-days').textContent = d;
-    $('#cd-hours').textContent = h;
-    $('#cd-mins').textContent = m;
-    $('#cd-secs').textContent = s;
-  }
-
-  setInterval(updateCountdown, 1000);
-
-  /* ── Numeric animation ── */
-  function animateValue(id, start, end, duration) {
+  function animateVal(id, start, end, dur) {
     const el = document.getElementById(id);
     if (!el) return;
-    const startTime = performance.now();
+    const t0 = performance.now();
     const diff = end - start;
-    
-    function step(currentTime) {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const current = Math.floor(start + diff * eased);
-      el.textContent = current.toLocaleString();
-      if (progress < 1) requestAnimationFrame(step);
+    function step(t) {
+      const p = Math.min((t - t0) / dur, 1);
+      const e = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.floor(start + diff * e).toLocaleString();
+      if (p < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
   }
 
-  setInterval(fetchStats, 5000);
-  fetchStats();
+  /* ── Countdown ── */
+  setInterval(() => {
+    const s = Math.floor((Date.now() - state.uptimeStart) / 1000);
+    $('#cd-d').textContent = Math.floor(s / 86400);
+    $('#cd-h').textContent = Math.floor((s % 86400) / 3600);
+    $('#cd-m').textContent = Math.floor((s % 3600) / 60);
+    $('#cd-s').textContent = s % 60;
+  }, 1000);
 
-  /* ═══════════════════════════════════════════════════════════════════ */
-  /* CHAT — Interactive AI demo                                        */
-  /* ═══════════════════════════════════════════════════════════════════ */
+  /* ── Case number ── */
+  const caseNum = $('#case-num');
+  if (caseNum) caseNum.textContent = String(Math.floor(Math.random() * 999) + 1).padStart(3, '0');
 
-  const chatForm = $('#chat-form');
-  const chatWindow = $('#chat-window');
-  const chatInput = $('#chat-input');
-
-  if (chatForm) {
-    chatForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const msg = chatInput.value.trim();
-      if (!msg) return;
-
-      // Add user message
-      appendMessage('user', msg);
-      chatInput.value = '';
-      chatInput.style.height = 'auto';
-
-      // Show typing indicator
-      const typing = document.createElement('div');
-      typing.className = 'chat-msg assistant';
-      typing.innerHTML = '<div class="msg-content">Typing...</div>';
-      chatWindow.appendChild(typing);
-      chatWindow.scrollTop = chatWindow.scrollHeight;
-
-      try {
-        const res = await fetch('/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ goal: msg })
-        });
-        const data = await res.json();
-        typing.remove();
-        
-        const response = data.response || data.error || 'No response';
-        appendMessage('assistant', response);
-      } catch (err) {
-        typing.remove();
-        appendMessage('assistant', 'Sorry, I encountered an error. Please try again.');
-      }
-    });
-
-    // Ctrl+Enter to send
-    chatInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && e.ctrlKey) {
-        e.preventDefault();
-        chatForm.dispatchEvent(new Event('submit'));
-      }
-    });
-
-    // Auto-resize textarea
-    chatInput.addEventListener('input', () => {
-      chatInput.style.height = 'auto';
-      chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
-    });
-  }
-
-  function appendMessage(type, text) {
-    const msg = document.createElement('div');
-    msg.className = `chat-msg ${type}`;
-    msg.innerHTML = `<div class="msg-content">${escapeHtml(text)}</div>`;
-    chatWindow.appendChild(msg);
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-    state.chatHistory.push({ type, text, time: Date.now() });
-  }
-
-  function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
-
-  /* ═══════════════════════════════════════════════════════════════════ */
-  /* TOAST NOTIFICATIONS                                                */
-  /* ═══════════════════════════════════════════════════════════════════ */
-
-  function showToast(message, type = 'info') {
-    const container = $('#toast-container');
-    if (!container) return;
-    
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = message;
-    container.appendChild(toast);
-
-    setTimeout(() => {
-      toast.style.opacity = '0';
-      toast.style.transform = 'translateX(100%)';
-      toast.style.transition = 'all 0.3s ease';
-      setTimeout(() => toast.remove(), 300);
-    }, 3000);
-  }
-
-  /* ═══════════════════════════════════════════════════════════════════ */
-  /* SYSTEM CARDS — Click to explore                                   */
-  /* ═══════════════════════════════════════════════════════════════════ */
-
-  $$('.system-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const sys = card.getAttribute('data-system');
-      showToast(`Exploring ${sys} — Coming soon!`, 'info');
-    });
-  });
-
-  /* ═══════════════════════════════════════════════════════════════════ */
-  /* WORK ITEMS — Click to expand                                      */
-  /* ═══════════════════════════════════════════════════════════════════ */
-
-  $$('.work-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const project = item.getAttribute('data-project');
-      item.classList.toggle('expanded');
-      showToast(`Project: ${project}`, 'success');
-    });
-  });
-
-  /* ═══════════════════════════════════════════════════════════════════ */
-  /* STACK ITEMS — Click to highlight                                  */
-  /* ═══════════════════════════════════════════════════════════════════ */
-
-  $$('.stack-item').forEach(item => {
-    item.addEventListener('click', () => {
-      $$('.stack-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-    });
-  });
-
-  /* ═══════════════════════════════════════════════════════════════════ */
-  /* CASE NUMBER GENERATOR — Fun detail                                */
-  /* ═══════════════════════════════════════════════════════════════════ */
-
-  const caseSuffix = $('#case-suffix');
-  if (caseSuffix) {
-    const num = Math.floor(Math.random() * 999) + 1;
-    caseSuffix.textContent = num.toString().padStart(3, '0');
-  }
-
-  /* ── Case scope animation ── */
+  /* ── Case scope ── */
   const caseScope = $('#case-scope');
   if (caseScope) {
-    let val = 0;
-    setInterval(() => {
-      val += Math.floor(Math.random() * 100);
-      caseScope.textContent = '$' + val.toLocaleString();
-    }, 2000);
+    let v = 0;
+    setInterval(() => { v += Math.floor(Math.random() * 100); caseScope.textContent = '$' + v.toLocaleString(); }, 2000);
   }
 
-  /* ═══════════════════════════════════════════════════════════════════ */
-  /* KEYBOARD SHORTCUTS                                                */
-  /* ═══════════════════════════════════════════════════════════════════ */
-
+  /* ── Keyboard ── */
   document.addEventListener('keydown', (e) => {
-    // Ctrl+K for command palette
     if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
       showToast('Command palette — Coming soon!', 'info');
     }
-    // Esc to close modals
-    if (e.key === 'Escape') {
-      $$('.modal.active').forEach(m => m.classList.remove('active'));
-    }
   });
 
-  /* ═══════════════════════════════════════════════════════════════════ */
-  /* PERFORMANCE MONITORING — Web Vitals                             */
-  /* ═══════════════════════════════════════════════════════════════════ */
+  setInterval(fetchStats, 5000);
+  fetchStats();
 
-  if ('PerformanceObserver' in window) {
-    const perfObserver = new PerformanceObserver((list) => {
-      for (const entry of list.getEntries()) {
-        if (entry.entryType === 'largest-contentful-paint') {
-          // LCP logged
-        }
-      }
-    });
-    perfObserver.observe({ entryTypes: ['largest-contentful-paint', 'first-input'] });
-  }
-
-  /* ── Log initial load ── */
-  window.addEventListener('load', () => {
-    const timing = performance.timing;
-    const loadTime = timing.loadEventEnd - timing.navigationStart;
-    // Load time logged
-  });
-
-  /* ═══════════════════════════════════════════════════════════════════ */
-  /* EXPORTS                                                           */
-  /* ═══════════════════════════════════════════════════════════════════ */
-
-  window.Aery = {
-    state,
-    showToast,
-    scrollToSection,
-    fetchStats,
-    appendMessage
-  };
+  window.Aery = { state, showToast, scrollTo, fetchStats };
 
 })();
