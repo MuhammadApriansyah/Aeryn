@@ -1,7 +1,3 @@
-//! Database adapter for Aeryn.
-//!
-//! Provides SQLite connectivity with connection pooling.
-
 use std::collections::HashMap;
 use std::sync::Arc;
 
