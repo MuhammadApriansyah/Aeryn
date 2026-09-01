@@ -4,731 +4,762 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aeryn — AI Agent Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/static/css/dashboard.css">
+<script src="/static/vendor/gsap.min.js" defer></script>
+<script src="/static/vendor/three.min.js" defer></script>
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to main content</a>
-<div class="toast-container" id="toast-container" role="status" aria-live="polite"></div>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="cursor-follower"></div>
 
 <div class="app">
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
     <div class="sidebar-header">
-      <span class="sidebar-logo">🤖 Aeryn</span>
-      <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">☰</button>
+      <div class="sidebar-brand">
+        <span class="sidebar-logo">AERYN</span>
+        <span class="sidebar-tag">AI Platform</span>
+      </div>
+      <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+        <span></span><span></span>
+      </button>
     </div>
+    
     <nav class="sidebar-nav">
-      <div class="nav-section">
-        <div class="nav-section-title">Main</div>
-        <button class="nav-item active" data-section="overview"><i>📊</i> Overview</button>
-        <button class="nav-item" data-section="chat"><i>💬</i> Chat</button>
-        <button class="nav-item" data-section="divisions"><i>🧠</i> Divisions</button>
+      <div class="nav-group">
+        <div class="nav-group-title">Overview</div>
+        <a href="#overview" class="nav-item active" data-section="overview">
+          <span class="nav-icon">📊</span>
+          <span class="nav-text">Dashboard</span>
+        </a>
+        <a href="#analytics" class="nav-item" data-section="analytics">
+          <span class="nav-icon">📈</span>
+          <span class="nav-text">Analytics</span>
+        </a>
+        <a href="#activity" class="nav-item" data-section="activity">
+          <span class="nav-icon">⚡</span>
+          <span class="nav-text">Activity</span>
+        </a>
       </div>
-      <div class="nav-section">
-        <div class="nav-section-title">Workspace</div>
-        <button class="nav-item" data-section="workspaces"><i>🏢</i> Workspaces</button>
-        <button class="nav-item" data-section="projects"><i>📁</i> Projects</button>
-        <button class="nav-item" data-section="workflows"><i>⚡</i> Workflows</button>
+      
+      <div class="nav-group">
+        <div class="nav-group-title">Intelligence</div>
+        <a href="#chat" class="nav-item" data-section="chat">
+          <span class="nav-icon">💬</span>
+          <span class="nav-text">Chat</span>
+        </a>
+        <a href="#divisions" class="nav-item" data-section="divisions">
+          <span class="nav-icon">🧠</span>
+          <span class="nav-text">Divisions</span>
+        </a>
+        <a href="#agents" class="nav-item" data-section="agents">
+          <span class="nav-icon">🤖</span>
+          <span class="nav-text">Agents</span>
+        </a>
+        <a href="#memory" class="nav-item" data-section="memory">
+          <span class="nav-icon">🧩</span>
+          <span class="nav-text">Memory</span>
+        </a>
       </div>
-      <div class="nav-section">
-        <div class="nav-section-title">Intelligence</div>
-        <button class="nav-item" data-section="plugins"><i>🔌</i> Plugins <span class="nav-badge" id="plugin-count">2</span></button>
-        <button class="nav-item" data-section="memory"><i>🧩</i> Memory</button>
-        <button class="nav-item" data-section="tools"><i>🔧</i> Tools</button>
-        <button class="nav-item" data-section="agents"><i>🤖</i> Agents</button>
+      
+      <div class="nav-group">
+        <div class="nav-group-title">Workspace</div>
+        <a href="#projects" class="nav-item" data-section="projects">
+          <span class="nav-icon">📁</span>
+          <span class="nav-text">Projects</span>
+        </a>
+        <a href="#workflows" class="nav-item" data-section="workflows">
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-text">Workflows</span>
+        </a>
+        <a href="#workspaces" class="nav-item" data-section="workspaces">
+          <span class="nav-icon">🏢</span>
+          <span class="nav-text">Workspaces</span>
+        </a>
       </div>
-      <div class="nav-section">
-        <div class="nav-section-title">System</div>
-        <button class="nav-item" data-section="observability"><i>📈</i> Observability</button>
-        <button class="nav-item" data-section="billing"><i>💰</i> Billing</button>
-        <button class="nav-item" data-section="notifications"><i>🔔</i> Notifications <span class="nav-badge" id="notif-count">0</span></button>
-        <button class="nav-item" data-section="settings"><i>⚙️</i> Settings</button>
-        <button class="nav-item" data-section="admin"><i>🛡️</i> Admin</button>
+      
+      <div class="nav-group">
+        <div class="nav-group-title">Extensions</div>
+        <a href="#plugins" class="nav-item" data-section="plugins">
+          <span class="nav-icon">🔌</span>
+          <span class="nav-text">Plugins</span>
+          <span class="nav-count">2</span>
+        </a>
+        <a href="#tools" class="nav-item" data-section="tools">
+          <span class="nav-icon">🔧</span>
+          <span class="nav-text">Tools</span>
+        </a>
+        <a href="#integrations" class="nav-item" data-section="integrations">
+          <span class="nav-icon">🔗</span>
+          <span class="nav-text">Integrations</span>
+        </a>
+      </div>
+      
+      <div class="nav-group">
+        <div class="nav-group-title">System</div>
+        <a href="#observability" class="nav-item" data-section="observability">
+          <span class="nav-icon">📊</span>
+          <span class="nav-text">Observability</span>
+        </a>
+        <a href="#billing" class="nav-item" data-section="billing">
+          <span class="nav-icon">💰</span>
+          <span class="nav-text">Billing</span>
+        </a>
+        <a href="#notifications" class="nav-item" data-section="notifications">
+          <span class="nav-icon">🔔</span>
+          <span class="nav-text">Notifications</span>
+          <span class="nav-count">0</span>
+        </a>
+        <a href="#settings" class="nav-item" data-section="settings">
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-text">Settings</span>
+        </a>
       </div>
     </nav>
+    
     <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="user-avatar">S</div>
+        <div class="user-info">
+          <span class="user-name">Sen</span>
+          <span class="user-role">Admin</span>
+        </div>
+      </div>
       <div class="sidebar-status">
         <span class="status-dot online" id="status-dot"></span>
-        <span id="status-text">Online</span>
+        <span id="status-text">System Online</span>
       </div>
     </div>
   </aside>
 
-  <!-- Main -->
+  <!-- Main Content -->
   <main class="main" id="main-content">
-    <header class="header">
-      <h1 class="header-title" id="page-title">Overview</h1>
-      <div class="header-actions">
-        <button class="header-btn" onclick="toggleTheme()" id="theme-toggle" aria-label="Toggle theme">🌙</button>
-        <button class="header-btn" onclick="refreshAll()" aria-label="Refresh data">🔄</button>
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="breadcrumb">
+          <span class="breadcrumb-item">Home</span>
+          <span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-item active" id="breadcrumb-current">Dashboard</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <input type="text" placeholder="Search anything..." class="search-input" aria-label="Search">
+          <span class="search-icon">🔍</span>
+        </div>
+        <button class="topbar-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+          <span class="theme-icon" id="theme-icon">🌙</span>
+        </button>
+        <button class="topbar-btn" onclick="refreshAll()" aria-label="Refresh">
+          🔄
+        </button>
       </div>
     </header>
 
-    <div class="content">
-
-      <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- Page Content -->
+    <div class="page-content">
+    
       <!-- OVERVIEW SECTION -->
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <section class="section active" id="section-overview" role="region" aria-label="Overview">
+      <section class="page-section active" id="section-overview">
         <div class="section-header">
-          <h2 class="section-title">Overview</h2>
-          <p class="section-desc">Monitor your Aeryn AI platform at a glance</p>
+          <h1 class="section-title">Dashboard</h1>
+          <p class="section-desc">Welcome back! Here's your AI platform overview</p>
         </div>
-        <div class="grid grid-4" style="margin-bottom: 24px;">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background: rgba(34,197,94,0.1);">✅</div>
-              <div>
-                <div class="card-title">System Status</div>
-                <div class="card-subtitle" id="ov-status">Checking...</div>
-              </div>
+        
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-card stat-primary">
+            <div class="stat-icon">🧠</div>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-divisions">5</span>
+              <span class="stat-label">Divisions</span>
             </div>
+            <div class="stat-trend up">+2 this week</div>
           </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background: rgba(99,102,241,0.1);">🧠</div>
-              <div>
-                <div class="card-title">Memory Usage</div>
-                <div class="card-subtitle" id="ov-memory">— MB</div>
-              </div>
+          <div class="stat-card stat-success">
+            <div class="stat-icon">✅</div>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-status">Healthy</span>
+              <span class="stat-label">System Status</span>
             </div>
+            <div class="stat-trend up">99.9% uptime</div>
           </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background: rgba(234,179,8,0.1);">📊</div>
-              <div>
-                <div class="card-title">Traces</div>
-                <div class="card-subtitle" id="ov-traces">—</div>
-              </div>
+          <div class="stat-card stat-warning">
+            <div class="stat-icon">📊</div>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-traces">—</span>
+              <span class="stat-label">Traces</span>
             </div>
+            <div class="stat-trend">Real-time</div>
           </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background: rgba(168,85,247,0.1);">🔧</div>
-              <div>
-                <div class="card-title">Plugins</div>
-                <div class="card-subtitle" id="ov-plugins">—</div>
-              </div>
+          <div class="stat-card stat-info">
+            <div class="stat-icon">🔧</div>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-plugins">2</span>
+              <span class="stat-label">Plugins</span>
             </div>
+            <div class="stat-trend">Active</div>
           </div>
         </div>
-        <div class="grid grid-2">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon">🚀</div>
-              <div>
-                <div class="card-title">Quick Actions</div>
-                <div class="card-subtitle">Common tasks at your fingertips</div>
-              </div>
-            </div>
-            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-              <button class="btn btn-primary" onclick="switchSection('chat')">💬 Chat</button>
-              <button class="btn btn-secondary" onclick="switchSection('divisions')">🧠 Divisions</button>
-              <button class="btn btn-secondary" onclick="switchSection('plugins')">🔌 Plugins</button>
-              <button class="btn btn-secondary" onclick="switchSection('workflows')">⚡ Workflows</button>
-              <button class="btn btn-secondary" onclick="switchSection('memory')">🧩 Memory</button>
-            </div>
+        
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <h3 class="subsection-title">Quick Actions</h3>
+          <div class="actions-grid">
+            <button class="action-card" onclick="switchSection('chat')">
+              <span class="action-icon">💬</span>
+              <span class="action-text">Start Chat</span>
+            </button>
+            <button class="action-card" onclick="switchSection('divisions')">
+              <span class="action-icon">🧠</span>
+              <span class="action-text">Run Division</span>
+            </button>
+            <button class="action-card" onclick="switchSection('plugins')">
+              <span class="action-icon">🔌</span>
+              <span class="action-text">Run Plugin</span>
+            </button>
+            <button class="action-card" onclick="switchSection('workflows')">
+              <span class="action-icon">⚙️</span>
+              <span class="action-text">Create Workflow</span>
+            </button>
+            <button class="action-card" onclick="switchSection('memory')">
+              <span class="action-icon">🧩</span>
+              <span class="action-text">Search Memory</span>
+            </button>
+            <button class="action-card" onclick="switchSection('tools')">
+              <span class="action-icon">🔧</span>
+              <span class="action-text">Discover Tools</span>
+            </button>
           </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon">📈</div>
-              <div>
-                <div class="card-title">System Health</div>
-                <div class="card-subtitle">Real-time monitoring</div>
+        </div>
+        
+        <!-- Recent Activity -->
+        <div class="activity-section">
+          <h3 class="subsection-title">Recent Activity</h3>
+          <div class="activity-list" id="recent-activity">
+            <div class="activity-item">
+              <div class="activity-icon success">✅</div>
+              <div class="activity-content">
+                <span class="activity-text">System initialized successfully</span>
+                <span class="activity-time">Just now</span>
               </div>
             </div>
-            <div id="ov-health-details">Loading...</div>
+            <div class="activity-item">
+              <div class="activity-icon info">🧠</div>
+              <div class="activity-content">
+                <span class="activity-text">5 divisions loaded</span>
+                <span class="activity-time">Just now</span>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon warning">🔌</div>
+              <div class="activity-content">
+                <span class="activity-text">2 plugins active</span>
+                <span class="activity-time">Just now</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <!-- CHAT SECTION -->
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <section class="section" id="section-chat" role="region" aria-label="Chat">
+      <!-- ANALYTICS SECTION -->
+      <section class="page-section" id="section-analytics">
         <div class="section-header">
-          <h2 class="section-title">Chat</h2>
+          <h1 class="section-title">Analytics</h1>
+          <p class="section-desc">Deep insights into your AI platform performance</p>
+        </div>
+        <div class="analytics-grid">
+          <div class="card chart-card">
+            <div class="card-header">
+              <h3>Request Volume</h3>
+              <span class="badge badge-success">+24%</span>
+            </div>
+            <div class="chart-placeholder" id="chart-requests">
+              <div class="chart-bar" style="height: 40%"></div>
+              <div class="chart-bar" style="height: 60%"></div>
+              <div class="chart-bar" style="height: 45%"></div>
+              <div class="chart-bar" style="height: 80%"></div>
+              <div class="chart-bar" style="height: 65%"></div>
+              <div class="chart-bar" style="height: 90%"></div>
+              <div class="chart-bar" style="height: 70%"></div>
+            </div>
+          </div>
+          <div class="card chart-card">
+            <div class="card-header">
+              <h3>Response Time</h3>
+              <span class="badge badge-info">156ms avg</span>
+            </div>
+            <div class="chart-placeholder" id="chart-response">
+              <div class="chart-line"></div>
+            </div>
+          </div>
+          <div class="card chart-card">
+            <div class="card-header">
+              <h3>Token Usage</h3>
+              <span class="badge badge-warning">2.4M tokens</span>
+            </div>
+            <div class="chart-placeholder" id="chart-tokens">
+              <div class="donut-chart">
+                <span class="donut-value">67%</span>
+              </div>
+            </div>
+          </div>
+          <div class="card chart-card">
+            <div class="card-header">
+              <h3>Active Sessions</h3>
+              <span class="badge badge-success">12</span>
+            </div>
+            <div class="chart-placeholder" id="chart-sessions">
+              <div class="chart-area"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACTIVITY SECTION -->
+      <section class="page-section" id="section-activity">
+        <div class="section-header">
+          <h1 class="section-title">Activity</h1>
+          <p class="section-desc">Real-time activity feed from all modules</p>
+        </div>
+        <div class="activity-feed" id="activity-feed">
+          <div class="activity-timeline" id="activity-timeline"></div>
+        </div>
+      </section>
+
+      <!-- CHAT SECTION -->
+      <section class="page-section" id="section-chat">
+        <div class="section-header">
+          <h1 class="section-title">Chat</h1>
           <p class="section-desc">Conversational AI with tool execution and division routing</p>
         </div>
-        <div class="grid grid-2">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon">💬</div>
-              <div>
-                <div class="card-title">Conversation</div>
-                <div class="card-subtitle">Chat with Aeryn AI</div>
+        <div class="chat-layout">
+          <div class="chat-main">
+            <div class="chat-messages" id="chat-messages">
+              <div class="chat-msg system">
+                <div class="msg-content">Welcome! Ask me anything or try a command.</div>
               </div>
             </div>
-            <div class="chat-container">
-              <div class="chat-messages" id="chat-messages">
-                <div class="chat-message system">Welcome! Ask me anything or try a command.</div>
-              </div>
-              <div class="chat-input-container">
-                <textarea id="chat-input" placeholder="Type your message... (Enter to send, Shift+Enter for new line)" aria-label="Chat message"></textarea>
-                <button class="btn btn-primary" onclick="sendChat()">Send</button>
-              </div>
+            <div class="chat-input-wrap">
+              <textarea id="chat-input" placeholder="Type your message... (Enter to send)" rows="1"></textarea>
+              <button class="btn btn-primary chat-send" onclick="sendChat()">Send</button>
             </div>
           </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon">⚡</div>
-              <div>
-                <div class="card-title">Quick Run</div>
-                <div class="card-subtitle">Execute a task directly</div>
-              </div>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-              <textarea id="run-input" class="textarea" placeholder="Enter your goal or task..."></textarea>
-              <button class="btn btn-primary" onclick="runTask()">Run Task</button>
-              <div id="run-result"></div>
+          <div class="chat-sidebar">
+            <div class="card">
+              <h4>Quick Actions</h4>
+              <button class="btn btn-sm btn-secondary" onclick="runQuickTask('Summarize my vault')">📝 Summarize Vault</button>
+              <button class="btn btn-sm btn-secondary" onclick="runQuickTask('Search for AI agents')">🔍 Search</button>
+              <button class="btn btn-sm btn-secondary" onclick="runQuickTask('Generate a report')">📊 Report</button>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════════════════════════ -->
       <!-- DIVISIONS SECTION -->
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <section class="section" id="section-divisions" role="region" aria-label="Divisions">
+      <section class="page-section" id="section-divisions">
         <div class="section-header">
-          <h2 class="section-title">Cognitive Divisions</h2>
+          <h1 class="section-title">Cognitive Divisions</h1>
           <p class="section-desc">5 specialized AI divisions for different tasks</p>
         </div>
-        <div class="grid grid-3" id="divisions-grid">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background: rgba(239,68,68,0.1);">🎨</div>
-              <div>
-                <div class="card-title">Creative</div>
-                <div class="card-subtitle">POV, Style, Master</div>
-              </div>
-            </div>
-            <p style="color: var(--text2); font-size: 13px; margin-bottom: 12px;">Content generation, creative writing, stylistic adaptation</p>
-            <button class="btn btn-sm btn-primary" onclick="executeDivision('creative')">Execute</button>
+        <div class="divisions-grid">
+          <div class="division-card" onclick="executeDivision('creative')">
+            <div class="division-icon">🎨</div>
+            <h3>Creative</h3>
+            <p>Content generation, creative writing, stylistic adaptation</p>
+            <div class="division-agents">POV, Style, Master</div>
+            <button class="btn btn-sm btn-primary">Execute</button>
           </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background: rgba(59,130,246,0.1);">🧠</div>
-              <div>
-                <div class="card-title">Psychology</div>
-                <div class="card-subtitle">Sub-agents, Master</div>
-              </div>
-            </div>
-            <p style="color: var(--text2); font-size: 13px; margin-bottom: 12px;">Emotional intelligence, behavioral analysis, mood detection</p>
-            <button class="btn btn-sm btn-primary" onclick="executeDivision('psych')">Execute</button>
+          <div class="division-card" onclick="executeDivision('psych')">
+            <div class="division-icon">🧠</div>
+            <h3>Psychology</h3>
+            <p>Emotional intelligence, behavioral analysis, mood detection</p>
+            <div class="division-agents">Sub-agents, Master</div>
+            <button class="btn btn-sm btn-primary">Execute</button>
           </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background: rgba(34,197,94,0.1);">🔬</div>
-              <div>
-                <div class="card-title">Reasoning</div>
-                <div class="card-subtitle">MCTS, FOL, Critique, Graph</div>
-              </div>
-            </div>
-            <p style="color: var(--text2); font-size: 13px; margin-bottom: 12px;">Logical reasoning, planning, theorem proving, verification</p>
-            <button class="btn btn-sm btn-primary" onclick="executeDivision('reasoning')">Execute</button>
+          <div class="division-card" onclick="executeDivision('reasoning')">
+            <div class="division-icon">🔬</div>
+            <h3>Reasoning</h3>
+            <p>Logical reasoning, planning, theorem proving, verification</p>
+            <div class="division-agents">MCTS, FOL, Critique, Graph</div>
+            <button class="btn btn-sm btn-primary">Execute</button>
           </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background: rgba(234,179,8,0.1);">🏛️</div>
-              <div>
-                <div class="card-title">Governance</div>
-                <div class="card-subtitle">Sub-agents, Master</div>
-              </div>
-            </div>
-            <p style="color: var(--text2); font-size: 13px; margin-bottom: 12px;">Compliance enforcement, policy management, audit trails</p>
-            <button class="btn btn-sm btn-primary" onclick="executeDivision('gov')">Execute</button>
+          <div class="division-card" onclick="executeDivision('gov')">
+            <div class="division-icon">🏛️</div>
+            <h3>Governance</h3>
+            <p>Compliance enforcement, policy management, audit trails</p>
+            <div class="division-agents">Sub-agents, Master</div>
+            <button class="btn btn-sm btn-primary">Execute</button>
           </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background: rgba(168,85,247,0.1);">⚙️</div>
-              <div>
-                <div class="card-title">Infrastructure</div>
-                <div class="card-subtitle">Sync, Validator, Master</div>
-              </div>
-            </div>
-            <p style="color: var(--text2); font-size: 13px; margin-bottom: 12px;">System synchronization, data validation, health monitoring</p>
-            <button class="btn btn-sm btn-primary" onclick="executeDivision('infra')">Execute</button>
+          <div class="division-card" onclick="executeDivision('infra')">
+            <div class="division-icon">⚙️</div>
+            <h3>Infrastructure</h3>
+            <p>System synchronization, data validation, health monitoring</p>
+            <div class="division-agents">Sync, Validator, Master</div>
+            <button class="btn btn-sm btn-primary">Execute</button>
           </div>
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <!-- WORKSPACES SECTION -->
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <section class="section" id="section-workspaces" role="region" aria-label="Workspaces">
+      <!-- AGENTS SECTION -->
+      <section class="page-section" id="section-agents">
         <div class="section-header">
-          <h2 class="section-title">Workspaces</h2>
-          <p class="section-desc">Multi-tenant workspace management</p>
+          <h1 class="section-title">Agents</h1>
+          <p class="section-desc">Manage and monitor AI agents</p>
         </div>
-        <div class="grid grid-2">
+        <div class="agents-layout">
           <div class="card">
-            <div class="card-header">
-              <div class="card-icon">🏢</div>
-              <div>
-                <div class="card-title">Your Workspaces</div>
-                <div class="card-subtitle">Manage your team workspaces</div>
-              </div>
-            </div>
-            <div id="workspaces-list">
-              <div class="loading"><div class="spinner"></div> Loading...</div>
-            </div>
+            <h3>Registered Agents</h3>
+            <div id="agents-list"></div>
           </div>
           <div class="card">
-            <div class="card-header">
-              <div class="card-icon">➕</div>
-              <div>
-                <div class="card-title">Create Workspace</div>
-                <div class="card-subtitle">Set up a new workspace</div>
-              </div>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-              <input type="text" class="input" id="ws-name" placeholder="Workspace name">
-              <textarea class="textarea" id="ws-desc" placeholder="Description"></textarea>
-              <button class="btn btn-primary" onclick="createWorkspace()">Create</button>
-            </div>
+            <h3>Agent Tasks</h3>
+            <div id="agent-tasks-list"></div>
           </div>
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <!-- PROJECTS SECTION -->
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <section class="section" id="section-projects" role="region" aria-label="Projects">
-        <div class="section-header">
-          <h2 class="section-title">Projects</h2>
-          <p class="section-desc">Manage your AI projects and tasks</p>
-        </div>
-        <div class="grid grid-3" id="projects-grid">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon">📋</div>
-              <div>
-                <div class="card-title">Planning Tasks</div>
-                <div class="card-subtitle" id="planning-count">—</div>
-              </div>
-            </div>
-            <div id="planning-list">Loading...</div>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon">📝</div>
-              <div>
-                <div class="card-title">Shared Tasks</div>
-                <div class="card-subtitle" id="shared-count">—</div>
-              </div>
-            </div>
-            <div id="shared-tasks-list">Loading...</div>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon">⏰</div>
-              <div>
-                <div class="card-title">Reminders</div>
-                <div class="card-subtitle" id="reminders-count">—</div>
-              </div>
-            </div>
-            <div id="reminders-list">Loading...</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <!-- WORKFLOWS SECTION -->
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <section class="section" id="section-workflows" role="region" aria-label="Workflows">
-        <div class="section-header">
-          <h2 class="section-title">Workflows</h2>
-          <p class="section-desc">Multi-step automation workflows</p>
-        </div>
-        <div class="grid grid-2">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon">⚡</div>
-              <div>
-                <div class="card-title">Active Workflows</div>
-                <div class="card-subtitle">Manage running workflows</div>
-              </div>
-            </div>
-            <div id="workflows-list">
-              <div class="loading"><div class="spinner"></div> Loading...</div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon">➕</div>
-              <div>
-                <div class="card-title">Create Workflow</div>
-                <div class="card-subtitle">Start a new workflow</div>
-              </div>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-              <input type="text" class="input" id="wf-name" placeholder="Workflow name">
-              <textarea class="textarea" id="wf-idea" placeholder="Describe your SaaS idea or workflow goal..."></textarea>
-              <button class="btn btn-primary" onclick="createWorkflow()">Create Workflow</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <!-- PLUGINS SECTION -->
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <section class="section" id="section-plugins" role="region" aria-label="Plugins">
-        <div class="section-header">
-          <h2 class="section-title">Plugins</h2>
-          <p class="section-desc">Extend Aeryn with powerful plugins</p>
-        </div>
-        <div class="grid grid-3" id="plugins-grid">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon">🔍</div>
-              <div>
-                <div class="card-title">Code Review</div>
-                <div class="card-subtitle">Analyze Python code</div>
-              </div>
-            </div>
-            <textarea class="textarea" id="plugin-code-review-input" placeholder="Paste your Python code here..." style="min-height: 80px;"></textarea>
-            <button class="btn btn-sm btn-primary" style="margin-top: 8px;" onclick="runPlugin('code-review')">Analyze</button>
-            <div id="plugin-code-review-output" style="margin-top: 8px;"></div>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon">🔎</div>
-              <div>
-                <div class="card-title">Research Assistant</div>
-                <div class="card-subtitle">Search vault & summarize</div>
-              </div>
-            </div>
-            <input type="text" class="input" id="plugin-research-input" placeholder="Search query...">
-            <button class="btn btn-sm btn-primary" style="margin-top: 8px;" onclick="runPlugin('research-assistant')">Search</button>
-            <div id="plugin-research-output" style="margin-top: 8px;"></div>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon">📦</div>
-              <div>
-                <div class="card-title">Installed Plugins</div>
-                <div class="card-subtitle" id="installed-plugins-count">—</div>
-              </div>
-            </div>
-            <div id="installed-plugins-list">Loading...</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ═══════════════════════════════════════════════════════════════ -->
       <!-- MEMORY SECTION -->
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <section class="section" id="section-memory" role="region" aria-label="Memory">
+      <section class="page-section" id="section-memory">
         <div class="section-header">
-          <h2 class="section-title">Memory</h2>
+          <h1 class="section-title">Memory</h1>
           <p class="section-desc">PostgreSQL-backed semantic memory system</p>
         </div>
-        <div class="grid grid-4" style="margin-bottom: 24px;">
-          <div class="card">
-            <div class="card-value" id="mem-sessions">—</div>
-            <div class="card-label">Sessions</div>
+        <div class="memory-stats">
+          <div class="memory-stat">
+            <span class="mem-num" id="mem-sessions">—</span>
+            <span class="mem-label">Sessions</span>
           </div>
-          <div class="card">
-            <div class="card-value" id="mem-total">—</div>
-            <div class="card-label">Total Memories</div>
+          <div class="memory-stat">
+            <span class="mem-num" id="mem-total">—</span>
+            <span class="mem-label">Memories</span>
           </div>
-          <div class="card">
-            <div class="card-value" id="mem-hot">—</div>
-            <div class="card-label">Hot</div>
+          <div class="memory-stat">
+            <span class="mem-num" id="mem-hot">—</span>
+            <span class="mem-label">Hot</span>
           </div>
-          <div class="card">
-            <div class="card-value" id="mem-warm">—</div>
-            <div class="card-label">Warm</div>
+          <div class="memory-stat">
+            <span class="mem-num" id="mem-warm">—</span>
+            <span class="mem-label">Warm</span>
+          </div>
+          <div class="memory-stat">
+            <span class="mem-num" id="mem-cold">—</span>
+            <span class="mem-label">Cold</span>
           </div>
         </div>
-        <div class="grid grid-2">
+        <div class="memory-layout">
           <div class="card">
-            <div class="card-header">
-              <div class="card-icon">🔍</div>
-              <div>
-                <div class="card-title">Search Memories</div>
-                <div class="card-subtitle">Semantic search across all memories</div>
-              </div>
-            </div>
-            <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-              <input type="text" class="input" id="mem-search-input" placeholder="Search...">
+            <h3>Search Memories</h3>
+            <div class="memory-search">
+              <input type="text" id="mem-search-input" placeholder="Search..." class="input">
               <button class="btn btn-primary" onclick="searchMemories()">Search</button>
             </div>
             <div id="mem-search-results"></div>
           </div>
           <div class="card">
-            <div class="card-header">
-              <div class="card-icon">➕</div>
-              <div>
-                <div class="card-title">Store Memory</div>
-                <div class="card-subtitle">Add a new memory entry</div>
-              </div>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-              <input type="text" class="input" id="mem-key" placeholder="Key">
-              <textarea class="textarea" id="mem-value" placeholder="Value..." style="min-height: 80px;"></textarea>
-              <select class="select" id="mem-type">
-                <option value="fact">Fact</option>
-                <option value="lesson">Lesson</option>
-                <option value="preference">Preference</option>
-                <option value="task">Task</option>
-              </select>
-              <button class="btn btn-primary" onclick="storeMemory()">Store</button>
-            </div>
+            <h3>Store Memory</h3>
+            <input type="text" id="mem-key" placeholder="Key" class="input" style="margin-bottom: 8px;">
+            <textarea id="mem-value" placeholder="Value..." class="textarea" style="min-height: 80px;"></textarea>
+            <select id="mem-type" class="select" style="margin-top: 8px;">
+              <option value="fact">Fact</option>
+              <option value="lesson">Lesson</option>
+              <option value="preference">Preference</option>
+              <option value="task">Task</option>
+            </select>
+            <button class="btn btn-primary" style="margin-top: 8px;" onclick="storeMemory()">Store</button>
           </div>
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <!-- TOOLS SECTION -->
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <section class="section" id="section-tools" role="region" aria-label="Tools">
+      <!-- PROJECTS SECTION -->
+      <section class="page-section" id="section-projects">
         <div class="section-header">
-          <h2 class="section-title">Tools</h2>
+          <h1 class="section-title">Projects</h1>
+          <p class="section-desc">Manage your AI projects and tasks</p>
+        </div>
+        <div class="projects-grid">
+          <div class="card">
+            <h3>📋 Planning Tasks</h3>
+            <div id="planning-list"></div>
+          </div>
+          <div class="card">
+            <h3>📝 Shared Tasks</h3>
+            <div id="shared-tasks-list"></div>
+          </div>
+          <div class="card">
+            <h3>⏰ Reminders</h3>
+            <div id="reminders-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- WORKFLOWS SECTION -->
+      <section class="page-section" id="section-workflows">
+        <div class="section-header">
+          <h1 class="section-title">Workflows</h1>
+          <p class="section-desc">Multi-step automation workflows</p>
+        </div>
+        <div class="workflows-layout">
+          <div class="card">
+            <h3>Active Workflows</h3>
+            <div id="workflows-list"></div>
+          </div>
+          <div class="card">
+            <h3>Create Workflow</h3>
+            <input type="text" id="wf-name" placeholder="Name" class="input">
+            <textarea id="wf-idea" placeholder="Describe your idea..." class="textarea" style="margin-top: 8px;"></textarea>
+            <button class="btn btn-primary" style="margin-top: 8px;" onclick="createWorkflow()">Create</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- WORKSPACES SECTION -->
+      <section class="page-section" id="section-workspaces">
+        <div class="section-header">
+          <h1 class="section-title">Workspaces</h1>
+          <p class="section-desc">Multi-tenant workspace management</p>
+        </div>
+        <div class="workspaces-layout">
+          <div class="card">
+            <h3>Your Workspaces</h3>
+            <div id="workspaces-list"></div>
+          </div>
+          <div class="card">
+            <h3>Create Workspace</h3>
+            <input type="text" id="ws-name" placeholder="Name" class="input">
+            <textarea id="ws-desc" placeholder="Description" class="textarea" style="margin-top: 8px;"></textarea>
+            <button class="btn btn-primary" style="margin-top: 8px;" onclick="createWorkspace()">Create</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- PLUGINS SECTION -->
+      <section class="page-section" id="section-plugins">
+        <div class="section-header">
+          <h1 class="section-title">Plugins</h1>
+          <p class="section-desc">Extend Aeryn with powerful plugins</p>
+        </div>
+        <div class="plugins-grid">
+          <div class="plugin-card">
+            <div class="plugin-header">
+              <span class="plugin-icon">🔍</span>
+              <div>
+                <h3>Code Review</h3>
+                <span class="badge badge-info">v1.0</span>
+              </div>
+            </div>
+            <p>Analyze Python code for syntax errors, style issues, and bugs</p>
+            <textarea id="plugin-code-review-input" placeholder="Paste code..." class="textarea" style="min-height: 100px;"></textarea>
+            <button class="btn btn-primary" onclick="runPlugin('code-review')">Analyze</button>
+            <div id="plugin-code-review-output"></div>
+          </div>
+          <div class="plugin-card">
+            <div class="plugin-header">
+              <span class="plugin-icon">🔎</span>
+              <div>
+                <h3>Research Assistant</h3>
+                <span class="badge badge-info">v1.0</span>
+              </div>
+            </div>
+            <p>Search vault entries and summarize findings</p>
+            <input type="text" id="plugin-research-input" placeholder="Search query..." class="input">
+            <button class="btn btn-primary" style="margin-top: 8px;" onclick="runPlugin('research-assistant')">Search</button>
+            <div id="plugin-research-output"></div>
+          </div>
+          <div class="plugin-card">
+            <div class="plugin-header">
+              <span class="plugin-icon">📦</span>
+              <div>
+                <h3>Installed</h3>
+                <span class="badge badge-success" id="installed-count">2</span>
+              </div>
+            </div>
+            <div id="installed-plugins-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TOOLS SECTION -->
+      <section class="page-section" id="section-tools">
+        <div class="section-header">
+          <h1 class="section-title">Tools</h1>
           <p class="section-desc">Discover and execute available tools</p>
         </div>
-        <div class="grid grid-2">
+        <div class="tools-layout">
           <div class="card">
-            <div class="card-header">
-              <div class="card-icon">🔧</div>
-              <div>
-                <div class="card-title">Available Tools</div>
-                <div class="card-subtitle" id="tools-count">—</div>
-              </div>
-            </div>
-            <div id="tools-list">Loading...</div>
+            <h3>Available Tools</h3>
+            <div id="tools-list"></div>
           </div>
           <div class="card">
-            <div class="card-header">
-              <div class="card-icon">⚡</div>
-              <div>
-                <div class="card-title">Execute Tool</div>
-                <div class="card-subtitle">Run a tool directly</div>
-              </div>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-              <select class="select" id="tool-select"></select>
-              <textarea class="textarea" id="tool-input" placeholder='JSON input, e.g.: {"query": "test"}'></textarea>
-              <button class="btn btn-primary" onclick="executeTool()">Execute</button>
-              <div id="tool-output"></div>
-            </div>
+            <h3>Execute Tool</h3>
+            <select id="tool-select" class="select"></select>
+            <textarea id="tool-input" placeholder='JSON input' class="textarea" style="margin-top: 8px;"></textarea>
+            <button class="btn btn-primary" style="margin-top: 8px;" onclick="executeTool()">Execute</button>
+            <div id="tool-output"></div>
           </div>
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <!-- AGENTS SECTION -->
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <section class="section" id="section-agents" role="region" aria-label="Agents">
+      <!-- INTEGRATIONS SECTION -->
+      <section class="page-section" id="section-integrations">
         <div class="section-header">
-          <h2 class="section-title">Agents</h2>
-          <p class="section-desc">Manage and monitor AI agents</p>
+          <h1 class="section-title">Integrations</h1>
+          <p class="section-desc">Connect with external services and APIs</p>
         </div>
-        <div class="grid grid-2">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon">🤖</div>
-              <div>
-                <div class="card-title">Registered Agents</div>
-                <div class="card-subtitle" id="agents-count">—</div>
-              </div>
-            </div>
-            <div id="agents-list">Loading...</div>
+        <div class="integrations-grid">
+          <div class="integration-card">
+            <span class="integration-icon">📧</span>
+            <h3>Email</h3>
+            <p>Generate replies and triage inbox</p>
+            <button class="btn btn-sm btn-secondary">Configure</button>
           </div>
-          <div class="card">
-            <div class="card-header">
-              <div class="card-icon">📋</div>
-              <div>
-                <div class="card-title">Agent Tasks</div>
-                <div class="card-subtitle" id="agent-tasks-count">—</div>
-              </div>
-            </div>
-            <div id="agent-tasks-list">Loading...</div>
+          <div class="integration-card">
+            <span class="integration-icon">📅</span>
+            <h3>Calendar</h3>
+            <p>Manage events and schedules</p>
+            <button class="btn btn-sm btn-secondary">Configure</button>
+          </div>
+          <div class="integration-card">
+            <span class="integration-icon">🐙</span>
+            <h3>GitHub</h3>
+            <p>Repository management and automation</p>
+            <button class="btn btn-sm btn-secondary">Configure</button>
+          </div>
+          <div class="integration-card">
+            <span class="integration-icon">💬</span>
+            <h3>Slack</h3>
+            <p>Team communication integration</p>
+            <button class="btn btn-sm btn-secondary">Configure</button>
+          </div>
+          <div class="integration-card">
+            <span class="integration-icon">📱</span>
+            <h3>Telegram</h3>
+            <p>Bot messaging integration</p>
+            <span class="badge badge-success">Connected</span>
+          </div>
+          <div class="integration-card">
+            <span class="integration-icon">🎮</span>
+            <h3>Discord</h3>
+            <p>Community server integration</p>
+            <span class="badge badge-success">Connected</span>
           </div>
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════════════════════════ -->
       <!-- OBSERVABILITY SECTION -->
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <section class="section" id="section-observability" role="region" aria-label="Observability">
+      <section class="page-section" id="section-observability">
         <div class="section-header">
-          <h2 class="section-title">Observability</h2>
+          <h1 class="section-title">Observability</h1>
           <p class="section-desc">Monitor traces, metrics, and system health</p>
         </div>
-        <div class="grid grid-3" style="margin-bottom: 24px;">
-          <div class="card">
-            <div class="card-value" id="obs-traces">—</div>
-            <div class="card-label">Total Traces</div>
+        <div class="obs-stats">
+          <div class="obs-stat">
+            <span class="obs-num" id="obs-traces">—</span>
+            <span class="obs-label">Traces</span>
           </div>
-          <div class="card">
-            <div class="card-value" id="obs-spans">—</div>
-            <div class="card-label">Total Spans</div>
+          <div class="obs-stat">
+            <span class="obs-num" id="obs-spans">—</span>
+            <span class="obs-label">Spans</span>
           </div>
-          <div class="card">
-            <div class="card-value" id="obs-avg">—</div>
-            <div class="card-label">Avg Duration</div>
+          <div class="obs-stat">
+            <span class="obs-num" id="obs-avg">—</span>
+            <span class="obs-label">Avg Duration</span>
           </div>
         </div>
-        <div class="grid grid-2">
+        <div class="obs-layout">
           <div class="card">
-            <div class="card-header">
-              <div class="card-icon">📊</div>
-              <div>
-                <div class="card-title">Recent Traces</div>
-                <div class="card-subtitle">Latest execution traces</div>
-              </div>
-            </div>
-            <div id="traces-list">Loading...</div>
+            <h3>Recent Traces</h3>
+            <div id="traces-list"></div>
           </div>
           <div class="card">
-            <div class="card-header">
-              <div class="card-icon">⚡</div>
-              <div>
-                <div class="card-title">Performance</div>
-                <div class="card-subtitle">System performance metrics</div>
-              </div>
-            </div>
-            <div id="performance-metrics">Loading...</div>
+            <h3>Performance Metrics</h3>
+            <div id="performance-metrics"></div>
           </div>
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════════════════════════ -->
       <!-- BILLING SECTION -->
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <section class="section" id="section-billing" role="region" aria-label="Billing">
+      <section class="page-section" id="section-billing">
         <div class="section-header">
-          <h2 class="section-title">Billing & Usage</h2>
+          <h1 class="section-title">Billing</h1>
           <p class="section-desc">Track usage and manage billing</p>
         </div>
-        <div class="grid grid-3">
+        <div class="billing-grid">
           <div class="card">
-            <div class="card-value" id="billing-plan">—</div>
-            <div class="card-label">Current Plan</div>
-          </div>
-          <div class="card">
-            <div class="card-value" id="billing-quota">—</div>
-            <div class="card-label">Quota Used</div>
+            <h3>Current Plan</h3>
+            <span class="plan-name" id="billing-plan">Free</span>
           </div>
           <div class="card">
-            <div class="card-value" id="billing-cost">—</div>
-            <div class="card-label">Est. Cost</div>
+            <h3>Quota Used</h3>
+            <span class="quota-bar"><span class="quota-fill" style="width: 45%"></span></span>
+            <span class="quota-text" id="billing-quota">45%</span>
           </div>
-        </div>
-        <div class="card" style="margin-top: 16px;">
-          <div class="card-header">
-            <div class="card-icon">💰</div>
-            <div>
-              <div class="card-title">Pricing Plans</div>
-              <div class="card-subtitle">Available subscription plans</div>
-            </div>
+          <div class="card">
+            <h3>Est. Cost</h3>
+            <span class="cost-value" id="billing-cost">$0.00</span>
           </div>
-          <div id="pricing-plans">Loading...</div>
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════════════════════════ -->
       <!-- NOTIFICATIONS SECTION -->
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <section class="section" id="section-notifications" role="region" aria-label="Notifications">
+      <section class="page-section" id="section-notifications">
         <div class="section-header">
-          <h2 class="section-title">Notifications</h2>
-          <p class="section-desc">Manage your notifications and alerts</p>
+          <h1 class="section-title">Notifications</h1>
+          <p class="section-desc">Manage notifications and alerts</p>
         </div>
-        <div class="grid grid-2">
+        <div class="notif-layout">
           <div class="card">
-            <div class="card-header">
-              <div class="card-icon">🔔</div>
-              <div>
-                <div class="card-title">Pending Notifications</div>
-                <div class="card-subtitle" id="pending-notifs-count">—</div>
-              </div>
-            </div>
-            <div id="pending-notifs-list">Loading...</div>
+            <h3>Pending</h3>
+            <div id="pending-notifs-list"></div>
           </div>
           <div class="card">
-            <div class="card-header">
-              <div class="card-icon">➕</div>
-              <div>
-                <div class="card-title">Create Notification</div>
-                <div class="card-subtitle">Add a new notification</div>
-              </div>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-              <input type="text" class="input" id="notif-title" placeholder="Title">
-              <textarea class="textarea" id="notif-content" placeholder="Content..." style="min-height: 60px;"></textarea>
-              <button class="btn btn-primary" onclick="createNotification()">Create</button>
-            </div>
+            <h3>Create</h3>
+            <input type="text" id="notif-title" placeholder="Title" class="input">
+            <textarea id="notif-content" placeholder="Content..." class="textarea" style="margin-top: 8px;"></textarea>
+            <button class="btn btn-primary" style="margin-top: 8px;" onclick="createNotification()">Create</button>
           </div>
         </div>
       </section>
 
-      <!-- ═══════════════════════════════════════════════════════════════ -->
       <!-- SETTINGS SECTION -->
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <section class="section" id="section-settings" role="region" aria-label="Settings">
+      <section class="page-section" id="section-settings">
         <div class="section-header">
-          <h2 class="section-title">Settings</h2>
+          <h1 class="section-title">Settings</h1>
           <p class="section-desc">Configure your Aeryn platform</p>
         </div>
-        <div class="grid grid-2">
+        <div class="settings-layout">
           <div class="card">
-            <div class="card-header">
-              <div class="card-icon">🌐</div>
-              <div>
-                <div class="card-title">Environment</div>
-                <div class="card-subtitle">Runtime configuration</div>
-              </div>
-            </div>
-            <div id="env-info">Loading...</div>
+            <h3>Environment</h3>
+            <div id="env-info"></div>
           </div>
           <div class="card">
-            <div class="card-header">
-              <div class="card-icon">🔒</div>
-              <div>
-                <div class="card-title">Security</div>
-                <div class="card-subtitle">Security controls and status</div>
-              </div>
-            </div>
-            <div id="security-info">Loading...</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <!-- ADMIN SECTION -->
-      <!-- ═══════════════════════════════════════════════════════════════ -->
-      <section class="section" id="section-admin" role="region" aria-label="Admin">
-        <div class="section-header">
-          <h2 class="section-title">Admin</h2>
-          <p class="section-desc">System administration and monitoring</p>
-        </div>
-        <div class="grid grid-3">
-          <div class="card">
-            <div class="card-value" id="admin-users">—</div>
-            <div class="card-label">Users</div>
+            <h3>Security</h3>
+            <div id="security-info"></div>
           </div>
           <div class="card">
-            <div class="card-value" id="admin-stats">—</div>
-            <div class="card-label">Sessions</div>
-          </div>
-          <div class="card">
-            <div class="card-value" id="admin-health">—</div>
-            <div class="card-label">Health</div>
-          </div>
-        </div>
-        <div class="card" style="margin-top: 16px;">
-          <div class="card-header">
-            <div class="card-icon">🛡️</div>
-            <div>
-              <div class="card-title">Compliance</div>
-              <div class="card-subtitle">Compliance and audit</div>
+            <h3>Theme</h3>
+            <div class="theme-options">
+              <button class="theme-option active" onclick="setTheme('dark')">🌙 Dark</button>
+              <button class="theme-option" onclick="setTheme('light')">☀️ Light</button>
+              <button class="theme-option" onclick="setTheme('auto')">🔄 Auto</button>
             </div>
           </div>
-          <div id="compliance-info">Loading...</div>
+          <div class="card">
+            <h3>Language</h3>
+            <select id="lang-select" class="select">
+              <option value="id">🇮🇩 Indonesia</option>
+              <option value="en">🇬🇧 English</option>
+            </select>
+          </div>
         </div>
       </section>
 
@@ -737,19 +768,16 @@
 </div>
 
 <!-- Modal -->
-<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-header">
-      <h3 class="modal-title" id="modal-title">Modal</h3>
-      <button class="modal-close" onclick="closeModal()" aria-label="Close modal">Close</button>
+      <h3 id="modal-title">Modal</h3>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
     </div>
     <div class="modal-body" id="modal-body"></div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal()">Close</button>
-    </div>
   </div>
 </div>
 
-<script src="/static/js/dashboard.js" defer></script>
+<script src="/static/js/dashboard.js"></script>
 </body>
 </html>

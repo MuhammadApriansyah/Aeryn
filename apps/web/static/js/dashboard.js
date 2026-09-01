@@ -1,6 +1,6 @@
 /**
  * Aeryn Dashboard v61.4 — Massive SPA
- * Comprehensive UI for all Aeryn modules with WCAG 2.1 AA accessibility
+ * Comprehensive UI for all Aeryn modules
  */
 (function() {
   'use strict';
@@ -12,11 +12,9 @@
   const state = {
     currentSection: 'overview',
     sidebarCollapsed: false,
-    sidebarMobileOpen: false,
     sessionId: 'web_' + Date.now(),
     theme: localStorage.getItem('theme') || 'dark',
     refreshInterval: null,
-    ws: null,
     traces: [],
     workflows: [],
     tools: [],
@@ -30,95 +28,42 @@
   };
 
   const API = {
-    // Core
     health: '/health',
     gatewayEnv: '/gateway/env',
-    
-    // Chat & Execution
     chat: '/chat',
     run: '/run',
     search: (q) => `/search?q=${encodeURIComponent(q)}`,
-    compile: '/compile',
-    digest: '/digest',
-    
-    // Divisions & Workflows
     divisions: '/divisions',
     executeDivision: (name) => `/divisions/${name}/execute`,
     workflows: '/workflows',
     workflow: (id) => `/workflows/${id}`,
     workflowStep: (id) => `/workflows/${id}/step`,
-    workflowApprove: (id) => `/workflows/${id}/approve`,
-    
-    // Plugins
     plugins: '/plugins',
     pluginRun: '/plugins/run',
-    pluginDiscover: (q) => `/plugins/discover?q=${encodeURIComponent(q)}`,
-    
-    // Memory (PostgreSQL)
     pgStats: '/v1/postgres-memory/stats',
     pgRemember: '/v1/postgres-memory/remember',
     pgRecall: (q, limit) => `/v1/postgres-memory/recall?q=${encodeURIComponent(q)}&limit=${limit || 10}`,
-    pgSessions: (q, limit) => `/v1/postgres-memory/sessions?q=${encodeURIComponent(q)}&limit=${limit || 5}`,
     pgForget: (key) => `/v1/postgres-memory/forget?key=${encodeURIComponent(key)}`,
-    pgIndex: '/v1/postgres-memory/index',
-    
-    // Memory (Vault)
-    memoryRecall: (q) => `/memory/recall?q=${encodeURIComponent(q)}`,
-    vaultSearch: (q) => `/vault/search?q=${encodeURIComponent(q)}`,
-    vaultEntries: '/vault/entries',
-    
-    // Tools
     tools: '/tools/list',
     toolsExecute: '/tools/execute',
     toolsDiscover: (q) => `/tools/discover?q=${encodeURIComponent(q)}`,
-    
-    // Agents
     agents: '/agents',
     agentTasks: '/agents/tasks',
-    
-    // Observability
     traces: '/observability/traces',
-    trace: (id) => `/observability/traces/${id}`,
     traceStats: '/observability/stats',
     performance: '/performance/stats',
-    
-    // Workspaces
     workspaces: '/workspaces',
-    workspace: (id) => `/workspaces/${id}`,
-    
-    // Projects & Tasks
     planningTasks: '/planning/tasks',
     sharedTasks: '/shared/tasks',
     sharedReminders: '/shared/reminders',
-    
-    // Billing
     billingPricing: '/billing/pricing',
     billingQuota: '/billing/quota',
-    usageSummary: '/usage/summary',
-    
-    // Notifications
     notifications: '/notifications/pending',
     notificationsCreate: '/notifications/create',
-    
-    // Admin
     adminStats: '/admin/stats',
     adminUsers: '/admin/users',
-    complianceReport: '/admin/compliance/report',
-    
-    // Self-Improvement
     selfImprovementStats: '/self-improvement/stats',
     selfImprovementAdapt: '/self-improvement/adapt',
-    selfImprovementPatterns: '/self-improvement/patterns',
-    
-    // Experience Transfer
-    experienceStatus: '/v1/experience/status',
-    experienceLessons: '/v1/experience/lessons',
-    experiencePreferences: '/v1/experience/preferences',
-    experienceInitialize: '/v1/experience/initialize',
-    
-    // Messaging
-    messagingStatus: '/v1/messaging/status',
-    messagingSend: (platform) => `/v1/messaging/send/${platform}`,
   };
 
   // ═══════════════════════════════════════════════════════════════
@@ -148,16 +93,6 @@
     setTimeout(() => toast.remove(), 3000);
   }
 
-  function announce(message) {
-    const announcer = document.createElement('div');
-    announcer.setAttribute('role', 'status');
-    announcer.setAttribute('aria-live', 'polite');
-    announcer.className = 'sr-only';
-    announcer.textContent = message;
-    document.body.appendChild(announcer);
-    setTimeout(() => announcer.remove(), 1000);
-  }
-
   function escapeHtml(str) {
     if (!str) return '';
     const div = document.createElement('div');
@@ -172,15 +107,6 @@
     return `${(ms / 60000).toFixed(1)}m`;
   }
 
-  function formatDate(dateStr) {
-    if (!dateStr) return '—';
-    try {
-      return new Date(dateStr).toLocaleString('id-ID');
-    } catch {
-      return dateStr;
-    }
-  }
-
   // ═══════════════════════════════════════════════════════════════
   // NAVIGATION
   // ═══════════════════════════════════════════════════════════════
@@ -188,39 +114,37 @@
   function switchSection(sectionName) {
     state.currentSection = sectionName;
     
-    // Update nav items
     document.querySelectorAll('.nav-item').forEach(item => {
       item.classList.toggle('active', item.dataset.section === sectionName);
     });
     
-    // Update sections
-    document.querySelectorAll('.section').forEach(section => {
+    document.querySelectorAll('.page-section').forEach(section => {
       section.classList.toggle('active', section.id === `section-${sectionName}`);
     });
     
-    // Update header title
     const titles = {
-      overview: 'Overview',
+      overview: 'Dashboard',
+      analytics: 'Analytics',
+      activity: 'Activity',
       chat: 'Chat',
       divisions: 'Cognitive Divisions',
-      workspaces: 'Workspaces',
+      agents: 'Agents',
+      memory: 'Memory',
       projects: 'Projects',
       workflows: 'Workflows',
+      workspaces: 'Workspaces',
       plugins: 'Plugins',
-      memory: 'Memory',
       tools: 'Tools',
-      agents: 'Agents',
+      integrations: 'Integrations',
       observability: 'Observability',
-      billing: 'Billing & Usage',
+      billing: 'Billing',
       notifications: 'Notifications',
       settings: 'Settings',
-      admin: 'Admin',
     };
-    document.getElementById('page-title').textContent = titles[sectionName] || sectionName;
     
-    announce(`Switched to ${titles[sectionName] || sectionName}`);
+    const titleEl = document.getElementById('breadcrumb-current');
+    if (titleEl) titleEl.textContent = titles[sectionName] || sectionName;
     
-    // Load section data
     loadSectionData(sectionName);
   }
 
@@ -230,12 +154,20 @@
   }
 
   function toggleTheme() {
-    const html = document.documentElement;
-    const current = html.getAttribute('data-theme');
-    const next = current === 'dark' ? 'light' : 'dark';
-    html.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-    document.getElementById('theme-toggle').textContent = next === 'dark' ? '🌙' : '☀️';
+    const next = state.theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+  }
+
+  function setTheme(theme) {
+    state.theme = theme;
+    if (theme === 'auto') {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+    localStorage.setItem('theme', theme);
+    document.getElementById('theme-icon').textContent = state.theme === 'dark' ? '🌙' : '☀️';
   }
 
   function showModal(title, content) {
@@ -255,20 +187,21 @@
   function loadSectionData(section) {
     const loaders = {
       overview: loadOverview,
+      analytics: loadAnalytics,
       chat: () => {},
       divisions: loadDivisions,
-      workspaces: loadWorkspaces,
+      agents: loadAgents,
+      memory: loadMemory,
       projects: loadProjects,
       workflows: loadWorkflows,
+      workspaces: loadWorkspaces,
       plugins: loadPlugins,
-      memory: loadMemory,
       tools: loadTools,
-      agents: loadAgents,
+      integrations: () => {},
       observability: loadObservability,
       billing: loadBilling,
       notifications: loadNotifications,
       settings: loadSettings,
-      admin: loadAdmin,
     };
     
     if (loaders[section]) loaders[section]();
@@ -280,28 +213,15 @@
     const health = await api(API.health);
     state.health = health;
     
-    document.getElementById('ov-status').textContent = health.status || 'unknown';
-    document.getElementById('ov-memory').textContent = (health.memory_mb || 0) + ' MB';
-    document.getElementById('ov-plugins').textContent = state.plugins.length || '—';
+    document.getElementById('stat-status').textContent = health.status || 'unknown';
+    document.getElementById('stat-plugins').textContent = state.plugins.length || '—';
     
     const traceStats = await api(API.traceStats);
-    document.getElementById('ov-traces').textContent = traceStats.total_traces || 0;
+    document.getElementById('stat-traces').textContent = traceStats.total_traces || 0;
     
-    const healthDetails = document.getElementById('ov-health-details');
-    if (healthDetails) {
-      healthDetails.innerHTML = `
-        <div style="display: grid; gap: 8px;">
-          <div><span class="badge badge-${health.status === 'healthy' ? 'success' : 'danger'}">${health.status}</span></div>
-          <div>Memory: <strong>${health.memory_mb} MB</strong></div>
-          <div>Version: <strong>${health.version}</strong></div>
-        </div>
-      `;
-    }
-    
-    // Update status dot
     const isHealthy = health.status === 'healthy';
     document.getElementById('status-dot').className = `status-dot ${isHealthy ? 'online' : ''}`;
-    document.getElementById('status-text').textContent = isHealthy ? 'Online' : 'Offline';
+    document.getElementById('status-text').textContent = isHealthy ? 'System Online' : 'Offline';
   }
 
   // ── Divisions ──
@@ -325,52 +245,94 @@
       showToast(`Error: ${result.error}`, 'error');
     } else {
       showToast(`Completed: ${result.completed}/${result.tasks} tasks`, 'success');
-      showModal('Division Result', `<pre class="code-block">${escapeHtml(JSON.stringify(result, null, 2))}</pre>`);
+      showModal('Division Result', `<pre>${escapeHtml(JSON.stringify(result, null, 2))}</pre>`);
     }
   }
 
-  // ── Workspaces ──
+  // ── Agents ──
   
-  async function loadWorkspaces() {
-    const result = await api(API.workspaces);
-    state.workspaces = result.workspaces || [];
+  async function loadAgents() {
+    const [agents, tasks] = await Promise.all([
+      api(API.agents),
+      api(API.agentTasks),
+    ]);
     
-    const list = document.getElementById('workspaces-list');
+    const agentsList = document.getElementById('agents-list');
+    if (agentsList) {
+      const agentList = agents.agents || [];
+      agentsList.innerHTML = agentList.length ? agentList.map(a => `
+        <div style="padding: 8px; background: var(--bg3); border-radius: 6px; margin-bottom: 4px;">
+          <strong>${escapeHtml(a.name || 'Agent')}</strong>
+          <span class="badge badge-${a.status === 'active' ? 'success' : 'warning'}" style="margin-left: 8px;">${a.status || 'idle'}</span>
+        </div>
+      `).join('') : '<p style="color: var(--text2);">No agents registered</p>';
+    }
+    
+    const tasksList = document.getElementById('agent-tasks-list');
+    if (tasksList) {
+      const taskList = tasks.tasks || [];
+      tasksList.innerHTML = taskList.length ? taskList.map(t => `
+        <div style="padding: 8px; background: var(--bg3); border-radius: 6px; margin-bottom: 4px;">
+          <strong>${escapeHtml(t.name || 'Task')}</strong>
+          <span class="badge badge-${t.status === 'completed' ? 'success' : 'warning'}" style="margin-left: 8px;">${t.status || 'pending'}</span>
+        </div>
+      `).join('') : '<p style="color: var(--text2);">No tasks</p>';
+    }
+  }
+
+  // ── Memory ──
+  
+  async function loadMemory() {
+    const stats = await api(API.pgStats);
+    
+    document.getElementById('mem-sessions').textContent = stats.total_sessions || 0;
+    document.getElementById('mem-total').textContent = stats.total_memories || 0;
+    document.getElementById('mem-hot').textContent = stats.hot_memories || 0;
+    document.getElementById('mem-warm').textContent = stats.warm_memories || 0;
+    document.getElementById('mem-cold').textContent = stats.cold_memories || 0;
+  }
+
+  async function searchMemories() {
+    const q = document.getElementById('mem-search-input').value;
+    if (!q) return;
+    
+    const result = await api(API.pgRecall(q, 20));
+    const list = document.getElementById('mem-search-results');
     if (!list) return;
     
-    if (!state.workspaces.length) {
-      list.innerHTML = '<p style="color: var(--text2);">No workspaces yet. Create one to get started.</p>';
+    if (!result.results || result.results.length === 0) {
+      list.innerHTML = '<p style="color: var(--text2);">No memories found</p>';
       return;
     }
     
-    list.innerHTML = state.workspaces.map(ws => `
-      <div class="card" style="margin-bottom: 8px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            <strong>${escapeHtml(ws.name)}</strong>
-            <p style="color: var(--text2); font-size: 12px;">${escapeHtml(ws.description || '')}</p>
-          </div>
-          <span class="badge badge-${ws.status === 'active' ? 'success' : 'warning'}">${ws.status || 'unknown'}</span>
+    list.innerHTML = result.results.map(m => `
+      <div style="padding: 12px; background: var(--bg3); border-radius: 6px; margin-bottom: 8px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+          <strong>${escapeHtml(m.key)}</strong>
+          <span class="badge badge-${m.tier === 'hot' ? 'danger' : m.tier === 'warm' ? 'warning' : 'info'}">${m.tier}</span>
         </div>
+        <p style="font-size: 13px; color: var(--text2);">${escapeHtml(m.value?.substring(0, 150) || '')}</p>
       </div>
     `).join('');
   }
 
-  async function createWorkspace() {
-    const name = document.getElementById('ws-name').value;
-    const desc = document.getElementById('ws-desc').value;
-    if (!name) return showToast('Name required', 'error');
+  async function storeMemory() {
+    const key = document.getElementById('mem-key').value;
+    const value = document.getElementById('mem-value').value;
+    const type = document.getElementById('mem-type').value;
     
-    const result = await api(API.workspaces, {
+    if (!key || !value) return showToast('Key and value required', 'error');
+    
+    const result = await api(API.pgRemember, {
       method: 'POST',
-      body: JSON.stringify({ name, description: desc }),
+      body: JSON.stringify({ key, value, type, importance: 0.7, skip_embedding: true }),
     });
     
     if (result.error) {
       showToast(`Error: ${result.error}`, 'error');
     } else {
-      showToast('Workspace created!', 'success');
-      loadWorkspaces();
+      showToast('Memory stored!', 'success');
+      loadMemory();
     }
   }
 
@@ -383,16 +345,12 @@
       api(API.sharedReminders),
     ]);
     
-    document.getElementById('planning-count').textContent = (planning.tasks || []).length;
-    document.getElementById('shared-count').textContent = (shared.tasks || []).length;
-    document.getElementById('reminders-count').textContent = (reminders.reminders || []).length;
-    
     const planningList = document.getElementById('planning-list');
     if (planningList) {
       const tasks = planning.tasks || [];
       planningList.innerHTML = tasks.length ? tasks.map(t => `
         <div style="padding: 8px; background: var(--bg3); border-radius: 6px; margin-bottom: 4px;">
-          <strong>${escapeHtml(t.name || t.title || 'Untitled')}</strong>
+          <strong>${escapeHtml(t.name || 'Untitled')}</strong>
           <span class="badge badge-${t.status === 'completed' ? 'success' : 'warning'}" style="margin-left: 8px;">${t.status || 'pending'}</span>
         </div>
       `).join('') : '<p style="color: var(--text2);">No tasks</p>';
@@ -403,7 +361,7 @@
       const tasks = shared.tasks || [];
       sharedList.innerHTML = tasks.length ? tasks.map(t => `
         <div style="padding: 8px; background: var(--bg3); border-radius: 6px; margin-bottom: 4px;">
-          <strong>${escapeHtml(t.name || t.title || 'Untitled')}</strong>
+          <strong>${escapeHtml(t.name || 'Untitled')}</strong>
           <p style="font-size: 12px; color: var(--text2);">${escapeHtml(t.description || '')}</p>
         </div>
       `).join('') : '<p style="color: var(--text2);">No shared tasks</p>';
@@ -414,8 +372,7 @@
       const rems = reminders.reminders || [];
       remindersList.innerHTML = rems.length ? rems.map(r => `
         <div style="padding: 8px; background: var(--bg3); border-radius: 6px; margin-bottom: 4px;">
-          <strong>${escapeHtml(r.text || r.title || 'Reminder')}</strong>
-          <span style="font-size: 11px; color: var(--text2); margin-left: 8px;">${formatDate(r.due_at || r.created_at)}</span>
+          <strong>${escapeHtml(r.text || 'Reminder')}</strong>
         </div>
       `).join('') : '<p style="color: var(--text2);">No reminders</p>';
     }
@@ -431,21 +388,15 @@
     if (!list) return;
     
     if (!state.workflows.length) {
-      list.innerHTML = '<p style="color: var(--text2);">No workflows yet. Create one to get started.</p>';
+      list.innerHTML = '<p style="color: var(--text2);">No workflows yet</p>';
       return;
     }
     
     list.innerHTML = state.workflows.map(w => `
-      <div class="card" style="margin-bottom: 8px;">
+      <div style="padding: 12px; background: var(--bg3); border-radius: 6px; margin-bottom: 8px;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            <strong>${escapeHtml(w.name || 'Untitled')}</strong>
-            <span class="badge badge-${w.status === 'completed' ? 'success' : 'warning'}" style="margin-left: 8px;">${w.status || 'active'}</span>
-          </div>
-          <div style="display: flex; gap: 4px;">
-            <button class="btn btn-sm btn-secondary" onclick="stepWorkflow('${w.id}')">Step</button>
-            <button class="btn btn-sm btn-primary" onclick="viewWorkflow('${w.id}')">View</button>
-          </div>
+          <strong>${escapeHtml(w.name || 'Untitled')}</strong>
+          <span class="badge badge-${w.status === 'completed' ? 'success' : 'warning'}">${w.status || 'active'}</span>
         </div>
       </div>
     `).join('');
@@ -469,15 +420,44 @@
     }
   }
 
-  async function stepWorkflow(id) {
-    const result = await api(API.workflowStep(id), { method: 'POST' });
-    showToast(`Step: ${result.status}`, 'info');
-    loadWorkflows();
+  // ── Workspaces ──
+  
+  async function loadWorkspaces() {
+    const result = await api(API.workspaces);
+    state.workspaces = result.workspaces || [];
+    
+    const list = document.getElementById('workspaces-list');
+    if (!list) return;
+    
+    if (!state.workspaces.length) {
+      list.innerHTML = '<p style="color: var(--text2);">No workspaces yet</p>';
+      return;
+    }
+    
+    list.innerHTML = state.workspaces.map(ws => `
+      <div style="padding: 12px; background: var(--bg3); border-radius: 6px; margin-bottom: 8px;">
+        <strong>${escapeHtml(ws.name)}</strong>
+        <p style="font-size: 12px; color: var(--text2);">${escapeHtml(ws.description || '')}</p>
+      </div>
+    `).join('');
   }
 
-  async function viewWorkflow(id) {
-    const result = await api(API.workflow(id));
-    showModal('Workflow Details', `<pre class="code-block">${escapeHtml(JSON.stringify(result, null, 2))}</pre>`);
+  async function createWorkspace() {
+    const name = document.getElementById('ws-name').value;
+    const desc = document.getElementById('ws-desc').value;
+    if (!name) return showToast('Name required', 'error');
+    
+    const result = await api(API.workspaces, {
+      method: 'POST',
+      body: JSON.stringify({ name, description: desc }),
+    });
+    
+    if (result.error) {
+      showToast(`Error: ${result.error}`, 'error');
+    } else {
+      showToast('Workspace created!', 'success');
+      loadWorkspaces();
+    }
   }
 
   // ── Plugins ──
@@ -486,9 +466,7 @@
     const result = await api(API.plugins);
     state.plugins = result.tools || result.plugins || [];
     
-    document.getElementById('ov-plugins').textContent = state.plugins.length;
-    document.getElementById('plugin-count').textContent = state.plugins.length;
-    document.getElementById('installed-plugins-count').textContent = state.plugins.length;
+    document.getElementById('installed-count').textContent = state.plugins.length;
     
     const list = document.getElementById('installed-plugins-list');
     if (list) {
@@ -525,66 +503,8 @@
       if (result.error) {
         output.innerHTML = `<span style="color: var(--danger);">${escapeHtml(result.error)}</span>`;
       } else {
-        output.innerHTML = `<pre class="code-block">${escapeHtml(JSON.stringify(result, null, 2))}</pre>`;
+        output.innerHTML = `<pre>${escapeHtml(JSON.stringify(result, null, 2))}</pre>`;
       }
-    }
-  }
-
-  // ── Memory ──
-  
-  async function loadMemory() {
-    const stats = await api(API.pgStats);
-    
-    document.getElementById('mem-sessions').textContent = stats.total_sessions || 0;
-    document.getElementById('mem-total').textContent = stats.total_memories || 0;
-    document.getElementById('mem-hot').textContent = stats.hot_memories || 0;
-    document.getElementById('mem-warm').textContent = stats.warm_memories || 0;
-  }
-
-  async function searchMemories() {
-    const q = document.getElementById('mem-search-input').value;
-    if (!q) return;
-    
-    const result = await api(API.pgRecall(q, 20));
-    const list = document.getElementById('mem-search-results');
-    if (!list) return;
-    
-    if (!result.results || !result.results.length) {
-      list.innerHTML = '<p style="color: var(--text2);">No memories found</p>';
-      return;
-    }
-    
-    list.innerHTML = result.results.map(m => `
-      <div class="card" style="margin-bottom: 8px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-          <strong>${escapeHtml(m.key)}</strong>
-          <span class="badge badge-${m.tier === 'hot' ? 'danger' : m.tier === 'warm' ? 'warning' : 'info'}">${m.tier}</span>
-        </div>
-        <p style="font-size: 13px; color: var(--text2);">${escapeHtml(m.value?.substring(0, 150) || '')}</p>
-        <div style="font-size: 11px; color: var(--text2); margin-top: 4px;">
-          Type: ${m.type || 'fact'} | Importance: ${(m.importance || 0).toFixed(2)} | Similarity: ${(m.similarity || 0).toFixed(2)}
-        </div>
-      </div>
-    `).join('');
-  }
-
-  async function storeMemory() {
-    const key = document.getElementById('mem-key').value;
-    const value = document.getElementById('mem-value').value;
-    const type = document.getElementById('mem-type').value;
-    
-    if (!key || !value) return showToast('Key and value required', 'error');
-    
-    const result = await api(API.pgRemember, {
-      method: 'POST',
-      body: JSON.stringify({ key, value, type, importance: 0.7, skip_embedding: true }),
-    });
-    
-    if (result.error) {
-      showToast(`Error: ${result.error}`, 'error');
-    } else {
-      showToast('Memory stored!', 'success');
-      loadMemory();
     }
   }
 
@@ -593,8 +513,6 @@
   async function loadTools() {
     const result = await api(API.toolsDiscover(''));
     state.tools = result.tools || [];
-    
-    document.getElementById('tools-count').textContent = state.tools.length;
     
     const list = document.getElementById('tools-list');
     if (list) {
@@ -632,41 +550,7 @@
     
     const output = document.getElementById('tool-output');
     if (output) {
-      output.innerHTML = `<pre class="code-block">${escapeHtml(JSON.stringify(result, null, 2))}</pre>`;
-    }
-  }
-
-  // ── Agents ──
-  
-  async function loadAgents() {
-    const [agents, tasks] = await Promise.all([
-      api(API.agents),
-      api(API.agentTasks),
-    ]);
-    
-    document.getElementById('agents-count').textContent = (agents.agents || []).length;
-    document.getElementById('agent-tasks-count').textContent = (tasks.tasks || []).length;
-    
-    const agentsList = document.getElementById('agents-list');
-    if (agentsList) {
-      const agentList = agents.agents || [];
-      agentsList.innerHTML = agentList.length ? agentList.map(a => `
-        <div style="padding: 8px; background: var(--bg3); border-radius: 6px; margin-bottom: 4px;">
-          <strong>${escapeHtml(a.name || 'Agent')}</strong>
-          <span class="badge badge-${a.status === 'active' ? 'success' : 'warning'}" style="margin-left: 8px;">${a.status || 'idle'}</span>
-        </div>
-      `).join('') : '<p style="color: var(--text2);">No agents registered</p>';
-    }
-    
-    const tasksList = document.getElementById('agent-tasks-list');
-    if (tasksList) {
-      const taskList = tasks.tasks || [];
-      tasksList.innerHTML = taskList.length ? taskList.map(t => `
-        <div style="padding: 8px; background: var(--bg3); border-radius: 6px; margin-bottom: 4px;">
-          <strong>${escapeHtml(t.name || 'Task')}</strong>
-          <span class="badge badge-${t.status === 'completed' ? 'success' : 'warning'}" style="margin-left: 8px;">${t.status || 'pending'}</span>
-        </div>
-      `).join('') : '<p style="color: var(--text2);">No tasks</p>';
+      output.innerHTML = `<pre>${escapeHtml(JSON.stringify(result, null, 2))}</pre>`;
     }
   }
 
@@ -687,12 +571,9 @@
     if (tracesList) {
       const traceList = traces.traces || [];
       tracesList.innerHTML = traceList.length ? traceList.map(t => `
-        <div class="card" style="margin-bottom: 8px;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-              <strong>${escapeHtml(t.id)}</strong>
-              <span style="font-size: 12px; color: var(--text2); margin-left: 8px;">${escapeHtml(t.session_id || 'default')}</span>
-            </div>
+        <div style="padding: 12px; background: var(--bg3); border-radius: 6px; margin-bottom: 8px;">
+          <div style="display: flex; justify-content: space-between;">
+            <strong>${escapeHtml(t.id)}</strong>
             <span class="badge badge-info">${t.spans || 0} spans</span>
           </div>
         </div>
@@ -723,18 +604,6 @@
     document.getElementById('billing-plan').textContent = pricing.plan || 'Free';
     document.getElementById('billing-quota').textContent = quota.used ? `${quota.used}%` : '—';
     document.getElementById('billing-cost').textContent = usage.cost ? `$${usage.cost}` : '$0';
-    
-    const plans = document.getElementById('pricing-plans');
-    if (plans) {
-      const planList = pricing.plans || [];
-      plans.innerHTML = `<div class="grid grid-3">${planList.map(p => `
-        <div class="card">
-          <div class="card-title">${escapeHtml(p.name)}</div>
-          <div class="card-value">$${p.price || 0}</div>
-          <p style="font-size: 12px; color: var(--text2);">${escapeHtml(p.description || '')}</p>
-        </div>
-      `).join('')}</div>`;
-    }
   }
 
   // ── Notifications ──
@@ -742,9 +611,6 @@
   async function loadNotifications() {
     const result = await api(API.notifications);
     state.notifications = result.notifications || [];
-    
-    document.getElementById('pending-notifs-count').textContent = state.notifications.length;
-    document.getElementById('notif-count').textContent = state.notifications.length;
     
     const list = document.getElementById('pending-notifs-list');
     if (list) {
@@ -800,37 +666,10 @@
           <div>Sandbox: <span class="badge badge-success">4 Levels</span></div>
           <div>Prompt Injection: <span class="badge badge-success">Multi-layer</span></div>
           <div>Encryption: <span class="badge badge-success">At Rest</span></div>
-          <div>Rate Limiting: <span class="badge badge-success">Active</span></div>
         </div>
       `;
     }
   }
-
-  // ── Admin ──
-  
-  async function loadAdmin() {
-    const [stats, users, compliance] = await Promise.all([
-      api(API.adminStats),
-      api(API.adminUsers),
-      api(API.complianceReport),
-    ]);
-    
-    document.getElementById('admin-users').textContent = (users.users || []).length;
-    document.getElementById('admin-stats').textContent = stats.sessions || 0;
-    document.getElementById('admin-health').textContent = stats.health || 'OK';
-    
-    const compEl = document.getElementById('compliance-info');
-    if (compEl) {
-      compEl.innerHTML = `
-        <div style="display: grid; gap: 8px;">
-          <div>SOC2: <span class="badge badge-success">Compliant</span></div>
-          <div>GDPR: <span class="badge badge-success">Compliant</span></div>
-          <div>Last Audit: <strong>${formatDate(compliance.last_audit)}</strong></div>
-        </div>
-      `;
-    }
-  }
-
 
   // ═══════════════════════════════════════════════════════════════
   // CHAT
@@ -857,87 +696,30 @@
     } else if (result.error) {
       addChatMessage('system', `Error: ${result.error}`);
     }
-    
-    announce('Response received');
   }
 
   function addChatMessage(role, content) {
     const container = document.getElementById('chat-messages');
     const div = document.createElement('div');
-    div.className = `chat-message ${role}`;
+    div.className = `chat-msg ${role}`;
     div.textContent = content;
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
   }
 
-  async function runTask() {
-    const input = document.getElementById('run-input');
-    const goal = input.value.trim();
-    if (!goal) return showToast('Enter a goal', 'error');
+  async function runQuickTask(goal) {
+    addChatMessage('user', goal);
     
     const result = await api(API.run, {
       method: 'POST',
       body: JSON.stringify({ goal }),
     });
     
-    const output = document.getElementById('run-result');
-    if (output) {
-      if (result.response) {
-        output.innerHTML = `<pre class="code-block">${escapeHtml(result.response)}</pre>`;
-      } else if (result.error) {
-        output.innerHTML = `<span style="color: var(--danger);">${escapeHtml(result.error)}</span>`;
-      } else {
-        output.innerHTML = `<pre class="code-block">${escapeHtml(JSON.stringify(result, null, 2))}</pre>`;
-      }
+    if (result.response) {
+      addChatMessage('assistant', result.response);
+    } else if (result.error) {
+      addChatMessage('system', `Error: ${result.error}`);
     }
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // KEYBOARD SHORTCUTS
-  // ═══════════════════════════════════════════════════════════════
-  
-  function setupKeyboardShortcuts() {
-    document.addEventListener('keydown', (e) => {
-      // Ctrl+K: Focus search
-      if (e.ctrlKey && e.key === 'k') {
-        e.preventDefault();
-        const search = document.getElementById('mem-search-input') || document.getElementById('global-search');
-        if (search) search.focus();
-      }
-      
-      // Ctrl+T: Toggle theme
-      if (e.ctrlKey && e.key === 't') {
-        e.preventDefault();
-        toggleTheme();
-      }
-      
-      // Escape: Close modal
-      if (e.key === 'Escape') {
-        closeModal();
-      }
-      
-      // Ctrl+Enter in chat: Send
-      if (e.ctrlKey && e.key === 'Enter' && document.activeElement.id === 'chat-input') {
-        e.preventDefault();
-        sendChat();
-      }
-    });
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // REFRESH & CLEANUP
-  // ═══════════════════════════════════════════════════════════════
-  
-  function refreshAll() {
-    loadOverview();
-    showToast('Refreshed', 'success');
-  }
-
-  function startAutoRefresh() {
-    if (state.refreshInterval) clearInterval(state.refreshInterval);
-    state.refreshInterval = setInterval(() => {
-      if (state.currentSection === 'overview') loadOverview();
-    }, 15000);
   }
 
   // ═══════════════════════════════════════════════════════════════
@@ -945,19 +727,12 @@
   // ═══════════════════════════════════════════════════════════════
   
   function init() {
-    // Set theme
-    document.documentElement.setAttribute('data-theme', state.theme);
-    document.getElementById('theme-toggle').textContent = state.theme === 'dark' ? '🌙' : '☀️';
+    setTheme(state.theme);
     
-    // Setup navigation
     document.querySelectorAll('.nav-item').forEach(item => {
       item.addEventListener('click', () => switchSection(item.dataset.section));
     });
     
-    // Setup keyboard shortcuts
-    setupKeyboardShortcuts();
-    
-    // Setup chat input
     const chatInput = document.getElementById('chat-input');
     if (chatInput) {
       chatInput.addEventListener('keydown', (e) => {
@@ -968,7 +743,10 @@
       });
     }
     
-    // Load initial data
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+    
     loadOverview();
     loadDivisions();
     loadPlugins();
@@ -976,18 +754,9 @@
     loadTools();
     loadObservability();
     
-    // Start auto-refresh
-    startAutoRefresh();
-    
-    // Close modal on overlay click
-    document.getElementById('modal-overlay').addEventListener('click', (e) => {
-      if (e.target.id === 'modal-overlay') closeModal();
-    });
-    
     console.log('🤖 Aeryn Dashboard v61.4 initialized');
   }
 
-  // Start when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

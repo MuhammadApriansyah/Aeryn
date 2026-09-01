@@ -1,4 +1,4 @@
-"""V61.3 — Web routes for Aeryn Dashboard."""
+"""V61.4 — Web routes for Aeryn Dashboard."""
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse, FileResponse
 import os
@@ -8,7 +8,6 @@ BASE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.a
 TEMPLATE = os.path.join(BASE, "apps", "web", "templates")
 
 @router.get("/", response_class=HTMLResponse)
-@router.get("/dashboard", response_class=HTMLResponse)
 async def dashboard():
     p = os.path.join(TEMPLATE, "dashboard.html")
     if os.path.exists(p):

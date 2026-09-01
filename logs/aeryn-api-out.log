@@ -1257,3 +1257,18 @@
 2026-09-01 06:37:41: INFO:     127.0.0.1:55622 - "GET /observability/stats HTTP/1.1" 200 OK
 2026-09-01 06:37:56: INFO:     127.0.0.1:40662 - "GET /health HTTP/1.1" 200 OK
 2026-09-01 06:37:56: INFO:     127.0.0.1:40662 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 07:00:23: INFO:     127.0.0.1:50178 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 07:00:23: INFO:     127.0.0.1:50192 - "GET /favicon.ico HTTP/1.1" 200 OK
+2026-09-01 07:00:38: INFO:     127.0.0.1:34776 - "GET /health HTTP/1.1" 200 OK
+2026-09-01 07:00:38: INFO:     127.0.0.1:34776 - "GET /observability/stats HTTP/1.1" 200 OK
+2026-09-01 07:06:25: 2026-09-01 07:06:25 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-01 07:06:34: 2026-09-01 07:06:34 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-01 07:06:34: 2026-09-01 07:06:34 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-01 07:06:34: 2026-09-01 07:06:34 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-01 07:06:34: 2026-09-01 07:06:34 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-01 07:06:34: 2026-09-01 07:06:34 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-01 07:06:39: INFO:     127.0.0.1:59852 - "GET / HTTP/1.1" 200 OK
+2026-09-01 07:06:40: INFO:     127.0.0.1:59854 - "GET /static/css/dashboard.css HTTP/1.1" 200 OK
+2026-09-01 07:06:40: INFO:     127.0.0.1:59866 - "GET /static/js/dashboard.js HTTP/1.1" 200 OK
+2026-09-01 07:06:40: INFO:     127.0.0.1:59882 - "GET / HTTP/1.1" 200 OK
+2026-09-01 07:06:40: INFO:     127.0.0.1:59888 - "GET / HTTP/1.1" 200 OK
