@@ -36,7 +36,7 @@
     requestAnimationFrame(animate);
   })();
 
-  $$('a,button,.system-card,.work-item,.stack-item,.nav-link,.division-card,.tool-card,.workspace-card,.integration-card,.marketplace-card').forEach(el => {
+  $$('a,button,.stat-card,.work-item,.stack-item,.nav-link,.div-card,.tool-card,.ws-card,.int-card,.market-card,.practice-card,.system-card').forEach(el => {
     el.addEventListener('mouseenter', () => { cursor.style.width = '40px'; cursor.style.height = '40px'; });
     el.addEventListener('mouseleave', () => { cursor.style.width = '20px'; cursor.style.height = '20px'; });
   });
@@ -47,7 +47,7 @@
       if (e.isIntersecting) {
         e.target.classList.add('revealed');
         const sec = e.target.getAttribute('data-section');
-        if (sec) $$('.nav-link').forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#section-${sec}`));
+        if (sec) $$('.nav-link').forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#${sec}`));
       }
     });
   }, { threshold: 0.15 });
@@ -55,7 +55,7 @@
   $$('section').forEach(s => observer.observe(s));
 
   /* ── Smooth scroll ── */
-  window.scrollToSection = (id) => {
+  window.scrollTo = (id) => {
     const el = document.getElementById(`section-${id}`);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
@@ -78,10 +78,10 @@
   function applyTheme() {
     document.documentElement.setAttribute('data-theme', state.theme);
     localStorage.setItem('aery-theme', state.theme);
-    const btn = $('#theme-toggle');
+    const btn = $('#theme-btn');
     if (btn) btn.textContent = state.theme === 'dark' ? '☀️' : '🌙';
   }
-  const themeBtn = $('#theme-toggle');
+  const themeBtn = $('#theme-btn');
   if (themeBtn) themeBtn.addEventListener('click', () => {
     state.theme = state.theme === 'dark' ? 'light' : 'dark';
     applyTheme();
@@ -90,7 +90,7 @@
   applyTheme();
 
   /* ── Lang ── */
-  const langBtn = $('#lang-toggle');
+  const langBtn = $('#lang-btn');
   if (langBtn) langBtn.addEventListener('click', () => {
     state.lang = state.lang === 'id' ? 'en' : 'id';
     localStorage.setItem('aery-lang', state.lang);
@@ -126,7 +126,7 @@
   };
 
   /* ── Divisions execute ── */
-  window.executeDivision = async (div) => {
+  window.execDiv = async (div) => {
     showToast(`Executing ${div} division...`, 'info');
     try {
       const res = await fetch(`/divisions/${div}/execute`, {
@@ -158,7 +158,7 @@
   };
 
   /* ── Tools execute ── */
-  window.executeTool = async (name) => {
+  window.execTool = async (name) => {
     showToast(`Executing tool: ${name}...`, 'info');
     try {
       const res = await fetch(`/tools/${name}`, {
@@ -174,17 +174,17 @@
   };
 
   /* ── Memory search ── */
-  window.searchMemory = async () => {
-    const q = $('#memory-search').value.trim();
+  window.searchMem = async () => {
+    const q = $('#mem-search').value.trim();
     if (!q) return showToast('Enter search query', 'warning');
     showToast(`Searching: ${q}...`, 'info');
     try {
       const res = await fetch(`/memory/recall?q=${encodeURIComponent(q)}`);
       const data = await res.json();
       const results = data.results || [];
-      const container = $('#memory-results');
+      const container = $('#mem-results');
       if (results.length === 0) {
-        container.innerHTML = '<div class="empty-state"><div class="empty-icon">🔍</div><p>No results found</p></div>';
+        container.innerHTML = '<div class="empty-state"><div class="empty-ico">🔍</div><p>No results found</p></div>';
       } else {
         container.innerHTML = results.map(r => `
           <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:0.5rem">
@@ -193,7 +193,7 @@
           </div>
         `).join('');
       }
-      $('#results-count').textContent = `${results.length} found`;
+      $('#results-cnt').textContent = `${results.length} found`;
       showToast(`Found ${results.length} results`, 'success');
     } catch (e) {
       showToast(`Error: ${e.message}`, 'error');
@@ -201,9 +201,9 @@
   };
 
   /* ── Memory store ── */
-  window.storeMemory = async () => {
-    const key = $('#memory-key').value.trim();
-    const val = $('#memory-value').value.trim();
+  window.storeMem = async () => {
+    const key = $('#mem-key').value.trim();
+    const val = $('#mem-val').value.trim();
     if (!key || !val) return showToast('Enter key and value', 'warning');
     showToast(`Storing: ${key}...`, 'info');
     try {
@@ -214,8 +214,8 @@
       });
       const data = await res.json();
       showToast(`Stored: ${key}`, 'success');
-      $('#memory-key').value = '';
-      $('#memory-value').value = '';
+      $('#mem-key').value = '';
+      $('#mem-val').value = '';
     } catch (e) {
       showToast(`Error: ${e.message}`, 'error');
     }
@@ -223,13 +223,13 @@
 
   /* ── Chat ── */
   const chatForm = $('#chat-form');
-  const chatWin = $('#chat-window');
-  const chatIn = $('#chat-input');
+  const chatWin = $('#chat-win');
+  const chatIn = $('#chat-in');
 
   function appendMsg(type, text) {
     const msg = document.createElement('div');
-    msg.className = `chat-msg ${type}`;
-    msg.innerHTML = `<div class="msg-content">${escapeHtml(text)}</div>`;
+    msg.className = `msg ${type}`;
+    msg.innerHTML = `<div class="bubble">${escapeHtml(text)}</div>`;
     chatWin.appendChild(msg);
     chatWin.scrollTop = chatWin.scrollHeight;
     state.chatHistory.push({ type, text, time: Date.now() });
@@ -251,8 +251,8 @@
       chatIn.style.height = 'auto';
 
       const typing = document.createElement('div');
-      typing.className = 'chat-msg assistant';
-      typing.innerHTML = '<div class="msg-content">Typing...</div>';
+      typing.className = 'msg asst';
+      typing.innerHTML = '<div class="bubble">Typing...</div>';
       chatWin.appendChild(typing);
       chatWin.scrollTop = chatWin.scrollHeight;
 
@@ -264,10 +264,10 @@
         });
         const data = await res.json();
         typing.remove();
-        appendMsg('assistant', data.response || data.error || 'No response');
+        appendMsg('asst', data.response || data.error || 'No response');
       } catch (err) {
         typing.remove();
-        appendMsg('assistant', 'Sorry, error occurred.');
+        appendMsg('asst', 'Sorry, error occurred.');
       }
     });
 
@@ -292,17 +292,17 @@
       const data = await res.json();
       const req = data.requests || state.requests;
       const tok = data.tokens || state.tokens + Math.floor(Math.random() * 1000);
-      animateVal('stat-requests', state.requests, req, 1000);
+      animateVal('s-req', state.requests, req, 1000);
       state.requests = req;
-      animateVal('stat-tokens', state.tokens, tok, 1000);
+      animateVal('s-tok', state.tokens, tok, 1000);
       state.tokens = tok;
-      $('#live-rps').textContent = (Math.random() * 5).toFixed(1);
-      $('#live-latency').textContent = Math.floor(Math.random() * 150 + 50);
-      $('#live-memory').textContent = (Math.random() * 50 + 400).toFixed(0);
+      $('#l-rps').textContent = (Math.random() * 5).toFixed(1);
+      $('#l-lat').textContent = Math.floor(Math.random() * 150 + 50);
+      $('#l-mem').textContent = (Math.random() * 50 + 400).toFixed(0);
       const up = Math.floor((Date.now() - state.uptimeStart) / 1000);
-      $('#stat-uptime').textContent = fmtDur(up);
-      $('#dossier-uptime').textContent = fmtDur(up);
-      $('#dossier-requests').textContent = state.requests;
+      $('#s-up').textContent = fmtDur(up);
+      $('#dos-up').textContent = fmtDur(up);
+      $('#dos-req').textContent = state.requests;
     } catch (e) { /* silent */ }
   }
 
@@ -334,10 +334,10 @@
   /* ── Countdown ── */
   setInterval(() => {
     const s = Math.floor((Date.now() - state.uptimeStart) / 1000);
-    $('#cd-days').textContent = Math.floor(s / 86400);
-    $('#cd-hours').textContent = Math.floor((s % 86400) / 3600);
-    $('#cd-mins').textContent = Math.floor((s % 3600) / 60);
-    $('#cd-secs').textContent = s % 60;
+    $('#cd-d').textContent = Math.floor(s / 86400);
+    $('#cd-h').textContent = Math.floor((s % 86400) / 3600);
+    $('#cd-m').textContent = Math.floor((s % 3600) / 60);
+    $('#cd-s').textContent = s % 60;
   }, 1000);
 
   /* ── Case number ── */
@@ -349,6 +349,25 @@
   if (caseScope) {
     let v = 0;
     setInterval(() => { v += Math.floor(Math.random() * 100); caseScope.textContent = '$' + v.toLocaleString(); }, 2000);
+  }
+
+  /* ── Being processed (audit.devoco concept) ── */
+  const beingProc = $('#being-proc');
+  if (beingProc) {
+    let bp = 0;
+    setInterval(() => { bp += Math.floor(Math.random() * 50); beingProc.textContent = bp.toLocaleString(); }, 1000);
+  }
+
+  /* ── Clock (sly.systems concept) ── */
+  const clockJkt = $('#clock-jkt');
+  if (clockJkt) {
+    setInterval(() => {
+      const now = new Date();
+      const h = now.getHours().toString().padStart(2, '0');
+      const m = now.getMinutes().toString().padStart(2, '0');
+      const s = now.getSeconds().toString().padStart(2, '0');
+      clockJkt.textContent = `Jakarta ${h}:${m}:${s}`;
+    }, 1000);
   }
 
   /* ── Keyboard ── */
@@ -380,6 +399,6 @@
   setInterval(fetchStats, 5000);
   fetchStats();
 
-  window.Aery = { state, showToast, scrollToSection: window.scrollToSection, fetchStats };
+  window.Aery = { state, showToast, scrollTo: window.scrollTo, fetchStats };
 
 })();
