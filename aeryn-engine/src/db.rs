@@ -38,19 +38,15 @@ impl Database {
         let conn = self.conn.lock().map_err(|e| e.to_string())?;
         let mut stmt = conn.prepare(sql).map_err(|e| e.to_string())?;
         let columns: Vec<String> = stmt.column_names().into_iter().map(|s| s.to_string()).collect();
-        let rows = stmt.query_map(params, |row| {
+        
+        let rows: Vec<HashMap<String, String>> = stmt.query_map(params, |row| {
             let mut map = HashMap::new();
             for (i, col) in columns.iter().enumerate() {
                 let value: String = row.get(i).unwrap_or_else(|_| String::new());
                 map.insert(col.clone(), value);
             }
             Ok(map)
-        }).map_err(|e| e.to_string())?;
-        
-        let mut results = Vec::new();
-        for row in rows {
-            results.push(row.map_err(|e| e.to_string())?);
-        }
+        }).map_err(|e| e.to_string())?.collect::<Result<Vec<_>, _>>().map_err(|e| e.to_string())?;
         
         Ok(QueryResult { columns, rows })
     }
@@ -154,7 +150,7 @@ mod db_tests {
         item1.insert("price".to_string(), "9.99".to_string());
         db.insert("items", &item1).unwrap();
 
-        let result = db.query("SELECT * FROM items WHERE name = ?", &["Widget"]).unwrap();
+        let result = db.query("SELECT * FROM items WHERE name = ?", &[&"Widget"]).unwrap();
         assert_eq!(result.rows.len(), 1);
     }
 }
