@@ -9,6 +9,7 @@ members = [
     "crates/aeryn-embed",
     "crates/aeryn-processor",
     "crates/aeryn-mcp",
+    "crates/aeryn-graph",
     "crates/aeryn-py",
 ]
 
