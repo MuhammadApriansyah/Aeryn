@@ -1,0 +1,21 @@
+[package]
+name = "aeryn-tokenizer"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+aeryn-core = { path = "../aeryn-core" }
+serde = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+regex = { workspace = true }
+unicode-segmentation = { workspace = true }
+memchr = { workspace = true }
+lazy_static = { workspace = true }
+
+[lib]
+name = "aeryn_tokenizer"
+path = "src/lib.rs"
+crate-type = ["cdylib", "rlib"]

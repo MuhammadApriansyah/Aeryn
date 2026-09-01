@@ -1,0 +1,59 @@
+[package]
+name = "aeryn-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+regex = { workspace = true }
+unicode-segmentation = { workspace = true }
+lazy_static = { workspace = true }
+hashbrown = { workspace = true }
+parking_lot = { workspace = true }
+rayon = { workspace = true }
+memmap2 = { workspace = true }
+bincode = { workspace = true }
+flate2 = { workspace = true }
+sha2 = { workspace = true }
+base64 = { workspace = true }
+itertools = { workspace = true }
+smallvec = { workspace = true }
+half = { workspace = true }
+ndarray = { workspace = true }
+rusqlite = { workspace = true }
+url = { workspace = true }
+httparse = { workspace = true }
+jsonwebtoken = { workspace = true }
+argon2 = { workspace = true }
+zstd = { workspace = true }
+lru = { workspace = true }
+moka = { workspace = true }
+metrics = { workspace = true }
+equivalent = { workspace = true }
+indexmap = { workspace = true }
+compact_str = { workspace = true }
+stringzilla = { workspace = true }
+simdutf8 = { workspace = true }
+memchr = { workspace = true }
+aho-corasick = { workspace = true }
+rand = { workspace = true }
+crossbeam = { workspace = true }
+bytes = { workspace = true }
+num_cpus = "1"
+hex = "0.4"
+
+[lib]
+name = "aeryn_core"
+path = "src/lib.rs"
+crate-type = ["cdylib", "rlib"]
+
+[dev-dependencies]
+tempfile = { workspace = true }
+proptest = { workspace = true }
