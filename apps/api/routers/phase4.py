@@ -578,15 +578,10 @@ async def monitoring_stats():
         return {"error": str(e)}
 
 
-# Dashboard web routes
-from apps.web.server import router as dashboard_router
+# Dashboard web routes — removed, using web_routes_router for React SPA
+# from apps.web.server import router as dashboard_router  # REMOVED: old vanilla dashboard
 
-# SPA routes — serve dashboard HTML for client-side routing routes
-@router.get("/", response_class=HTMLResponse)
-async def spa_root():
-    """Serve dashboard HTML for client-side routing pages."""
-    from apps.web.server import _serve_dashboard
-    return _serve_dashboard()
+# SPA routes — / is now handled by web_routes_router (React app)
 
 # Redirect all old SPA routes to single dashboard
 for _route in ["/projects", "/workspaces", "/chat", "/audit", "/settings", "/notifications"]:
@@ -600,11 +595,13 @@ for _route in ["/projects", "/workspaces", "/chat", "/audit", "/settings", "/not
 
 @router.get("/app/{spa:path}", response_class=HTMLResponse)
 async def spa_fallback(spa: str):
-    """Serve dashboard HTML for client-side routing routes."""
+    """Serve React app for client-side routing routes."""
     SPA_ROUTES = {"/", "/projects", "/workspaces", "/chat", "/plugins", "/audit", "/settings", "/notifications"}
-    from apps.web.server import _serve_dashboard
     if "/" + spa in SPA_ROUTES:
-        return _serve_dashboard()
+        react_index = "/home/sen/aeryn-core-agent/apps/web-vite/dist/index.html"
+        if os.path.exists(react_index):
+            with open(react_index, encoding="utf-8") as f:
+                return f.read()
     return JSONResponse({"error": "Not found"}, status_code=404)
 
 if __name__ == "__main__":
