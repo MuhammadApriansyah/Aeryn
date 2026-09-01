@@ -6,6 +6,7 @@ members = [
     "crates/aeryn-splitter",
     "crates/aeryn-tokenizer",
     "crates/aeryn-db",
+    "crates/aeryn-embed",
     "crates/aeryn-py",
 ]
 
