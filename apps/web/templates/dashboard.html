@@ -7,21 +7,24 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r170/three.min.js"></script>
 <link rel="stylesheet" href="/static/css/dashboard.css">
 </head>
 <body data-section="cover">
-<a href="#main" class="skip-link">Skip to content</a>
+<a href="#main" class="skip-link">Skip to main content</a>
+
 <div class="cursor" id="cursor" aria-hidden="true"></div>
 <div class="cursor-trail" id="cursor-trail" aria-hidden="true"></div>
 <div class="toast-container" id="toast-container" role="status" aria-live="polite"></div>
+
+<!-- Three.js Canvas Background -->
+<div class="cover-3d" id="cover-3d"></div>
 
 <!-- ══ COVER: sly.systems + audit.devoco.studio ══ -->
 <section class="sec-cover" data-section="cover">
   <div class="cover-bg">
     <div class="grid-overlay"></div>
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
     <div class="noise"></div>
   </div>
   <div class="cover-content">
@@ -31,39 +34,30 @@
       <span>SOURCES: <b>4 verified</b></span>
       <span>STATUS: <b class="online">PRODUCTION</b></span>
     </div>
-    <div class="cover-clock">
-      <span id="clock-jkt">Jakarta 00:00</span>
-    </div>
+    <div class="cover-clock">Jakarta <span id="clock-jkt">00:00</span></div>
     <h1 class="cover-title">
-      <span>The best agents</span>
-      <span>are <em>managed</em>,</span>
-      <span>not improvised.</span>
+      <span class="title-line">The best agents</span>
+      <span class="title-line">are <em>managed</em>,</span>
+      <span class="title-line">not improvised.</span>
     </h1>
     <div class="cover-stats">
-      <div class="stat-card"><div class="stat-ico">⚡</div><div class="stat-val" id="s-req">0</div><div class="stat-lbl">Requests</div><div class="stat-tr" id="s-req-t">+0%</div></div>
-      <div class="stat-card"><div class="stat-ico">👥</div><div class="stat-val" id="s-agt">5</div><div class="stat-lbl">Divisions</div><div class="stat-tr">All operational</div></div>
-      <div class="stat-card"><div class="stat-ico">⏱️</div><div class="stat-val" id="s-up">0s</div><div class="stat-lbl">Uptime</div><div class="stat-tr">Since restart</div></div>
-      <div class="stat-card"><div class="stat-ico">🎯</div><div class="stat-val" id="s-tok">0</div><div class="stat-lbl">Tokens</div><div class="stat-tr" id="s-tok-t">+0%</div></div>
+      <div class="stat-card"><div class="stat-ico">⚡</div><div class="stat-val" id="s-req">0</div><div class="stat-lbl">Requests</div></div>
+      <div class="stat-card"><div class="stat-ico">👥</div><div class="stat-val" id="s-agt">5</div><div class="stat-lbl">Divisions</div></div>
+      <div class="stat-card"><div class="stat-ico">⏱️</div><div class="stat-val" id="s-up">0s</div><div class="stat-lbl">Uptime</div></div>
+      <div class="stat-card"><div class="stat-ico">🎯</div><div class="stat-val" id="s-tok">0</div><div class="stat-lbl">Tokens</div></div>
     </div>
-    <div class="cover-live">
-      <span class="dot"></span> LIVE — <span id="l-rps">0</span> req/s · <span id="l-lat">0</span>ms · <span id="l-mem">0</span>MB
-    </div>
-    <div class="cover-being">
-      <span>BEING PROCESSED AS YOU READ: <b id="being-proc">0</b> tokens</span>
-    </div>
+    <div class="cover-live"><span class="dot"></span> LIVE — <span id="l-rps">0</span> req/s · <span id="l-lat">0</span>ms · <span id="l-mem">0</span>MB</div>
+    <div class="cover-being">BEING PROCESSED AS YOU READ: <b id="b-proc">0</b> tokens</div>
     <div class="cover-cta">
       <button class="btn-pri" onclick="scrollTo('systems')">Enter the Systems →</button>
       <button class="btn-sec" onclick="scrollTo('work')">See the Work</button>
     </div>
   </div>
-  <div class="cover-scroll">
-    <span>SCROLL TO EXPLORE</span>
-    <div class="scroll-line"></div>
-  </div>
+  <div class="cover-scroll"><span>SCROLL TO EXPLORE</span><div class="scroll-line"></div></div>
 </section>
 
 <!-- ══ PRACTICE: sly.systems ══ -->
-<section class="sec-practice" data-section="practice">
+<section class="sec-practice" data-section="systems" id="systems">
   <div class="container">
     <div class="hdr"><div class="num">01</div><h2>The Practice</h2><p>A private firm, holding a limited number of engagements. For each, we design, build and manage the systems the business runs on — the software, the intelligence, and the operations around them.</p></div>
     <div class="practice-grid">
@@ -75,7 +69,7 @@
 </section>
 
 <!-- ══ WORK: acid-crunch.com + sly.systems ══ -->
-<section class="sec-work" data-section="work">
+<section class="sec-work" data-section="work" id="work">
   <div class="container">
     <div class="hdr"><div class="num">02</div><h2>The Work</h2><p>Real products, live in days — and then in motion.</p></div>
     <div class="work-list">
@@ -104,41 +98,25 @@
           <div class="tags"><span>Extensible</span><span>Marketplace</span><span>Custom</span></div>
         </div>
       </div>
-      <div class="work-item" onclick="toggleWork(this)">
-        <div class="work-header"><div class="work-title">Memory</div><div class="work-toggle">+</div></div>
-        <div class="work-detail">
-          <div class="mem-viz"><span class="m-node">Entity</span><span class="m-edge">→</span><span class="m-node">Relation</span><span class="m-edge">→</span><span class="m-node">Recall</span></div>
-          <div class="tags"><span>PostgreSQL</span><span>pgvector</span><span>384d</span></div>
-        </div>
-      </div>
-      <div class="work-item" onclick="toggleWork(this)">
-        <div class="work-header"><div class="work-title">Observability</div><div class="work-toggle">+</div></div>
-        <div class="work-detail">
-          <div class="trace-viz"><span class="t-bar" style="width:60%"></span><span class="t-bar" style="width:40%;opacity:.7"></span><span class="t-bar" style="width:80%;opacity:.4"></span></div>
-          <div class="tags"><span>Traces</span><span>Spans</span><span>Metrics</span></div>
-        </div>
-      </div>
     </div>
   </div>
 </section>
 
 <!-- ══ STACK: sly.systems ══ -->
-<section class="sec-stack" data-section="stack">
+<section class="sec-stack" data-section="stack" id="stack">
   <div class="container">
     <div class="hdr"><div class="num">03</div><h2>The Stack</h2><p>We don't sell one tool. We direct the whole stack — the platforms, models and studios the work is built with.</p></div>
     <div class="stack-grid">
-      <div class="stack-cat"><h4>Backend</h4><div class="stack-items"><span>FastAPI</span><span>Python 3.11</span><span>SQLite</span><span>PostgreSQL</span><span>Redis</span><span>asyncpg</span></div></div>
-      <div class="stack-cat"><h4>AI / LLM</h4><div class="stack-items"><span>Gemini</span><span>Claude</span><span>OpenAI</span><span>Mistral</span><span>Perplexity</span><span>sentence-transformers</span></div></div>
-      <div class="stack-cat"><h4>Frontend</h4><div class="stack-items"><span>React</span><span>Vite</span><span>Three.js</span><span>GSAP</span><span>D3.js</span><span>Vanilla JS</span></div></div>
-      <div class="stack-cat"><h4>Infrastructure</h4><div class="stack-items"><span>PM2</span><span>Docker</span><span>Nginx</span><span>Cloudflare</span><span>GitHub</span><span>Actions</span></div></div>
-      <div class="stack-cat"><h4>Data</h4><div class="stack-items"><span>pgvector</span><span>Elasticsearch</span><span>Snowflake</span><span>Supabase</span><span>Stripe</span><span>Polar</span></div></div>
-      <div class="stack-cat"><h4>Comms</h4><div class="stack-items"><span>Telegram</span><span>Discord</span><span>Slack</span><span>Twilio</span><span>Notion</span><span>Zapier</span></div></div>
+      <div class="stack-cat"><h4>Backend</h4><div class="stack-items"><span>FastAPI</span><span>Python 3.11</span><span>SQLite</span><span>PostgreSQL</span><span>Redis</span></div></div>
+      <div class="stack-cat"><h4>AI / LLM</h4><div class="stack-items"><span>Gemini</span><span>Claude</span><span>OpenAI</span><span>Mistral</span><span>Perplexity</span></div></div>
+      <div class="stack-cat"><h4>Frontend</h4><div class="stack-items"><span>Vanilla JS</span><span>GSAP</span><span>Three.js</span><span>WebGL</span><span>D3.js</span></div></div>
+      <div class="stack-cat"><h4>Infrastructure</h4><div class="stack-items"><span>PM2</span><span>Docker</span><span>Nginx</span><span>Cloudflare</span><span>GitHub</span></div></div>
     </div>
   </div>
 </section>
 
 <!-- ══ CHAT: Interactive ══ -->
-<section class="sec-chat" data-section="chat">
+<section class="sec-chat" data-section="chat" id="chat">
   <div class="container">
     <div class="hdr"><div class="num">04</div><h2>Ask Aeryn</h2><p>The intelligence engine. Ask anything — I have 12 tools and 5 cognitive divisions ready to help.</p></div>
     <div class="chat-box">
@@ -154,176 +132,30 @@
 </section>
 
 <!-- ══ DIVISIONS: 5 agents ══ -->
-<section class="sec-divisions" data-section="divisions">
+<section class="sec-divisions" data-section="divisions" id="divisions">
   <div class="container">
-    <div class="hdr"><div class="num">05</div><h2>Cognitive Divisions</h2><p>5 specialized AI agents handling different aspects of reasoning. Each division has unique capabilities and tools.</p></div>
+    <div class="hdr"><div class="num">05</div><h2>Cognitive Divisions</h2><p>5 specialized AI agents handling different aspects of reasoning.</p></div>
     <div class="div-grid">
-      <div class="div-card" onclick="execDiv('creative')"><div class="div-ico">🎨</div><h4>Creative</h4><p>Design, storytelling, content creation</p><div class="div-agents"><span>POV</span><span>Style</span></div><button class="btn-exec">Execute</button></div>
-      <div class="div-card" onclick="execDiv('psych')"><div class="div-ico">🧠</div><h4>Psychology</h4><p>Emotional intelligence, cognitive analysis</p><div class="div-agents"><span>Emotion</span><span>Cognitive</span></div><button class="btn-exec">Execute</button></div>
-      <div class="div-card" onclick="execDiv('reasoning')"><div class="div-ico">🔍</div><h4>Reasoning</h4><p>Logic, problem solving, critical analysis</p><div class="div-agents"><span>MCTS</span><span>FOL</span><span>Critique</span></div><button class="btn-exec">Execute</button></div>
-      <div class="div-card" onclick="execDiv('gov')"><div class="div-ico">🏛️</div><h4>Governance</h4><p>Rules, ethics, compliance, safety</p><div class="div-agents"><span>Safety</span><span>Compliance</span></div><button class="btn-exec">Execute</button></div>
-      <div class="div-card" onclick="execDiv('infra')"><div class="div-ico">⚙️</div><h4>Infrastructure</h4><p>Deployment, monitoring, system tasks</p><div class="div-agents"><span>Sync</span><span>Validator</span></div><button class="btn-exec">Execute</button></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ PLUGINS: Installed + Marketplace ══ -->
-<section class="sec-plugins" data-section="plugins">
-  <div class="container">
-    <div class="hdr"><div class="num">06</div><h2>Plugins</h2><p>Installed and discoverable plugins for extended functionality. Auto-discovered and auto-loaded.</p></div>
-    <div class="plugins-layout">
-      <div class="plugins-installed">
-        <h3 class="sub-title">Installed</h3>
-        <div class="plugin-list" id="plugin-list">
-          <div class="plugin-row"><span class="plugin-ico">🔍</span><div class="plugin-info"><span class="plugin-name">Code Review</span><span class="plugin-desc">Analyze Python code for bugs</span></div><button class="btn-run" onclick="runPlugin('code-review')">Run</button></div>
-          <div class="plugin-row"><span class="plugin-ico">📚</span><div class="plugin-info"><span class="plugin-name">Research Assistant</span><span class="plugin-desc">Search vault and summarize</span></div><button class="btn-run" onclick="runPlugin('research-assistant')">Run</button></div>
-          <div class="plugin-row"><span class="plugin-ico">🧩</span><div class="plugin-info"><span class="plugin-name">Memory Vault</span><span class="plugin-desc">PostgreSQL semantic search</span></div><button class="btn-run" onclick="runPlugin('postgres-memory')">Run</button></div>
-          <div class="plugin-row"><span class="plugin-ico">🔗</span><div class="plugin-info"><span class="plugin-name">Messaging Gateway</span><span class="plugin-desc">Telegram, Discord, Slack</span></div><button class="btn-run" onclick="runPlugin('messaging-gateway')">Run</button></div>
-        </div>
-      </div>
-      <div class="plugins-market">
-        <h3 class="sub-title">Marketplace</h3>
-        <div class="market-grid">
-          <div class="market-card"><span class="market-ico">📊</span><h4>Analytics Pro</h4><p>Advanced analytics</p><span class="market-price">Free</span></div>
-          <div class="market-card"><span class="market-ico">🔐</span><h4>Security Scanner</h4><p>OWASP audit</p><span class="market-price">Free</span></div>
-          <div class="market-card"><span class="market-ico">🌐</span><h4>Web Scraper</h4><p>Extract web content</p><span class="market-price">Free</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ MEMORY: PostgreSQL search ══ -->
-<section class="sec-memory" data-section="memory">
-  <div class="container">
-    <div class="hdr"><div class="num">07</div><h2>Memory Vault</h2><p>Long-term knowledge storage with semantic search. PostgreSQL + pgvector for 384-dimensional embeddings.</p></div>
-    <div class="mem-layout">
-      <div class="mem-search-panel">
-        <div class="search-bar"><input type="text" class="search-in" id="mem-search" placeholder="Search memories semantically..."><button class="btn-search" onclick="searchMem()">Search</button></div>
-        <div class="store-bar"><input type="text" class="store-in" id="mem-key" placeholder="Key"><input type="text" class="store-in" id="mem-val" placeholder="Value"><button class="btn-store" onclick="storeMem()">Store</button></div>
-      </div>
-      <div class="mem-results-panel">
-        <div class="results-hdr"><h3>Search Results</h3><span class="results-cnt" id="results-cnt">0 found</span></div>
-        <div class="mem-results" id="mem-results"><div class="empty-state"><div class="empty-ico">🔍</div><p>Search for memories or store new ones</p></div></div>
-      </div>
-    </div>
-    <div class="mem-stats">
-      <div class="mem-stat"><span class="mem-stat-val" id="mem-total">0</span><span class="mem-stat-lbl">Total</span></div>
-      <div class="mem-stat"><span class="mem-stat-val" id="mem-hot">0</span><span class="mem-stat-lbl">Hot (7d)</span></div>
-      <div class="mem-stat"><span class="mem-stat-val" id="mem-warm">0</span><span class="mem-stat-lbl">Warm (30d)</span></div>
-      <div class="mem-stat"><span class="mem-stat-val" id="mem-cold">0</span><span class="mem-stat-lbl">Cold (90d)</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ TOOLS: Discover + Execute ══ -->
-<section class="sec-tools" data-section="tools">
-  <div class="container">
-    <div class="hdr"><div class="num">08</div><h2>Tools</h2><p>Discover and execute capabilities. 12+ tools available for various tasks.</p></div>
-    <div class="tools-grid">
-      <div class="tool-card" onclick="execTool('search')"><div class="tool-ico">🔍</div><h4>Search</h4><p>FTS5 + TF-IDF hybrid</p><span class="tool-status ready">Ready</span></div>
-      <div class="tool-card" onclick="execTool('stats')"><div class="tool-ico">📊</div><h4>Stats</h4><p>Dashboard metrics</p><span class="tool-status ready">Ready</span></div>
-      <div class="tool-card" onclick="execTool('traces')"><div class="tool-ico">📈</div><h4>Traces</h4><p>Observability data</p><span class="tool-status ready">Ready</span></div>
-      <div class="tool-card" onclick="execTool('skills')"><div class="tool-ico">🧠</div><h4>Skills</h4><p>3 active skills</p><span class="tool-status ready">Ready</span></div>
-      <div class="tool-card" onclick="execTool('config')"><div class="tool-ico">🔧</div><h4>Config</h4><p>System configuration</p><span class="tool-status ready">Ready</span></div>
-      <div class="tool-card" onclick="execTool('files')"><div class="tool-ico">📁</div><h4>Files</h4><p>File management</p><span class="tool-status ready">Ready</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ AGENTS: Monitoring ══ -->
-<section class="sec-agents" data-section="agents">
-  <div class="container">
-    <div class="hdr"><div class="num">09</div><h2>Agents</h2><p>AI agents and their task monitoring. Real-time status and performance.</p></div>
-    <div class="table-wrap"><table class="tbl"><thead><tr><th>Name</th><th>Division</th><th>Status</th><th>Tasks</th><th>Last Active</th></tr></thead><tbody id="agents-tbody"><tr><td colspan="5" class="loading">Loading agents...</td></tr></tbody></table></div>
-  </div>
-</section>
-
-<!-- ══ WORKSPACES: Multi-tenant ══ -->
-<section class="sec-workspaces" data-section="workspaces">
-  <div class="container">
-    <div class="hdr"><div class="num">10</div><h2>Workspaces</h2><p>Multi-tenant workspace management. Isolated environments for different projects.</p></div>
-    <div class="ws-grid">
-      <div class="ws-card active"><div class="ws-ico">🏠</div><h4>Default Workspace</h4><p>Personal workspace for Sen</p><div class="ws-meta"><span class="ws-status active">Active</span><span class="ws-members">1 member</span></div></div>
-      <div class="ws-card"><div class="ws-ico">💼</div><h4>Work Projects</h4><p>Professional projects</p><div class="ws-meta"><span class="ws-status">Inactive</span><span class="ws-members">0 members</span></div></div>
-      <div class="ws-card add" onclick="toast('Create workspace — Coming soon!')"><div class="add-ico">+</div><h4>Add Workspace</h4><p>Create new environment</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ WORKFLOWS: Automation ══ -->
-<section class="sec-workflows" data-section="workflows">
-  <div class="container">
-    <div class="hdr"><div class="num">11</div><h2>Workflows</h2><p>Multi-step automation workflows. Create, manage, and monitor complex processes.</p></div>
-    <div class="wf-list">
-      <div class="wf-item"><div class="wf-step">1</div><div class="wf-info"><h4>Code Review Pipeline</h4><p>Analyze → Report → Fix → Verify</p></div><div class="wf-status active">Active</div></div>
-      <div class="wf-item"><div class="wf-step">2</div><div class="wf-info"><h4>Research Flow</h4><p>Search → Summarize → Store → Notify</p></div><div class="wf-status active">Active</div></div>
-      <div class="wf-item"><div class="wf-step">3</div><div class="wf-info"><h4>Deployment Pipeline</h4><p>Build → Test → Deploy → Monitor</p></div><div class="wf-status">Inactive</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ ANALYTICS: Charts ══ -->
-<section class="sec-analytics" data-section="analytics">
-  <div class="container">
-    <div class="hdr"><div class="num">12</div><h2>Analytics</h2><p>Performance metrics and usage analytics. Real-time data visualization.</p></div>
-    <div class="analytics-grid">
-      <div class="analytics-card"><h4>Usage Overview</h4><div class="bar-chart" id="usage-chart"></div><div class="chart-labels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div></div>
-      <div class="analytics-card"><h4>Performance</h4><div class="perf-list"><div><span>Backend API</span><span class="perf-val online" id="perf-backend">0ms</span></div><div><span>Database</span><span class="perf-val online" id="perf-database">0ms</span></div><div><span>LLM Gateway</span><span class="perf-val online" id="perf-llm">0ms</span></div><div><span>Memory Search</span><span class="perf-val online" id="perf-memory">0ms</span></div></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ OBSERVABILITY: Traces ══ -->
-<section class="sec-obs" data-section="observability">
-  <div class="container">
-    <div class="hdr"><div class="num">13</div><h2>Observability</h2><p>Traces, spans, and performance metrics for all operations. Langfuse-style monitoring.</p></div>
-    <div class="obs-stats">
-      <div class="obs-stat"><div class="obs-stat-val" id="obs-traces">0</div><div class="obs-stat-lbl">Traces</div></div>
-      <div class="obs-stat"><div class="obs-stat-val" id="obs-spans">0</div><div class="obs-stat-lbl">Spans</div></div>
-      <div class="obs-stat"><div class="obs-stat-val" id="obs-errors">0</div><div class="obs-stat-lbl">Errors</div></div>
-    </div>
-    <div class="obs-table"><h3>Recent Traces</h3><table class="tbl"><thead><tr><th>ID</th><th>Operation</th><th>Duration</th><th>Status</th><th>Spans</th></tr></thead><tbody id="trace-rows"><tr><td colspan="5" class="loading">Loading traces...</td></tr></tbody></table></div>
-  </div>
-</section>
-
-<!-- ══ TIMELINE: wip.workoholics.es countdown ══ -->
-<section class="sec-timeline" data-section="timeline">
-  <div class="container">
-    <div class="hdr"><div class="num">14</div><h2>Uptime</h2><p>System availability since last restart. Real-time counter.</p></div>
-    <div class="countdown">
-      <div class="cd"><div class="cd-val" id="cd-d">0</div><div class="cd-lbl">Days</div></div>
-      <div class="cd"><div class="cd-val" id="cd-h">0</div><div class="cd-lbl">Hours</div></div>
-      <div class="cd"><div class="cd-val" id="cd-m">0</div><div class="cd-lbl">Minutes</div></div>
-      <div class="cd"><div class="cd-val" id="cd-s">0</div><div class="cd-lbl">Seconds</div></div>
+      <div class="div-card" onclick="execDiv('creative')"><div class="div-ico">🎨</div><h4>Creative</h4><p>Design, storytelling</p><div class="div-agents"><span>POV</span><span>Style</span></div><button class="btn-exec">Execute</button></div>
+      <div class="div-card" onclick="execDiv('psych')"><div class="div-ico">🧠</div><h4>Psychology</h4><p>Emotional intelligence</p><div class="div-agents"><span>Emotion</span><span>Cognitive</span></div><button class="btn-exec">Execute</button></div>
+      <div class="div-card" onclick="execDiv('reasoning')"><div class="div-ico">🔍</div><h4>Reasoning</h4><p>Logic, problem solving</p><div class="div-agents"><span>MCTS</span><span>FOL</span></div><button class="btn-exec">Execute</button></div>
+      <div class="div-card" onclick="execDiv('gov')"><div class="div-ico">🏛️</div><h4>Governance</h4><p>Rules, ethics, compliance</p><div class="div-agents"><span>Safety</span></div><button class="btn-exec">Execute</button></div>
+      <div class="div-card" onclick="execDiv('infra')"><div class="div-ico">⚙️</div><h4>Infrastructure</h4><p>Deployment, monitoring</p><div class="div-agents"><span>Sync</span><span>Validator</span></div><button class="btn-exec">Execute</button></div>
     </div>
   </div>
 </section>
 
 <!-- ══ DOSSIER: audit.devoco.studio ══ -->
-<section class="sec-dossier" data-section="dossier">
+<section class="sec-dossier" data-section="dossier" id="dossier">
   <div class="container">
-    <div class="hdr"><div class="num">15</div><h2>Dossier</h2><p>Subject: Aeryn AI Platform. Classification: Production. All figures verified.</p></div>
+    <div class="hdr"><div class="num">06</div><h2>Dossier</h2><p>Subject: Aeryn AI Platform. Classification: Production.</p></div>
     <div class="dossier-grid">
       <div class="dossier-card"><div class="dossier-lbl">Status</div><div class="dossier-val">Production</div></div>
       <div class="dossier-card"><div class="dossier-lbl">Version</div><div class="dossier-val">v61.5</div></div>
       <div class="dossier-card"><div class="dossier-lbl">Uptime</div><div class="dossier-val" id="dos-up">0s</div></div>
       <div class="dossier-card"><div class="dossier-lbl">Requests</div><div class="dossier-val" id="dos-req">0</div></div>
       <div class="dossier-card"><div class="dossier-lbl">Agents</div><div class="dossier-val">5 Divisions</div></div>
-      <div class="dossier-card"><div class="dossier-lbl">Plugins</div><div class="dossier-val" id="dos-plg">4</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ INTEGRATIONS: Messaging ══ -->
-<section class="sec-integrations" data-section="integrations">
-  <div class="container">
-    <div class="hdr"><div class="num">16</div><h2>Integrations</h2><p>Third-party connections and messaging platforms. Connected and ready.</p></div>
-    <div class="int-grid">
-      <div class="int-card connected"><div class="int-ico">📱</div><h4>Telegram</h4><p>Bot API with inline keyboards</p><div class="int-status online">● Connected</div></div>
-      <div class="int-card connected"><div class="int-ico">💬</div><h4>Discord</h4><p>Slash commands and embeds</p><div class="int-status online">● Connected</div></div>
-      <div class="int-card"><div class="int-ico">💼</div><h4>Slack</h4><p>Web API with blocks</p><div class="int-status offline">○ Pending</div></div>
-      <div class="int-card"><div class="int-ico">🐙</div><h4>GitHub</h4><p>Issues, PRs, CI/CD</p><div class="int-status offline">○ Pending</div></div>
+      <div class="dossier-card"><div class="dossier-lbl">Plugins</div><div class="dossier-val">4</div></div>
     </div>
   </div>
 </section>
@@ -332,12 +164,12 @@
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
-      <div class="footer-col"><div class="footer-logo">🌀 Aeryn</div><div class="footer-tag">Managed intelligence, not improvised.</div><div class="footer-desc">AI Agent Platform with 5 cognitive divisions, 200+ endpoints, and adaptive learning.</div></div>
+      <div class="footer-col"><div class="footer-logo">🌀 Aeryn</div><div class="footer-tag">Managed intelligence, not improvised.</div></div>
       <div class="footer-col"><h4>Platform</h4><a href="#systems">Systems</a><a href="#work">Work</a><a href="#stack">Stack</a><a href="#chat">Chat</a></div>
-      <div class="footer-col"><h4>Intelligence</h4><a href="#memory">Memory</a><a href="#observability">Observability</a><a href="#analytics">Analytics</a><a href="#dossier">Dossier</a></div>
-      <div class="footer-col"><h4>Connect</h4><a href="#">Telegram</a><a href="#">Discord</a><a href="#">Slack</a><a href="#">GitHub</a></div>
+      <div class="footer-col"><h4>Intelligence</h4><a href="#divisions">Divisions</a><a href="#dossier">Dossier</a></div>
+      <div class="footer-col"><h4>Connect</h4><a href="#">Telegram</a><a href="#">Discord</a><a href="#">Slack</a></div>
     </div>
-    <div class="footer-bottom"><span>© 2026 Aeryn AI</span><span>CASE № 2026/001 · MMXXVI · Proof copy — not for distribution</span></div>
+    <div class="footer-bottom"><span>© 2026 Aeryn AI</span><span>CASE № 2026/001 · MMXXVI</span></div>
   </div>
 </footer>
 
@@ -346,13 +178,12 @@
   <div class="nav-inner">
     <div class="nav-logo">🌀 Aeryn</div>
     <div class="nav-links">
-      <a href="#practice">Practice</a><a href="#work">Work</a><a href="#stack">Stack</a>
-      <a href="#chat">Chat</a><a href="#divisions">Divisions</a><a href="#memory">Memory</a>
-      <a href="#observability">Observe</a><a href="#dossier">Dossier</a>
+      <a href="#systems">Systems</a><a href="#work">Work</a><a href="#stack">Stack</a>
+      <a href="#chat">Chat</a><a href="#dossier">Dossier</a>
     </div>
     <div class="nav-actions">
-      <button id="theme-btn" class="nav-btn">🌙</button>
-      <button id="lang-btn" class="nav-btn">ID</button>
+      <button id="theme-btn">🌙</button>
+      <button id="lang-btn">ID</button>
     </div>
   </div>
 </nav>
