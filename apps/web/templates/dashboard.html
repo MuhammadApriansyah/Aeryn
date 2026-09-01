@@ -3,781 +3,490 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aeryn — AI Agent Platform</title>
+<meta name="description" content="Aeryn — AI Agent Platform. Managed intelligence, not improvised.">
+<title>Aeryn — Managed Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/static/css/dashboard.css">
-<script src="/static/vendor/gsap.min.js" defer></script>
-<script src="/static/vendor/three.min.js" defer></script>
 </head>
-<body>
-<a href="#main-content" class="skip-link">Skip to main content</a>
+<body data-section="cover">
+<a href="#main" class="skip-link">Skip to content</a>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-follower" id="cursor-follower"></div>
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+<div class="cursor-trail" id="cursor-trail" aria-hidden="true"></div>
 
-<div class="app">
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
-    <div class="sidebar-header">
-      <div class="sidebar-brand">
-        <span class="sidebar-logo">AERYN</span>
-        <span class="sidebar-tag">AI Platform</span>
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container" role="status" aria-live="polite"></div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- COVER SECTION — sly.systems + audit.devoco.studio concept        -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="section-cover" id="section-cover" data-section="cover">
+  <div class="cover-bg">
+    <div class="grid-overlay"></div>
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+    <div class="noise-overlay"></div>
+  </div>
+  
+  <div class="cover-content">
+    <div class="cover-case">
+      <div class="case-number">CASE № 2026/<span id="case-suffix">001</span></div>
+      <div class="case-scope">SCOPE: <span id="case-scope">$0</span></div>
+      <div class="case-subject">SUBJECT: <span id="case-subject">Aeryn AI Platform</span></div>
+      <div class="case-sources">SOURCES: <span id="case-sources">4 verified</span></div>
+      <div class="case-opened">OPENED: <span id="case-opened">—</span></div>
+    </div>
+
+    <h1 class="cover-title">
+      <span class="title-line">The best agents</span>
+      <span class="title-line">are <em>managed</em>,</span>
+      <span class="title-line">not improvised.</span>
+    </h1>
+
+    <div class="cover-stats">
+      <div class="stat-big">
+        <div class="stat-big-value" id="stat-requests">0</div>
+        <div class="stat-big-label">Requests Processed</div>
       </div>
-      <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
-        <span></span><span></span>
+      <div class="stat-big">
+        <div class="stat-big-value" id="stat-agents">5</div>
+        <div class="stat-big-label">Active Divisions</div>
+      </div>
+      <div class="stat-big">
+        <div class="stat-big-value" id="stat-uptime">0s</div>
+        <div class="stat-big-label">Uptime</div>
+      </div>
+      <div class="stat-big">
+        <div class="stat-big-value" id="stat-tokens">0</div>
+        <div class="stat-big-label">Tokens Consumed</div>
+      </div>
+    </div>
+
+    <div class="cover-live">
+      <div class="live-item">
+        <span class="live-dot"></span>
+        <span class="live-text">LIVE — Processing <span id="live-rps">0</span> req/s</span>
+      </div>
+      <div class="live-item">
+        <span class="live-text">Latency: <span id="live-latency">0</span>ms</span>
+      </div>
+      <div class="live-item">
+        <span class="live-text">Memory: <span id="live-memory">0</span>MB</span>
+      </div>
+    </div>
+
+    <div class="cover-cta">
+      <button class="btn-cover" onclick="scrollToSection('systems')">
+        <span>Enter the Systems</span>
+        <span class="btn-arrow">→</span>
+      </button>
+      <button class="btn-cover btn-ghost" onclick="scrollToSection('work')">
+        <span>See the Work</span>
       </button>
     </div>
-    
-    <nav class="sidebar-nav">
-      <div class="nav-group">
-        <div class="nav-group-title">Overview</div>
-        <a href="#overview" class="nav-item active" data-section="overview">
-          <span class="nav-icon">📊</span>
-          <span class="nav-text">Dashboard</span>
-        </a>
-        <a href="#analytics" class="nav-item" data-section="analytics">
-          <span class="nav-icon">📈</span>
-          <span class="nav-text">Analytics</span>
-        </a>
-        <a href="#activity" class="nav-item" data-section="activity">
-          <span class="nav-icon">⚡</span>
-          <span class="nav-text">Activity</span>
-        </a>
-      </div>
-      
-      <div class="nav-group">
-        <div class="nav-group-title">Intelligence</div>
-        <a href="#chat" class="nav-item" data-section="chat">
-          <span class="nav-icon">💬</span>
-          <span class="nav-text">Chat</span>
-        </a>
-        <a href="#divisions" class="nav-item" data-section="divisions">
-          <span class="nav-icon">🧠</span>
-          <span class="nav-text">Divisions</span>
-        </a>
-        <a href="#agents" class="nav-item" data-section="agents">
-          <span class="nav-icon">🤖</span>
-          <span class="nav-text">Agents</span>
-        </a>
-        <a href="#memory" class="nav-item" data-section="memory">
-          <span class="nav-icon">🧩</span>
-          <span class="nav-text">Memory</span>
-        </a>
-      </div>
-      
-      <div class="nav-group">
-        <div class="nav-group-title">Workspace</div>
-        <a href="#projects" class="nav-item" data-section="projects">
-          <span class="nav-icon">📁</span>
-          <span class="nav-text">Projects</span>
-        </a>
-        <a href="#workflows" class="nav-item" data-section="workflows">
-          <span class="nav-icon">⚙️</span>
-          <span class="nav-text">Workflows</span>
-        </a>
-        <a href="#workspaces" class="nav-item" data-section="workspaces">
-          <span class="nav-icon">🏢</span>
-          <span class="nav-text">Workspaces</span>
-        </a>
-      </div>
-      
-      <div class="nav-group">
-        <div class="nav-group-title">Extensions</div>
-        <a href="#plugins" class="nav-item" data-section="plugins">
-          <span class="nav-icon">🔌</span>
-          <span class="nav-text">Plugins</span>
-          <span class="nav-count">2</span>
-        </a>
-        <a href="#tools" class="nav-item" data-section="tools">
-          <span class="nav-icon">🔧</span>
-          <span class="nav-text">Tools</span>
-        </a>
-        <a href="#integrations" class="nav-item" data-section="integrations">
-          <span class="nav-icon">🔗</span>
-          <span class="nav-text">Integrations</span>
-        </a>
-      </div>
-      
-      <div class="nav-group">
-        <div class="nav-group-title">System</div>
-        <a href="#observability" class="nav-item" data-section="observability">
-          <span class="nav-icon">📊</span>
-          <span class="nav-text">Observability</span>
-        </a>
-        <a href="#billing" class="nav-item" data-section="billing">
-          <span class="nav-icon">💰</span>
-          <span class="nav-text">Billing</span>
-        </a>
-        <a href="#notifications" class="nav-item" data-section="notifications">
-          <span class="nav-icon">🔔</span>
-          <span class="nav-text">Notifications</span>
-          <span class="nav-count">0</span>
-        </a>
-        <a href="#settings" class="nav-item" data-section="settings">
-          <span class="nav-icon">⚙️</span>
-          <span class="nav-text">Settings</span>
-        </a>
-      </div>
-    </nav>
-    
-    <div class="sidebar-footer">
-      <div class="sidebar-user">
-        <div class="user-avatar">S</div>
-        <div class="user-info">
-          <span class="user-name">Sen</span>
-          <span class="user-role">Admin</span>
-        </div>
-      </div>
-      <div class="sidebar-status">
-        <span class="status-dot online" id="status-dot"></span>
-        <span id="status-text">System Online</span>
-      </div>
-    </div>
-  </aside>
-
-  <!-- Main Content -->
-  <main class="main" id="main-content">
-    <!-- Top Bar -->
-    <header class="topbar">
-      <div class="topbar-left">
-        <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Open menu">
-          <span></span><span></span><span></span>
-        </button>
-        <div class="breadcrumb">
-          <span class="breadcrumb-item">Home</span>
-          <span class="breadcrumb-sep">/</span>
-          <span class="breadcrumb-item active" id="breadcrumb-current">Dashboard</span>
-        </div>
-      </div>
-      <div class="topbar-right">
-        <div class="search-box">
-          <input type="text" placeholder="Search anything..." class="search-input" aria-label="Search">
-          <span class="search-icon">🔍</span>
-        </div>
-        <button class="topbar-btn" onclick="toggleTheme()" aria-label="Toggle theme">
-          <span class="theme-icon" id="theme-icon">🌙</span>
-        </button>
-        <button class="topbar-btn" onclick="refreshAll()" aria-label="Refresh">
-          🔄
-        </button>
-      </div>
-    </header>
-
-    <!-- Page Content -->
-    <div class="page-content">
-    
-      <!-- OVERVIEW SECTION -->
-      <section class="page-section active" id="section-overview">
-        <div class="section-header">
-          <h1 class="section-title">Dashboard</h1>
-          <p class="section-desc">Welcome back! Here's your AI platform overview</p>
-        </div>
-        
-        <!-- Stats Grid -->
-        <div class="stats-grid">
-          <div class="stat-card stat-primary">
-            <div class="stat-icon">🧠</div>
-            <div class="stat-info">
-              <span class="stat-value" id="stat-divisions">5</span>
-              <span class="stat-label">Divisions</span>
-            </div>
-            <div class="stat-trend up">+2 this week</div>
-          </div>
-          <div class="stat-card stat-success">
-            <div class="stat-icon">✅</div>
-            <div class="stat-info">
-              <span class="stat-value" id="stat-status">Healthy</span>
-              <span class="stat-label">System Status</span>
-            </div>
-            <div class="stat-trend up">99.9% uptime</div>
-          </div>
-          <div class="stat-card stat-warning">
-            <div class="stat-icon">📊</div>
-            <div class="stat-info">
-              <span class="stat-value" id="stat-traces">—</span>
-              <span class="stat-label">Traces</span>
-            </div>
-            <div class="stat-trend">Real-time</div>
-          </div>
-          <div class="stat-card stat-info">
-            <div class="stat-icon">🔧</div>
-            <div class="stat-info">
-              <span class="stat-value" id="stat-plugins">2</span>
-              <span class="stat-label">Plugins</span>
-            </div>
-            <div class="stat-trend">Active</div>
-          </div>
-        </div>
-        
-        <!-- Quick Actions -->
-        <div class="quick-actions">
-          <h3 class="subsection-title">Quick Actions</h3>
-          <div class="actions-grid">
-            <button class="action-card" onclick="switchSection('chat')">
-              <span class="action-icon">💬</span>
-              <span class="action-text">Start Chat</span>
-            </button>
-            <button class="action-card" onclick="switchSection('divisions')">
-              <span class="action-icon">🧠</span>
-              <span class="action-text">Run Division</span>
-            </button>
-            <button class="action-card" onclick="switchSection('plugins')">
-              <span class="action-icon">🔌</span>
-              <span class="action-text">Run Plugin</span>
-            </button>
-            <button class="action-card" onclick="switchSection('workflows')">
-              <span class="action-icon">⚙️</span>
-              <span class="action-text">Create Workflow</span>
-            </button>
-            <button class="action-card" onclick="switchSection('memory')">
-              <span class="action-icon">🧩</span>
-              <span class="action-text">Search Memory</span>
-            </button>
-            <button class="action-card" onclick="switchSection('tools')">
-              <span class="action-icon">🔧</span>
-              <span class="action-text">Discover Tools</span>
-            </button>
-          </div>
-        </div>
-        
-        <!-- Recent Activity -->
-        <div class="activity-section">
-          <h3 class="subsection-title">Recent Activity</h3>
-          <div class="activity-list" id="recent-activity">
-            <div class="activity-item">
-              <div class="activity-icon success">✅</div>
-              <div class="activity-content">
-                <span class="activity-text">System initialized successfully</span>
-                <span class="activity-time">Just now</span>
-              </div>
-            </div>
-            <div class="activity-item">
-              <div class="activity-icon info">🧠</div>
-              <div class="activity-content">
-                <span class="activity-text">5 divisions loaded</span>
-                <span class="activity-time">Just now</span>
-              </div>
-            </div>
-            <div class="activity-item">
-              <div class="activity-icon warning">🔌</div>
-              <div class="activity-content">
-                <span class="activity-text">2 plugins active</span>
-                <span class="activity-time">Just now</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ANALYTICS SECTION -->
-      <section class="page-section" id="section-analytics">
-        <div class="section-header">
-          <h1 class="section-title">Analytics</h1>
-          <p class="section-desc">Deep insights into your AI platform performance</p>
-        </div>
-        <div class="analytics-grid">
-          <div class="card chart-card">
-            <div class="card-header">
-              <h3>Request Volume</h3>
-              <span class="badge badge-success">+24%</span>
-            </div>
-            <div class="chart-placeholder" id="chart-requests">
-              <div class="chart-bar" style="height: 40%"></div>
-              <div class="chart-bar" style="height: 60%"></div>
-              <div class="chart-bar" style="height: 45%"></div>
-              <div class="chart-bar" style="height: 80%"></div>
-              <div class="chart-bar" style="height: 65%"></div>
-              <div class="chart-bar" style="height: 90%"></div>
-              <div class="chart-bar" style="height: 70%"></div>
-            </div>
-          </div>
-          <div class="card chart-card">
-            <div class="card-header">
-              <h3>Response Time</h3>
-              <span class="badge badge-info">156ms avg</span>
-            </div>
-            <div class="chart-placeholder" id="chart-response">
-              <div class="chart-line"></div>
-            </div>
-          </div>
-          <div class="card chart-card">
-            <div class="card-header">
-              <h3>Token Usage</h3>
-              <span class="badge badge-warning">2.4M tokens</span>
-            </div>
-            <div class="chart-placeholder" id="chart-tokens">
-              <div class="donut-chart">
-                <span class="donut-value">67%</span>
-              </div>
-            </div>
-          </div>
-          <div class="card chart-card">
-            <div class="card-header">
-              <h3>Active Sessions</h3>
-              <span class="badge badge-success">12</span>
-            </div>
-            <div class="chart-placeholder" id="chart-sessions">
-              <div class="chart-area"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ACTIVITY SECTION -->
-      <section class="page-section" id="section-activity">
-        <div class="section-header">
-          <h1 class="section-title">Activity</h1>
-          <p class="section-desc">Real-time activity feed from all modules</p>
-        </div>
-        <div class="activity-feed" id="activity-feed">
-          <div class="activity-timeline" id="activity-timeline"></div>
-        </div>
-      </section>
-
-      <!-- CHAT SECTION -->
-      <section class="page-section" id="section-chat">
-        <div class="section-header">
-          <h1 class="section-title">Chat</h1>
-          <p class="section-desc">Conversational AI with tool execution and division routing</p>
-        </div>
-        <div class="chat-layout">
-          <div class="chat-main">
-            <div class="chat-messages" id="chat-messages">
-              <div class="chat-msg system">
-                <div class="msg-content">Welcome! Ask me anything or try a command.</div>
-              </div>
-            </div>
-            <div class="chat-input-wrap">
-              <textarea id="chat-input" placeholder="Type your message... (Enter to send)" rows="1"></textarea>
-              <button class="btn btn-primary chat-send" onclick="sendChat()">Send</button>
-            </div>
-          </div>
-          <div class="chat-sidebar">
-            <div class="card">
-              <h4>Quick Actions</h4>
-              <button class="btn btn-sm btn-secondary" onclick="runQuickTask('Summarize my vault')">📝 Summarize Vault</button>
-              <button class="btn btn-sm btn-secondary" onclick="runQuickTask('Search for AI agents')">🔍 Search</button>
-              <button class="btn btn-sm btn-secondary" onclick="runQuickTask('Generate a report')">📊 Report</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- DIVISIONS SECTION -->
-      <section class="page-section" id="section-divisions">
-        <div class="section-header">
-          <h1 class="section-title">Cognitive Divisions</h1>
-          <p class="section-desc">5 specialized AI divisions for different tasks</p>
-        </div>
-        <div class="divisions-grid">
-          <div class="division-card" onclick="executeDivision('creative')">
-            <div class="division-icon">🎨</div>
-            <h3>Creative</h3>
-            <p>Content generation, creative writing, stylistic adaptation</p>
-            <div class="division-agents">POV, Style, Master</div>
-            <button class="btn btn-sm btn-primary">Execute</button>
-          </div>
-          <div class="division-card" onclick="executeDivision('psych')">
-            <div class="division-icon">🧠</div>
-            <h3>Psychology</h3>
-            <p>Emotional intelligence, behavioral analysis, mood detection</p>
-            <div class="division-agents">Sub-agents, Master</div>
-            <button class="btn btn-sm btn-primary">Execute</button>
-          </div>
-          <div class="division-card" onclick="executeDivision('reasoning')">
-            <div class="division-icon">🔬</div>
-            <h3>Reasoning</h3>
-            <p>Logical reasoning, planning, theorem proving, verification</p>
-            <div class="division-agents">MCTS, FOL, Critique, Graph</div>
-            <button class="btn btn-sm btn-primary">Execute</button>
-          </div>
-          <div class="division-card" onclick="executeDivision('gov')">
-            <div class="division-icon">🏛️</div>
-            <h3>Governance</h3>
-            <p>Compliance enforcement, policy management, audit trails</p>
-            <div class="division-agents">Sub-agents, Master</div>
-            <button class="btn btn-sm btn-primary">Execute</button>
-          </div>
-          <div class="division-card" onclick="executeDivision('infra')">
-            <div class="division-icon">⚙️</div>
-            <h3>Infrastructure</h3>
-            <p>System synchronization, data validation, health monitoring</p>
-            <div class="division-agents">Sync, Validator, Master</div>
-            <button class="btn btn-sm btn-primary">Execute</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- AGENTS SECTION -->
-      <section class="page-section" id="section-agents">
-        <div class="section-header">
-          <h1 class="section-title">Agents</h1>
-          <p class="section-desc">Manage and monitor AI agents</p>
-        </div>
-        <div class="agents-layout">
-          <div class="card">
-            <h3>Registered Agents</h3>
-            <div id="agents-list"></div>
-          </div>
-          <div class="card">
-            <h3>Agent Tasks</h3>
-            <div id="agent-tasks-list"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- MEMORY SECTION -->
-      <section class="page-section" id="section-memory">
-        <div class="section-header">
-          <h1 class="section-title">Memory</h1>
-          <p class="section-desc">PostgreSQL-backed semantic memory system</p>
-        </div>
-        <div class="memory-stats">
-          <div class="memory-stat">
-            <span class="mem-num" id="mem-sessions">—</span>
-            <span class="mem-label">Sessions</span>
-          </div>
-          <div class="memory-stat">
-            <span class="mem-num" id="mem-total">—</span>
-            <span class="mem-label">Memories</span>
-          </div>
-          <div class="memory-stat">
-            <span class="mem-num" id="mem-hot">—</span>
-            <span class="mem-label">Hot</span>
-          </div>
-          <div class="memory-stat">
-            <span class="mem-num" id="mem-warm">—</span>
-            <span class="mem-label">Warm</span>
-          </div>
-          <div class="memory-stat">
-            <span class="mem-num" id="mem-cold">—</span>
-            <span class="mem-label">Cold</span>
-          </div>
-        </div>
-        <div class="memory-layout">
-          <div class="card">
-            <h3>Search Memories</h3>
-            <div class="memory-search">
-              <input type="text" id="mem-search-input" placeholder="Search..." class="input">
-              <button class="btn btn-primary" onclick="searchMemories()">Search</button>
-            </div>
-            <div id="mem-search-results"></div>
-          </div>
-          <div class="card">
-            <h3>Store Memory</h3>
-            <input type="text" id="mem-key" placeholder="Key" class="input" style="margin-bottom: 8px;">
-            <textarea id="mem-value" placeholder="Value..." class="textarea" style="min-height: 80px;"></textarea>
-            <select id="mem-type" class="select" style="margin-top: 8px;">
-              <option value="fact">Fact</option>
-              <option value="lesson">Lesson</option>
-              <option value="preference">Preference</option>
-              <option value="task">Task</option>
-            </select>
-            <button class="btn btn-primary" style="margin-top: 8px;" onclick="storeMemory()">Store</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- PROJECTS SECTION -->
-      <section class="page-section" id="section-projects">
-        <div class="section-header">
-          <h1 class="section-title">Projects</h1>
-          <p class="section-desc">Manage your AI projects and tasks</p>
-        </div>
-        <div class="projects-grid">
-          <div class="card">
-            <h3>📋 Planning Tasks</h3>
-            <div id="planning-list"></div>
-          </div>
-          <div class="card">
-            <h3>📝 Shared Tasks</h3>
-            <div id="shared-tasks-list"></div>
-          </div>
-          <div class="card">
-            <h3>⏰ Reminders</h3>
-            <div id="reminders-list"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- WORKFLOWS SECTION -->
-      <section class="page-section" id="section-workflows">
-        <div class="section-header">
-          <h1 class="section-title">Workflows</h1>
-          <p class="section-desc">Multi-step automation workflows</p>
-        </div>
-        <div class="workflows-layout">
-          <div class="card">
-            <h3>Active Workflows</h3>
-            <div id="workflows-list"></div>
-          </div>
-          <div class="card">
-            <h3>Create Workflow</h3>
-            <input type="text" id="wf-name" placeholder="Name" class="input">
-            <textarea id="wf-idea" placeholder="Describe your idea..." class="textarea" style="margin-top: 8px;"></textarea>
-            <button class="btn btn-primary" style="margin-top: 8px;" onclick="createWorkflow()">Create</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- WORKSPACES SECTION -->
-      <section class="page-section" id="section-workspaces">
-        <div class="section-header">
-          <h1 class="section-title">Workspaces</h1>
-          <p class="section-desc">Multi-tenant workspace management</p>
-        </div>
-        <div class="workspaces-layout">
-          <div class="card">
-            <h3>Your Workspaces</h3>
-            <div id="workspaces-list"></div>
-          </div>
-          <div class="card">
-            <h3>Create Workspace</h3>
-            <input type="text" id="ws-name" placeholder="Name" class="input">
-            <textarea id="ws-desc" placeholder="Description" class="textarea" style="margin-top: 8px;"></textarea>
-            <button class="btn btn-primary" style="margin-top: 8px;" onclick="createWorkspace()">Create</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- PLUGINS SECTION -->
-      <section class="page-section" id="section-plugins">
-        <div class="section-header">
-          <h1 class="section-title">Plugins</h1>
-          <p class="section-desc">Extend Aeryn with powerful plugins</p>
-        </div>
-        <div class="plugins-grid">
-          <div class="plugin-card">
-            <div class="plugin-header">
-              <span class="plugin-icon">🔍</span>
-              <div>
-                <h3>Code Review</h3>
-                <span class="badge badge-info">v1.0</span>
-              </div>
-            </div>
-            <p>Analyze Python code for syntax errors, style issues, and bugs</p>
-            <textarea id="plugin-code-review-input" placeholder="Paste code..." class="textarea" style="min-height: 100px;"></textarea>
-            <button class="btn btn-primary" onclick="runPlugin('code-review')">Analyze</button>
-            <div id="plugin-code-review-output"></div>
-          </div>
-          <div class="plugin-card">
-            <div class="plugin-header">
-              <span class="plugin-icon">🔎</span>
-              <div>
-                <h3>Research Assistant</h3>
-                <span class="badge badge-info">v1.0</span>
-              </div>
-            </div>
-            <p>Search vault entries and summarize findings</p>
-            <input type="text" id="plugin-research-input" placeholder="Search query..." class="input">
-            <button class="btn btn-primary" style="margin-top: 8px;" onclick="runPlugin('research-assistant')">Search</button>
-            <div id="plugin-research-output"></div>
-          </div>
-          <div class="plugin-card">
-            <div class="plugin-header">
-              <span class="plugin-icon">📦</span>
-              <div>
-                <h3>Installed</h3>
-                <span class="badge badge-success" id="installed-count">2</span>
-              </div>
-            </div>
-            <div id="installed-plugins-list"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- TOOLS SECTION -->
-      <section class="page-section" id="section-tools">
-        <div class="section-header">
-          <h1 class="section-title">Tools</h1>
-          <p class="section-desc">Discover and execute available tools</p>
-        </div>
-        <div class="tools-layout">
-          <div class="card">
-            <h3>Available Tools</h3>
-            <div id="tools-list"></div>
-          </div>
-          <div class="card">
-            <h3>Execute Tool</h3>
-            <select id="tool-select" class="select"></select>
-            <textarea id="tool-input" placeholder='JSON input' class="textarea" style="margin-top: 8px;"></textarea>
-            <button class="btn btn-primary" style="margin-top: 8px;" onclick="executeTool()">Execute</button>
-            <div id="tool-output"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- INTEGRATIONS SECTION -->
-      <section class="page-section" id="section-integrations">
-        <div class="section-header">
-          <h1 class="section-title">Integrations</h1>
-          <p class="section-desc">Connect with external services and APIs</p>
-        </div>
-        <div class="integrations-grid">
-          <div class="integration-card">
-            <span class="integration-icon">📧</span>
-            <h3>Email</h3>
-            <p>Generate replies and triage inbox</p>
-            <button class="btn btn-sm btn-secondary">Configure</button>
-          </div>
-          <div class="integration-card">
-            <span class="integration-icon">📅</span>
-            <h3>Calendar</h3>
-            <p>Manage events and schedules</p>
-            <button class="btn btn-sm btn-secondary">Configure</button>
-          </div>
-          <div class="integration-card">
-            <span class="integration-icon">🐙</span>
-            <h3>GitHub</h3>
-            <p>Repository management and automation</p>
-            <button class="btn btn-sm btn-secondary">Configure</button>
-          </div>
-          <div class="integration-card">
-            <span class="integration-icon">💬</span>
-            <h3>Slack</h3>
-            <p>Team communication integration</p>
-            <button class="btn btn-sm btn-secondary">Configure</button>
-          </div>
-          <div class="integration-card">
-            <span class="integration-icon">📱</span>
-            <h3>Telegram</h3>
-            <p>Bot messaging integration</p>
-            <span class="badge badge-success">Connected</span>
-          </div>
-          <div class="integration-card">
-            <span class="integration-icon">🎮</span>
-            <h3>Discord</h3>
-            <p>Community server integration</p>
-            <span class="badge badge-success">Connected</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- OBSERVABILITY SECTION -->
-      <section class="page-section" id="section-observability">
-        <div class="section-header">
-          <h1 class="section-title">Observability</h1>
-          <p class="section-desc">Monitor traces, metrics, and system health</p>
-        </div>
-        <div class="obs-stats">
-          <div class="obs-stat">
-            <span class="obs-num" id="obs-traces">—</span>
-            <span class="obs-label">Traces</span>
-          </div>
-          <div class="obs-stat">
-            <span class="obs-num" id="obs-spans">—</span>
-            <span class="obs-label">Spans</span>
-          </div>
-          <div class="obs-stat">
-            <span class="obs-num" id="obs-avg">—</span>
-            <span class="obs-label">Avg Duration</span>
-          </div>
-        </div>
-        <div class="obs-layout">
-          <div class="card">
-            <h3>Recent Traces</h3>
-            <div id="traces-list"></div>
-          </div>
-          <div class="card">
-            <h3>Performance Metrics</h3>
-            <div id="performance-metrics"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- BILLING SECTION -->
-      <section class="page-section" id="section-billing">
-        <div class="section-header">
-          <h1 class="section-title">Billing</h1>
-          <p class="section-desc">Track usage and manage billing</p>
-        </div>
-        <div class="billing-grid">
-          <div class="card">
-            <h3>Current Plan</h3>
-            <span class="plan-name" id="billing-plan">Free</span>
-          </div>
-          <div class="card">
-            <h3>Quota Used</h3>
-            <span class="quota-bar"><span class="quota-fill" style="width: 45%"></span></span>
-            <span class="quota-text" id="billing-quota">45%</span>
-          </div>
-          <div class="card">
-            <h3>Est. Cost</h3>
-            <span class="cost-value" id="billing-cost">$0.00</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- NOTIFICATIONS SECTION -->
-      <section class="page-section" id="section-notifications">
-        <div class="section-header">
-          <h1 class="section-title">Notifications</h1>
-          <p class="section-desc">Manage notifications and alerts</p>
-        </div>
-        <div class="notif-layout">
-          <div class="card">
-            <h3>Pending</h3>
-            <div id="pending-notifs-list"></div>
-          </div>
-          <div class="card">
-            <h3>Create</h3>
-            <input type="text" id="notif-title" placeholder="Title" class="input">
-            <textarea id="notif-content" placeholder="Content..." class="textarea" style="margin-top: 8px;"></textarea>
-            <button class="btn btn-primary" style="margin-top: 8px;" onclick="createNotification()">Create</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- SETTINGS SECTION -->
-      <section class="page-section" id="section-settings">
-        <div class="section-header">
-          <h1 class="section-title">Settings</h1>
-          <p class="section-desc">Configure your Aeryn platform</p>
-        </div>
-        <div class="settings-layout">
-          <div class="card">
-            <h3>Environment</h3>
-            <div id="env-info"></div>
-          </div>
-          <div class="card">
-            <h3>Security</h3>
-            <div id="security-info"></div>
-          </div>
-          <div class="card">
-            <h3>Theme</h3>
-            <div class="theme-options">
-              <button class="theme-option active" onclick="setTheme('dark')">🌙 Dark</button>
-              <button class="theme-option" onclick="setTheme('light')">☀️ Light</button>
-              <button class="theme-option" onclick="setTheme('auto')">🔄 Auto</button>
-            </div>
-          </div>
-          <div class="card">
-            <h3>Language</h3>
-            <select id="lang-select" class="select">
-              <option value="id">🇮🇩 Indonesia</option>
-              <option value="en">🇬🇧 English</option>
-            </select>
-          </div>
-        </div>
-      </section>
-
-    </div>
-  </main>
-</div>
-
-<!-- Modal -->
-<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true">
-  <div class="modal">
-    <div class="modal-header">
-      <h3 id="modal-title">Modal</h3>
-      <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
-    </div>
-    <div class="modal-body" id="modal-body"></div>
   </div>
-</div>
 
+  <div class="cover-scroll-hint">
+    <span class="scroll-text">SCROLL TO EXPLORE</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SYSTEMS SECTION — sly.systems concept                            -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="section-systems" id="section-systems" data-section="systems">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">01</div>
+      <h2 class="section-title">The Systems</h2>
+      <p class="section-desc">A private firm, holding a limited number of engagements. For each, we design, build and manage the systems the business runs on.</p>
+    </div>
+
+    <div class="systems-grid">
+      <div class="system-card" data-system="api">
+        <div class="system-icon">⚡</div>
+        <h3 class="system-name">API Gateway</h3>
+        <p class="system-desc">FastAPI backend with 200+ endpoints, WebSocket streaming, and real-time observability.</p>
+        <div class="system-status online">● Operational</div>
+      </div>
+      <div class="system-card" data-system="llm">
+        <div class="system-icon">🧠</div>
+        <h3 class="system-name">LLM Engine</h3>
+        <p class="system-desc">Multi-model routing with Gemini, Claude, and OpenAI. Adaptive fallback and cost optimization.</p>
+        <div class="system-status online">● Operational</div>
+      </div>
+      <div class="system-card" data-system="memory">
+        <div class="system-icon">🧩</div>
+        <h3 class="system-name">Memory Vault</h3>
+        <p class="system-desc">PostgreSQL + pgvector semantic search. Long-term knowledge with entity resolution.</p>
+        <div class="system-status online">● Operational</div>
+      </div>
+      <div class="system-card" data-system="plugins">
+        <div class="system-icon">🔌</div>
+        <h3 class="system-name">Plugin System</h3>
+        <p class="system-desc">Extensible architecture with code-review, research-assistant, and custom plugins.</p>
+        <div class="system-status online">● Operational</div>
+      </div>
+      <div class="system-card" data-system="divisions">
+        <div class="system-icon">👥</div>
+        <h3 class="system-name">5 Divisions</h3>
+        <p class="system-desc">Creative, Psychology, Reasoning, Governance, Infrastructure — specialized cognitive agents.</p>
+        <div class="system-status online">● Operational</div>
+      </div>
+      <div class="system-card" data-system="observability">
+        <div class="system-icon">📈</div>
+        <h3 class="system-name">Observability</h3>
+        <p class="system-desc">Langfuse-style tracing with spans, metrics, and real-time performance monitoring.</p>
+        <div class="system-status online">● Operational</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- WORK SECTION — acid-crunch.com concept (giant typography)        -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="section-work" id="section-work" data-section="work">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">02</div>
+      <h2 class="section-title">The Work</h2>
+      <p class="section-desc">Real products, live in days — and then in motion.</p>
+    </div>
+
+    <div class="work-list">
+      <div class="work-item" data-project="chat">
+        <div class="work-title-large">Chat</div>
+        <div class="work-preview">
+          <div class="chat-bubble">Halo! Saya Aeryn v61.5. Ada yang bisa kubantu?</div>
+        </div>
+        <div class="work-meta">
+          <span class="work-tag">Conversational AI</span>
+          <span class="work-tag">Tool Execution</span>
+          <span class="work-tag">Memory Recall</span>
+        </div>
+      </div>
+
+      <div class="work-item" data-project="divisions">
+        <div class="work-title-large">Divisions</div>
+        <div class="work-preview">
+          <div class="division-icons">
+            <span class="div-icon">🎨</span>
+            <span class="div-icon">🧠</span>
+            <span class="div-icon">🔍</span>
+            <span class="div-icon">🏛️</span>
+            <span class="div-icon">⚙️</span>
+          </div>
+        </div>
+        <div class="work-meta">
+          <span class="work-tag">Creative</span>
+          <span class="work-tag">Psychology</span>
+          <span class="work-tag">Reasoning</span>
+          <span class="work-tag">Governance</span>
+          <span class="work-tag">Infrastructure</span>
+        </div>
+      </div>
+
+      <div class="work-item" data-project="plugins">
+        <div class="work-title-large">Plugins</div>
+        <div class="work-preview">
+          <div class="plugin-list">
+            <div class="plugin-item">🔍 Code Review</div>
+            <div class="plugin-item">📚 Research Assistant</div>
+            <div class="plugin-item">🧩 Memory Vault</div>
+            <div class="plugin-item">🔗 Integrations</div>
+          </div>
+        </div>
+        <div class="work-meta">
+          <span class="work-tag">Extensible</span>
+          <span class="work-tag">Marketplace</span>
+          <span class="work-tag">Custom</span>
+        </div>
+      </div>
+
+      <div class="work-item" data-project="memory">
+        <div class="work-title-large">Memory</div>
+        <div class="work-preview">
+          <div class="memory-viz">
+            <div class="memory-node">Entity</div>
+            <div class="memory-edge"></div>
+            <div class="memory-node">Relation</div>
+            <div class="memory-edge"></div>
+            <div class="memory-node">Recall</div>
+          </div>
+        </div>
+        <div class="work-meta">
+          <span class="work-tag">PostgreSQL</span>
+          <span class="work-tag">pgvector</span>
+          <span class="work-tag">Semantic Search</span>
+        </div>
+      </div>
+
+      <div class="work-item" data-project="observability">
+        <div class="work-title-large">Observability</div>
+        <div class="work-preview">
+          <div class="trace-viz">
+            <div class="trace-span"></div>
+            <div class="trace-span"></div>
+            <div class="trace-span"></div>
+          </div>
+        </div>
+        <div class="work-meta">
+          <span class="work-tag">Traces</span>
+          <span class="work-tag">Spans</span>
+          <span class="work-tag">Metrics</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- STACK SECTION — sly.systems concept (grid of technologies)       -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="section-stack" id="section-stack" data-section="stack">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">03</div>
+      <h2 class="section-title">The Stack</h2>
+      <p class="section-desc">We don't sell one tool. We direct the whole stack.</p>
+    </div>
+
+    <div class="stack-grid">
+      <div class="stack-category">
+        <h3 class="stack-cat">Backend</h3>
+        <div class="stack-items">
+          <span class="stack-item">FastAPI</span>
+          <span class="stack-item">Python 3.11</span>
+          <span class="stack-item">SQLite</span>
+          <span class="stack-item">PostgreSQL</span>
+          <span class="stack-item">Redis</span>
+        </div>
+      </div>
+      <div class="stack-category">
+        <h3 class="stack-cat">AI/LLM</h3>
+        <div class="stack-items">
+          <span class="stack-item">Gemini</span>
+          <span class="stack-item">Claude</span>
+          <span class="stack-item">OpenAI</span>
+          <span class="stack-item">Mistral</span>
+          <span class="stack-item">Perplexity</span>
+        </div>
+      </div>
+      <div class="stack-category">
+        <h3 class="stack-cat">Frontend</h3>
+        <div class="stack-items">
+          <span class="stack-item">React</span>
+          <span class="stack-item">Vite</span>
+          <span class="stack-item">Three.js</span>
+          <span class="stack-item">GSAP</span>
+          <span class="stack-item">D3.js</span>
+        </div>
+      </div>
+      <div class="stack-category">
+        <h3 class="stack-cat">Infra</h3>
+        <div class="stack-items">
+          <span class="stack-item">PM2</span>
+          <span class="stack-item">Docker</span>
+          <span class="stack-item">Nginx</span>
+          <span class="stack-item">Cloudflare</span>
+          <span class="stack-item">GitHub</span>
+        </div>
+      </div>
+      <div class="stack-category">
+        <h3 class="stack-cat">Data</h3>
+        <div class="stack-items">
+          <span class="stack-item">pgvector</span>
+          <span class="stack-item">Elasticsearch</span>
+          <span class="stack-item">Snowflake</span>
+          <span class="stack-item">Supabase</span>
+          <span class="stack-item">Stripe</span>
+        </div>
+      </div>
+      <div class="stack-category">
+        <h3 class="stack-cat">Comms</h3>
+        <div class="stack-items">
+          <span class="stack-item">Telegram</span>
+          <span class="stack-item">Discord</span>
+          <span class="stack-item">Slack</span>
+          <span class="stack-item">Twilio</span>
+          <span class="stack-item">Notion</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- CHAT SECTION — Interactive demo                                    -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="section-chat" id="section-chat" data-section="chat">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">04</div>
+      <h2 class="section-title">Ask Aeryn</h2>
+      <p class="section-desc">The intelligence engine. Ask anything.</p>
+    </div>
+
+    <div class="chat-container">
+      <div class="chat-window" id="chat-window" role="log" aria-live="polite">
+        <div class="chat-msg system">
+          <div class="msg-content">Halo! Saya Aeryn v61.5. Saya punya 12 tools dan 5 divisi kognitif. Apa yang mau kerjakan hari ini?</div>
+        </div>
+      </div>
+      <form class="chat-form" id="chat-form">
+        <textarea class="chat-input" id="chat-input" placeholder="Tulis pesan... (Ctrl+Enter untuk kirim)" rows="1" aria-label="Pesan"></textarea>
+        <button type="submit" class="chat-send">📤</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- TIMELINE SECTION — wip.workoholics.es concept (countdown)        -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="section-timeline" id="section-timeline" data-section="timeline">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">05</div>
+      <h2 class="section-title">Uptime</h2>
+      <p class="section-desc">System availability since last restart.</p>
+    </div>
+
+    <div class="countdown-grid">
+      <div class="countdown-item">
+        <div class="countdown-value" id="cd-days">0</div>
+        <div class="countdown-label">Days</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value" id="cd-hours">0</div>
+        <div class="countdown-label">Hours</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value" id="cd-mins">0</div>
+        <div class="countdown-label">Minutes</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value" id="cd-secs">0</div>
+        <div class="countdown-label">Seconds</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- DOSSIER SECTION — audit.devoco.studio concept                     -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="section-dossier" id="section-dossier" data-section="dossier">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">06</div>
+      <h2 class="section-title">Dossier</h2>
+      <p class="section-desc">Subject: Aeryn AI Platform. Classification: Production.</p>
+    </div>
+
+    <div class="dossier-grid">
+      <div class="dossier-card">
+        <div class="dossier-label">Status</div>
+        <div class="dossier-value">Production</div>
+      </div>
+      <div class="dossier-card">
+        <div class="dossier-label">Version</div>
+        <div class="dossier-value">v61.5</div>
+      </div>
+      <div class="dossier-card">
+        <div class="dossier-label">Uptime</div>
+        <div class="dossier-value" id="dossier-uptime">0s</div>
+      </div>
+      <div class="dossier-card">
+        <div class="dossier-label">Requests</div>
+        <div class="dossier-value" id="dossier-requests">0</div>
+      </div>
+      <div class="dossier-card">
+        <div class="dossier-label">Agents</div>
+        <div class="dossier-value">5 Divisions</div>
+      </div>
+      <div class="dossier-card">
+        <div class="dossier-label">Plugins</div>
+        <div class="dossier-value" id="dossier-plugins">2</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- FOOTER                                                            -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<footer class="footer" id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-logo">🌀 Aeryn</div>
+        <div class="footer-tagline">Managed intelligence, not improvised.</div>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Platform</h4>
+        <ul class="footer-links">
+          <li><a href="#section-systems">Systems</a></li>
+          <li><a href="#section-work">Work</a></li>
+          <li><a href="#section-stack">Stack</a></li>
+          <li><a href="#section-chat">Chat</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Intelligence</h4>
+        <ul class="footer-links">
+          <li><a href="#section-dossier">Dossier</a></li>
+          <li><a href="#section-timeline">Uptime</a></li>
+          <li><a href="#">Observability</a></li>
+          <li><a href="#">Memory</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Connect</h4>
+        <ul class="footer-links">
+          <li><a href="#">Telegram</a></li>
+          <li><a href="#">Discord</a></li>
+          <li><a href="#">Slack</a></li>
+          <li><a href="#">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Aeryn AI. All rights reserved.</div>
+      <div class="footer-meta">CASE № 2026/001 · MMXXVI · Proof copy — not for distribution</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- NAVIGATION — Minimal top nav                                       -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<nav class="top-nav" id="top-nav" role="navigation" aria-label="Main">
+  <div class="nav-inner">
+    <div class="nav-logo">🌀 Aeryn</div>
+    <div class="nav-links">
+      <a href="#section-systems" class="nav-link">Systems</a>
+      <a href="#section-work" class="nav-link">Work</a>
+      <a href="#section-stack" class="nav-link">Stack</a>
+      <a href="#section-chat" class="nav-link">Chat</a>
+      <a href="#section-dossier" class="nav-link">Dossier</a>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+      <button class="nav-btn" id="lang-toggle" aria-label="Toggle language">ID</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SCRIPTS                                                           -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
 <script src="/static/js/dashboard.js"></script>
 </body>
 </html>

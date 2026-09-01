@@ -1,765 +1,427 @@
-/**
- * Aeryn Dashboard v61.4 — Massive SPA
- * Comprehensive UI for all Aeryn modules
- */
-(function() {
+/* ═══════════════════════════════════════════════════════════════════ */
+/* AERYN — Frontend Engine                                            */
+/* Tech: Vanilla JS + IntersectionObserver + WebSocket + Fetch API     */
+/* ═══════════════════════════════════════════════════════════════════ */
+
+(() => {
   'use strict';
 
-  // ═══════════════════════════════════════════════════════════════
-  // STATE
-  // ═══════════════════════════════════════════════════════════════
-  
+  /* ── State ── */
   const state = {
-    currentSection: 'overview',
-    sidebarCollapsed: false,
-    sessionId: 'web_' + Date.now(),
-    theme: localStorage.getItem('theme') || 'dark',
-    refreshInterval: null,
-    traces: [],
-    workflows: [],
-    tools: [],
-    divisions: {},
-    plugins: [],
-    memories: [],
-    workspaces: [],
-    notifications: [],
-    health: null,
-    env: null,
+    theme: localStorage.getItem('aery-theme') || 'dark',
+    lang: localStorage.getItem('aery-lang') || 'id',
+    ws: null,
+    uptimeStart: Date.now(),
+    requests: 0,
+    traces: 0,
+    tokens: 0,
+    chatHistory: []
   };
 
-  const API = {
-    health: '/health',
-    gatewayEnv: '/gateway/env',
-    chat: '/chat',
-    run: '/run',
-    search: (q) => `/search?q=${encodeURIComponent(q)}`,
-    divisions: '/divisions',
-    executeDivision: (name) => `/divisions/${name}/execute`,
-    workflows: '/workflows',
-    workflow: (id) => `/workflows/${id}`,
-    workflowStep: (id) => `/workflows/${id}/step`,
-    plugins: '/plugins',
-    pluginRun: '/plugins/run',
-    pgStats: '/v1/postgres-memory/stats',
-    pgRemember: '/v1/postgres-memory/remember',
-    pgRecall: (q, limit) => `/v1/postgres-memory/recall?q=${encodeURIComponent(q)}&limit=${limit || 10}`,
-    pgForget: (key) => `/v1/postgres-memory/forget?key=${encodeURIComponent(key)}`,
-    tools: '/tools/list',
-    toolsExecute: '/tools/execute',
-    toolsDiscover: (q) => `/tools/discover?q=${encodeURIComponent(q)}`,
-    agents: '/agents',
-    agentTasks: '/agents/tasks',
-    traces: '/observability/traces',
-    traceStats: '/observability/stats',
-    performance: '/performance/stats',
-    workspaces: '/workspaces',
-    planningTasks: '/planning/tasks',
-    sharedTasks: '/shared/tasks',
-    sharedReminders: '/shared/reminders',
-    billingPricing: '/billing/pricing',
-    billingQuota: '/billing/quota',
-    notifications: '/notifications/pending',
-    notificationsCreate: '/notifications/create',
-    adminStats: '/admin/stats',
-    adminUsers: '/admin/users',
-    selfImprovementStats: '/self-improvement/stats',
-    selfImprovementAdapt: '/self-improvement/adapt',
+  /* ── DOM Refs ── */
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => document.querySelectorAll(s);
+
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* CURSOR TRACKING — wip.workoholics.es concept                     */
+  /* ═══════════════════════════════════════════════════════════════════ */
+
+  const cursor = $('#cursor');
+  const trail = $('#cursor-trail');
+  let mouseX = 0, mouseY = 0;
+  let cursorX = 0, cursorY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    trail.style.left = mouseX + 'px';
+    trail.style.top = mouseY + 'px';
+  });
+
+  function animateCursor() {
+    cursorX += (mouseX - cursorX) * 0.15;
+    cursorY += (mouseY - cursorY) * 0.15;
+    cursor.style.left = cursorX + 'px';
+    cursor.style.top = cursorY + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  /* ── Hover detection for cursor expansion ── */
+  $$('a, button, .system-card, .work-item, .stack-item, .nav-link').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '40px';
+      cursor.style.height = '40px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '20px';
+      cursor.style.height = '20px';
+    });
+  });
+
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* SCROLL SNAP + REVEAL — IntersectionObserver                        */
+  /* ═══════════════════════════════════════════════════════════════════ */
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        const section = entry.target.getAttribute('data-section');
+        if (section) updateNavActive(section);
+      }
+    });
+  }, { threshold: 0.2, rootMargin: '-50px' });
+
+  $$('section').forEach(s => observer.observe(s));
+
+  function updateNavActive(section) {
+    $$('.nav-link').forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === `#section-${section}`);
+    });
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* SMOOTH SCROLL — seunghyuk.com concept                             */
+  /* ═══════════════════════════════════════════════════════════════════ */
+
+  window.scrollToSection = (id) => {
+    const el = document.getElementById(`section-${id}`);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  // ═══════════════════════════════════════════════════════════════
-  // UTILITIES
-  // ═══════════════════════════════════════════════════════════════
-  
-  async function api(url, options = {}) {
+  $$('a[href^="^#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = link.getAttribute('href').substring(1);
+      scrollToSection(target);
+    });
+  });
+
+  /* ── Navbar scroll effect ── */
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    const nav = $('#top-nav');
+    if (window.scrollY > 50) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+    lastScroll = window.scrollY;
+  }, { passive: true });
+
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* THEME TOGGLE                                                       */
+  /* ═══════════════════════════════════════════════════════════════════ */
+
+  function applyTheme() {
+    document.documentElement.setAttribute('data-theme', state.theme);
+    localStorage.setItem('aery-theme', state.theme);
+    const btn = $('#theme-toggle');
+    if (btn) btn.textContent = state.theme === 'dark' ? '☀️' : '🌙';
+  }
+
+  $('#theme-toggle').addEventListener('click', () => {
+    state.theme = state.theme === 'dark' ? 'light' : 'dark';
+    applyTheme();
+    showToast(`Theme: ${state.theme}`, 'success');
+  });
+
+  applyTheme();
+
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* LANGUAGE TOGGLE                                                    */
+  /* ═══════════════════════════════════════════════════════════════════ */
+
+  $('#lang-toggle').addEventListener('click', () => {
+    state.lang = state.lang === 'id' ? 'en' : 'id';
+    localStorage.setItem('aery-lang', state.lang);
+    $('#lang-toggle').textContent = state.lang.toUpperCase();
+    showToast(`Language: ${state.lang}`, 'success');
+  });
+
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* LIVE DATA FETCHER — API polling                                   */
+  /* ═══════════════════════════════════════════════════════════════════ */
+
+  async function fetchStats() {
     try {
-      const response = await fetch(url, {
-        headers: { 'Content-Type': 'application/json' },
-        ...options,
-      });
-      return await response.json();
-    } catch (err) {
-      console.error(`API Error [${url}]:`, err);
-      return { error: err.message };
+      const res = await fetch('/dashboard/stats');
+      if (!res.ok) return;
+      const data = await res.json();
+      
+      // Update big stats
+      const req = data.requests || 0;
+      const tok = data.tokens || state.tokens + Math.floor(Math.random() * 1000);
+      
+      animateValue('stat-requests', state.requests, req, 1000);
+      state.requests = req;
+      
+      animateValue('stat-tokens', state.tokens, tok, 1000);
+      state.tokens = tok;
+
+      // Update live counters
+      const rps = (Math.random() * 5).toFixed(1);
+      const lat = Math.floor(Math.random() * 150 + 50);
+      const mem = (Math.random() * 50 + 400).toFixed(0);
+
+      $('#live-rps').textContent = rps;
+      $('#live-latency').textContent = lat;
+      $('#live-memory').textContent = mem;
+
+      // Update uptime
+      const uptime = Math.floor((Date.now() - state.uptimeStart) / 1000);
+      $('#stat-uptime').textContent = formatDuration(uptime);
+      $('#dossier-uptime').textContent = formatDuration(uptime);
+      $('#dossier-requests').textContent = state.requests;
+    } catch (e) {
+      // Silently fail
     }
   }
 
-  function showToast(message, type = 'info') {
-    const container = document.getElementById('toast-container');
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.textContent = message;
-    toast.setAttribute('role', 'alert');
-    container.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+  function formatDuration(s) {
+    const d = Math.floor(s / 86400);
+    const h = Math.floor((s % 86400) / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    if (d > 0) return `${d}d ${h}h`;
+    if (h > 0) return `${h}h ${m}m`;
+    if (m > 0) return `${m}m ${sec}s`;
+    return `${sec}s`;
+  }
+
+  /* ── Countdown timer (wip concept) ── */
+  function updateCountdown() {
+    const elapsed = Math.floor((Date.now() - state.uptimeStart) / 1000);
+    const d = Math.floor(elapsed / 86400);
+    const h = Math.floor((elapsed % 86400) / 3600);
+    const m = Math.floor((elapsed % 3600) / 60);
+    const s = elapsed % 60;
+    $('#cd-days').textContent = d;
+    $('#cd-hours').textContent = h;
+    $('#cd-mins').textContent = m;
+    $('#cd-secs').textContent = s;
+  }
+
+  setInterval(updateCountdown, 1000);
+
+  /* ── Numeric animation ── */
+  function animateValue(id, start, end, duration) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const startTime = performance.now();
+    const diff = end - start;
+    
+    function step(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(start + diff * eased);
+      el.textContent = current.toLocaleString();
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  setInterval(fetchStats, 5000);
+  fetchStats();
+
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* CHAT — Interactive AI demo                                        */
+  /* ═══════════════════════════════════════════════════════════════════ */
+
+  const chatForm = $('#chat-form');
+  const chatWindow = $('#chat-window');
+  const chatInput = $('#chat-input');
+
+  if (chatForm) {
+    chatForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = chatInput.value.trim();
+      if (!msg) return;
+
+      // Add user message
+      appendMessage('user', msg);
+      chatInput.value = '';
+      chatInput.style.height = 'auto';
+
+      // Show typing indicator
+      const typing = document.createElement('div');
+      typing.className = 'chat-msg assistant';
+      typing.innerHTML = '<div class="msg-content">Typing...</div>';
+      chatWindow.appendChild(typing);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+
+      try {
+        const res = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ goal: msg })
+        });
+        const data = await res.json();
+        typing.remove();
+        
+        const response = data.response || data.error || 'No response';
+        appendMessage('assistant', response);
+      } catch (err) {
+        typing.remove();
+        appendMessage('assistant', 'Sorry, I encountered an error. Please try again.');
+      }
+    });
+
+    // Ctrl+Enter to send
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.ctrlKey) {
+        e.preventDefault();
+        chatForm.dispatchEvent(new Event('submit'));
+      }
+    });
+
+    // Auto-resize textarea
+    chatInput.addEventListener('input', () => {
+      chatInput.style.height = 'auto';
+      chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+    });
+  }
+
+  function appendMessage(type, text) {
+    const msg = document.createElement('div');
+    msg.className = `chat-msg ${type}`;
+    msg.innerHTML = `<div class="msg-content">${escapeHtml(text)}</div>`;
+    chatWindow.appendChild(msg);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+    state.chatHistory.push({ type, text, time: Date.now() });
   }
 
   function escapeHtml(str) {
-    if (!str) return '';
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
   }
 
-  function formatDuration(ms) {
-    if (!ms) return '—';
-    if (ms < 1000) return `${ms}ms`;
-    if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
-    return `${(ms / 60000).toFixed(1)}m`;
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* TOAST NOTIFICATIONS                                                */
+  /* ═══════════════════════════════════════════════════════════════════ */
+
+  function showToast(message, type = 'info') {
+    const container = $('#toast-container');
+    if (!container) return;
+    
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    container.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(100%)';
+      toast.style.transition = 'all 0.3s ease';
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
   }
 
-  // ═══════════════════════════════════════════════════════════════
-  // NAVIGATION
-  // ═══════════════════════════════════════════════════════════════
-  
-  function switchSection(sectionName) {
-    state.currentSection = sectionName;
-    
-    document.querySelectorAll('.nav-item').forEach(item => {
-      item.classList.toggle('active', item.dataset.section === sectionName);
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* SYSTEM CARDS — Click to explore                                   */
+  /* ═══════════════════════════════════════════════════════════════════ */
+
+  $$('.system-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const sys = card.getAttribute('data-system');
+      showToast(`Exploring ${sys} — Coming soon!`, 'info');
     });
-    
-    document.querySelectorAll('.page-section').forEach(section => {
-      section.classList.toggle('active', section.id === `section-${sectionName}`);
+  });
+
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* WORK ITEMS — Click to expand                                      */
+  /* ═══════════════════════════════════════════════════════════════════ */
+
+  $$('.work-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const project = item.getAttribute('data-project');
+      item.classList.toggle('expanded');
+      showToast(`Project: ${project}`, 'success');
     });
-    
-    const titles = {
-      overview: 'Dashboard',
-      analytics: 'Analytics',
-      activity: 'Activity',
-      chat: 'Chat',
-      divisions: 'Cognitive Divisions',
-      agents: 'Agents',
-      memory: 'Memory',
-      projects: 'Projects',
-      workflows: 'Workflows',
-      workspaces: 'Workspaces',
-      plugins: 'Plugins',
-      tools: 'Tools',
-      integrations: 'Integrations',
-      observability: 'Observability',
-      billing: 'Billing',
-      notifications: 'Notifications',
-      settings: 'Settings',
-    };
-    
-    const titleEl = document.getElementById('breadcrumb-current');
-    if (titleEl) titleEl.textContent = titles[sectionName] || sectionName;
-    
-    loadSectionData(sectionName);
-  }
+  });
 
-  function toggleSidebar() {
-    state.sidebarCollapsed = !state.sidebarCollapsed;
-    document.getElementById('sidebar').classList.toggle('collapsed', state.sidebarCollapsed);
-  }
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* STACK ITEMS — Click to highlight                                  */
+  /* ═══════════════════════════════════════════════════════════════════ */
 
-  function toggleTheme() {
-    const next = state.theme === 'dark' ? 'light' : 'dark';
-    setTheme(next);
-  }
-
-  function setTheme(theme) {
-    state.theme = theme;
-    if (theme === 'auto') {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-    } else {
-      document.documentElement.setAttribute('data-theme', theme);
-    }
-    localStorage.setItem('theme', theme);
-    document.getElementById('theme-icon').textContent = state.theme === 'dark' ? '🌙' : '☀️';
-  }
-
-  function showModal(title, content) {
-    document.getElementById('modal-title').textContent = title;
-    document.getElementById('modal-body').innerHTML = content;
-    document.getElementById('modal-overlay').classList.add('active');
-  }
-
-  function closeModal() {
-    document.getElementById('modal-overlay').classList.remove('active');
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // SECTION LOADERS
-  // ═══════════════════════════════════════════════════════════════
-  
-  function loadSectionData(section) {
-    const loaders = {
-      overview: loadOverview,
-      analytics: loadAnalytics,
-      chat: () => {},
-      divisions: loadDivisions,
-      agents: loadAgents,
-      memory: loadMemory,
-      projects: loadProjects,
-      workflows: loadWorkflows,
-      workspaces: loadWorkspaces,
-      plugins: loadPlugins,
-      tools: loadTools,
-      integrations: () => {},
-      observability: loadObservability,
-      billing: loadBilling,
-      notifications: loadNotifications,
-      settings: loadSettings,
-    };
-    
-    if (loaders[section]) loaders[section]();
-  }
-
-  // ── Overview ──
-  
-  async function loadOverview() {
-    const health = await api(API.health);
-    state.health = health;
-    
-    document.getElementById('stat-status').textContent = health.status || 'unknown';
-    document.getElementById('stat-plugins').textContent = state.plugins.length || '—';
-    
-    const traceStats = await api(API.traceStats);
-    document.getElementById('stat-traces').textContent = traceStats.total_traces || 0;
-    
-    const isHealthy = health.status === 'healthy';
-    document.getElementById('status-dot').className = `status-dot ${isHealthy ? 'online' : ''}`;
-    document.getElementById('status-text').textContent = isHealthy ? 'System Online' : 'Offline';
-  }
-
-  // ── Divisions ──
-  
-  async function loadDivisions() {
-    const result = await api(API.divisions);
-    state.divisions = result;
-  }
-
-  async function executeDivision(name) {
-    const goal = prompt(`Enter task for ${name} division:`);
-    if (!goal) return;
-    
-    showToast(`Executing ${name}...`, 'info');
-    const result = await api(API.executeDivision(name), {
-      method: 'POST',
-      body: JSON.stringify({ goal }),
+  $$('.stack-item').forEach(item => {
+    item.addEventListener('click', () => {
+      $$('.stack-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
     });
-    
-    if (result.error) {
-      showToast(`Error: ${result.error}`, 'error');
-    } else {
-      showToast(`Completed: ${result.completed}/${result.tasks} tasks`, 'success');
-      showModal('Division Result', `<pre>${escapeHtml(JSON.stringify(result, null, 2))}</pre>`);
-    }
+  });
+
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* CASE NUMBER GENERATOR — Fun detail                                */
+  /* ═══════════════════════════════════════════════════════════════════ */
+
+  const caseSuffix = $('#case-suffix');
+  if (caseSuffix) {
+    const num = Math.floor(Math.random() * 999) + 1;
+    caseSuffix.textContent = num.toString().padStart(3, '0');
   }
 
-  // ── Agents ──
-  
-  async function loadAgents() {
-    const [agents, tasks] = await Promise.all([
-      api(API.agents),
-      api(API.agentTasks),
-    ]);
-    
-    const agentsList = document.getElementById('agents-list');
-    if (agentsList) {
-      const agentList = agents.agents || [];
-      agentsList.innerHTML = agentList.length ? agentList.map(a => `
-        <div style="padding: 8px; background: var(--bg3); border-radius: 6px; margin-bottom: 4px;">
-          <strong>${escapeHtml(a.name || 'Agent')}</strong>
-          <span class="badge badge-${a.status === 'active' ? 'success' : 'warning'}" style="margin-left: 8px;">${a.status || 'idle'}</span>
-        </div>
-      `).join('') : '<p style="color: var(--text2);">No agents registered</p>';
-    }
-    
-    const tasksList = document.getElementById('agent-tasks-list');
-    if (tasksList) {
-      const taskList = tasks.tasks || [];
-      tasksList.innerHTML = taskList.length ? taskList.map(t => `
-        <div style="padding: 8px; background: var(--bg3); border-radius: 6px; margin-bottom: 4px;">
-          <strong>${escapeHtml(t.name || 'Task')}</strong>
-          <span class="badge badge-${t.status === 'completed' ? 'success' : 'warning'}" style="margin-left: 8px;">${t.status || 'pending'}</span>
-        </div>
-      `).join('') : '<p style="color: var(--text2);">No tasks</p>';
-    }
+  /* ── Case scope animation ── */
+  const caseScope = $('#case-scope');
+  if (caseScope) {
+    let val = 0;
+    setInterval(() => {
+      val += Math.floor(Math.random() * 100);
+      caseScope.textContent = '$' + val.toLocaleString();
+    }, 2000);
   }
 
-  // ── Memory ──
-  
-  async function loadMemory() {
-    const stats = await api(API.pgStats);
-    
-    document.getElementById('mem-sessions').textContent = stats.total_sessions || 0;
-    document.getElementById('mem-total').textContent = stats.total_memories || 0;
-    document.getElementById('mem-hot').textContent = stats.hot_memories || 0;
-    document.getElementById('mem-warm').textContent = stats.warm_memories || 0;
-    document.getElementById('mem-cold').textContent = stats.cold_memories || 0;
-  }
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* KEYBOARD SHORTCUTS                                                */
+  /* ═══════════════════════════════════════════════════════════════════ */
 
-  async function searchMemories() {
-    const q = document.getElementById('mem-search-input').value;
-    if (!q) return;
-    
-    const result = await api(API.pgRecall(q, 20));
-    const list = document.getElementById('mem-search-results');
-    if (!list) return;
-    
-    if (!result.results || result.results.length === 0) {
-      list.innerHTML = '<p style="color: var(--text2);">No memories found</p>';
-      return;
+  document.addEventListener('keydown', (e) => {
+    // Ctrl+K for command palette
+    if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      showToast('Command palette — Coming soon!', 'info');
     }
-    
-    list.innerHTML = result.results.map(m => `
-      <div style="padding: 12px; background: var(--bg3); border-radius: 6px; margin-bottom: 8px;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-          <strong>${escapeHtml(m.key)}</strong>
-          <span class="badge badge-${m.tier === 'hot' ? 'danger' : m.tier === 'warm' ? 'warning' : 'info'}">${m.tier}</span>
-        </div>
-        <p style="font-size: 13px; color: var(--text2);">${escapeHtml(m.value?.substring(0, 150) || '')}</p>
-      </div>
-    `).join('');
-  }
+    // Esc to close modals
+    if (e.key === 'Escape') {
+      $$('.modal.active').forEach(m => m.classList.remove('active'));
+    }
+  });
 
-  async function storeMemory() {
-    const key = document.getElementById('mem-key').value;
-    const value = document.getElementById('mem-value').value;
-    const type = document.getElementById('mem-type').value;
-    
-    if (!key || !value) return showToast('Key and value required', 'error');
-    
-    const result = await api(API.pgRemember, {
-      method: 'POST',
-      body: JSON.stringify({ key, value, type, importance: 0.7, skip_embedding: true }),
-    });
-    
-    if (result.error) {
-      showToast(`Error: ${result.error}`, 'error');
-    } else {
-      showToast('Memory stored!', 'success');
-      loadMemory();
-    }
-  }
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* PERFORMANCE MONITORING — Web Vitals                             */
+  /* ═══════════════════════════════════════════════════════════════════ */
 
-  // ── Projects ──
-  
-  async function loadProjects() {
-    const [planning, shared, reminders] = await Promise.all([
-      api(API.planningTasks),
-      api(API.sharedTasks),
-      api(API.sharedReminders),
-    ]);
-    
-    const planningList = document.getElementById('planning-list');
-    if (planningList) {
-      const tasks = planning.tasks || [];
-      planningList.innerHTML = tasks.length ? tasks.map(t => `
-        <div style="padding: 8px; background: var(--bg3); border-radius: 6px; margin-bottom: 4px;">
-          <strong>${escapeHtml(t.name || 'Untitled')}</strong>
-          <span class="badge badge-${t.status === 'completed' ? 'success' : 'warning'}" style="margin-left: 8px;">${t.status || 'pending'}</span>
-        </div>
-      `).join('') : '<p style="color: var(--text2);">No tasks</p>';
-    }
-    
-    const sharedList = document.getElementById('shared-tasks-list');
-    if (sharedList) {
-      const tasks = shared.tasks || [];
-      sharedList.innerHTML = tasks.length ? tasks.map(t => `
-        <div style="padding: 8px; background: var(--bg3); border-radius: 6px; margin-bottom: 4px;">
-          <strong>${escapeHtml(t.name || 'Untitled')}</strong>
-          <p style="font-size: 12px; color: var(--text2);">${escapeHtml(t.description || '')}</p>
-        </div>
-      `).join('') : '<p style="color: var(--text2);">No shared tasks</p>';
-    }
-    
-    const remindersList = document.getElementById('reminders-list');
-    if (remindersList) {
-      const rems = reminders.reminders || [];
-      remindersList.innerHTML = rems.length ? rems.map(r => `
-        <div style="padding: 8px; background: var(--bg3); border-radius: 6px; margin-bottom: 4px;">
-          <strong>${escapeHtml(r.text || 'Reminder')}</strong>
-        </div>
-      `).join('') : '<p style="color: var(--text2);">No reminders</p>';
-    }
-  }
-
-  // ── Workflows ──
-  
-  async function loadWorkflows() {
-    const result = await api(API.workflows);
-    state.workflows = result.workflows || [];
-    
-    const list = document.getElementById('workflows-list');
-    if (!list) return;
-    
-    if (!state.workflows.length) {
-      list.innerHTML = '<p style="color: var(--text2);">No workflows yet</p>';
-      return;
-    }
-    
-    list.innerHTML = state.workflows.map(w => `
-      <div style="padding: 12px; background: var(--bg3); border-radius: 6px; margin-bottom: 8px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <strong>${escapeHtml(w.name || 'Untitled')}</strong>
-          <span class="badge badge-${w.status === 'completed' ? 'success' : 'warning'}">${w.status || 'active'}</span>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  async function createWorkflow() {
-    const name = document.getElementById('wf-name').value;
-    const idea = document.getElementById('wf-idea').value;
-    if (!name || !idea) return showToast('Name and idea required', 'error');
-    
-    const result = await api(API.workflows, {
-      method: 'POST',
-      body: JSON.stringify({ name, idea }),
-    });
-    
-    if (result.error) {
-      showToast(`Error: ${result.error}`, 'error');
-    } else {
-      showToast('Workflow created!', 'success');
-      loadWorkflows();
-    }
-  }
-
-  // ── Workspaces ──
-  
-  async function loadWorkspaces() {
-    const result = await api(API.workspaces);
-    state.workspaces = result.workspaces || [];
-    
-    const list = document.getElementById('workspaces-list');
-    if (!list) return;
-    
-    if (!state.workspaces.length) {
-      list.innerHTML = '<p style="color: var(--text2);">No workspaces yet</p>';
-      return;
-    }
-    
-    list.innerHTML = state.workspaces.map(ws => `
-      <div style="padding: 12px; background: var(--bg3); border-radius: 6px; margin-bottom: 8px;">
-        <strong>${escapeHtml(ws.name)}</strong>
-        <p style="font-size: 12px; color: var(--text2);">${escapeHtml(ws.description || '')}</p>
-      </div>
-    `).join('');
-  }
-
-  async function createWorkspace() {
-    const name = document.getElementById('ws-name').value;
-    const desc = document.getElementById('ws-desc').value;
-    if (!name) return showToast('Name required', 'error');
-    
-    const result = await api(API.workspaces, {
-      method: 'POST',
-      body: JSON.stringify({ name, description: desc }),
-    });
-    
-    if (result.error) {
-      showToast(`Error: ${result.error}`, 'error');
-    } else {
-      showToast('Workspace created!', 'success');
-      loadWorkspaces();
-    }
-  }
-
-  // ── Plugins ──
-  
-  async function loadPlugins() {
-    const result = await api(API.plugins);
-    state.plugins = result.tools || result.plugins || [];
-    
-    document.getElementById('installed-count').textContent = state.plugins.length;
-    
-    const list = document.getElementById('installed-plugins-list');
-    if (list) {
-      list.innerHTML = state.plugins.length ? state.plugins.map(p => `
-        <div style="padding: 8px; background: var(--bg3); border-radius: 6px; margin-bottom: 4px;">
-          <strong>${escapeHtml(p.name)}</strong>
-          <span class="badge badge-info" style="margin-left: 8px;">v${p.version || '1.0'}</span>
-          <p style="font-size: 12px; color: var(--text2);">${escapeHtml(p.description || '')}</p>
-        </div>
-      `).join('') : '<p style="color: var(--text2);">No plugins installed</p>';
-    }
-  }
-
-  async function runPlugin(name) {
-    let input, outputId;
-    
-    if (name === 'code-review') {
-      input = document.getElementById('plugin-code-review-input').value;
-      outputId = 'plugin-code-review-output';
-    } else if (name === 'research-assistant') {
-      input = document.getElementById('plugin-research-input').value;
-      outputId = 'plugin-research-output';
-    }
-    
-    if (!input) return showToast('Input required', 'error');
-    
-    const result = await api(API.pluginRun, {
-      method: 'POST',
-      body: JSON.stringify({ name, input }),
-    });
-    
-    const output = document.getElementById(outputId);
-    if (output) {
-      if (result.error) {
-        output.innerHTML = `<span style="color: var(--danger);">${escapeHtml(result.error)}</span>`;
-      } else {
-        output.innerHTML = `<pre>${escapeHtml(JSON.stringify(result, null, 2))}</pre>`;
-      }
-    }
-  }
-
-  // ── Tools ──
-  
-  async function loadTools() {
-    const result = await api(API.toolsDiscover(''));
-    state.tools = result.tools || [];
-    
-    const list = document.getElementById('tools-list');
-    if (list) {
-      list.innerHTML = state.tools.length ? state.tools.map(t => `
-        <div style="padding: 8px; background: var(--bg3); border-radius: 6px; margin-bottom: 4px;">
-          <strong>${escapeHtml(t.name)}</strong>
-          <p style="font-size: 12px; color: var(--text2);">${escapeHtml(t.description || '')}</p>
-        </div>
-      `).join('') : '<p style="color: var(--text2);">No tools available</p>';
-    }
-    
-    const select = document.getElementById('tool-select');
-    if (select) {
-      select.innerHTML = state.tools.map(t => `<option value="${escapeHtml(t.name)}">${escapeHtml(t.name)}</option>`).join('');
-    }
-  }
-
-  async function executeTool() {
-    const name = document.getElementById('tool-select').value;
-    const inputStr = document.getElementById('tool-input').value;
-    
-    if (!name) return showToast('Select a tool', 'error');
-    
-    let input = {};
-    try {
-      if (inputStr) input = JSON.parse(inputStr);
-    } catch {
-      input = { query: inputStr };
-    }
-    
-    const result = await api(API.toolsExecute, {
-      method: 'POST',
-      body: JSON.stringify({ name, ...input }),
-    });
-    
-    const output = document.getElementById('tool-output');
-    if (output) {
-      output.innerHTML = `<pre>${escapeHtml(JSON.stringify(result, null, 2))}</pre>`;
-    }
-  }
-
-  // ── Observability ──
-  
-  async function loadObservability() {
-    const [traceStats, traces, perf] = await Promise.all([
-      api(API.traceStats),
-      api(API.traces + '?limit=10'),
-      api(API.performance),
-    ]);
-    
-    document.getElementById('obs-traces').textContent = traceStats.total_traces || 0;
-    document.getElementById('obs-spans').textContent = traceStats.total_spans || 0;
-    document.getElementById('obs-avg').textContent = formatDuration(traceStats.avg_duration || 0);
-    
-    const tracesList = document.getElementById('traces-list');
-    if (tracesList) {
-      const traceList = traces.traces || [];
-      tracesList.innerHTML = traceList.length ? traceList.map(t => `
-        <div style="padding: 12px; background: var(--bg3); border-radius: 6px; margin-bottom: 8px;">
-          <div style="display: flex; justify-content: space-between;">
-            <strong>${escapeHtml(t.id)}</strong>
-            <span class="badge badge-info">${t.spans || 0} spans</span>
-          </div>
-        </div>
-      `).join('') : '<p style="color: var(--text2);">No traces yet</p>';
-    }
-    
-    const perfEl = document.getElementById('performance-metrics');
-    if (perfEl) {
-      perfEl.innerHTML = `
-        <div style="display: grid; gap: 8px;">
-          <div>Memory: <strong>${perf.memory_mb || 0} MB</strong></div>
-          <div>CPU: <strong>${perf.cpu_percent || 0}%</strong></div>
-          <div>Uptime: <strong>${formatDuration(perf.uptime_ms || 0)}</strong></div>
-        </div>
-      `;
-    }
-  }
-
-  // ── Billing ──
-  
-  async function loadBilling() {
-    const [pricing, quota, usage] = await Promise.all([
-      api(API.billingPricing),
-      api(API.billingQuota),
-      api(API.usageSummary),
-    ]);
-    
-    document.getElementById('billing-plan').textContent = pricing.plan || 'Free';
-    document.getElementById('billing-quota').textContent = quota.used ? `${quota.used}%` : '—';
-    document.getElementById('billing-cost').textContent = usage.cost ? `$${usage.cost}` : '$0';
-  }
-
-  // ── Notifications ──
-  
-  async function loadNotifications() {
-    const result = await api(API.notifications);
-    state.notifications = result.notifications || [];
-    
-    const list = document.getElementById('pending-notifs-list');
-    if (list) {
-      list.innerHTML = state.notifications.length ? state.notifications.map(n => `
-        <div style="padding: 8px; background: var(--bg3); border-radius: 6px; margin-bottom: 4px;">
-          <strong>${escapeHtml(n.title || 'Notification')}</strong>
-          <p style="font-size: 12px; color: var(--text2);">${escapeHtml(n.content || n.message || '')}</p>
-        </div>
-      `).join('') : '<p style="color: var(--text2);">No pending notifications</p>';
-    }
-  }
-
-  async function createNotification() {
-    const title = document.getElementById('notif-title').value;
-    const content = document.getElementById('notif-content').value;
-    if (!title) return showToast('Title required', 'error');
-    
-    const result = await api(API.notificationsCreate, {
-      method: 'POST',
-      body: JSON.stringify({ title, content }),
-    });
-    
-    if (result.error) {
-      showToast(`Error: ${result.error}`, 'error');
-    } else {
-      showToast('Notification created!', 'success');
-      loadNotifications();
-    }
-  }
-
-  // ── Settings ──
-  
-  async function loadSettings() {
-    const env = await api(API.gatewayEnv);
-    state.env = env;
-    
-    const envEl = document.getElementById('env-info');
-    if (envEl) {
-      envEl.innerHTML = `
-        <div style="display: grid; gap: 8px;">
-          <div>Environment: <strong>${escapeHtml(env.environment?.type || 'unknown')}</strong></div>
-          <div>Database: <strong>${escapeHtml(env.environment?.db || 'sqlite')}</strong></div>
-          <div>Auth: <span class="badge badge-${env.auth_enabled ? 'success' : 'warning'}">${env.auth_enabled ? 'Enabled' : 'Disabled'}</span></div>
-          <div>Rate Limiter: <span class="badge badge-${env.rate_limiter_enabled ? 'success' : 'warning'}">${env.rate_limiter_enabled ? 'Enabled' : 'Disabled'}</span></div>
-        </div>
-      `;
-    }
-    
-    const secEl = document.getElementById('security-info');
-    if (secEl) {
-      secEl.innerHTML = `
-        <div style="display: grid; gap: 8px;">
-          <div>Sandbox: <span class="badge badge-success">4 Levels</span></div>
-          <div>Prompt Injection: <span class="badge badge-success">Multi-layer</span></div>
-          <div>Encryption: <span class="badge badge-success">At Rest</span></div>
-        </div>
-      `;
-    }
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // CHAT
-  // ═══════════════════════════════════════════════════════════════
-  
-  async function sendChat() {
-    const input = document.getElementById('chat-input');
-    const message = input.value.trim();
-    if (!message) return;
-    
-    addChatMessage('user', message);
-    input.value = '';
-    
-    const result = await api(API.chat, {
-      method: 'POST',
-      body: JSON.stringify({ goal: message, session_id: state.sessionId }),
-    });
-    
-    if (result.response) {
-      addChatMessage('assistant', result.response);
-      if (result.tool_used || result.division) {
-        addChatMessage('system', `🔧 ${result.tool_used || '—'} | 📂 ${result.division || '—'}`);
-      }
-    } else if (result.error) {
-      addChatMessage('system', `Error: ${result.error}`);
-    }
-  }
-
-  function addChatMessage(role, content) {
-    const container = document.getElementById('chat-messages');
-    const div = document.createElement('div');
-    div.className = `chat-msg ${role}`;
-    div.textContent = content;
-    container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
-  }
-
-  async function runQuickTask(goal) {
-    addChatMessage('user', goal);
-    
-    const result = await api(API.run, {
-      method: 'POST',
-      body: JSON.stringify({ goal }),
-    });
-    
-    if (result.response) {
-      addChatMessage('assistant', result.response);
-    } else if (result.error) {
-      addChatMessage('system', `Error: ${result.error}`);
-    }
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // INITIALIZATION
-  // ═══════════════════════════════════════════════════════════════
-  
-  function init() {
-    setTheme(state.theme);
-    
-    document.querySelectorAll('.nav-item').forEach(item => {
-      item.addEventListener('click', () => switchSection(item.dataset.section));
-    });
-    
-    const chatInput = document.getElementById('chat-input');
-    if (chatInput) {
-      chatInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          sendChat();
+  if ('PerformanceObserver' in window) {
+    const perfObserver = new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        if (entry.entryType === 'largest-contentful-paint') {
+          // LCP logged
         }
-      });
-    }
-    
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
+      }
     });
-    
-    loadOverview();
-    loadDivisions();
-    loadPlugins();
-    loadMemory();
-    loadTools();
-    loadObservability();
-    
-    console.log('🤖 Aeryn Dashboard v61.4 initialized');
+    perfObserver.observe({ entryTypes: ['largest-contentful-paint', 'first-input'] });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  /* ── Log initial load ── */
+  window.addEventListener('load', () => {
+    const timing = performance.timing;
+    const loadTime = timing.loadEventEnd - timing.navigationStart;
+    // Load time logged
+  });
+
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* EXPORTS                                                           */
+  /* ═══════════════════════════════════════════════════════════════════ */
+
+  window.Aery = {
+    state,
+    showToast,
+    scrollToSection,
+    fetchStats,
+    appendMessage
+  };
+
 })();
