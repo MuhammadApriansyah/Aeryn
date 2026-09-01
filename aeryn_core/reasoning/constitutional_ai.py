@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
-"""V40.30 — Constitutional AI: Self-governance via ethical principles."""
+"""V61.5 — Constitutional AI: Self-governance via ethical principles."""
 
-import os, sys, json, sqlite3
+import os
+import sys
+import json
 from typing import Dict, List, Optional
 from datetime import datetime
 from aeryn_core.utils.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
 DB_PATH = os.path.join(DATABASE_DIR, "constitutional_ai.db")
+
+# Import raw sqlite3 (bypass patch for this module's own DB)
+import sqlite3 as _raw_sqlite3
 
 class ConstitutionalAI:
     def __init__(self, db_path=DB_PATH):
@@ -15,7 +20,7 @@ class ConstitutionalAI:
         self._init_db()
     
     def _init_db(self):
-        conn = sqlite3.connect(self.db_path)
+        conn = _raw_sqlite3.connect(self.db_path)
         conn.executescript("""
             CREATE TABLE IF NOT EXISTS principles (
                 id TEXT PRIMARY KEY,
@@ -47,14 +52,14 @@ class ConstitutionalAI:
             ("P06", "Stay in scope", "Don't exceed authorized capabilities or permissions", 8),
             ("P07", "Transparency", "Be clear about capabilities, limitations, and data usage", 7),
         ]
-        conn = sqlite3.connect(self.db_path)
+        conn = _raw_sqlite3.connect(self.db_path)
         for d in defaults:
             conn.execute("INSERT OR IGNORE INTO principles (id, name, description, priority) VALUES (?,?,?,?)", d)
         conn.commit()
         conn.close()
     
     def check_action(self, action: str, context: str = "") -> Dict:
-        conn = sqlite3.connect(self.db_path)
+        conn = _raw_sqlite3.connect(self.db_path)
         rows = conn.execute("SELECT id, name, description FROM principles WHERE is_active=1 ORDER BY priority DESC").fetchall()
         violations = []
         for r in rows:
@@ -71,6 +76,15 @@ class ConstitutionalAI:
             "Stay in scope": any(w in action_lower for w in ["sudo", "root access", "system files"]),
         }
         return checks.get(principle, False)
+    
+    def get_principles(self) -> List[Dict]:
+        conn = _raw_sqlite3.connect(self.db_path)
+        rows = conn.execute("SELECT id, name, description, priority FROM principles WHERE is_active=1 ORDER BY priority DESC").fetchall()
+        conn.close()
+        return [
+            {"id": r[0], "name": r[1], "description": r[2], "priority": r[3]}
+            for r in rows
+        ]
 
 _cai = None
 def get_constitutional_ai() -> ConstitutionalAI:

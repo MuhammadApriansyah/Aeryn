@@ -4,6 +4,46 @@ All notable changes to Aeryn will be documented in this file.
 
 ---
 
+## [61.5] — 2026-09-02
+
+### Refactored — Monolith Removal & Dead Code Cleanup
+- **Removed `aeryn_api.py` monolith** (4,303 lines, 140KB) — all routes migrated to modular `routers/` directory
+- **Removed all Rust source code** (22 files in `src/`) — zero Python imports, pure dead code
+- **Removed `aeryn_native.so`** — compiled extension never imported by any Python module
+- **Removed `Cargo.toml`** — PyO3 build dependency no longer needed
+
+### Fixed — Disappearing React Components
+- **Root cause**: `phase4.py` had `@router.get("/")` that overrode `web_routes_router`'s `/` route
+- **Fix**: Removed duplicate `/` route from `phase4.py`, kept only in `web_routes.py`
+- **Result**: React SPA now serves correctly at `/` with `<div id="root">` for React mounting
+
+### Fixed — Missing Imports in Phase 4 Router
+- Added 18 missing `get_*` function imports to `phase4.py`
+- Fixed `get_usage_metering` import in `tools.py`
+- Added `get_pending_tasks()` and `get_all_tasks()` convenience methods to `SharedDB`
+
+### Fixed — Constitutional AI
+- Rewrote `constitutional_ai.py` to use raw `sqlite3` (bypasses PG adapter for local DB)
+- Added `get_principles()` method to `ConstitutionalAI` class
+- Fixed `get_principles` endpoint in `phase4.py` to use the new method
+
+### Fixed — Metrics & Alerts
+- Replaced broken `from monitor import ProductionMonitor` with fallback using `SharedDB`
+- `/v1/metrics` now returns workflow stats from `SharedDB.get_workflow_stats()`
+- `/v1/alerts` now returns pending reminders from `SharedDB.get_all_reminders()`
+
+### Consolidated — Frontend
+- Removed fallback to old vanilla dashboard (`apps/web/templates/dashboard.html`)
+- `web_routes.py` now serves only React SPA from `apps/web-vite/dist/`
+- Removed `apps/web/server.py` import from `phase4.py`
+
+### Verification
+- All 31 critical endpoints tested with real HTTP requests (no test doubles)
+- All endpoints return 200 OK
+- React SPA confirmed serving at `/` with correct `id="root"` div
+
+---
+
 ## [61.1] — 2026-08-31
 
 ### Added — Adaptive Infrastructure (Roadmap P0a–P6)

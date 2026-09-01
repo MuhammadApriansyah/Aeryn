@@ -277,7 +277,7 @@ class SharedDB:
             finally:
                 conn.close()
     
-    def get_tasks(self, status: str = None, limit: int = 50) -> List[dict]:
+    def get_tasks(self, status: Optional[str] = None, limit: int = 50) -> List[dict]:
         """Get tasks, optionally filtered by status."""
         conn = self._get_conn()
         try:
@@ -306,6 +306,14 @@ class SharedDB:
             ]
         finally:
             conn.close()
+    
+    def get_pending_tasks(self, limit: int = 50) -> List[dict]:
+        """Get pending tasks (convenience method)."""
+        return self.get_tasks(status='pending', limit=limit)
+    
+    def get_all_tasks(self, limit: int = 100) -> List[dict]:
+        """Get all tasks (convenience method)."""
+        return self.get_tasks(status=None, limit=limit)
     
     def update_task_progress(self, task_id: str, progress: float, result: str = None):
         """Update task progress."""

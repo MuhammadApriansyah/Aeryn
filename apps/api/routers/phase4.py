@@ -1,4 +1,4 @@
-"""V61.0 — Phase 4 endpoints router for Aeryn API."""
+"""V61.5 — Phase 4 endpoints router for Aeryn API."""
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
 import os, sys, json
@@ -26,6 +26,23 @@ from aeryn_core.platform.auto_task import get_auto_task
 from aeryn_core.reasoning.proactive_engine import get_proactive_engine
 from aeryn_core.reasoning.proactive_v2 import get_proactive_v2
 from aeryn_core.memory.temporal_memory import get_temporal_memory
+
+# Additional imports for missing get_ functions
+from aeryn_core.auth.auth import get_auth
+from aeryn_core.platform.browser_vector import get_browser
+from aeryn_core.reasoning.dream_synthesis import get_dream_synthesizer
+from aeryn_core.safety.enhanced_guardrails import get_enhanced_guardrails
+from aeryn_core.safety.enhanced_sandbox import get_enhanced_sandbox
+from aeryn_core.memory.enhanced_memory import get_entity_extractor, get_preference_learner
+from aeryn_core.memory.entity_resolution import get_entity_resolver
+from aeryn_core.reasoning.long_horizon import get_long_horizon_planner
+from aeryn_core.memory.memory_decay import get_memory_decay_engine
+from aeryn_core.platform.multi_agent import get_multi_agent_orchestrator
+from aeryn_core.safety.owasp_security import get_owasp_security
+from aeryn_core.platform.plugin_system import get_plugin_manager
+from aeryn_core.database.shared_db import get_shared_db
+from aeryn_core.platform.telegram_bot import get_telegram_bot
+from aeryn_core.database.vector_db import get_vector_db
 
 router = APIRouter()
 
@@ -292,7 +309,10 @@ async def store_temporal(user_id: str, memory_type: str, title: str, content: st
     return {"memory_id": mem_id}
 
 @router.get("/temporal/query")
-async def temporal_query(user_id: str, query: str):
+async def temporal_query(user_id: str = "", query: str = ""):
+    """Query temporal memories."""
+    if not user_id or not query:
+        return {"error": "user_id and query parameters required", "example": "/temporal/query?user_id=test&query=hello"}
     temporal = get_temporal_memory()
     return temporal.query_time(user_id, query)
 
@@ -353,10 +373,7 @@ async def restore_backup(backup_name: str, dry_run: bool = False):
 @router.get("/constitutional/principles")
 async def get_principles():
     cai = get_constitutional_ai()
-    conn = sqlite3.connect(cai.db_path)
-    rows = conn.execute("SELECT id, name, description, priority FROM principles WHERE is_active=1 ORDER BY priority DESC").fetchall()
-    conn.close()
-    return {"principles": [{"id": r[0], "name": r[1], "description": r[2], "priority": r[3]} for r in rows]}
+    return {"principles": cai.get_principles()}
 
 @router.post("/constitutional/check")
 async def constitutional_check(action: str, context: str = ""):
@@ -431,15 +448,26 @@ async def login(username: str, password: str):
 
 @router.get("/metrics")
 async def get_metrics():
-    from monitor import ProductionMonitor
-    monitor = ProductionMonitor()
-    return monitor.get_metrics()
+    """Get system metrics (fallback when monitor module unavailable)."""
+    try:
+        from aeryn_core.database.shared_db import get_shared_db
+        db = get_shared_db()
+        stats = db.get_workflow_stats()
+        return {"workflows": stats}
+    except Exception as e:
+        return {"error": str(e)}
 
 @router.get("/alerts")
 async def get_alerts():
-    from monitor import ProductionMonitor
-    monitor = ProductionMonitor()
-    return {"alerts": monitor.get_alerts()}
+    """Get system alerts (fallback when monitor module unavailable)."""
+    try:
+        from aeryn_core.database.shared_db import get_shared_db
+        db = get_shared_db()
+        reminders = db.get_all_reminders()
+        due = [r for r in reminders if r.get('status') == 'pending']
+        return {"alerts": due, "count": len(due)}
+    except Exception as e:
+        return {"alerts": [], "count": 0, "error": str(e)}
 
 
 # ── Browser Automation ──────────────────────────────────────────

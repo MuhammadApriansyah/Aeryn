@@ -14,6 +14,7 @@ from aeryn_core.memory.memory_decay import get_memory_decay_engine
 from aeryn_core.memory.entity_resolution import get_entity_resolver
 from aeryn_core.safety.owasp_security import get_owasp_security
 from aeryn_core.database.semantic_indexer import get_semantic_indexer
+from aeryn_core.billing.usage_metering import get_usage_metering
 
 router = APIRouter()
 
