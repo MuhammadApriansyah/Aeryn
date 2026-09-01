@@ -2522,3 +2522,22 @@
 2026-09-02 01:24:24: INFO:     127.0.0.1:42876 - "GET /v1/admin/stats HTTP/1.1" 200 OK
 2026-09-02 01:24:24: INFO:     127.0.0.1:42880 - "GET /static/js/app.js HTTP/1.1" 200 OK
 2026-09-02 01:24:24: INFO:     127.0.0.1:42882 - "GET /static/css/dashboard.css HTTP/1.1" 200 OK
+2026-09-02 01:55:52: 2026-09-02 01:55:52 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 01:55:52: 2026-09-02 01:55:52 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 01:55:52: 2026-09-02 01:55:52 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 01:55:52: 2026-09-02 01:55:52 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 01:55:52: 2026-09-02 01:55:52 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 01:56:07: INFO:     127.0.0.1:51400 - "GET / HTTP/1.1" 200 OK
+2026-09-02 01:56:08: INFO:     127.0.0.1:51416 - "GET /health HTTP/1.1" 200 OK
+2026-09-02 01:56:08: INFO:     127.0.0.1:51422 - "GET /v1/dashboard/stats HTTP/1.1" 200 OK
+2026-09-02 01:56:08: INFO:     127.0.0.1:51424 - "GET /v1/constitutional/principles HTTP/1.1" 200 OK
+2026-09-02 01:56:08: 2026-09-02 01:56:08 [INFO] aeryn: PostgreSQL available
+2026-09-02 01:56:08: 2026-09-02 01:56:08 [INFO] aeryn: All PostgreSQL tables ensured
+2026-09-02 01:56:09: INFO:     127.0.0.1:51428 - "GET /v1/shared/tasks HTTP/1.1" 200 OK
+2026-09-02 01:56:09: INFO:     127.0.0.1:51434 - "GET /static/js/app.js HTTP/1.1" 200 OK
+2026-09-02 02:08:04: 2026-09-02 02:08:04 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 02:08:11: 2026-09-02 02:08:11 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 02:08:11: 2026-09-02 02:08:11 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 02:08:11: 2026-09-02 02:08:11 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 02:08:12: 2026-09-02 02:08:12 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 02:08:12: 2026-09-02 02:08:12 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
