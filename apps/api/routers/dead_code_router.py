@@ -265,11 +265,11 @@ async def hermes_memory():
 # ========================================
 
 @router.get("/memory/core/render")
-async def memory_core_render(content: str):
+async def memory_core_render():
     """Render core memory."""
     from aeryn_core.memory.core_memory import CoreMemory
     mem = CoreMemory()
-    result = mem.render(content)
+    result = mem.render()
     return {"rendered": result}
 
 
@@ -389,14 +389,14 @@ async def personal_preferences_set(preference: str, value: str):
 
 
 @router.get("/personal/preferences/get")
-async def personal_preferences_get(preference: str = ""):
+async def personal_preferences_get(preference: str = "", user_id: str = ""):
     """Get user preference."""
     from aeryn_core.personal.personalization import PersonalizationEngine
     engine = PersonalizationEngine()
     if preference:
-        result = engine.get_preference(preference)
+        result = engine.get_preference(user_id, preference)
     else:
-        result = engine.get_all_preferences()
+        result = engine.get_all_preferences(user_id)
     return {"preferences": result}
 
 
