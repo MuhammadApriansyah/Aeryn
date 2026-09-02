@@ -20,10 +20,23 @@ class VaultWriteRequest(BaseModel):
 @router.post("/vault/write")
 async def vault_write(req: VaultWriteRequest):
     """Write to vault."""
-    from aeryn_core.memory.vault import get_vault
+    from aeryn_core.memory.vault import get_vault, VaultEntry
     
     vault = get_vault()
-    result = vault.write(req.filename, req.content, req.frontmatter)
+    tags = req.frontmatter.get("tags", []) if req.frontmatter else []
+    links = req.frontmatter.get("links", []) if req.frontmatter else []
+    if isinstance(tags, str):
+        tags = [tags]
+    if isinstance(links, str):
+        links = [links]
+    entry = VaultEntry(
+        layer="Wiki",
+        title=req.filename,
+        body=req.content,
+        tags=tags,
+        links=links,
+    )
+    result = vault.write(entry)
     
     return {"status": "ok", "result": result}
 
@@ -45,7 +58,7 @@ async def vault_search(query: str, limit: int = 10):
     from aeryn_core.memory.vault import get_vault
     
     vault = get_vault()
-    results = vault.search(query, limit)
+    results = vault.search(query, limit=limit)
     
     return {"results": results, "count": len(results)}
 
@@ -79,7 +92,16 @@ async def episodic_record(req: EpisodicRequest):
     from aeryn_core.memory.episodic_memory import EpisodicMemory
     
     memory = EpisodicMemory()
-    result = memory.record(req.event, req.metadata)
+    result = memory.record(
+        session_id="default",
+        goal=req.event,
+        plan_source="api",
+        trace=[],
+        answer=None,
+        error=None,
+        timed_out=False,
+        strategy=""
+    )
     
     return {"status": "ok", "result": result}
 

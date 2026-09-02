@@ -18,7 +18,7 @@ class CommitmentRequest(BaseModel):
 
 
 @router.post("/cerewet/detect")
-async def cerewet_detect(text: str):
+async def cerewet_detect(text: str = ""):
     """Detect commitment in text."""
     from aeryn_core.reasoning.cerewet_mode import detect_commitment
     

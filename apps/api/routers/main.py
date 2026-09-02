@@ -44,7 +44,7 @@ from apps.api.routers.safety import router as safety_router
 from apps.api.routers.memory import router as memory_router
 from apps.api.routers.reasoning import router as reasoning_router
 from apps.api.routers.agents import router as agents_router
-from apps.api.routers.platform import router as platform_router
+from apps.api.routers.platform_router import router as platform_router
 
 # --- Background tasks ---
 async def broadcast_loop():
