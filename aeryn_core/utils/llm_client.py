@@ -188,8 +188,14 @@ class AerynLLMClient:
         resp = await loop.run_in_executor(None, lambda: urllib.request.urlopen(req, timeout=60))
         data = json.loads(resp.read().decode())
         choice = data["choices"][0]
-        return {"content": choice["message"]["content"], "provider": p["api_key_env"], "model": use_model,
-                "tokens": data.get("usage", {}).get("total_tokens", 0)}
+        result = {
+            "content": choice["message"].get("content", ""),
+            "tool_calls": choice["message"].get("tool_calls", []),
+            "provider": p["api_key_env"],
+            "model": use_model,
+            "tokens": data.get("usage", {}).get("total_tokens", 0)
+        }
+        return result
 
 
 class SessionManager:
