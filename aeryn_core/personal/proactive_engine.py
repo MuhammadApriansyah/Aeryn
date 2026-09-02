@@ -20,6 +20,12 @@ class ProactiveEngine:
             conn = sqlite3.connect(DB_PATH, check_same_thread=False)
             conn.execute("CREATE TABLE IF NOT EXISTS user_patterns (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT, action TEXT, context TEXT, timestamp REAL)")
             conn.execute("CREATE TABLE IF NOT EXISTS suggestions (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT, suggestion TEXT, reason TEXT, priority INTEGER DEFAULT 5, dismissed INTEGER DEFAULT 0, created_at REAL)")
+            # Schema migration: detect old schema and migrate
+            existing_cols = [r[1] for r in conn.execute("PRAGMA table_info(suggestions)").fetchall()]
+            if "suggestion" not in existing_cols and "suggestion_type" in existing_cols:
+                # Old schema detected — migrate to new schema
+                conn.execute("DROP TABLE suggestions")
+                conn.execute("CREATE TABLE suggestions (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT, suggestion TEXT, reason TEXT, priority INTEGER DEFAULT 5, dismissed INTEGER DEFAULT 0, created_at REAL)")
             conn.commit()
             conn.close()
     

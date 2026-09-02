@@ -76,6 +76,13 @@ def check_cli() -> tuple:
 def check_auth() -> tuple:
     try:
         data = json.load(open(AUTH))
+        # New format: credential_pool.nous (list of credential dicts)
+        pool = data.get("credential_pool", {})
+        nous_list = pool.get("nous", [])
+        if nous_list:
+            # Any nous credential present = auth available
+            return True, f"OK (credential_pool.nous: {len(nous_list)} cred)"
+        # Old format: providers.nous.agent_key (single string)
         nous = data.get("providers", {}).get("nous", {})
         key_present = bool(nous.get("agent_key"))
         exp = nous.get("expires_at", 0)

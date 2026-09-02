@@ -36,8 +36,15 @@ class RatePluginRequest(BaseModel):
 @router.get("/plugins")
 async def list_plugins(query: str = None, limit: int = 20, offset: int = 0):
     """List public plugins."""
-    mp = get_plugin_marketplace()
-    return {"plugins": mp.search(query=query, limit=limit, offset=offset)}
+    try:
+        mp = get_plugin_marketplace()
+        return {"plugins": mp.search(query=query, limit=limit, offset=offset)}
+    except Exception as e:
+        # Fallback: return plugin loader discoveries when Postgres unavailable
+        from aeryn_core.plugins.loader import get_plugin_loader
+        loader = get_plugin_loader()
+        plugins = loader.discover()
+        return {"plugins": plugins, "count": len(plugins), "fallback": True}
 
 @router.post("/plugins/publish")
 async def publish_plugin(req: PublishPluginRequest, authorization: str = Header(None)):
