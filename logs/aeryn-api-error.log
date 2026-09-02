@@ -2198,3 +2198,369 @@
 2026-09-02 09:43:00: INFO:     Waiting for application startup.
 2026-09-02 09:43:00: INFO:     Application startup complete.
 2026-09-02 09:43:00: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-02 09:52:21: INFO:     Shutting down
+2026-09-02 09:52:21: INFO:     Waiting for application shutdown.
+2026-09-02 09:52:21: INFO:     Application shutdown complete.
+2026-09-02 09:52:21: INFO:     Finished server process [13595]
+2026-09-02 09:52:26: INFO:     Started server process [25379]
+2026-09-02 09:52:26: INFO:     Waiting for application startup.
+2026-09-02 09:52:26: INFO:     Application startup complete.
+2026-09-02 09:52:26: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-02 09:53:52: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/joblib/_multiprocessing_helpers.py:44: UserWarning: [Errno 2] No such file or directory.  joblib will operate in serial mode
+2026-09-02 09:53:52:   warnings.warn("%s.  joblib will operate in serial mode" % (e,))
+2026-09-02 09:54:08: INFO:     Started server process [28334]
+2026-09-02 09:54:08: INFO:     Waiting for application startup.
+2026-09-02 09:54:08: INFO:     Application startup complete.
+2026-09-02 09:54:08: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-02 09:55:50: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/joblib/_multiprocessing_helpers.py:44: UserWarning: [Errno 2] No such file or directory.  joblib will operate in serial mode
+2026-09-02 09:55:50:   warnings.warn("%s.  joblib will operate in serial mode" % (e,))
+2026-09-02 09:57:28: INFO:     Started server process [6343]
+2026-09-02 09:57:28: INFO:     Waiting for application startup.
+2026-09-02 09:57:28: INFO:     Application startup complete.
+2026-09-02 09:57:28: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-02 09:58:34: INFO:     Started server process [9709]
+2026-09-02 09:58:34: INFO:     Waiting for application startup.
+2026-09-02 09:58:34: INFO:     Application startup complete.
+2026-09-02 09:58:34: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-02 09:59:37: INFO:     Started server process [10470]
+2026-09-02 09:59:37: INFO:     Waiting for application startup.
+2026-09-02 09:59:37: INFO:     Application startup complete.
+2026-09-02 09:59:37: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-02 09:59:55: INFO:     Shutting down
+2026-09-02 09:59:55: INFO:     Waiting for application shutdown.
+2026-09-02 09:59:55: INFO:     Application shutdown complete.
+2026-09-02 09:59:55: INFO:     Finished server process [10470]
+2026-09-02 10:00:11: INFO:     Started server process [14058]
+2026-09-02 10:00:11: INFO:     Waiting for application startup.
+2026-09-02 10:00:11: INFO:     Application startup complete.
+2026-09-02 10:00:11: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-02 10:07:21: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/joblib/_multiprocessing_helpers.py:44: UserWarning: [Errno 2] No such file or directory.  joblib will operate in serial mode
+2026-09-02 10:07:21:   warnings.warn("%s.  joblib will operate in serial mode" % (e,))
+2026-09-02 10:07:33: INFO:     Started server process [25130]
+2026-09-02 10:07:33: INFO:     Waiting for application startup.
+2026-09-02 10:07:33: INFO:     Application startup complete.
+2026-09-02 10:07:33: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-02 10:07:40: INFO:     Started server process [25346]
+2026-09-02 10:07:40: INFO:     Waiting for application startup.
+2026-09-02 10:07:41: INFO:     Application startup complete.
+2026-09-02 10:07:41: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:07:41: INFO:     Waiting for application shutdown.
+2026-09-02 10:07:41: INFO:     Application shutdown complete.
+2026-09-02 10:07:49: INFO:     Started server process [26459]
+2026-09-02 10:07:49: INFO:     Waiting for application startup.
+2026-09-02 10:07:49: INFO:     Application startup complete.
+2026-09-02 10:07:49: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:07:49: INFO:     Waiting for application shutdown.
+2026-09-02 10:07:49: INFO:     Application shutdown complete.
+2026-09-02 10:07:56: INFO:     Started server process [26832]
+2026-09-02 10:07:56: INFO:     Waiting for application startup.
+2026-09-02 10:07:56: INFO:     Application startup complete.
+2026-09-02 10:07:56: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:07:56: INFO:     Waiting for application shutdown.
+2026-09-02 10:07:56: INFO:     Application shutdown complete.
+2026-09-02 10:08:04: INFO:     Started server process [26865]
+2026-09-02 10:08:04: INFO:     Waiting for application startup.
+2026-09-02 10:08:04: INFO:     Application startup complete.
+2026-09-02 10:08:04: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:08:04: INFO:     Waiting for application shutdown.
+2026-09-02 10:08:04: INFO:     Application shutdown complete.
+2026-09-02 10:08:16: INFO:     Started server process [27067]
+2026-09-02 10:08:16: INFO:     Waiting for application startup.
+2026-09-02 10:08:16: INFO:     Application startup complete.
+2026-09-02 10:08:16: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:08:16: INFO:     Waiting for application shutdown.
+2026-09-02 10:08:16: INFO:     Application shutdown complete.
+2026-09-02 10:08:32: INFO:     Started server process [27826]
+2026-09-02 10:08:32: INFO:     Waiting for application startup.
+2026-09-02 10:08:32: INFO:     Application startup complete.
+2026-09-02 10:08:32: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:08:32: INFO:     Waiting for application shutdown.
+2026-09-02 10:08:32: INFO:     Application shutdown complete.
+2026-09-02 10:08:45: INFO:     Started server process [28350]
+2026-09-02 10:08:45: INFO:     Waiting for application startup.
+2026-09-02 10:08:45: INFO:     Application startup complete.
+2026-09-02 10:08:45: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:08:45: INFO:     Waiting for application shutdown.
+2026-09-02 10:08:45: INFO:     Application shutdown complete.
+2026-09-02 10:08:58: INFO:     Started server process [28383]
+2026-09-02 10:08:58: INFO:     Waiting for application startup.
+2026-09-02 10:08:58: INFO:     Application startup complete.
+2026-09-02 10:08:58: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:08:58: INFO:     Waiting for application shutdown.
+2026-09-02 10:08:58: INFO:     Application shutdown complete.
+2026-09-02 10:09:08: INFO:     Started server process [28448]
+2026-09-02 10:09:08: INFO:     Waiting for application startup.
+2026-09-02 10:09:08: INFO:     Application startup complete.
+2026-09-02 10:09:08: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:09:08: INFO:     Waiting for application shutdown.
+2026-09-02 10:09:08: INFO:     Application shutdown complete.
+2026-09-02 10:09:15: /home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/joblib/_multiprocessing_helpers.py:44: UserWarning: [Errno 2] No such file or directory.  joblib will operate in serial mode
+2026-09-02 10:09:15:   warnings.warn("%s.  joblib will operate in serial mode" % (e,))
+2026-09-02 10:09:18: INFO:     Started server process [28499]
+2026-09-02 10:09:18: INFO:     Waiting for application startup.
+2026-09-02 10:09:18: INFO:     Application startup complete.
+2026-09-02 10:09:18: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:09:18: INFO:     Waiting for application shutdown.
+2026-09-02 10:09:18: INFO:     Application shutdown complete.
+2026-09-02 10:09:31: INFO:     Started server process [28620]
+2026-09-02 10:09:31: INFO:     Waiting for application startup.
+2026-09-02 10:09:31: INFO:     Application startup complete.
+2026-09-02 10:09:31: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:09:31: INFO:     Waiting for application shutdown.
+2026-09-02 10:09:31: INFO:     Application shutdown complete.
+2026-09-02 10:09:43: INFO:     Started server process [29534]
+2026-09-02 10:09:43: INFO:     Waiting for application startup.
+2026-09-02 10:09:43: INFO:     Application startup complete.
+2026-09-02 10:09:43: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:09:43: INFO:     Waiting for application shutdown.
+2026-09-02 10:09:43: INFO:     Application shutdown complete.
+2026-09-02 10:09:52: INFO:     Started server process [29674]
+2026-09-02 10:09:52: INFO:     Waiting for application startup.
+2026-09-02 10:09:52: INFO:     Application startup complete.
+2026-09-02 10:09:52: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:09:52: INFO:     Waiting for application shutdown.
+2026-09-02 10:09:52: INFO:     Application shutdown complete.
+2026-09-02 10:10:02: INFO:     Started server process [29736]
+2026-09-02 10:10:02: INFO:     Waiting for application startup.
+2026-09-02 10:10:02: INFO:     Application startup complete.
+2026-09-02 10:10:02: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:10:02: INFO:     Waiting for application shutdown.
+2026-09-02 10:10:02: INFO:     Application shutdown complete.
+2026-09-02 10:10:08: Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]
+2026-09-02 10:10:08: Loading weights:   2%|▏         | 2/103 [00:00<00:07, 14.23it/s]
+2026-09-02 10:10:08: Loading weights:   8%|▊         | 8/103 [00:00<00:02, 35.31it/s]
+2026-09-02 10:10:08: Loading weights: 100%|██████████| 103/103 [00:00<00:00, 316.84it/s]
+2026-09-02 10:10:08: 
+2026-09-02 10:10:11: INFO:     Started server process [29789]
+2026-09-02 10:10:11: INFO:     Waiting for application startup.
+2026-09-02 10:10:11: INFO:     Application startup complete.
+2026-09-02 10:10:11: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:10:11: INFO:     Waiting for application shutdown.
+2026-09-02 10:10:11: INFO:     Application shutdown complete.
+2026-09-02 10:10:21: INFO:     Started server process [30034]
+2026-09-02 10:10:21: INFO:     Waiting for application startup.
+2026-09-02 10:10:21: INFO:     Application startup complete.
+2026-09-02 10:10:21: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:10:21: INFO:     Waiting for application shutdown.
+2026-09-02 10:10:21: INFO:     Application shutdown complete.
+2026-09-02 10:10:30: INFO:     Started server process [30247]
+2026-09-02 10:10:30: INFO:     Waiting for application startup.
+2026-09-02 10:10:30: INFO:     Application startup complete.
+2026-09-02 10:10:30: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:10:30: INFO:     Waiting for application shutdown.
+2026-09-02 10:10:30: INFO:     Application shutdown complete.
+2026-09-02 10:10:40: INFO:     Started server process [30322]
+2026-09-02 10:10:40: INFO:     Waiting for application startup.
+2026-09-02 10:10:40: INFO:     Application startup complete.
+2026-09-02 10:10:40: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:10:40: INFO:     Waiting for application shutdown.
+2026-09-02 10:10:40: INFO:     Application shutdown complete.
+2026-09-02 10:10:47: INFO:     Started server process [30726]
+2026-09-02 10:10:47: INFO:     Waiting for application startup.
+2026-09-02 10:10:47: INFO:     Application startup complete.
+2026-09-02 10:10:47: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:10:47: INFO:     Waiting for application shutdown.
+2026-09-02 10:10:47: INFO:     Application shutdown complete.
+2026-09-02 10:10:54: INFO:     Started server process [30775]
+2026-09-02 10:10:54: INFO:     Waiting for application startup.
+2026-09-02 10:10:54: INFO:     Application startup complete.
+2026-09-02 10:10:54: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:10:54: INFO:     Waiting for application shutdown.
+2026-09-02 10:10:54: INFO:     Application shutdown complete.
+2026-09-02 10:11:01: INFO:     Started server process [31538]
+2026-09-02 10:11:01: INFO:     Waiting for application startup.
+2026-09-02 10:11:01: INFO:     Application startup complete.
+2026-09-02 10:11:01: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:11:01: INFO:     Waiting for application shutdown.
+2026-09-02 10:11:01: INFO:     Application shutdown complete.
+2026-09-02 10:11:10: INFO:     Started server process [31852]
+2026-09-02 10:11:10: INFO:     Waiting for application startup.
+2026-09-02 10:11:10: INFO:     Application startup complete.
+2026-09-02 10:11:10: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:11:10: INFO:     Waiting for application shutdown.
+2026-09-02 10:11:10: INFO:     Application shutdown complete.
+2026-09-02 10:11:17: INFO:     Started server process [32076]
+2026-09-02 10:11:17: INFO:     Waiting for application startup.
+2026-09-02 10:11:17: INFO:     Application startup complete.
+2026-09-02 10:11:17: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:11:17: INFO:     Waiting for application shutdown.
+2026-09-02 10:11:17: INFO:     Application shutdown complete.
+2026-09-02 10:11:23: INFO:     Started server process [32098]
+2026-09-02 10:11:23: INFO:     Waiting for application startup.
+2026-09-02 10:11:23: INFO:     Application startup complete.
+2026-09-02 10:11:23: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:11:23: INFO:     Waiting for application shutdown.
+2026-09-02 10:11:23: INFO:     Application shutdown complete.
+2026-09-02 10:11:30: INFO:     Started server process [32177]
+2026-09-02 10:11:30: INFO:     Waiting for application startup.
+2026-09-02 10:11:30: INFO:     Application startup complete.
+2026-09-02 10:11:30: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:11:30: INFO:     Waiting for application shutdown.
+2026-09-02 10:11:30: INFO:     Application shutdown complete.
+2026-09-02 10:11:37: INFO:     Started server process [32202]
+2026-09-02 10:11:37: INFO:     Waiting for application startup.
+2026-09-02 10:11:37: INFO:     Application startup complete.
+2026-09-02 10:11:37: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:11:37: INFO:     Waiting for application shutdown.
+2026-09-02 10:11:37: INFO:     Application shutdown complete.
+2026-09-02 10:11:44: INFO:     Started server process [32394]
+2026-09-02 10:11:44: INFO:     Waiting for application startup.
+2026-09-02 10:11:44: INFO:     Application startup complete.
+2026-09-02 10:11:44: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:11:44: INFO:     Waiting for application shutdown.
+2026-09-02 10:11:44: INFO:     Application shutdown complete.
+2026-09-02 10:11:52: INFO:     Started server process [32569]
+2026-09-02 10:11:52: INFO:     Waiting for application startup.
+2026-09-02 10:11:52: INFO:     Application startup complete.
+2026-09-02 10:11:52: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:11:52: INFO:     Waiting for application shutdown.
+2026-09-02 10:11:52: INFO:     Application shutdown complete.
+2026-09-02 10:12:00: INFO:     Started server process [389]
+2026-09-02 10:12:00: INFO:     Waiting for application startup.
+2026-09-02 10:12:00: INFO:     Application startup complete.
+2026-09-02 10:12:00: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:12:00: INFO:     Waiting for application shutdown.
+2026-09-02 10:12:00: INFO:     Application shutdown complete.
+2026-09-02 10:12:08: INFO:     Started server process [469]
+2026-09-02 10:12:08: INFO:     Waiting for application startup.
+2026-09-02 10:12:08: INFO:     Application startup complete.
+2026-09-02 10:12:08: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:12:08: INFO:     Waiting for application shutdown.
+2026-09-02 10:12:08: INFO:     Application shutdown complete.
+2026-09-02 10:12:16: INFO:     Started server process [1109]
+2026-09-02 10:12:16: INFO:     Waiting for application startup.
+2026-09-02 10:12:16: INFO:     Application startup complete.
+2026-09-02 10:12:16: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:12:16: INFO:     Waiting for application shutdown.
+2026-09-02 10:12:16: INFO:     Application shutdown complete.
+2026-09-02 10:12:25: INFO:     Started server process [1798]
+2026-09-02 10:12:25: INFO:     Waiting for application startup.
+2026-09-02 10:12:25: INFO:     Application startup complete.
+2026-09-02 10:12:25: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:12:25: INFO:     Waiting for application shutdown.
+2026-09-02 10:12:25: INFO:     Application shutdown complete.
+2026-09-02 10:12:33: INFO:     Started server process [2583]
+2026-09-02 10:12:33: INFO:     Waiting for application startup.
+2026-09-02 10:12:33: INFO:     Application startup complete.
+2026-09-02 10:12:33: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:12:33: INFO:     Waiting for application shutdown.
+2026-09-02 10:12:33: INFO:     Application shutdown complete.
+2026-09-02 10:12:40: INFO:     Started server process [2903]
+2026-09-02 10:12:40: INFO:     Waiting for application startup.
+2026-09-02 10:12:40: INFO:     Application startup complete.
+2026-09-02 10:12:40: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:12:40: INFO:     Waiting for application shutdown.
+2026-09-02 10:12:40: INFO:     Application shutdown complete.
+2026-09-02 10:12:48: Traceback (most recent call last):
+2026-09-02 10:12:48:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 10:12:48:     from fastapi import FastAPI, Request, Response
+2026-09-02 10:12:48:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 10:12:48:     from .applications import FastAPI as FastAPI
+2026-09-02 10:12:48:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 9, in <module>
+2026-09-02 10:12:48:     from fastapi.exception_handlers import (
+2026-09-02 10:12:48:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exception_handlers.py", line 4, in <module>
+2026-09-02 10:12:48:     from fastapi.websockets import WebSocket
+2026-09-02 10:12:48:   File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+2026-09-02 10:12:48:   File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+2026-09-02 10:12:48:   File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+2026-09-02 10:12:48:   File "<frozen importlib._bootstrap_external>", line 936, in exec_module
+2026-09-02 10:12:48:   File "<frozen importlib._bootstrap_external>", line 1026, in get_code
+2026-09-02 10:12:48:   File "<frozen importlib._bootstrap_external>", line 1148, in path_stats
+2026-09-02 10:12:48:   File "<frozen importlib._bootstrap_external>", line 147, in _path_stat
+2026-09-02 10:12:48: KeyboardInterrupt
+2026-09-02 10:13:03: INFO:     Started server process [4286]
+2026-09-02 10:13:03: INFO:     Waiting for application startup.
+2026-09-02 10:13:03: INFO:     Application startup complete.
+2026-09-02 10:13:03: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:13:03: INFO:     Waiting for application shutdown.
+2026-09-02 10:13:03: INFO:     Application shutdown complete.
+2026-09-02 10:13:25: INFO:     Started server process [6396]
+2026-09-02 10:13:25: INFO:     Waiting for application startup.
+2026-09-02 10:13:25: INFO:     Application startup complete.
+2026-09-02 10:13:25: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:13:25: INFO:     Waiting for application shutdown.
+2026-09-02 10:13:25: INFO:     Application shutdown complete.
+2026-09-02 10:13:37: INFO:     Started server process [7619]
+2026-09-02 10:13:37: INFO:     Waiting for application startup.
+2026-09-02 10:13:37: INFO:     Application startup complete.
+2026-09-02 10:13:37: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:13:37: INFO:     Waiting for application shutdown.
+2026-09-02 10:13:37: INFO:     Application shutdown complete.
+2026-09-02 10:13:48: INFO:     Started server process [7814]
+2026-09-02 10:13:48: INFO:     Waiting for application startup.
+2026-09-02 10:13:48: INFO:     Application startup complete.
+2026-09-02 10:13:48: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:13:48: INFO:     Waiting for application shutdown.
+2026-09-02 10:13:48: INFO:     Application shutdown complete.
+2026-09-02 10:13:57: INFO:     Started server process [7931]
+2026-09-02 10:13:57: INFO:     Waiting for application startup.
+2026-09-02 10:13:57: INFO:     Application startup complete.
+2026-09-02 10:13:57: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:13:57: INFO:     Waiting for application shutdown.
+2026-09-02 10:13:57: INFO:     Application shutdown complete.
+2026-09-02 10:14:07: INFO:     Started server process [8122]
+2026-09-02 10:14:07: INFO:     Waiting for application startup.
+2026-09-02 10:14:07: INFO:     Application startup complete.
+2026-09-02 10:14:07: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:14:07: INFO:     Waiting for application shutdown.
+2026-09-02 10:14:07: INFO:     Application shutdown complete.
+2026-09-02 10:14:17: INFO:     Started server process [8295]
+2026-09-02 10:14:17: INFO:     Waiting for application startup.
+2026-09-02 10:14:17: INFO:     Application startup complete.
+2026-09-02 10:14:17: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:14:17: INFO:     Waiting for application shutdown.
+2026-09-02 10:14:17: INFO:     Application shutdown complete.
+2026-09-02 10:14:26: INFO:     Started server process [8405]
+2026-09-02 10:14:26: INFO:     Waiting for application startup.
+2026-09-02 10:14:26: INFO:     Application startup complete.
+2026-09-02 10:14:26: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:14:26: INFO:     Waiting for application shutdown.
+2026-09-02 10:14:27: INFO:     Application shutdown complete.
+2026-09-02 10:14:36: INFO:     Started server process [8671]
+2026-09-02 10:14:36: INFO:     Waiting for application startup.
+2026-09-02 10:14:36: INFO:     Application startup complete.
+2026-09-02 10:14:36: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:14:36: INFO:     Waiting for application shutdown.
+2026-09-02 10:14:36: INFO:     Application shutdown complete.
+2026-09-02 10:14:45: INFO:     Started server process [8846]
+2026-09-02 10:14:45: INFO:     Waiting for application startup.
+2026-09-02 10:14:45: INFO:     Application startup complete.
+2026-09-02 10:14:45: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:14:45: INFO:     Waiting for application shutdown.
+2026-09-02 10:14:45: INFO:     Application shutdown complete.
+2026-09-02 10:14:54: INFO:     Started server process [9195]
+2026-09-02 10:14:54: INFO:     Waiting for application startup.
+2026-09-02 10:14:54: INFO:     Application startup complete.
+2026-09-02 10:14:54: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:14:54: INFO:     Waiting for application shutdown.
+2026-09-02 10:14:54: INFO:     Application shutdown complete.
+2026-09-02 10:15:04: INFO:     Started server process [9411]
+2026-09-02 10:15:04: INFO:     Waiting for application startup.
+2026-09-02 10:15:04: INFO:     Application startup complete.
+2026-09-02 10:15:04: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:15:04: INFO:     Waiting for application shutdown.
+2026-09-02 10:15:04: INFO:     Application shutdown complete.
+2026-09-02 10:15:13: INFO:     Started server process [9533]
+2026-09-02 10:15:13: INFO:     Waiting for application startup.
+2026-09-02 10:15:13: INFO:     Application startup complete.
+2026-09-02 10:15:13: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:15:13: INFO:     Waiting for application shutdown.
+2026-09-02 10:15:13: INFO:     Application shutdown complete.
+2026-09-02 10:15:22: INFO:     Started server process [9576]
+2026-09-02 10:15:22: INFO:     Waiting for application startup.
+2026-09-02 10:15:22: INFO:     Application startup complete.
+2026-09-02 10:15:22: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:15:22: INFO:     Waiting for application shutdown.
+2026-09-02 10:15:22: INFO:     Application shutdown complete.
+2026-09-02 10:15:30: INFO:     Started server process [9754]
+2026-09-02 10:15:30: INFO:     Waiting for application startup.
+2026-09-02 10:15:30: INFO:     Application startup complete.
+2026-09-02 10:15:30: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:15:30: INFO:     Waiting for application shutdown.
+2026-09-02 10:15:30: INFO:     Application shutdown complete.
+2026-09-02 10:15:39: INFO:     Started server process [9928]
+2026-09-02 10:15:39: INFO:     Waiting for application startup.
+2026-09-02 10:15:39: INFO:     Application startup complete.
+2026-09-02 10:15:39: ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1', 3010): address already in use
+2026-09-02 10:15:39: INFO:     Waiting for application shutdown.
+2026-09-02 10:15:39: INFO:     Application shutdown complete.

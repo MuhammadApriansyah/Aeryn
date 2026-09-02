@@ -157,8 +157,8 @@ async def mcp_server_call(name: str, args: Dict[str, Any] = None):
 async def mcp_client_discover(server_url: str = ""):
     """Discover MCP servers."""
     from aeryn_core.mcp.client import MCPClient
-    client = MCPClient()
-    servers = client.discover(server_url)
+    client = MCPClient("", "default")
+    servers = client.discover()
     return {"servers": servers}
 
 
@@ -166,7 +166,7 @@ async def mcp_client_discover(server_url: str = ""):
 async def mcp_client_call(server: str, tool: str, args: Dict[str, Any] = None):
     """Call tool via MCP client."""
     from aeryn_core.mcp.client import MCPClient
-    client = MCPClient()
+    client = MCPClient(server_url=server, name="default")
     result = client.call_tool(server, tool, args or {})
     return {"result": result}
 
@@ -175,7 +175,7 @@ async def mcp_client_call(server: str, tool: str, args: Dict[str, Any] = None):
 async def mcp_client_list(server: str = ""):
     """List tools from MCP server."""
     from aeryn_core.mcp.client import MCPClient
-    client = MCPClient()
+    client = MCPClient(server_url=server, name="default")
     tools = client.list_tools(server)
     return {"tools": tools}
 
@@ -187,8 +187,13 @@ async def mcp_client_list(server: str = ""):
 @router.get("/hermes/brain/digest")
 async def hermes_brain_digest():
     """Get Hermes brain digest."""
-    from aeryn_core.hermes.hermes_brain import register
-    result = register()
+    import os
+    hermes_scripts = os.path.expanduser("~/.hermes/scripts")
+    if not os.path.exists(hermes_scripts):
+        return {"error": "Hermes scripts not available", "path": hermes_scripts}
+    
+    from aeryn_core.hermes.hermes_brain import _memory_search
+    result = _memory_search("aeryn", top=3)
     return {"digest": result}
 
 
