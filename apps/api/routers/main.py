@@ -39,6 +39,7 @@ from apps.api.routers.admin import router as admin_router
 from apps.api.routers.phase4 import router as phase4_router
 from apps.api.routers.shared import router as shared_router
 from apps.api.routers.web_routes import router as web_routes_router
+from apps.api.routers.engine import router as engine_router
 
 # --- Background tasks ---
 async def broadcast_loop():
@@ -167,7 +168,8 @@ app.include_router(workspaces_router)   # Workspace endpoints
 app.include_router(admin_router)        # Admin, SSO, SOC2
 app.include_router(phase4_router)     # Phase 4 + Browser + Vector + Monitoring
 app.include_router(shared_router)     # Shared DB, Vault, Reminders, Tasks
-app.include_router(web_routes_router) # SPA, redirects, static
+app.include_router(web_routes_router)   # SPA, redirects, static
+app.include_router(engine_router)       # Vector search, text processing, graph traversal
 
 # PostgreSQL Memory Plugin (optional)
 try:
