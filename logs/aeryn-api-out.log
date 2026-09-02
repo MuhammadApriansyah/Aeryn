@@ -4889,3 +4889,22 @@
 2026-09-02 11:22:17: INFO:     127.0.0.1:40700 - "GET /v1/plugins HTTP/1.1" 200 OK
 2026-09-02 11:22:17: INFO:     127.0.0.1:40712 - "GET /v1/workspaces HTTP/1.1" 200 OK
 2026-09-02 11:22:17: INFO:     127.0.0.1:40714 - "GET /v1/agents HTTP/1.1" 200 OK
+2026-09-02 13:06:20: 2026-09-02 13:06:20 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 13:06:20: 2026-09-02 13:06:20 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 13:06:20: 2026-09-02 13:06:20 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 13:06:21: 2026-09-02 13:06:21 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 13:06:21: 2026-09-02 13:06:21 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 14:11:03: 2026-09-02 14:11:03 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 14:11:06: 2026-09-02 14:11:06 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 14:11:06: 2026-09-02 14:11:06 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 14:11:06: 2026-09-02 14:11:06 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 14:11:07: 2026-09-02 14:11:07 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 14:11:07: 2026-09-02 14:11:07 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 14:11:21: INFO:     127.0.0.1:41202 - "GET /health HTTP/1.1" 200 OK
+2026-09-02 14:16:23: INFO:     127.0.0.1:51386 - "GET /chat HTTP/1.1" 200 OK
+2026-09-02 14:16:23: INFO:     127.0.0.1:52898 - "GET /static/css/chat.css HTTP/1.1" 200 OK
+2026-09-02 14:16:23: INFO:     127.0.0.1:52904 - "GET /static/js/chat.js HTTP/1.1" 200 OK
+2026-09-02 14:21:18: INFO:     127.0.0.1:49160 - "POST /v1/chat HTTP/1.1" 200 OK
+2026-09-02 14:26:55: INFO:     127.0.0.1:35068 - "POST /v1/sessions/frontend_test/history HTTP/1.1" 405 Method Not Allowed
+2026-09-02 15:43:16: INFO:     127.0.0.1:40320 - "GET /v1/sessions/frontend_test/history HTTP/1.1" 200 OK
+2026-09-02 15:46:47: INFO:     127.0.0.1:52074 - "POST /v1/chat/stream HTTP/1.1" 200 OK

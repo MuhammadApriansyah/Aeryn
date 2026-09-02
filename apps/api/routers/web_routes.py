@@ -11,13 +11,32 @@ REACT_INDEX = os.path.join(REACT_DIST, "index.html")
 REACT_STATIC = os.path.join(REACT_DIST, "static")
 
 
-@router.get("/", response_class=HTMLResponse)
-async def dashboard():
-    """Serve React SPA."""
-    if os.path.exists(REACT_INDEX):
-        with open(REACT_INDEX, encoding="utf-8") as f:
+@router.get("/chat", response_class=HTMLResponse)
+async def chat_page():
+    """Serve chat page."""
+    chat_path = "/home/sen/aeryn-core-agent/apps/web/templates/chat.html"
+    if os.path.exists(chat_path):
+        with open(chat_path, encoding="utf-8") as f:
             return f.read()
-    return "<h1>Aeryn</h1>"
+    return "<h1>Chat</h1>"
+
+
+@router.get("/static/css/{path:path}")
+async def css_files(path: str):
+    """Serve CSS files."""
+    css_file = os.path.join("/home/sen/aeryn-core-agent/apps/web/static/css", path)
+    if os.path.exists(css_file):
+        return FileResponse(css_file)
+    return HTMLResponse("Not found", status_code=404)
+
+
+@router.get("/static/js/{path:path}")
+async def js_files(path: str):
+    """Serve JS files."""
+    js_file = os.path.join("/home/sen/aeryn-core-agent/apps/web/static/js", path)
+    if os.path.exists(js_file):
+        return FileResponse(js_file)
+    return HTMLResponse("Not found", status_code=404)
 
 
 @router.get("/static/{path:path}")
