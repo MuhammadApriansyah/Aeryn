@@ -8,6 +8,7 @@ Integrated with:
 
 import json
 import asyncio
+import time
 from typing import List, Dict, Any, Optional, AsyncGenerator
 from datetime import datetime
 
@@ -51,8 +52,20 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
     async def run(self, session_id: str, user_message: str) -> Dict[str, Any]:
         """Run agent loop for a user message."""
         from aeryn_core.utils.llm_client import get_mode_router
+        from aeryn_core.observability.tracing import (
+            get_trace_collector, start_trace, ATTR_AGENT_NAME, ATTR_SESSION, ATTR_MODEL, ATTR_TOKENS_TOTAL, ATTR_TOOL_NAME
+        )
         router = get_mode_router()
         session = router.get_or_create_session(session_id)
+        
+        # === OBSERVABILITY: start trace + agent span ===
+        collector = get_trace_collector()
+        trace_id = start_trace(session_id)
+        agent_span = collector.start_span(trace_id, None, "invoke_agent", {
+            ATTR_AGENT_NAME: "aeryn",
+            ATTR_SESSION: session_id,
+        })
+        t_start = time.time()
         
         # === DIVISION ROUTING: classify message ===
         division_id = self.divisions.classify(user_message)
@@ -79,12 +92,25 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         last_content = ""
         
         for iteration in range(self.max_iterations):
+            # === OBSERVABILITY: LLM (chat) span ===
+            chat_span = collector.start_span(trace_id, agent_span.id, "chat", {
+                ATTR_SESSION: session_id,
+            })
+            c_start = time.time()
+            
             # Get LLM response
             response = await self.llm.chat(
                 messages=messages,
                 session_id=session_id,
                 tools=tools_schema
             )
+            
+            # End chat span with token + model attributes
+            collector.end_span(chat_span, status="ok", attributes={
+                ATTR_MODEL: response.get("model", "unknown"),
+                ATTR_TOKENS_TOTAL: response.get("tokens", 0),
+                "gen_ai.latency_ms": round((time.time() - c_start) * 1000, 2),
+            })
             
             content = response.get("content", "")
             tool_calls = response.get("tool_calls", [])
@@ -99,6 +125,13 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                 # === MEMORY WRITE: Save facts after conversation ===
                 self._save_facts(session_id, user_message, content, messages)
                 
+                # End agent span
+                collector.end_span(agent_span, status="ok", attributes={
+                    "gen_ai.latency_ms": round((time.time() - t_start) * 1000, 2),
+                    ATTR_AGENT_NAME: "aeryn",
+                    "division": division_id,
+                })
+                
                 return {
                     "role": "assistant",
                     "content": content,
@@ -108,6 +141,7 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                     "iterations": iteration + 1,
                     "memories_used": len(relevant_memories),
                     "division": division_id,
+                    "trace_id": trace_id,
                 }
             
             messages.append({"role": "assistant", "content": content, "tool_calls": tool_calls})
@@ -135,7 +169,19 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                         "division": division_id,
                     }
                 
+                # === OBSERVABILITY: tool (execute_tool) span ===
+                tool_span = collector.start_span(trace_id, agent_span.id, "execute_tool", {
+                    ATTR_TOOL_NAME: tool_name,
+                })
+                t_tool_start = time.time()
+                
                 result = await self.tools.call(tool_name, tool_args)
+                
+                tool_status = "error" if result.get("status") == "error" else "ok"
+                collector.end_span(tool_span, status=tool_status, attributes={
+                    ATTR_TOOL_NAME: tool_name,
+                    "gen_ai.latency_ms": round((time.time() - t_tool_start) * 1000, 2),
+                })
                 
                 messages.append({
                     "role": "tool",
