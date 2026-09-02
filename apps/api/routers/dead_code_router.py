@@ -297,7 +297,7 @@ async def security_dashboard_alert(alert_type: str, message: str):
 @router.get("/security/memory-guard/verify")
 async def security_memory_guard_verify():
     from aeryn_core.security.memory_guard import MemoryGuard
-    return {"integrity": MemoryGuard().verify_integrity()}
+    return {"integrity": MemoryGuard().verify_integrity("default", "default_hash")}
 
 
 @router.get("/security/memory-guard/audit")
@@ -336,8 +336,8 @@ async def security_tool_permissions_risk(tool_name: str = ""):
 
 @router.get("/security/tool-permissions/allowed")
 async def security_tool_permissions_allowed():
-    from aeryn_core.security.tool_permissions import get_allowed_tools
-    return {"tools": get_allowed_tools()}
+    from aeryn_core.security.tool_permissions import get_allowed_tools, RiskLevel
+    return {"tools": list(get_allowed_tools(RiskLevel.LOW))}
 
 
 # ========================================
