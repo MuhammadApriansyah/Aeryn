@@ -2605,3 +2605,9 @@
 2026-09-02 08:43:06: INFO:     127.0.0.1:56120 - "POST /v1/safety/guardian/check HTTP/1.1" 200 OK
 2026-09-02 08:43:14: INFO:     127.0.0.1:43806 - "POST /v1/safety/guardian/check HTTP/1.1" 200 OK
 2026-09-02 08:43:40: INFO:     127.0.0.1:54610 - "POST /v1/safety/guardrails/validate-input HTTP/1.1" 200 OK
+2026-09-02 08:47:30: 2026-09-02 08:47:30 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 08:47:37: 2026-09-02 08:47:37 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 08:47:37: 2026-09-02 08:47:37 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 08:47:37: 2026-09-02 08:47:37 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 08:47:38: 2026-09-02 08:47:38 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 08:47:38: 2026-09-02 08:47:38 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
