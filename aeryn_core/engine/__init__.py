@@ -9,13 +9,11 @@ import subprocess
 from pathlib import Path
 from typing import List, Optional
 
-# Try to find the Rust shared library
 def _find_library() -> Optional[Path]:
     """Find the aeryn_engine shared library."""
-    base = Path(__file__).parent.parent.parent.parent / "aeryn-engine"
+    base = Path(os.path.expanduser("~")) / "aeryn-core-agent" / "aeryn-engine"
     candidates = [
         base / "target" / "release" / "libaeryn_engine.so",
-        base / "target" / "release" / "libaeryn_engine.dylib",
         base / "libaeryn_engine.so",
     ]
     for path in candidates:
@@ -26,13 +24,9 @@ def _find_library() -> Optional[Path]:
 
 def _build_library() -> Path:
     """Build the Rust library if not found."""
-    base = Path(__file__).parent.parent.parent.parent / "aeryn-engine"
+    base = Path(os.path.expanduser("~")) / "aeryn-core-agent" / "aeryn-engine"
     print("Building aeryn-engine...")
-    subprocess.run(
-        ["cargo", "build", "--release"],
-        cwd=base,
-        check=True,
-    )
+    subprocess.run(["cargo", "build", "--release"], cwd=base, check=True)
     lib = base / "target" / "release" / "libaeryn_engine.so"
     if not lib.exists():
         raise RuntimeError("Failed to build aeryn-engine")
@@ -62,7 +56,7 @@ _lib.free_string.restype = None
 
 
 def cosine_similarity(a: List[float], b: List[float]) -> float:
-    """Compute cosine similarity between two vectors."""
+    """Compute cosine similarity between two vectors using Rust."""
     if len(a) != len(b):
         return 0.0
     arr_a = (ctypes.c_float * len(a))(*a)
@@ -71,7 +65,7 @@ def cosine_similarity(a: List[float], b: List[float]) -> float:
 
 
 def hash_text(text: str) -> str:
-    """Compute SHA-256 hash of a string."""
+    """Compute SHA-256 hash of a string using Rust."""
     result = _lib.hash_text(text.encode("utf-8"))
     if result is None:
         return ""
@@ -79,7 +73,7 @@ def hash_text(text: str) -> str:
 
 
 class VectorStore:
-    """Simple vector store using Rust cosine similarity."""
+    """Vector store using Rust cosine similarity."""
     
     def __init__(self, dimensions: int):
         self.dimensions = dimensions
@@ -148,31 +142,3 @@ class Tokenizer:
     
     def count_tokens(self, text: str) -> int:
         return len(self.tokenize(text))
-
-
-if __name__ == "__main__":
-    print("🦀 Aeryn Engine Python Wrapper")
-    print("=" * 40)
-    
-    # Test cosine similarity
-    a = [1.0, 2.0, 3.0]
-    b = [1.0, 2.0, 3.0]
-    sim = cosine_similarity(a, b)
-    print(f"Cosine similarity: {sim:.4f}")
-    
-    # Test hash
-    hash1 = hash_text("Hello World")
-    print(f"Hash: {hash1}")
-    
-    # Test vector store
-    store = VectorStore(3)
-    store.add("a", [1.0, 0.0, 0.0])
-    store.add("b", [0.0, 1.0, 0.0])
-    store.add("c", [0.5, 0.5, 0.0])
-    
-    results = store.search([1.0, 0.0, 0.0], 2)
-    print(f"\nSearch results:")
-    for r in results:
-        print(f"  {r['id']}: {r['score']:.4f}")
-    
-    print("\n✅ All working!")

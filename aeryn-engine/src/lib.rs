@@ -18,6 +18,17 @@ pub extern "C" fn cosine_similarity(a: *const f32, b: *const f32, len: usize) ->
     }
 }
 
+fn bytes_to_hex(bytes: &[u8]) -> String {
+    let mut result = String::new();
+    for b in bytes {
+        let high = b >> 4;
+        let low = b & 0xf;
+        result.push(if high < 10 { b'0' + high } else { b'a' + high - 10 } as char);
+        result.push(if low < 10 { b'0' + low } else { b'a' + low - 10 } as char);
+    }
+    result
+}
+
 #[no_mangle]
 pub extern "C" fn hash_text(input: *const c_char) -> *mut c_char {
     if input.is_null() {
@@ -28,7 +39,8 @@ pub extern "C" fn hash_text(input: *const c_char) -> *mut c_char {
         use sha2::{Digest, Sha256};
         let mut hasher = Sha256::new();
         hasher.update(input.as_bytes());
-        format!("{:x}", hasher.finalize())
+        let result = hasher.finalize();
+        bytes_to_hex(&result)
     };
     CString::new(hash).unwrap().into_raw()
 }
