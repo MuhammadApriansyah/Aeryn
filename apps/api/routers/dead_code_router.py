@@ -156,8 +156,10 @@ async def mcp_server_call(name: str, args: Dict[str, Any] = None):
 @router.get("/mcp/client/discover")
 async def mcp_client_discover(server_url: str = ""):
     """Discover MCP servers."""
+    if not server_url:
+        return {"message": "No server_url provided — discovery skipped"}
     from aeryn_core.mcp.client import MCPClient
-    client = MCPClient("", "default")
+    client = MCPClient(server_url, "default")
     servers = client.discover()
     return {"servers": servers}
 

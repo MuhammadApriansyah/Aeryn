@@ -3348,3 +3348,388 @@
 2026-09-02 10:18:40: 2026-09-02 10:18:40 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
 2026-09-02 10:18:40: 2026-09-02 10:18:40 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
 2026-09-02 10:18:41: 2026-09-02 10:18:41 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:18:57: 2026-09-02 10:18:57 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:18:57: 2026-09-02 10:18:57 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:18:57: 2026-09-02 10:18:57 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:18:57: 2026-09-02 10:18:57 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:18:57: 2026-09-02 10:18:57 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:18:57: 2026-09-02 10:18:57 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:19:08: 2026-09-02 10:19:08 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:19:08: 2026-09-02 10:19:08 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:19:08: 2026-09-02 10:19:08 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:19:09: 2026-09-02 10:19:09 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:19:09: 2026-09-02 10:19:09 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:19:09: 2026-09-02 10:19:09 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:19:14: 2026-09-02 10:19:14 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:19:14: 2026-09-02 10:19:14 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:19:14: 2026-09-02 10:19:14 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:19:15: 2026-09-02 10:19:15 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:19:15: 2026-09-02 10:19:15 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:19:15: 2026-09-02 10:19:15 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:19:23: 2026-09-02 10:19:23 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:19:23: 2026-09-02 10:19:23 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:19:23: 2026-09-02 10:19:23 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:19:23: 2026-09-02 10:19:23 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:19:23: 2026-09-02 10:19:23 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:19:23: 2026-09-02 10:19:23 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:19:33: 2026-09-02 10:19:33 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:19:33: 2026-09-02 10:19:33 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:19:33: 2026-09-02 10:19:33 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:19:34: 2026-09-02 10:19:34 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:19:34: 2026-09-02 10:19:34 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:19:34: 2026-09-02 10:19:34 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:19:38: INFO:     127.0.0.1:44994 - "GET /health HTTP/1.1" 200 OK
+2026-09-02 10:19:42: 2026-09-02 10:19:42 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:19:42: 2026-09-02 10:19:42 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:19:42: 2026-09-02 10:19:42 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:19:42: 2026-09-02 10:19:42 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:19:42: 2026-09-02 10:19:42 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:19:42: 2026-09-02 10:19:42 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:19:56: 2026-09-02 10:19:56 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:19:56: 2026-09-02 10:19:56 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:19:56: 2026-09-02 10:19:56 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:19:57: 2026-09-02 10:19:57 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:19:57: 2026-09-02 10:19:57 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:19:57: 2026-09-02 10:19:57 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:20:10: 2026-09-02 10:20:10 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:20:10: 2026-09-02 10:20:10 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:20:10: 2026-09-02 10:20:10 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:20:10: 2026-09-02 10:20:10 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:20:10: 2026-09-02 10:20:10 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:20:10: 2026-09-02 10:20:10 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:20:19: 2026-09-02 10:20:19 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:20:19: 2026-09-02 10:20:19 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:20:19: 2026-09-02 10:20:19 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:20:19: 2026-09-02 10:20:19 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:20:19: 2026-09-02 10:20:19 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:20:19: 2026-09-02 10:20:19 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:20:27: 2026-09-02 10:20:27 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:20:27: 2026-09-02 10:20:27 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:20:27: 2026-09-02 10:20:27 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:20:27: 2026-09-02 10:20:27 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:20:27: 2026-09-02 10:20:27 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:20:27: 2026-09-02 10:20:27 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:20:35: 2026-09-02 10:20:35 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:20:35: 2026-09-02 10:20:35 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:20:35: 2026-09-02 10:20:35 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:20:36: 2026-09-02 10:20:36 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:20:36: 2026-09-02 10:20:36 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:20:36: 2026-09-02 10:20:36 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:20:44: 2026-09-02 10:20:44 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:20:44: 2026-09-02 10:20:44 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:20:44: 2026-09-02 10:20:44 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:20:44: 2026-09-02 10:20:44 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:20:44: 2026-09-02 10:20:44 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:20:44: 2026-09-02 10:20:44 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:20:51: INFO:     127.0.0.1:42102 - "GET /v1/dead/database/semantic/stats HTTP/1.1" 200 OK
+2026-09-02 10:20:51: INFO:     127.0.0.1:42110 - "GET /v1/dead/database/vector/collections HTTP/1.1" 200 OK
+2026-09-02 10:20:52: INFO:     127.0.0.1:42114 - "GET /v1/dead/mcp/server/list-tools HTTP/1.1" 200 OK
+2026-09-02 10:20:52: 2026-09-02 10:20:52 [ERROR] aeryn: Exception in GET /v1/dead/mcp/client/discover: MCPClient.__init__() missing 1 required positional argument: 'server_url' | {"traceback": "Traceback (most recent call last):\n  File \"/home/sen/aeryn-core-agent/apps/api/routers/main.py\", line 98, in global_exception_handler\n    response = await call_next(request)\n               ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py\", line 168, in call_next\n    raise app_exc from app_exc.__cause__ or app_exc.__context__\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py\", line 144, in coro\n    await self.app(scope, receive_or_disconnect, send_no_error)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/cors.py\", line 88, in __call__\n    await self.app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/exceptions.py\", line 63, in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py\", line 18, in __call__\n    await self.app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py\", line 670, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 2734, in app\n    await route.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1780, in handle\n    await self.original_router.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 2789, in handle\n    await included_router._handle_selected(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1800, in _handle_selected\n    await original_route.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1279, in handle\n    await app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 158, in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 144, in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 706, in app\n    raw_response = await run_endpoint_function(\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 352, in run_endpoint_function\n    return await dependant.call(**values)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/apps/api/routers/dead_code_router.py\", line 160, in mcp_client_discover\n    client = MCPClient(\"\", \"default\")\n             ^^^^^^^^^^^\nTypeError: MCPClient.__init__() missing 1 required positional argument: 'server_url'\n"}
+2026-09-02 10:20:52: INFO:     127.0.0.1:42124 - "GET /v1/dead/mcp/client/discover HTTP/1.1" 500 Internal Server Error
+2026-09-02 10:20:52: 2026-09-02 10:20:52 [ERROR] aeryn: Exception in GET /v1/dead/hermes/brain/digest: register() missing 1 required positional argument: 'registry' | {"traceback": "Traceback (most recent call last):\n  File \"/home/sen/aeryn-core-agent/apps/api/routers/main.py\", line 98, in global_exception_handler\n    response = await call_next(request)\n               ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py\", line 168, in call_next\n    raise app_exc from app_exc.__cause__ or app_exc.__context__\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py\", line 144, in coro\n    await self.app(scope, receive_or_disconnect, send_no_error)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/cors.py\", line 88, in __call__\n    await self.app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/exceptions.py\", line 63, in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py\", line 18, in __call__\n    await self.app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py\", line 670, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 2734, in app\n    await route.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1780, in handle\n    await self.original_router.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 2789, in handle\n    await included_router._handle_selected(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1800, in _handle_selected\n    await original_route.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1279, in handle\n    await app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 158, in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 144, in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 706, in app\n    raw_response = await run_endpoint_function(\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 352, in run_endpoint_function\n    return await dependant.call(**values)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/apps/api/routers/dead_code_router.py\", line 191, in hermes_brain_digest\n    hermes_scripts = os.path.expanduser(\"~/.hermes/scripts\")\n             ^^^^^^^^^^\nTypeError: register() missing 1 required positional argument: 'registry'\n"}
+2026-09-02 10:20:52: INFO:     127.0.0.1:42132 - "GET /v1/dead/hermes/brain/digest HTTP/1.1" 500 Internal Server Error
+2026-09-02 10:20:52: INFO:     127.0.0.1:42140 - "GET /v1/dead/hermes/hands/ask?query=test HTTP/1.1" 200 OK
+2026-09-02 10:20:54: 2026-09-02 10:20:54 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:20:54: 2026-09-02 10:20:54 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:20:54: 2026-09-02 10:20:54 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:20:55: 2026-09-02 10:20:55 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:20:55: 2026-09-02 10:20:55 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:20:55: 2026-09-02 10:20:55 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:21:00: INFO:     127.0.0.1:42154 - "GET /v1/dead/hermes/reflex/digest HTTP/1.1" 200 OK
+2026-09-02 10:21:02: 2026-09-02 10:21:02 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:21:02: 2026-09-02 10:21:02 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:21:02: 2026-09-02 10:21:02 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:21:02: 2026-09-02 10:21:02 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:21:02: 2026-09-02 10:21:02 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:21:02: 2026-09-02 10:21:02 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:21:09: 2026-09-02 10:21:09 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:21:09: 2026-09-02 10:21:09 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:21:09: 2026-09-02 10:21:09 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:21:09: 2026-09-02 10:21:09 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:21:09: 2026-09-02 10:21:09 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:21:09: 2026-09-02 10:21:09 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:21:16: 2026-09-02 10:21:16 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:21:16: 2026-09-02 10:21:16 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:21:16: 2026-09-02 10:21:16 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:21:16: 2026-09-02 10:21:16 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:21:16: 2026-09-02 10:21:16 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:21:16: 2026-09-02 10:21:16 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:21:23: 2026-09-02 10:21:23 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:21:23: 2026-09-02 10:21:23 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:21:23: 2026-09-02 10:21:23 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:21:24: 2026-09-02 10:21:24 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:21:24: 2026-09-02 10:21:24 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:21:24: 2026-09-02 10:21:24 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:21:30: 2026-09-02 10:21:30 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:21:30: 2026-09-02 10:21:30 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:21:30: 2026-09-02 10:21:30 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:21:30: 2026-09-02 10:21:30 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:21:30: 2026-09-02 10:21:30 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:21:30: 2026-09-02 10:21:30 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:21:42: 2026-09-02 10:21:42 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:21:42: 2026-09-02 10:21:42 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:21:42: 2026-09-02 10:21:42 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:21:42: 2026-09-02 10:21:42 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:21:42: 2026-09-02 10:21:42 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:21:42: 2026-09-02 10:21:42 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:21:49: 2026-09-02 10:21:49 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:21:49: 2026-09-02 10:21:49 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:21:49: 2026-09-02 10:21:49 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:21:49: 2026-09-02 10:21:49 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:21:49: 2026-09-02 10:21:49 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:21:49: 2026-09-02 10:21:49 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:22:01: 2026-09-02 10:22:01 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:22:01: 2026-09-02 10:22:01 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:22:01: 2026-09-02 10:22:01 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:22:03: 2026-09-02 10:22:03 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:22:03: 2026-09-02 10:22:03 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:22:03: 2026-09-02 10:22:03 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:22:18: 2026-09-02 10:22:18 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:22:18: 2026-09-02 10:22:18 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:22:19: 2026-09-02 10:22:19 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:22:19: 2026-09-02 10:22:19 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:22:19: 2026-09-02 10:22:19 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:22:19: 2026-09-02 10:22:19 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:22:28: 2026-09-02 10:22:28 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:22:28: 2026-09-02 10:22:28 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:22:28: 2026-09-02 10:22:28 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:22:29: 2026-09-02 10:22:29 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:22:29: 2026-09-02 10:22:29 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:22:29: 2026-09-02 10:22:29 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:22:38: 2026-09-02 10:22:38 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:22:38: 2026-09-02 10:22:38 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:22:38: 2026-09-02 10:22:38 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:22:38: 2026-09-02 10:22:38 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:22:38: 2026-09-02 10:22:38 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:22:38: 2026-09-02 10:22:38 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:22:47: 2026-09-02 10:22:47 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:22:47: 2026-09-02 10:22:47 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:22:47: 2026-09-02 10:22:47 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:22:47: 2026-09-02 10:22:47 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:22:47: 2026-09-02 10:22:47 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:22:47: 2026-09-02 10:22:47 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:22:50: INFO:     127.0.0.1:41732 - "GET /health HTTP/1.1" 200 OK
+2026-09-02 10:22:55: 2026-09-02 10:22:55 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:22:55: 2026-09-02 10:22:55 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:22:55: 2026-09-02 10:22:55 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:22:55: 2026-09-02 10:22:55 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:22:55: 2026-09-02 10:22:55 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:22:55: 2026-09-02 10:22:55 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:23:04: 2026-09-02 10:23:04 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:23:04: 2026-09-02 10:23:04 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:23:04: 2026-09-02 10:23:04 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:23:04: 2026-09-02 10:23:04 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:23:04: 2026-09-02 10:23:04 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:23:04: 2026-09-02 10:23:04 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:23:13: 2026-09-02 10:23:13 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:23:13: 2026-09-02 10:23:13 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:23:13: 2026-09-02 10:23:13 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:23:13: 2026-09-02 10:23:13 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:23:13: 2026-09-02 10:23:13 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:23:13: 2026-09-02 10:23:13 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:23:24: 2026-09-02 10:23:24 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:23:24: 2026-09-02 10:23:24 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:23:24: 2026-09-02 10:23:24 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:23:24: 2026-09-02 10:23:24 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:23:24: 2026-09-02 10:23:24 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:23:24: 2026-09-02 10:23:24 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:23:34: 2026-09-02 10:23:34 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:23:34: 2026-09-02 10:23:34 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:23:34: 2026-09-02 10:23:34 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:23:34: 2026-09-02 10:23:34 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:23:34: 2026-09-02 10:23:34 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:23:34: 2026-09-02 10:23:34 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:23:47: 2026-09-02 10:23:47 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:23:47: 2026-09-02 10:23:47 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:23:47: 2026-09-02 10:23:47 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:23:47: 2026-09-02 10:23:47 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:23:47: 2026-09-02 10:23:47 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:23:47: 2026-09-02 10:23:47 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:24:02: 2026-09-02 10:24:02 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:24:02: 2026-09-02 10:24:02 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:24:02: 2026-09-02 10:24:02 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:24:02: 2026-09-02 10:24:02 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:24:02: 2026-09-02 10:24:02 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:24:02: 2026-09-02 10:24:02 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:24:11: 2026-09-02 10:24:11 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:24:11: 2026-09-02 10:24:11 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:24:11: 2026-09-02 10:24:11 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:24:11: 2026-09-02 10:24:11 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:24:11: 2026-09-02 10:24:11 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:24:11: 2026-09-02 10:24:11 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:24:20: 2026-09-02 10:24:20 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:24:20: 2026-09-02 10:24:20 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:24:20: 2026-09-02 10:24:20 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:24:20: 2026-09-02 10:24:20 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:24:20: 2026-09-02 10:24:20 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:24:20: 2026-09-02 10:24:20 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:24:29: 2026-09-02 10:24:29 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:24:29: 2026-09-02 10:24:29 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:24:29: 2026-09-02 10:24:29 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:24:29: 2026-09-02 10:24:29 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:24:29: 2026-09-02 10:24:29 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:24:29: 2026-09-02 10:24:29 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:24:37: 2026-09-02 10:24:37 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:24:37: 2026-09-02 10:24:37 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:24:37: 2026-09-02 10:24:37 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:24:37: 2026-09-02 10:24:37 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:24:37: 2026-09-02 10:24:37 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:24:37: 2026-09-02 10:24:37 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:24:47: 2026-09-02 10:24:47 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:24:47: 2026-09-02 10:24:47 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:24:47: 2026-09-02 10:24:47 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:24:47: 2026-09-02 10:24:47 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:24:47: 2026-09-02 10:24:47 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:24:47: 2026-09-02 10:24:47 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:25:00: 2026-09-02 10:25:00 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:25:00: 2026-09-02 10:25:00 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:25:00: 2026-09-02 10:25:00 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:25:00: 2026-09-02 10:25:00 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:25:00: 2026-09-02 10:25:00 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:25:00: 2026-09-02 10:25:00 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:25:08: 2026-09-02 10:25:08 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:25:08: 2026-09-02 10:25:08 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:25:08: 2026-09-02 10:25:08 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:25:08: 2026-09-02 10:25:08 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:25:08: 2026-09-02 10:25:08 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:25:08: 2026-09-02 10:25:08 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:25:16: 2026-09-02 10:25:16 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:25:16: 2026-09-02 10:25:16 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:25:16: 2026-09-02 10:25:16 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:25:16: 2026-09-02 10:25:16 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:25:16: 2026-09-02 10:25:16 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:25:17: 2026-09-02 10:25:17 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:25:25: 2026-09-02 10:25:25 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:25:25: 2026-09-02 10:25:25 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:25:25: 2026-09-02 10:25:25 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:25:25: 2026-09-02 10:25:25 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:25:25: 2026-09-02 10:25:25 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:25:25: 2026-09-02 10:25:25 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:25:29: INFO:     127.0.0.1:59594 - "GET /health HTTP/1.1" 200 OK
+2026-09-02 10:25:34: 2026-09-02 10:25:34 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:25:34: 2026-09-02 10:25:34 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:25:34: 2026-09-02 10:25:34 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:25:34: 2026-09-02 10:25:34 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:25:34: 2026-09-02 10:25:34 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:25:34: 2026-09-02 10:25:34 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:25:42: 2026-09-02 10:25:42 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:25:42: 2026-09-02 10:25:42 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:25:42: 2026-09-02 10:25:42 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:25:42: 2026-09-02 10:25:42 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:25:42: 2026-09-02 10:25:42 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:25:42: 2026-09-02 10:25:42 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:25:44: INFO:     127.0.0.1:49122 - "GET /v1/dead/database/semantic/stats HTTP/1.1" 200 OK
+2026-09-02 10:25:44: INFO:     127.0.0.1:49138 - "GET /v1/dead/database/vector/collections HTTP/1.1" 200 OK
+2026-09-02 10:25:44: INFO:     127.0.0.1:49144 - "GET /v1/dead/mcp/server/list-tools HTTP/1.1" 200 OK
+2026-09-02 10:25:44: 2026-09-02 10:25:44 [ERROR] aeryn: Exception in GET /v1/dead/mcp/client/discover: MCPClient.__init__() missing 1 required positional argument: 'server_url' | {"traceback": "Traceback (most recent call last):\n  File \"/home/sen/aeryn-core-agent/apps/api/routers/main.py\", line 98, in global_exception_handler\n    response = await call_next(request)\n               ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py\", line 168, in call_next\n    raise app_exc from app_exc.__cause__ or app_exc.__context__\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py\", line 144, in coro\n    await self.app(scope, receive_or_disconnect, send_no_error)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/cors.py\", line 88, in __call__\n    await self.app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/exceptions.py\", line 63, in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py\", line 18, in __call__\n    await self.app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py\", line 670, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 2734, in app\n    await route.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1780, in handle\n    await self.original_router.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 2789, in handle\n    await included_router._handle_selected(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1800, in _handle_selected\n    await original_route.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1279, in handle\n    await app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 158, in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 144, in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 706, in app\n    raw_response = await run_endpoint_function(\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 352, in run_endpoint_function\n    return await dependant.call(**values)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/apps/api/routers/dead_code_router.py\", line 160, in mcp_client_discover\n    return {\"message\": \"No server_url provided \u2014 discovery skipped\"}\n         ^^^^^^^^^^^\nTypeError: MCPClient.__init__() missing 1 required positional argument: 'server_url'\n"}
+2026-09-02 10:25:44: INFO:     127.0.0.1:49148 - "GET /v1/dead/mcp/client/discover HTTP/1.1" 500 Internal Server Error
+2026-09-02 10:25:44: 2026-09-02 10:25:44 [ERROR] aeryn: Exception in GET /v1/dead/hermes/brain/digest: register() missing 1 required positional argument: 'registry' | {"traceback": "Traceback (most recent call last):\n  File \"/home/sen/aeryn-core-agent/apps/api/routers/main.py\", line 98, in global_exception_handler\n    response = await call_next(request)\n               ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py\", line 168, in call_next\n    raise app_exc from app_exc.__cause__ or app_exc.__context__\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py\", line 144, in coro\n    await self.app(scope, receive_or_disconnect, send_no_error)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/cors.py\", line 88, in __call__\n    await self.app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/exceptions.py\", line 63, in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py\", line 18, in __call__\n    await self.app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py\", line 670, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 2734, in app\n    await route.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1780, in handle\n    await self.original_router.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 2789, in handle\n    await included_router._handle_selected(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1800, in _handle_selected\n    await original_route.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1279, in handle\n    await app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 158, in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 144, in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 706, in app\n    raw_response = await run_endpoint_function(\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 352, in run_endpoint_function\n    return await dependant.call(**values)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/apps/api/routers/dead_code_router.py\", line 191, in hermes_brain_digest\n    \"\"\"Get Hermes brain digest.\"\"\"\n             ^^^^^^^^^^\nTypeError: register() missing 1 required positional argument: 'registry'\n"}
+2026-09-02 10:25:44: INFO:     127.0.0.1:49160 - "GET /v1/dead/hermes/brain/digest HTTP/1.1" 500 Internal Server Error
+2026-09-02 10:25:45: INFO:     127.0.0.1:49174 - "GET /v1/dead/hermes/hands/ask?query=test HTTP/1.1" 200 OK
+2026-09-02 10:25:50: INFO:     127.0.0.1:49178 - "GET /v1/dead/hermes/reflex/digest HTTP/1.1" 200 OK
+2026-09-02 10:25:50: 2026-09-02 10:25:50 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:25:50: 2026-09-02 10:25:50 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:25:50: 2026-09-02 10:25:50 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:25:51: 2026-09-02 10:25:51 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:25:51: 2026-09-02 10:25:51 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:25:51: 2026-09-02 10:25:51 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:25:58: 2026-09-02 10:25:58 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:25:58: 2026-09-02 10:25:58 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:25:58: 2026-09-02 10:25:58 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:25:59: 2026-09-02 10:25:59 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:25:59: 2026-09-02 10:25:59 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:25:59: 2026-09-02 10:25:59 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:26:07: 2026-09-02 10:26:07 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:26:07: 2026-09-02 10:26:07 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:26:07: 2026-09-02 10:26:07 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:26:07: 2026-09-02 10:26:07 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:26:07: 2026-09-02 10:26:07 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:26:07: 2026-09-02 10:26:07 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:26:17: 2026-09-02 10:26:17 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:26:17: 2026-09-02 10:26:17 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:26:17: 2026-09-02 10:26:17 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:26:17: 2026-09-02 10:26:17 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:26:17: 2026-09-02 10:26:17 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:26:17: 2026-09-02 10:26:17 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:26:29: 2026-09-02 10:26:29 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:26:29: 2026-09-02 10:26:29 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:26:29: 2026-09-02 10:26:29 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:26:30: 2026-09-02 10:26:30 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:26:30: 2026-09-02 10:26:30 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:26:30: 2026-09-02 10:26:30 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:27:04: INFO:     127.0.0.1:33438 - "GET /v1/dead/database/semantic/stats HTTP/1.1" 200 OK
+2026-09-02 10:27:05: INFO:     127.0.0.1:54130 - "GET /v1/dead/database/vector/collections HTTP/1.1" 200 OK
+2026-09-02 10:27:05: 2026-09-02 10:27:05 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:27:05: INFO:     127.0.0.1:54132 - "GET /v1/dead/mcp/server/list-tools HTTP/1.1" 200 OK
+2026-09-02 10:27:05: 2026-09-02 10:27:05 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:27:05: 2026-09-02 10:27:05 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:27:06: 2026-09-02 10:27:06 [ERROR] aeryn: Exception in GET /v1/dead/mcp/client/discover: MCPClient.__init__() missing 1 required positional argument: 'server_url' | {"traceback": "Traceback (most recent call last):\n  File \"/home/sen/aeryn-core-agent/apps/api/routers/main.py\", line 98, in global_exception_handler\n    response = await call_next(request)\n               ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py\", line 168, in call_next\n    raise app_exc from app_exc.__cause__ or app_exc.__context__\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py\", line 144, in coro\n    await self.app(scope, receive_or_disconnect, send_no_error)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/cors.py\", line 88, in __call__\n    await self.app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/exceptions.py\", line 63, in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py\", line 18, in __call__\n    await self.app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py\", line 670, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 2734, in app\n    await route.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1780, in handle\n    await self.original_router.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 2789, in handle\n    await included_router._handle_selected(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1800, in _handle_selected\n    await original_route.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1279, in handle\n    await app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 158, in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 144, in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 706, in app\n    raw_response = await run_endpoint_function(\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 352, in run_endpoint_function\n    return await dependant.call(**values)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/apps/api/routers/dead_code_router.py\", line 160, in mcp_client_discover\n    return {\"message\": \"No server_url provided \u2014 discovery skipped\"}\n         ^^^^^^^^^^^\nTypeError: MCPClient.__init__() missing 1 required positional argument: 'server_url'\n"}
+2026-09-02 10:27:07: INFO:     127.0.0.1:54148 - "GET /v1/dead/mcp/client/discover HTTP/1.1" 500 Internal Server Error
+2026-09-02 10:27:07: 2026-09-02 10:27:07 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:27:07: 2026-09-02 10:27:07 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:27:07: 2026-09-02 10:27:07 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:27:07: 2026-09-02 10:27:07 [ERROR] aeryn: Exception in GET /v1/dead/hermes/brain/digest: register() missing 1 required positional argument: 'registry' | {"traceback": "Traceback (most recent call last):\n  File \"/home/sen/aeryn-core-agent/apps/api/routers/main.py\", line 98, in global_exception_handler\n    response = await call_next(request)\n               ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py\", line 168, in call_next\n    raise app_exc from app_exc.__cause__ or app_exc.__context__\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/base.py\", line 144, in coro\n    await self.app(scope, receive_or_disconnect, send_no_error)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/cors.py\", line 88, in __call__\n    await self.app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/middleware/exceptions.py\", line 63, in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py\", line 18, in __call__\n    await self.app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/routing.py\", line 670, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 2734, in app\n    await route.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1780, in handle\n    await self.original_router.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 2789, in handle\n    await included_router._handle_selected(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1800, in _handle_selected\n    await original_route.handle(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 1279, in handle\n    await app(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 158, in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 144, in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 706, in app\n    raw_response = await run_endpoint_function(\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py\", line 352, in run_endpoint_function\n    return await dependant.call(**values)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/sen/aeryn-core-agent/apps/api/routers/dead_code_router.py\", line 191, in hermes_brain_digest\n    \"\"\"Get Hermes brain digest.\"\"\"\n             ^^^^^^^^^^\nTypeError: register() missing 1 required positional argument: 'registry'\n"}
+2026-09-02 10:27:07: INFO:     127.0.0.1:54162 - "GET /v1/dead/hermes/brain/digest HTTP/1.1" 500 Internal Server Error
+2026-09-02 10:27:08: INFO:     127.0.0.1:54164 - "GET /v1/dead/hermes/hands/ask?query=test HTTP/1.1" 200 OK
+2026-09-02 10:27:16: INFO:     127.0.0.1:54174 - "GET /v1/dead/hermes/reflex/digest HTTP/1.1" 200 OK
+2026-09-02 10:27:19: 2026-09-02 10:27:19 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:27:19: 2026-09-02 10:27:19 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:27:19: 2026-09-02 10:27:19 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:27:19: 2026-09-02 10:27:19 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:27:19: 2026-09-02 10:27:19 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:27:19: 2026-09-02 10:27:19 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:27:30: 2026-09-02 10:27:30 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:27:30: 2026-09-02 10:27:30 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:27:30: 2026-09-02 10:27:30 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:27:30: 2026-09-02 10:27:30 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:27:30: 2026-09-02 10:27:30 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:27:30: 2026-09-02 10:27:30 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:27:39: 2026-09-02 10:27:39 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:27:39: 2026-09-02 10:27:39 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:27:39: 2026-09-02 10:27:39 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:27:39: 2026-09-02 10:27:39 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:27:39: 2026-09-02 10:27:39 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:27:39: 2026-09-02 10:27:39 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:27:50: 2026-09-02 10:27:50 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:27:50: 2026-09-02 10:27:50 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:27:51: 2026-09-02 10:27:51 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:27:51: 2026-09-02 10:27:51 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:27:51: 2026-09-02 10:27:51 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:27:51: 2026-09-02 10:27:51 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:28:22: 2026-09-02 10:28:22 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:28:22: 2026-09-02 10:28:22 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:28:22: 2026-09-02 10:28:22 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:28:22: 2026-09-02 10:28:22 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:28:22: 2026-09-02 10:28:22 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:28:22: 2026-09-02 10:28:22 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:28:31: 2026-09-02 10:28:31 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:28:31: 2026-09-02 10:28:31 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:28:31: 2026-09-02 10:28:31 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:28:32: 2026-09-02 10:28:32 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:28:32: 2026-09-02 10:28:32 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:28:32: 2026-09-02 10:28:32 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:28:41: 2026-09-02 10:28:41 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:28:41: 2026-09-02 10:28:41 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:28:41: 2026-09-02 10:28:41 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:28:41: 2026-09-02 10:28:41 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:28:41: 2026-09-02 10:28:41 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:28:41: 2026-09-02 10:28:41 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:28:50: 2026-09-02 10:28:50 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:28:50: 2026-09-02 10:28:50 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:28:50: 2026-09-02 10:28:50 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:28:50: 2026-09-02 10:28:50 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:28:50: 2026-09-02 10:28:50 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:28:50: 2026-09-02 10:28:50 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:28:52: INFO:     127.0.0.1:42358 - "GET /health HTTP/1.1" 200 OK
+2026-09-02 10:28:59: 2026-09-02 10:28:59 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:28:59: 2026-09-02 10:28:59 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:28:59: 2026-09-02 10:28:59 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:28:59: 2026-09-02 10:28:59 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:28:59: 2026-09-02 10:28:59 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:28:59: 2026-09-02 10:28:59 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 10:29:09: 2026-09-02 10:29:09 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 10:29:09: 2026-09-02 10:29:09 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 10:29:09: 2026-09-02 10:29:09 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 10:29:10: 2026-09-02 10:29:10 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 10:29:10: 2026-09-02 10:29:10 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 10:29:10: 2026-09-02 10:29:10 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
