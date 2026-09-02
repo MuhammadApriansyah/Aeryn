@@ -1,5 +1,10 @@
 use std::ffi::{CStr, CString};
 use std::os::raw::c_char;
+use std::collections::HashMap;
+
+// ========================================
+// DISTANCE METRICS
+// ========================================
 
 #[no_mangle]
 pub extern "C" fn cosine_similarity(a: *const f32, b: *const f32, len: usize) -> f32 {
@@ -17,6 +22,20 @@ pub extern "C" fn cosine_similarity(a: *const f32, b: *const f32, len: usize) ->
         dot / (norm_a * norm_b)
     }
 }
+
+#[no_mangle]
+pub extern "C" fn euclidean_distance(a: *const f32, b: *const f32, len: usize) -> f32 {
+    if a.is_null() || b.is_null() || len == 0 {
+        return f32::MAX;
+    }
+    let a = unsafe { std::slice::from_raw_parts(a, len) };
+    let b = unsafe { std::slice::from_raw_parts(b, len) };
+    a.iter().zip(b.iter()).map(|(x, y)| (x - y).powi(2)).sum::<f32>().sqrt()
+}
+
+// ========================================
+// HASHING
+// ========================================
 
 fn bytes_to_hex(bytes: &[u8]) -> String {
     let mut result = String::new();
@@ -52,6 +71,80 @@ pub extern "C" fn free_string(s: *mut c_char) {
     }
 }
 
+// ========================================
+// TEXT PROCESSING
+// ========================================
+
+#[no_mangle]
+pub extern "C" fn word_count(text: *const c_char) -> usize {
+    if text.is_null() {
+        return 0;
+    }
+    let text = unsafe { CStr::from_ptr(text) }.to_str().unwrap_or("");
+    text.split_whitespace().count()
+}
+
+#[no_mangle]
+pub extern "C" fn truncate_text(text: *const c_char, max_len: usize) -> *mut c_char {
+    if text.is_null() {
+        return std::ptr::null_mut();
+    }
+    let text = unsafe { CStr::from_ptr(text) }.to_str().unwrap_or("");
+    let result = if text.len() <= max_len {
+        text.to_string()
+    } else {
+        format!("{}...", &text[..max_len.saturating_sub(3)])
+    };
+    CString::new(result).unwrap().into_raw()
+}
+
+// ========================================
+// VECTOR SEARCH HELPERS
+// ========================================
+
+#[no_mangle]
+pub extern "C" fn find_top_k(
+    query: *const f32,
+    query_len: usize,
+    vectors: *const f32,
+    num_vectors: usize,
+    dim: usize,
+    k: usize,
+    out_indices: *mut usize,
+    out_scores: *mut f32,
+) -> usize {
+    if query.is_null() || vectors.is_null() || out_indices.is_null() || out_scores.is_null() {
+        return 0;
+    }
+    
+    let all_vectors = unsafe { std::slice::from_raw_parts(vectors, num_vectors * dim) };
+    
+    let mut results: Vec<(usize, f32)> = Vec::new();
+    
+    for i in 0..num_vectors {
+        let start = i * dim;
+        let vec_ptr = unsafe { all_vectors.as_ptr().add(start) };
+        let score = cosine_similarity(query, vec_ptr, dim);
+        results.push((i, score));
+    }
+    
+    results.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
+    
+    let k = k.min(results.len());
+    for i in 0..k {
+        unsafe {
+            *out_indices.add(i) = results[i].0;
+            *out_scores.add(i) = results[i].1;
+        }
+    }
+    
+    k
+}
+
+// ========================================
+// TESTS
+// ========================================
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -73,6 +166,14 @@ mod tests {
     }
 
     #[test]
+    fn test_euclidean_distance() {
+        let a = vec![0.0f32, 0.0];
+        let b = vec![3.0f32, 4.0];
+        let dist = euclidean_distance(a.as_ptr(), b.as_ptr(), 2);
+        assert!((dist - 5.0).abs() < 1e-5);
+    }
+
+    #[test]
     fn test_hash_text() {
         let input = CString::new("hello").unwrap();
         let hash = hash_text(input.as_ptr());
@@ -82,5 +183,36 @@ mod tests {
             assert_eq!(hash_str.len(), 64);
             free_string(hash);
         }
+    }
+
+    #[test]
+    fn test_word_count() {
+        let text = CString::new("Hello world this is a test").unwrap();
+        let count = word_count(text.as_ptr());
+        assert_eq!(count, 6);
+    }
+
+    #[test]
+    fn test_find_top_k() {
+        let query = vec![1.0f32, 0.0, 0.0];
+        let vectors = vec![
+            1.0, 0.0, 0.0,  // index 0: identical
+            0.0, 1.0, 0.0,  // index 1: orthogonal
+            0.5, 0.5, 0.0,  // index 2: partial
+        ];
+        let mut out_indices = vec![0usize; 3];
+        let mut out_scores = vec![0.0f32; 3];
+        
+        let k = find_top_k(
+            query.as_ptr(), 3,
+            vectors.as_ptr(), 3, 3,
+            3,
+            out_indices.as_mut_ptr(),
+            out_scores.as_mut_ptr(),
+        );
+        
+        assert_eq!(k, 3);
+        assert_eq!(out_indices[0], 0);  // identical first
+        assert!(out_scores[0] > out_scores[1]);
     }
 }
