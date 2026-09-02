@@ -1,6 +1,5 @@
-"""Aeryn Engine Router — FastAPI endpoints for engine operations."""
-
 from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 
 router = APIRouter(prefix="/v1/engine", tags=["engine"])
@@ -10,20 +9,50 @@ _vector_stores: Dict[str, Any] = {}
 _graphs: Dict[str, Any] = {}
 
 
+class VectorInsertRequest(BaseModel):
+    id: str
+    vector: List[float]
+    metadata: Optional[Dict[str, str]] = None
+
+
+class VectorSearchRequest(BaseModel):
+    query: List[float]
+    k: int = 10
+
+
+class TextSplitRequest(BaseModel):
+    text: str
+    chunk_size: int = 1000
+    chunk_overlap: int = 200
+
+
+class GraphNodeRequest(BaseModel):
+    id: str
+    label: str
+    node_type: str = "entity"
+
+
+class GraphEdgeRequest(BaseModel):
+    source: str
+    target: str
+    edge_type: str = "related_to"
+    weight: float = 1.0
+
+
 @router.post("/vector/{store_id}/insert")
-async def vector_insert(store_id: str, id: str, vector: List[float], metadata: Optional[Dict[str, str]] = None):
+async def vector_insert(store_id: str, req: VectorInsertRequest):
     """Insert a vector into a store."""
     from aeryn_core.engine import VectorStore
     
     if store_id not in _vector_stores:
-        if vector:
-            dim = len(vector)
+        if req.vector:
+            dim = len(req.vector)
         else:
             raise HTTPException(400, "Cannot determine vector dimension")
         _vector_stores[store_id] = VectorStore(dim)
     
     store = _vector_stores[store_id]
-    store.add(id, vector, metadata)
+    store.add(req.id, req.vector, req.metadata)
     return {"status": "ok", "store_id": store_id, "vectors": store.len()}
 
 
