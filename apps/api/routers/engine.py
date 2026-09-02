@@ -57,13 +57,13 @@ async def vector_insert(store_id: str, req: VectorInsertRequest):
 
 
 @router.post("/vector/{store_id}/search")
-async def vector_search(store_id: str, query: List[float], k: int = 10):
+async def vector_search(store_id: str, req: VectorSearchRequest):
     """Search for similar vectors."""
     if store_id not in _vector_stores:
         raise HTTPException(404, f"Store {store_id} not found")
     
     store = _vector_stores[store_id]
-    results = store.search(query, k)
+    results = store.search(req.query, req.k)
     return {"results": results}
 
 
