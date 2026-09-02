@@ -43,6 +43,8 @@ from apps.api.routers.engine import router as engine_router
 from apps.api.routers.safety import router as safety_router
 from apps.api.routers.memory import router as memory_router
 from apps.api.routers.reasoning import router as reasoning_router
+from apps.api.routers.agents import router as agents_router
+from apps.api.routers.platform import router as platform_router
 
 # --- Background tasks ---
 async def broadcast_loop():
@@ -176,6 +178,8 @@ app.include_router(engine_router)       # Vector search, text processing, graph 
 app.include_router(safety_router)       # Guardian, Guardrails, Verification, Critic, OWASP
 app.include_router(memory_router)       # Vault, Episodic, Graph, Temporal, Hybrid, Semantic
 app.include_router(reasoning_router)    # Cerewet, Constitutional, Context, Dream, Emotion, Planner
+app.include_router(agents_router)       # 5 Divisions, Sub-agents
+app.include_router(platform_router)     # Browser, Cloud, GitHub, Discord, MCP, Skills
 
 # PostgreSQL Memory Plugin (optional)
 try:

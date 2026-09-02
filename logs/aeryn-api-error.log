@@ -1065,3 +1065,1067 @@
 2026-09-02 08:47:38: INFO:     Waiting for application startup.
 2026-09-02 08:47:38: INFO:     Application startup complete.
 2026-09-02 08:47:38: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-02 08:55:58: INFO:     Shutting down
+2026-09-02 08:55:58: INFO:     Waiting for application shutdown.
+2026-09-02 08:55:58: INFO:     Application shutdown complete.
+2026-09-02 08:55:58: INFO:     Finished server process [24501]
+2026-09-02 08:56:00: Traceback (most recent call last):
+2026-09-02 08:56:00:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:56:00:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:56:00:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:56:00:     from .applications import FastAPI as FastAPI
+2026-09-02 08:56:00:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:56:00:     from fastapi import routing
+2026-09-02 08:56:00:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:56:00:     from fastapi import params
+2026-09-02 08:56:00:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:56:00:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:56:00:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:56:00:     from pydantic import BaseModel, create_model
+2026-09-02 08:56:00:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:56:00:     module = import_module(module_name, package=package)
+2026-09-02 08:56:00:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:00:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:56:00:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:56:00:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:00:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:56:00:     from ._internal import (
+2026-09-02 08:56:00:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:56:00:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:56:00:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:56:00:     from uuid import UUID
+2026-09-02 08:56:00:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:56:01:     import platform
+2026-09-02 08:56:01:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:56:01:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:56:01: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:56:07: Traceback (most recent call last):
+2026-09-02 08:56:07:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:56:07:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:56:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:56:07:     from .applications import FastAPI as FastAPI
+2026-09-02 08:56:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:56:07:     from fastapi import routing
+2026-09-02 08:56:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:56:07:     from fastapi import params
+2026-09-02 08:56:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:56:07:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:56:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:56:07:     from pydantic import BaseModel, create_model
+2026-09-02 08:56:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:56:07:     module = import_module(module_name, package=package)
+2026-09-02 08:56:07:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:07:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:56:07:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:56:07:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:56:07:     from ._internal import (
+2026-09-02 08:56:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:56:07:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:56:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:56:07:     from uuid import UUID
+2026-09-02 08:56:07:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:56:07:     import platform
+2026-09-02 08:56:07:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:56:07:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:56:07: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:56:14: Traceback (most recent call last):
+2026-09-02 08:56:14:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:56:14:     
+2026-09-02 08:56:14: from fastapi import FastAPI, Request, Response
+2026-09-02 08:56:14:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:56:14:     from .applications import FastAPI as FastAPI
+2026-09-02 08:56:14:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:56:14:     from fastapi import routing
+2026-09-02 08:56:14:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:56:14:     from fastapi import params
+2026-09-02 08:56:14:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:56:14:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:56:14:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:56:14:     from pydantic import BaseModel, create_model
+2026-09-02 08:56:14:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:56:14:     module = import_module(module_name, package=package)
+2026-09-02 08:56:14:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:14:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:56:14:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:56:14:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:14:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:56:14:     from ._internal import (
+2026-09-02 08:56:14:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:56:14:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:56:14:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:56:14:     from uuid import UUID
+2026-09-02 08:56:14:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:56:14:     import platform
+2026-09-02 08:56:14:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:56:14:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:56:14: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:56:19: Traceback (most recent call last):
+2026-09-02 08:56:19:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:56:19:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:56:19:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:56:19:     from .applications import FastAPI as FastAPI
+2026-09-02 08:56:19:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:56:19:     from fastapi import routing
+2026-09-02 08:56:19:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:56:19:     from fastapi import params
+2026-09-02 08:56:19:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:56:19:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:56:19:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:56:19:     from pydantic import BaseModel, create_model
+2026-09-02 08:56:19:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:56:19:     module = import_module(module_name, package=package)
+2026-09-02 08:56:19:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:19:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:56:19:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:56:19:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:19:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:56:19:     from ._internal import (
+2026-09-02 08:56:19:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:56:19:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:56:19:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:56:19:     from uuid import UUID
+2026-09-02 08:56:19:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:56:19:     import platform
+2026-09-02 08:56:19:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:56:19:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:56:19: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:56:25: Traceback (most recent call last):
+2026-09-02 08:56:25:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:56:25:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:56:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:56:25:     from .applications import FastAPI as FastAPI
+2026-09-02 08:56:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:56:25:     from fastapi import routing
+2026-09-02 08:56:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:56:25:     from fastapi import params
+2026-09-02 08:56:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:56:25:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:56:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:56:25:     from pydantic import BaseModel, create_model
+2026-09-02 08:56:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:56:25:     module = import_module(module_name, package=package)
+2026-09-02 08:56:25:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:25:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:56:25:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:56:25:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:56:25:     from ._internal import (
+2026-09-02 08:56:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:56:25:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:56:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:56:25:     from uuid import UUID
+2026-09-02 08:56:25:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:56:25:     import platform
+2026-09-02 08:56:25:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:56:25:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:56:25: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:56:30: Traceback (most recent call last):
+2026-09-02 08:56:30:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:56:30:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:56:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:56:30:     from .applications import FastAPI as FastAPI
+2026-09-02 08:56:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:56:30:     from fastapi import routing
+2026-09-02 08:56:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:56:30:     from fastapi import params
+2026-09-02 08:56:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:56:30:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:56:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:56:30:     from pydantic import BaseModel, create_model
+2026-09-02 08:56:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:56:30:     module = import_module(module_name, package=package)
+2026-09-02 08:56:30:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:30:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:56:30:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:56:30:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:56:30:     from ._internal import (
+2026-09-02 08:56:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:56:30:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:56:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:56:30:     from uuid import UUID
+2026-09-02 08:56:30:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:56:30:     import platform
+2026-09-02 08:56:30:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:56:30:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:56:30: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:56:35: Traceback (most recent call last):
+2026-09-02 08:56:35:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:56:35:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:56:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:56:35:     from .applications import FastAPI as FastAPI
+2026-09-02 08:56:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:56:35:     from fastapi import routing
+2026-09-02 08:56:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:56:35:     from fastapi import params
+2026-09-02 08:56:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:56:35:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:56:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:56:35:     from pydantic import BaseModel, create_model
+2026-09-02 08:56:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:56:35:     module = import_module(module_name, package=package)
+2026-09-02 08:56:35:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:35:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:56:35:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:56:35: ^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:56:35:     from ._internal import (
+2026-09-02 08:56:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:56:35:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:56:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:56:35:     from uuid import UUID
+2026-09-02 08:56:35:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:56:35:     import platform
+2026-09-02 08:56:35:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:56:35:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:56:35: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:56:40: Traceback (most recent call last):
+2026-09-02 08:56:40:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:56:40:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:56:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:56:40:     
+2026-09-02 08:56:40: from .applications import FastAPI as FastAPI
+2026-09-02 08:56:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:56:40:     from fastapi import routing
+2026-09-02 08:56:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:56:40:     
+2026-09-02 08:56:40: from fastapi import params
+2026-09-02 08:56:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:56:40:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:56:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:56:40:     
+2026-09-02 08:56:40: from pydantic import BaseModel, create_model
+2026-09-02 08:56:40: 
+2026-09-02 08:56:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:56:40:     module = import_module(module_name, package=package)
+2026-09-02 08:56:40:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:40:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:56:40:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:56:40:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:56:40:     from ._internal import (
+2026-09-02 08:56:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:56:40:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:56:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:56:40:     from uuid import UUID
+2026-09-02 08:56:40:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:56:40:     import platform
+2026-09-02 08:56:40:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:56:40:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:56:40: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:56:44: Traceback (most recent call last):
+2026-09-02 08:56:44:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:56:44:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:56:44:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:56:44:     from .applications import FastAPI as FastAPI
+2026-09-02 08:56:44:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:56:44:     from fastapi import routing
+2026-09-02 08:56:44:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:56:44:     from fastapi import params
+2026-09-02 08:56:44:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:56:44:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:56:44:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:56:44:     from pydantic import BaseModel, create_model
+2026-09-02 08:56:44:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:56:44:     module = import_module(module_name, package=package)
+2026-09-02 08:56:44:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:44:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:56:44:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:56:44:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:44:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:56:44:     from ._internal import (
+2026-09-02 08:56:44:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:56:44:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:56:44:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:56:44:     from uuid import UUID
+2026-09-02 08:56:44:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:56:44:     import platform
+2026-09-02 08:56:44:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:56:44:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:56:44: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:56:49: Traceback (most recent call last):
+2026-09-02 08:56:49:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:56:49:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:56:49:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:56:49:     from .applications import FastAPI as FastAPI
+2026-09-02 08:56:49:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:56:49:     from fastapi import routing
+2026-09-02 08:56:49:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:56:49:     from fastapi import params
+2026-09-02 08:56:49:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:56:49:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:56:49:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:56:49:     from pydantic import BaseModel, create_model
+2026-09-02 08:56:49:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:56:49:     module = import_module(module_name, package=package)
+2026-09-02 08:56:49:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:49:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:56:49:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:56:49:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:49:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:56:49:     from ._internal import (
+2026-09-02 08:56:49:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:56:49:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:56:49:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:56:49:     from uuid import UUID
+2026-09-02 08:56:49:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:56:49:     import platform
+2026-09-02 08:56:49:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:56:49:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:56:49: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:56:53: Traceback (most recent call last):
+2026-09-02 08:56:53:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:56:53:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:56:53:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:56:53:     from .applications import FastAPI as FastAPI
+2026-09-02 08:56:53:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:56:53:     from fastapi import routing
+2026-09-02 08:56:53:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:56:53:     from fastapi import params
+2026-09-02 08:56:53:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:56:53:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:56:53:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:56:53:     from pydantic import BaseModel, create_model
+2026-09-02 08:56:53:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:56:53:     module = import_module(module_name, package=package)
+2026-09-02 08:56:53:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:53:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:56:53:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:56:53:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:53:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:56:53:     from ._internal import (
+2026-09-02 08:56:53:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:56:53:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:56:53:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:56:53:     from uuid import UUID
+2026-09-02 08:56:53:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:56:53:     import platform
+2026-09-02 08:56:53:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:56:53:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:56:53: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:56:58: Traceback (most recent call last):
+2026-09-02 08:56:58:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:56:58:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:56:58:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:56:58:     from .applications import FastAPI as FastAPI
+2026-09-02 08:56:58:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:56:58:     from fastapi import routing
+2026-09-02 08:56:58:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:56:58:     from fastapi import params
+2026-09-02 08:56:58:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:56:58:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:56:58:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:56:58:     from pydantic import BaseModel, create_model
+2026-09-02 08:56:58:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:56:58:     module = import_module(module_name, package=package)
+2026-09-02 08:56:58:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:58:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:56:58:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:56:58:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:56:58:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:56:58:     from ._internal import (
+2026-09-02 08:56:58:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:56:58:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:56:58:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:56:58:     from uuid import UUID
+2026-09-02 08:56:58:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:56:58:     import platform
+2026-09-02 08:56:58:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:56:58:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:56:58: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:57:02: Traceback (most recent call last):
+2026-09-02 08:57:02:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:57:02:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:57:02:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:57:02:     from .applications import FastAPI as FastAPI
+2026-09-02 08:57:02:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:57:02:     from fastapi import routing
+2026-09-02 08:57:02:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:57:02:     from fastapi import params
+2026-09-02 08:57:02:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:57:02:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:57:02:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:57:02:     from pydantic import BaseModel, create_model
+2026-09-02 08:57:02:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:57:02:     module = import_module(module_name, package=package)
+2026-09-02 08:57:02:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:02:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:57:02:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:57:02:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:02:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:57:02:     from ._internal import (
+2026-09-02 08:57:02:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:57:02:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:57:02:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:57:02:     from uuid import UUID
+2026-09-02 08:57:02:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:57:02:     import platform
+2026-09-02 08:57:02:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:57:02:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:57:02: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:57:07: Traceback (most recent call last):
+2026-09-02 08:57:07:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:57:07:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:57:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:57:07:     from .applications import FastAPI as FastAPI
+2026-09-02 08:57:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:57:07:     from fastapi import routing
+2026-09-02 08:57:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:57:07:     from fastapi import params
+2026-09-02 08:57:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:57:07:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:57:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:57:07:     from pydantic import BaseModel, create_model
+2026-09-02 08:57:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:57:07:     module = import_module(module_name, package=package)
+2026-09-02 08:57:07:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:07:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:57:07:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:57:07:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:57:07:     from ._internal import (
+2026-09-02 08:57:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:57:07:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:57:07:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:57:07:     from uuid import UUID
+2026-09-02 08:57:07:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:57:07:     import platform
+2026-09-02 08:57:07:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:57:07:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:57:07: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:57:12: Traceback (most recent call last):
+2026-09-02 08:57:12:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:57:12:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:57:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:57:12:     from .applications import FastAPI as FastAPI
+2026-09-02 08:57:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:57:12:     from fastapi import routing
+2026-09-02 08:57:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:57:12:     from fastapi import params
+2026-09-02 08:57:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:57:12:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:57:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:57:12:     from pydantic import BaseModel, create_model
+2026-09-02 08:57:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:57:12:     module = import_module(module_name, package=package)
+2026-09-02 08:57:12:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:12:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:57:12:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:57:12:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:57:12:     from ._internal import (
+2026-09-02 08:57:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:57:12:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:57:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:57:12:     from uuid import UUID
+2026-09-02 08:57:12:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:57:12:     import platform
+2026-09-02 08:57:12:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:57:12:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:57:12: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:57:16: Traceback (most recent call last):
+2026-09-02 08:57:16:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:57:16:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:57:16:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:57:16:     from .applications import FastAPI as FastAPI
+2026-09-02 08:57:16:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:57:16:     from fastapi import routing
+2026-09-02 08:57:16:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:57:16:     from fastapi import params
+2026-09-02 08:57:16:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:57:16:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:57:16:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:57:16:     from pydantic import BaseModel, create_model
+2026-09-02 08:57:16:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:57:16:     module = import_module(module_name, package=package)
+2026-09-02 08:57:16:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:16:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:57:16:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:57:16:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:16:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:57:16:     from ._internal import (
+2026-09-02 08:57:16:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:57:16:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:57:16:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:57:16:     from uuid import UUID
+2026-09-02 08:57:16:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:57:16:     import platform
+2026-09-02 08:57:16:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:57:16:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:57:16: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:57:21: Traceback (most recent call last):
+2026-09-02 08:57:21:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:57:21:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:57:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:57:21:     from .applications import FastAPI as FastAPI
+2026-09-02 08:57:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:57:21:     from fastapi import routing
+2026-09-02 08:57:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:57:21:     from fastapi import params
+2026-09-02 08:57:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:57:21:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:57:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:57:21:     from pydantic import BaseModel, create_model
+2026-09-02 08:57:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:57:21:     module = import_module(module_name, package=package)
+2026-09-02 08:57:21:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:21:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:57:21:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:57:21:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:57:21:     from ._internal import (
+2026-09-02 08:57:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:57:21:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:57:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:57:21:     from uuid import UUID
+2026-09-02 08:57:21:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:57:21:     import platform
+2026-09-02 08:57:21:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:57:21:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:57:21: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:57:25: Traceback (most recent call last):
+2026-09-02 08:57:25:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:57:25:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:57:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:57:25:     from .applications import FastAPI as FastAPI
+2026-09-02 08:57:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:57:25:     from fastapi import routing
+2026-09-02 08:57:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:57:25:     from fastapi import params
+2026-09-02 08:57:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:57:25:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:57:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:57:25:     from pydantic import BaseModel, create_model
+2026-09-02 08:57:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:57:25:     module = import_module(module_name, package=package)
+2026-09-02 08:57:25:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:25:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:57:25:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:57:25:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:57:25:     from ._internal import (
+2026-09-02 08:57:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:57:25:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:57:25:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:57:25:     from uuid import UUID
+2026-09-02 08:57:25:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:57:25:     import platform
+2026-09-02 08:57:25:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:57:25:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:57:25: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:57:30: Traceback (most recent call last):
+2026-09-02 08:57:30:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:57:30:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:57:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:57:30:     from .applications import FastAPI as FastAPI
+2026-09-02 08:57:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:57:30:     from fastapi import routing
+2026-09-02 08:57:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:57:30:     
+2026-09-02 08:57:30: from fastapi import params
+2026-09-02 08:57:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:57:30:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:57:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:57:30:     from pydantic import BaseModel, create_model
+2026-09-02 08:57:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:57:30:     module = import_module(module_name, package=package)
+2026-09-02 08:57:30:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:30:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:57:30:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:57:30:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:57:30:     
+2026-09-02 08:57:30: from ._internal import (
+2026-09-02 08:57:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:57:30:     
+2026-09-02 08:57:30: from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:57:30:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:57:30:     from uuid import UUID
+2026-09-02 08:57:30:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:57:30:     import platform
+2026-09-02 08:57:30:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:57:30:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:57:30: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:57:35: Traceback (most recent call last):
+2026-09-02 08:57:35:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:57:35:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:57:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:57:35:     from .applications import FastAPI as FastAPI
+2026-09-02 08:57:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:57:35:     from fastapi import routing
+2026-09-02 08:57:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:57:35:     from fastapi import params
+2026-09-02 08:57:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:57:35:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:57:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:57:35:     from pydantic import BaseModel, create_model
+2026-09-02 08:57:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:57:35:     module = import_module(module_name, package=package)
+2026-09-02 08:57:35:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:35:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:57:35:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:57:35:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:57:35:     from ._internal import (
+2026-09-02 08:57:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:57:35:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:57:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:57:35:     from uuid import UUID
+2026-09-02 08:57:35:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:57:35:     import platform
+2026-09-02 08:57:35:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:57:35:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:57:35: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:57:36: Traceback (most recent call last):
+2026-09-02 08:57:36:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:57:36:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:57:36:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:57:36:     from .applications import FastAPI as FastAPI
+2026-09-02 08:57:36:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:57:36:     from fastapi import routing
+2026-09-02 08:57:36:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:57:36:     from fastapi import params
+2026-09-02 08:57:36:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:57:36:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:57:36:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:57:36:     from pydantic import BaseModel, create_model
+2026-09-02 08:57:36:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:57:36:     module = import_module(module_name, package=package)
+2026-09-02 08:57:36:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:36:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:57:36:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:57:36:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:36:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:57:36:     
+2026-09-02 08:57:36: from ._internal import (
+2026-09-02 08:57:36:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:57:36:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:57:36:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:57:36:     from uuid import UUID
+2026-09-02 08:57:36:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:57:36:     import platform
+2026-09-02 08:57:36:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:57:36:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:57:36: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:57:41: Traceback (most recent call last):
+2026-09-02 08:57:41:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:57:41:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:57:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:57:41:     from .applications import FastAPI as FastAPI
+2026-09-02 08:57:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:57:41:     from fastapi import routing
+2026-09-02 08:57:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:57:41:     from fastapi import params
+2026-09-02 08:57:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:57:41:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:57:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:57:41:     from pydantic import BaseModel, create_model
+2026-09-02 08:57:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:57:41:     module = import_module(module_name, package=package)
+2026-09-02 08:57:41:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:41:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:57:41:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:57:41: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:57:41:     from ._internal import (
+2026-09-02 08:57:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:57:41:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:57:41:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:57:41:     from uuid import UUID
+2026-09-02 08:57:41:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:57:41:     import platform
+2026-09-02 08:57:41:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:57:41:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:57:41: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:57:45: Traceback (most recent call last):
+2026-09-02 08:57:45:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:57:45:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:57:45:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:57:45:     from .applications import FastAPI as FastAPI
+2026-09-02 08:57:45:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:57:45:     from fastapi import routing
+2026-09-02 08:57:45:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:57:45:     from fastapi import params
+2026-09-02 08:57:45:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:57:45:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:57:45:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:57:45:     from pydantic import BaseModel, create_model
+2026-09-02 08:57:45:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:57:45:     module = import_module(module_name, package=package)
+2026-09-02 08:57:45:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:45:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:57:45:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:57:45:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:45:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:57:45:     from ._internal import (
+2026-09-02 08:57:45:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:57:45:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:57:45:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:57:45:     from uuid import UUID
+2026-09-02 08:57:45:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:57:45:     import platform
+2026-09-02 08:57:45:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:57:45:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:57:45: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:57:50: Traceback (most recent call last):
+2026-09-02 08:57:50:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:57:50:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:57:50:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:57:50:     from .applications import FastAPI as FastAPI
+2026-09-02 08:57:50:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:57:50:     from fastapi import routing
+2026-09-02 08:57:50:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:57:50:     from fastapi import params
+2026-09-02 08:57:50:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:57:50:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:57:50:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:57:50:     from pydantic import BaseModel, create_model
+2026-09-02 08:57:50:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:57:50:     module = import_module(module_name, package=package)
+2026-09-02 08:57:50:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:50:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:57:50:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:57:50:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:50:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:57:50:     from ._internal import (
+2026-09-02 08:57:50:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:57:50:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:57:50:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:57:50:     from uuid import UUID
+2026-09-02 08:57:50:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:57:50:     import platform
+2026-09-02 08:57:50:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:57:50:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:57:50: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:57:54: Traceback (most recent call last):
+2026-09-02 08:57:54:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:57:54:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:57:54:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:57:54:     from .applications import FastAPI as FastAPI
+2026-09-02 08:57:54:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:57:54:     from fastapi import routing
+2026-09-02 08:57:54:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:57:54:     from fastapi import params
+2026-09-02 08:57:54:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:57:54:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:57:54:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:57:54:     from pydantic import BaseModel, create_model
+2026-09-02 08:57:54:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:57:54:     module = import_module(module_name, package=package)
+2026-09-02 08:57:54:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:54:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:57:54:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:57:54:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:54:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:57:54:     from ._internal import (
+2026-09-02 08:57:54:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:57:54:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:57:54:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:57:54:     from uuid import UUID
+2026-09-02 08:57:54:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:57:54:     import platform
+2026-09-02 08:57:54:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:57:54:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:57:54: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:57:59: Traceback (most recent call last):
+2026-09-02 08:57:59:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:57:59:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:57:59:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:57:59:     from .applications import FastAPI as FastAPI
+2026-09-02 08:57:59:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:57:59:     from fastapi import routing
+2026-09-02 08:57:59:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:57:59:     from fastapi import params
+2026-09-02 08:57:59:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:57:59:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:57:59:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:57:59:     from pydantic import BaseModel, create_model
+2026-09-02 08:57:59:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:57:59:     module = import_module(module_name, package=package)
+2026-09-02 08:57:59:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:59:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:57:59:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:57:59:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:57:59:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:57:59:     from ._internal import (
+2026-09-02 08:57:59:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:57:59:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:57:59:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:57:59:     from uuid import UUID
+2026-09-02 08:57:59:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:57:59:     import platform
+2026-09-02 08:57:59:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:57:59:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:57:59: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:58:03: Traceback (most recent call last):
+2026-09-02 08:58:03:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:58:03:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:58:03:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:58:03:     from .applications import FastAPI as FastAPI
+2026-09-02 08:58:03:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:58:03:     from fastapi import routing
+2026-09-02 08:58:03:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:58:03:     from fastapi import params
+2026-09-02 08:58:03:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:58:03:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:58:03:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:58:03:     from pydantic import BaseModel, create_model
+2026-09-02 08:58:03:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:58:03:     module = import_module(module_name, package=package)
+2026-09-02 08:58:03:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:03:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:58:03:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:58:03:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:03:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:58:03:     from ._internal import (
+2026-09-02 08:58:03:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:58:03:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:58:03:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:58:03:     from uuid import UUID
+2026-09-02 08:58:03:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:58:03:     import platform
+2026-09-02 08:58:03:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:58:03:     
+2026-09-02 08:58:03: from fastapi import APIRouter, HTTPException
+2026-09-02 08:58:03: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:58:08: Traceback (most recent call last):
+2026-09-02 08:58:08:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:58:08:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:58:08:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:58:08:     from .applications import FastAPI as FastAPI
+2026-09-02 08:58:08:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:58:08:     from fastapi import routing
+2026-09-02 08:58:08:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:58:08:     from fastapi import params
+2026-09-02 08:58:08:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:58:08:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:58:08:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:58:08:     from pydantic import BaseModel, create_model
+2026-09-02 08:58:08:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:58:08:     module = import_module(module_name, package=package)
+2026-09-02 08:58:08:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:08:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:58:08:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:58:08:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:08:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:58:08:     from ._internal import (
+2026-09-02 08:58:08:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:58:08:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:58:08:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:58:08:     from uuid import UUID
+2026-09-02 08:58:08:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:58:08:     import platform
+2026-09-02 08:58:08:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:58:08:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:58:08: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:58:12: Traceback (most recent call last):
+2026-09-02 08:58:12:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:58:12:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:58:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:58:12:     from .applications import FastAPI as FastAPI
+2026-09-02 08:58:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:58:12:     from fastapi import routing
+2026-09-02 08:58:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:58:12:     from fastapi import params
+2026-09-02 08:58:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:58:12:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:58:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:58:12:     from pydantic import BaseModel, create_model
+2026-09-02 08:58:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:58:12:     module = import_module(module_name, package=package)
+2026-09-02 08:58:12:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:12:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:58:12:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:58:12:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:58:12:     from ._internal import (
+2026-09-02 08:58:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:58:12:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:58:12:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:58:12:     from uuid import UUID
+2026-09-02 08:58:12:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:58:12:     import platform
+2026-09-02 08:58:12:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:58:12:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:58:12: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:58:17: Traceback (most recent call last):
+2026-09-02 08:58:17:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:58:17:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:58:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:58:17:     from .applications import FastAPI as FastAPI
+2026-09-02 08:58:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:58:17:     from fastapi import routing
+2026-09-02 08:58:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:58:17:     from fastapi import params
+2026-09-02 08:58:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:58:17:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:58:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:58:17:     from pydantic import BaseModel, create_model
+2026-09-02 08:58:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:58:17:     module = import_module(module_name, package=package)
+2026-09-02 08:58:17:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:17:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:58:17:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:58:17:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:58:17:     from ._internal import (
+2026-09-02 08:58:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:58:17:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:58:17:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:58:17:     from uuid import UUID
+2026-09-02 08:58:17:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:58:17:     import platform
+2026-09-02 08:58:17:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:58:17:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:58:17: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:58:21: Traceback (most recent call last):
+2026-09-02 08:58:21:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:58:21:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:58:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:58:21:     from .applications import FastAPI as FastAPI
+2026-09-02 08:58:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:58:21:     from fastapi import routing
+2026-09-02 08:58:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:58:21:     from fastapi import params
+2026-09-02 08:58:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:58:21:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:58:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:58:21:     from pydantic import BaseModel, create_model
+2026-09-02 08:58:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:58:21:     module = import_module(module_name, package=package)
+2026-09-02 08:58:21:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:21:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:58:21:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:58:21:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:58:21:     from ._internal import (
+2026-09-02 08:58:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:58:21:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:58:21:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:58:21:     from uuid import UUID
+2026-09-02 08:58:21:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:58:21:     import platform
+2026-09-02 08:58:21:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:58:21:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:58:21: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:58:26: Traceback (most recent call last):
+2026-09-02 08:58:26:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:58:26:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:58:26:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:58:26:     from .applications import FastAPI as FastAPI
+2026-09-02 08:58:26:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:58:26:     from fastapi import routing
+2026-09-02 08:58:26:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:58:26:     from fastapi import params
+2026-09-02 08:58:26:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:58:26:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:58:26:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:58:26:     from pydantic import BaseModel, create_model
+2026-09-02 08:58:26:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:58:26:     module = import_module(module_name, package=package)
+2026-09-02 08:58:26:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:26:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:58:26:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:58:26: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:26:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:58:26:     from ._internal import (
+2026-09-02 08:58:26:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:58:26:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:58:26:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:58:26:     from uuid import UUID
+2026-09-02 08:58:26:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:58:26:     import platform
+2026-09-02 08:58:26:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:58:26:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:58:26: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:58:31: Traceback (most recent call last):
+2026-09-02 08:58:31:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:58:31:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:58:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:58:31:     from .applications import FastAPI as FastAPI
+2026-09-02 08:58:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:58:31:     from fastapi import routing
+2026-09-02 08:58:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:58:31:     from fastapi import params
+2026-09-02 08:58:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:58:31:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:58:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:58:31:     from pydantic import BaseModel, create_model
+2026-09-02 08:58:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:58:31:     module = import_module(module_name, package=package)
+2026-09-02 08:58:31:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:31:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:58:31:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:58:31:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:58:31:     from ._internal import (
+2026-09-02 08:58:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:58:31:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:58:31:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:58:31:     from uuid import UUID
+2026-09-02 08:58:31:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:58:31:     import platform
+2026-09-02 08:58:31:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:58:31:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:58:31: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:58:35: Traceback (most recent call last):
+2026-09-02 08:58:35:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:58:35:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:58:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:58:35:     from .applications import FastAPI as FastAPI
+2026-09-02 08:58:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:58:35:     from fastapi import routing
+2026-09-02 08:58:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:58:35:     from fastapi import params
+2026-09-02 08:58:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:58:35:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:58:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:58:35:     from pydantic import BaseModel, create_model
+2026-09-02 08:58:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:58:35:     module = import_module(module_name, package=package)
+2026-09-02 08:58:35:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:35:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:58:35:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:58:35:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:58:35:     from ._internal import (
+2026-09-02 08:58:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:58:35:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:58:35:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:58:35:     from uuid import UUID
+2026-09-02 08:58:35:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:58:35:     import platform
+2026-09-02 08:58:35:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:58:35:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:58:35: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
+2026-09-02 08:58:40: Traceback (most recent call last):
+2026-09-02 08:58:40:   File "/home/sen/aeryn-core-agent/apps/api/routers/main.py", line 14, in <module>
+2026-09-02 08:58:40:     from fastapi import FastAPI, Request, Response
+2026-09-02 08:58:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py", line 7, in <module>
+2026-09-02 08:58:40:     from .applications import FastAPI as FastAPI
+2026-09-02 08:58:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/applications.py", line 7, in <module>
+2026-09-02 08:58:40:     from fastapi import routing
+2026-09-02 08:58:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/routing.py", line 45, in <module>
+2026-09-02 08:58:40:     from fastapi import params
+2026-09-02 08:58:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/params.py", line 7, in <module>
+2026-09-02 08:58:40:     from fastapi.exceptions import FastAPIDeprecationWarning
+2026-09-02 08:58:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/exceptions.py", line 5, in <module>
+2026-09-02 08:58:40:     from pydantic import BaseModel, create_model
+2026-09-02 08:58:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/__init__.py", line 446, in __getattr__
+2026-09-02 08:58:40:     module = import_module(module_name, package=package)
+2026-09-02 08:58:40:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:40:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/importlib/__init__.py", line 126, in import_module
+2026-09-02 08:58:40:     return _bootstrap._gcd_import(name[level:], package, level)
+2026-09-02 08:58:40:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-09-02 08:58:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/main.py", line 36, in <module>
+2026-09-02 08:58:40:     from ._internal import (
+2026-09-02 08:58:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_model_construction.py", line 25, in <module>
+2026-09-02 08:58:40:     from ._generate_schema import GenerateSchema, InvalidSchemaError
+2026-09-02 08:58:40:   File "/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/pydantic/_internal/_generate_schema.py", line 39, in <module>
+2026-09-02 08:58:40:     from uuid import UUID
+2026-09-02 08:58:40:   File "/home/sen/.local/share/uv/python/cpython-3.11-linux-aarch64-gnu/lib/python3.11/uuid.py", line 59, in <module>
+2026-09-02 08:58:40:     import platform
+2026-09-02 08:58:40:   File "/home/sen/aeryn-core-agent/apps/api/routers/platform.py", line 3, in <module>
+2026-09-02 08:58:40:     from fastapi import APIRouter, HTTPException
+2026-09-02 08:58:40: ImportError: cannot import name 'APIRouter' from partially initialized module 'fastapi' (most likely due to a circular import) (/home/sen/aeryn-core-agent/venv-proot/lib/python3.11/site-packages/fastapi/__init__.py)
