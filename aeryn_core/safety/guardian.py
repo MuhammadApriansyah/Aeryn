@@ -32,12 +32,13 @@ class GuardianResult:
 _INJECTION_PATTERNS = [
     r"ignore\s+(all\s+)?(previous|above|prior)\s+(instructions?|prompts?|rules?)",
     r"forget\s+(everything|all|your\s+instructions?)",
-    r"you\s+are\s+now\s+(?!a\s+helpful)",  # "You are now X" override
+    r"you\s+are\s+now\s+(?!a\s+helpful)",
     r"new\s+persona\s*:",
     r"system\s+prompt\s*:",
     r"internal\s+instructions?\s*:",
     r"reveal\s+(your|the)\s+(system|internal|hidden)",
-    r"jailbreak|d|anarchy|(\s|^)AIM(\s|$)",
+    r"\bjailbreak\b",
+    r"\baim\b",
     r"bypass\s+(filters?|restrictions?|safety)",
     r"pretend\s+(you\s+have\s+no|there\s+are\s+no)\s+restrictions",
 ]

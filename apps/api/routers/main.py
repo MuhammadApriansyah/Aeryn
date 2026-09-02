@@ -41,6 +41,7 @@ from apps.api.routers.shared import router as shared_router
 from apps.api.routers.web_routes import router as web_routes_router
 from apps.api.routers.engine import router as engine_router
 from apps.api.routers.safety import router as safety_router
+from apps.api.routers.memory import router as memory_router
 
 # --- Background tasks ---
 async def broadcast_loop():
@@ -172,6 +173,7 @@ app.include_router(shared_router)     # Shared DB, Vault, Reminders, Tasks
 app.include_router(web_routes_router)   # SPA, redirects, static
 app.include_router(engine_router)       # Vector search, text processing, graph traversal
 app.include_router(safety_router)       # Guardian, Guardrails, Verification, Critic, OWASP
+app.include_router(memory_router)       # Vault, Episodic, Graph, Temporal, Hybrid, Semantic
 
 # PostgreSQL Memory Plugin (optional)
 try:
