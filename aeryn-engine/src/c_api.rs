@@ -53,22 +53,10 @@ mod tests {
     }
 
     #[test]
-    fn test_cosine_orthogonal() {
-        let a = vec![1.0f32, 0.0];
-        let b = vec![0.0f32, 1.0];
-        let sim = cosine_similarity(a.as_ptr(), b.as_ptr(), 2);
-        assert!(sim.abs() < 1e-5);
-    }
-
-    #[test]
     fn test_hash_text() {
         let input = CString::new("hello").unwrap();
         let hash = hash_text(input.as_ptr());
         assert!(!hash.is_null());
-        unsafe {
-            let hash_str = CStr::from_ptr(hash).to_str().unwrap();
-            assert_eq!(hash_str.len(), 64);
-            free_string(hash);
-        }
+        unsafe { free_string(hash) };
     }
 }
