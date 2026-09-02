@@ -309,10 +309,11 @@ async def skills_record_action(action: str, context: str = ""):
 @router.get("/skills/frequent-patterns")
 async def skills_frequent_patterns(limit: int = 10):
     """Get frequent patterns."""
-    from aeryn_core.platform.skill_crystallization import get_skill_crystallizer
+    from aeryn_core.platform.skill_crystallization import PatternDetector
     
-    crystallizer = get_skill_crystallizer()
-    patterns = crystallizer.get_frequent_patterns(limit)
+    detector = PatternDetector()
+    patterns = detector.get_frequent_patterns(user_id="", min_frequency=limit)
+    
     return {"patterns": patterns}
 
 

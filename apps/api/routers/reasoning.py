@@ -84,7 +84,7 @@ async def constitutional_check(action: str, context: str = ""):
 # ========================================
 
 @router.post("/context/estimate-tokens")
-async def context_estimate_tokens(text: str):
+async def context_estimate_tokens(text: str = ""):
     """Estimate token count."""
     from aeryn_core.reasoning.context_manager import get_context_manager
     
