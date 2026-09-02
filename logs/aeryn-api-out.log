@@ -5092,3 +5092,18 @@
 2026-09-03 02:02:14: INFO:     127.0.0.1:49422 - "GET /v1/plugins HTTP/1.1" 200 OK
 2026-09-03 02:02:14: INFO:     127.0.0.1:49424 - "GET /v1/workspaces HTTP/1.1" 200 OK
 2026-09-03 02:02:14: INFO:     127.0.0.1:49440 - "GET /v1/agents HTTP/1.1" 200 OK
+2026-09-03 05:40:02: 2026-09-03 05:40:02 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-03 05:40:13: 2026-09-03 05:40:13 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-03 05:40:13: 2026-09-03 05:40:13 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-03 05:40:13: 2026-09-03 05:40:13 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-03 05:40:14: 2026-09-03 05:40:14 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-03 05:40:14: 2026-09-03 05:40:14 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-03 05:40:21: INFO:     127.0.0.1:36356 - "GET /health HTTP/1.1" 200 OK
+2026-09-03 05:40:52: INFO:     127.0.0.1:48574 - "GET /v1/approvals/policies HTTP/1.1" 200 OK
+2026-09-03 05:40:52: INFO:     127.0.0.1:48588 - "GET /v1/approvals/pending HTTP/1.1" 200 OK
+2026-09-03 05:43:07: INFO:     127.0.0.1:57080 - "POST /v1/chat HTTP/1.1" 200 OK
+2026-09-03 05:46:06: INFO:     127.0.0.1:40850 - "GET /v1/approvals/policies HTTP/1.1" 200 OK
+2026-09-03 05:46:09: INFO:     127.0.0.1:40854 - "POST /v1/chat HTTP/1.1" 200 OK
+2026-09-03 05:46:09: INFO:     127.0.0.1:45928 - "GET /v1/approvals/pending HTTP/1.1" 200 OK
+2026-09-03 05:46:09: INFO:     127.0.0.1:45942 - "GET /v1/approvals/pending HTTP/1.1" 200 OK
+2026-09-03 05:46:09: INFO:     127.0.0.1:45946 - "POST /v1/approvals/decide HTTP/1.1" 200 OK

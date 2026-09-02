@@ -53,12 +53,15 @@ class ToolRegistry:
         return [t.to_openai_schema() for t in self._tools.values()]
     
     async def call(self, name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
-        """Call a tool by name with arguments."""
+        """Call a tool by name with arguments. Enforced through guardrails."""
         tool = self._tools.get(name)
         if not tool:
             return {"error": f"Tool '{name}' not found"}
         
         try:
+            # === GUARDRAIL: 4-layer enforcement before execution ===
+            self._check_guardrail(name, arguments)
+            
             if tool.is_async:
                 result = await tool.handler(**arguments)
             else:
@@ -68,16 +71,27 @@ class ToolRegistry:
             return {"error": str(e), "tool": name, "status": "error"}
     
     def call_sync(self, name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
-        """Call a tool synchronously."""
+        """Call a tool synchronously. Enforced through guardrails."""
         tool = self._tools.get(name)
         if not tool:
             return {"error": f"Tool '{name}' not found"}
         
         try:
+            # === GUARDRAIL: 4-layer enforcement before execution ===
+            self._check_guardrail(name, arguments)
+            
             result = tool.handler(**arguments)
             return {"result": result, "tool": name, "status": "ok"}
         except Exception as e:
             return {"error": str(e), "tool": name, "status": "error"}
+    
+    def _check_guardrail(self, name: str, arguments: Dict[str, Any]):
+        """Enforce guardrail policy. Returns dict with approval info if required."""
+        from aeryn_core.safety.guardrail_engine import (
+            get_guardrail_engine, GuardrailViolation, ApprovalRequired
+        )
+        engine = get_guardrail_engine()
+        engine.check_tool(name, arguments)
 
 
 # Global registry instance

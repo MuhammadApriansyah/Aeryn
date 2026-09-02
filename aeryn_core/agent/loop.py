@@ -122,6 +122,19 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                     except:
                         tool_args = {}
                 
+                # === GUARDRAIL: detect approval requirement ===
+                pending_approval = self._precheck_approval(tool_name, tool_args)
+                if pending_approval is not None:
+                    # Surface approval request to human and STOP (HITL)
+                    return {
+                        "role": "assistant",
+                        "content": content,
+                        "requires_approval": True,
+                        "approval": pending_approval.to_dict(),
+                        "iterations": iteration + 1,
+                        "division": division_id,
+                    }
+                
                 result = await self.tools.call(tool_name, tool_args)
                 
                 messages.append({
@@ -141,6 +154,21 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
             "memories_used": len(relevant_memories),
         }
     
+    def _precheck_approval(self, tool_name: str, tool_args: Dict[str, Any]):
+        """Check if a tool action requires approval BEFORE execution.
+        Returns ApprovalRequest if approval needed, else None."""
+        from aeryn_core.safety.guardrail_engine import (
+            get_guardrail_engine, GuardrailViolation, ApprovalRequired
+        )
+        engine = get_guardrail_engine()
+        try:
+            engine.check_tool(tool_name, tool_args)
+            return None  # No approval needed
+        except ApprovalRequired as e:
+            return e.approval_request
+        except GuardrailViolation:
+            return None  # Will be caught as error in tool call
+
     def _trim_context(self, messages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Trim messages to fit within token budget."""
         total_tokens = TokenCounter.count_messages(messages)
