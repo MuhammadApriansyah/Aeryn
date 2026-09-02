@@ -4908,3 +4908,14 @@
 2026-09-02 14:26:55: INFO:     127.0.0.1:35068 - "POST /v1/sessions/frontend_test/history HTTP/1.1" 405 Method Not Allowed
 2026-09-02 15:43:16: INFO:     127.0.0.1:40320 - "GET /v1/sessions/frontend_test/history HTTP/1.1" 200 OK
 2026-09-02 15:46:47: INFO:     127.0.0.1:52074 - "POST /v1/chat/stream HTTP/1.1" 200 OK
+2026-09-02 18:25:07: 2026-09-02 18:25:07 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-02 18:25:13: 2026-09-02 18:25:13 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-02 18:25:13: 2026-09-02 18:25:13 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-02 18:25:13: 2026-09-02 18:25:13 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-02 18:25:13: 2026-09-02 18:25:13 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-02 18:25:13: 2026-09-02 18:25:13 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-02 18:25:27: INFO:     127.0.0.1:58250 - "GET /health HTTP/1.1" 200 OK
+2026-09-02 18:28:56: INFO:     127.0.0.1:51170 - "GET /v1/divisions HTTP/1.1" 200 OK
+2026-09-02 18:28:56: INFO:     127.0.0.1:51174 - "POST /v1/divisions/classify?message=Write%20a%20poem HTTP/1.1" 200 OK
+2026-09-02 18:28:56: INFO:     127.0.0.1:51180 - "POST /v1/plan/decompose?goal=Build%20a%20website HTTP/1.1" 200 OK
+2026-09-02 18:28:56: INFO:     127.0.0.1:51182 - "GET /v1/plugins/discover HTTP/1.1" 200 OK

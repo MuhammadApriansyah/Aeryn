@@ -1,0 +1,19 @@
+{
+  "name": "calculator",
+  "version": "0.1.0",
+  "description": "Provides basic calculation tools",
+  "tools": [
+    {
+      "name": "calculate",
+      "description": "Evaluate a mathematical expression",
+      "handler": "calculate",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "expression": {"type": "string", "description": "Math expression to evaluate"}
+        },
+        "required": ["expression"]
+      }
+    }
+  ]
+}

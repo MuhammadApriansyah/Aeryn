@@ -47,6 +47,7 @@ from apps.api.routers.agents import router as agents_router
 from apps.api.routers.platform_router import router as platform_router
 from apps.api.routers.dead_code_router import router as dead_router
 from apps.api.routers.chat_agent import router as chat_agent_router
+from apps.api.routers.advanced_router import router as advanced_router
 
 # --- Background tasks ---
 async def broadcast_loop():
@@ -184,6 +185,7 @@ app.include_router(agents_router)       # 5 Divisions, Sub-agents
 app.include_router(platform_router)     # Browser, Cloud, GitHub, Discord, MCP, Skills
 app.include_router(dead_router)         # Database, MCP, Hermes, Memory, Safety, Sandbox, Security
 app.include_router(chat_agent_router)   # Chat, Sessions, Streaming
+app.include_router(advanced_router)    # Divisions, Plugins, Planning, Reflection
 
 # PostgreSQL Memory Plugin (optional)
 try:

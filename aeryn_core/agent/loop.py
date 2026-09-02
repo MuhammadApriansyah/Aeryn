@@ -30,6 +30,8 @@ class AgentLoop:
         self.recall = get_memory_recall()
         self.write = get_memory_write()
         self.context = ContextWindow(max_tokens=max_tokens)
+        from aeryn_core.agent.divisions import get_division_manager
+        self.divisions = get_division_manager()
     
     def _default_system_prompt(self) -> str:
         """Build default system prompt."""
@@ -52,12 +54,16 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         router = get_mode_router()
         session = router.get_or_create_session(session_id)
         
+        # === DIVISION ROUTING: classify message ===
+        division_id = self.divisions.classify(user_message)
+        division_prompt = self.divisions.get_system_prompt(division_id)
+        
         # === MEMORY RECALL: Get relevant memories ===
         relevant_memories = self.recall.recall(user_message, limit=3)
         memory_context = self.recall.format_for_prompt(relevant_memories)
         
-        # Build system prompt with memory
-        system_content = self.system_prompt
+        # Build system prompt with division + memory
+        system_content = division_prompt
         if memory_context:
             system_content += "\n\n" + memory_context
         
@@ -101,6 +107,7 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                     "model": response.get("model", ""),
                     "iterations": iteration + 1,
                     "memories_used": len(relevant_memories),
+                    "division": division_id,
                 }
             
             messages.append({"role": "assistant", "content": content, "tool_calls": tool_calls})
