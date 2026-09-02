@@ -2579,3 +2579,13 @@
 2026-09-02 08:15:04: INFO:     127.0.0.1:57070 - "POST /v1/engine/vector/test/insert HTTP/1.1" 200 OK
 2026-09-02 08:15:04: INFO:     127.0.0.1:57080 - "POST /v1/engine/vector/test/search HTTP/1.1" 200 OK
 2026-09-02 08:15:14: INFO:     127.0.0.1:60964 - "POST /v1/engine/text/split?text=Hello%20world%20this%20is%20a%20test&chunk_size=10&chunk_overlap=2 HTTP/1.1" 200 OK
+2026-09-02 08:16:07: INFO:     127.0.0.1:33958 - "GET /health HTTP/1.1" 200 OK
+2026-09-02 08:16:07: INFO:     127.0.0.1:33964 - "POST /v1/engine/vector/e2e/insert HTTP/1.1" 200 OK
+2026-09-02 08:16:07: INFO:     127.0.0.1:33974 - "POST /v1/engine/vector/e2e/search HTTP/1.1" 200 OK
+2026-09-02 08:16:07: INFO:     127.0.0.1:33982 - "POST /v1/engine/text/split?text=Hello+world+this+is+a+test&chunk_size=10&chunk_overlap=2 HTTP/1.1" 200 OK
+2026-09-02 08:16:07: INFO:     127.0.0.1:33984 - "GET /v1/engine/text/tokenize?text=Hello+World+foo+bar HTTP/1.1" 200 OK
+2026-09-02 08:16:07: INFO:     127.0.0.1:34000 - "GET /v1/dashboard/stats HTTP/1.1" 200 OK
+2026-09-02 08:16:07: INFO:     127.0.0.1:34006 - "GET /v1/memory/entities HTTP/1.1" 200 OK
+2026-09-02 08:16:08: INFO:     127.0.0.1:34018 - "GET /v1/plugins HTTP/1.1" 200 OK
+2026-09-02 08:16:08: INFO:     127.0.0.1:34020 - "GET /v1/workspaces HTTP/1.1" 200 OK
+2026-09-02 08:16:08: INFO:     127.0.0.1:34030 - "GET /v1/agents HTTP/1.1" 200 OK
