@@ -3903,3 +3903,11 @@
 2026-09-03 05:40:14: INFO:     Waiting for application startup.
 2026-09-03 05:40:14: INFO:     Application startup complete.
 2026-09-03 05:40:14: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
+2026-09-03 06:06:40: INFO:     Shutting down
+2026-09-03 06:06:40: INFO:     Waiting for application shutdown.
+2026-09-03 06:06:40: INFO:     Application shutdown complete.
+2026-09-03 06:06:40: INFO:     Finished server process [25979]
+2026-09-03 06:06:45: INFO:     Started server process [8205]
+2026-09-03 06:06:45: INFO:     Waiting for application startup.
+2026-09-03 06:06:45: INFO:     Application startup complete.
+2026-09-03 06:06:45: INFO:     Uvicorn running on http://127.0.0.1:3010 (Press CTRL+C to quit)
