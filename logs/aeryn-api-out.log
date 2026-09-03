@@ -5122,3 +5122,86 @@
 2026-09-03 06:55:52: 2026-09-03 06:55:52 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
 2026-09-03 06:55:52: 2026-09-03 06:55:52 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
 2026-09-03 06:56:05: INFO:     127.0.0.1:58226 - "GET /v1/traces/ HTTP/1.1" 200 OK
+2026-09-03 08:31:11: 2026-09-03 08:31:11 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-03 08:31:27: 2026-09-03 08:31:26 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-03 08:31:27: 2026-09-03 08:31:27 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-03 08:31:27: 2026-09-03 08:31:27 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-03 08:31:27: 2026-09-03 08:31:27 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-03 08:31:27: 2026-09-03 08:31:27 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-03 08:31:32: INFO:     127.0.0.1:57776 - "GET /health HTTP/1.1" 200 OK
+2026-09-03 08:31:33: INFO:     127.0.0.1:57778 - "POST /v1/auth/issue-key HTTP/1.1" 200 OK
+2026-09-03 08:36:09: INFO:     127.0.0.1:50660 - "GET /health HTTP/1.1" 200 OK
+2026-09-03 08:36:09: INFO:     127.0.0.1:50676 - "POST /v1/engine/vector/test/insert HTTP/1.1" 200 OK
+2026-09-03 08:36:09: INFO:     127.0.0.1:50690 - "POST /v1/engine/vector/test/insert HTTP/1.1" 200 OK
+2026-09-03 08:36:09: INFO:     127.0.0.1:50698 - "POST /v1/engine/vector/test/search HTTP/1.1" 200 OK
+2026-09-03 08:36:09: INFO:     127.0.0.1:50712 - "GET /v1/engine/vector/test/stats HTTP/1.1" 200 OK
+2026-09-03 08:36:10: INFO:     127.0.0.1:50726 - "POST /v1/engine/text/split?text=Hello+world+this+is+a+test&chunk_size=5&chunk_overlap=1 HTTP/1.1" 200 OK
+2026-09-03 08:36:10: INFO:     127.0.0.1:50732 - "GET /v1/engine/text/tokenize?text=Hello+World HTTP/1.1" 200 OK
+2026-09-03 08:36:10: INFO:     127.0.0.1:50744 - "POST /v1/safety/guardian/check HTTP/1.1" 200 OK
+2026-09-03 08:36:10: INFO:     127.0.0.1:50760 - "POST /v1/safety/guardian/check HTTP/1.1" 200 OK
+2026-09-03 08:36:10: INFO:     127.0.0.1:50764 - "POST /v1/safety/guardian/sanitize?text=Hello HTTP/1.1" 200 OK
+2026-09-03 08:36:10: INFO:     127.0.0.1:50770 - "POST /v1/safety/guardrails/validate-input HTTP/1.1" 200 OK
+2026-09-03 08:36:10: INFO:     127.0.0.1:50776 - "POST /v1/safety/guardrails/validate-output HTTP/1.1" 200 OK
+2026-09-03 08:36:10: INFO:     127.0.0.1:50786 - "GET /v1/safety/guardrails/validators HTTP/1.1" 200 OK
+2026-09-03 08:36:10: INFO:     127.0.0.1:50800 - "POST /v1/safety/owasp/scan HTTP/1.1" 200 OK
+2026-09-03 08:36:10: INFO:     127.0.0.1:50806 - "POST /v1/safety/critic/pass HTTP/1.1" 200 OK
+2026-09-03 08:36:11: INFO:     127.0.0.1:50808 - "POST /v1/safety/critic/refine HTTP/1.1" 200 OK
+2026-09-03 08:36:11: INFO:     127.0.0.1:50816 - "POST /v1/safety/verify/answer HTTP/1.1" 200 OK
+2026-09-03 08:36:11: INFO:     127.0.0.1:50826 - "POST /v1/safety/shadow/run?text=test HTTP/1.1" 200 OK
+2026-09-03 08:36:11: INFO:     127.0.0.1:50838 - "POST /v1/memory/vault/write HTTP/1.1" 200 OK
+2026-09-03 08:36:11: INFO:     127.0.0.1:50850 - "GET /v1/memory/vault/read/e2e.txt HTTP/1.1" 200 OK
+2026-09-03 08:36:11: INFO:     127.0.0.1:50862 - "GET /v1/memory/vault/search?query=E2E HTTP/1.1" 200 OK
+2026-09-03 08:36:11: INFO:     127.0.0.1:50866 - "POST /v1/memory/episodic/record HTTP/1.1" 200 OK
+2026-09-03 08:36:11: INFO:     127.0.0.1:50872 - "POST /v1/memory/graph/node HTTP/1.1" 200 OK
+2026-09-03 08:36:11: INFO:     127.0.0.1:50874 - "POST /v1/memory/graph/edge HTTP/1.1" 200 OK
+2026-09-03 08:36:12: INFO:     127.0.0.1:50880 - "GET /v1/memory/decay/stats HTTP/1.1" 200 OK
+2026-09-03 08:36:12: INFO:     127.0.0.1:50890 - "GET /v1/memory/hybrid/search?query=test HTTP/1.1" 200 OK
+2026-09-03 08:36:12: INFO:     127.0.0.1:50904 - "GET /v1/memory/semantic/recall?query=test HTTP/1.1" 200 OK
+2026-09-03 08:36:12: INFO:     127.0.0.1:50914 - "POST /v1/memory/social/know HTTP/1.1" 200 OK
+2026-09-03 08:36:12: INFO:     127.0.0.1:50916 - "POST /v1/memory/session/record?role=user&content=hi HTTP/1.1" 200 OK
+2026-09-03 08:36:12: INFO:     127.0.0.1:50920 - "POST /v1/memory/entity/register HTTP/1.1" 200 OK
+2026-09-03 08:36:12: INFO:     127.0.0.1:50926 - "POST /v1/memory/canary/plant?marker=m1 HTTP/1.1" 200 OK
+2026-09-03 08:36:12: INFO:     127.0.0.1:50930 - "GET /v1/reasoning/constitutional/principles HTTP/1.1" 200 OK
+2026-09-03 08:36:12: INFO:     127.0.0.1:50932 - "POST /v1/reasoning/cerewet/detect?text=I+will+do+this HTTP/1.1" 200 OK
+2026-09-03 08:36:13: INFO:     127.0.0.1:50946 - "POST /v1/reasoning/context/estimate-tokens?text=Hello HTTP/1.1" 200 OK
+2026-09-03 08:36:13: INFO:     127.0.0.1:50958 - "POST /v1/reasoning/dream/synthesize?content=test HTTP/1.1" 200 OK
+2026-09-03 08:36:13: INFO:     127.0.0.1:50968 - "GET /v1/agents/divisions HTTP/1.1" 200 OK
+2026-09-03 08:36:13: INFO:     127.0.0.1:50974 - "GET /v1/agents/sub-agents HTTP/1.1" 200 OK
+2026-09-03 08:36:13: INFO:     127.0.0.1:50984 - "GET /v1/agents/creative/prompt HTTP/1.1" 200 OK
+2026-09-03 08:36:13: INFO:     127.0.0.1:50996 - "GET /v1/platform/skills/frequent-patterns HTTP/1.1" 200 OK
+2026-09-03 08:36:13: INFO:     127.0.0.1:50998 - "GET /v1/platform/tools/schemas HTTP/1.1" 200 OK
+2026-09-03 08:36:13: INFO:     127.0.0.1:51014 - "GET /v1/dead/database/pg-check HTTP/1.1" 200 OK
+2026-09-03 08:36:14: INFO:     127.0.0.1:51022 - "GET /v1/dead/database/neon/available HTTP/1.1" 200 OK
+2026-09-03 08:36:14: INFO:     127.0.0.1:51036 - "GET /v1/dead/database/semantic/stats HTTP/1.1" 200 OK
+2026-09-03 08:36:14: INFO:     127.0.0.1:51042 - "GET /v1/dead/database/vector/collections HTTP/1.1" 200 OK
+2026-09-03 08:36:14: INFO:     127.0.0.1:51046 - "GET /v1/dead/mcp/server/list-tools HTTP/1.1" 200 OK
+2026-09-03 08:36:14: INFO:     127.0.0.1:51056 - "GET /v1/dead/mcp/client/discover HTTP/1.1" 200 OK
+2026-09-03 08:36:14: INFO:     127.0.0.1:51058 - "GET /v1/dead/hermes/brain/digest HTTP/1.1" 200 OK
+2026-09-03 08:36:14: INFO:     127.0.0.1:51060 - "GET /v1/dead/hermes/hands/ask?query=test HTTP/1.1" 200 OK
+2026-09-03 08:36:21: INFO:     127.0.0.1:51064 - "GET /v1/dead/hermes/reflex/digest HTTP/1.1" 200 OK
+2026-09-03 08:36:21: INFO:     127.0.0.1:38920 - "GET /v1/dead/memory/core/render HTTP/1.1" 200 OK
+2026-09-03 08:36:23: INFO:     127.0.0.1:38934 - "GET /v1/dead/memory/graph/backlinks?node_id=test HTTP/1.1" 200 OK
+2026-09-03 08:36:23: INFO:     127.0.0.1:38936 - "GET /v1/dead/personal/context/get HTTP/1.1" 200 OK
+2026-09-03 08:36:24: INFO:     127.0.0.1:38940 - "GET /v1/dead/personal/preferences/get HTTP/1.1" 200 OK
+2026-09-03 08:36:24: INFO:     127.0.0.1:38954 - "GET /v1/dead/sandbox/detect HTTP/1.1" 200 OK
+2026-09-03 08:36:24: INFO:     127.0.0.1:38964 - "POST /v1/dead/safety/kernel/check-path HTTP/1.1" 200 OK
+2026-09-03 08:36:24: INFO:     127.0.0.1:38976 - "GET /v1/dead/security/compliance/checks HTTP/1.1" 200 OK
+2026-09-03 08:36:24: INFO:     127.0.0.1:38980 - "GET /v1/dead/security/dashboard/events HTTP/1.1" 200 OK
+2026-09-03 08:36:25: INFO:     127.0.0.1:38988 - "GET /v1/dead/security/memory-guard/verify HTTP/1.1" 200 OK
+2026-09-03 08:36:25: INFO:     127.0.0.1:38990 - "POST /v1/dead/security/prompt-injection/detect HTTP/1.1" 200 OK
+2026-09-03 08:36:25: INFO:     127.0.0.1:38992 - "GET /v1/dead/security/tool-permissions/allowed HTTP/1.1" 200 OK
+2026-09-03 08:36:25: INFO:     127.0.0.1:38998 - "GET /v1/dashboard/stats HTTP/1.1" 200 OK
+2026-09-03 08:36:25: 2026-09-03 08:36:25 [ERROR] aeryn: Database connection failed: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: Connection refused
+2026-09-03 08:36:25: 	Is the server running locally and accepting connections on that socket?
+2026-09-03 08:36:25: 
+2026-09-03 08:36:25: INFO:     127.0.0.1:39012 - "GET /v1/plugins HTTP/1.1" 200 OK
+2026-09-03 08:36:25: INFO:     127.0.0.1:39020 - "GET /v1/workspaces HTTP/1.1" 200 OK
+2026-09-03 08:36:25: INFO:     127.0.0.1:39024 - "GET /v1/agents HTTP/1.1" 200 OK
+2026-09-03 08:54:56: INFO:     127.0.0.1:33772 - "GET /v1/approvals/policies HTTP/1.1" 200 OK
+2026-09-03 08:54:56: INFO:     127.0.0.1:33786 - "POST /v1/tasks/submit HTTP/1.1" 200 OK
+2026-09-03 08:54:56: INFO:     127.0.0.1:33794 - "GET /v1/tasks/ HTTP/1.1" 200 OK
+2026-09-03 08:54:56: INFO:     127.0.0.1:33804 - "GET /v1/traces/ HTTP/1.1" 200 OK
+2026-09-03 08:54:56: INFO:     127.0.0.1:33820 - "GET /v1/sessions?user_id=e2e_user HTTP/1.1" 200 OK
+2026-09-03 08:54:56: INFO:     127.0.0.1:33830 - "POST /v1/auth/issue-key HTTP/1.1" 200 OK
+2026-09-03 08:54:56: INFO:     127.0.0.1:33834 - "POST /v1/auth/validate?api_key=aeryn_fccdfbe32525441baea516d7c1facb3a30bd8652204f7eb19a855adcbe9b9c4b HTTP/1.1" 200 OK
+2026-09-03 08:54:56: INFO:     127.0.0.1:33844 - "GET /v1/auth/tool-permission?tool_name=bash&user_id=e2e_user HTTP/1.1" 200 OK

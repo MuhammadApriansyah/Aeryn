@@ -52,13 +52,20 @@ class ToolRegistry:
         """Get all tool schemas in OpenAI format."""
         return [t.to_openai_schema() for t in self._tools.values()]
     
-    async def call(self, name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
+    async def call(self, name: str, arguments: Dict[str, Any], identity=None) -> Dict[str, Any]:
         """Call a tool by name with arguments. Enforced through guardrails."""
         tool = self._tools.get(name)
         if not tool:
             return {"error": f"Tool '{name}' not found"}
         
         try:
+            # === IDENTITY: least-privilege tool permission ===
+            if identity is not None:
+                from aeryn_core.auth.identity import get_auth_manager
+                manager = get_auth_manager()
+                if not manager.check_tool_permission(identity, name):
+                    return {"error": f"Tool '{name}' not permitted for identity '{identity.user_id}'", "status": "forbidden"}
+            
             # === GUARDRAIL: 4-layer enforcement before execution ===
             self._check_guardrail(name, arguments)
             
