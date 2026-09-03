@@ -49,36 +49,40 @@ def test_mcp_client():
 
 
 def test_multi_agent_orchestrator():
-    from aeryn_core.multi_agent.orchestrator import MultiAgentOrchestrator, Task, TaskStatus
-    
-    orch = MultiAgentOrchestrator()
-    
-    # Register agents
-    orch.register_agent("agent_1", "Researcher", ["search", "analyze"])
-    orch.register_agent("agent_2", "Writer", ["write", "edit"])
-    
-    # Create workflow
-    workflow = orch.create_workflow("Research & Write", "Research topic and write article")
-    
-    # Add tasks
-    task1 = Task("Research", "Research the topic", "agent_1", {"topic": "AI safety"})
-    task2 = Task("Write", "Write the article", "agent_2", {"format": "markdown"}, dependencies=[task1.id])
-    
-    workflow.add_task(task1)
-    workflow.add_task(task2)
-    
-    assert len(workflow.tasks) == 2
-    
-    # Execute workflow
-    result = orch.execute_workflow(workflow.id)
-    assert result["status"] == "completed"
-    
-    # Get status
-    status = orch.get_workflow_status(workflow.id)
-    assert status is not None
-    assert len(status["tasks"]) == 2
-    
-    print("✓ MultiAgentOrchestrator")
+    import asyncio
+    from aeryn_core.multi_agent.orchestrator import get_supervisor, ParallelOrchestrator
+
+    supervisor = get_supervisor()
+
+    async def _run():
+        # Route tasks to divisions
+        creative = await supervisor.route("Write a poem")
+        assert creative == "creative"
+
+        reasoning = await supervisor.route("Analyze this logic")
+        assert reasoning == "reasoning"
+
+        # Handoff between divisions
+        handoff = await supervisor.handoff("creative", "reasoning", "Critique my poem")
+        assert handoff.from_agent == "creative"
+        assert handoff.to_agent == "reasoning"
+
+        # Broadcast
+        recipients = await supervisor.broadcast("supervisor", "Hello all")
+        assert len(recipients) == 5
+
+        # Blackboard
+        await supervisor.blackboard.write("key", "value")
+        val = await supervisor.blackboard.read("key")
+        assert val == "value"
+
+        # Metrics
+        metrics = supervisor.get_metrics()
+        assert "coordination_efficiency" in metrics
+
+    asyncio.run(_run())
+
+    print("✓ MultiAgentOrchestrator (Supervisor)")
 
 
 def test_integration_sdk():
