@@ -5218,3 +5218,19 @@
 2026-09-03 11:06:02: INFO:     127.0.0.1:37240 - "GET /v1/eval/benchmarks HTTP/1.1" 200 OK
 2026-09-03 11:06:02: INFO:     127.0.0.1:37242 - "POST /v1/eval/diagnostics/attribute?episode_id=e2e_eval_1&trace_id= HTTP/1.1" 200 OK
 2026-09-03 11:06:02: INFO:     127.0.0.1:37250 - "GET /v1/eval/episodes HTTP/1.1" 200 OK
+2026-09-03 11:55:29: 2026-09-03 11:55:29 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-03 11:55:36: 2026-09-03 11:55:36 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-03 11:55:36: 2026-09-03 11:55:36 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-03 11:55:36: 2026-09-03 11:55:36 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-03 11:55:37: 2026-09-03 11:55:37 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-03 11:55:37: 2026-09-03 11:55:37 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-03 11:55:48: INFO:     127.0.0.1:34964 - "POST /v1/orchestrate/route?task=Write%20a%20story HTTP/1.1" 200 OK
+2026-09-03 11:55:48: INFO:     127.0.0.1:34976 - "GET /v1/orchestrate/metrics HTTP/1.1" 200 OK
+2026-09-03 11:57:12: INFO:     127.0.0.1:42032 - "POST /v1/orchestrate/handoff HTTP/1.1" 200 OK
+2026-09-03 11:57:12: INFO:     127.0.0.1:42034 - "GET /v1/orchestrate/blackboard HTTP/1.1" 200 OK
+2026-09-03 12:00:57: INFO:     127.0.0.1:39740 - "POST /v1/orchestrate/route?task=Write+a+poem HTTP/1.1" 200 OK
+2026-09-03 12:00:57: INFO:     127.0.0.1:39744 - "POST /v1/orchestrate/route?task=Deploy+server HTTP/1.1" 200 OK
+2026-09-03 12:00:57: INFO:     127.0.0.1:39750 - "POST /v1/orchestrate/handoff HTTP/1.1" 200 OK
+2026-09-03 12:00:57: INFO:     127.0.0.1:39752 - "POST /v1/orchestrate/broadcast?sender=supervisor&message=Hello+all HTTP/1.1" 200 OK
+2026-09-03 12:00:57: INFO:     127.0.0.1:39766 - "GET /v1/orchestrate/blackboard HTTP/1.1" 200 OK
+2026-09-03 12:00:57: INFO:     127.0.0.1:39782 - "GET /v1/orchestrate/metrics HTTP/1.1" 200 OK

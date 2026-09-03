@@ -1,2 +1,3 @@
-from .orchestrator import orchestrator, MultiAgentOrchestrator, Workflow, Task, TaskStatus
-__all__ = ['orchestrator', 'MultiAgentOrchestrator', 'Workflow', 'Task', 'TaskStatus']
+from .orchestrator import Supervisor, AgentMessage, Handoff, Blackboard, ParallelOrchestrator, get_supervisor
+
+__all__ = ['Supervisor', 'AgentMessage', 'Handoff', 'Blackboard', 'ParallelOrchestrator', 'get_supervisor']
