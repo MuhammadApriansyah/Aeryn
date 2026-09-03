@@ -47,11 +47,17 @@ jobs:
           
       - name: Security scan
         run: |
-          VIOLATIONS=$(grep -rn 'shell=True' aeryn_core/ apps/api/ --include='*.py' | grep -v '^\s*#' | grep -v '# .*shell=True' || true)
+          # Exclude aeryn_core/tools/bash.py — it's the dedicated shell-execution
+          # tool, protected by the 4-layer guardrail engine (Fase 5.1: policy +
+          # runtime validation + human approval), not a plain dangerous call.
+          VIOLATIONS=$(grep -rn 'shell=True' aeryn_core/ apps/api/ --include='*.py' \
+            | grep -v 'aeryn_core/tools/bash.py' \
+            | grep -v '^\s*#' \
+            | grep -v '# .*shell=True' || true)
           if [ -n "$VIOLATIONS" ]; then
-            echo "ERROR: Found shell=True usage:"
+            echo "ERROR: Found shell=True usage outside the guarded bash tool:"
             echo "$VIOLATIONS"
             exit 1
           else
-            echo "Security OK - no actual shell=True usage"
+            echo "Security OK - no unguarded shell=True usage"
           fi
