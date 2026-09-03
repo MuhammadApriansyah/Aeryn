@@ -49,14 +49,23 @@ Rules:
 Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 """
     
-    async def run(self, session_id: str, user_message: str) -> Dict[str, Any]:
-        """Run agent loop for a user message."""
+    async def run(self, session_id: str, user_message: str, user_id: str = "default") -> Dict[str, Any]:
+        """Run agent loop for a user message (user-scoped session)."""
         from aeryn_core.utils.llm_client import get_mode_router
         from aeryn_core.observability.tracing import (
             get_trace_collector, start_trace, ATTR_AGENT_NAME, ATTR_SESSION, ATTR_MODEL, ATTR_TOKENS_TOTAL, ATTR_TOOL_NAME
         )
+        from aeryn_core.runtime.session_store import get_session_store
         router = get_mode_router()
         session = router.get_or_create_session(session_id)
+        session_store = get_session_store()
+        
+        # === SESSION STATE: load persistent history (user-isolated) ===
+        persisted = session_store.load_session(user_id, session_id)
+        if persisted:
+            history_messages = persisted.messages
+        else:
+            history_messages = []
         
         # === OBSERVABILITY: start trace + agent span ===
         collector = get_trace_collector()
@@ -80,9 +89,9 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         if memory_context:
             system_content += "\n\n" + memory_context
         
-        # Load history from session
+        # Load history from session (persistent + user-isolated)
         messages = [{"role": "system", "content": system_content}]
-        messages.extend(session.messages)
+        messages.extend(history_messages)
         messages.append({"role": "user", "content": user_message})
         
         # === CONTEXT WINDOW: Trim if needed ===
@@ -125,6 +134,13 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                 # === MEMORY WRITE: Save facts after conversation ===
                 self._save_facts(session_id, user_message, content, messages)
                 
+                # === SESSION STATE: persist history (user-isolated) ===
+                persistent_history = history_messages + [
+                    {"role": "user", "content": user_message},
+                    {"role": "assistant", "content": content},
+                ]
+                session_store.save_session(user_id, session_id, persistent_history)
+                
                 # End agent span
                 collector.end_span(agent_span, status="ok", attributes={
                     "gen_ai.latency_ms": round((time.time() - t_start) * 1000, 2),
@@ -142,6 +158,7 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                     "memories_used": len(relevant_memories),
                     "division": division_id,
                     "trace_id": trace_id,
+                    "user_id": user_id,
                 }
             
             messages.append({"role": "assistant", "content": content, "tool_calls": tool_calls})
@@ -252,7 +269,7 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         except:
             pass
     
-    async def run_stream(self, session_id: str, user_message: str) -> AsyncGenerator[str, None]:
+    async def run_stream(self, session_id: str, user_message: str, user_id: str = "default") -> AsyncGenerator[str, None]:
         """Run agent loop with streaming response."""
         from aeryn_core.utils.llm_client import get_mode_router
         router = get_mode_router()
