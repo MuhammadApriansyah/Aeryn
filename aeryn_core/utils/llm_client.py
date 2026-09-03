@@ -177,6 +177,51 @@ class AerynLLMClient:
 
         return {"content": "All providers failed", "reasoning": steps, "provider": "none", "model": "none", "tokens": 0}
 
+    async def chat_stream(self, messages, session_id="default", model=None, temperature=0.7, max_tokens=4000, tools=None):
+        """Stream tokens from the LLM (true token-by-token SSE)."""
+        if not _FALLBACK_CHAIN:
+            yield json.dumps({"content": "No LLM providers available", "provider": "none", "model": "none", "tokens": 0})
+            return
+
+        prov_name = _FALLBACK_CHAIN[0]
+        p = _PROVIDERS[prov_name]
+        key = os.environ.get(p["api_key_env"], "")
+        use_model = model or p["models"][0]
+
+        url = f"{p['base_url']}/chat/completions"
+        body = {"model": use_model, "messages": messages, "temperature": temperature, "max_tokens": max_tokens, "stream": True}
+        if tools: body["tools"] = tools
+
+        req = urllib.request.Request(url, data=json.dumps(body).encode(),
+            headers={"Content-Type": "application/json", "Authorization": f"Bearer {key}"}, method="POST")
+        loop = asyncio.get_event_loop()
+
+        def _stream():
+            resp = urllib.request.urlopen(req, timeout=120)
+            for line in resp:
+                line = line.decode().strip()
+                if not line or line.startswith(":"):
+                    continue
+                if line.startswith("data: "):
+                    data_str = line[6:]
+                    if data_str == "[DONE]":
+                        break
+                    try:
+                        chunk = json.loads(data_str)
+                        delta = chunk.get("choices", [{}])[0].get("delta", {})
+                        content = delta.get("content", "")
+                        if content:
+                            yield json.dumps({"content": content, "provider": p["api_key_env"], "model": use_model})
+                    except json.JSONDecodeError:
+                        continue
+            resp.close()
+
+        try:
+            for piece in await loop.run_in_executor(None, lambda: list(_stream())):
+                yield piece
+        except Exception as e:
+            yield json.dumps({"error": str(e)})
+
     async def _request(self, p, key, messages, model, temperature, max_tokens, tools):
         url = f"{p['base_url']}/chat/completions"
         use_model = model or p["models"][0]

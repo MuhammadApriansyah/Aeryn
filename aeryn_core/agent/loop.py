@@ -270,16 +270,22 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
             pass
     
     async def run_stream(self, session_id: str, user_message: str, user_id: str = "default") -> AsyncGenerator[str, None]:
-        """Run agent loop with streaming response."""
+        """Run agent loop with TRUE token-by-token streaming."""
         from aeryn_core.utils.llm_client import get_mode_router
+        from aeryn_core.runtime.error_recovery import get_error_recovery
         router = get_mode_router()
         session = router.get_or_create_session(session_id)
+        recovery = get_error_recovery()
+        
+        # === DIVISION ROUTING ===
+        division_id = self.divisions.classify(user_message)
+        division_prompt = self.divisions.get_system_prompt(division_id)
         
         # === MEMORY RECALL ===
         relevant_memories = self.recall.recall(user_message, limit=3)
         memory_context = self.recall.format_for_prompt(relevant_memories)
         
-        system_content = self.system_prompt
+        system_content = division_prompt
         if memory_context:
             system_content += "\n\n" + memory_context
         
@@ -292,25 +298,43 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         tools_schema = self.tools.get_schemas()
         
         for iteration in range(self.max_iterations):
-            response = await self.llm.chat(
+            # === TRUE STREAMING: token-by-token from LLM ===
+            content = ""
+            tool_calls = []
+            stream_started = False
+            
+            async for piece in self.llm.chat_stream(
                 messages=messages,
                 session_id=session_id,
                 tools=tools_schema
-            )
+            ):
+                chunk = json.loads(piece)
+                if "content" in chunk:
+                    token = chunk["content"]
+                    content += token
+                    # Stream each token to the frontend
+                    yield json.dumps({"type": "token", "content": token})
+                    stream_started = True
+                elif "error" in chunk:
+                    yield json.dumps({"type": "error", "error": chunk["error"]})
+                    return
             
-            content = response.get("content", "")
-            tool_calls = response.get("tool_calls", [])
+            if not content and not tool_calls:
+                # No content and no tools — nothing to say
+                yield json.dumps({"type": "done", "reason": "empty_response"})
+                return
+            
+            # Emit the complete message marker
+            yield json.dumps({"type": "message_complete", "content": content, "division": division_id})
             
             if not tool_calls:
                 session.add_message("user", user_message)
                 session.add_message("assistant", content)
-                
-                # Save facts
                 self._save_facts(session_id, user_message, content, messages)
-                
-                yield json.dumps({"type": "message", "content": content, "memories_used": len(relevant_memories)})
+                yield json.dumps({"type": "done", "reason": "complete"})
                 return
             
+            # Tool calls (no streaming for these — execute after)
             yield json.dumps({"type": "tool_calls", "tool_calls": tool_calls})
             
             messages.append({"role": "assistant", "content": content, "tool_calls": tool_calls})
@@ -327,7 +351,16 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                 
                 yield json.dumps({"type": "tool_call", "tool": tool_name, "args": tool_args})
                 
-                result = await self.tools.call(tool_name, tool_args)
+                # === ERROR RECOVERY: retry tool call ===
+                retry_result = await recovery.with_retry(
+                    self.tools.call, tool_name, tool_args
+                )
+                if retry_result.success:
+                    result = retry_result.result
+                    if retry_result.attempts > 1:
+                        yield json.dumps({"type": "tool_retry", "tool": tool_name, "attempts": retry_result.attempts})
+                else:
+                    result = {"error": f"tool '{tool_name}' failed after {retry_result.attempts} attempts: {retry_result.error}", "status": "error"}
                 
                 yield json.dumps({"type": "tool_result", "tool": tool_name, "result": result})
                 
