@@ -1,8 +1,8 @@
 # 🤖 Aeryn — Personal AI Assistant Platform
 
-> **5,600+ files · 661 tests · 18 major versions · WCAG 2.1 AA · Self-improving · Adaptive**
+> **8 development phases complete · 765 tests · Production-grade agent framework · Rust + Python hybrid · 5 cognitive divisions**
 
-Aeryn is a **fully adaptive, recursive self-improving AI personal assistant platform** with 5 cognitive divisions, a memory system that evolves with you, enterprise-grade security, and a SPA dashboard accessible to everyone.
+Aeryn is a **production-grade AI agent framework** built from validated research (OpenTelemetry GenAI, AWS/Azure production playbook, arXiv agent evaluation/security papers). It features an agent loop with tool use, 5 collaborative cognitive divisions, 4-layer guardrails with human-in-the-loop, persistent user-isolated memory, continuous evaluation, and multi-agent orchestration.
 
 ---
 

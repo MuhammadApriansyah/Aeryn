@@ -4,6 +4,51 @@ All notable changes to Aeryn will be documented in this file.
 
 ---
 
+## [62.0] — 2026-09-03
+
+### 🎉 Major — Agent Framework Complete (Fase 1-8)
+
+Aeryn graduated from "agent core" to **production-grade agent framework**.
+8 phases built from validated research (OpenTelemetry GenAI, AWS/Azure playbook,
+arXiv agent evaluation/security papers).
+
+#### Fase 1-4: Agent Core
+- **Agent Loop**: LLM → Tool → Response cycle with session history
+- **5 Core Tools**: bash, file_read, file_write, file_search, web_search
+- **5 Cognitive Divisions** + keyword-based routing
+- **Plugin System**: dynamic tool loading (calculator plugin example)
+- **Memory**: recall, write, context window
+- **Frontend Chat**: React-style chat UI + streaming + sessions
+
+#### Fase 5: Production Hardening
+- **Guardrails (4-layer)**: policy, permission, runtime validation, human approval
+- **Human-in-the-Loop**: approval gate for destructive tools
+- **Task Queue**: durable SQLite queue + background workers
+- **Observability**: OTel GenAI spans (chat/invoke_agent/execute_tool)
+- **Session State**: persistent + user-isolated
+- **Identity + Auth**: hashed API keys + least-privilege tool scopes
+
+#### Fase 6: Continuous Evaluation
+- **Evaluation Harness**: success rate, progress rate, tool accuracy, efficacy
+- **Benchmark Suite**: 6 gold-annotated scenarios
+- **Diagnostics**: failure attribution (trace back to culprit step)
+
+#### Fase 7: Multi-Agent Orchestration
+- **Supervisor**: centralized routing across 5 divisions
+- **Handoff**: inter-agent task transfer
+- **Blackboard**: shared memory for collaboration
+- **Parallel execution**: concurrent division runs
+
+#### Fase 8: True Streaming + Error Recovery
+- **True token-by-token streaming** (SSE, stream=true)
+- **Error recovery**: exponential backoff retry + tool fallback
+
+#### Test Results
+- 634 unit tests + 131 E2E tests = **765 total passing**
+- Zero test doubles (all live-verified)
+
+---
+
 ## [61.5] — 2026-09-02
 
 ### Refactored — Monolith Removal & Dead Code Cleanup
