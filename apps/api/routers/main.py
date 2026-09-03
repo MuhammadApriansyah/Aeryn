@@ -52,6 +52,7 @@ from apps.api.routers.approval_router import router as approval_router
 from apps.api.routers.task_router import router as task_router
 from apps.api.routers.tracing_router import router as tracing_router
 from apps.api.routers.auth_router import router as auth_router
+from apps.api.routers.eval_router import router as eval_router
 
 # --- Background tasks ---
 async def broadcast_loop():
@@ -194,6 +195,7 @@ app.include_router(approval_router)    # Guardrails, Human-in-the-Loop approvals
 app.include_router(task_router)        # Async task queue, long-running agents
 app.include_router(tracing_router)     # OTel GenAI traces & spans
 app.include_router(auth_router)        # Identity, API keys, least-privilege
+app.include_router(eval_router)        # Evaluation, benchmarks, diagnostics
 
 # PostgreSQL Memory Plugin (optional)
 try:

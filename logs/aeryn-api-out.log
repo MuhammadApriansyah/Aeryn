@@ -5205,3 +5205,16 @@
 2026-09-03 08:54:56: INFO:     127.0.0.1:33830 - "POST /v1/auth/issue-key HTTP/1.1" 200 OK
 2026-09-03 08:54:56: INFO:     127.0.0.1:33834 - "POST /v1/auth/validate?api_key=aeryn_fccdfbe32525441baea516d7c1facb3a30bd8652204f7eb19a855adcbe9b9c4b HTTP/1.1" 200 OK
 2026-09-03 08:54:56: INFO:     127.0.0.1:33844 - "GET /v1/auth/tool-permission?tool_name=bash&user_id=e2e_user HTTP/1.1" 200 OK
+2026-09-03 10:48:09: 2026-09-03 10:48:09 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-03 10:48:14: 2026-09-03 10:48:14 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-03 10:48:14: 2026-09-03 10:48:14 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-03 10:48:14: 2026-09-03 10:48:14 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-03 10:48:14: 2026-09-03 10:48:14 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-03 10:48:14: 2026-09-03 10:48:14 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-03 10:48:29: INFO:     127.0.0.1:60084 - "GET /v1/eval/metrics HTTP/1.1" 200 OK
+2026-09-03 10:48:29: INFO:     127.0.0.1:60090 - "GET /v1/eval/benchmarks HTTP/1.1" 200 OK
+2026-09-03 11:06:02: INFO:     127.0.0.1:37224 - "GET /v1/eval/metrics HTTP/1.1" 200 OK
+2026-09-03 11:06:02: INFO:     127.0.0.1:37228 - "POST /v1/eval/record HTTP/1.1" 200 OK
+2026-09-03 11:06:02: INFO:     127.0.0.1:37240 - "GET /v1/eval/benchmarks HTTP/1.1" 200 OK
+2026-09-03 11:06:02: INFO:     127.0.0.1:37242 - "POST /v1/eval/diagnostics/attribute?episode_id=e2e_eval_1&trace_id= HTTP/1.1" 200 OK
+2026-09-03 11:06:02: INFO:     127.0.0.1:37250 - "GET /v1/eval/episodes HTTP/1.1" 200 OK
