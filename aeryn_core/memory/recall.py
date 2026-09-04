@@ -27,9 +27,14 @@ class MemoryRecall:
                 content TEXT NOT NULL,
                 source TEXT DEFAULT 'vault',
                 relevance_score REAL DEFAULT 0.0,
+                metadata TEXT DEFAULT '{}',
                 created_at TEXT DEFAULT (datetime('now'))
             )
         """)
+        # Migration: add metadata column if missing (older schema)
+        cols = [r[1] for r in conn.execute("PRAGMA table_info(memories)").fetchall()]
+        if "metadata" not in cols:
+            conn.execute("ALTER TABLE memories ADD COLUMN metadata TEXT DEFAULT '{}'")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_memories_source ON memories(source)")
         conn.commit()
         conn.close()
@@ -77,9 +82,24 @@ class MemoryRecall:
         """Search semantic memory."""
         try:
             from aeryn_core.memory.semantic_recall import SemanticRecall
-            recall = SemanticRecall()
-            return recall.search(query, limit)
+            recall = SemanticRecall(os.path.expanduser(
+                "~/aeryn-core-agent/Personalisasi/Database/episodes"))
+            return recall.recall(query, limit)
         except:
+            return []
+
+    def search_dense(self, query: str, limit: int = 5) -> List[Dict[str, Any]]:
+        """Dense embedding search (Gap 2) — hash/neural vector similarity."""
+        try:
+            from aeryn_core.memory.embedding import get_embedding_index
+            index = get_embedding_index()
+            results = index.search(query, k=limit)
+            return [{
+                "content": r["content"],
+                "source": f"dense:{r['source']}",
+                "score": r["score"],
+            } for r in results]
+        except Exception:
             return []
     
     def search_graph(self, query: str, limit: int = 5) -> List[Dict[str, Any]]:
@@ -109,6 +129,7 @@ class MemoryRecall:
         # Search all memory sources
         all_results.extend(self.search_vault(query, limit))
         all_results.extend(self.search_semantic(query, limit))
+        all_results.extend(self.search_dense(query, limit))
         all_results.extend(self.search_graph(query, limit))
         all_results.extend(self.search_episodic(query, limit))
         

@@ -16,6 +16,26 @@ class MemoryWrite:
     def __init__(self):
         self.vault_dir = VAULT_DIR
         self.db_path = os.path.join(DATABASE_DIR, "memories.db")
+        self._ensure_schema()
+
+    def _ensure_schema(self):
+        """Ensure memories table has required columns (migration)."""
+        conn = sqlite3.connect(self.db_path)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS memories (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                content TEXT NOT NULL,
+                source TEXT DEFAULT 'vault',
+                relevance_score REAL DEFAULT 0.0,
+                metadata TEXT DEFAULT '{}',
+                created_at TEXT DEFAULT (datetime('now'))
+            )
+        """)
+        cols = [r[1] for r in conn.execute("PRAGMA table_info(memories)").fetchall()]
+        if "metadata" not in cols:
+            conn.execute("ALTER TABLE memories ADD COLUMN metadata TEXT DEFAULT '{}'")
+        conn.commit()
+        conn.close()
     
     def extract_facts(self, text: str) -> List[Dict[str, str]]:
         """Extract facts from text."""
@@ -50,6 +70,16 @@ class MemoryWrite:
         )
         conn.commit()
         conn.close()
+
+        # Also index into dense embedding index (Gap 2)
+        try:
+            from aeryn_core.memory.embedding import get_embedding_index
+            import hashlib
+            index = get_embedding_index()
+            fact_id = hashlib.sha256(f"memories:{fact}".encode()).hexdigest()
+            index.add(fact_id, fact, source=source)
+        except Exception:
+            pass
     
     def save_to_vault(self, filename: str, content: str, layer: str = "Raw"):
         """Save content to vault."""

@@ -144,3 +144,23 @@ Hal yang menggembirakan: **semua fix yang dibutuhkan sudah disiapkan di fase
 sebelumnya** (task queue di 5.2, streaming di 8, adapter Postgres sudah ada).
 Pekerjaan tersisa adalah **wiring**: arahkan chat path lewat task queue + aktifkan
 streaming, bukan membangun dari nol.
+
+---
+
+## 7. Gap 2 — Dense Embedding (temuan tambahan, fix-nanti)
+
+Saat eksekusi Gap 2 (dense RAG), ditemukan:
+
+1. **sentence-transformers HANG di proot headless** — import saja timeout 25 detik.
+   Neural embedding sejati (all-MiniLM-L6-v2) TIDAK feasible di environment ini.
+   → **Fix nanti**: jalankan di GPU/accelerated env, atau pindah ke API embedding.
+
+2. **Fallback yang dipakai: hash embedder** (feature hashing char 3-gram → 384-dim).
+   Hasil evaluasi:
+   - Hit rate@5: dense-hash 100% vs keyword 33.3% (menang jauh untuk parafrase)
+   - MRR: 0.539 vs 0.492 (hanya sedikit lebih baik — hash menangkap leksikal, bukan semantik murni)
+   → **Kesimpulan**: hash embedder > TF-IDF, tapi neural embedding tetap tujuan akhir.
+
+3. **Bug schema ditemukan & difix saat itu juga**: tabel `memories` tidak punya
+   kolom `metadata` tapi `write.save_fact` INSERT ke sana → migration ALTER TABLE
+   ditambahkan di `recall.py` dan `write.py`.
