@@ -116,12 +116,21 @@ class ReasoningStore(_SQLiteStore):
 
 
 class AerynLLMClient:
+    # Global semaphore: limit concurrent LLM calls to prevent provider
+    # rate-limit (429) and local OOM under load (Gap 1 load-test finding).
+    _llm_semaphore = asyncio.Semaphore(5)
+
     def __init__(self):
         self._request_count = 0
         self._error_count = 0
         self._reasoning_store = ReasoningStore()
 
     async def chat(self, messages, session_id="default", model=None, temperature=0.7, max_tokens=4000, tools=None):
+        # Acquire semaphore to throttle concurrent LLM calls
+        async with self._llm_semaphore:
+            return await self._chat_impl(messages, session_id, model, temperature, max_tokens, tools)
+
+    async def _chat_impl(self, messages, session_id="default", model=None, temperature=0.7, max_tokens=4000, tools=None):
         steps = []
         n = 0
 
