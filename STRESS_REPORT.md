@@ -180,14 +180,16 @@ State sharing via Postgres (selective, bukan monkey-patch global):
   (session dibuat instance A dibaca instance B dari Postgres).
 - **`task_queue.py`**: FULL refactor → cross-instance task claiming ✅
   (instance B claim task yang enqueue instance A).
-- **Approval store & trace collector**: BELUM di-refactor (schema kompleks).
+- **Approval store (`guardrail_engine.py`)**: FULL refactor → PG ✅
+- **Trace collector (`tracing.py`)**: FULL refactor → PG ✅
+
+**Semua 4 state store sekarang PG-backed** (sessions, tasks, approvals, spans).
 
 **Verifikasi:**
 - 634/634 unit test masih passing (tidak ada regresi)
 - Fallback SQLite teruji (PG down → SQLite otomatis)
 - End-to-end chat OK dengan session PG-backed
+- Approval & span cross-instance teruji (dibuat A, dibaca B)
 
 **Catatan follow-up (fix-nanti):**
-- Refactor approval store (`guardrail_engine.py`) & trace collector (`tracing.py`)
-  ke `shared_connect` — schema beda, butuh mapping kolom hati-hati.
 - PM2 `instances: max` + nginx load balancer untuk deployment multi-instance nyata.

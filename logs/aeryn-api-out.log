@@ -5583,3 +5583,10 @@
 2026-09-05 10:15:54: 2026-09-05 10:15:54 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
 2026-09-05 10:16:06: INFO:     127.0.0.1:32904 - "GET /v1/memory-guard/status HTTP/1.1" 200 OK
 2026-09-05 10:16:06: INFO:     127.0.0.1:32908 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 11:27:37: 2026-09-05 11:27:37 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-05 11:27:42: 2026-09-05 11:27:42 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 11:27:42: 2026-09-05 11:27:42 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 11:27:42: 2026-09-05 11:27:42 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 11:27:42: 2026-09-05 11:27:42 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-05 11:27:42: 2026-09-05 11:27:42 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-05 11:27:54: INFO:     127.0.0.1:59844 - "GET /health HTTP/1.1" 200 OK

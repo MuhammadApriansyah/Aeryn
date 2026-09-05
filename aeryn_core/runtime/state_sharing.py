@@ -184,20 +184,25 @@ def ensure_shared_tables():
                 tool_name TEXT,
                 args TEXT DEFAULT '{}',
                 risk_level TEXT,
+                irreversible INTEGER DEFAULT 0,
+                affected_scope TEXT DEFAULT '',
+                estimated_cost TEXT DEFAULT '',
+                explanation TEXT DEFAULT '',
                 status TEXT DEFAULT 'pending',
                 created_at DOUBLE PRECISION,
-                resolved_at DOUBLE PRECISION
+                resolved_at DOUBLE PRECISION,
+                decided_by TEXT DEFAULT ''
             )""",
         "traces": """
-            CREATE TABLE IF NOT EXISTS traces (
-                trace_id TEXT PRIMARY KEY,
-                span_id TEXT,
+            CREATE TABLE IF NOT EXISTS spans (
+                id TEXT PRIMARY KEY,
+                trace_id TEXT,
                 parent_id TEXT,
                 name TEXT,
-                status TEXT,
-                attributes TEXT DEFAULT '{}',
                 start_time DOUBLE PRECISION,
-                end_time DOUBLE PRECISION
+                end_time DOUBLE PRECISION,
+                attributes TEXT DEFAULT '{}',
+                status TEXT DEFAULT 'unset'
             )""",
     }
     for table, ddl in schemas.items():

@@ -69,31 +69,43 @@ class Span:
 
 
 class TraceCollector:
-    """Collects spans into a trace tree, persisted to SQLite."""
+    """Collects spans into a trace tree, persisted (PG-backed when available)."""
 
     def __init__(self):
+        from aeryn_core.runtime.state_sharing import shared_connect
+        self._shared_connect = shared_connect
         self.db_path = os.path.join(DATABASE_DIR, "traces.db")
         self._lock = threading.Lock()
         self._init_db()
 
+    def _connect(self):
+        return self._shared_connect("traces")
+
     def _init_db(self):
-        conn = sqlite3.connect(self.db_path)
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS spans (
-                id TEXT PRIMARY KEY,
-                trace_id TEXT NOT NULL,
-                parent_id TEXT,
-                name TEXT NOT NULL,
-                start_time REAL,
-                end_time REAL,
-                attributes TEXT DEFAULT '{}',
-                status TEXT DEFAULT 'unset'
-            )
-        """)
-        conn.execute("CREATE INDEX IF NOT EXISTS idx_spans_trace ON spans(trace_id)")
-        conn.execute("CREATE INDEX IF NOT EXISTS idx_spans_name ON spans(name)")
-        conn.commit()
-        conn.close()
+        conn = self._connect()
+        try:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS spans (
+                    id TEXT PRIMARY KEY,
+                    trace_id TEXT NOT NULL,
+                    parent_id TEXT,
+                    name TEXT NOT NULL,
+                    start_time REAL,
+                    end_time REAL,
+                    attributes TEXT DEFAULT '{}',
+                    status TEXT DEFAULT 'unset'
+                )
+            """)
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_spans_trace ON spans(trace_id)")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_spans_name ON spans(name)")
+            conn.commit()
+        except Exception:
+            try:
+                conn.rollback()
+            except Exception:
+                pass
+        finally:
+            conn.close()
 
     def start_span(self, trace_id: str, parent_id: Optional[str], name: str, attributes: Dict[str, Any] = None) -> Span:
         span = Span(
@@ -113,7 +125,7 @@ class TraceCollector:
             span.attributes.update(attributes)
 
         with self._lock:
-            conn = sqlite3.connect(self.db_path)
+            conn = self._connect()
             conn.execute(
                 "INSERT INTO spans (id, trace_id, parent_id, name, start_time, end_time, attributes, status) VALUES (?,?,?,?,?,?,?,?)",
                 (span.id, span.trace_id, span.parent_id, span.name,
@@ -123,7 +135,7 @@ class TraceCollector:
             conn.close()
 
     def get_trace(self, trace_id: str) -> List[Span]:
-        conn = sqlite3.connect(self.db_path)
+        conn = self._connect()
         rows = conn.execute("SELECT * FROM spans WHERE trace_id = ? ORDER BY start_time ASC", (trace_id,)).fetchall()
         conn.close()
 
@@ -152,7 +164,7 @@ class TraceCollector:
         return total
 
     def list_traces(self, limit: int = 20) -> List[Dict[str, Any]]:
-        conn = sqlite3.connect(self.db_path)
+        conn = self._connect()
         rows = conn.execute(
             "SELECT trace_id, MIN(start_time) as first, MAX(end_time) as last, COUNT(*) as span_count FROM spans GROUP BY trace_id ORDER BY first DESC LIMIT ?",
             (limit,)

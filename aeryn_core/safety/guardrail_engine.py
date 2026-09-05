@@ -165,37 +165,49 @@ class ApprovalRequest:
 
 
 class ApprovalStore:
-    """Persistent store for approval requests."""
+    """Persistent store for approval requests (PG-backed when available)."""
 
     def __init__(self):
+        from aeryn_core.runtime.state_sharing import shared_connect
+        self._shared_connect = shared_connect
         self.db_path = os.path.join(DATABASE_DIR, "approvals.db")
         self._lock = threading.Lock()
         self._init_db()
 
+    def _connect(self):
+        return self._shared_connect("approvals")
+
     def _init_db(self):
-        conn = sqlite3.connect(self.db_path)
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS approvals (
-                id TEXT PRIMARY KEY,
-                tool_name TEXT NOT NULL,
-                args TEXT NOT NULL,
-                risk_level TEXT NOT NULL,
-                irreversible INTEGER DEFAULT 0,
-                affected_scope TEXT DEFAULT '',
-                estimated_cost TEXT DEFAULT '',
-                explanation TEXT DEFAULT '',
-                status TEXT DEFAULT 'pending',
-                created_at REAL,
-                resolved_at REAL,
-                decided_by TEXT DEFAULT ''
-            )
-        """)
-        conn.commit()
-        conn.close()
+        conn = self._connect()
+        try:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS approvals (
+                    id TEXT PRIMARY KEY,
+                    tool_name TEXT NOT NULL,
+                    args TEXT NOT NULL,
+                    risk_level TEXT NOT NULL,
+                    irreversible INTEGER DEFAULT 0,
+                    affected_scope TEXT DEFAULT '',
+                    estimated_cost TEXT DEFAULT '',
+                    explanation TEXT DEFAULT '',
+                    status TEXT DEFAULT 'pending',
+                    created_at REAL,
+                    resolved_at REAL,
+                    decided_by TEXT DEFAULT ''
+                )
+            """)
+            conn.commit()
+        except Exception:
+            try:
+                conn.rollback()
+            except Exception:
+                pass
+        finally:
+            conn.close()
 
     def create(self, req: ApprovalRequest) -> ApprovalRequest:
         with self._lock:
-            conn = sqlite3.connect(self.db_path)
+            conn = self._connect()
             conn.execute(
                 "INSERT INTO approvals (id, tool_name, args, risk_level, irreversible, affected_scope, estimated_cost, explanation, status, created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
                 (req.id, req.tool_name, json.dumps(req.args), req.risk_level,
@@ -207,7 +219,7 @@ class ApprovalStore:
         return req
 
     def get(self, approval_id: str) -> Optional[ApprovalRequest]:
-        conn = sqlite3.connect(self.db_path)
+        conn = self._connect()
         row = conn.execute("SELECT * FROM approvals WHERE id = ?", (approval_id,)).fetchone()
         conn.close()
         if not row:
@@ -235,7 +247,7 @@ class ApprovalStore:
 
     def update_status(self, approval_id: str, status: str, decided_by: str = "", edited_args: Optional[Dict] = None):
         with self._lock:
-            conn = sqlite3.connect(self.db_path)
+            conn = self._connect()
             if edited_args:
                 args_json = json.dumps(edited_args)
                 conn.execute("UPDATE approvals SET args = ?, status = ?, resolved_at = ?, decided_by = ? WHERE id = ?",
@@ -247,7 +259,7 @@ class ApprovalStore:
             conn.close()
 
     def pending(self) -> List[ApprovalRequest]:
-        conn = sqlite3.connect(self.db_path)
+        conn = self._connect()
         rows = conn.execute("SELECT * FROM approvals WHERE status = 'pending' ORDER BY created_at ASC").fetchall()
         conn.close()
         cols = ["id", "tool_name", "args", "risk_level", "irreversible",
