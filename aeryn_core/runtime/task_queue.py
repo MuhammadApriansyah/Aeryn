@@ -55,32 +55,44 @@ class Task:
 
 
 class TaskQueue:
-    """Durable SQLite-backed task queue."""
+    """Durable task queue (PG-backed when available)."""
 
     def __init__(self, db_path: str = None):
+        from aeryn_core.runtime.state_sharing import shared_connect
+        self._shared_connect = shared_connect
         self.db_path = db_path or os.path.join(DATABASE_DIR, "tasks.db")
         self._lock = threading.Lock()
         self._init_db()
 
+    def _connect(self):
+        return self._shared_connect("tasks")
+
     def _init_db(self):
-        conn = sqlite3.connect(self.db_path)
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS tasks (
-                id TEXT PRIMARY KEY,
-                type TEXT NOT NULL,
-                payload TEXT NOT NULL,
-                status TEXT DEFAULT 'pending',
-                result TEXT DEFAULT '{}',
-                error TEXT DEFAULT '',
-                created_at REAL,
-                started_at REAL,
-                finished_at REAL,
-                session_id TEXT DEFAULT ''
-            )
-        """)
-        conn.execute("CREATE INDEX IF NOT EXISTS idx_tasks_status ON tasks(status)")
-        conn.commit()
-        conn.close()
+        conn = self._connect()
+        try:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS tasks (
+                    id TEXT PRIMARY KEY,
+                    type TEXT NOT NULL,
+                    payload TEXT NOT NULL,
+                    status TEXT DEFAULT 'pending',
+                    result TEXT DEFAULT '{}',
+                    error TEXT DEFAULT '',
+                    created_at REAL,
+                    started_at REAL,
+                    finished_at REAL,
+                    session_id TEXT DEFAULT ''
+                )
+            """)
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_tasks_status ON tasks(status)")
+            conn.commit()
+        except Exception:
+            try:
+                conn.rollback()
+            except Exception:
+                pass
+        finally:
+            conn.close()
 
     def enqueue(self, type: str, payload: Dict[str, Any], session_id: str = "") -> Task:
         """Add a task to the queue."""
@@ -91,7 +103,7 @@ class TaskQueue:
             session_id=session_id,
         )
         with self._lock:
-            conn = sqlite3.connect(self.db_path)
+            conn = self._connect()
             conn.execute(
                 "INSERT INTO tasks (id, type, payload, status, result, error, created_at, session_id) VALUES (?,?,?,?,?,?,?,?)",
                 (task.id, task.type, json.dumps(task.payload), task.status,
@@ -104,7 +116,7 @@ class TaskQueue:
     def get_next_pending(self) -> Optional[Task]:
         """Atomically claim the next pending task (mark as running)."""
         with self._lock:
-            conn = sqlite3.connect(self.db_path)
+            conn = self._connect()
             row = conn.execute(
                 "SELECT * FROM tasks WHERE status = 'pending' ORDER BY created_at ASC LIMIT 1"
             ).fetchone()
@@ -138,7 +150,7 @@ class TaskQueue:
 
     def complete(self, task_id: str, result: Dict[str, Any]):
         with self._lock:
-            conn = sqlite3.connect(self.db_path)
+            conn = self._connect()
             conn.execute("UPDATE tasks SET status = 'completed', result = ?, finished_at = ? WHERE id = ?",
                          (json.dumps(result), time.time(), task_id))
             conn.commit()
@@ -146,7 +158,7 @@ class TaskQueue:
 
     def fail(self, task_id: str, error: str):
         with self._lock:
-            conn = sqlite3.connect(self.db_path)
+            conn = self._connect()
             conn.execute("UPDATE tasks SET status = 'failed', error = ?, finished_at = ? WHERE id = ?",
                          (error, time.time(), task_id))
             conn.commit()
@@ -154,14 +166,14 @@ class TaskQueue:
 
     def awaiting_approval(self, task_id: str, approval_data: Dict[str, Any]):
         with self._lock:
-            conn = sqlite3.connect(self.db_path)
+            conn = self._connect()
             conn.execute("UPDATE tasks SET status = 'awaiting_approval', result = ? WHERE id = ?",
                          (json.dumps(approval_data), task_id))
             conn.commit()
             conn.close()
 
     def get(self, task_id: str) -> Optional[Task]:
-        conn = sqlite3.connect(self.db_path)
+        conn = self._connect()
         row = conn.execute("SELECT * FROM tasks WHERE id = ?", (task_id,)).fetchone()
         conn.close()
         if not row:
@@ -183,7 +195,7 @@ class TaskQueue:
         )
 
     def list_tasks(self, status: str = None, limit: int = 20) -> List[Task]:
-        conn = sqlite3.connect(self.db_path)
+        conn = self._connect()
         if status:
             rows = conn.execute("SELECT * FROM tasks WHERE status = ? ORDER BY created_at DESC LIMIT ?", (status, limit)).fetchall()
         else:

@@ -43,34 +43,48 @@ class PersistentSession:
 
 
 class PersistentSessionStore:
-    """SQLite-backed session checkpointer with user isolation."""
+    """Session checkpointer with user isolation (PG-backed when available)."""
 
     def __init__(self, db_path: str = None):
+        from aeryn_core.runtime.state_sharing import shared_connect
+        self._shared_connect = shared_connect
         self.db_path = db_path or os.path.join(DATABASE_DIR, "sessions.db")
         self._lock = threading.Lock()
         self._init_db()
 
+    def _connect(self):
+        """Open a connection (routes to PG if available, else SQLite)."""
+        conn = self._shared_connect("sessions")
+        return conn
+
     def _init_db(self):
-        conn = sqlite3.connect(self.db_path)
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS sessions (
-                user_id TEXT NOT NULL,
-                session_id TEXT NOT NULL,
-                messages TEXT DEFAULT '[]',
-                title TEXT DEFAULT '',
-                created_at REAL,
-                updated_at REAL,
-                PRIMARY KEY (user_id, session_id)
-            )
-        """)
-        conn.execute("CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id)")
-        conn.commit()
-        conn.close()
+        conn = self._connect()
+        try:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS sessions (
+                    user_id TEXT NOT NULL,
+                    session_id TEXT NOT NULL,
+                    messages TEXT DEFAULT '[]',
+                    title TEXT DEFAULT '',
+                    created_at REAL,
+                    updated_at REAL,
+                    PRIMARY KEY (user_id, session_id)
+                )
+            """)
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id)")
+            conn.commit()
+        except Exception:
+            try:
+                conn.rollback()
+            except Exception:
+                pass
+        finally:
+            conn.close()
 
     def save_session(self, user_id: str, session_id: str, messages: List[Dict[str, Any]], title: str = ""):
         """Save (upsert) a session, isolated by user_id."""
         with self._lock:
-            conn = sqlite3.connect(self.db_path)
+            conn = self._connect()
             now = time.time()
             # Check if exists to preserve created_at
             exists = conn.execute(
@@ -93,7 +107,7 @@ class PersistentSessionStore:
 
     def load_session(self, user_id: str, session_id: str) -> Optional[PersistentSession]:
         """Load a session, scoped to user_id."""
-        conn = sqlite3.connect(self.db_path)
+        conn = self._connect()
         row = conn.execute(
             "SELECT * FROM sessions WHERE user_id = ? AND session_id = ?",
             (user_id, session_id)
@@ -116,7 +130,7 @@ class PersistentSessionStore:
 
     def list_user_sessions(self, user_id: str, limit: int = 50) -> List[Dict[str, Any]]:
         """List sessions for a specific user (isolated)."""
-        conn = sqlite3.connect(self.db_path)
+        conn = self._connect()
         rows = conn.execute(
             "SELECT session_id, title, created_at, updated_at, messages FROM sessions WHERE user_id = ? ORDER BY updated_at DESC LIMIT ?",
             (user_id, limit)
@@ -138,7 +152,7 @@ class PersistentSessionStore:
     def delete_session(self, user_id: str, session_id: str):
         """Delete a session, isolated by user_id."""
         with self._lock:
-            conn = sqlite3.connect(self.db_path)
+            conn = self._connect()
             conn.execute("DELETE FROM sessions WHERE user_id = ? AND session_id = ?", (user_id, session_id))
             conn.commit()
             conn.close()

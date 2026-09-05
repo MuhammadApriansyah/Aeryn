@@ -164,3 +164,27 @@ Saat eksekusi Gap 2 (dense RAG), ditemukan:
 3. **Bug schema ditemukan & difix saat itu juga**: tabel `memories` tidak punya
    kolom `metadata` tapi `write.save_fact` INSERT ke sana → migration ALTER TABLE
    ditambahkan di `recall.py` dan `write.py`.
+
+---
+
+## 8. Gap 3 — Multi-instance Scalability (hasil)
+
+State sharing via Postgres (selective, bukan monkey-patch global):
+
+- **`state_sharing.py`**: `shared_connect(store)` helper — route ke PG kalau
+  `DATABASE_URL` reachable, fallback SQLite otomatis (graceful degradation).
+- **`session_store.py`**: FULL refactor → cross-instance session sharing ✅
+  (session dibuat instance A dibaca instance B dari Postgres).
+- **`task_queue.py`**: FULL refactor → cross-instance task claiming ✅
+  (instance B claim task yang enqueue instance A).
+- **Approval store & trace collector**: BELUM di-refactor (schema kompleks).
+
+**Verifikasi:**
+- 634/634 unit test masih passing (tidak ada regresi)
+- Fallback SQLite teruji (PG down → SQLite otomatis)
+- End-to-end chat OK dengan session PG-backed
+
+**Catatan follow-up (fix-nanti):**
+- Refactor approval store (`guardrail_engine.py`) & trace collector (`tracing.py`)
+  ke `shared_connect` — schema beda, butuh mapping kolom hati-hati.
+- PM2 `instances: max` + nginx load balancer untuk deployment multi-instance nyata.
