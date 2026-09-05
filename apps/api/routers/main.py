@@ -476,9 +476,13 @@ async def health():
 # --- Main Entry ---
 if __name__ == "__main__":
     import uvicorn
+
+    port = int(os.getenv("AERYN_PORT", "3010"))
+
     uvicorn.run(
-        app,
+        app,  # objek app (bukan import string) — single-worker; proot tidak
+              # mendukung multiprocessing.spawn (lihat STRESS_REPORT "fix-nanti").
         host=os.getenv("AERYN_HOST", "127.0.0.1"),
-        port=int(os.getenv("AERYN_PORT", "3010")),
+        port=port,
         log_level="info",
     )

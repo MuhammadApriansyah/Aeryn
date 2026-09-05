@@ -5590,3 +5590,73 @@
 2026-09-05 11:27:42: 2026-09-05 11:27:42 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
 2026-09-05 11:27:42: 2026-09-05 11:27:42 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
 2026-09-05 11:27:54: INFO:     127.0.0.1:59844 - "GET /health HTTP/1.1" 200 OK
+2026-09-05 14:20:45: 2026-09-05 14:20:45 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-05 15:36:50: 2026-09-05 15:36:50 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:36:50: 2026-09-05 15:36:50 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:36:50: 2026-09-05 15:36:50 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:36:59: 2026-09-05 15:36:59 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:36:59: 2026-09-05 15:36:59 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:36:59: 2026-09-05 15:36:59 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:37:08: 2026-09-05 15:37:08 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:37:08: 2026-09-05 15:37:08 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:37:08: 2026-09-05 15:37:08 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:37:16: 2026-09-05 15:37:16 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:37:16: 2026-09-05 15:37:16 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:37:16: 2026-09-05 15:37:16 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:37:23: 2026-09-05 15:37:23 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:37:23: 2026-09-05 15:37:23 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:37:23: 2026-09-05 15:37:23 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:37:31: 2026-09-05 15:37:31 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:37:31: 2026-09-05 15:37:31 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:37:31: 2026-09-05 15:37:31 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:37:38: 2026-09-05 15:37:38 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:37:38: 2026-09-05 15:37:38 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:37:38: 2026-09-05 15:37:38 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:37:46: 2026-09-05 15:37:46 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:37:46: 2026-09-05 15:37:46 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:37:46: 2026-09-05 15:37:46 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:37:55: 2026-09-05 15:37:55 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:37:55: 2026-09-05 15:37:55 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:37:55: 2026-09-05 15:37:55 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:38:02: 2026-09-05 15:38:02 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:38:02: 2026-09-05 15:38:02 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:38:02: 2026-09-05 15:38:02 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:38:09: 2026-09-05 15:38:09 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:38:09: 2026-09-05 15:38:09 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:38:09: 2026-09-05 15:38:09 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:38:17: 2026-09-05 15:38:17 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:38:17: 2026-09-05 15:38:17 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:38:17: 2026-09-05 15:38:17 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:38:24: 2026-09-05 15:38:24 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:38:24: 2026-09-05 15:38:24 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:38:24: 2026-09-05 15:38:24 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:38:32: 2026-09-05 15:38:32 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:38:32: 2026-09-05 15:38:32 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:38:32: 2026-09-05 15:38:32 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:38:39: 2026-09-05 15:38:39 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:38:39: 2026-09-05 15:38:39 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:38:39: 2026-09-05 15:38:39 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:38:47: 2026-09-05 15:38:47 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:38:47: 2026-09-05 15:38:47 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:38:47: 2026-09-05 15:38:47 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:38:55: 2026-09-05 15:38:55 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:38:56: 2026-09-05 15:38:56 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:38:56: 2026-09-05 15:38:56 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:39:02: 2026-09-05 15:39:02 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:39:02: 2026-09-05 15:39:02 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:39:02: 2026-09-05 15:39:02 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:39:09: 2026-09-05 15:39:09 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:39:09: 2026-09-05 15:39:09 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:39:09: 2026-09-05 15:39:09 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 15:39:16: 2026-09-05 15:39:16 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 15:39:16: 2026-09-05 15:39:16 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 15:39:16: 2026-09-05 15:39:16 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 16:01:40: 2026-09-05 16:01:40 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 16:01:40: 2026-09-05 16:01:40 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 16:01:40: 2026-09-05 16:01:40 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 16:29:18: 2026-09-05 16:29:18 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 16:29:18: 2026-09-05 16:29:18 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 16:29:18: 2026-09-05 16:29:18 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 16:29:24: 2026-09-05 16:29:24 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-05 16:29:24: 2026-09-05 16:29:24 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-05 16:30:10: INFO:     127.0.0.1:59522 - "GET /health HTTP/1.1" 200 OK

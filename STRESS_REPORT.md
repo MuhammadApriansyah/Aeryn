@@ -193,3 +193,20 @@ State sharing via Postgres (selective, bukan monkey-patch global):
 
 **Catatan follow-up (fix-nanti):**
 - PM2 `instances: max` + nginx load balancer untuk deployment multi-instance nyata.
+
+### Temuan penting (Gap 1 follow-up): multi-instance di proot
+
+Saat mencoba implementasi multi-instance nyata, ditemukan 2 batas environment:
+
+1. **PM2 `cluster` mode TIDAK bekerja untuk Python** — semua instance "online" tapi
+   `pid=0`, tidak ada port listening. PM2 cluster IPC dirancang untuk Node.js.
+
+2. **uvicorn `workers=N` (multi-worker) TIDAK bekerja di proot** — uvicorn pakai
+   `multiprocessing.spawn` yang gagal re-import (`pydantic.BaseModel` error) di
+   proot headless. Sama seperti sentence-transformers hang.
+
+Konfigurasi yang **terbukti jalan**: single-worker uvicorn via PM2 fork.
+State sharing PG tetap terpasang & siap, jadi begitu deploy ke environment
+dengan spawn+GPU normal (bukan proot), tinggal aktifkan `workers=N` + nginx.
+
+Artifak siap pakai: `deploy/nginx-aeryn.conf` (reverse proxy + SSE streaming).
