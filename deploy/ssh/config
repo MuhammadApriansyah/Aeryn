@@ -1,0 +1,7 @@
+Host termux
+    HostName 127.0.0.1
+    Port 8022
+    User u0_a396
+    IdentityFile ~/.ssh/id_ed25519
+    StrictHostKeyChecking no
+    ConnectTimeout 8
