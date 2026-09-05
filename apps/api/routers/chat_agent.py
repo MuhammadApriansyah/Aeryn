@@ -29,6 +29,28 @@ async def chat(req: ChatRequest):
     return response
 
 
+@router.post("/chat/async")
+async def chat_async(req: ChatRequest):
+    """Async chat: enqueue to task queue, return task_id immediately (P0 fix).
+
+    Decouples the LLM call from the HTTP request cycle — the handler returns
+    instantly with a task_id; the client polls /v1/tasks/{id} for the result.
+    This removes the synchronous-LLM bottleneck found in Gap 1 load testing.
+    """
+    from aeryn_core.runtime.task_queue import get_task_queue
+    from aeryn_core.runtime.chat_async import ensure_worker_started
+
+    ensure_worker_started()
+
+    queue = get_task_queue()
+    task = queue.enqueue(
+        "chat",
+        {"message": req.message, "session_id": req.session_id, "user_id": req.user_id},
+        session_id=req.session_id,
+    )
+    return {"task_id": task.id, "status": task.status, "message": "poll /v1/tasks/{task_id}"}
+
+
 @router.post("/chat/stream")
 async def chat_stream(req: ChatRequest):
     """Send a message and stream agent response."""

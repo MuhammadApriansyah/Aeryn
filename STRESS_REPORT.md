@@ -103,10 +103,13 @@ Request masuk → enqueue ke task queue → return task_id segera
 
 ## 5. Rekomendasi Fix (diurutkan prioritas)
 
-### P0 — Async LLM execution (kritis)
-- Semua path `/v1/chat` yang butuh LLM → **enqueue ke task queue (Fase 5.2)**,
-  return `task_id` segera, client polling/streaming.
-- **Kenapa:** ini menghilangkan 3 dari 4 dampak (latency, concurrency, OOM).
+### P0 — Async LLM execution (kritis) — ✅ DIFIX
+- Ditambahkan `/v1/chat/async` + `/v1/tasks/{id}` (poll).
+- Request enqueue ke task queue → return `task_id` segera, background worker
+  proses LLM di luar HTTP cycle.
+- Verifikasi: 20 concurrent → 20/20 sukses (vs sync 100% timeout di 50),
+  return latency 0.6s (vs 17.9s P50). Bottleneck teratasi.
+- File: `chat_agent.py`, `task_router.py`, `chat_async.py`.
 
 ### P1 — LLM connection pooling + semaphore
 - Batasi LLM call paralel ke N (misal 5) via `asyncio.Semaphore`.

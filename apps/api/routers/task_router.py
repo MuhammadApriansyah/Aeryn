@@ -45,19 +45,11 @@ async def list_tasks(status: Optional[str] = None, limit: int = 20):
 @router.post("/submit-chat")
 async def submit_chat(req: TaskRequest):
     """Submit a chat agent task (long-running) to the background queue."""
-    from aeryn_core.runtime.task_queue import get_task_queue, get_background_worker
+    from aeryn_core.runtime.task_queue import get_task_queue
+    from aeryn_core.runtime.chat_async import ensure_worker_started
 
-    # Register agent chat handler if not already
-    worker = get_background_worker()
-    if "chat" not in worker.handlers:
-        async def chat_handler(payload):
-            from aeryn_core.agent.loop import AgentLoop
-            agent = AgentLoop()
-            session_id = payload.get("session_id", "default")
-            message = payload.get("message", "")
-            return await agent.run(session_id, message)
-        worker.handlers["chat"] = chat_handler
-        worker.start()
+    # Register handler + start worker (idempotent)
+    ensure_worker_started()
 
     queue = get_task_queue()
     task = queue.enqueue("chat", req.payload, req.session_id)

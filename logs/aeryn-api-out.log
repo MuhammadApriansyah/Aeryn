@@ -5539,3 +5539,39 @@
 2026-09-05 07:12:28: 2026-09-05 07:12:28 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
 2026-09-05 07:12:40: INFO:     127.0.0.1:38550 - "GET /health HTTP/1.1" 200 OK
 2026-09-05 07:21:32: INFO:     127.0.0.1:38376 - "POST /v1/chat HTTP/1.1" 200 OK
+2026-09-05 09:03:34: 2026-09-05 09:03:34 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-05 09:03:41: 2026-09-05 09:03:41 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 09:03:41: 2026-09-05 09:03:41 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 09:03:41: 2026-09-05 09:03:41 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 09:03:41: 2026-09-05 09:03:41 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-05 09:03:41: 2026-09-05 09:03:41 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-05 09:03:52: INFO:     127.0.0.1:43720 - "GET /health HTTP/1.1" 200 OK
+2026-09-05 09:06:57: INFO:     127.0.0.1:41068 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:10:17: INFO:     127.0.0.1:39328 - "GET /v1/tasks/c4e611b0d5464c64 HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37544 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37554 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37568 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37558 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37580 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37588 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37604 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37614 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37630 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37636 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37646 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37648 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37664 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37676 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37692 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37708 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37724 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37734 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37748 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:13:45: INFO:     127.0.0.1:37752 - "POST /v1/chat/async HTTP/1.1" 200 OK
+2026-09-05 09:26:30: 2026-09-05 09:26:30 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon stopped
+2026-09-05 09:26:35: 2026-09-05 09:26:35 [INFO] root: PostgreSQL Memory Plugin loaded at /v1/postgres-memory/*
+2026-09-05 09:26:35: 2026-09-05 09:26:35 [INFO] root: Messaging Gateway loaded at /v1/messaging/*
+2026-09-05 09:26:35: 2026-09-05 09:26:35 [INFO] root: Experience Transfer loaded at /v1/experience/*
+2026-09-05 09:26:35: 2026-09-05 09:26:35 [INFO] aeryn: Aeryn API starting | {"version": "61.0"}
+2026-09-05 09:26:35: 2026-09-05 09:26:35 [INFO] aeryn_core.platform.agent_daemon: AgentDaemon starting (env=proot, workers=2)
+2026-09-05 09:26:48: INFO:     127.0.0.1:33426 - "POST /v1/chat/async HTTP/1.1" 200 OK
