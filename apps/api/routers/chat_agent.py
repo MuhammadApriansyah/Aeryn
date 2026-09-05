@@ -22,9 +22,18 @@ class ChatRequest(BaseModel):
 async def chat(req: ChatRequest):
     """Send a message and get agent response (user-scoped)."""
     from aeryn_core.agent.loop import AgentLoop
+    from aeryn_core.runtime.memory_guard import get_memory_guard
 
-    agent = AgentLoop()
-    response = await agent.run(req.session_id, req.message, user_id=req.user_id)
+    guard = get_memory_guard()
+
+    # Memory guard: reject with 503 under pressure (P2 anti-OOM)
+    ok, reason = guard.check_memory()
+    if not ok:
+        raise HTTPException(status_code=503, detail=reason)
+
+    async with guard.semaphore:
+        agent = AgentLoop()
+        response = await agent.run(req.session_id, req.message, user_id=req.user_id)
 
     return response
 
@@ -39,6 +48,12 @@ async def chat_async(req: ChatRequest):
     """
     from aeryn_core.runtime.task_queue import get_task_queue
     from aeryn_core.runtime.chat_async import ensure_worker_started
+    from aeryn_core.runtime.memory_guard import get_memory_guard
+
+    guard = get_memory_guard()
+    ok, reason = guard.check_memory()
+    if not ok:
+        raise HTTPException(status_code=503, detail=reason)
 
     ensure_worker_started()
 
@@ -85,6 +100,14 @@ async def session_history(session_id: str, user_id: str = "default"):
     if not session:
         return {"session_id": session_id, "history": [], "user_id": user_id}
     return {"session_id": session_id, "history": session.messages, "user_id": user_id}
+
+
+@router.get("/memory-guard/status")
+async def memory_guard_status():
+    """Memory guard status (P2 anti-OOM monitoring)."""
+    from aeryn_core.runtime.memory_guard import get_memory_guard
+    guard = get_memory_guard()
+    return guard.status()
 
 
 @router.delete("/sessions/{session_id}")
