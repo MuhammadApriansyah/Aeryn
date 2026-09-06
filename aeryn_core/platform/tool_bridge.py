@@ -190,14 +190,56 @@ def _web_read(url: str):
         return {"error": f"fetch gagal: {type(e).__name__}: {e}"[:200], "url": url}
     if not downloaded:
         return {"error": "halaman tidak bisa diambil", "url": url}
+
+    # Fallback chain: trafilatura → readability → html2text → raw text
     text = trafilatura.extract(downloaded) or ""
+    method = "trafilatura"
+    title = None
+    author = ""
+
+    if not text.strip():
+        # trafilatura gagal (bukan halaman artikel) → coba readability
+        try:
+            from readability import Document
+            doc = Document(downloaded)
+            text = (doc.summary(html_partial=False) or "").strip()
+            title = doc.short_title()
+            if text:
+                method = "readability"
+                # strip HTML tags dari summary
+                import re as _re
+                text = _re.sub(r"<[^>]+>", " ", text)
+                text = _re.sub(r"\s+", " ", text).strip()
+        except ImportError:
+            pass
+    if not text.strip():
+        # readability gagal/tidak ada → coba html2text
+        try:
+            import html2text
+            h = html2text.HTML2Text()
+            h.ignore_links = False
+            h.ignore_images = True
+            text = (h.handle(downloaded) or "").strip()
+            if text:
+                method = "html2text"
+        except ImportError:
+            pass
+    if not text.strip():
+        # semua fallback gagal → raw text (buang tag HTML kasar)
+        import re as _re
+        text = _re.sub(r"<script[^>]*>.*?</script>", " ", downloaded, flags=_re.S)
+        text = _re.sub(r"<style[^>]*>.*?</style>", " ", text, flags=_re.S)
+        text = _re.sub(r"<[^>]+>", " ", text)
+        text = _re.sub(r"\s+", " ", text).strip()
+        method = "raw"
     if not text.strip():
         return {"error": "ekstraksi kosong (kemungkinan bukan halaman artikel)",
                 "url": url}
-    out = {"url": url, "text": text[:20000], "chars": len(text)}
+
+    out = {"url": url, "text": text[:20000], "chars": len(text), "method": method}
     meta = trafilatura.extract_metadata(downloaded)
     if meta:
-        out["title"] = (getattr(meta, "title", "") or "")[:200]
+        out["title"] = (title or getattr(meta, "title", "") or "")[:200]
         author = getattr(meta, "author", "") or ""
         if author:
             out["author"] = author[:120]
