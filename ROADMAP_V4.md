@@ -180,3 +180,43 @@ Setelah ini, cukup `ssh termux "..."` untuk eksekusi remote tanpa password.
 | Streaming UI | ⚠️ belum | ✅ tetap di proot (A3) |
 | Utopia (knowledge graph) | roadmap | ✅ compute ada (B1) |
 | JiuwenSwarm (swarm/evolution) | roadmap | ✅ compute ada (B2-B3) |
+
+---
+
+## PROGRESS NYATA (verified pada environment)
+
+1. **SSH key-auth proot→Termux** ✅ — `ssh termux` bekerja tanpa password.
+   Termux native = `u0_a396`, `PREFIX=/data/data/com.termux/files/usr`, Python 3.14.6, aarch64.
+
+2. **torch 2.11.0 terpasang di Termux native** ✅ — `torch.get_num_threads() = 8`.
+   Ini membuktikan keputusan: torch/neural yang HANG di proot ternyata JALAN di Termux.
+
+3. **numpy 2.4.4** sudah prebuilt via `pkg` (apt), tidak perlu build dari source.
+
+4. **fastapi + uvicorn + sentence-transformers** — terpasang via kombinasi apt (prebuilt) + pip `--no-deps`.
+
+### Status install neural di Termux native
+
+| Komponen | Status |
+|----------|--------|
+| numpy 2.4.4 (prebuilt apt) | ✅ |
+| python-torch 2.11.0 (prebuilt apt) | ✅ 8 threads |
+| python-scipy 1.18.1 (prebuilt apt) | ✅ |
+| python-tokenizers (prebuilt apt) | ✅ |
+| fastapi 0.141.1 + uvicorn 0.52.4 | ✅ |
+| sentence-transformers 6.0.1 | ✅ |
+| transformers 5.16.1 | ✅ |
+
+### Pitfall install Termux (ditemukan & diatasi)
+
+Python 3.14 di Termux sangat baru → banyak wheel aarch64 belum ada, pip mencoba
+**build dari source** yang gagal (numpy/scipy/scikit-learn butuh compiler fortran).
+Solusi yang jalan:
+
+1. **Install heavy binary dari `pkg`/apt** (prebuilt): `python-torch`, `python-scipy`,
+   `python-tokenizers`, `python-numpy` — tidak build dari source.
+2. **Install sisanya via pip `--no-deps`** supaya tidak menarik dependency yang
+   akan dibangun dari source.
+3. `tokenizers` dari pip menghasilkan `tokenizers.abi3.so` yang **ABI-mismatch**
+   dengan Python 3.14 (`dlopen failed: PyBaseObject_Type`). Fix: pakai
+   `python-tokenizers` dari apt (binary compatible).
