@@ -74,6 +74,8 @@ class _SentenceEmbedder:
         self.dim = dim
         self._model = None
         self._failed = False
+        # Termux-hosted embedding server (proot hangs on torch — Termux doesn't)
+        self.url = os.environ.get("EMBEDDING_URL", "http://127.0.0.1:8081")
 
     def _load(self):
         if self._failed:
@@ -87,6 +89,24 @@ class _SentenceEmbedder:
         return self._model
 
     def embed(self, text: str) -> Optional[List[float]]:
+        """Embed via Termux HTTP server (primary), local model (fallback)."""
+        # 1) Termux neural server (primary — proot can't load torch)
+        try:
+            import urllib.request
+            import json as _json
+            req = urllib.request.Request(
+                f"{self.url}/embed",
+                data=_json.dumps({"text": text}).encode("utf-8"),
+                headers={"Content-Type": "application/json"},
+            )
+            with urllib.request.urlopen(req, timeout=8) as resp:
+                data = _json.loads(resp.read().decode("utf-8"))
+            vec = data.get("vector")
+            if vec:
+                return [float(x) for x in vec]
+        except Exception:
+            pass
+        # 2) Local sentence-transformers (fallback, may hang on proot)
         model = self._load()
         if model is None:
             return None

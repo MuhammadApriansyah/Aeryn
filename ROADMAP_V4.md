@@ -220,3 +220,19 @@ Solusi yang jalan:
 3. `tokenizers` dari pip menghasilkan `tokenizers.abi3.so` yang **ABI-mismatch**
    dengan Python 3.14 (`dlopen failed: PyBaseObject_Type`). Fix: pakai
    `python-tokenizers` dari apt (binary compatible).
+
+### Pitfall #2 — DUAL PYTHON (akar "MISSING" berulang)
+
+Simptom: `pip install X` sukses, tapi `python3 -c "import X"` selalu MISSING.
+
+Akar: **`pip`/`pip3` menunjuk Python 3.11, sedangkan `python3` = 3.14.**
+Semua `pip install` meng-install ke site-packages 3.11, tapi runtime `python3`
+membaca 3.14 → tidak pernah ketemu.
+
+**FIX WAJIB:** selalu pakai `pip3.14 install ...` ATAU `python3 -m pip install ...`
+supaya interpreter & pip selaras (keduanya 3.14). Jangan pernah `pip` polos di
+Termux ini.
+
+Catatan tambahan:
+- `python2.7` masih terinstall (sisa) — abaikan.
+- `python3.11` masih ada (pip default menunjuk ke sini) — ini jebakan.
