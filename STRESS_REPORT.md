@@ -6,6 +6,23 @@
 
 ---
 
+## Fix-nanti (pre-existing, bukan regresi)
+
+Tercatat saat menjalankan full suite setelah A3 (streaming UI). Keduanya
+**tidak terkait** perubahan frontend, sudah gagal sejak sebelum A3:
+
+1. **`test_v39_10_drift_guard.py::test_current_environment_is_healthy`**
+   — `agent_key hilang dari auth.json` (integrasi Aeryn↔Hermes). Fail karena
+   environment Hermes tidak punya `agent_key` di auth.json, bukan bug Aeryn.
+
+2. **`test_v40_multimodal.py::test_process_image_valid_png`**
+   — assert `'PNG' == 'png'` (case-sensitive): PIL mengembalikan `PNG` uppercase
+   dari `metadata["format"]`, test expect lowercase. Bug test lama.
+
+Keduanya perlu di-fix nanti (bukan blocker A3).
+
+---
+
 ## Ringkasan Eksekutif
 
 Aeryn **lolos** uji chaos & edge cases (error recovery, guardrail, isolasi, overflow
