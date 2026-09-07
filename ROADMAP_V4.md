@@ -236,3 +236,66 @@ Termux ini.
 Catatan tambahan:
 - `python2.7` masih terinstall (sisa) — abaikan.
 - `python3.11` masih ada (pip default menunjuk ke sini) — ini jebakan.
+
+### Pitfall #3 — TUR repo & bentrokan Python (analisa menyeluruh)
+
+**Struktur Python di tur (hasil `apt-cache policy`):**
+
+| Paket | Versi tur | Versi stable/main |
+|-------|-----------|------------------|
+| `python` (meta) | 3.13.12-3 | 3.14.6-1 |
+| `python3.13` | 3.13.13 | — |
+
+**Paket ML tur (SEMUA compiled untuk Python 3.13):**
+torch 2.11.0-2, numpy 2.4.4-1, scipy 1:1.18.1, tokenizers 0.23.2, onnxruntime 1.29.0
+— semuanya `Depends: python` (=3.13 di tur), `.so` dibangun melawan libpython3.13.
+
+**Bentrokan nyata (bukan spekulasi):**
+1. `python3` = **3.14.6** (dari stable), tapi tur packages = **3.13** → ABI mismatch.
+2. `pip` default → **3.11** (sisa), `python3` → **3.14** → pip install ke lokasi salah.
+3. `tokenizers.abi3.so` dari pip = compiled utk Python 3.14 awal (rusak `PyBaseObject_Type`),
+   sedangkan `python-tokenizers` (tur) = compiled utk 3.13 (menginstall ke 3.13 site-packages).
+
+**Solusi yang TERBUKTI (bukan downgrade):**
+Stack lengkap JUSTU sudah bisa di Python 3.14 via pip binary wheels:
+- `sklearn 1.9.0`, `torch 2.11.0`, `numpy 2.5.3`, `scipy 1.15.2`, `pandas 3.0.5`,
+  `polars`, `sentence-transformers 6.0.1`, `transformers 5.16.1`, `maturin 1.15.0`.
+- Akar "import gagal" selama ini = **dependency `--no-deps` terlewat** (joblib,
+  cloudpickle, narwhals, dsb). `pip install scikit-learn` (DENGAN deps) otomatis
+  resolve semuanya → sklearn import OK.
+- Satu-satunya yang butuh build dari source = **tokenizers** (Rust compile di Termux,
+  `cargo`/`rustc` sudah tersedia), karena tidak ada wheel abi3 3.14 yang bersih.
+
+**ATURAN FINAL (urutan & versi jelas):**
+1. Pakai `python3 -m pip` (BUKAN `pip` polos) — pastikan interpreter = 3.14.
+2. Binary berat yang tidak ada wheel aarch64 3.14 → `pkg install` (tetapi ingat: tur=3.13,
+   jadi untuk 3.14 lebih baik pip binary wheel).
+3. Kalau `import` gagal padahal `pip list` menunjuk ada → cek dependency terlewat,
+   install pakai pip TANPA `--no-deps` (biar resolve otomatis).
+4. Build-from-source (tokenizers) butuh Rust — sudah ada di Termux.
+
+### Koreksi analisa (setelah eksekusi downgrade & revert)
+
+**Kesimpulan terbukti di lapangan: TUR PACKAGES = Python 3.14, BUKAN 3.13.**
+
+Saat downgrade ke 3.13 dicoba, `dpkg -L python-numpy` menunjukkan file di
+`lib/python3.14/site-packages` — artinya tur/stable packages yang terinstall
+sebenarnya compiled utk **3.14** (tur-continuous), bukan 3.13 (tur-packages).
+`apt-cache policy python-numpy` konfirmasi: installed 2.4.4-1 dari termux-main,
+bukan tur `1.23.0` (3.13 lama).
+
+**Jadi downgrade ke 3.13 = LANGKAH KELIRU**, sudah di-revert kembali ke 3.14.
+Koreksi pemahaman:
+
+| Asumsi awal | Fakta |
+|-------------|-------|
+| tur = Python 3.13 | ❌ salah — tur/stable = Python 3.14 (file di lib/python3.14) |
+| perlu downgrade | ❌ salah — 3.14 sudah benar |
+
+**Status akhir (verified):**
+- `numpy 2.4.4`, `torch 2.11`, `scipy 1.18.1`, `tokenizers 0.23.2` — import OK di 3.14.
+- `sklearn 1.9.0` — import OK (binary wheel 3.14).
+- **A1 embedding server MASHI JALAN** (`curl /health` → ok), vector 384-dim dihasilkan.
+- Sisa masalah kecil: `scipy.spatial.transform` submodule error `_promote` saat
+  import segar (campuran tur+pip scipy), TAPI `scipy.spatial.transform` TIDAK
+  dipakai sentence-transformers/transformers → tidak memblokir embedding.
