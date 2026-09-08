@@ -36,43 +36,133 @@
   // === Section loaders (mengembalikan DOM node) ===
 
   async function loadMemory(container) {
-    // Recall memory + list entities (jika endpoint ada).
     var box = el('div', 'section-stack');
+    box.appendChild(el('div', 'section-title', '🧠 Memory'));
+
+    // Search form
+    var form = el('div', 'section-form');
+    var input = el('input', 'section-input');
+    input.type = 'text';
+    input.placeholder = 'Query untuk cari di vault…';
+    var btn = el('button', 'section-btn', 'Cari');
+    var result = el('div', 'section-result', '');
+    form.appendChild(input);
+    form.appendChild(btn);
+    box.appendChild(form);
+    box.appendChild(result);
+
+    async function doSearch() {
+      var q = input.value.trim();
+      if (!q) { result.textContent = 'Masukkan query dulu.'; return; }
+      result.textContent = 'Mencari…';
+      try {
+        var r = await getJSON(BASE + '/vault/search?query=' + encodeURIComponent(q));
+        var rows = r && r.results;
+        result.innerHTML = '';
+        if (Array.isArray(rows) && rows.length) {
+          rows.forEach(function (m) {
+            result.appendChild(el('div', 'section-row', typeof m === 'string' ? m : (m.content || JSON.stringify(m))));
+          });
+        } else {
+          result.textContent = 'Tidak ada hasil untuk "' + q + '".';
+        }
+      } catch (e) {
+        result.innerHTML = '';
+        result.appendChild(errorBox('Search gagal: ' + e.message));
+      }
+    }
+    btn.addEventListener('click', doSearch);
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') doSearch(); });
+
+    // Entities list (di bawah form)
+    var entTitle = el('div', 'section-subtitle', 'Entities');
+    box.appendChild(entTitle);
+    var entBox = el('div', 'section-stack');
+    box.appendChild(entBox);
     try {
       var mem = await getJSON(BASE + '/memory/entities');
-      var title = el('div', 'section-title', '🧠 Memory — Entities');
-      box.appendChild(title);
-      if (mem && mem.entities) {
-        mem.entities.forEach(function (e) {
-          box.appendChild(el('div', 'section-row', (e.name || e.id || JSON.stringify(e))));
+      var ents = mem && mem.entities;
+      if (Array.isArray(ents) && ents.length) {
+        ents.forEach(function (e) {
+          entBox.appendChild(el('div', 'section-row', e.name || e.id || JSON.stringify(e)));
         });
       } else {
-        box.appendChild(el('div', 'section-row', JSON.stringify(mem)));
+        entBox.appendChild(el('div', 'section-row', '(belum ada entity)'));
       }
     } catch (e) {
-      box.appendChild(errorBox('Memory endpoint belum tersedia atau gagal: ' + e.message));
+      entBox.appendChild(errorBox('Entities gagal: ' + e.message));
     }
+
     return box;
   }
 
   async function loadTools(container) {
     var box = el('div', 'section-stack');
+    box.appendChild(el('div', 'section-title', '🔧 Tools'));
+
+    // Execute form
+    var form = el('div', 'section-form-stack');
+    var toolSel = el('select', 'section-select');
+    var toolOptPlaceholder = el('option', null, 'Pilih tool…');
+    toolOptPlaceholder.value = '';
+    toolSel.appendChild(toolOptPlaceholder);
+    var paramsInput = el('textarea', 'section-textarea', '');
+    paramsInput.placeholder = 'Params JSON (contoh: {"path": "/etc/hostname"})';
+    paramsInput.rows = 2;
+    var execBtn = el('button', 'section-btn', 'Execute');
+    var execResult = el('div', 'section-result', '');
+
+    form.appendChild(toolSel);
+    form.appendChild(paramsInput);
+    form.appendChild(execBtn);
+    box.appendChild(form);
+    box.appendChild(execResult);
+
+    // Load tool list ke dropdown.
     try {
       var tools = await getJSON(BASE + '/tools/list');
-      var title = el('div', 'section-title', '🔧 Tools (terdaftar)');
-      box.appendChild(title);
       var list = tools && (tools.tools || tools.result || tools);
       if (Array.isArray(list)) {
         list.forEach(function (t) {
-          var name = typeof t === 'string' ? t : (t.name || t.id || JSON.stringify(t));
-          box.appendChild(el('div', 'section-row', name));
+          var name = typeof t === 'string' ? t : (t.name || t.id || String(t));
+          var o = el('option', null, name);
+          o.value = name;
+          toolSel.appendChild(o);
         });
-      } else {
-        box.appendChild(el('div', 'section-row', JSON.stringify(tools)));
       }
     } catch (e) {
-      box.appendChild(errorBox('Tools endpoint gagal: ' + e.message));
+      box.appendChild(errorBox('Gagal load tool list: ' + e.message));
     }
+
+    async function doExecute() {
+      var tool = toolSel.value;
+      if (!tool) { execResult.textContent = 'Pilih tool dulu.'; return; }
+      var params = {};
+      try {
+        params = paramsInput.value.trim() ? JSON.parse(paramsInput.value) : {};
+      } catch (e) {
+        execResult.textContent = 'Invalid JSON params: ' + e.message;
+        return;
+      }
+      execResult.textContent = 'Menjalankan ' + tool + '…';
+      try {
+        var r = await fetch(BASE + '/tools/execute?tool=' + encodeURIComponent(tool), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(params),
+        });
+        var data = await r.json();
+        execResult.innerHTML = '';
+        var out = el('pre', 'section-output');
+        out.textContent = JSON.stringify(data, null, 2);
+        execResult.appendChild(out);
+      } catch (e) {
+        execResult.innerHTML = '';
+        execResult.appendChild(errorBox('Execute gagal: ' + e.message));
+      }
+    }
+    execBtn.addEventListener('click', doExecute);
+
     return box;
   }
 

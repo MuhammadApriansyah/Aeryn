@@ -279,6 +279,70 @@ body {
   font-size: 14px;
 }
 
+/* Form interaktif (poin 1: memory search, tool execute) */
+.section-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.section-form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.section-input, .section-textarea {
+  flex: 1;
+  padding: 10px 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: 'JetBrains Mono', monospace;
+  outline: none;
+}
+.section-input:focus, .section-textarea:focus, .section-select:focus {
+  border-color: var(--accent);
+}
+.section-btn {
+  padding: 10px 16px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--ds-duration-fast) var(--ds-ease-standard);
+}
+.section-btn:hover { background: var(--accent-hover); }
+.section-subtitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 8px;
+}
+.section-result {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.section-output {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 300px;
+  overflow-y: auto;
+  color: var(--text-primary);
+}
+
 /* ============ Toast ============ */
 .toast-root {
   position: fixed;
