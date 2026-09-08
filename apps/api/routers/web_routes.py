@@ -31,6 +31,16 @@ async def app_page():
     return "<h1>Aeryn App</h1>"
 
 
+@router.get("/", response_class=HTMLResponse)
+async def root_page():
+    """Root → app shell (single entry point untuk Web UI)."""
+    app_path = "/home/sen/aeryn-core-agent/apps/web/templates/app.html"
+    if os.path.exists(app_path):
+        with open(app_path, encoding="utf-8") as f:
+            return f.read()
+    return "<h1>Aeryn App</h1>"
+
+
 @router.get("/static/css/{path:path}")
 async def css_files(path: str):
     """Serve CSS files."""
