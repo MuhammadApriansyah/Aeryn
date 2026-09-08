@@ -326,6 +326,14 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
             
             # Emit the complete message marker
             yield json.dumps({"type": "message_complete", "content": content, "division": division_id})
+
+            # P6: emit citations (sumber memori yang dipakai) setelah konten.
+            if relevant_memories:
+                citations = [
+                    {"source": m.get("source", "unknown"), "content": m.get("content", "")[:200]}
+                    for m in relevant_memories
+                ]
+                yield json.dumps({"type": "citations", "citations": citations})
             
             if not tool_calls:
                 session.add_message("user", user_message)

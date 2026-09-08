@@ -221,6 +221,36 @@
     elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
   }
 
+  // P6: inline citation card — sumber memori yang dipakai agent.
+  function addCitations(citations) {
+    const card = document.createElement('div');
+    card.className = 'citations';
+    const label = document.createElement('div');
+    label.className = 'citations-label';
+    label.textContent = '📚 Sumber';
+    card.appendChild(label);
+
+    citations.forEach(c => {
+      const item = document.createElement('div');
+      item.className = 'citation-item';
+      item.setAttribute('tabindex', '0');
+      const badge = document.createElement('span');
+      badge.className = 'citation-source';
+      badge.textContent = c.source || 'unknown';
+      const text = document.createElement('span');
+      text.className = 'citation-body';
+      text.textContent = c.content || '';
+      item.appendChild(badge);
+      item.appendChild(text);
+      // Hover/title preview (full content) + keyboard focus.
+      item.title = c.content || '';
+      card.appendChild(item);
+    });
+
+    elements.chatMessages.appendChild(card);
+    elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+  }
+
   // Actions
   async function loadSession(sessionId) {
     state.sessionId = sessionId;
@@ -380,6 +410,9 @@
         } else if (chunk.type === 'message_complete') {
           // Marker konten lengkap (untuk sinkronisasi akhir)
           if (chunk.content) fullContent = chunk.content;
+        } else if (chunk.type === 'citations' && chunk.citations) {
+          // P6: tampilkan sumber memori yang dipakai (inline citation).
+          addCitations(chunk.citations);
         } else if (chunk.type === 'tool_calls' && chunk.tool_calls) {
           chunk.tool_calls.forEach(tc => addToolCall(tc.function.name, tc.function.arguments));
           setPhase('Menjalankan tool…');
