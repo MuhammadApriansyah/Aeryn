@@ -313,7 +313,10 @@ async def search(q: str, limit: int = 10):
 
 @router.get("/dashboard")
 async def dashboard():
-    """Serve monitoring dashboard HTML."""
+    """Serve app shell (menggantikan legacy dashboard.html)."""
+    app_path = "/home/sen/aeryn-core-agent/apps/web/templates/app.html"
+    if os.path.exists(app_path):
+        return FileResponse(app_path, media_type="text/html")
     return FileResponse("apps/api/dashboard.html")
 
 @router.get("/chat")
