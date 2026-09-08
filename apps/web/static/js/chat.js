@@ -12,6 +12,7 @@
     messages: [],
     streaming: false,
     sessions: [],
+    abortController: null,   // P5: untuk stop streaming
   };
 
   // DOM Elements
@@ -22,6 +23,7 @@
     sendBtn: document.getElementById('sendBtn'),
     chatEmpty: document.getElementById('chatEmpty'),
     chatTitle: document.getElementById('chatTitle'),
+    chatStatusText: document.getElementById('chatStatusText'),
     newChatBtn: document.getElementById('newChatBtn'),
     settingsOverlay: document.getElementById('settingsOverlay'),
     settingsPanel: document.getElementById('settingsPanel'),
@@ -42,11 +44,12 @@
       return res.json();
     },
 
-    async chatStream(message, sessionId, onChunk) {
+    async chatStream(message, sessionId, onChunk, signal) {
       const res = await fetch('/v1/chat/stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message, session_id: sessionId }),
+        signal: signal || undefined,
       });
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
@@ -246,6 +249,20 @@
     elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
   }
 
+  function setPhase(text) {
+    if (elements.chatStatusText) elements.chatStatusText.textContent = text;
+  }
+
+  function resetPhase() {
+    if (elements.chatStatusText) elements.chatStatusText.textContent = 'Online';
+  }
+
+  function stopStreaming() {
+    if (state.abortController) {
+      state.abortController.abort();
+    }
+  }
+
   async function sendMessage() {
     const text = elements.chatInput.value.trim();
     if (!text || state.streaming) return;
@@ -260,7 +277,13 @@
 
     elements.chatInput.value = '';
     state.streaming = true;
-    elements.sendBtn.disabled = true;
+    // P3/P5: send button tetap aktif (jadi stop), jangan disabled.
+    elements.sendBtn.classList.add('stop');
+    setPhase('Riset…');
+
+    // P5: AbortController agar bisa stop.
+    state.abortController = new AbortController();
+    const signal = state.abortController.signal;
 
     // Buat elemen streaming (menggantikan indikator 3 titik)
     const { text: textEl, cursor: cursorEl } = createStreamingMessage();
@@ -285,24 +308,34 @@
           // Token delta → buffer & append live
           fullContent += chunk.content;
           tokenBuffer.push(chunk.content);
+          setPhase('Menulis…');
         } else if (chunk.type === 'message_complete') {
           // Marker konten lengkap (untuk sinkronisasi akhir)
           if (chunk.content) fullContent = chunk.content;
         } else if (chunk.type === 'tool_calls' && chunk.tool_calls) {
           chunk.tool_calls.forEach(tc => addToolCall(tc.function.name, tc.function.arguments));
+          setPhase('Menjalankan tool…');
         } else if (chunk.type === 'tool_call') {
           addToolCall(chunk.tool, chunk.args);
+          setPhase('Menjalankan tool…');
         } else if (chunk.type === 'tool_result') {
           addToolResult(chunk.tool, chunk.result);
+          setPhase('Tool selesai…');
         } else if (chunk.type === 'error') {
           errored = true;
           if (!fullContent) fullContent = 'Error: ' + (chunk.error || 'unknown');
+          setPhase('Error');
         }
         // 'done' — biarkan loop selesai, finalisasi di bawah
-      });
+      }, signal);
     } catch (e) {
-      errored = true;
-      fullContent = 'Error: ' + e.message;
+      if (e.name === 'AbortError') {
+        // P5: user stop — tandai sebagai dihentikan, bukan error.
+        fullContent = fullContent || '_(dihentikan oleh pengguna)_';
+      } else {
+        errored = true;
+        fullContent = 'Error: ' + e.message;
+      }
     }
 
     // Flush sisa token buffer
@@ -316,12 +349,21 @@
     }
 
     state.streaming = false;
-    elements.sendBtn.disabled = false;
+    elements.sendBtn.classList.remove('stop');
+    state.abortController = null;
+    resetPhase();
     renderSessions();
   }
 
   // Event Listeners
-  elements.sendBtn.addEventListener('click', sendMessage);
+  elements.sendBtn.addEventListener('click', () => {
+    if (state.streaming) {
+      // P5: sedang streaming → jadikan sebagai tombol stop.
+      stopStreaming();
+    } else {
+      sendMessage();
+    }
+  });
 
   elements.chatInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {

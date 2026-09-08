@@ -291,6 +291,14 @@
   cursor: not-allowed;
 }
 
+/* P5: send button berubah jadi stop saat streaming */
+.chat-send-btn.stop {
+  background: #ef4444;
+}
+.chat-send-btn.stop:hover {
+  background: #dc2626;
+}
+
 /* Streaming indicator */
 .streaming-indicator {
   display: flex;
