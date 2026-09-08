@@ -318,7 +318,10 @@ async def dashboard():
 
 @router.get("/chat")
 async def web_chat():
-    """Serve web chat interface."""
+    """Serve web chat interface — delegates to templates/chat.html (A3/P2 UI)."""
+    chat_path = "/home/sen/aeryn-core-agent/apps/web/templates/chat.html"
+    if os.path.exists(chat_path):
+        return FileResponse(chat_path, media_type="text/html")
     return Response(content=WEB_CHAT_HTML, media_type="text/html")
 
 WEB_CHAT_HTML = """<!DOCTYPE html>

@@ -119,7 +119,12 @@
 
       const text = document.createElement('div');
       text.className = 'message-text';
-      text.textContent = msg.content || '';
+      // Render markdown untuk pesan assistant (user tetap plain text).
+      if (msg.role === 'assistant' && window.AerynMarkdown) {
+        text.innerHTML = window.AerynMarkdown.renderMarkdown(msg.content || '', true);
+      } else {
+        text.textContent = msg.content || '';
+      }
 
       content.appendChild(role);
       content.appendChild(text);
@@ -231,9 +236,11 @@
   }
 
   function finishStreaming(textEl, cursorEl, fullContent) {
-    // Hapus cursor DENGAN offset 0 — teks final sudah diganti di bawah.
+    // Hapus cursor, render markdown FINAL (final=true).
     removeCursor(textEl, cursorEl);
-    textEl.textContent = fullContent;
+    textEl.innerHTML = window.AerynMarkdown
+      ? window.AerynMarkdown.renderMarkdown(fullContent, true)
+      : window.AerynMarkdown.escapeHtml(fullContent);
     const msgEl = document.getElementById('streamingMessage');
     if (msgEl) msgEl.id = '';  // jadikan pesan permanen
     elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
@@ -258,9 +265,13 @@
     // Buat elemen streaming (menggantikan indikator 3 titik)
     const { text: textEl, cursor: cursorEl } = createStreamingMessage();
 
-    // Buffer token delta per frame
+    // Buffer token delta per frame, render markdown parsial (P2).
+    // fullContent di-akumulasi, lalu render parsial (final=false) tiap frame.
     const tokenBuffer = makeStreamBuffer((batch) => {
-      textEl.textContent += batch;
+      const html = window.AerynMarkdown
+        ? window.AerynMarkdown.renderMarkdown(fullContent, false)
+        : batch;
+      textEl.innerHTML = html;
       appendCursor(textEl, cursorEl);
       elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
     });

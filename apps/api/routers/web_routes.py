@@ -39,6 +39,15 @@ async def js_files(path: str):
     return HTMLResponse("Not found", status_code=404)
 
 
+@router.get("/static/vendor/{path:path}")
+async def vendor_files(path: str):
+    """Serve vendor JS libraries (gsap, three, marked)."""
+    vendor_file = os.path.join("/home/sen/aeryn-core-agent/apps/web/static/vendor", path)
+    if os.path.exists(vendor_file):
+        return FileResponse(vendor_file)
+    return HTMLResponse("Not found", status_code=404)
+
+
 @router.get("/static/{path:path}")
 async def static_files(path: str):
     """Serve static files from React dist."""
