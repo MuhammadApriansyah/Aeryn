@@ -21,6 +21,16 @@ async def chat_page():
     return "<h1>Chat</h1>"
 
 
+@router.get("/app", response_class=HTMLResponse)
+async def app_page():
+    """Serve app shell (floating navbar + modal)."""
+    app_path = "/home/sen/aeryn-core-agent/apps/web/templates/app.html"
+    if os.path.exists(app_path):
+        with open(app_path, encoding="utf-8") as f:
+            return f.read()
+    return "<h1>Aeryn App</h1>"
+
+
 @router.get("/static/css/{path:path}")
 async def css_files(path: str):
     """Serve CSS files."""

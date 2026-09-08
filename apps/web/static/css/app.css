@@ -1,0 +1,349 @@
+/* ============ Aeryn App Shell — Design Tokens (dari WEB_UI_MOTION.md) ============ */
+:root {
+  /* Warna (dark theme) */
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-hover: #1a1a2e;
+  --border: #1a1a2e;
+  --text-primary: #e0e0e0;
+  --text-secondary: #a0a0a0;
+  --text-muted: #666;
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-dim: rgba(99, 102, 241, 0.15);
+  --bg-code: #1a1a2e;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+
+  /* Motion tokens */
+  --ds-duration-fast: 120ms;
+  --ds-duration-base: 240ms;
+  --ds-duration-slow: 360ms;
+  --ds-ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --ds-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ds-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============ Reset ============ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* ============ App Shell ============ */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+}
+
+/* ============ Floating Navbar ============ */
+.floating-nav {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(18, 18, 26, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 12px;
+  border-right: 1px solid var(--border);
+}
+.nav-brand-mark { color: var(--accent); font-size: 16px; }
+.nav-brand-name { font-weight: 700; font-size: 14px; }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--ds-duration-fast) var(--ds-ease-standard),
+              color var(--ds-duration-fast) var(--ds-ease-standard);
+  white-space: nowrap;
+}
+.nav-link:hover { background: var(--bg-hover); color: var(--text-primary); }
+.nav-link.active {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+.nav-icon { font-size: 14px; }
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-left: 12px;
+  border-left: 1px solid var(--border);
+}
+.nav-action {
+  padding: 8px 10px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background var(--ds-duration-fast) var(--ds-ease-standard);
+}
+.nav-action:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+/* ============ Content area ============ */
+.app-content {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+  padding-top: 72px; /* ruang untuk floating nav */
+}
+
+.view-panel {
+  display: none;
+  height: 100%;
+  overflow-y: auto;
+}
+.view-panel.active { display: block; }
+.view-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* Chat iframe (full app P1-P7) — di atas particle canvas */
+.chat-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  position: relative;
+  z-index: 10;
+}
+
+/* Pastikan konten & nav di atas particle background (z-index 0) */
+.app-content { position: relative; z-index: 10; }
+.floating-nav { z-index: 100; }
+
+/* ============ Modal (adaptif size) ============ */
+.modal-root { display: none; }
+.modal-root.open { display: block; }
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity var(--ds-duration-base) var(--ds-ease-standard);
+}
+.modal-root.open .modal-backdrop { opacity: 1; }
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.96);
+  z-index: 201;
+  width: 560px;
+  max-width: 92vw;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity var(--ds-duration-base) var(--ds-ease-enter),
+              transform var(--ds-duration-base) var(--ds-ease-enter);
+}
+.modal-root.open .modal {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Modal size adaptive */
+.modal.size-small { width: 360px; }
+.modal.size-medium { width: 560px; }
+.modal.size-large { width: 820px; }
+.modal.size-full { width: 95vw; height: 90vh; }
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.modal-title { font-size: 16px; font-weight: 600; }
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+}
+.modal-close:hover { color: var(--text-primary); }
+
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+.modal-loading {
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 40px 0;
+}
+
+/* ============ Toast ============ */
+.toast-root {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.toast {
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  animation: toast-in var(--ds-duration-base) var(--ds-ease-enter);
+}
+.toast.info { border-left: 3px solid var(--accent); }
+.toast.success { border-left: 3px solid var(--success); }
+.toast.warning { border-left: 3px solid var(--warning); }
+.toast.error { border-left: 3px solid var(--danger); }
+.toast.hide { opacity: 0; transform: translateY(8px); transition: all var(--ds-duration-base) var(--ds-ease-exit); }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============ Command palette ============ */
+.palette-root { display: none; }
+.palette-root.open { display: block; }
+.palette-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: rgba(0, 0, 0, 0.4);
+}
+.palette {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 401;
+  width: 480px;
+  max-width: 92vw;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+}
+.palette-input {
+  width: 100%;
+  padding: 16px 20px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 15px;
+  outline: none;
+}
+.palette-results { max-height: 320px; overflow-y: auto; }
+.palette-item {
+  padding: 12px 20px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.palette-item:hover, .palette-item.selected { background: var(--bg-hover); }
+.palette-item .palette-icon { font-size: 15px; }
+
+/* ============ Custom cursor (preserved dari dashboard) ============ */
+.cursor-outer, .cursor-inner {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+}
+.cursor-outer {
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid var(--accent);
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s;
+}
+.cursor-inner {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  transform: translate(-50%, -50%);
+}
+.cursor-outer.hovering { width: 48px; height: 48px; }
+
+/* ============ Reduced motion (WCAG 2.3.3) ============ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .cursor-outer, .cursor-inner { display: none !important; }
+}
+
+/* ============ Responsive ============ */
+@media (max-width: 768px) {
+  .floating-nav { top: 8px; padding: 6px 8px; }
+  .nav-link span:last-child { display: none; } /* icon only */
+  .nav-brand-name { display: none; }
+  .nav-actions { display: none; }
+}
