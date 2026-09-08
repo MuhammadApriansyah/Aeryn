@@ -139,19 +139,85 @@
     elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
   }
 
+  // P4: tool call card (expandable + status). Map tool_calls → card.
+  const _activeToolCards = {}; // track card per tool untuk update status.
+
   function addToolCall(toolName, args) {
-    const div = document.createElement('div');
-    div.className = 'tool-call';
-    div.innerHTML = `<div class="tool-call-header">⚡ ${toolName}</div><div class="tool-call-args">${JSON.stringify(args)}</div>`;
-    elements.chatMessages.appendChild(div);
+    const card = document.createElement('div');
+    card.className = 'tool-card';
+
+    const header = document.createElement('div');
+    header.className = 'tool-card-header';
+    header.setAttribute('role', 'button');
+    header.setAttribute('tabindex', '0');
+    header.setAttribute('aria-expanded', 'false');
+
+    const chevron = document.createElement('span');
+    chevron.className = 'tool-card-chevron';
+    chevron.textContent = '▶';
+
+    const name = document.createElement('span');
+    name.className = 'tool-card-name';
+    name.textContent = '⚡ ' + toolName;
+
+    const status = document.createElement('span');
+    status.className = 'tool-card-status running';
+    status.textContent = 'running';
+
+    header.appendChild(chevron);
+    header.appendChild(name);
+    header.appendChild(status);
+
+    const body = document.createElement('div');
+    body.className = 'tool-card-body';
+    const argsLabel = document.createElement('div');
+    argsLabel.className = 'tool-card-section-label';
+    argsLabel.textContent = 'Arguments';
+    const argsDiv = document.createElement('div');
+    argsDiv.textContent = typeof args === 'string' ? args : JSON.stringify(args, null, 2);
+    body.appendChild(argsLabel);
+    body.appendChild(argsDiv);
+
+    card.appendChild(header);
+    card.appendChild(body);
+
+    header.onclick = () => {
+      const open = card.classList.toggle('open');
+      header.setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
+    header.onkeydown = (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); header.click(); }
+    };
+
+    elements.chatMessages.appendChild(card);
     elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+    _activeToolCards[toolName] = card;
   }
 
   function addToolResult(toolName, result) {
-    const div = document.createElement('div');
-    div.className = 'tool-result';
-    div.textContent = typeof result === 'string' ? result : JSON.stringify(result, null, 2);
-    elements.chatMessages.appendChild(div);
+    const card = _activeToolCards[toolName];
+    const resultText = typeof result === 'string' ? result : JSON.stringify(result, null, 2);
+
+    if (card) {
+      // Update card: status → success, tambah hasil ke body.
+      const status = card.querySelector('.tool-card-status');
+      if (status) { status.className = 'tool-card-status success'; status.textContent = 'done'; }
+      const body = card.querySelector('.tool-card-body');
+      const resLabel = document.createElement('div');
+      resLabel.className = 'tool-card-section-label';
+      resLabel.textContent = 'Result';
+      const resDiv = document.createElement('div');
+      resDiv.textContent = resultText;
+      body.appendChild(resLabel);
+      body.appendChild(resDiv);
+      delete _activeToolCards[toolName];
+    } else {
+      // Fallback: tool result tanpa call card (mis. langkah terpisah).
+      const div = document.createElement('div');
+      div.className = 'tool-result';
+      div.textContent = resultText;
+      elements.chatMessages.appendChild(div);
+    }
     elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
   }
 
