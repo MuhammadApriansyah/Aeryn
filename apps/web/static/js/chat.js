@@ -280,6 +280,8 @@
 
     const text = document.createElement('div');
     text.className = 'message-text';
+    // P7: aria-live polite — screen reader baca streaming (debounce oleh buffer).
+    text.setAttribute('aria-live', 'polite');
 
     const cursor = document.createElement('span');
     cursor.className = 'streaming-cursor';
@@ -450,9 +452,47 @@
     elements.settingsOverlay.classList.remove('open');
   });
 
+  // P7: ESC tutup settings modal + return fokus.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && elements.settingsPanel.classList.contains('open')) {
+      elements.settingsPanel.classList.remove('open');
+      elements.settingsOverlay.classList.remove('open');
+      elements.chatInput.focus();
+    }
+  });
+
+  // P7: a11y attribute untuk settings dialog (role/aria-modern) + status live.
+  function applyAccessibility() {
+    const panel = elements.settingsPanel;
+    if (panel) {
+      panel.setAttribute('role', 'dialog');
+      panel.setAttribute('aria-modal', 'true');
+      panel.setAttribute('aria-label', 'Settings');
+    }
+    if (elements.chatStatusText) {
+      elements.chatStatusText.setAttribute('aria-live', 'polite');
+    }
+    // Fokus trap: jaga Tab tetap dalam settings panel saat terbuka.
+    if (panel) {
+      panel.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab') return;
+        const focusables = panel.querySelectorAll('button, select, textarea, input, [tabindex]:not([tabindex="-1"])');
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault(); first.focus();
+        }
+      });
+    }
+  }
+
   // Initialize
   async function init() {
     state.sessionId = 'default';
+    applyAccessibility();
     renderSessions();
     renderMessages();
   }
