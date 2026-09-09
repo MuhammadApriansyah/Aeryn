@@ -93,6 +93,52 @@
     });
   }
 
+  // === 2b. SECTION TRANSITIONS (pin + scrub antar hero) ===
+  function initSectionTransitions() {
+    if (!hasGsap || !hasScrollTrigger || reduceMotion) return;
+
+    // Setiap hero-section scale + fade saat keluar viewport (scrub), membuat
+    // transisi antar section terasa sinematik (section sebelumnya 'mengecil'
+    // sementara section berikutnya masuk).
+    document.querySelectorAll('.hero').forEach(function (section, i) {
+      var isFirst = i === 0;
+      var isLast = i === document.querySelectorAll('.hero').length - 1;
+
+      if (!isLast) {
+        // Section ke-i turun/mengecil halus saat scroll melewatinya.
+        gsap.to(section.querySelector('.hero-inner'), {
+          opacity: 0.15,
+          scale: 0.96,
+          y: -60,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+          },
+        });
+      }
+    });
+
+    // Section berikutnya masuk dengan reveal dari bawah (stagger komponen).
+    document.querySelectorAll('.hero').forEach(function (section) {
+      var els = section.querySelectorAll('.hero-inner > *');
+      gsap.from(els, {
+        opacity: 0,
+        y: 60,
+        duration: 0.8,
+        ease: 'power3.out',
+        stagger: 0.08,
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 75%',
+          once: true,
+        },
+      });
+    });
+  }
+
   // === 3. SCROLL PROGRESS ===
   function initScrollProgress() {
     var bar = document.querySelector('.scroll-progress-bar');
@@ -213,6 +259,7 @@
   function init() {
     initLenis();
     initScrollAnimations();
+    initSectionTransitions();
     initScrollProgress();
     initCountUp();
     initCursor();

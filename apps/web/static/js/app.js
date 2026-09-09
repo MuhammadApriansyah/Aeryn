@@ -21,6 +21,10 @@
   var chatModalClose = document.getElementById('chatModalClose');
   var chatModalBackdrop = document.getElementById('chatModalBackdrop');
 
+  var drawer = document.getElementById('drawer');
+  var drawerBackdrop = document.getElementById('drawerBackdrop');
+  var drawerHamburger = document.getElementById('dockHamburger');
+
   var toastRoot = document.getElementById('toastRoot');
 
   var s = { focusReturn: null };
@@ -99,6 +103,26 @@
     }
   }
 
+  // === Drawer (hamburger menu) ===
+  function openDrawer() {
+    drawer.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+    drawerHamburger.classList.add('open');
+    drawerHamburger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+    drawerHamburger.classList.remove('open');
+    drawerHamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  function toggleDrawer() {
+    if (drawer.classList.contains('open')) closeDrawer();
+    else openDrawer();
+  }
+
   // === Focus trap ===
   function focusTrap(e) {
     if (e.key !== 'Tab') return;
@@ -127,6 +151,19 @@
       btn.addEventListener('click', openChat);
     });
 
+    // Drawer items → module modal (tutup drawer dulu)
+    document.querySelectorAll('.drawer-item').forEach(function (item) {
+      item.addEventListener('click', function () {
+        var mid = item.getAttribute('data-open-modal');
+        closeDrawer();
+        if (mid) openModal(mid);
+      });
+    });
+
+    // Hamburger toggle
+    if (drawerHamburger) drawerHamburger.addEventListener('click', toggleDrawer);
+    if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeDrawer);
+
     // Scroll-to buttons
     scrollToBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -145,6 +182,7 @@
       if (e.key === 'Escape') {
         if (chatModalRoot.classList.contains('open')) { closeChat(); return; }
         if (modalRoot.classList.contains('open')) { closeModal(); return; }
+        if (drawer.classList.contains('open')) { closeDrawer(); return; }
       }
       focusTrap(e);
     });

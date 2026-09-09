@@ -156,7 +156,7 @@
 
   </main>
 
-  <!-- ============ BOTTOM FLOATING NAVBAR ============ -->
+  <!-- ============ BOTTOM FLOATING NAVBAR (hamburger) ============ -->
   <nav class="dock" id="dock" role="navigation" aria-label="Aeryn console">
     <div class="dock-item active" data-open-chat data-cursor-hover="Chat">
       <span class="dock-icon">💬</span>
@@ -170,27 +170,49 @@
       <span class="dock-icon">🔧</span>
       <span class="dock-label">Tools</span>
     </div>
-    <div class="dock-item" data-open-modal="agents" data-cursor-hover="Agents">
-      <span class="dock-icon">🤖</span>
-      <span class="dock-label">Agents</span>
-    </div>
-    <div class="dock-item" data-open-modal="trace" data-cursor-hover="Trace">
-      <span class="dock-icon">📈</span>
-      <span class="dock-label">Trace</span>
-    </div>
-    <div class="dock-item" data-open-modal="eval" data-cursor-hover="Eval">
-      <span class="dock-icon">🏆</span>
-      <span class="dock-label">Eval</span>
-    </div>
-    <div class="dock-item" data-open-modal="plugins" data-cursor-hover="Plugins">
-      <span class="dock-icon">🧩</span>
-      <span class="dock-label">Plugins</span>
-    </div>
-    <div class="dock-item" data-open-modal="settings" data-cursor-hover="Settings">
-      <span class="dock-icon">⚙️</span>
-      <span class="dock-label">Settings</span>
-    </div>
+
+    <!-- Hamburger → buka drawer -->
+    <button class="dock-hamburger" id="dockHamburger" aria-label="Menu" aria-expanded="false" data-cursor-hover="Menu">
+      <span class="burger-line"></span>
+      <span class="burger-line"></span>
+      <span class="burger-line"></span>
+    </button>
   </nav>
+
+  <!-- ============ DRAWER (menu disembunyikan) ============ -->
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    <div class="drawer-panel" id="drawerPanel">
+      <div class="drawer-grabber" aria-hidden="true"></div>
+      <div class="drawer-title">Aeryn Console</div>
+      <div class="drawer-grid">
+        <div class="drawer-item" data-open-modal="agents" data-cursor-hover="Agents">
+          <span class="drawer-icon">🤖</span>
+          <span class="drawer-label">Agents</span>
+        </div>
+        <div class="drawer-item" data-open-modal="trace" data-cursor-hover="Trace">
+          <span class="drawer-icon">📈</span>
+          <span class="drawer-label">Trace</span>
+        </div>
+        <div class="drawer-item" data-open-modal="eval" data-cursor-hover="Eval">
+          <span class="drawer-icon">🏆</span>
+          <span class="drawer-label">Eval</span>
+        </div>
+        <div class="drawer-item" data-open-modal="plugins" data-cursor-hover="Plugins">
+          <span class="drawer-icon">🧩</span>
+          <span class="drawer-label">Plugins</span>
+        </div>
+        <div class="drawer-item" data-open-modal="safety" data-cursor-hover="Safety">
+          <span class="drawer-icon">🛡️</span>
+          <span class="drawer-label">Safety</span>
+        </div>
+        <div class="drawer-item" data-open-modal="settings" data-cursor-hover="Settings">
+          <span class="drawer-icon">⚙️</span>
+          <span class="drawer-label">Settings</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ============ MODAL CONTAINER (adaptif) ============ -->
   <div class="modal-root" id="modalRoot">
