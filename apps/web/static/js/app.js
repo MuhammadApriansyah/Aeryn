@@ -1,51 +1,41 @@
 /**
- * app.js — App shell controller: floating navbar routing + modal manager +
- * command palette. Vanilla (ES5, no modules), a11y-aware.
+ * app.js — App shell controller: bottom dock, modal manager, chat modal.
+ * Vanilla (ES5), a11y-aware (focus trap + ESC).
  */
 (function () {
   'use strict';
 
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // === State ===
-  var s = {
-    activeView: 'chat',
-    modalOpen: false,
-    focusReturn: null,
-  };
-
   // === DOM ===
-  var navLinks = document.querySelectorAll('.nav-link');
-  var settingsBtn = document.getElementById('settingsBtn');
-  var commandBtn = document.getElementById('commandBtn');
+  var dockItems = document.querySelectorAll('.dock-item');
+  var openChatBtns = document.querySelectorAll('[data-open-chat]');
+  var scrollToBtns = document.querySelectorAll('[data-scroll-to]');
+
   var modalRoot = document.getElementById('modalRoot');
   var modal = document.getElementById('modal');
   var modalTitle = document.getElementById('modalTitle');
   var modalBody = document.getElementById('modalBody');
   var modalClose = document.getElementById('modalClose');
   var modalBackdrop = document.getElementById('modalBackdrop');
+
+  var chatModalRoot = document.getElementById('chatModalRoot');
+  var chatModalClose = document.getElementById('chatModalClose');
+  var chatModalBackdrop = document.getElementById('chatModalBackdrop');
+
   var toastRoot = document.getElementById('toastRoot');
-  var paletteRoot = document.getElementById('paletteRoot');
-  var paletteInput = document.getElementById('paletteInput');
-  var paletteResults = document.getElementById('paletteResults');
 
-  // === Module registry (untuk modal + command palette) ===
-  var MODULES = [
-    { id: 'chat',       label: 'Chat',           icon: '💬', size: 'full',   view: true },
-    { id: 'memory',     label: 'Memory',         icon: '🧠', size: 'large' },
-    { id: 'tools',      label: 'Tools',          icon: '🔧', size: 'large' },
-    { id: 'agents',     label: 'Agents',         icon: '🤖', size: 'large' },
-    { id: 'safety',     label: 'Safety',         icon: '🛡', size: 'medium' },
-    { id: 'trace',      label: 'Trace',          icon: '📈', size: 'medium' },
-    { id: 'eval',       label: 'Evaluation',     icon: '🏆', size: 'medium' },
-    { id: 'plugins',    label: 'Plugins',        icon: '🧩', size: 'medium' },
-    { id: 'settings',   label: 'Settings',       icon: '⚙', size: 'small' },
-  ];
+  var s = { focusReturn: null };
 
-  function moduleById(id) {
-    for (var i = 0; i < MODULES.length; i++) if (MODULES[i].id === id) return MODULES[i];
-    return null;
-  }
+  // === Module registry (untuk modal) ===
+  var MODULES = {
+    memory:  { label: 'Memory',  size: 'large' },
+    tools:   { label: 'Tools',   size: 'large' },
+    agents:  { label: 'Agents',  size: 'large' },
+    safety:  { label: 'Safety',  size: 'medium' },
+    trace:   { label: 'Trace',   size: 'medium' },
+    eval:    { label: 'Evaluation', size: 'medium' },
+    plugins: { label: 'Plugins', size: 'medium' },
+    settings:{ label: 'Settings', size: 'small' },
+  };
 
   // === Toast ===
   function showToast(msg, type) {
@@ -58,47 +48,63 @@
     setTimeout(function () {
       t.classList.add('hide');
       setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 260);
-    }, 2800);
+    }, 2600);
   }
   window.AerynToast = showToast;
 
-  // === Modal manager ===
+  // === Modal (module) ===
   function openModal(id) {
-    var m = moduleById(id);
-    if (!m || m.view) return; // view modules bukan modal (chat)
-
+    var m = MODULES[id];
+    if (!m) return;
     s.focusReturn = document.activeElement;
     modalTitle.textContent = m.label;
-    modal.className = 'modal size-' + (m.size || 'medium');
+    modal.className = 'modal size-' + m.size;
     modalBody.innerHTML = '<div class="modal-loading" id="modalLoading">Memuat ' + m.label + '…</div>';
     modal.setAttribute('aria-hidden', 'false');
     modalRoot.classList.add('open');
-
-    // body scroll lock
     document.body.style.overflow = 'hidden';
-    s.modalOpen = true;
 
-    // Muat konten modul (hook untuk section loader, diisi nanti).
     if (window.AerynSection && window.AerynSection.load) {
       window.AerynSection.load(id, modalBody);
-    } else {
-      var lb = document.getElementById('modalLoading');
-      if (lb) lb.textContent = m.label + ' (belum diimplementasi)';
     }
   }
 
   function closeModal() {
-    if (!s.modalOpen) return;
     modalRoot.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
-    s.modalOpen = false;
     if (s.focusReturn) { s.focusReturn.focus(); s.focusReturn = null; }
   }
 
+  // === Chat modal ===
+  function openChat() {
+    s.focusReturn = document.activeElement;
+    chatModalRoot.classList.add('open');
+    chatModalRoot.querySelector('.chatmodal').setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeChat() {
+    chatModalRoot.classList.remove('open');
+    chatModalRoot.querySelector('.chatmodal').setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (s.focusReturn) { s.focusReturn.focus(); s.focusReturn = null; }
+  }
+
+  // === Scroll-to (hero buttons) ===
+  function scrollTo(target) {
+    var el = document.querySelector(target);
+    if (el) {
+      if (window.lenis) window.lenis.scrollTo(el);
+      else el.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  // === Focus trap ===
   function focusTrap(e) {
-    if (!s.modalOpen || e.key !== 'Tab') return;
-    var focusables = modal.querySelectorAll('button, select, textarea, input, [tabindex]:not([tabindex="-1"])');
+    if (e.key !== 'Tab') return;
+    var container = document.querySelector('.modal-root.open .modal, .chatmodal-root.open .chatmodal');
+    if (!container) return;
+    var focusables = container.querySelectorAll('button, select, textarea, input, [tabindex]:not([tabindex="-1"])');
     if (focusables.length === 0) return;
     var first = focusables[0];
     var last = focusables[focusables.length - 1];
@@ -106,115 +112,55 @@
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   }
 
-  // === Navbar routing ===
-  function activate(id) {
-    var m = moduleById(id);
-    if (!m) return;
-    s.activeView = id;
-
-    // Update nav active state
-    for (var i = 0; i < navLinks.length; i++) {
-      navLinks[i].classList.toggle('active', navLinks[i].getAttribute('data-target') === id);
-    }
-
-    if (m.view) {
-      // view module (chat) — tutup modal, pastikan view aktif
-      closeModal();
-      var panels = document.querySelectorAll('.view-panel');
-      for (var j = 0; j < panels.length; j++) {
-        panels[j].classList.toggle('active', panels[j].getAttribute('data-view') === id);
-      }
-    } else {
-      openModal(id);
-    }
-  }
-
-  // Wire nav links
-  function wireNav() {
-    for (var i = 0; i < navLinks.length; i++) {
-      navLinks[i].addEventListener('click', function () {
-        activate(this.getAttribute('data-target'));
-      });
-    }
-    if (settingsBtn) settingsBtn.addEventListener('click', function () { activate('settings'); });
-  }
-
-  // === Command palette ===
-  function openPalette() {
-    paletteRoot.classList.add('open');
-    paletteInput.value = '';
-    paletteInput.focus();
-    renderPalette('');
-  }
-  function closePalette() {
-    paletteRoot.classList.remove('open');
-  }
-  function renderPalette(q) {
-    q = (q || '').toLowerCase();
-    paletteResults.innerHTML = '';
-    var matches = MODULES.filter(function (m) {
-      return !q || m.label.toLowerCase().indexOf(q) !== -1;
-    });
-    matches.forEach(function (m) {
-      var item = document.createElement('div');
-      item.className = 'palette-item';
-      item.innerHTML = '<span class="palette-icon">' + m.icon + '</span>' + m.label;
+  // === Wire events ===
+  function wire() {
+    // Dock items → module modal
+    dockItems.forEach(function (item) {
       item.addEventListener('click', function () {
-        closePalette();
-        activate(m.id);
+        var mid = item.getAttribute('data-open-modal');
+        if (mid) openModal(mid);
       });
-      paletteResults.appendChild(item);
     });
-  }
 
-  // Wire command palette
-  if (commandBtn) commandBtn.addEventListener('click', openPalette);
-
-  // === Global keyboard ===
-  document.addEventListener('keydown', function (e) {
-    // Cmd/Ctrl+K → command palette
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-      e.preventDefault();
-      if (paletteRoot.classList.contains('open')) closePalette();
-      else openPalette();
-      return;
-    }
-    // ESC → tutup modal / palette
-    if (e.key === 'Escape') {
-      if (s.modalOpen) { closeModal(); return; }
-      if (paletteRoot.classList.contains('open')) { closePalette(); return; }
-    }
-    focusTrap(e);
-  });
-
-  if (paletteInput) {
-    paletteInput.addEventListener('input', function () { renderPalette(paletteInput.value); });
-    paletteInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closePalette();
+    // Open chat buttons (hero + dock)
+    openChatBtns.forEach(function (btn) {
+      btn.addEventListener('click', openChat);
     });
-  }
 
-  // Modal close events
-  if (modalClose) modalClose.addEventListener('click', closeModal);
-  if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
+    // Scroll-to buttons
+    scrollToBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        scrollTo(btn.getAttribute('data-scroll-to'));
+      });
+    });
 
-  // === Init ===
-  function init() {
-    wireNav();
-    activate('chat');
+    // Modal close
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
+    if (chatModalClose) chatModalClose.addEventListener('click', closeChat);
+    if (chatModalBackdrop) chatModalBackdrop.addEventListener('click', closeChat);
+
+    // ESC + focus trap
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        if (chatModalRoot.classList.contains('open')) { closeChat(); return; }
+        if (modalRoot.classList.contains('open')) { closeModal(); return; }
+      }
+      focusTrap(e);
+    });
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', wire);
   } else {
-    init();
+    wire();
   }
 
-  // Expose
   window.AerynApp = {
     showToast: showToast,
     openModal: openModal,
     closeModal: closeModal,
-    activate: activate,
+    openChat: openChat,
+    closeChat: closeChat,
   };
 })();

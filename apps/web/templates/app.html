@@ -3,102 +3,232 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aeryn — Agent Console</title>
+  <title>Aeryn — Autonomous AI Agent Framework</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/css/app.css">
 </head>
-<body>
-  <!-- ======= APP SHELL ======= -->
-  <div class="app-shell">
+<body data-scroll-container>
 
-    <!-- Floating Navbar -->
-    <nav class="floating-nav" id="floatingNav" role="navigation" aria-label="Aeryn modules">
-      <div class="nav-brand">
-        <span class="nav-brand-mark">✦</span>
-        <span class="nav-brand-name">Aeryn</span>
-      </div>
+  <!-- ============ MAGNETIC CURSOR ============ -->
+  <div class="cursor-outer" aria-hidden="true"></div>
+  <div class="cursor-inner" aria-hidden="true"></div>
 
-      <div class="nav-links" id="navLinks">
-        <button class="nav-link active" data-target="chat" data-modal-size="full">
-          <span class="nav-icon">💬</span><span>Chat</span>
-        </button>
-        <button class="nav-link" data-target="memory" data-modal-size="large">
-          <span class="nav-icon">🧠</span><span>Memory</span>
-        </button>
-        <button class="nav-link" data-target="tools" data-modal-size="large">
-          <span class="nav-icon">🔧</span><span>Tools</span>
-        </button>
-        <button class="nav-link" data-target="agents" data-modal-size="large">
-          <span class="nav-icon">🤖</span><span>Agents</span>
-        </button>
-        <button class="nav-link" data-target="safety" data-modal-size="medium">
-          <span class="nav-icon">🛡</span><span>Safety</span>
-        </button>
-        <button class="nav-link" data-target="trace" data-modal-size="medium">
-          <span class="nav-icon">📈</span><span>Trace</span>
-        </button>
-        <button class="nav-link" data-target="eval" data-modal-size="medium">
-          <span class="nav-icon">🏆</span><span>Eval</span>
-        </button>
-        <button class="nav-link" data-target="plugins" data-modal-size="medium">
-          <span class="nav-icon">🧩</span><span>Plugins</span>
-        </button>
-      </div>
+  <!-- ============ THREE.JS PARTICLE BACKGROUND ============ -->
+  <div class="particle-bg" id="particleBg" aria-hidden="true"></div>
 
-      <div class="nav-actions">
-        <button class="nav-action" id="settingsBtn" data-target="settings" data-modal-size="small" aria-label="Settings">⚙</button>
-        <button class="nav-action" id="commandBtn" aria-label="Command palette">⌘K</button>
-      </div>
-    </nav>
+  <!-- ============ HOMEPAGE (LANDING) ============ -->
+  <main class="homepage">
 
-    <!-- Main content area -->
-    <main class="app-content" id="appContent">
-      <!-- Chat di-load sebagai default view (full app P1-P7 via iframe) -->
-      <section class="view-panel active" id="view-chat" data-view="chat">
-        <iframe class="chat-iframe" src="/chat" title="Aeryn Chat"></iframe>
-      </section>
-    </main>
-
-    <!-- Modal container (adaptif) -->
-    <div class="modal-root" id="modalRoot">
-      <div class="modal-backdrop" id="modalBackdrop"></div>
-      <div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="modal-header">
-          <div class="modal-title" id="modalTitle">Module</div>
-          <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
-        </div>
-        <div class="modal-body" id="modalBody">
-          <div class="modal-loading">Memuat…</div>
+    <!-- HERO 1 — Intro -->
+    <section class="hero hero-1" id="hero1" data-reveal>
+      <div class="hero-inner">
+        <p class="hero-eyebrow" data-cursor-hover="View" data-reveal>✦ Autonomous AI Agent Framework</p>
+        <h1 class="hero-title" data-reveal>
+          <span class="line"><span>Aeryn</span></span>
+          <span class="line"><span class="outline">thinks</span> <span class="accent">·</span> <span class="outline">builds</span> <span class="accent">·</span> <span class="outline">acts</span></span>
+        </h1>
+        <p class="hero-sub" data-reveal>
+          Agent otonom dengan 5 divisi kognitif, 70+ modul, mesin Rust, dan memori
+          neural. Dari percakapan hingga tindakan nyata — dalam satu kerangka.
+        </p>
+        <div class="hero-cta" data-reveal>
+          <button class="btn btn-primary" data-open-chat>Mulai Chat ✦</button>
+          <button class="btn btn-ghost" data-scroll-to="#hero2">Jelajahi ↓</button>
         </div>
       </div>
-    </div>
+      <div class="hero-orb" data-parallax="0.2" aria-hidden="true"></div>
+    </section>
 
-    <!-- Toast container -->
-    <div class="toast-root" id="toastRoot" aria-live="polite"></div>
-
-    <!-- Command palette -->
-    <div class="palette-root" id="paletteRoot" hidden>
-      <div class="palette-backdrop" id="paletteBackdrop"></div>
-      <div class="palette" role="dialog" aria-label="Command palette">
-        <input class="palette-input" id="paletteInput" type="text" placeholder="Ketik untuk mencari modul / tool…" />
-        <div class="palette-results" id="paletteResults"></div>
+    <!-- HERO 2 — Divisions -->
+    <section class="hero hero-2" id="hero2" data-reveal>
+      <div class="hero-inner">
+        <p class="hero-eyebrow" data-reveal>5 Divisi Kognitif</p>
+        <h2 class="hero-heading" data-reveal>Satu agen, lima otak yang <span class="accent">bersinergi</span></h2>
+        <div class="division-grid">
+          <div class="division-card" data-parallax="0.06" data-cursor-hover="Creative">
+            <span class="division-icon">🎨</span>
+            <h3>Creative</h3>
+            <p>Style, POV, narasi, prosa</p>
+          </div>
+          <div class="division-card" data-parallax="0.1" data-cursor-hover="Psych">
+            <span class="division-icon">🧠</span>
+            <h3>Psych</h3>
+            <p>Kecerdasan psikologis & kesejahteraan</p>
+          </div>
+          <div class="division-card" data-parallax="0.14" data-cursor-hover="Reasoning">
+            <span class="division-icon">⚙️</span>
+            <h3>Reasoning</h3>
+            <p>MCTS, FOL, critique, graph</p>
+          </div>
+          <div class="division-card" data-parallax="0.08" data-cursor-hover="Gov">
+            <span class="division-icon">🛡️</span>
+            <h3>Governance</h3>
+            <p>Guardrail & kendali keamanan</p>
+          </div>
+          <div class="division-card" data-parallax="0.12" data-cursor-hover="Infra">
+            <span class="division-icon">🏗️</span>
+            <h3>Infra</h3>
+            <p>Sinkronisasi & validasi</p>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
+    <!-- HERO 3 — Stats -->
+    <section class="hero hero-3" id="hero3" data-reveal>
+      <div class="hero-inner">
+        <p class="hero-eyebrow" data-reveal>Angka yang berbicara</p>
+        <h2 class="hero-heading" data-reveal>Dibangun untuk <span class="accent">skala</span></h2>
+        <div class="stats-row">
+          <div class="stat" data-count="70" data-suffix="+">
+            <span class="stat-num">0</span><span class="stat-suffix">+</span>
+            <p class="stat-label">Modul inti</p>
+          </div>
+          <div class="stat" data-count="5" data-suffix="">
+            <span class="stat-num">0</span><span class="stat-suffix"></span>
+            <p class="stat-label">Divisi kognitif</p>
+          </div>
+          <div class="stat" data-count="230" data-suffix="+">
+            <span class="stat-num">0</span><span class="stat-suffix">+</span>
+            <p class="stat-label">Endpoint API</p>
+          </div>
+          <div class="stat" data-count="765" data-suffix="">
+            <span class="stat-num">0</span><span class="stat-suffix"></span>
+            <p class="stat-label">Test passing</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HERO 4 — Features / Cards -->
+    <section class="hero hero-4" id="hero4" data-reveal>
+      <div class="hero-inner">
+        <p class="hero-eyebrow" data-reveal>Kemampuan</p>
+        <h2 class="hero-heading" data-reveal>Semua yang Aeryn <span class="accent">bisa</span></h2>
+        <div class="features-grid">
+          <article class="feature-card" data-cursor-hover="Memory">
+            <span class="feature-num">01</span>
+            <h3>Memory Neural</h3>
+            <p>Recall semantik + embedding 3-tier (neural/hash/TF-IDF) untuk konteks lintas sesi.</p>
+          </article>
+          <article class="feature-card" data-cursor-hover="Tools">
+            <span class="feature-num">02</span>
+            <h3>Tool Runtime</h3>
+            <p>Bash, file, web search, dengan 4-layer guardrail + human-in-the-loop.</p>
+          </article>
+          <article class="feature-card" data-cursor-hover="Streaming">
+            <span class="feature-num">03</span>
+            <h3>True Streaming</h3>
+            <p>SSE token-by-token, phase status, tool viz, citation — polish 7 pilar.</p>
+          </article>
+          <article class="feature-card" data-cursor-hover="Multi-agent">
+            <span class="feature-num">04</span>
+            <h3>Multi-Agent</h3>
+            <p>Supervisor, handoff, blackboard, orkestrasi paralel antar divisi.</p>
+          </article>
+          <article class="feature-card" data-cursor-hover="Observability">
+            <span class="feature-num">05</span>
+            <h3>Observability</h3>
+            <p>OpenTelemetry GenAI semantic conventions untuk trace & span.</p>
+          </article>
+          <article class="feature-card" data-cursor-hover="Safety">
+            <span class="feature-num">06</span>
+            <h3>Safety & Auth</h3>
+            <p>Guardrail berlapis, sandbox, least-privilege API key, HITL.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- HERO 5 — CTA / Footer -->
+    <section class="hero hero-5" id="hero5" data-reveal>
+      <div class="hero-inner">
+        <h2 class="hero-cta-title" data-reveal>Aeryn menanti <span class="accent">perintahmu</span></h2>
+        <p class="hero-sub" data-reveal>Mulai percakapan, jalankan tool, atau kelola memory — semuanya dari console.</p>
+        <button class="btn btn-primary btn-lg" data-open-chat>✦ Buka Chat</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ BOTTOM FLOATING NAVBAR ============ -->
+  <nav class="dock" id="dock" role="navigation" aria-label="Aeryn console">
+    <div class="dock-item active" data-open-chat data-cursor-hover="Chat">
+      <span class="dock-icon">💬</span>
+      <span class="dock-label">Chat</span>
+    </div>
+    <div class="dock-item" data-open-modal="memory" data-cursor-hover="Memory">
+      <span class="dock-icon">🧠</span>
+      <span class="dock-label">Memory</span>
+    </div>
+    <div class="dock-item" data-open-modal="tools" data-cursor-hover="Tools">
+      <span class="dock-icon">🔧</span>
+      <span class="dock-label">Tools</span>
+    </div>
+    <div class="dock-item" data-open-modal="agents" data-cursor-hover="Agents">
+      <span class="dock-icon">🤖</span>
+      <span class="dock-label">Agents</span>
+    </div>
+    <div class="dock-item" data-open-modal="trace" data-cursor-hover="Trace">
+      <span class="dock-icon">📈</span>
+      <span class="dock-label">Trace</span>
+    </div>
+    <div class="dock-item" data-open-modal="eval" data-cursor-hover="Eval">
+      <span class="dock-icon">🏆</span>
+      <span class="dock-label">Eval</span>
+    </div>
+    <div class="dock-item" data-open-modal="plugins" data-cursor-hover="Plugins">
+      <span class="dock-icon">🧩</span>
+      <span class="dock-label">Plugins</span>
+    </div>
+    <div class="dock-item" data-open-modal="settings" data-cursor-hover="Settings">
+      <span class="dock-icon">⚙️</span>
+      <span class="dock-label">Settings</span>
+    </div>
+  </nav>
+
+  <!-- ============ MODAL CONTAINER (adaptif) ============ -->
+  <div class="modal-root" id="modalRoot">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTitle">Module</div>
+        <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
   </div>
 
-  <!-- Vendor libraries (no build step) -->
+  <!-- ============ CHAT MODAL (ChatGPT-style) ============ -->
+  <div class="chatmodal-root" id="chatModalRoot">
+    <div class="chatmodal-backdrop" id="chatModalBackdrop"></div>
+    <div class="chatmodal" id="chatModal" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="chatmodal-bar">
+        <div class="chatmodal-brand"><span>✦</span> Aeryn Chat</div>
+        <button class="chatmodal-close" id="chatModalClose" aria-label="Close">✕</button>
+      </div>
+      <iframe class="chatmodal-iframe" src="/chat" title="Aeryn Chat"></iframe>
+    </div>
+  </div>
+
+  <!-- ============ TOAST ============ -->
+  <div class="toast-root" id="toastRoot" aria-live="polite"></div>
+
+  <!-- ============ LIBRARIES ============ -->
   <script src="/static/vendor/gsap.min.js"></script>
+  <script src="/static/vendor/ScrollTrigger.min.js"></script>
+  <script src="/static/vendor/CustomEase.min.js"></script>
+  <script src="/static/vendor/lenis.min.js"></script>
   <script src="/static/vendor/three.min.js"></script>
   <script src="/static/vendor/alpine.min.js"></script>
   <script src="/static/vendor/marked.min.js"></script>
 
-  <!-- App scripts (chat di-load via iframe terpisah, jadi tidak perlu chat.js di sini) -->
+  <!-- ============ APP SCRIPTS ============ -->
   <script src="/static/js/markdown.js"></script>
   <script src="/static/js/sections.js"></script>
+  <script src="/static/js/home.js"></script>
   <script src="/static/js/app.js"></script>
-  <script src="/static/js/effects.js"></script>
 </body>
 </html>
