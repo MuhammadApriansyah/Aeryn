@@ -93,7 +93,24 @@
     });
   }
 
-  // === 3. COUNT-UP STATS ===
+  // === 3. SCROLL PROGRESS ===
+  function initScrollProgress() {
+    var bar = document.querySelector('.scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      var pct = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+      bar.style.width = pct + '%';
+    }
+    if (window.lenis) {
+      window.lenis.on('scroll', update);
+    } else {
+      window.addEventListener('scroll', update);
+    }
+    update();
+  }
+
+  // === 4. COUNT-UP STATS ===
   function initCountUp() {
     if (reduceMotion || !hasGsap) {
       // Tanpa animasi — set angka final langsung.
@@ -118,7 +135,7 @@
     });
   }
 
-  // === 4. MAGNETIC CURSOR ===
+  // === 5. MAGNETIC CURSOR ===
   function initCursor() {
     if (reduceMotion) return;
     var outer = document.querySelector('.cursor-outer');
@@ -147,7 +164,7 @@
     });
   }
 
-  // === 5. THREE.JS PARTICLE BACKGROUND ===
+  // === 6. THREE.JS PARTICLE BACKGROUND ===
   function initParticles() {
     if (reduceMotion || typeof window.THREE === 'undefined') return;
     var container = document.getElementById('particleBg');
@@ -196,6 +213,7 @@
   function init() {
     initLenis();
     initScrollAnimations();
+    initScrollProgress();
     initCountUp();
     initCursor();
     initParticles();

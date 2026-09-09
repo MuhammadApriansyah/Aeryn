@@ -52,6 +52,22 @@ body {
   pointer-events: none;
 }
 
+/* ============ Scroll progress ============ */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 500;
+  pointer-events: none;
+}
+.scroll-progress-bar {
+  height: 100%;
+  background: var(--gradient);
+  width: 0%;
+  transform-origin: left;
+}
+
 /* ============ Homepage ============ */
 .homepage {
   position: relative; z-index: 1;
