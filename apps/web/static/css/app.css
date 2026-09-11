@@ -629,6 +629,40 @@ body {
   max-height: 300px; overflow-y: auto;
 }
 
+/* Session list (console) */
+.session-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.session-info { min-width: 0; }
+.session-name {
+  font-weight: 600;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.session-meta { font-size: 11px; color: var(--text-2); margin-top: 2px; }
+.session-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.session-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+  color: var(--text-1);
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color var(--ds-fast), background var(--ds-fast);
+}
+.session-btn:hover { border-color: var(--accent); background: var(--accent-dim); }
+.session-btn.danger:hover { border-color: var(--accent-3); background: rgba(255,92,168,0.1); color: var(--accent-3); }
+
 /* ============ Chat modal (ChatGPT-style) ============ */
 .chatmodal-root { display: none; }
 .chatmodal-root.open { display: block; }

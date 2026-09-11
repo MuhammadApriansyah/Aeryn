@@ -70,6 +70,8 @@
     modalRoot.classList.add('open');
     document.body.style.overflow = 'hidden';
     setPanelFocus(modal);
+    // P0: persist modul terakhir dibuka.
+    try { localStorage.setItem('aeryn.lastModule', id); } catch (e) {}
 
     if (window.AerynSection && window.AerynSection.load) {
       window.AerynSection.load(id, modalBody);
@@ -98,6 +100,13 @@
     document.body.style.overflow = '';
     releaseFocus();
     if (s.focusReturn) { s.focusReturn.focus(); s.focusReturn = null; }
+  }
+  // Buka chat modal + resume sesi tertentu (set iframe src, reload).
+  function openSession(sessionId) {
+    if (!sessionId) { openChat(); return; }
+    var frame = chatModalRoot.querySelector('.chatmodal-iframe');
+    if (frame) frame.src = '/chat?session=' + encodeURIComponent(sessionId);
+    openChat();
   }
 
   // === Scroll-to (hero buttons) ===
@@ -238,5 +247,8 @@
     closeModal: closeModal,
     openChat: openChat,
     closeChat: closeChat,
+    openSession: openSession,
+    openDrawer: openDrawer,
+    closeDrawer: closeDrawer,
   };
 })();

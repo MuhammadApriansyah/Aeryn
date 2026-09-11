@@ -524,10 +524,14 @@
 
   // Initialize
   async function init() {
-    state.sessionId = 'default';
+    // Dukung resume sesi dari URL (?session=<id>) — dipakai shell console.
+    var qs = new URLSearchParams(window.location.search);
+    var resume = qs.get('session');
+    state.sessionId = (resume && resume !== 'default') ? resume : 'default';
     applyAccessibility();
     renderSessions();
-    renderMessages();
+    if (resume && resume !== 'default') await loadSession(resume);
+    else renderMessages();
   }
 
   init();

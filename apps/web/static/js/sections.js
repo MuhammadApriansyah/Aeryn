@@ -288,6 +288,49 @@
     return row;
   }
 
+  async function loadSessions(container) {
+    var box = el('div', 'section-stack');
+    box.appendChild(el('div', 'section-title', '💬 Sessions — Lanjutkan Percakapan'));
+    try {
+      var r = await getJSON(BASE + '/sessions');
+      var sessions = r && r.sessions;
+      if (Array.isArray(sessions) && sessions.length) {
+        sessions.forEach(function (s) {
+          var id = s.session_id;
+          var row = el('div', 'session-row');
+          var info = el('div', 'session-info');
+          var title = s.title || ('Session ' + String(id).slice(0, 10));
+          info.appendChild(el('div', 'session-name', title));
+          info.appendChild(el('div', 'session-meta', 'Msg: ' + s.message_count));
+          var actions = el('div', 'session-actions');
+          var resume = el('button', 'session-btn', 'Lanjutkan');
+          resume.addEventListener('click', function () {
+            if (window.AerynApp && window.AerynApp.openSession) window.AerynApp.openSession(id);
+          });
+          var del = el('button', 'session-btn danger', 'Hapus');
+          del.addEventListener('click', async function () {
+            try {
+              await fetch(BASE + '/sessions/' + encodeURIComponent(id), { method: 'DELETE' });
+              row.remove();
+            } catch (e2) {
+              row.appendChild(errorBox('Gagal hapus: ' + e2.message));
+            }
+          });
+          actions.appendChild(resume);
+          actions.appendChild(del);
+          row.appendChild(info);
+          row.appendChild(actions);
+          box.appendChild(row);
+        });
+      } else {
+        box.appendChild(el('div', 'section-row', 'Belum ada sesi. Mulai chat dulu.'));
+      }
+    } catch (e) {
+      box.appendChild(errorBox('Sessions gagal: ' + e.message));
+    }
+    return box;
+  }
+
   async function loadHealth(container) {
     var box = el('div', 'section-stack');
     box.appendChild(el('div', 'section-title', '🩺 Health — Status Sistem'));
@@ -318,6 +361,7 @@
     memory: loadMemory,
     tools: loadTools,
     agents: loadAgents,
+    sessions: loadSessions,
     tasks: loadTasks,
     safety: loadSafety,
     trace: loadTrace,
