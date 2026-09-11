@@ -281,11 +281,44 @@
     return row;
   }
 
+  function settingsRow(k, v) {
+    var row = el('div', 'section-row');
+    row.appendChild(el('span', null, k + ': '));
+    row.appendChild(el('strong', null, String(v)));
+    return row;
+  }
+
+  async function loadHealth(container) {
+    var box = el('div', 'section-stack');
+    box.appendChild(el('div', 'section-title', '🩺 Health — Status Sistem'));
+    try {
+      var h = await getJSON('/health');
+      Object.keys(h).forEach(function (k) { box.appendChild(settingsRow(k, h[k])); });
+    } catch (e) {
+      box.appendChild(errorBox('Health gagal: ' + e.message));
+    }
+    return box;
+  }
+
+  async function loadTasks(container) {
+    var box = el('div', 'section-stack');
+    box.appendChild(el('div', 'section-title', '📋 Tasks — Antrean Berjalan'));
+    try {
+      var t = await getJSON(BASE + '/queue/tasks');
+      box.appendChild(el('div', 'section-row', JSON.stringify(t, null, 2)));
+    } catch (e) {
+      box.appendChild(errorBox('Tasks gagal: ' + e.message));
+    }
+    return box;
+  }
+
   // === Registry & entry ===
   var LOADERS = {
+    health: loadHealth,
     memory: loadMemory,
     tools: loadTools,
     agents: loadAgents,
+    tasks: loadTasks,
     safety: loadSafety,
     trace: loadTrace,
     eval: loadEval,

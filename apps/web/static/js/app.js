@@ -31,9 +31,11 @@
 
   // === Module registry (untuk modal) ===
   var MODULES = {
+    health:  { label: 'Health',  size: 'medium' },
     memory:  { label: 'Memory',  size: 'large' },
     tools:   { label: 'Tools',   size: 'large' },
     agents:  { label: 'Agents',  size: 'large' },
+    tasks:   { label: 'Tasks',   size: 'medium' },
     safety:  { label: 'Safety',  size: 'medium' },
     trace:   { label: 'Trace',   size: 'medium' },
     eval:    { label: 'Evaluation', size: 'medium' },
@@ -171,6 +173,31 @@
         if (mid) openModal(mid);
       });
     });
+
+    // Quick actions → aksi cepat
+    document.querySelectorAll('.quick-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var q = btn.getAttribute('data-quick');
+        closeDrawer();
+        if (q === 'chat') { openChat(); }
+        else if (q === 'tasks') { openModal('tasks'); }
+        else { openModal(q); }
+      });
+    });
+
+    // Filter drawer grid (cari modul cepat)
+    var drawerInput = document.getElementById('drawerInput');
+    if (drawerInput) {
+      drawerInput.addEventListener('input', function () {
+        var q = drawerInput.value.trim().toLowerCase();
+        document.querySelectorAll('.drawer-item').forEach(function (item) {
+          var label = item.querySelector('.drawer-label');
+          var desc = item.querySelector('.drawer-desc');
+          var text = (label ? label.textContent : '') + ' ' + (desc ? desc.textContent : '');
+          item.classList.toggle('hidden', q && text.toLowerCase().indexOf(q) === -1);
+        });
+      });
+    }
 
     // Hamburger toggle
     if (drawerHamburger) drawerHamburger.addEventListener('click', toggleDrawer);

@@ -468,21 +468,65 @@ body {
   color: var(--text-2);
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   text-align: center;
 }
+
+/* Quick actions (fungsi cepat) */
+.drawer-quick {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+.quick-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  color: var(--text-1);
+  font-size: 13px;
+  cursor: pointer;
+  transition: transform var(--ds-fast) var(--ease-enter), background var(--ds-fast), border-color var(--ds-fast);
+}
+.quick-btn:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.quick-icon { font-size: 16px; }
+
+/* Drawer search / filter */
+.drawer-search { margin-bottom: 14px; }
+.drawer-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-1);
+  font-size: 13px;
+  outline: none;
+}
+.drawer-input:focus { border-color: var(--accent); }
+
 .drawer-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 10px;
 }
 .drawer-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 18px 8px;
-  border-radius: 18px;
+  gap: 6px;
+  padding: 16px 8px;
+  border-radius: 16px;
   background: rgba(255,255,255,0.03);
   border: 1px solid var(--border);
   cursor: pointer;
@@ -493,8 +537,13 @@ body {
   border-color: var(--accent);
   transform: translateY(-3px);
 }
-.drawer-icon { font-size: 26px; }
-.drawer-label { font-size: 12px; color: var(--text-2); }
+.drawer-icon { font-size: 24px; }
+.drawer-label { font-size: 12px; color: var(--text-1); }
+.drawer-desc {
+  font-size: 10px;
+  color: var(--text-3);
+}
+.drawer-item.hidden { display: none; }
 
 /* ============ Modal (adaptif) ============ */
 .modal-root { display: none; }

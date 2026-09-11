@@ -248,36 +248,61 @@
     </button>
   </nav>
 
-  <!-- ============ DRAWER (menu disembunyikan) ============ -->
+  <!-- ============ DRAWER (work console) ============ -->
   <div class="drawer" id="drawer" aria-hidden="true">
     <div class="drawer-backdrop" id="drawerBackdrop"></div>
     <div class="drawer-panel" id="drawerPanel">
       <div class="drawer-grabber" aria-hidden="true"></div>
       <div class="drawer-title">Aeryn Console</div>
-      <div class="drawer-grid">
+
+      <!-- Quick actions (fungsi cepat) -->
+      <div class="drawer-quick" id="drawerQuick">
+        <button class="quick-btn" data-quick="chat" data-cursor-hover="Chat">
+          <span class="quick-icon">💬</span><span>Chat</span>
+        </button>
+        <button class="quick-btn" data-quick="health" data-cursor-hover="Health">
+          <span class="quick-icon">🩺</span><span>Health</span>
+        </button>
+        <button class="quick-btn" data-quick="memory" data-cursor-hover="Memory">
+          <span class="quick-icon">🧠</span><span>Memory</span>
+        </button>
+        <button class="quick-btn" data-quick="tools" data-cursor-hover="Tools">
+          <span class="quick-icon">🔧</span><span>Tools</span>
+        </button>
+        <button class="quick-btn" data-quick="tasks" data-cursor-hover="Tasks">
+          <span class="quick-icon">📋</span><span>Tasks</span>
+        </button>
+      </div>
+
+      <!-- Filter input: cari modul cepat -->
+      <div class="drawer-search">
+        <input type="text" class="drawer-input" id="drawerInput" placeholder="Cari modul… (filter)" />
+      </div>
+
+      <div class="drawer-grid" id="drawerGrid">
         <div class="drawer-item" data-open-modal="agents" data-cursor-hover="Agents">
-          <span class="drawer-icon">🤖</span>
-          <span class="drawer-label">Agents</span>
+          <span class="drawer-icon">🤖</span><span class="drawer-label">Agents</span>
+          <span class="drawer-desc">Divisi kognitif</span>
         </div>
         <div class="drawer-item" data-open-modal="trace" data-cursor-hover="Trace">
-          <span class="drawer-icon">📈</span>
-          <span class="drawer-label">Trace</span>
+          <span class="drawer-icon">📈</span><span class="drawer-label">Trace</span>
+          <span class="drawer-desc">Span observasi</span>
         </div>
         <div class="drawer-item" data-open-modal="eval" data-cursor-hover="Eval">
-          <span class="drawer-icon">🏆</span>
-          <span class="drawer-label">Eval</span>
+          <span class="drawer-icon">🏆</span><span class="drawer-label">Eval</span>
+          <span class="drawer-desc">Benchmark</span>
         </div>
         <div class="drawer-item" data-open-modal="plugins" data-cursor-hover="Plugins">
-          <span class="drawer-icon">🧩</span>
-          <span class="drawer-label">Plugins</span>
+          <span class="drawer-icon">🧩</span><span class="drawer-label">Plugins</span>
+          <span class="drawer-desc">Pasang / jalankan</span>
         </div>
         <div class="drawer-item" data-open-modal="safety" data-cursor-hover="Safety">
-          <span class="drawer-icon">🛡️</span>
-          <span class="drawer-label">Safety</span>
+          <span class="drawer-icon">🛡️</span><span class="drawer-label">Safety</span>
+          <span class="drawer-desc">Guardrail</span>
         </div>
         <div class="drawer-item" data-open-modal="settings" data-cursor-hover="Settings">
-          <span class="drawer-icon">⚙️</span>
-          <span class="drawer-label">Settings</span>
+          <span class="drawer-icon">⚙️</span><span class="drawer-label">Settings</span>
+          <span class="drawer-desc">Provider & model</span>
         </div>
       </div>
     </div>
