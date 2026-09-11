@@ -642,6 +642,86 @@ body {
 /* Reveal (data-reveal initial hidden) */
 [data-reveal] { opacity: 0; transform: translateY(40px); }
 
+/* ============ Page loader (intro reveal) ============ */
+/* Loader fixed menutupi viewport; homepage tetap normal di flow (no CLS). */
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 700;
+  background: var(--bg-0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+.loader-word {
+  display: flex;
+  gap: 4px;
+}
+.loader-l {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(48px, 10vw, 96px);
+  font-weight: 700;
+  opacity: 0;
+  transform: translateY(40px);
+}
+.loader-l:first-child { color: var(--accent); }
+.loader-bar {
+  width: 180px;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.loader-bar span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--gradient);
+}
+.loader.done { pointer-events: none; }
+
+/* ============ Marquee band ============ */
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 28px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+}
+.marquee-track {
+  display: flex;
+  gap: 40px;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+.marquee-track span {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(24px, 4vw, 56px);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.marquee-track .m-dot { color: var(--accent-2); }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ============ Card spotlight (mouse-follow glow) ============ */
+.division-card, .feature-card { position: relative; }
+.division-card .card-glow, .feature-card .card-glow {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--ds-base);
+  background: radial-gradient(400px circle at var(--mx,50%) var(--my,50%), rgba(109,92,255,0.12), transparent 40%);
+}
+.division-card:hover .card-glow, .feature-card:hover .card-glow { opacity: 1; }
+
 /* ============ Accessibility (sederhana & jelas) ============ */
 .skip-link {
   position: fixed;

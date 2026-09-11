@@ -43,6 +43,27 @@
     }
   }
 
+  // === 1b. PAGE LOADER (intro reveal) ===
+  function initLoader() {
+    var loader = document.getElementById('loader');
+    if (!loader) return;
+    if (reduceMotion) { loader.style.display = 'none'; return; }
+    if (!hasGsap) { loader.style.display = 'none'; return; }
+
+    var letters = loader.querySelectorAll('.loader-l');
+    var bar = loader.querySelector('.loader-bar span');
+    var tl = gsap.timeline();
+    // Huruf "Aeryn" naik satu per satu.
+    tl.fromTo(letters, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: 'power3.out' })
+      // Bar terisi.
+      .to(bar, { width: '100%', duration: 0.8, ease: 'power2.inOut' }, '-=0.2')
+      // Jeda sebentar, lalu wipe fade.
+      .to(loader, { opacity: 0, duration: 0.6, ease: 'power2.inOut', onComplete: function () { loader.style.display = 'none'; document.body.classList.add('loaded'); } });
+    tl.pause();
+    // Jalankan setelah ~1.3s (biar homepage render dulu, agent lobby feel).
+    setTimeout(function () { tl.play(); }, 1300);
+  }
+
   // === 2. SCROLLTRIGGER — PARALLAX & REVEAL ===
   function initScrollAnimations() {
     if (!hasGsap || !hasScrollTrigger || reduceMotion) {
@@ -232,7 +253,28 @@
     });
   }
 
-  // === 6. MAGNETIC CURSOR ===
+  // === 6. CARD SPOTLIGHT (mouse-follow glow) ===
+  function initCardGlow() {
+    if (reduceMotion) return;
+    document.querySelectorAll('.division-card, .feature-card').forEach(function (card) {
+      // Inject elemen glow sekali.
+      var glow = card.querySelector('.card-glow');
+      if (!glow) {
+        glow = document.createElement('div');
+        glow.className = 'card-glow';
+        card.appendChild(glow);
+      }
+      card.addEventListener('mousemove', function (e) {
+        var r = card.getBoundingClientRect();
+        var x = e.clientX - r.left;
+        var y = e.clientY - r.top;
+        glow.style.setProperty('--mx', x + 'px');
+        glow.style.setProperty('--my', y + 'px');
+      });
+    });
+  }
+
+  // === 7. MAGNETIC CURSOR ===
   function initCursor() {
     if (reduceMotion) return;
     var outer = document.querySelector('.cursor-outer');
@@ -261,7 +303,7 @@
     });
   }
 
-  // === 7. THREE.JS PARTICLE BACKGROUND ===
+  // === 8. THREE.JS PARTICLE BACKGROUND (defer ke idle) ===
   function initParticles() {
     if (reduceMotion || typeof window.THREE === 'undefined') return;
     var container = document.getElementById('particleBg');
@@ -308,6 +350,7 @@
 
   // === INIT ===
   function init() {
+    initLoader();
     initLenis();
     initScrollAnimations();
     initSectionTransitions();
@@ -315,7 +358,13 @@
     initScrollProgress();
     initCountUp();
     initCursor();
-    initParticles();
+    initCardGlow();
+    // Defer partikel ke idle (performa: jangan blokir render utama).
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(initParticles, { timeout: 1500 });
+    } else {
+      setTimeout(initParticles, 800);
+    }
   }
 
   if (document.readyState === 'loading') {
