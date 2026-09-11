@@ -67,6 +67,7 @@
     modal.setAttribute('aria-hidden', 'false');
     modalRoot.classList.add('open');
     document.body.style.overflow = 'hidden';
+    setPanelFocus(modal);
 
     if (window.AerynSection && window.AerynSection.load) {
       window.AerynSection.load(id, modalBody);
@@ -77,6 +78,7 @@
     modalRoot.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    releaseFocus();
     if (s.focusReturn) { s.focusReturn.focus(); s.focusReturn = null; }
   }
 
@@ -86,11 +88,13 @@
     chatModalRoot.classList.add('open');
     chatModalRoot.querySelector('.chatmodal').setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    setPanelFocus(chatModalRoot.querySelector('.chatmodal'));
   }
   function closeChat() {
     chatModalRoot.classList.remove('open');
     chatModalRoot.querySelector('.chatmodal').setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    releaseFocus();
     if (s.focusReturn) { s.focusReturn.focus(); s.focusReturn = null; }
   }
 
@@ -110,6 +114,7 @@
     drawerHamburger.classList.add('open');
     drawerHamburger.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
+    setPanelFocus(drawer.querySelector('.drawer-panel'));
   }
   function closeDrawer() {
     drawer.classList.remove('open');
@@ -117,23 +122,30 @@
     drawerHamburger.classList.remove('open');
     drawerHamburger.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
+    releaseFocus();
   }
   function toggleDrawer() {
     if (drawer.classList.contains('open')) closeDrawer();
     else openDrawer();
   }
 
-  // === Focus trap ===
-  function focusTrap(e) {
-    if (e.key !== 'Tab') return;
-    var container = document.querySelector('.modal-root.open .modal, .chatmodal-root.open .chatmodal');
-    if (!container) return;
-    var focusables = container.querySelectorAll('button, select, textarea, input, [tabindex]:not([tabindex="-1"])');
-    if (focusables.length === 0) return;
-    var first = focusables[0];
-    var last = focusables[focusables.length - 1];
-    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  // === Focus management (ringkas: pakai `inert`) ===
+  // Saat panel (modal/drawer/chat) terbuka, kita buat area lain inert sehingga
+  // fokus keyboard & screen-reader otomatis terkurung di dalam panel — tanpa
+  // kalkulasi first/last manual yang rumit.
+  var HOME = document.querySelector('.homepage');
+  function setPanelFocus(panel) {
+    if (!HOME) return;
+    // Semua panel non-aktif di-jadikan inert. Panel aktif bebas fokus.
+    HOME.inert = true;
+    document.querySelectorAll('.dock, .drawer').forEach(function (el) {
+      el.inert = !(el === panel);
+    });
+  }
+  function releaseFocus() {
+    if (!HOME) return;
+    HOME.inert = false;
+    document.querySelectorAll('.dock, .drawer').forEach(function (el) { el.inert = false; });
   }
 
   // === Wire events ===
@@ -184,7 +196,6 @@
         if (modalRoot.classList.contains('open')) { closeModal(); return; }
         if (drawer.classList.contains('open')) { closeDrawer(); return; }
       }
-      focusTrap(e);
     });
   }
 

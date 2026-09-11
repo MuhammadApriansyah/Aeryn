@@ -27,7 +27,6 @@ body {
   background: var(--bg-0);
   color: var(--text-1);
   overflow-x: hidden;
-  cursor: none;
 }
 @media (max-width: 768px) { body { cursor: auto; } }
 
@@ -202,26 +201,61 @@ body {
   gap: 20px;
 }
 .division-card {
+  position: relative;
   background: rgba(255,255,255,0.03);
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 28px 24px;
+  overflow: hidden;
   transition: transform var(--ds-base) var(--ease-enter), background var(--ds-base), border-color var(--ds-base);
 }
 .division-card:hover {
   background: rgba(255,255,255,0.06);
   border-color: var(--accent);
-  transform: translateY(-6px);
+  transform: translateY(-8px) scale(1.02);
 }
-.division-icon { font-size: 32px; display: block; margin-bottom: 16px; }
+.division-icon { font-size: 32px; display: block; margin-bottom: 14px; }
+.division-rank {
+  position: absolute;
+  top: 18px; right: 20px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.15);
+  transition: -webkit-text-stroke var(--ds-base), opacity var(--ds-base);
+}
+.division-card:hover .division-rank {
+  -webkit-text-stroke: 1px var(--accent-2);
+}
 .division-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; margin-bottom: 8px; }
-.division-card p { font-size: 14px; color: var(--text-2); line-height: 1.5; }
+.division-card p { font-size: 14px; color: var(--text-2); line-height: 1.5; margin-bottom: 14px; }
+.division-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.division-tags span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(109,92,255,0.12);
+  color: var(--accent);
+  border: 1px solid rgba(109,92,255,0.25);
+}
 
 /* --- Stats --- */
+.stats-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
 .stats-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 40px;
+  gap: 36px;
 }
 .stat { min-width: 140px; }
 .stat-num {
@@ -241,6 +275,42 @@ body {
   color: var(--accent-2);
 }
 .stat-label { font-size: 14px; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 8px; }
+
+/* Capability bars (hero 3) */
+.capabilities {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.capability { opacity: 0; transform: translateX(30px); }
+.cap-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--text-1);
+}
+.cap-pct {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent-2);
+}
+.cap-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+.cap-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: var(--gradient);
+  transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--delay, 0s);
+}
 
 /* --- Features --- */
 .features-grid {
@@ -271,8 +341,32 @@ body {
   font-size: 12px; color: var(--accent-2);
   display: block; margin-bottom: 12px;
 }
+.feature-icon {
+  width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  border-radius: 14px;
+  background: var(--accent-dim, rgba(109,92,255,0.12));
+  border: 1px solid rgba(109,92,255,0.2);
+  margin-bottom: 16px;
+  transition: transform var(--ds-base) var(--ease-enter), background var(--ds-base);
+}
+.feature-card:hover .feature-icon {
+  transform: scale(1.1) rotate(-4deg);
+  background: rgba(109,92,255,0.2);
+}
 .feature-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; margin-bottom: 10px; }
-.feature-card p { font-size: 14px; color: var(--text-2); line-height: 1.6; }
+.feature-card p { font-size: 14px; color: var(--text-2); line-height: 1.6; margin-bottom: 14px; }
+.feature-more {
+  font-size: 12px;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0.6;
+  transition: opacity var(--ds-base), gap var(--ds-base) var(--ease-enter);
+}
+.feature-card:hover .feature-more { opacity: 1; gap: 10px; }
 
 /* ============ Bottom floating dock ============ */
 .dock {
@@ -547,6 +641,34 @@ body {
 
 /* Reveal (data-reveal initial hidden) */
 [data-reveal] { opacity: 0; transform: translateY(40px); }
+
+/* ============ Accessibility (sederhana & jelas) ============ */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 16px;
+  z-index: 600;
+  padding: 10px 16px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+  text-decoration: none;
+  transition: top var(--ds-fast) var(--ease-enter);
+}
+.skip-link:focus {
+  top: 16px;
+}
+/* Fokus keyboard selalu terlihat (ring, tanpa JS rumit) */
+:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+/* Hanya pakai custom cursor di perangkat hover + tanpa reduced-motion */
+@media (hover: hover) and (pointer: fine) {
+  body { cursor: none; }
+}
 
 /* ============ Reduced motion ============ */
 @media (prefers-reduced-motion: reduce) {

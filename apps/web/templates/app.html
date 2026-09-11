@@ -11,6 +11,9 @@
 </head>
 <body data-scroll-container>
 
+  <!-- Skip link (a11y sederhana) -->
+  <a class="skip-link" href="#hero1" data-cursor-hover="Lompat">Lewati ke konten utama</a>
+
   <!-- ============ MAGNETIC CURSOR ============ -->
   <div class="cursor-outer" aria-hidden="true"></div>
   <div class="cursor-inner" aria-hidden="true"></div>
@@ -47,59 +50,92 @@
     <!-- HERO 2 — Divisions -->
     <section class="hero hero-2" id="hero2" data-reveal>
       <div class="hero-inner">
-        <p class="hero-eyebrow" data-reveal>5 Divisi Kognitif</p>
-        <h2 class="hero-heading" data-reveal>Satu agen, lima otak yang <span class="accent">bersinergi</span></h2>
+        <p class="hero-eyebrow" data-reveal>Arsitektur Internal</p>
+        <h2 class="hero-heading" data-reveal>Lima divisi kognitif, satu <span class="accent">kesadaran</span></h2>
+
         <div class="division-grid">
           <div class="division-card" data-parallax="0.06" data-cursor-hover="Creative">
             <span class="division-icon">🎨</span>
+            <div class="division-rank">01</div>
             <h3>Creative</h3>
-            <p>Style, POV, narasi, prosa</p>
+            <p>Style, POV, narasi & prosa — menulis dengan identitas, bukan template.</p>
+            <div class="division-tags"><span>Style</span><span>POV</span><span>Narasi</span></div>
           </div>
           <div class="division-card" data-parallax="0.1" data-cursor-hover="Psych">
             <span class="division-icon">🧠</span>
+            <div class="division-rank">02</div>
             <h3>Psych</h3>
-            <p>Kecerdasan psikologis & kesejahteraan</p>
+            <p>Kecerdasan psikologis — kesejahteraan, empati & nuansa emosional.</p>
+            <div class="division-tags"><span>Empati</span><span>Wellness</span><span>Nuansa</span></div>
           </div>
           <div class="division-card" data-parallax="0.14" data-cursor-hover="Reasoning">
             <span class="division-icon">⚙️</span>
+            <div class="division-rank">03</div>
             <h3>Reasoning</h3>
-            <p>MCTS, FOL, critique, graph</p>
+            <p>Neuro-simbolik — MCTS, FOL, critique & reasoning graph.</p>
+            <div class="division-tags"><span>MCTS</span><span>FOL</span><span>Graph</span></div>
           </div>
           <div class="division-card" data-parallax="0.08" data-cursor-hover="Gov">
             <span class="division-icon">🛡️</span>
+            <div class="division-rank">04</div>
             <h3>Governance</h3>
-            <p>Guardrail & kendali keamanan</p>
+            <p>Guardrail berlapis & kendali keamanan untuk eksekusi yang aman.</p>
+            <div class="division-tags"><span>Guardrail</span><span>HITL</span><span>Sandbox</span></div>
           </div>
           <div class="division-card" data-parallax="0.12" data-cursor-hover="Infra">
             <span class="division-icon">🏗️</span>
+            <div class="division-rank">05</div>
             <h3>Infra</h3>
-            <p>Sinkronisasi & validasi</p>
+            <p>Sinkronisasi, validasi & oracle — fondasi yang selalu siap eksekusi.</p>
+            <div class="division-tags"><span>Sync</span><span>Validasi</span><span>Oracle</span></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- HERO 3 — Stats -->
+    <!-- HERO 3 — Stats + Capabilities -->
     <section class="hero hero-3" id="hero3" data-reveal>
       <div class="hero-inner">
-        <p class="hero-eyebrow" data-reveal>Angka yang berbicara</p>
-        <h2 class="hero-heading" data-reveal>Dibangun untuk <span class="accent">skala</span></h2>
-        <div class="stats-row">
-          <div class="stat" data-count="70" data-suffix="+">
-            <span class="stat-num">0</span><span class="stat-suffix">+</span>
-            <p class="stat-label">Modul inti</p>
+        <p class="hero-eyebrow" data-reveal>Dibangun untuk skala</p>
+        <h2 class="hero-heading" data-reveal>Angka di balik <span class="accent">kesadaran</span></h2>
+
+        <div class="stats-layout">
+          <div class="stats-row">
+            <div class="stat" data-count="70" data-suffix="+">
+              <span class="stat-num">0</span><span class="stat-suffix">+</span>
+              <p class="stat-label">Modul inti</p>
+            </div>
+            <div class="stat" data-count="5" data-suffix="">
+              <span class="stat-num">0</span><span class="stat-suffix"></span>
+              <p class="stat-label">Divisi kognitif</p>
+            </div>
+            <div class="stat" data-count="230" data-suffix="+">
+              <span class="stat-num">0</span><span class="stat-suffix">+</span>
+              <p class="stat-label">Endpoint API</p>
+            </div>
+            <div class="stat" data-count="765" data-suffix="">
+              <span class="stat-num">0</span><span class="stat-suffix"></span>
+              <p class="stat-label">Test passing</p>
+            </div>
           </div>
-          <div class="stat" data-count="5" data-suffix="">
-            <span class="stat-num">0</span><span class="stat-suffix"></span>
-            <p class="stat-label">Divisi kognitif</p>
-          </div>
-          <div class="stat" data-count="230" data-suffix="+">
-            <span class="stat-num">0</span><span class="stat-suffix">+</span>
-            <p class="stat-label">Endpoint API</p>
-          </div>
-          <div class="stat" data-count="765" data-suffix="">
-            <span class="stat-num">0</span><span class="stat-suffix"></span>
-            <p class="stat-label">Test passing</p>
+
+          <div class="capabilities">
+            <div class="capability" data-cursor-hover="Neural">
+              <div class="cap-info"><span>Memory Neural</span><span class="cap-pct">98%</span></div>
+              <div class="cap-bar"><span class="cap-fill" data-fill="98"></span></div>
+            </div>
+            <div class="capability" data-cursor-hover="Rust">
+              <div class="cap-info"><span>Mesin Rust</span><span class="cap-pct">240μs</span></div>
+              <div class="cap-bar"><span class="cap-fill" data-fill="94" style="--delay:.1s"></span></div>
+            </div>
+            <div class="capability" data-cursor-hover="Streaming">
+              <div class="cap-info"><span>Streaming SSE</span><span class="cap-pct">Real-time</span></div>
+              <div class="cap-bar"><span class="cap-fill" data-fill="100"></span></div>
+            </div>
+            <div class="capability" data-cursor-hover="Guardrail">
+              <div class="cap-info"><span>Guardrail 4-layer</span><span class="cap-pct">Aman</span></div>
+              <div class="cap-bar"><span class="cap-fill" data-fill="88" style="--delay:.2s"></span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -112,34 +148,46 @@
         <h2 class="hero-heading" data-reveal>Semua yang Aeryn <span class="accent">bisa</span></h2>
         <div class="features-grid">
           <article class="feature-card" data-cursor-hover="Memory">
+            <div class="feature-icon">🧠</div>
             <span class="feature-num">01</span>
             <h3>Memory Neural</h3>
             <p>Recall semantik + embedding 3-tier (neural/hash/TF-IDF) untuk konteks lintas sesi.</p>
+            <span class="feature-more">Jelajahi →</span>
           </article>
           <article class="feature-card" data-cursor-hover="Tools">
+            <div class="feature-icon">🔧</div>
             <span class="feature-num">02</span>
             <h3>Tool Runtime</h3>
             <p>Bash, file, web search, dengan 4-layer guardrail + human-in-the-loop.</p>
+            <span class="feature-more">Jelajahi →</span>
           </article>
           <article class="feature-card" data-cursor-hover="Streaming">
+            <div class="feature-icon">⚡</div>
             <span class="feature-num">03</span>
             <h3>True Streaming</h3>
             <p>SSE token-by-token, phase status, tool viz, citation — polish 7 pilar.</p>
+            <span class="feature-more">Jelajahi →</span>
           </article>
           <article class="feature-card" data-cursor-hover="Multi-agent">
+            <div class="feature-icon">🕸️</div>
             <span class="feature-num">04</span>
             <h3>Multi-Agent</h3>
             <p>Supervisor, handoff, blackboard, orkestrasi paralel antar divisi.</p>
+            <span class="feature-more">Jelajahi →</span>
           </article>
           <article class="feature-card" data-cursor-hover="Observability">
+            <div class="feature-icon">📡</div>
             <span class="feature-num">05</span>
             <h3>Observability</h3>
             <p>OpenTelemetry GenAI semantic conventions untuk trace & span.</p>
+            <span class="feature-more">Jelajahi →</span>
           </article>
           <article class="feature-card" data-cursor-hover="Safety">
+            <div class="feature-icon">🔐</div>
             <span class="feature-num">06</span>
             <h3>Safety & Auth</h3>
             <p>Guardrail berlapis, sandbox, least-privilege API key, HITL.</p>
+            <span class="feature-more">Jelajahi →</span>
           </article>
         </div>
       </div>

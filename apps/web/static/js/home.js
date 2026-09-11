@@ -91,6 +91,23 @@
         delay: 0.2,
       });
     });
+
+    // Motion menyeluruh: tiap kartu grid masuk berurutan (stagger).
+    document.querySelectorAll('.division-grid, .features-grid').forEach(function (grid) {
+      var cards = grid.children;
+      gsap.from(cards, {
+        opacity: 0,
+        y: 40,
+        duration: 0.7,
+        ease: 'power3.out',
+        stagger: 0.1,
+        scrollTrigger: {
+          trigger: grid,
+          start: 'top 80%',
+          once: true,
+        },
+      });
+    });
   }
 
   // === 2b. SECTION TRANSITIONS (pin + scrub antar hero) ===
@@ -139,7 +156,41 @@
     });
   }
 
-  // === 3. SCROLL PROGRESS ===
+  // === 3. CAPABILITY BARS (hero 3) ===
+  function initCapabilities() {
+    if (reduceMotion) {
+      // Tanpa animasi — isi bar langsung.
+      document.querySelectorAll('.cap-fill').forEach(function (f) {
+        f.style.width = (f.getAttribute('data-fill') || '0') + '%';
+      });
+      document.querySelectorAll('.capability').forEach(function (c) { c.style.opacity = 1; c.style.transform = ''; });
+      return;
+    }
+    document.querySelectorAll('.capability').forEach(function (cap) {
+      var fill = cap.querySelector('.cap-fill');
+      var target = parseInt((fill && fill.getAttribute('data-fill')) || '0', 10);
+      // Slide-in dari kanan.
+      gsap.to(cap, {
+        opacity: 1,
+        x: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: cap, start: 'top 85%', once: true },
+      });
+      // Bar ngisi dari kiri saat viewport.
+      if (fill) {
+        gsap.to(fill, {
+          width: target + '%',
+          duration: 1.4,
+          delay: 0.2,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: cap, start: 'top 85%', once: true },
+        });
+      }
+    });
+  }
+
+  // === 4. SCROLL PROGRESS ===
   function initScrollProgress() {
     var bar = document.querySelector('.scroll-progress-bar');
     if (!bar) return;
@@ -156,7 +207,7 @@
     update();
   }
 
-  // === 4. COUNT-UP STATS ===
+  // === 5. COUNT-UP STATS ===
   function initCountUp() {
     if (reduceMotion || !hasGsap) {
       // Tanpa animasi — set angka final langsung.
@@ -181,7 +232,7 @@
     });
   }
 
-  // === 5. MAGNETIC CURSOR ===
+  // === 6. MAGNETIC CURSOR ===
   function initCursor() {
     if (reduceMotion) return;
     var outer = document.querySelector('.cursor-outer');
@@ -210,7 +261,7 @@
     });
   }
 
-  // === 6. THREE.JS PARTICLE BACKGROUND ===
+  // === 7. THREE.JS PARTICLE BACKGROUND ===
   function initParticles() {
     if (reduceMotion || typeof window.THREE === 'undefined') return;
     var container = document.getElementById('particleBg');
@@ -260,6 +311,7 @@
     initLenis();
     initScrollAnimations();
     initSectionTransitions();
+    initCapabilities();
     initScrollProgress();
     initCountUp();
     initCursor();
