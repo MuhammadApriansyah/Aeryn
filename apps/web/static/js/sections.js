@@ -282,25 +282,61 @@
   }
 
   async function loadSettings(container) {
-    // Settings: provider/model (client-side, sama seperti chat.html settings).
     var box = el('div', 'section-stack');
-    box.appendChild(el('div', 'section-title', '⚙ Settings'));
+    box.appendChild(el('div', 'section-title', '⚙ Settings — Provider & Model'));
+
+    function save() {
+      try {
+        localStorage.setItem('aeryn.provider', provider.value);
+        localStorage.setItem('aeryn.model', model.value);
+      } catch (e) { /* ignore */ }
+    }
 
     var provider = el('select', 'section-select');
     ['gemini', 'openai', 'anthropic', 'deepseek'].forEach(function (p) {
-      var o = el('option', null, p);
-      o.value = p;
-      provider.appendChild(o);
+      var o = el('option', null, p); o.value = p; provider.appendChild(o);
     });
+    var savedProvider = null, savedModel = null;
+    try { savedProvider = localStorage.getItem('aeryn.provider'); savedModel = localStorage.getItem('aeryn.model'); } catch (e) {}
+    if (savedProvider) provider.value = savedProvider;
     box.appendChild(labelRow('Provider', provider));
 
     var model = el('select', 'section-select');
     ['auto', 'gemini-3.5-flash-lite', 'gpt-4o', 'claude-sonnet-4', 'deepseek-chat'].forEach(function (m) {
-      var o = el('option', null, m);
-      o.value = m;
-      model.appendChild(o);
+      var o = el('option', null, m); o.value = m; model.appendChild(o);
     });
+    if (savedModel) model.value = savedModel;
     box.appendChild(labelRow('Model', model));
+
+    provider.addEventListener('change', save);
+    model.addEventListener('change', save);
+
+    // Test koneksi LLM — cek nyata via /v1/chat/stream.
+    var testRow = el('div', 'section-form');
+    var testBtn = el('button', 'section-btn', 'Test Koneksi');
+    var testOut = el('div', 'section-hint', 'Preferensi tersimpan lokal. Test kirim ping ke LLM.');
+    testRow.appendChild(testBtn);
+    box.appendChild(testRow);
+    box.appendChild(testOut);
+
+    testBtn.addEventListener('click', async function () {
+      testOut.textContent = 'Menguji koneksi LLM…';
+      testBtn.disabled = true;
+      try {
+        var res = await fetch('/v1/chat/stream', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: 'ping', session_id: 'connectivity_test_' + Date.now() }),
+        });
+        var text = await res.text();
+        var gotData = text.indexOf('"type"') !== -1 && (text.indexOf('"token"') !== -1 || text.indexOf('"done"') !== -1);
+        testOut.textContent = gotData ? '✓ Koneksi LLM OK (stream berjalan).' : '⚠ Streaming kosong/tidak ada respons.';
+      } catch (e) {
+        testOut.textContent = '✗ Gagal: ' + e.message;
+      } finally {
+        testBtn.disabled = false;
+      }
+    });
 
     return box;
   }
