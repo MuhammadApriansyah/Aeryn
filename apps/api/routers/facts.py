@@ -35,6 +35,30 @@ async def fact_entities():
     return {"entities": store.entities()}
 
 
+class EvalIn(BaseModel):
+    name: str = ""
+    description: str = ""
+    trigger: str = ""
+    expertise: str = ""
+    examples: list = []
+    source: str = "api"
+
+
+@router.post("/evolution/evaluate")
+async def skill_evolve(body: EvalIn):
+    """Evaluate a candidate skill (B2) — returns verdict + records to fact graph."""
+    from aeryn_core.adaptive.skill_evolution import SkillCandidate, evolve
+    cand = SkillCandidate(
+        name=body.name,
+        description=body.description,
+        trigger=body.trigger,
+        expertise=body.expertise,
+        examples=body.examples,
+        source=body.source,
+    )
+    return evolve(cand)
+
+
 @router.get("/facts/{entity}")
 async def get_facts(entity: str, predicate: str = None, as_of: str = None):
     """Get facts for an entity (as-of now, or at a given valid time)."""
