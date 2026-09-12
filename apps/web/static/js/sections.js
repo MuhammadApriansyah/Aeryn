@@ -398,6 +398,69 @@
     return box;
   }
 
+  async function loadLogs(container) {
+    var box = el('div', 'section-stack');
+    box.appendChild(el('div', 'section-title', '📜 Console — Log Percakapan'));
+
+    // Pilih sesi dari /api/monitoring/sessions.
+    var sel = el('select', 'section-select');
+    var ph = el('option', null, 'Pilih sesi…'); ph.value = ''; sel.appendChild(ph);
+    box.appendChild(sel);
+
+    var logBox = el('div', 'section-stack');
+    logBox.appendChild(el('div', 'section-row', 'Pilih sesi untuk lihat log real-time (polling 4s).'));
+    box.appendChild(logBox);
+
+    try {
+      var s = await getJSON('/api/monitoring/sessions');
+      var sess = s && s.sessions;
+      if (Array.isArray(sess)) {
+        sess.forEach(function (x) {
+          var o = el('option', null, x.session_id + ' (' + x.messages + ' msg)');
+          o.value = x.session_id; sel.appendChild(o);
+        });
+      }
+    } catch (e) { box.appendChild(errorBox('Gagal load sesi monitoring: ' + e.message)); }
+
+    var timer = null;
+    function formatTime(t) { return t ? String(t).slice(5, 19) : ''; }
+    async function loadHistory(sessionId) {
+      try {
+        var h = await getJSON('/api/monitoring/history?session_id=' + encodeURIComponent(sessionId) + '&limit=50');
+        var msgs = h && h.history;
+        logBox.innerHTML = '';
+        if (Array.isArray(msgs) && msgs.length) {
+          msgs.forEach(function (m) {
+            var row = el('div', 'log-row ' + (m.role === 'user' ? 'user' : 'agent'));
+            var badge = el('span', 'log-badge', m.role === 'user' ? 'YOU' : 'AERYN');
+            var content = el('span', 'log-text', m.content || '');
+            var time = el('span', 'log-time', formatTime(m.created_at));
+            row.appendChild(badge);
+            row.appendChild(content);
+            row.appendChild(time);
+            logBox.appendChild(row);
+          });
+        } else {
+          logBox.appendChild(el('div', 'section-row', 'Belum ada pesan di sesi ini.'));
+        }
+      } catch (e2) {
+        logBox.innerHTML = '';
+        logBox.appendChild(errorBox('Gagal load history: ' + e2.message));
+      }
+    }
+
+    sel.addEventListener('change', function () {
+      if (timer) window.clearInterval(timer);
+      if (!sel.value) return;
+      loadHistory(sel.value);
+      timer = window.setInterval(function () { loadHistory(sel.value); }, 4000); // polling real-time
+    });
+
+    // Bersihkan timer saat container dimuat ulang (pakai rilis focus method).
+    window.AerynSection._cleanup = function () { if (timer) window.clearInterval(timer); };
+    return box;
+  }
+
   async function loadHealth(container) {
     var box = el('div', 'section-stack');
     box.appendChild(el('div', 'section-title', '🩺 Health — Status Sistem'));
@@ -430,6 +493,7 @@
     agents: loadAgents,
     sessions: loadSessions,
     skills: loadSkills,
+    logs: loadLogs,
     tasks: loadTasks,
     safety: loadSafety,
     trace: loadTrace,
@@ -439,6 +503,8 @@
   };
 
   async function load(id, container) {
+    // Bersihkan timer (mis. polling log) sebelum render section baru.
+    if (window.AerynSection._cleanup) { try { window.AerynSection._cleanup(); } catch (e) {} window.AerynSection._cleanup = null; }
     container.innerHTML = loading();
     var fn = LOADERS[id];
     if (!fn) {

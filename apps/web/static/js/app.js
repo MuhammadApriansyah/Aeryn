@@ -37,6 +37,7 @@
     agents:  { label: 'Agents',  size: 'large' },
     sessions:{ label: 'Sessions', size: 'medium' },
     skills:  { label: 'Skills',  size: 'medium' },
+    logs:    { label: 'Console', size: 'medium' },
     tasks:   { label: 'Tasks',   size: 'medium' },
     safety:  { label: 'Safety',  size: 'medium' },
     trace:   { label: 'Trace',   size: 'medium' },
