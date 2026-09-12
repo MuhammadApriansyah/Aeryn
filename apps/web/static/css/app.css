@@ -621,6 +621,16 @@ body {
 }
 .section-btn:hover { transform: translateY(-1px); }
 .section-result { font-size: 13px; color: var(--text-2); }
+.section-hint {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--accent-2);
+  background: rgba(0,217,255,0.06);
+  border: 1px solid rgba(0,217,255,0.15);
+  border-radius: 8px;
+  padding: 8px 10px;
+  min-height: 20px;
+}
 .section-output {
   background: var(--bg-1); border: 1px solid var(--border);
   border-radius: 10px; padding: 12px;

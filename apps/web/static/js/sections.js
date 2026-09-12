@@ -98,52 +98,65 @@
 
   async function loadTools(container) {
     var box = el('div', 'section-stack');
-    box.appendChild(el('div', 'section-title', '🔧 Tools'));
+    box.appendChild(el('div', 'section-title', '🔧 Tools — Eksekusi Cepat'));
 
-    // Execute form
+    // Hint param per tool bawaan (petunjuk UX, bukan schema backend).
+    var HINTS = {
+      fs_read:   { desc: 'Baca file',                   hint: '{"path": "/etc/hostname"}' },
+      fs_write:  { desc: 'Tulis file',                  hint: '{"path": "/tmp/a.txt", "content": "halo"}' },
+      fs_list:   { desc: 'List direktori',              hint: '{"path": "/tmp"}' },
+      terminal:  { desc: 'Jalankan perintah shell',     hint: '{"command": "ls -la"}' },
+      web_search:{ desc: 'Cari di web',                 hint: '{"query": "berita terbaru"}' },
+      web_fetch: { desc: 'Baca halaman web',            hint: '{"url": "https://example.com"}' },
+      python:    { desc: 'Eksekusi kode Python',        hint: '{"code": "print(2+2)"}' },
+    };
+
     var form = el('div', 'section-form-stack');
+    var row = el('div', 'section-form');
     var toolSel = el('select', 'section-select');
-    var toolOptPlaceholder = el('option', null, 'Pilih tool…');
-    toolOptPlaceholder.value = '';
-    toolSel.appendChild(toolOptPlaceholder);
+    var ph = el('option', null, 'Pilih tool…'); ph.value = ''; toolSel.appendChild(ph);
+    var runBtn = el('button', 'section-btn', 'Run');
+    row.appendChild(toolSel); row.appendChild(runBtn);
+
+    var hintBox = el('div', 'section-hint', '');
     var paramsInput = el('textarea', 'section-textarea', '');
-    paramsInput.placeholder = 'Params JSON (contoh: {"path": "/etc/hostname"})';
+    paramsInput.placeholder = 'Params JSON';
     paramsInput.rows = 2;
-    var execBtn = el('button', 'section-btn', 'Execute');
     var execResult = el('div', 'section-result', '');
 
-    form.appendChild(toolSel);
+    form.appendChild(row);
+    form.appendChild(hintBox);
     form.appendChild(paramsInput);
-    form.appendChild(execBtn);
     box.appendChild(form);
     box.appendChild(execResult);
 
-    // Load tool list ke dropdown.
+    // Load tool list ke dropdown. Saat pilih → tampilkan hint + desc.
     try {
       var tools = await getJSON(BASE + '/tools/list');
       var list = tools && (tools.tools || tools.result || tools);
       if (Array.isArray(list)) {
         list.forEach(function (t) {
           var name = typeof t === 'string' ? t : (t.name || t.id || String(t));
-          var o = el('option', null, name);
-          o.value = name;
-          toolSel.appendChild(o);
+          var o = el('option', null, name + (HINTS[name] ? ' — ' + HINTS[name].desc : ''));
+          o.value = name; toolSel.appendChild(o);
         });
       }
-    } catch (e) {
-      box.appendChild(errorBox('Gagal load tool list: ' + e.message));
+    } catch (e) { box.appendChild(errorBox('Gagal load tool list: ' + e.message)); }
+
+    function showHint() {
+      var name = toolSel.value;
+      var h = HINTS[name];
+      hintBox.textContent = h ? (h.desc + ' — contoh params:  ' + h.hint) : '';
+      if (h && h.hint && !paramsInput.value) paramsInput.value = h.hint;
     }
+    toolSel.addEventListener('change', showHint);
 
     async function doExecute() {
       var tool = toolSel.value;
       if (!tool) { execResult.textContent = 'Pilih tool dulu.'; return; }
       var params = {};
-      try {
-        params = paramsInput.value.trim() ? JSON.parse(paramsInput.value) : {};
-      } catch (e) {
-        execResult.textContent = 'Invalid JSON params: ' + e.message;
-        return;
-      }
+      try { params = paramsInput.value.trim() ? JSON.parse(paramsInput.value) : {}; }
+      catch (e) { execResult.textContent = 'Invalid JSON params: ' + e.message; return; }
       execResult.textContent = 'Menjalankan ' + tool + '…';
       try {
         var r = await fetch(BASE + '/tools/execute?tool=' + encodeURIComponent(tool), {
@@ -161,8 +174,26 @@
         execResult.appendChild(errorBox('Execute gagal: ' + e.message));
       }
     }
-    execBtn.addEventListener('click', doExecute);
+    runBtn.addEventListener('click', doExecute);
+    return box;
+  }
 
+  async function loadSkills(container) {
+    var box = el('div', 'section-stack');
+    box.appendChild(el('div', 'section-title', '🧩 Skills — Terpasang'));
+    try {
+      var r = await getJSON(BASE + '/skills');
+      var skills = r && (r.skills || r.result);
+      if (Array.isArray(skills) && skills.length) {
+        skills.forEach(function (s) {
+          box.appendChild(el('div', 'section-row', typeof s === 'string' ? s : (s.name || s.id || JSON.stringify(s))));
+        });
+      } else {
+        box.appendChild(el('div', 'section-row', 'Belum ada skill terpasang / API kosong.'));
+      }
+    } catch (e) {
+      box.appendChild(errorBox('Skills gagal: ' + e.message));
+    }
     return box;
   }
 
@@ -362,6 +393,7 @@
     tools: loadTools,
     agents: loadAgents,
     sessions: loadSessions,
+    skills: loadSkills,
     tasks: loadTasks,
     safety: loadSafety,
     trace: loadTrace,
