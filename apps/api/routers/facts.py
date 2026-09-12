@@ -59,6 +59,17 @@ async def skill_evolve(body: EvalIn):
     return evolve(cand)
 
 
+class HarnessIn(BaseModel):
+    tasks: list = []
+
+
+@router.post("/harness/eval")
+async def harness_eval(body: HarnessIn):
+    """Run an auto-harness evaluation batch (B3) — score + tuning feedback."""
+    from aeryn_core.adaptive.auto_harness import run_and_record
+    return run_and_record(body.tasks)
+
+
 @router.get("/facts/{entity}")
 async def get_facts(entity: str, predicate: str = None, as_of: str = None):
     """Get facts for an entity (as-of now, or at a given valid time)."""
