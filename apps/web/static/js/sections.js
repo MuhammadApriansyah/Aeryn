@@ -93,6 +93,53 @@
       entBox.appendChild(errorBox('Entities gagal: ' + e.message));
     }
 
+    // Knowledge Graph (Bitemporal) — dari /v1/facts
+    var kgTitle = el('div', 'section-subtitle', 'Knowledge Graph (bitemporal)');
+    box.appendChild(kgTitle);
+    var kgWrap = el('div', 'section-stack');
+    box.appendChild(kgWrap);
+    try {
+      var ent = await getJSON(BASE + '/facts/entities');
+      var kents = ent && ent.entities;
+      if (Array.isArray(kents) && kents.length) {
+        var chips = el('div', 'kg-chips');
+        kents.forEach(function (x) {
+          var c = el('button', 'kg-chip', x.entity + ' (' + x.facts + ')');
+          c.addEventListener('click', async function () {
+            kgWrap.innerHTML = '';
+            var detail = el('div', 'section-stack');
+            detail.appendChild(el('div', 'section-row', 'Fakta ' + x.entity + ':'));
+            var cur = await getJSON(BASE + '/facts/' + encodeURIComponent(x.entity));
+            (cur && cur.facts || []).forEach(function (f) {
+              var r = el('div', 'kg-row', '▪ ' + f.predicate + ' = ' + f.fact + '  <span class="kg-src">' + (f.source || '') + '</span>');
+              r.innerHTML = '▪ <b>' + f.predicate + '</b> = ' + f.fact + (f.source ? '  <span class="kg-src">[' + f.source + ']</span>' : '');
+              detail.appendChild(r);
+            });
+            // tombol history
+            var hbtn = el('button', 'section-btn', 'Riwayat (audit trail)');
+            hbtn.addEventListener('click', async function () {
+              var hist = await getJSON(BASE + '/facts/' + encodeURIComponent(x.entity) + '/history');
+              var hbox = el('div', 'section-stack');
+              (hist && hist.history || []).forEach(function (v) {
+                var r = el('div', 'kg-row', v.ts);
+                r.innerHTML = '↳ ' + v.tx_from + ' → <b>' + v.predicate + '</b> = ' + v.fact + (v.valid_to ? ' (valid s/d ' + v.valid_to + ')' : ' (berlaku)');
+                hbox.appendChild(r);
+              });
+              detail.appendChild(hbox);
+            });
+            detail.appendChild(hbtn);
+            kgWrap.appendChild(detail);
+          });
+          chips.appendChild(c);
+        });
+        kgWrap.appendChild(chips);
+      } else {
+        kgWrap.appendChild(el('div', 'section-row', 'Knowledge graph kosong.'));
+      }
+    } catch (e) {
+      kgWrap.appendChild(errorBox('Knowledge graph gagal: ' + e.message));
+    }
+
     return box;
   }
 

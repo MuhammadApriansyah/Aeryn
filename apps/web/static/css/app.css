@@ -623,6 +623,27 @@ body {
 .section-btn.danger { border-color: rgba(255,92,168,0.4); }
 .section-btn.danger:hover { border-color: var(--accent-3); background: rgba(255,92,168,0.12); color: var(--accent-3); }
 .section-result.error { color: var(--accent-3); }
+
+/* Knowledge graph (bitemporal) */
+.kg-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.kg-chip {
+  padding: 6px 12px;
+  border: 1px solid rgba(109,92,255,0.3);
+  border-radius: 999px;
+  background: rgba(109,92,255,0.1);
+  color: var(--accent);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background var(--ds-fast), transform var(--ds-fast);
+}
+.kg-chip:hover { background: rgba(109,92,255,0.2); transform: translateY(-1px); }
+.kg-row {
+  padding: 8px 10px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  word-break: break-word;
+}
+.kg-src { font-size: 11px; color: var(--text-3); margin-left: 4px; }
 .section-result { font-size: 13px; color: var(--text-2); }
 .section-hint {
   font-family: 'JetBrains Mono', monospace;
