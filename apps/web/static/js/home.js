@@ -228,28 +228,38 @@
     update();
   }
 
-  // === 5. COUNT-UP STATS ===
-  function initCountUp() {
-    if (reduceMotion || !hasGsap) {
-      // Tanpa animasi — set angka final langsung.
-      document.querySelectorAll('.stat').forEach(function (stat) {
-        var target = parseInt(stat.getAttribute('data-count') || '0', 10);
-        stat.querySelector('.stat-num').textContent = target;
-      });
-      return;
-    }
-    document.querySelectorAll('.stat').forEach(function (stat) {
-      var numEl = stat.querySelector('.stat-num');
-      var target = parseInt(stat.getAttribute('data-count') || '0', 10);
-      var obj = { val: 0 };
-      gsap.to(obj, {
-        val: target,
-        duration: 2,
-        ease: 'power2.out',
-        scrollTrigger: { trigger: stat, start: 'top 85%', once: true },
-        onUpdate: function () { numEl.textContent = Math.floor(obj.val); },
-        onComplete: function () { numEl.textContent = target; },
-      });
+  // === 5. LIVE STATS (angka nyata dari API, bukan hardcoded) ===
+  function animateNum(el, target) {
+    if (!el) return;
+    if (reduceMotion || !hasGsap) { el.textContent = target; return; }
+    var obj = { val: 0 };
+    gsap.to(obj, {
+      val: target, duration: 1.6, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+      onUpdate: function () { el.textContent = Math.floor(obj.val); },
+      onComplete: function () { el.textContent = target; },
+    });
+  }
+  function initLiveStats() {
+    var stats = {
+      endpoints: { url: '/openapi.json', val: function (d) { return d && d.paths ? Object.keys(d.paths).length : 0; } },
+      tools:     { url: '/v1/tools/list', val: function (d) { var t = d && (d.tools || d.result); return Array.isArray(t) ? t.length : 0; } },
+      sessions:  { url: '/v1/sessions', val: function (d) { var s = d && d.sessions; return Array.isArray(s) ? s.length : 0; } },
+      mem:       { url: '/health', val: function (d) { return Math.round((d && d.memory_mb) || 0); } },
+    };
+    var els = {};
+    document.querySelectorAll('.stat[data-live]').forEach(function (s) {
+      els[s.getAttribute('data-live')] = s.querySelector('.stat-num');
+      if (els[s.getAttribute('data-live')]) els[s.getAttribute('data-live')].textContent = '…';
+    });
+    Object.keys(stats).forEach(function (key) {
+      fetch(stats[key].url)
+        .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+        .then(function (d) {
+          var n = stats[key].val(d);
+          if (typeof n === 'number' && els[key]) animateNum(els[key], n);
+        })
+        .catch(function () { if (els[key]) els[key].textContent = '–'; });
     });
   }
 
@@ -356,7 +366,7 @@
     initSectionTransitions();
     initCapabilities();
     initScrollProgress();
-    initCountUp();
+    initLiveStats();
     initCursor();
     initCardGlow();
     // Defer partikel ke idle (performa: jangan blokir render utama).
