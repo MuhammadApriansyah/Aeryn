@@ -620,6 +620,9 @@ body {
   transition: transform var(--ds-fast) var(--ease-enter);
 }
 .section-btn:hover { transform: translateY(-1px); }
+.section-btn.danger { border-color: rgba(255,92,168,0.4); }
+.section-btn.danger:hover { border-color: var(--accent-3); background: rgba(255,92,168,0.12); color: var(--accent-3); }
+.section-result.error { color: var(--accent-3); }
 .section-result { font-size: 13px; color: var(--text-2); }
 .section-hint {
   font-family: 'JetBrains Mono', monospace;

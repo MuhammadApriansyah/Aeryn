@@ -461,6 +461,95 @@
     return box;
   }
 
+  async function loadAuth(container) {
+    var box = el('div', 'section-stack');
+    box.appendChild(el('div', 'section-title', '🔐 Auth — Masuk / Daftar'));
+
+    // State login tersimpan (dari localStorage).
+    function getMe() {
+      try { var s = localStorage.getItem('aeryn.user'); return s ? JSON.parse(s) : null; } catch (e) { return null; }
+    }
+    var me = getMe();
+
+    var statusBox = el('div', 'section-hint', me ? ('Masuk sebagai: ' + (me.display_name || me.email)) : 'Belum masuk.');
+    box.appendChild(statusBox);
+
+    if (me) {
+      var out = el('button', 'section-btn danger', 'Keluar');
+      out.addEventListener('click', function () {
+        try { localStorage.removeItem('aeryn.user'); } catch (e) {}
+        statusBox.textContent = 'Belum masuk.';
+        out.remove();
+        var h = el('div', 'section-hint', 'Kamu keluar. Muat ulang (F5) untuk masuk lagi.');
+        box.appendChild(h);
+      });
+      box.appendChild(out);
+    }
+    if (!me) {
+      box.appendChild(el('div', 'section-form', (function () {
+        var b = el('div', 'section-form-stack');
+        var mode = 'login';
+        var loginForm = el('div', 'section-form-stack');
+        var eMail = el('input', 'section-input'); eMail.placeholder = 'Email'; eMail.type = 'email';
+        var ePass = el('input', 'section-input'); ePass.placeholder = 'Password'; ePass.type = 'password';
+        var eBtn = el('button', 'section-btn', 'Masuk');
+        loginForm.appendChild(eMail); loginForm.appendChild(ePass); loginForm.appendChild(eBtn);
+        var regForm = el('div', 'section-form-stack'); regForm.style.display = 'none';
+        var rMail = el('input', 'section-input'); rMail.placeholder = 'Email'; rMail.type = 'email';
+        var rName = el('input', 'section-input'); rName.placeholder = 'Nama tampilan';
+        var rPass = el('input', 'section-input'); rPass.placeholder = 'Password'; rPass.type = 'password';
+        var rBtn = el('button', 'section-btn', 'Daftar');
+        regForm.appendChild(rMail); regForm.appendChild(rName); regForm.appendChild(rPass); regForm.appendChild(rBtn);
+        var tgl = el('button', 'section-btn', 'Punya akun? Masuk');
+        b.appendChild(loginForm); b.appendChild(regForm); b.appendChild(tgl);
+
+        function setMode(m) {
+          mode = m;
+          loginForm.style.display = m === 'login' ? '' : 'none';
+          regForm.style.display = m === 'register' ? '' : 'none';
+          tgl.textContent = m === 'login' ? 'Daftar akun baru' : 'Punya akun? Masuk';
+        }
+        tgl.addEventListener('click', function () { setMode(mode === 'login' ? 'register' : 'login'); });
+
+        var out2 = el('div', 'section-result');
+        b.appendChild(out2);
+        async function doLogin() {
+          out2.textContent = 'Memeriksa…';
+          try {
+            var r = await fetch('/v1/auth/login?username=' + encodeURIComponent(eMail.value) + '&password=' + encodeURIComponent(ePass.value), { method: 'POST' });
+            var d = await r.json();
+            if (d.status === 'success' && d.token) {
+              try { localStorage.setItem('aeryn.user', JSON.stringify(d.token)); } catch (e2) {}
+              out2.textContent = '✓ Masuk berhasil sebagai ' + (d.token.display_name || d.token.email) + '.';
+              setTimeout(function () { location.reload(); }, 900);
+            } else {
+              out2.textContent = 'Login gagal: ' + (d.error || d.detail || JSON.stringify(d));
+              out2.className = 'section-result error';
+            }
+          } catch (e2) { out2.textContent = 'Error: ' + e2.message; }
+        }
+        async function doRegister() {
+          out2.textContent = 'Membuat akun…';
+          try {
+            var r = await fetch('/v1/auth/register?username=' + encodeURIComponent(rMail.value) + '&password=' + encodeURIComponent(rPass.value) + '&role=user', { method: 'POST' });
+            var d = await r.json();
+            if (d.status === 'created' && d.user_id && d.user_id.id) {
+              out2.textContent = '✓ Akun dibuat. Silakan masuk dengan email & password.';
+            } else {
+              out2.textContent = 'Daftar gagal: ' + JSON.stringify(d);
+              out2.className = 'section-result error';
+            }
+          } catch (e2) { out2.textContent = 'Error: ' + e2.message; }
+        }
+        eBtn.addEventListener('click', doLogin);
+        rBtn.addEventListener('click', doRegister);
+        return b;
+      })()));
+    }
+
+    return box;
+  }
+
   async function loadHealth(container) {
     var box = el('div', 'section-stack');
     box.appendChild(el('div', 'section-title', '🩺 Health — Status Sistem'));
@@ -494,6 +583,7 @@
     sessions: loadSessions,
     skills: loadSkills,
     logs: loadLogs,
+    auth: loadAuth,
     tasks: loadTasks,
     safety: loadSafety,
     trace: loadTrace,

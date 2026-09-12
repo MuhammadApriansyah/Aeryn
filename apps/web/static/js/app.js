@@ -35,6 +35,7 @@
     memory:  { label: 'Memory',  size: 'large' },
     tools:   { label: 'Tools',   size: 'large' },
     agents:  { label: 'Agents',  size: 'large' },
+    auth:    { label: 'Auth',    size: 'medium' },
     sessions:{ label: 'Sessions', size: 'medium' },
     skills:  { label: 'Skills',  size: 'medium' },
     logs:    { label: 'Console', size: 'medium' },

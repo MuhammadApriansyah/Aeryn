@@ -13,6 +13,7 @@ module.exports = {
         AERYN_PORT: "3010",
         AERYN_HOST: "127.0.0.1",
         AERYN_ENV: "proot",
+        NEON_DATABASE_URL: "postgresql://sen@127.0.0.1:5432/aeryn",
         PYTHONUNBUFFERED: "1",
         TZ: "Asia/Jakarta",
       },
