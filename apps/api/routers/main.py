@@ -48,6 +48,7 @@ from apps.api.routers.platform_router import router as platform_router
 from apps.api.routers.dead_code_router import router as dead_router
 from apps.api.routers.chat_agent import router as chat_agent_router
 from apps.api.routers.facts import router as facts_router
+from apps.api.routers.cron import router as cron_router
 from apps.api.routers.advanced_router import router as advanced_router
 from apps.api.routers.approval_router import router as approval_router
 from apps.api.routers.task_router import router as task_router
@@ -78,9 +79,23 @@ async def lifespan(app: FastAPI):
     from aeryn_core.platform.agent_daemon import get_agent_daemon
     daemon = get_agent_daemon()
     await daemon.start()
+    # Start Cron Scheduler (fitur Hermes: jadwal berulang)
+    scheduler = None
+    try:
+        from aeryn_core.job_queue.scheduler import get_scheduler
+        scheduler = get_scheduler(poll_interval=10)
+        scheduler.start()
+        info("Cron scheduler started")
+    except Exception as e:
+        info("Cron scheduler skipped", error=str(e))
     yield
     task.cancel()
     await daemon.stop()
+    if scheduler is not None:
+        try:
+            scheduler.stop()
+        except Exception:
+            pass
 
 # --- App ---
 app = FastAPI(
@@ -251,6 +266,7 @@ _V1.include_router(admin_router)
 _V1.include_router(phase4_router)
 _V1.include_router(shared_router)
 _V1.include_router(facts_router)
+_V1.include_router(cron_router)
 app.include_router(_V1, prefix="/v1")
 
 # --- Adaptive Gateway Endpoint ---
