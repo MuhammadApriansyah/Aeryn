@@ -306,6 +306,52 @@ class AerynVault:
         
         return "\n".join(parts)
 
+    def delete(self, entry_id: str, layer: str = None) -> bool:
+        """Hapus entri vault (aman: hanya file .md di bawah BASE)."""
+        path = self._resolve(entry_id, layer)
+        if path is None:
+            return False
+        try:
+            os.remove(path)
+            return True
+        except OSError:
+            return False
+
+    def update(self, entry_id: str, body: str, layer: str = None) -> str:
+        """Timpa isi entri vault; return path atau ''."""
+        path = self._resolve(entry_id, layer)
+        if path is None:
+            return ""
+        try:
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(body)
+            return path
+        except OSError:
+            return ""
+
+    def _resolve(self, entry_id: str, layer: str = None):
+        """Resolve (entry_id, layer) ke path absolut; None jika di luar BASE / tak ada.
+
+        Cocokkan dengan prefix (karena nama file ber-suffix hash: foo__ab12.md).
+        """
+        import os.path as _p
+        eid = entry_id[:-3] if entry_id.endswith(".md") else entry_id
+        for sub in ([layer] if layer else SUBDIRS):
+            if not sub:
+                continue
+            d = _p.abspath(_p.join(BASE, sub))
+            if not d.startswith(_p.abspath(BASE) + os.sep):
+                continue
+            try:
+                cands = [_p.join(d, fn) for fn in os.listdir(d)
+                         if fn.endswith(".md") and fn.startswith(eid)]
+            except OSError:
+                continue
+            for cand in cands:
+                if _p.isfile(cand) and cand.startswith(_p.abspath(BASE) + os.sep):
+                    return cand
+        return None
+
 
 # Singleton
 _vault = None

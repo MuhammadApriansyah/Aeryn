@@ -140,6 +140,55 @@
       kgWrap.appendChild(errorBox('Knowledge graph gagal: ' + e.message));
     }
 
+    // Vault manager — list entri + edit + hapus
+    var vt = el('div', 'section-subtitle', 'Vault — Kelola Entri');
+    box.appendChild(vt);
+    var vbox = el('div', 'section-stack');
+    box.appendChild(vbox);
+
+    async function loadVault() {
+      vbox.innerHTML = '';
+      try {
+        var r = await getJSON(BASE + '/memory/vault/entries?limit=300');
+        var ents = r && r.results;
+        if (Array.isArray(ents) && ents.length) {
+          ents.forEach(function (e) {
+            var rw = el('div', 'section-row', '');
+            var lab = el('span', null, '');
+            lab.innerHTML = '📄 <b>' + e.title + '</b> <span class="kg-src">(' + e.layer + ' · ' + (e.size || 0) + 'B)</span>';
+            var act = el('div', 'session-actions');
+            var ebtn = el('button', 'session-btn', 'Edit');
+            var dbtn = el('button', 'session-btn danger', 'Hapus');
+            ebtn.addEventListener('click', async function () {
+              var body = prompt('Isi baru untuk "' + e.title + '":', 'isi entri');
+              if (body === null) return;
+              try {
+                await fetch(BASE + '/memory/vault/' + encodeURIComponent(e.id), {
+                  method: 'PUT', headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ body: body }) });
+                loadVault();
+              } catch (e2) { }
+            });
+            dbtn.addEventListener('click', async function () {
+              if (!confirm('Hapus "' + e.title + '"?')) return;
+              try {
+                await fetch(BASE + '/memory/vault/' + encodeURIComponent(e.id), { method: 'DELETE' });
+                loadVault();
+              } catch (e2) { }
+            });
+            act.appendChild(ebtn); act.appendChild(dbtn);
+            rw.appendChild(lab); rw.appendChild(act);
+            vbox.appendChild(rw);
+          });
+        } else {
+          vbox.appendChild(el('div', 'section-row', '(vault kosong)'));
+        }
+      } catch (e3) {
+        vbox.appendChild(errorBox('Vault gagal: ' + e3.message));
+      }
+    }
+    loadVault();
+
     return box;
   }
 

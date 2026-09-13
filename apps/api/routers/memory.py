@@ -53,17 +53,33 @@ async def vault_search(query: str = "", limit: int = 10):
 
 
 @router.get("/vault/entries")
-async def vault_entries(layer: str = ""):
+async def vault_entries(layer: str = "", limit: int = 200, offset: int = 0):
     """List vault entries."""
     from aeryn_core.memory.vault import get_vault
-    
+
     vault = get_vault()
-    if layer:
-        results = vault.list_layer(layer)
-    else:
-        results = vault.list_entries()
-    
+    results = vault.list_entries(layer=layer, limit=limit, offset=offset)
     return {"results": results, "count": len(results)}
+
+
+class VaultUpdateRequest(BaseModel):
+    body: str
+
+
+@router.delete("/vault/{entry_id}")
+async def vault_delete(entry_id: str, layer: str = ""):
+    """Hapus entri vault (aman: hanya file .md di bawah BASE)."""
+    from aeryn_core.memory.vault import get_vault
+    ok = get_vault().delete(entry_id, layer=layer)
+    return {"status": "deleted" if ok else "not_found"}
+
+
+@router.put("/vault/{entry_id}")
+async def vault_update(entry_id: str, req: VaultUpdateRequest, layer: str = ""):
+    """Timpa isi entri vault dengan body baru."""
+    from aeryn_core.memory.vault import get_vault
+    path = get_vault().update(entry_id, req.body, layer=layer)
+    return {"status": "ok" if path else "not_found", "path": path}
 
 
 # ========================================
