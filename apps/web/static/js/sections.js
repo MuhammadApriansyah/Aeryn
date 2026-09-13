@@ -597,6 +597,72 @@
     return box;
   }
 
+  async function loadCron(container) {
+    var box = el('div', 'section-stack');
+    box.appendChild(el('div', 'section-title', '⏰ Cron — Jadwal Berulang'));
+
+    // Form tambah job
+    var form = el('div', 'section-stack');
+    var n = el('input', 'section-input'); n.placeholder = 'Nama job';
+    var sc = el('input', 'section-input'); sc.placeholder = 'Cron (mis. "0 9 * * *")'; sc.value = '0 9 * * *';
+    var u = el('input', 'section-input'); u.placeholder = 'URL tujuan (action)'; u.value = 'http://127.0.0.1:3010/v1/facts/entities';
+    var row = el('div', 'section-form');
+    var add = el('button', 'section-btn', '+ Tambah');
+    row.appendChild(add);
+    form.appendChild(n); form.appendChild(sc); form.appendChild(u); form.appendChild(row);
+    box.appendChild(form);
+
+    var list = el('div', 'section-stack');
+    box.appendChild(list);
+    var status = el('div', 'section-hint', '');
+    box.appendChild(status);
+
+    async function refresh() {
+      list.innerHTML = '';
+      try {
+        var r = await getJSON(BASE + '/cron/jobs');
+        var jobs = r && r.jobs;
+        if (Array.isArray(jobs) && jobs.length) {
+          jobs.forEach(function (j) {
+            var rowEl = el('div', 'section-row', '');
+            var info = el('span', null, '<b>' + j.name + '</b>  ' + j.schedule + '  → ' + j.action_url + '  · ' + (j.enabled ? 'ON' : 'OFF') + ' · run:' + (j.run_count || 0) + ' · ' + (j.last_status || '-'));
+            info.innerHTML = '<b>' + j.name + '</b> <span class="kg-src">' + j.schedule + '</span><br>' + j.action_url + '<br>status: <b>' + (j.last_status || '-') + '</b> · run:' + (j.run_count || 0) + ' · next: ' + (j.next_run || '-');
+            var del = el('button', 'session-btn danger', '✕');
+            del.addEventListener('click', async function () {
+              await fetch(BASE + '/cron/jobs/' + encodeURIComponent(j.id), { method: 'DELETE' });
+              refresh();
+            });
+            rowEl.appendChild(info);
+            rowEl.appendChild(del);
+            list.appendChild(rowEl);
+          });
+        } else {
+          list.appendChild(el('div', 'section-row', 'Belum ada job cron. Tambah di atas.'));
+        }
+      } catch (e) {
+        list.appendChild(errorBox('Cron gagal: ' + e.message));
+      }
+    }
+
+    add.addEventListener('click', async function () {
+      status.textContent = 'Membuat job…';
+      try {
+        var r = await fetch(BASE + '/cron/jobs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: n.value || 'unnamed', schedule: sc.value, url: u.value, method: 'GET' }),
+        });
+        var d = await r.json();
+        status.textContent = d.status === 'created' ? '✓ Job dibuat: ' + d.id : 'Gagal: ' + JSON.stringify(d);
+        n.value = '';
+        refresh();
+      } catch (e2) { status.textContent = 'Error: ' + e2.message; }
+    });
+
+    refresh();
+    return box;
+  }
+
   async function loadHealth(container) {
     var box = el('div', 'section-stack');
     box.appendChild(el('div', 'section-title', '🩺 Health — Status Sistem'));
@@ -631,6 +697,7 @@
     skills: loadSkills,
     logs: loadLogs,
     auth: loadAuth,
+    cron: loadCron,
     tasks: loadTasks,
     safety: loadSafety,
     trace: loadTrace,
