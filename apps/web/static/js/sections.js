@@ -712,6 +712,62 @@
     return box;
   }
 
+  async function loadObs(container) {
+    var box = el('div', 'section-stack');
+    box.appendChild(el('div', 'section-title', '📊 Observability — Log Request'));
+
+    var statsBox = el('div', 'section-stack');
+    box.appendChild(statsBox);
+    var recent = el('div', 'section-stack');
+    box.appendChild(recent);
+    var refresh = el('button', 'section-btn', '↻ Muat ulang');
+    box.appendChild(refresh);
+
+    async function load() {
+      // Stats
+      statsBox.innerHTML = '';
+      try {
+        var s = await getJSON(BASE + '/logging/stats?window_hours=24');
+        var card = el('div', 'section-row', '');
+        card.innerHTML = 'Total: <b>' + s.total + '</b> · Error 5xx: <b>' + s.err5xx + '</b> (' + s.error_rate + '%) · 4xx: <b>' + s.err4xx + '</b> · Rata2: <b>' + s.avg_ms + 'ms</b> · Max: <b>' + s.max_ms + 'ms</b>';
+        statsBox.appendChild(card);
+        if (s.slowest && s.slowest.length) {
+          var sh = el('div', 'section-subtitle', 'Paling lambat');
+          statsBox.appendChild(sh);
+          (s.slowest || []).forEach(function (r) {
+            statsBox.appendChild(el('div', 'kg-row', '⏱ ' + r.duration_ms + 'ms · ' + r.method + ' ' + r.path + ' (' + r.status + ')'));
+          });
+        }
+        if (s.top_error_paths && s.top_error_paths.length) {
+          var th = el('div', 'section-subtitle', 'Untuk error 5xx');
+          statsBox.appendChild(th);
+          (s.top_error_paths || []).forEach(function (r) {
+            statsBox.appendChild(el('div', 'kg-row', '⚠ ' + r.path + ' → ' + r.n + 'x'));
+          });
+        }
+      } catch (e) { statsBox.appendChild(errorBox('Stats gagal: ' + e.message)); }
+
+      // Recent
+      recent.innerHTML = '';
+      try {
+        var l = await getJSON(BASE + '/logging/recent?limit=30');
+        var logs = l && l.logs;
+        if (Array.isArray(logs) && logs.length) {
+          (logs || []).forEach(function (r) {
+            var c = r.status >= 500 ? 'var(--accent-3)' : (r.status >= 400 ? 'var(--accent-2)' : 'inherit');
+            recent.appendChild(el('div', 'kg-row', '<span style="color:' + c + '">' + r.status + '</span> ' + r.method + ' ' + r.path + ' · ' + r.duration_ms + 'ms · ' + r.ts));
+          });
+        } else {
+          recent.appendChild(el('div', 'section-row', 'Belum ada log.'));
+        }
+      } catch (e2) { recent.appendChild(errorBox('Recent gagal: ' + e2.message)); }
+    }
+
+    refresh.addEventListener('click', load);
+    load();
+    return box;
+  }
+
   async function loadHealth(container) {
     var box = el('div', 'section-stack');
     box.appendChild(el('div', 'section-title', '🩺 Health — Status Sistem'));
@@ -747,6 +803,7 @@
     logs: loadLogs,
     auth: loadAuth,
     cron: loadCron,
+    obs: loadObs,
     tasks: loadTasks,
     safety: loadSafety,
     trace: loadTrace,

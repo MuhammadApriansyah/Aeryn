@@ -37,6 +37,7 @@
     agents:  { label: 'Agents',  size: 'large' },
     auth:    { label: 'Auth',    size: 'small' },
     cron:    { label: 'Cron',    size: 'medium' },
+    obs:     { label: 'Performa', size: 'medium' },
     sessions:{ label: 'Sessions', size: 'medium' },
     skills:  { label: 'Skills',  size: 'medium' },
     logs:    { label: 'Console', size: 'medium' },

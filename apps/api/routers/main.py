@@ -49,6 +49,7 @@ from apps.api.routers.dead_code_router import router as dead_router
 from apps.api.routers.chat_agent import router as chat_agent_router
 from apps.api.routers.facts import router as facts_router
 from apps.api.routers.cron import router as cron_router
+from apps.api.routers.logging_router import router as logging_router
 from apps.api.routers.advanced_router import router as advanced_router
 from apps.api.routers.approval_router import router as approval_router
 from apps.api.routers.task_router import router as task_router
@@ -106,6 +107,30 @@ app = FastAPI(
     redoc_url="/redoc",
     lifespan=lifespan,
 )
+
+# --- Request observability (fitur Hermes: log terstruktur) ---
+_SKIP_LOG_MARK = ("/health", "/static/", "/openapi.json", "/docs", "/redoc", "/favicon")
+
+
+@app.middleware("http")
+async def request_logging_middleware(request, call_next):
+    import time
+    path = request.url.path
+    t0 = time.time()
+    try:
+        response = await call_next(request)
+    except Exception:
+        response = None
+        raise
+    dur = int((time.time() - t0) * 1000)
+    if not path.startswith(_SKIP_LOG_MARK):
+        try:
+            status = response.status_code if response else 500
+            from aeryn_core.advanced_monitoring.request_logger import get_request_logger
+            get_request_logger().log(request.method, path, status, dur)
+        except Exception:
+            pass
+    return response
 
 app.add_middleware(
     CORSMiddleware,
@@ -267,6 +292,7 @@ _V1.include_router(phase4_router)
 _V1.include_router(shared_router)
 _V1.include_router(facts_router)
 _V1.include_router(cron_router)
+_V1.include_router(logging_router)
 app.include_router(_V1, prefix="/v1")
 
 # --- Adaptive Gateway Endpoint ---
