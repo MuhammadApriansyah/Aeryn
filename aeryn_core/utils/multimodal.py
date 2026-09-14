@@ -113,7 +113,7 @@ def _image_metadata(data: bytes, path: str) -> dict:
         img = Image.open(io.BytesIO(data))
         meta["width"], meta["height"] = img.size
         meta["mode"] = img.mode
-        meta["format"] = img.format or meta["format"]
+        meta["format"] = (img.format or meta["format"]).lower()
     except ImportError:
         pass
     except Exception:
