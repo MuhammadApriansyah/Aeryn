@@ -350,21 +350,56 @@ async def canary_probe():
 # ========================================
 
 @router.post("/session/record")
-async def session_record(role: str = "", content: str = ""):
-    """Record a session message."""
-    return {"status": "ok", "role": role}
+async def session_record(role: str = "", content: str = "", session_id: str = "default", user_id: str = "default"):
+    """Record a session message (V61.1: nyata via SessionStore)."""
+    try:
+        from aeryn_core.runtime.session_store import get_session_store
+        store = get_session_store()
+        sess = store.load_session(user_id, session_id)
+        messages = list(sess.messages) if sess else []
+        messages.append({"role": role, "content": content})
+        store.save_session(user_id, session_id, messages, title=(sess.title if sess else ""))
+        return {"status": "ok", "role": role, "session_id": session_id}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
 
 
 @router.get("/session/history")
-async def session_history(limit: int = 20):
-    """Get session history."""
-    return {"history": [], "count": 0}
+async def session_history(limit: int = 20, session_id: str = "", user_id: str = "default"):
+    """Get session history (V61.1: nyata dari SessionStore)."""
+    try:
+        from aeryn_core.runtime.session_store import get_session_store
+        store = get_session_store()
+        if session_id:
+            sess = store.load_session(user_id, session_id)
+            msgs = (sess.messages if sess else [])
+        else:
+            sessions = store.list_user_sessions(user_id) or []
+            msgs = []
+            for s in sessions:
+                loaded = store.load_session(user_id, s["session_id"])
+                if loaded:
+                    msgs.extend(loaded.messages)
+        return {"history": msgs[-limit:], "count": len(msgs[-limit:]), "session_id": session_id, "user_id": user_id}
+    except Exception as e:
+        return {"history": [], "count": 0, "error": str(e)}
 
 
 @router.get("/session/turns")
-async def session_turns():
-    """Get turn count."""
-    return {"turns": 0}
+async def session_turns(user_id: str = "default"):
+    """Get turn count (V61.1: nyata dari SessionStore)."""
+    try:
+        from aeryn_core.runtime.session_store import get_session_store
+        store = get_session_store()
+        sessions = store.list_user_sessions(user_id) or []
+        turns = 0
+        for s in sessions:
+            loaded = store.load_session(user_id, s["session_id"])
+            if loaded and loaded.messages:
+                turns += len(loaded.messages) // 2
+        return {"turns": turns}
+    except Exception as e:
+        return {"turns": 0, "error": str(e)}
 
 
 # ========================================
