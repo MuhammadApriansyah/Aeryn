@@ -20,3 +20,13 @@ Alasan masukkan ke batch 1: nama modul unik, tidak muncul di MANA pun
   tidak wildcard-import. MOVE reversibel via git.
 
 Verifikasi: `from apps.api.routers.main import app` sukses; /health sehat.
+
+== UPDATE 2026-09-14 (P2 audit) ==
+- token_monitor.py DIPULIHKAN ke aeryn_core/cost/ (dirujuk oleh
+  tests/test_security_cost.py::test_token_monitor). Audit batch1 TIDAK
+  memindai tests/, sehingga token_monitor salah dikira true-orphan.
+- PELAJARAN: dead_code_audit.py kini SRC_DIRS mencakup [tests, scripts,
+  console] supaya modul yg dirujuk test TIDAK diarsip.
+- Sisanya (6 modul) tetap di arsip: rate_rust, model_router,
+  realtime_rust, websocket_rust, auth_plugin, tui_monitor (inti kode,
+  tanpa ref test/app).

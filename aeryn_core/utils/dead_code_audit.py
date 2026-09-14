@@ -14,7 +14,7 @@ import os
 import sys
 
 ROOT = "/home/sen/aeryn-core-agent"
-SRC_DIRS = ["aeryn_core", "apps/api"]
+SRC_DIRS = ["aeryn_core", "apps/api", "tests", "scripts", "console"]
 ENTRY_MODULES = {
     "apps.api.routers.main", "apps.api.aeryn_api", "aeryn_core.launcher",
     "apps.api.server", "apps.api.main",
@@ -83,6 +83,8 @@ def main():
     core_src = "".join(open(full, encoding="utf-8", errors="ignore").read()
                        for rel, full in files
                        if rel.startswith(("apps/", "aeryn_core", "tests", "scripts")))
+    test_src = "".join(open(full, encoding="utf-8", errors="ignore").read()
+                       for rel, full in files if rel.startswith(("tests", "working_tests")))
     mods = {}
     for rel, full in files:
         m = module_name(rel)
