@@ -363,14 +363,24 @@ async def get_superseded(content_id: str):
 
 @router.post("/canary/plant")
 async def canary_plant(marker: str = ""):
-    """Plant a canary."""
-    return {"status": "ok", "marker": marker}
+    """Plant a canary (V61.1: modul nyata)."""
+    try:
+        from aeryn_core.memory.memory_canary import plant
+        from aeryn_core.memory.core_memory import CoreMemory
+        return {"status": "ok", "marker": marker, "result": plant(CoreMemory())}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
 
 
 @router.get("/canary/probe")
 async def canary_probe():
-    """Probe canaries."""
-    return {"results": []}
+    """Probe canaries (V61.1: modul nyata)."""
+    try:
+        from aeryn_core.memory.memory_canary import probe
+        from aeryn_core.memory.core_memory import CoreMemory
+        return {"results": probe(CoreMemory())}
+    except Exception as e:
+        return {"results": [], "error": str(e)}
 
 
 # ========================================
