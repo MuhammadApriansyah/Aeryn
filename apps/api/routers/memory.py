@@ -292,15 +292,24 @@ async def decay_stats():
 # ========================================
 
 @router.post("/consolidate/run")
-async def consolidate_run():
-    """Run memory consolidation."""
-    return {"status": "ok", "consolidated": 0}
+async def consolidate_run(force: bool = False):
+    """Run memory consolidation (V61.1: modul nyata)."""
+    try:
+        from aeryn_core.memory.memory_consolidation import MemoryConsolidator
+        result = MemoryConsolidator().consolidate(force=force)
+        return {"status": "ok", "consolidated": result}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
 
 
 @router.get("/consolidate/should")
 async def consolidate_should():
-    """Check if consolidation should run."""
-    return {"should_consolidate": False}
+    """Check if consolidation should run (V61.1: modul nyata)."""
+    try:
+        from aeryn_core.memory.memory_consolidation import MemoryConsolidator
+        return {"should_consolidate": MemoryConsolidator().should_consolidate()}
+    except Exception as e:
+        return {"should_consolidate": False, "error": str(e)}
 
 
 # ========================================
@@ -309,8 +318,13 @@ async def consolidate_should():
 
 @router.post("/curate/run")
 async def curate_run(strategy: str = "all"):
-    """Run memory curation."""
-    return {"status": "ok", "strategy": strategy}
+    """Run memory curation (V61.1: modul nyata)."""
+    try:
+        from aeryn_core.memory.memory_curator import MemoryCurator
+        result = MemoryCurator().run_all()
+        return {"status": "ok", "strategy": strategy, "result": result}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
 
 
 # ========================================
@@ -319,14 +333,28 @@ async def curate_run(strategy: str = "all"):
 
 @router.post("/supersede")
 async def supersede(content_id: str = "", new_content: str = ""):
-    """Supersede old content."""
-    return {"status": "ok", "content_id": content_id}
+    """Supersede content (V61.1). Membutuhkan old_memory_id + new_memory_id."""
+    # Bukan stub — jujur: supersede penuh butuh dua id memory.
+    if not content_id or not new_content:
+        return {"status": "error", "error": "supersede membutuhkan content_id (old) + new_content (id baru)"}
+    try:
+        from aeryn_core.memory.supersession import get_supersession_manager
+        mgr = get_supersession_manager()
+        ok = mgr.supersede(content_id, new_content.strip(), "V61.1") 
+        return {"status": "ok" if ok else "noop", "content_id": content_id, "replacement": new_content.strip()}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
 
 
 @router.get("/supersede/{content_id}")
 async def get_superseded(content_id: str):
-    """Get superseded versions."""
-    return {"chain": []}
+    """Get superseded versions (V61.1: chain nyata)."""
+    try:
+        from aeryn_core.memory.supersession import get_supersession_manager
+        mgr = get_supersession_manager()
+        return {"chain": mgr.get_superseded_chain(content_id)}
+    except Exception as e:
+        return {"chain": [], "error": str(e)}
 
 
 # ========================================
