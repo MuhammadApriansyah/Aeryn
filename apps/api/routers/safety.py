@@ -177,5 +177,12 @@ async def research_ungrounded(text: str = "", tools_used: Optional[List[str]] = 
 
 @router.get("/health")
 async def safety_health():
-    """Safety module health check."""
-    return {"status": "healthy", "module": "safety"}
+    """Safety module health — probe nyata: guardrails handler."""
+    gate_loaded = False
+    try:
+        from aeryn_core.safety.guardrails import get_guardrails
+        gate_loaded = get_guardrails() is not None
+    except Exception:
+        gate_loaded = False
+    return {"status": "healthy", "module": "safety",
+            "guardrail_loaded": gate_loaded}

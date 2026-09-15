@@ -174,5 +174,13 @@ async def graph_stats(graph_id: str):
 
 @router.get("/health")
 async def engine_health():
-    """Engine health check."""
-    return {"status": "healthy", "module": "engine"}
+    """Engine health — probe nyata: embedding server (Termux :8081)."""
+    import urllib.request
+    eng = {"embedding": False}
+    try:
+        with urllib.request.urlopen("http://127.0.0.1:8081/health", timeout=3) as r:
+            eng["embedding"] = r.status == 200
+    except Exception:
+        eng["embedding"] = False
+    return {"status": "healthy" if eng["embedding"] else "degraded",
+            "module": "engine", "embedding_server": eng["embedding"]}

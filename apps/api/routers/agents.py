@@ -89,5 +89,12 @@ async def enforce_budget(text: str = "", budget_ms: int = 1000):
 
 @router.get("/health")
 async def agents_health():
-    """Agents module health check."""
-    return {"status": "healthy", "module": "agents"}
+    """Agents module health — probe nyata: division manager."""
+    divisions = []
+    try:
+        from aeryn_core.agent.divisions import get_division_manager
+        divisions = get_division_manager().list_divisions() or []
+    except Exception:
+        divisions = []
+    return {"status": "healthy", "module": "agents",
+            "divisions": divisions, "division_count": len(divisions)}

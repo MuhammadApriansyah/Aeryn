@@ -424,5 +424,12 @@ async def tools_governance_evaluate(req: GovernanceRequest):
 
 @router.get("/health")
 async def platform_health():
-    """Platform module health check."""
-    return {"status": "healthy", "module": "platform"}
+    """Platform module health — probe nyata: worker agen."""
+    workers = 0
+    try:
+        from aeryn_core.platform.agent_daemon import get_agent_daemon
+        workers = get_agent_daemon()._detect_workers() or 0
+    except Exception:
+        workers = 0
+    return {"status": "healthy", "module": "platform",
+            "workers": workers}

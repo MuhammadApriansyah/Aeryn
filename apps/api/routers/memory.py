@@ -516,5 +516,19 @@ async def learn_context(user_id: str):
 
 @router.get("/health")
 async def memory_health():
-    """Memory module health check."""
-    return {"status": "healthy", "module": "memory"}
+    """Memory module health — probe nyata: vault + entity + session store."""
+    from aeryn_core.memory.vault import get_vault
+    from aeryn_core.runtime.session_store import get_session_store
+    vault = get_vault()
+    entries = vault.list_entries(layer="") or []
+    try:
+        store_ok = get_session_store() is not None
+    except Exception:
+        store_ok = False
+    return {
+        "status": "healthy",
+        "module": "memory",
+        "vault_entries": len(entries),
+        "session_store": store_ok,
+        "layers": sorted({e.get("layer") for e in entries if e.get("layer")}),
+    }
