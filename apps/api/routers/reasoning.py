@@ -149,14 +149,23 @@ class EmotionRequest(BaseModel):
 
 @router.post("/emotion/detect-mood")
 async def emotion_detect_mood(text: str = "", user_id: str = ""):
-    """Detect mood from text."""
-    return {"mood": "neutral", "confidence": 0.5}
+    """Detect mood from text (V61.2: modul emotional_intelligence)."""
+    from aeryn_core.reasoning.emotional_intelligence import get_emotional_intelligence
+    ei = get_emotional_intelligence()
+    mood = ei.detect_mood(text or "neutral")
+    if user_id and text:
+        ei.record_mood(user_id, text)
+    return {"mood": mood.get("mood", "neutral"),
+            "confidence": mood.get("confidence", 0.0)}
 
 
 @router.post("/emotion/empathy-response")
 async def emotion_empathy_response(text: str = "", user_id: str = ""):
-    """Get empathy response."""
-    return {"response": "I understand how you feel."}
+    """Get empathy response (V61.2: modul emotional_intelligence)."""
+    from aeryn_core.reasoning.emotional_intelligence import get_emotional_intelligence
+    ei = get_emotional_intelligence()
+    mood = ei.detect_mood(text or "neutral").get("mood", "neutral")
+    return {"response": ei.get_empathy_response(mood)}
 
 
 # ========================================
