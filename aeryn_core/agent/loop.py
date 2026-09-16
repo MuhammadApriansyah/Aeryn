@@ -266,8 +266,9 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
             
             # Save conversation summary
             self.write.save_conversation_summary(session_id, messages)
-        except:
-            pass
+        except Exception as e:
+            import logging
+            logging.getLogger("aeryn.loop").warning("timbun fakta/ringkasan gagal: %s", e)
     
     async def run_stream(self, session_id: str, user_message: str, user_id: str = "default") -> AsyncGenerator[str, None]:
         """Run agent loop with TRUE token-by-token streaming."""

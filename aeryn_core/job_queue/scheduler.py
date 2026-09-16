@@ -139,8 +139,9 @@ class CronScheduler:
         while not self._stop.is_set():
             try:
                 self._tick()
-            except Exception:
-                pass
+            except Exception as e:
+                import logging
+                logging.getLogger("aeryn.cron").warning("tick: %s", e)
             self._stop.wait(self.poll)
 
     def start(self):
