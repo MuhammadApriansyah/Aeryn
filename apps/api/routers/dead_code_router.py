@@ -66,7 +66,17 @@ async def mcp_client_call(server: str, tool: str, args: Dict[str, Any] = None):
 
 @router.get("/hermes/brain/digest")
 async def hermes_brain_digest():
-    return {"brain": "Hermes brain module loaded", "status": "ready"}
+    """Hermes brain digest (V61.2): tool string sungguhan + memory_search live."""
+    try:
+        import aeryn_core.hermes.hermes_brain as hb
+        tools = [n
+                 for n in ("memory_search", "graph_traverse", "pitfall_search")
+                 if hasattr(hb, "_" + n) or n in dir(hb)]
+        preview = hb._memory_search("aeryn", top=1) if hasattr(hb, "_memory_search") else {}
+        return {"status": "ready", "tools": tools,
+                "memory_sample": preview.get("count", 0)}
+    except Exception as e:
+        return {"status": "error", "tools": [], "error": str(e)}
 
 
 @router.get("/hermes/hands/ask")
@@ -346,4 +356,10 @@ async def security_tool_permissions_allowed():
 
 @router.get("/health")
 async def dead_health():
-    return {"status": "healthy", "module": "dead"}
+    """Module health (V61.2): probe nyata ke /health app."""
+    import urllib.request
+    try:
+        with urllib.request.urlopen("http://127.0.0.1:3010/health", timeout=3) as r:
+            return {"status": "healthy", "module": "dead", "app_health": True}
+    except Exception:
+        return {"status": "degraded", "module": "dead", "app_health": False}
