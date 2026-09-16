@@ -45,7 +45,7 @@ from apps.api.routers.memory import router as memory_router
 from apps.api.routers.reasoning import router as reasoning_router
 from apps.api.routers.agents import router as agents_router
 from apps.api.routers.platform_router import router as platform_router
-from apps.api.routers.dead_code_router import router as dead_router
+from apps.api.routers.extended_router import router as extended_router
 from apps.api.routers.chat_agent import router as chat_agent_router
 from apps.api.routers.facts import router as facts_router
 from apps.api.routers.cron import router as cron_router
@@ -230,7 +230,7 @@ app.include_router(memory_router)       # Vault, Episodic, Graph, Temporal, Hybr
 app.include_router(reasoning_router)    # Cerewet, Constitutional, Context, Dream, Emotion, Planner
 app.include_router(agents_router)       # 5 Divisions, Sub-agents
 app.include_router(platform_router)     # Browser, Cloud, GitHub, Discord, MCP, Skills
-app.include_router(dead_router)         # Database, MCP, Hermes, Memory, Safety, Sandbox, Security
+app.include_router(extended_router)       # Extended/Misc: Database, MCP, Hermes, Memory, Safety, Sandbox, Security
 app.include_router(chat_agent_router)   # Chat, Sessions, Streaming
 app.include_router(advanced_router)    # Divisions, Plugins, Planning, Reflection
 app.include_router(approval_router)    # Guardrails, Human-in-the-Loop approvals
