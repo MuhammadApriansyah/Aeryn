@@ -17,6 +17,17 @@ from aeryn_core.tools import get_tool_registry
 from aeryn_core.memory.recall import get_memory_recall
 from aeryn_core.memory.write import get_memory_write
 from aeryn_core.memory.context import ContextWindow, TokenCounter
+from aeryn_core.utils.persona_engine import PersonaEngine
+
+_persona_singleton = None
+
+
+def _get_persona() -> str:
+    """Persona system-prompt (cached, reload-on-change)."""
+    global _persona_singleton
+    if _persona_singleton is None:
+        _persona_singleton = PersonaEngine()
+    return _persona_singleton.get()
 
 
 class AgentLoop:
@@ -85,7 +96,7 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         memory_context = self.recall.format_for_prompt(relevant_memories)
         
         # Build system prompt with division + memory
-        system_content = division_prompt
+        system_content = _get_persona() + "\n\n" + division_prompt
         if memory_context:
             system_content += "\n\n" + memory_context
         
@@ -286,7 +297,7 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         relevant_memories = self.recall.recall(user_message, limit=3)
         memory_context = self.recall.format_for_prompt(relevant_memories)
         
-        system_content = division_prompt
+        system_content = _get_persona() + "\n\n" + division_prompt
         if memory_context:
             system_content += "\n\n" + memory_context
         
