@@ -714,7 +714,10 @@
 
   async function loadObs(container) {
     var box = el('div', 'section-stack');
-    box.appendChild(el('div', 'section-title', '📊 Observability — Log Request'));
+    box.appendChild(el('div', 'section-title', '📊 Observability — Dashboard'));
+
+    var dash = el('div', 'section-stack');
+    box.appendChild(dash);
 
     var statsBox = el('div', 'section-stack');
     box.appendChild(statsBox);
@@ -722,6 +725,55 @@
     box.appendChild(recent);
     var refresh = el('button', 'section-btn', '↻ Muat ulang');
     box.appendChild(refresh);
+
+    async function renderDash() {
+      dash.innerHTML = '';
+      try {
+        var d = await getJSON(BASE + '/obs/summary?window_hours=24');
+        var app = d.app && d.app.status;
+        var appColor = app === 'healthy' ? 'var(--ok)' : (app === 'down' ? 'var(--accent-3)' : 'var(--accent-2)');
+        var title = el('div', 'section-subtitle', 'Kesehatan');
+        title.style.fontSize = '15px';
+        dash.appendChild(title);
+
+        var row = el('div', 'section-row', '');
+        row.innerHTML = 'App: <b style="color:' + appColor + '">' + app + '</b> · ' +
+          'PG: <b style="color:' + ((d.pg && d.pg.status === 'up') ? 'var(--ok)' : 'var(--accent-3)') + '">' + (d.pg ? d.pg.status : '?') + '</b>';
+        dash.appendChild(row);
+
+        // Subsystem chips
+        var subs = d.subsystems || {};
+        var names = { memory: 'Memori', engine: 'Engine', safety: 'Keamanan', agents: 'Agen', platform: 'Platform' };
+        var chipsWrap = el('div', 'kg-chips', '');
+        Object.keys(subs).forEach(function (k) {
+          var st = subs[k] && subs[k].status;
+          var c = (st === 'healthy' || st === 'up') ? 'var(--ok)' : (st === 'down' ? 'var(--accent-3)' : 'var(--accent-2)');
+          var ch = document.createElement('span');
+          ch.className = 'kg-chip';
+          ch.style.borderColor = c;
+          ch.style.color = c;
+          ch.textContent = (names[k] || k) + ' · ' + st;
+          chipsWrap.appendChild(ch);
+        });
+        dash.appendChild(chipsWrap);
+
+        // Metrics agregat
+        var rq = d.requests || {};
+        var m = el('div', 'section-stack', '');
+        m.innerHTML = '<div>Request: <b>' + (rq.total || 0) + '</b> · Error: <b>' +
+          (rq.error_rate || 0) + '%</b> · Rata2: <b>' + (rq.avg_ms || 0) + 'ms</b></div>' +
+          '<div>Facts bitemporal: <b>' + (d.facts || 0) + '</b> · Cron aktif: <b>' + (d.cron ? d.cron.active : 0) + '</b>/' + (d.cron ? d.cron.total : 0) + '</div>';
+        dash.appendChild(m);
+
+        if (Array.isArray(d.errors) && d.errors.length) {
+          var eh = el('div', 'section-subtitle', 'Error terbaru');
+          dash.appendChild(eh);
+          d.errors.forEach(function (r2) {
+            dash.appendChild(el('div', 'kg-row', '⚠ ' + r2.method + ' ' + r2.path + ' → ' + r2.status));
+          });
+        }
+      } catch (e) { dash.appendChild(errorBox('Dashboard gagal: ' + e.message)); }
+    }
 
     async function load() {
       // Stats
@@ -763,7 +815,8 @@
       } catch (e2) { recent.appendChild(errorBox('Recent gagal: ' + e2.message)); }
     }
 
-    refresh.addEventListener('click', load);
+    refresh.addEventListener('click', function () { renderDash(); load(); });
+    renderDash();
     load();
     return box;
   }

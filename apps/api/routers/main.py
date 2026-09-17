@@ -50,6 +50,7 @@ from apps.api.routers.chat_agent import router as chat_agent_router
 from apps.api.routers.facts import router as facts_router
 from apps.api.routers.cron import router as cron_router
 from apps.api.routers.logging_router import router as logging_router
+from aeryn_core.advanced_monitoring.obs_dashboard import router as obs_router
 from apps.api.routers.advanced_router import router as advanced_router
 from apps.api.routers.approval_router import router as approval_router
 from apps.api.routers.task_router import router as task_router
@@ -293,6 +294,7 @@ _V1.include_router(shared_router)
 _V1.include_router(facts_router)
 _V1.include_router(cron_router)
 _V1.include_router(logging_router)
+_V1.include_router(obs_router)
 app.include_router(_V1, prefix="/v1")
 
 # --- Adaptive Gateway Endpoint ---

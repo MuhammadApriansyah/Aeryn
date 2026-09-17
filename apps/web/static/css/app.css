@@ -11,6 +11,7 @@
   --accent: #6d5cff;
   --accent-2: #00d9ff;
   --accent-3: #ff5ca8;
+  --ok: #3ddc84;
   --gradient: linear-gradient(135deg, #6d5cff 0%, #00d9ff 50%, #ff5ca8 100%);
 
   --ds-fast: 120ms;
