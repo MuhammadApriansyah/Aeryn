@@ -127,6 +127,14 @@ class AgentDaemon:
         if self._autonomy_count % 60 != 0:
             return
         done = []
+        # 0) GOAL PURSUIT (F4.2): kejar goal aktif prio tertinggi
+        try:
+            from aeryn_core.agent.goal_pursuit import pursue_next_goal
+            pursued = pursue_next_goal()
+            if pursued:
+                done.append(f"goal:{pursed[title][:30]}@{pursed[progress]}%")
+        except Exception as e:
+            logger.warning("autonomy goal-pursuit: %s", e)
         try:
             from aeryn_core.memory.memory_consolidation import MemoryConsolidator
             c = MemoryConsolidator()
