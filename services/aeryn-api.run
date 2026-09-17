@@ -1,0 +1,12 @@
+#!/data/data/com.termux/files/usr/bin/sh
+# V61.3 — Aeryn API service (runsvdir/termux-services).
+# Supervise runit langsung memantau proses python (exec) —
+# auto-restart oleh runsvdir, tanpa PM2.
+export HOME=/data/data/com.termux/files/home
+export PREFIX=/data/data/com.termux/files/usr
+export PATH=$PREFIX/bin:$PATH
+export NEON_DATABASE_URL="postgresql://sen@127.0.0.1:5432/aeryn"
+export AERYN_HOST=127.0.0.1
+export AERYN_PORT=3010
+cd $HOME/aeryn-core-agent
+exec $HOME/aeryn-venv/bin/python -m apps.api.routers.main
