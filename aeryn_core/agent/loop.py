@@ -227,7 +227,43 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
             "iterations": self.max_iterations,
             "memories_used": len(relevant_memories),
         }
+        # === PASC-RESPONS: learning hook (V61.2 #3) — non-blocking, rate-limited ===
+        self._self_improve(session_id, user_message)
+        return result
     
+    def _self_improve(self, session_id: str, user_message: str) -> int:
+        """Pasca-respons learning hook (V61.2 #3). Non-blocking, rate-limited.
+
+        Tiap 10 interaksi: konsolidasi memori (jika due) + catat kandidat
+        skill ke fact graph. Kegagalan ditelan aman (tidak pernah menggagalkan
+        respons), error di-log bukan bisu.
+        """
+        self._improve_count = getattr(self, "_improve_count", 0) + 1
+        if self._improve_count % 10 != 0:
+            return 0
+        done = 0
+        try:
+            from aeryn_core.memory.memory_consolidation import MemoryConsolidator
+            c = MemoryConsolidator()
+            if c.should_consolidate():
+                c.consolidate(force=False)
+                done += 1
+        except Exception as e:  # noqa: BLE001
+            import logging
+            logging.getLogger("aeryn.learn").warning("consolidation: %s", e)
+        try:
+            from aeryn_core.memory.fact_store import get_fact_store
+            get_fact_store().record(
+                entity="skill", predicate="evolve_candidate",
+                fact={"n": self._improve_count,
+                      "hint": (user_message or "")[:80]},
+                source="runtime-loop")
+            done += 1
+        except Exception as e:  # noqa: BLE001
+            import logging
+            logging.getLogger("aeryn.learn").warning("evolve_candidate: %s", e)
+        return done
+
     def _precheck_approval(self, tool_name: str, tool_args: Dict[str, Any]):
         """Check if a tool action requires approval BEFORE execution.
         Returns ApprovalRequest if approval needed, else None."""
