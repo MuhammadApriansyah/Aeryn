@@ -252,11 +252,12 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
             import logging
             logging.getLogger("aeryn.learn").warning("consolidation: %s", e)
         try:
+            import json
             from aeryn_core.memory.fact_store import get_fact_store
             get_fact_store().record(
                 entity="skill", predicate="evolve_candidate",
-                fact={"n": self._improve_count,
-                      "hint": (user_message or "")[:80]},
+                fact=json.dumps({"n": self._improve_count,
+                                 "hint": (user_message or "")[:80]}),
                 source="runtime-loop")
             done += 1
         except Exception as e:  # noqa: BLE001
