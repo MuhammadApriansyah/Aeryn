@@ -68,6 +68,7 @@ class AgentDaemon:
         queue = get_task_queue()
         pending = queue.get_pending_count()
         if pending == 0:
+            await self._autonomy_tick()   # V61.2 #8: otonomi walau idle
             return
 
         # Pick first pending task
@@ -112,6 +113,54 @@ class AgentDaemon:
             router = get_mode_router()
             resp = router.chat(goal)
             return resp.get("content", "No response")
+
+
+    async def _autonomy_tick(self):
+        """Autonomi SELF-INITIATED (V61.2 #8) — bekerja berguna walau queue kosong.
+
+        Rate-limited; non-LLM (murah): maintenance memori + heartbeat bitemporal
+        + alert proaktif berbasis aturan (error-rate).
+        """
+        import json
+        from aeryn_core.memory.fact_store import get_fact_store
+        self._autonomy_count = getattr(self, "_autonomy_count", 0) + 1
+        if self._autonomy_count % 60 != 0:
+            return
+        done = []
+        try:
+            from aeryn_core.memory.memory_consolidation import MemoryConsolidator
+            c = MemoryConsolidator()
+            if c.should_consolidate():
+                c.consolidate(force=False)
+                done.append("consolidate")
+        except Exception as e:
+            logger.warning("autonomy consolidate: %s", e)
+        try:
+            get_fact_store().record(
+                entity="aeryn", predicate="autonomy_heartbeat",
+                fact=json.dumps({"cycle": self._autonomy_count,
+                                 "done": done}), source="daemon")
+            done.append("heartbeat")
+        except Exception as e:
+            logger.warning("autonomy heartbeat: %s", e)
+        # 3) Proactivity aturan: error-rate tinggi → alert
+        try:
+            import urllib.request
+            with urllib.request.urlopen(
+                    "http://127.0.0.1:3010/v1/logging/stats?window_hours=1",
+                    timeout=3) as r:
+                st = json.loads(r.read())
+            if st.get("error_rate", 0) > 20:
+                get_fact_store().record(
+                    entity="aeryn", predicate="proactive_alert",
+                    fact=json.dumps({"error_rate_pct": st.get("error_rate"),
+                                     "watch": "elevated 5xx"}),
+                    source="daemon")
+                done.append("alert")
+        except Exception as e:
+            logger.info("autonomy alert skip: %s", e)
+        if done:
+            logger.info("Autonomy tick %d → %s", self._autonomy_count, done)
 
 
 # Singleton
