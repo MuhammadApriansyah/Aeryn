@@ -74,24 +74,25 @@ def check_cli() -> tuple:
 
 
 def check_auth() -> tuple:
+    """V39.10→V61.2 (8-A): validasi provider AKTIF, bukan hardcode 'nous'.
+
+    Auth sehat bila credential_pool punya >=1 provider berisi (list non-kosong),
+    atau old-format providers.<name>.agent_key ada. Provider aktif Aeryn
+    (nvidia/openrouter) dicek apa adanya — tak perlu key nous lagi.
+    """
     try:
         data = json.load(open(AUTH))
-        # New format: credential_pool.nous (list of credential dicts)
-        pool = data.get("credential_pool", {})
-        nous_list = pool.get("nous", [])
-        if nous_list:
-            # Any nous credential present = auth available
-            return True, f"OK (credential_pool.nous: {len(nous_list)} cred)"
-        # Old format: providers.nous.agent_key (single string)
-        nous = data.get("providers", {}).get("nous", {})
-        key_present = bool(nous.get("agent_key"))
-        exp = nous.get("expires_at", 0)
-        expired = isinstance(exp, (int, float)) and exp < time.time()
-        if not key_present:
-            return False, "agent_key hilang dari auth.json"
-        if expired:
-            return True, "OK (key expired, akan auto-refresh)"
-        return True, "OK (key ada)"
+        pool = data.get("credential_pool", {}) or {}
+        present = [p for p, lst in pool.items()
+                   if isinstance(lst, list) and lst]
+        if present:
+            return True, f"OK (credential_pool aktif: {', '.join(sorted(present))})"
+        prov = data.get("providers", {}) or {}
+        active = [n for n, cfg in prov.items()
+                  if isinstance(cfg, dict) and cfg.get("agent_key")]
+        if active:
+            return True, f"OK (providers aktif: {', '.join(sorted(active))})"
+        return False, "credential provider aktif hilang di auth.json"
     except (OSError, ValueError, KeyError) as e:
         return False, f"auth.json tidak terbaca: {e}"
 
