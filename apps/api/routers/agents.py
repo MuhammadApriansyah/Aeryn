@@ -98,3 +98,82 @@ async def agents_health():
         divisions = []
     return {"status": "healthy", "module": "agents",
             "divisions": divisions, "division_count": len(divisions)}
+
+
+# ========================================
+# Goals — lapisan niat Aeryn (F4.1/F4.2)
+# ========================================
+
+@router.get("/goals")
+async def goals_list(status: str = ""):
+    """List goals Aeryn (default: aktif, urut prioritas)."""
+    from aeryn_core.agent.goal_store import get_goal_store
+    try:
+        gs = get_goal_store()
+        goals = gs.list_goals(status=status or None)
+        return {"goals": goals, "count": len(goals), "stats": gs.stats()}
+    except Exception as e:
+        return {"goals": [], "count": 0, "error": str(e)[:200]}
+
+
+@router.post("/goals")
+async def goals_create(title: str = "", description: str = "",
+                       priority: int = 5, steps: str = "",
+                       source: str = "api"):
+    """Daftarkan goal baru (steps = koma-pisah, mis. 'a,b,c')."""
+    if not title.strip():
+        return {"ok": False, "error": "title wajib"}
+    from aeryn_core.agent.goal_store import get_goal_store
+    try:
+        gs = get_goal_store()
+        step_list = [s.strip() for s in steps.split(",") if s.strip()]
+        gid = gs.create(title.strip(), description, priority,
+                        step_list, source=source)
+        return {"ok": True, "id": gid, "title": title.strip(),
+                "steps": step_list}
+    except Exception as e:
+        return {"ok": False, "error": str(e)[:200]}
+
+
+@router.post("/goals/{gid}/progress")
+async def goals_progress(gid: str, progress: int = 0, note: str = ""):
+    """Perbarui progress goal (0-100; 100 = auto-complete)."""
+    from aeryn_core.agent.goal_store import get_goal_store
+    try:
+        get_goal_store().update_progress(gid, progress, note)
+        return {"ok": True, "id": gid, "progress": max(0, min(100, progress))}
+    except Exception as e:
+        return {"ok": False, "error": str(e)[:200]}
+
+
+@router.post("/goals/{gid}/complete")
+async def goals_complete(gid: str, note: str = ""):
+    """Tandai goal selesai."""
+    from aeryn_core.agent.goal_store import get_goal_store
+    try:
+        get_goal_store().complete(gid, note)
+        return {"ok": True, "id": gid, "status": "completed"}
+    except Exception as e:
+        return {"ok": False, "error": str(e)[:200]}
+
+
+@router.post("/goals/{gid}/cancel")
+async def goals_cancel(gid: str, reason: str = ""):
+    """Batalkan goal."""
+    from aeryn_core.agent.goal_store import get_goal_store
+    try:
+        get_goal_store().cancel(gid, reason)
+        return {"ok": True, "id": gid, "status": "cancelled"}
+    except Exception as e:
+        return {"ok": False, "error": str(e)[:200]}
+
+
+@router.post("/goals/pursue")
+async def goals_pursue():
+    """Daemon otonom: kejar goal aktif prio tertinggi (satu langkah)."""
+    from aeryn_core.agent.goal_pursuit import pursue_next_goal
+    try:
+        r = pursue_next_goal()
+        return {"ok": True, "pursued": r}
+    except Exception as e:
+        return {"ok": False, "error": str(e)[:200]}
