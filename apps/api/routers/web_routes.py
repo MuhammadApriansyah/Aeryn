@@ -3,6 +3,8 @@ from fastapi import APIRouter
 from fastapi.responses import HTMLResponse, FileResponse
 import os
 _WEB_STATIC = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "apps", "web", "static")
+_WEB_TEMPLATES = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "apps", "web", "templates")
+
 
 
 router = APIRouter()
@@ -16,7 +18,7 @@ REACT_STATIC = os.path.join(REACT_DIST, "static")
 @router.get("/chat", response_class=HTMLResponse)
 async def chat_page():
     """Serve chat page."""
-    chat_path = "/home/sen/aeryn-core-agent/apps/web/templates/chat.html"
+    chat_path = os.path.join(_WEB_TEMPLATES, "chat.html")
     if os.path.exists(chat_path):
         with open(chat_path, encoding="utf-8") as f:
             return f.read()
@@ -26,7 +28,7 @@ async def chat_page():
 @router.get("/app", response_class=HTMLResponse)
 async def app_page():
     """Serve app shell (floating navbar + modal)."""
-    app_path = "/home/sen/aeryn-core-agent/apps/web/templates/app.html"
+    app_path = os.path.join(_WEB_TEMPLATES, "app.html")
     if os.path.exists(app_path):
         with open(app_path, encoding="utf-8") as f:
             return f.read()
@@ -36,7 +38,7 @@ async def app_page():
 @router.get("/", response_class=HTMLResponse)
 async def root_page():
     """Root → app shell (single entry point untuk Web UI)."""
-    app_path = "/home/sen/aeryn-core-agent/apps/web/templates/app.html"
+    app_path = os.path.join(_WEB_TEMPLATES, "app.html")
     if os.path.exists(app_path):
         with open(app_path, encoding="utf-8") as f:
             return f.read()
