@@ -34,10 +34,39 @@ def _ts(iso: str) -> str:
 class FactStore:
     """Bitemporal fact store on PostgreSQL."""
 
+    SCHEMA_SQL = """
+        CREATE TABLE IF NOT EXISTS facts (
+            id          TEXT PRIMARY KEY,
+            entity      TEXT NOT NULL,
+            predicate   TEXT NOT NULL,
+            fact        TEXT NOT NULL,
+            source      TEXT,
+            confidence  DOUBLE PRECISION DEFAULT 1.0,
+            valid_from  TIMESTAMP,
+            valid_to    TIMESTAMP,
+            tx_from     TIMESTAMP,
+            tx_to       TIMESTAMP
+        );
+        CREATE INDEX IF NOT EXISTS facts_entity_pred_idx
+            ON facts (entity, predicate, tx_to);
+    """
+
     def __init__(self, db=None):
         # Import lazy supaya tidak gagal saat Neon tidak tersedia.
         from aeryn_core.database.neon_db import get_neon
         self.db = db or get_neon()
+        self._ensure_schema()
+
+    def _ensure_schema(self):
+        """Pastikan tabel facts ada (idempotent) — portability: fresh PG
+        (mis. migrasi Termux) tidak punya tabel ini sampai dibuat."""
+        try:
+            self.db.execute(self.SCHEMA_SQL)
+        except Exception:
+            # Neon wrapper mungkin tak dukung multi-statement; fallback
+            # pecah per-statement.
+            for stmt in [s.strip() for s in self.SCHEMA_SQL.split(";") if s.strip()]:
+                self.db.execute(stmt)
 
     # ── Write ────────────────────────────────────────────────
 

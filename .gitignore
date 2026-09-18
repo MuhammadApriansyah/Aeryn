@@ -35,3 +35,7 @@ Personalisasi/Database/episodes/
 .vscode/
 *.swp
 *.swo
+Personalisasi/Database/conversations.db
+Personalisasi/Database/memories.db
+Personalisasi/Database/rate_limiter.db
+.github-ssh-config
