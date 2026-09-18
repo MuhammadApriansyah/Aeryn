@@ -2,6 +2,8 @@
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse, FileResponse
 import os
+_WEB_STATIC = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "apps", "web", "static")
+
 
 router = APIRouter()
 
@@ -44,7 +46,7 @@ async def root_page():
 @router.get("/static/css/{path:path}")
 async def css_files(path: str):
     """Serve CSS files."""
-    css_file = os.path.join("/home/sen/aeryn-core-agent/apps/web/static/css", path)
+    css_file = os.path.join(_WEB_STATIC, "css", path)
     if os.path.exists(css_file):
         return FileResponse(css_file)
     return HTMLResponse("Not found", status_code=404)
@@ -53,7 +55,7 @@ async def css_files(path: str):
 @router.get("/static/js/{path:path}")
 async def js_files(path: str):
     """Serve JS files."""
-    js_file = os.path.join("/home/sen/aeryn-core-agent/apps/web/static/js", path)
+    js_file = os.path.join(_WEB_STATIC, "js", path)
     if os.path.exists(js_file):
         return FileResponse(js_file)
     return HTMLResponse("Not found", status_code=404)
@@ -62,7 +64,7 @@ async def js_files(path: str):
 @router.get("/static/vendor/{path:path}")
 async def vendor_files(path: str):
     """Serve vendor JS libraries (gsap, three, marked)."""
-    vendor_file = os.path.join("/home/sen/aeryn-core-agent/apps/web/static/vendor", path)
+    vendor_file = os.path.join(_WEB_STATIC, "vendor", path)
     if os.path.exists(vendor_file):
         return FileResponse(vendor_file)
     return HTMLResponse("Not found", status_code=404)
