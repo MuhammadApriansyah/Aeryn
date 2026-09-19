@@ -4,6 +4,8 @@ from fastapi.responses import Response, JSONResponse, HTMLResponse, FileResponse
 from pydantic import BaseModel, Field
 import os, sys, json, time, uuid, asyncio
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+_TEMPLATES = os.path.join(_REPO_ROOT, "apps", "web", "templates")
 import aeryn_core.utils.patch_sqlite  # noqa
 
 from aeryn_core.safety.safety_engine import get_safety_engine, sanitize_output
@@ -314,7 +316,7 @@ async def search(q: str, limit: int = 10):
 @router.get("/dashboard")
 async def dashboard():
     """Serve app shell (menggantikan legacy dashboard.html)."""
-    app_path = "/home/sen/aeryn-core-agent/apps/web/templates/app.html"
+    app_path = os.path.join(_TEMPLATES, "app.html")
     if os.path.exists(app_path):
         return FileResponse(app_path, media_type="text/html")
     return FileResponse("apps/api/dashboard.html")
@@ -322,7 +324,7 @@ async def dashboard():
 @router.get("/chat")
 async def web_chat():
     """Serve web chat interface — delegates to templates/chat.html (A3/P2 UI)."""
-    chat_path = "/home/sen/aeryn-core-agent/apps/web/templates/chat.html"
+    chat_path = os.path.join(_TEMPLATES, "chat.html")
     if os.path.exists(chat_path):
         return FileResponse(chat_path, media_type="text/html")
     return Response(content=WEB_CHAT_HTML, media_type="text/html")

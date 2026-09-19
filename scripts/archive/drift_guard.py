@@ -19,6 +19,7 @@ Exit: 0 = OK, 1 = DRIFT (cetak detail titik pecah).
 """
 import json
 import os
+import shutil
 import sqlite3
 import subprocess
 import sys
@@ -27,8 +28,17 @@ import time
 HOME = os.path.expanduser("~")
 STATE_DB = f"{HOME}/.hermes/state.db"
 AUTH = f"{HOME}/.hermes/auth.json"
-INDEX = "/mnt/android/Ubuntu/hermes-memory-library/INDEX.json"
-MEM_LIB = f"{HOME}/.hermes/scripts/memory_library.py"
+_LIB_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                        "aeryn_core", "memory_library")
+INDEX = os.environ.get("MEMORY_LIBRARY_INDEX",
+                       os.path.join(_LIB_DIR, "library", "INDEX.json"))
+MEM_LIB = os.environ.get("MEMORY_LIBRARY_SCRIPT",
+                         os.path.join(_LIB_DIR, "memory_library.py"))
+
+
+def _hermes_present() -> bool:
+    """True kalau artefak Hermes ada di device ini (state.db atau CLI)."""
+    return os.path.exists(STATE_DB) or shutil.which("hermes") is not None
 
 # V39.10f — social.json audit constants
 SOCIAL_PATH = os.path.join(
@@ -42,6 +52,8 @@ FORBIDDEN_KEY_PATTERNS = ("../", "../../", "\\", "/etc/")
 
 def check_state_db() -> tuple:
     if not os.path.exists(STATE_DB):
+        if not _hermes_present():
+            return True, "SKIP (Hermes tak ter-install di device ini)"
         return False, "state.db tidak ada"
     try:
         con = sqlite3.connect(f"file:{STATE_DB}?mode=ro", uri=True,
@@ -70,6 +82,8 @@ def check_cli() -> tuple:
             break
         except subprocess.TimeoutExpired:
             continue
+    if not _hermes_present():
+        return True, "SKIP (Hermes tak ter-install di device ini)"
     return False, "CLI hermes tidak ditemukan/tidak jalan"
 
 
@@ -94,6 +108,8 @@ def check_auth() -> tuple:
             return True, f"OK (providers aktif: {', '.join(sorted(active))})"
         return False, "credential provider aktif hilang di auth.json"
     except (OSError, ValueError, KeyError) as e:
+        if not _hermes_present():
+            return True, "SKIP (Hermes tak ter-install di device ini)"
         return False, f"auth.json tidak terbaca: {e}"
 
 

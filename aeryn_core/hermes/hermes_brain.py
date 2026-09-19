@@ -13,7 +13,11 @@ import os
 import re
 import subprocess
 
-HERMES_SCRIPTS = os.path.expanduser("~/.hermes/scripts")
+HERMES_SCRIPTS = os.environ.get(
+    "AERYN_HERMES_SCRIPTS",
+    os.path.join(
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+        "aeryn_core", "memory_library"))
 _PY = "python3"
 _TIMEOUT = 30
 

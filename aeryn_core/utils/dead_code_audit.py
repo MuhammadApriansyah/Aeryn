@@ -13,7 +13,7 @@ import ast
 import os
 import sys
 
-ROOT = "/home/sen/aeryn-core-agent"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC_DIRS = ["aeryn_core", "apps/api", "tests", "scripts", "console"]
 ENTRY_MODULES = {
     "apps.api.routers.main", "apps.api.aeryn_api", "aeryn_core.launcher",

@@ -1,0 +1,912 @@
+{
+  "entries": [
+    {
+      "id": "webnovel-stack",
+      "topic": "webnovel",
+      "tags": [
+        "webnovel",
+        " fastify",
+        " vite",
+        " react",
+        " sqlite",
+        " pm2"
+      ],
+      "signal": "high",
+      "summary": "Webnovel platform = npm workspaces; apps/api Fastify v4+node:sqlite :3001, apps/web Vite+React :5173 proxy /api, both under PM2 ecosystem.config.js. Auth stdlib scrypt + sessions table. Core runs WITHOUT AI; AI optional author-side tool.",
+      "path": "webnovel/webnovel-stack.md",
+      "updated": "2026-08-24",
+      "access_count": 19
+    },
+    {
+      "id": "webnovel-ux-stack",
+      "topic": "webnovel",
+      "tags": [
+        "webnovel",
+        " ui",
+        " ux",
+        " navbar",
+        " theme",
+        " modal",
+        " animation",
+        " playwright"
+      ],
+      "signal": "high",
+      "summary": "Senior-level UI/UX standards. Dark mode required, instant theme toggle (NO View Transitions API). Modal via createPortal to document.body. Guest-first. Verify visual via Playwright E2E.",
+      "path": "webnovel/webnovel-ux-stack.md",
+      "updated": "2026-08-24"
+    },
+    {
+      "id": "discord-alpha",
+      "topic": "discord",
+      "tags": [
+        "discord",
+        " alpha",
+        " guild",
+        " bot",
+        " role-gate",
+        " koya",
+        " owo",
+        " jockie"
+      ],
+      "signal": "high",
+      "summary": "Discord server 'Alpha' (guild 1541432407847084042) built via API. 5 bots locked per-account. @everyone base permissions. Aeryn separated from Hermes gateway \u2014 dedicated Aeryn token on DIFFERENT server.",
+      "path": "discord/discord-alpha.md",
+      "updated": "2026-08-24"
+    },
+    {
+      "id": "aeryn-core",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn",
+        " arisylla",
+        " cognitive",
+        " sde",
+        " tensor",
+        " rust",
+        " planner",
+        " sub-agent"
+      ],
+      "signal": "low",
+      "summary": "Aeryn = multi-agent persona (45 sub-agents, 5 divisions), applied universally not on-demand. Cognitive core = Python+Rust at ~/aeryn-core-agent. Persona SKILL.md lives in Downloads (NOT a Hermes skill).",
+      "path": "aeryn/aeryn-core.md",
+      "updated": "2026-08-24",
+      "access_count": 3
+    },
+    {
+      "id": "aeryn-core-v30-plus",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn",
+        " v30",
+        " v32",
+        " daemon",
+        " heuristic",
+        " social-detection",
+        " nous",
+        " navbar"
+      ],
+      "signal": "high",
+      "summary": "Aeryn-Core V30-V32 (session 20260824_111023_6c0f07): schema dinamis V30.3 (hint path/URL dari goal), deteksi social vs knowledge query via heuristic bersih (V32), NOUS model paling natural untuk sapaan (4/5).",
+      "path": "aeryn/aeryn-core-v30-plus.md",
+      "updated": "2026-08-25",
+      "access_count": 32
+    },
+    {
+      "id": "aeryn-v32-final-study-social-generator-hybrid-no",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn",
+        "v32",
+        "social-generator",
+        "nous",
+        "discord-gateway"
+      ],
+      "signal": "high",
+      "summary": "aeryn v32 final study: social generator hybrid + nous primary + discord gateway split",
+      "path": "aeryn/aeryn-v32-final-study-social-generator-hybrid-no.md",
+      "updated": "2026-08-25",
+      "access_count": 30
+    },
+    {
+      "id": "v33-planning-research",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn",
+        " v32",
+        " v33",
+        " planning",
+        " social-detection",
+        " model-leak",
+        " sanitizer",
+        " research"
+      ],
+      "signal": "high",
+      "summary": "Riset penuh 4 isu sisa V32 + rencana perbaikan V33 (3 fase, acceptance criteria tertulis, urutan prioritas berbasis dampak). Siap eksekusi setelah approve Sen.",
+      "path": "aeryn/v33-planning-research.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v33-planning-and-research-documented-for-aeryn-f",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn",
+        "v33",
+        "planning",
+        "research"
+      ],
+      "signal": "high",
+      "summary": "v33 planning and research documented for aeryn fixes",
+      "path": "aeryn/v33-planning-and-research-documented-for-aeryn-f.md",
+      "updated": "2026-08-25",
+      "access_count": 15
+    },
+    {
+      "id": "v33-executed-social-detection-sanitizer-client-c",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn",
+        "v33",
+        "executed",
+        "web-search",
+        "bing"
+      ],
+      "signal": "high",
+      "summary": "v33 executed: social detection + sanitizer + client cache + bing web search",
+      "path": "aeryn/v33-executed-social-detection-sanitizer-client-c.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "fase-0-1-done-hygiene-archive-shared-brain-live",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn",
+        "v33",
+        "shared-brain",
+        "hygiene",
+        "architecture"
+      ],
+      "signal": "high",
+      "summary": "fase 0+1 done: hygiene archive + shared brain live",
+      "path": "aeryn/fase-0-1-done-hygiene-archive-shared-brain-live.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "fase-2-done-metrics-endpoint-nightly-self-reflec",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn",
+        "v33",
+        "fase2",
+        "observability"
+      ],
+      "signal": "high",
+      "summary": "fase 2 done: metrics endpoint + nightly self-reflection",
+      "path": "aeryn/fase-2-done-metrics-endpoint-nightly-self-reflec.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v33-t-web-read-tool-json-repair-hardening-shippe",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn",
+        "v33",
+        "web-read",
+        "trafilatura",
+        "json-repair",
+        "research"
+      ],
+      "signal": "high",
+      "summary": "v33-T: web_read tool + json_repair hardening shipped",
+      "path": "aeryn/v33-t-web-read-tool-json-repair-hardening-shippe.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v34-core-memory-blocks-temporal-validity-shipped",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn",
+        "v34",
+        "core-memory",
+        "letta",
+        "graphiti",
+        "temporal"
+      ],
+      "signal": "high",
+      "summary": "v34: core memory blocks + temporal validity shipped",
+      "path": "aeryn/v34-core-memory-blocks-temporal-validity-shipped.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v34-1-parity-probe-ritual-root-cause-flaky-routi",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn",
+        "v34",
+        "parity-probe",
+        "differential-testing",
+        "groq"
+      ],
+      "signal": "high",
+      "summary": "v34.1: parity probe ritual + root cause flaky routing",
+      "path": "aeryn/v34-1-parity-probe-ritual-root-cause-flaky-routi.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v34-aeryn-core-complete-core-memory-blocks-tempo",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn"
+      ],
+      "signal": "med",
+      "summary": "V34 Aeryn-Core complete: core-memory blocks + temporal validity + parity_probe ritual + NOUS OAuth key bridge (agent_key dari auth.json, bukan statis)",
+      "path": "aeryn/v34-aeryn-core-complete-core-memory-blocks-tempo.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v35-aeryn-infra-multi-turn-session-history-sebel",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn"
+      ],
+      "signal": "med",
+      "summary": "V35 Aeryn infra: multi-turn session history (sebelumnya amnesia total antar pesan!), nightly digest->core memory, fs_write sandboxed+parity-probed, se",
+      "path": "aeryn/v35-aeryn-infra-multi-turn-session-history-sebel.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "hermes-aeryn-parity-tracker",
+      "topic": "hermes-infra",
+      "tags": [],
+      "signal": "med",
+      "summary": "# Hermes\u2194Aeryn Parity Tracker  > Dibuat V35 (2026-08-25). Filosofi Sen: target diketahui + resource ada = > tidak perlu ",
+      "path": "aeryn/hermes-aeryn-parity-tracker.md",
+      "updated": "2026-09-19"
+    },
+    {
+      "id": "v36-aeryn-shipped-via-4-sub-agen-paralel-llm-com",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn"
+      ],
+      "signal": "med",
+      "summary": "V36 Aeryn shipped via 4 sub-agen paralel: LLM compaction riwayat (cache 6h), event bus + /events/recent + health watchdog, credential health check (9",
+      "path": "aeryn/v36-aeryn-shipped-via-4-sub-agen-paralel-llm-com.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "differential-testing-parity-probe",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn",
+        "parity-probe",
+        "differential-testing",
+        "metodologi",
+        "testing"
+      ],
+      "signal": "high",
+      "summary": "Metodologi parity probe: uji tool sama dari dua sisi (direct vs pipeline agen); divergensi = data perkembangan, provider-error = inconclusive.",
+      "path": "aeryn/differential-testing-parity-probe.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v37-corpus-callosum-shipped-refleks-kontinuitas",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn"
+      ],
+      "signal": "med",
+      "summary": "V37 Corpus Callosum shipped: refleks kontinuitas (Aeryn baca state.db Hermes), ask_hermes (Aeryn delegasi ke Hermes, cap 20/hari), nightly organism-wi",
+      "path": "aeryn/v37-corpus-callosum-shipped-refleks-kontinuitas.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "aeryn-dev-roadmap-probability",
+      "topic": "hermes-infra",
+      "tags": [],
+      "signal": "med",
+      "summary": "# Aeryn Development Roadmap & Probabilitas  > Dibuat 2026-08-25 (V37). Dokumen strategi pengembangan berkelanjutan > Aer",
+      "path": "aeryn/aeryn-dev-roadmap-probability.md",
+      "updated": "2026-09-19"
+    },
+    {
+      "id": "aeryn-nightly-2026-08-25-262-run-83-2-sukses-44",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn",
+        "nightly"
+      ],
+      "signal": "low",
+      "summary": "Aeryn nightly 2026-08-25: 262 run, 83.2% sukses. 44 error: LLM provider HTTP 500 (semua model fallback habis). tools: web_searchx146, fs_readx106, ter",
+      "path": "aeryn/aeryn-nightly-2026-08-25-262-run-83-2-sukses-44.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v37-5-securitykernel-shipped-defense-in-depth-te",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn"
+      ],
+      "signal": "med",
+      "summary": "V37.5 SecurityKernel shipped: defense-in-depth terpusat - secret zones (file sensitif dilindungi bahkan di dalam sandbox), source immutability (fs_wri",
+      "path": "aeryn/v37-5-securitykernel-shipped-defense-in-depth-te.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v38-production-hardening-shipped-rate-limit-20-m",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn"
+      ],
+      "signal": "med",
+      "summary": "V38 production hardening shipped: rate limit 20/menit per sesi (daemon) + 10/menit per user (gateway), input caps goal<=4000, rotasi JSONL >5MB otomat",
+      "path": "aeryn/v38-production-hardening-shipped-rate-limit-20-m.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v38-1-shipped-spawn-subagents-tool-aeryn-kini-pe",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn"
+      ],
+      "signal": "med",
+      "summary": "V38.1 shipped: spawn_subagents tool - Aeryn kini pecah tugas jadi 1-3 sub-goal dan eksekusi PARALEL via run internal terisolasi (anti-rekursi fail-clo",
+      "path": "aeryn/v38-1-shipped-spawn-subagents-tool-aeryn-kini-pe.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v38-2-sop-enforcement-utk-sub-agen-aeryn-mandat",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn"
+      ],
+      "signal": "med",
+      "summary": "V38.2: SOP enforcement utk sub-agen Aeryn (mandat Sen: bukan pekerja lepas). Tiap sub-agen terima SOP eksplisit (scope, larangan, batas, format lapor",
+      "path": "aeryn/v38-2-sop-enforcement-utk-sub-agen-aeryn-mandat.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "fine-tuning-methodology",
+      "topic": "hermes-infra",
+      "tags": [],
+      "signal": "med",
+      "summary": "# Metodologi Fine-Tuning Menyeluruh untuk Aeryn-Core  > Dibuat V38.5 (2026-08-25) atas permintaan Sen: riset metode fine",
+      "path": "aeryn/fine-tuning-methodology.md",
+      "updated": "2026-09-19"
+    },
+    {
+      "id": "v38-8-cross-user-privacy-episodes-jsonl-berisi-g",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn"
+      ],
+      "signal": "med",
+      "summary": "V38.8 cross-user privacy: episodes.jsonl (berisi goal semua user) bisa dibaca fs_read oleh user manapun. Fix: masuk SECRET_BASENAMES + blokir dir epis",
+      "path": "aeryn/v38-8-cross-user-privacy-episodes-jsonl-berisi-g.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v38-9-math-calc-dos-ditemukan-via-probe-m17-reso",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn"
+      ],
+      "signal": "med",
+      "summary": "V38.9: math_calc DoS ditemukan via probe M17 resource-exhaustion (9**9**9 hang >30s menggantung thread daemon). Fix: operand/depth/result guard di _sa",
+      "path": "aeryn/v38-9-math-calc-dos-ditemukan-via-probe-m17-reso.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v38-9-math-calc-dos-ditutup-via-probe-m17-resour",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn"
+      ],
+      "signal": "med",
+      "summary": "V38.9 math_calc DoS ditutup via probe M17 resource-exhaustion: 9**9**9 hang>30s menggantung thread daemon. Fix operand/depth/result guard di _safe_eva",
+      "path": "aeryn/v38-9-math-calc-dos-ditutup-via-probe-m17-resour.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v39-8-cerewet-polish-settle-commitment-kini-terp",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn"
+      ],
+      "signal": "med",
+      "summary": "V39.8 cerewet polish: settle_commitment kini terpanggil dari daemon ('udah/kelar/beres/done' -> FIFO oldest done + apresiasi), injection guard (janji",
+      "path": "aeryn/v39-8-cerewet-polish-settle-commitment-kini-terp.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v39-10b-hotfix-via-driftguard-nous-inference-api",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn"
+      ],
+      "signal": "med",
+      "summary": "V39.10b HOTFIX via DriftGuard: Nous inference-api mulai blok UA custom aeryn-core (Cloudflare 403 code 1010, pola sama seperti Groq V34) -> seluruh fa",
+      "path": "aeryn/v39-10b-hotfix-via-driftguard-nous-inference-api.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v39-10e-persona-sinkronisasi-gaya-aspri-cerewet",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn"
+      ],
+      "signal": "med",
+      "summary": "V39.10e: persona sinkronisasi - 'GAYA ASPRI CEREWET' resmi masuk identitas inti aeryn_core.md (dulu cuma di rules daemon = dua sumber kebenaran). Audi",
+      "path": "aeryn/v39-10e-persona-sinkronisasi-gaya-aspri-cerewet.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "aeryn-nightly-2026-08-26-204-run-83-8-sukses-33",
+      "topic": "aeryn",
+      "tags": [
+        "aeryn",
+        "nightly"
+      ],
+      "signal": "low",
+      "summary": "Aeryn nightly 2026-08-26: 204 run, 83.8% sukses. 33 error: iterasi habis tanpa jawaban final (goal terlalu kompleks atau model berputar); iterasi habi",
+      "path": "aeryn/aeryn-nightly-2026-08-26-204-run-83-8-sukses-33.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "hermes-infra",
+      "topic": "hermes-infra",
+      "tags": [
+        "gateway",
+        " gwctl",
+        " backup",
+        " memory",
+        " proot",
+        " pm2",
+        " symlink",
+        " cron",
+        " android-mount"
+      ],
+      "signal": "high",
+      "summary": "Hermes runs in proot ARM64 (no systemd). Gateway managed via gwctl.py (NOT hermes gateway restart, blocked inside agent). Memory+backup symlinked to /mnt/android/Ubuntu. Single-user (blueholic removed).",
+      "path": "hermes-infra/hermes-infra.md",
+      "updated": "2026-08-24"
+    },
+    {
+      "id": "handoff-tool-created-for-one-command-cross-sessi",
+      "topic": "hermes-infra",
+      "tags": [
+        "handoff",
+        "sync",
+        "tooling"
+      ],
+      "signal": "high",
+      "summary": "handoff tool created for one-command cross-session sync",
+      "path": "hermes-infra/handoff-tool-created-for-one-command-cross-sessi.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v37-2-fine-tuning-tingkat-lanjut-loop-strategi-r",
+      "topic": "hermes-infra",
+      "tags": [
+        "hermes-infra"
+      ],
+      "signal": "med",
+      "summary": "V37.2 fine-tuning tingkat lanjut: loop strategi refleksi ditutup (strategy kini diinjeksi balik ke prompt), ParityLedger persist ke disk (graduasi tak",
+      "path": "hermes-infra/v37-2-fine-tuning-tingkat-lanjut-loop-strategi-r.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v37-4-security-sweep-3-lubang-kritis-ditutup-1-t",
+      "topic": "hermes-infra",
+      "tags": [
+        "hermes-infra"
+      ],
+      "signal": "med",
+      "summary": "V37.4 security sweep: 3 lubang kritis ditutup - (1) terminal path traversal bocor .env secrets [KRITIS], (2) gateway tanpa allowlist user [KRITIS], (3",
+      "path": "hermes-infra/v37-4-security-sweep-3-lubang-kritis-ditutup-1-t.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v38-4-fine-tuning-web-read-ssrf-guard-paritas-ht",
+      "topic": "hermes-infra",
+      "tags": [
+        "hermes-infra"
+      ],
+      "signal": "med",
+      "summary": "V38.4 fine-tuning: web_read SSRF guard (paritas http_get), core_memory audit-trail append-only, ask_hermes exfiltration guard (marker sensitif ditolak",
+      "path": "hermes-infra/v38-4-fine-tuning-web-read-ssrf-guard-paritas-ht.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v38-5-social-memory-hygiene-49-55-entri-kenalan",
+      "topic": "hermes-infra",
+      "tags": [
+        "hermes-infra"
+      ],
+      "signal": "med",
+      "summary": "V38.5 social memory hygiene: 49/55 entri 'kenalan' ternyata sampah session test (parity-probe, smoke-v33, wrtest dll). Fix: is_persistent_person_key (",
+      "path": "hermes-infra/v38-5-social-memory-hygiene-49-55-entri-kenalan.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v39-chaos-engineering-shipped-chaos-harness-py-f",
+      "topic": "hermes-infra",
+      "tags": [
+        "hermes-infra"
+      ],
+      "signal": "med",
+      "summary": "V39 chaos engineering shipped: chaos_harness.py fault injection (timeout/server-error/permission) - resilience score 100% di 3 skenario pertama (web_s",
+      "path": "hermes-infra/v39-chaos-engineering-shipped-chaos-harness-py-f.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v39-shipped-metodologi-fine-tuning-dari-riset-we",
+      "topic": "hermes-infra",
+      "tags": [
+        "hermes-infra"
+      ],
+      "signal": "med",
+      "summary": "V39 shipped: metodologi fine-tuning dari riset web didokumentasikan + F1 chaos harness (resilience 100%), F2 memory canary (integritas+eksfiltrasi), F",
+      "path": "hermes-infra/v39-shipped-metodologi-fine-tuning-dari-riset-we.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v38-6-menerapkan-7-metode-metodologi-5-celah-bar",
+      "topic": "hermes-infra",
+      "tags": [
+        "hermes-infra"
+      ],
+      "signal": "med",
+      "summary": "V38.6: menerapkan 7 metode metodologi -> 5 celah baru: unicode homoglyph bypass SOP, rate limit bypass via rotasi sid, web_search query unbounded, cha",
+      "path": "hermes-infra/v38-6-menerapkan-7-metode-metodologi-5-celah-bar.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v38-7-fine-tuning-putaran-kedua-dgn-metode-gener",
+      "topic": "hermes-infra",
+      "tags": [
+        "hermes-infra"
+      ],
+      "signal": "med",
+      "summary": "V38.7 fine-tuning putaran kedua dgn metode generasi-2 (M10-M14): injection marker unicode-safe, RateLimiter evict anti memory-leak (10k entri abadi),",
+      "path": "hermes-infra/v38-7-fine-tuning-putaran-kedua-dgn-metode-gener.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v38-9h-fine-tuning-rekursif-luas-selesai-5-level",
+      "topic": "hermes-infra",
+      "tags": [
+        "hermes-infra"
+      ],
+      "signal": "med",
+      "summary": "V38.9h fine-tuning rekursif luas selesai - 5 level audit: (1) AST 40 modul core: encoding fix memory_consolidation+session_history, (2) 13 scripts ber",
+      "path": "hermes-infra/v38-9h-fine-tuning-rekursif-luas-selesai-5-level.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v39-10-driftguard-shipped-jawaban-pertanyaan-sen",
+      "topic": "hermes-infra",
+      "tags": [
+        "hermes-infra"
+      ],
+      "signal": "med",
+      "summary": "V39.10 DriftGuard shipped (jawaban pertanyaan Sen soal update Hermes): skrip drift_guard.py mengecek 5 titik integrasi (state.db schema, hermes CLI, a",
+      "path": "hermes-infra/v39-10-driftguard-shipped-jawaban-pertanyaan-sen.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v39-10c-cost-optimization-verifier-llm-call-kini",
+      "topic": "hermes-infra",
+      "tags": [
+        "hermes-infra"
+      ],
+      "signal": "med",
+      "summary": "V39.10c cost optimization: verifier LLM call kini selektif - hanya run dgn tool faktual (web/memory/hermes) atau >=3 tool yang dibayar deep-verify; ru",
+      "path": "hermes-infra/v39-10c-cost-optimization-verifier-llm-call-kini.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "user-prefs",
+      "topic": "user-prefs",
+      "tags": [
+        "communication",
+        " concise",
+        " indonesian",
+        " proactive",
+        " credential",
+        " style",
+        " direct"
+      ],
+      "signal": "high",
+      "summary": "Sen prefers concise Indonesian, proactive execution (no manual steps), verify before claim. Hates repeated credential requests & long explanations. Gave blanket authority to act independently.",
+      "path": "user-prefs/user-prefs.md",
+      "updated": "2026-08-24"
+    },
+    {
+      "id": "spark-mcp",
+      "topic": "spark",
+      "tags": [
+        "gemini",
+        " spark",
+        " mcp",
+        " oauth",
+        " google-drive"
+      ],
+      "signal": "low",
+      "summary": "Gemini Spark MCP investigated \u2014 needs HTTPS public + OAuth bugs. Sen gave up (credential Google ribet). Theory only, not implemented.",
+      "path": "spark/spark-mcp.md",
+      "updated": "2026-08-24"
+    },
+    {
+      "id": "v37-3-bug-self-introduced-v37-2-ketemu-pas-fine",
+      "topic": "misc",
+      "tags": [
+        "misc"
+      ],
+      "signal": "med",
+      "summary": "V37.3: bug self-introduced V37.2 ketemu pas fine-tuning lanjutan - ParityLedger numpuk registry state file (format beda). Fix: file terpisah + validas",
+      "path": "misc/v37-3-bug-self-introduced-v37-2-ketemu-pas-fine.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v38-3-fine-tuning-menyeluruh-4-celah-ditutup-sop",
+      "topic": "misc",
+      "tags": [
+        "misc"
+      ],
+      "signal": "med",
+      "summary": "V38.3 fine-tuning menyeluruh: 4 celah ditutup - SOP injection via goal dinetralkan sanitize_goal_for_sop, validasi tipe goals ketat, /events/recent ti",
+      "path": "misc/v38-3-fine-tuning-menyeluruh-4-celah-ditutup-sop.md",
+      "updated": "2026-08-25"
+    },
+    {
+      "id": "v39-1-fallbackrouter-shipped-filosofi-sen-error",
+      "topic": "misc",
+      "tags": [
+        "misc"
+      ],
+      "signal": "med",
+      "summary": "V39.1 FallbackRouter shipped (filosofi Sen): error tool tidak lagi mentah-mentah ditolak - FALLBACK_MAP memberi directive arahan eksplisit per tool (f",
+      "path": "misc/v39-1-fallbackrouter-shipped-filosofi-sen-error.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v39-2-2-tool-dasar-dari-analisa-398-episode-date",
+      "topic": "misc",
+      "tags": [
+        "misc"
+      ],
+      "signal": "med",
+      "summary": "V39.2: 2 tool dasar dari analisa 398 episode - datetime_now (WIB+nama hari Indonesia, anti halusinasi) dan math_calc (AST-whitelist tanpa eval). FALLB",
+      "path": "misc/v39-2-2-tool-dasar-dari-analisa-398-episode-date.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v39-3-shipped-set-reminder-internal-scheduler-lo",
+      "topic": "misc",
+      "tags": [
+        "misc"
+      ],
+      "signal": "med",
+      "summary": "V39.3 shipped: set_reminder (internal scheduler, loop 30s, fired->run di session pemiliknya) + image_understand (vision ox-alpha via inference API, gu",
+      "path": "misc/v39-3-shipped-set-reminder-internal-scheduler-lo.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v38-9b-toctou-guard-fs-write-rentan-symlink-swap",
+      "topic": "misc",
+      "tags": [
+        "misc"
+      ],
+      "signal": "med",
+      "summary": "V38.9b TOCTOU guard: fs_write rentan symlink-swap race antara check_path dan open. Fix: parent dir_fd + O_NOFOLLOW (kernel tolak ELOOP). Simulasi race",
+      "path": "misc/v38-9b-toctou-guard-fs-write-rentan-symlink-swap.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v39-5-llm-as-verifier-shipped-riset-web-beda-dar",
+      "topic": "misc",
+      "tags": [
+        "misc"
+      ],
+      "signal": "med",
+      "summary": "V39.5 LLM-as-Verifier shipped (riset web): beda dari judge (subjektif), verifier menilai BENAR/SALAH via rubrik ketat - mechanical checks (canary leak",
+      "path": "misc/v39-5-llm-as-verifier-shipped-riset-web-beda-dar.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v39-6-shipped-keinginan-sen-research-first-reaso",
+      "topic": "misc",
+      "tags": [
+        "misc"
+      ],
+      "signal": "med",
+      "summary": "V39.6 shipped (keinginan Sen): research-first reasoning - needs_research detector, prompt rule riset-dulu-susun-ulang, research_guard enforcement (goa",
+      "path": "misc/v39-6-shipped-keinginan-sen-research-first-reaso.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v39-6c-polish-false-negative-needs-research-dipe",
+      "topic": "misc",
+      "tags": [
+        "misc"
+      ],
+      "signal": "med",
+      "summary": "V39.6c polish: false-negative needs_research diperbaiki (tutorial/how-to/setup/migrasi sekarang memicu riset), audit research_guard bounded (iterasi t",
+      "path": "misc/v39-6c-polish-false-negative-needs-research-dipe.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v39-7-cerewet-mode-shipped-sen-minta-aspri-cerew",
+      "topic": "misc",
+      "tags": [
+        "misc"
+      ],
+      "signal": "med",
+      "summary": "V39.7 CEREWET MODE shipped (Sen minta aspri cerewet): detect_commitment (pola nanti aku/besok gue/ntar/akhir minggu/lusa), auto-catat commitments.json",
+      "path": "misc/v39-7-cerewet-mode-shipped-sen-minta-aspri-cerew.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v39-9-fallback-map-tutup-jadi-16-16-tool-set-rem",
+      "topic": "misc",
+      "tags": [
+        "misc"
+      ],
+      "signal": "med",
+      "summary": "V39.9: fallback map tutup jadi 16/16 tool (set_reminder & image_understand terakhir), nightly reflection sekarang melaporkan verifier_blocks + researc",
+      "path": "misc/v39-9-fallback-map-tutup-jadi-16-16-tool-set-rem.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v38-9f-cerewet-parity-jalur-sosial-social-genera",
+      "topic": "misc",
+      "tags": [
+        "misc"
+      ],
+      "signal": "med",
+      "summary": "V38.9f cerewet parity: jalur sosial (social_generator) kini ikut nagihan komitmen - dulu hanya jalur agent. Lenient match by uid, cooldown 6h, tone es",
+      "path": "misc/v38-9f-cerewet-parity-jalur-sosial-social-genera.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v38-9g-commitments-hygiene-stress-test-100-add-c",
+      "topic": "misc",
+      "tags": [
+        "misc"
+      ],
+      "signal": "med",
+      "summary": "V38.9g commitments hygiene: stress test 100 add concurrent -> cap 50 memotong janji pending aktif. Fix PENDING_CAP_PER_USER=10 + status 'expired' tran",
+      "path": "misc/v38-9g-commitments-hygiene-stress-test-100-add-c.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "v39-10d-putaran-penutup-false-negative-needs-res",
+      "topic": "misc",
+      "tags": [
+        "misc"
+      ],
+      "signal": "med",
+      "summary": "V39.10d putaran penutup: false-negative needs_research kedua ditutup (gimana caranya/bikin bot dll), DriftGuard kini jalan otomatis di nightly reflect",
+      "path": "misc/v39-10d-putaran-penutup-false-negative-needs-res.md",
+      "updated": "2026-08-26"
+    },
+    {
+      "id": "synth-aeryn-core+webnovel-stack",
+      "topic": "synthesis",
+      "tags": [
+        "aeryn",
+        " webnovel",
+        " insight"
+      ],
+      "signal": "med",
+      "summary": "Cross-domain insight: aeryn x webnovel",
+      "path": "synthesis/aeryn-core+webnovel-stack.md",
+      "updated": "2026-09-19"
+    },
+    {
+      "id": "synth-discord-alpha+hermes-infra",
+      "topic": "synthesis",
+      "tags": [
+        "discord",
+        " hermes-infra",
+        " insight"
+      ],
+      "signal": "med",
+      "summary": "Cross-domain insight: discord x hermes-infra",
+      "path": "synthesis/discord-alpha+hermes-infra.md",
+      "updated": "2026-09-19"
+    },
+    {
+      "id": "synth-discord-alpha+spark-mcp",
+      "topic": "synthesis",
+      "tags": [
+        "discord",
+        " spark",
+        " insight"
+      ],
+      "signal": "med",
+      "summary": "Cross-domain insight: discord x spark",
+      "path": "synthesis/discord-alpha+spark-mcp.md",
+      "updated": "2026-09-19"
+    },
+    {
+      "id": "synth-aeryn-core+discord-alpha",
+      "topic": "synthesis",
+      "tags": [
+        "aeryn",
+        " discord",
+        " insight"
+      ],
+      "signal": "med",
+      "summary": "Cross-domain insight: aeryn x discord",
+      "path": "synthesis/aeryn-core+discord-alpha.md",
+      "updated": "2026-09-19"
+    },
+    {
+      "id": "synth-discord-alpha+v37-3-bug-self-introduced-v37-2-ketemu-pas-fine",
+      "topic": "synthesis",
+      "tags": [
+        "discord",
+        " misc",
+        " insight"
+      ],
+      "signal": "med",
+      "summary": "Cross-domain insight: discord x misc",
+      "path": "synthesis/discord-alpha+v37-3-bug-self-introduced-v37-2-ketemu-pas-fine.md",
+      "updated": "2026-09-19"
+    },
+    {
+      "id": "synth-hermes-aeryn-parity-tracker+user-prefs",
+      "topic": "synthesis",
+      "tags": [
+        "hermes-infra",
+        " user-prefs",
+        " insight"
+      ],
+      "signal": "med",
+      "summary": "Cross-domain insight: hermes-infra x user-prefs",
+      "path": "synthesis/hermes-aeryn-parity-tracker+user-prefs.md",
+      "updated": "2026-09-19"
+    },
+    {
+      "id": "synth-hermes-aeryn-parity-tracker+webnovel-stack",
+      "topic": "synthesis",
+      "tags": [
+        "hermes-infra",
+        " webnovel",
+        " insight"
+      ],
+      "signal": "med",
+      "summary": "Cross-domain insight: hermes-infra x webnovel",
+      "path": "synthesis/hermes-aeryn-parity-tracker+webnovel-stack.md",
+      "updated": "2026-09-19"
+    },
+    {
+      "id": "synth-aeryn-core+v37-3-bug-self-introduced-v37-2-ketemu-pas-fine",
+      "topic": "synthesis",
+      "tags": [
+        "aeryn",
+        " misc",
+        " insight"
+      ],
+      "signal": "med",
+      "summary": "Cross-domain insight: aeryn x misc",
+      "path": "synthesis/aeryn-core+v37-3-bug-self-introduced-v37-2-ketemu-pas-fine.md",
+      "updated": "2026-09-19"
+    },
+    {
+      "id": "synth-discord-alpha+webnovel-stack",
+      "topic": "synthesis",
+      "tags": [
+        "discord",
+        " webnovel",
+        " insight"
+      ],
+      "signal": "med",
+      "summary": "Cross-domain insight: discord x webnovel",
+      "path": "synthesis/discord-alpha+webnovel-stack.md",
+      "updated": "2026-09-19"
+    }
+  ],
+  "built": "2026-09-19"
+}

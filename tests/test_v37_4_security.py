@@ -28,25 +28,29 @@ def test_terminal_blocks_relative_escape():
 
 
 def test_terminal_allows_sandbox_paths():
-    term = make_terminal(["/tmp/aeryn-test-sandbox"])
-    os.makedirs("/tmp/aeryn-test-sandbox", exist_ok=True)
-    with open("/tmp/aeryn-test-sandbox/halo.txt", "w") as f:
+    import tempfile
+    sandbox = tempfile.mkdtemp(prefix="aeryn-test-sandbox-")
+    term = make_terminal([sandbox])
+    os.makedirs(sandbox, exist_ok=True)
+    with open(os.path.join(sandbox, "halo.txt"), "w") as f:
         f.write("isi aman")
-    r = term("cat /tmp/aeryn-test-sandbox/halo.txt")
+    r = term("cat " + os.path.join(sandbox, "halo.txt"))
     assert r.get("stdout") == "isi aman", r
     # relative dalam cwd sandbox juga boleh
-    r2 = term("cat halo.txt", cwd="/tmp/aeryn-test-sandbox")
+    r2 = term("cat halo.txt", cwd=sandbox)
     assert "halo.txt" in str(r2) or r2.get("stdout") == "isi aman", r2
 
 
 def test_http_get_blocks_file_scheme():
-    reg = build_default_registry(sandbox_roots=["/tmp"])
+    import tempfile
+    reg = build_default_registry(sandbox_roots=[tempfile.gettempdir()])
     r = reg.execute("http_get", {"url": "file:///etc/passwd"})
     assert "error" in r and "passwd" not in str(r.get("body", ""))
 
 
 def test_http_get_blocks_ftp_and_data():
-    reg = build_default_registry(sandbox_roots=["/tmp"])
+    import tempfile
+    reg = build_default_registry(sandbox_roots=[tempfile.gettempdir()])
     assert "error" in reg.execute("http_get", {"url": "ftp://x/y"})
     assert "error" in reg.execute("http_get", {"url": "data:text/html,hi"})
 

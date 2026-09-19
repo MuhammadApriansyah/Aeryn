@@ -23,6 +23,7 @@ def test_current_environment_is_healthy():
 def test_drift_detected_when_db_missing(monkeypatch):
     from scripts.archive import drift_guard as dg
     monkeypatch.setattr(dg, "STATE_DB", "/nonexistent/state.db")
+    monkeypatch.setattr(dg, "_hermes_present", lambda: True)
     ok, msg = dg.check_state_db()
     assert not ok
 
@@ -33,11 +34,14 @@ def test_auth_missing_key_flagged(tmp_path):
     fake.write_text('{"providers": {"nous": {}}}')
     old = dg.AUTH
     dg.AUTH = str(fake)
+    old_present = dg._hermes_present
+    dg._hermes_present = lambda: True
     try:
         ok, msg = dg.check_auth()
         assert not ok and "hilang" in msg
     finally:
         dg.AUTH = old
+        dg._hermes_present = old_present
 
 
 def test_corrupt_index_flagged(tmp_path):

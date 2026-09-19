@@ -12,8 +12,10 @@ import os
 import re
 import time
 
-EPISODE_DIR = os.path.expanduser(
-    "~/aeryn-core-agent/Personalisasi/Database/episodes")
+EPISODE_DIR = os.environ.get(
+    "AERYN_EPISODE_DIR",
+    os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                 "Personalisasi", "Database", "episodes"))
 MAX_INJECT = 3          # berapa episode lama diinject per run
 STOPWORDS = frozenset(
     "yang untuk dengan dari ke di dan atau the a an of to in on for and or "

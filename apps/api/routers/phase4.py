@@ -626,7 +626,9 @@ async def spa_fallback(spa: str):
     """Serve React app for client-side routing routes."""
     SPA_ROUTES = {"/", "/projects", "/workspaces", "/chat", "/plugins", "/audit", "/settings", "/notifications"}
     if "/" + spa in SPA_ROUTES:
-        react_index = "/home/sen/aeryn-core-agent/apps/web-vite/dist/index.html"
+        react_index = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))),
+            "apps", "web-vite", "dist", "index.html")
         if os.path.exists(react_index):
             with open(react_index, encoding="utf-8") as f:
                 return f.read()

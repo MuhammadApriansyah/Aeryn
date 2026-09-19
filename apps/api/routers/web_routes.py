@@ -2,15 +2,12 @@
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse, FileResponse
 import os
-_WEB_STATIC = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "apps", "web", "static")
-_WEB_TEMPLATES = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "apps", "web", "templates")
-
-
 
 router = APIRouter()
 
-# React app paths
-REACT_DIST = "/home/sen/aeryn-core-agent/apps/web-vite/dist"
+# React app paths (portable — relatif lokasi file ini)
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+REACT_DIST = os.path.join(_REPO_ROOT, "apps", "web-vite", "dist")
 REACT_INDEX = os.path.join(REACT_DIST, "index.html")
 REACT_STATIC = os.path.join(REACT_DIST, "static")
 
@@ -18,7 +15,7 @@ REACT_STATIC = os.path.join(REACT_DIST, "static")
 @router.get("/chat", response_class=HTMLResponse)
 async def chat_page():
     """Serve chat page."""
-    chat_path = os.path.join(_WEB_TEMPLATES, "chat.html")
+    chat_path = "/home/sen/aeryn-core-agent/apps/web/templates/chat.html"
     if os.path.exists(chat_path):
         with open(chat_path, encoding="utf-8") as f:
             return f.read()
@@ -28,7 +25,7 @@ async def chat_page():
 @router.get("/app", response_class=HTMLResponse)
 async def app_page():
     """Serve app shell (floating navbar + modal)."""
-    app_path = os.path.join(_WEB_TEMPLATES, "app.html")
+    app_path = "/home/sen/aeryn-core-agent/apps/web/templates/app.html"
     if os.path.exists(app_path):
         with open(app_path, encoding="utf-8") as f:
             return f.read()
@@ -38,7 +35,7 @@ async def app_page():
 @router.get("/", response_class=HTMLResponse)
 async def root_page():
     """Root → app shell (single entry point untuk Web UI)."""
-    app_path = os.path.join(_WEB_TEMPLATES, "app.html")
+    app_path = "/home/sen/aeryn-core-agent/apps/web/templates/app.html"
     if os.path.exists(app_path):
         with open(app_path, encoding="utf-8") as f:
             return f.read()
@@ -48,7 +45,7 @@ async def root_page():
 @router.get("/static/css/{path:path}")
 async def css_files(path: str):
     """Serve CSS files."""
-    css_file = os.path.join(_WEB_STATIC, "css", path)
+    css_file = os.path.join("/home/sen/aeryn-core-agent/apps/web/static/css", path)
     if os.path.exists(css_file):
         return FileResponse(css_file)
     return HTMLResponse("Not found", status_code=404)
@@ -57,7 +54,7 @@ async def css_files(path: str):
 @router.get("/static/js/{path:path}")
 async def js_files(path: str):
     """Serve JS files."""
-    js_file = os.path.join(_WEB_STATIC, "js", path)
+    js_file = os.path.join("/home/sen/aeryn-core-agent/apps/web/static/js", path)
     if os.path.exists(js_file):
         return FileResponse(js_file)
     return HTMLResponse("Not found", status_code=404)
@@ -66,7 +63,7 @@ async def js_files(path: str):
 @router.get("/static/vendor/{path:path}")
 async def vendor_files(path: str):
     """Serve vendor JS libraries (gsap, three, marked)."""
-    vendor_file = os.path.join(_WEB_STATIC, "vendor", path)
+    vendor_file = os.path.join("/home/sen/aeryn-core-agent/apps/web/static/vendor", path)
     if os.path.exists(vendor_file):
         return FileResponse(vendor_file)
     return HTMLResponse("Not found", status_code=404)

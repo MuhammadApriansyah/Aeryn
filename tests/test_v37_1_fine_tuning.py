@@ -37,8 +37,11 @@ def test_truncated_run_records_error():
     """Simulasi episode truncated: error eksplisit harus ikut terekam."""
     from aeryn_core.memory.episodic_memory import EpisodicMemory
 
+    import tempfile
+    fd, tmp_path = tempfile.mkstemp(suffix="_v371_episodes.jsonl")
+    os.close(fd)
     mem = EpisodicMemory.__new__(EpisodicMemory)
-    mem.path = "/tmp/test_v371_episodes.jsonl"
+    mem.path = tmp_path
     if os.path.exists(mem.path):
         os.remove(mem.path)
 
