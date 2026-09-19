@@ -1,8 +1,8 @@
-# 🤖 Aeryn — Personal AI Assistant Platform
+# 🤖 Aeryn — Personal AI OS (Self-Reporting Agent Framework)
 
-> **8 development phases complete · 765 tests · Production-grade agent framework · Rust + Python hybrid · 5 cognitive divisions**
+> **62.1 · 17 skills · Self-reporting watchdog · Redis job-queue · MCP server · AlmaLinux glibc-worker · Rust + Python hybrid · 5 cognitive divisions**
 
-Aeryn is a **production-grade AI agent framework** built from validated research (OpenTelemetry GenAI, AWS/Azure production playbook, arXiv agent evaluation/security papers). It features an agent loop with tool use, 5 collaborative cognitive divisions, 4-layer guardrails with human-in-the-loop, persistent user-isolated memory, continuous evaluation, and multi-agent orchestration.
+Aeryn is a **Personal AI OS** — a production-grade AI agent framework that lives on one device (Termux native), knows its own health (watchdog self-reporting via termux-notification), grows its own memory (RAG + bitemporal facts + memory graph), and serves its capabilities as MCP tools. It features an agent loop with 11 registered tools, 5 collaborative cognitive divisions, 4-layer guardrails with human-in-the-loop, persistent user-isolated memory, continuous evaluation, multi-agent orchestration, and a redis-backed job queue that survives restarts.
 
 ---
 

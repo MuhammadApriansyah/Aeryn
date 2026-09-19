@@ -189,3 +189,26 @@ def _register_core_tools(registry: ToolRegistry):
         },
         web_search_tool.execute
     )
+
+    # ── FW1: internal tools (memory/graph/pitfall/body) ke AgentLoop registry ──
+    # Real implementations via internal_tools.py (wraps memory_library +
+    # termux-api). Aeryn bisa MEMAKAI memori & tubuhnya sendiri saat ngobrol.
+    try:
+        from aeryn_core.platform.internal_tools import register as _register_fw1
+
+        class _FW1Adapter:
+            """Adapt plugin-registry register() signature to tools registry."""
+
+            def __init__(self, reg):
+                self._reg = reg
+
+            def register(self, name, description, handler=None, parameters=None,
+                         tags=None, category="general"):
+                self._reg.register(name, description, parameters or
+                                   {"type": "object", "properties": {}}, handler)
+
+        _register_fw1(_FW1Adapter(registry))
+    except Exception:
+        # FW1 tools optional — jangan gagalkan core registry
+        import logging
+        logging.getLogger("aeryn.tools").warning("FW1 internal tools unavailable")

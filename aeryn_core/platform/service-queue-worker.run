@@ -1,0 +1,10 @@
+#!/data/data/com.termux/files/usr/bin/sh
+# V61.4 — IN1: Aeryn redis queue worker (runsvdir/termux-services).
+# Pops jobs dari redis (aeryn:jobs) + execute. Auto-restart oleh runit.
+export HOME=/data/data/com.termux/files/home
+export PREFIX=/data/data/com.termux/files/usr
+export PATH=$PREFIX/bin:$PATH
+export AERYN_REDIS_HOST=127.0.0.1
+export AERYN_REDIS_PORT=6379
+cd $HOME/aeryn-core-agent
+exec $HOME/aeryn-venv/bin/python aeryn_core/platform/queue_worker.py

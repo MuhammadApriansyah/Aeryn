@@ -1,7 +1,7 @@
 [project]
 name = "aeryn-core-agent"
-version = "61.0"
-description = "Aeryn Personal Assistant AI Agent — Full-stack adaptive AI platform"
+version = "62.1"
+description = "Aeryn Personal AI Assistant AI Agent — Full-stack adaptive AI platform"
 requires-python = ">=3.11"
 
 [tool.pytest.ini_options]

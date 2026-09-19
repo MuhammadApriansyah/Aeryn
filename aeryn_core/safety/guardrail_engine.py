@@ -102,6 +102,32 @@ DEFAULT_POLICIES: Dict[str, ToolPolicy] = {
         risk_level=RiskLevel.READ_ONLY,
         requires_approval=False,
     ),
+    # ── FW1: internal tools (memory/body — read-only, aman) ──
+    "memory_search": ToolPolicy(
+        tool_name="memory_search",
+        risk_level=RiskLevel.READ_ONLY,
+        requires_approval=False,
+    ),
+    "graph_traverse": ToolPolicy(
+        tool_name="graph_traverse",
+        risk_level=RiskLevel.READ_ONLY,
+        requires_approval=False,
+    ),
+    "graph_status": ToolPolicy(
+        tool_name="graph_status",
+        risk_level=RiskLevel.READ_ONLY,
+        requires_approval=False,
+    ),
+    "pitfall_search": ToolPolicy(
+        tool_name="pitfall_search",
+        risk_level=RiskLevel.READ_ONLY,
+        requires_approval=False,
+    ),
+    "battery": ToolPolicy(
+        tool_name="battery",
+        risk_level=RiskLevel.READ_ONLY,
+        requires_approval=False,
+    ),
 }
 
 

@@ -220,10 +220,13 @@ def _register_builtin_tools(registry: PluginRegistry):
         tags=["web", "fetch", "http"],
         category="web"
     )
-    registry.register(
-        "memory_search", "Search memory/vault",
-        handler=lambda query, limit=5, **kw: _safe_exec("memory_search", query=query, limit=limit),
-        parameters={"type": "object", "properties": {"query": {"type": "string"}, "limit": {"type": "integer"}}},
-        tags=["memory", "search", "vault"],
-        category="memory"
-    )
+    # ── FW1: internal tools (memory/graph/pitfall/body) ──
+    # Real implementations via internal_tools.py (wraps memory_library +
+    # termux-api). Registered explicitly below — replacing the old
+    # memory_search stub that pointed at a nonexistent tool_runtime handler.
+    try:
+        from aeryn_core.platform import internal_tools as _fw1
+        _fw1.register(registry)
+    except Exception as _fw1_err:
+        logger.warning(f"FW1 internal tools unavailable: {_fw1_err}")
+
