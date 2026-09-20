@@ -3,6 +3,8 @@ from fastapi import APIRouter
 from fastapi.responses import HTMLResponse, FileResponse
 import os
 
+_WEB_ROOT = os.path.join(os.environ.get("HOME", "/data/data/com.termux/files/home"), "aeryn-core-agent")
+
 router = APIRouter()
 
 # React app paths (portable — relatif lokasi file ini)
@@ -15,7 +17,7 @@ REACT_STATIC = os.path.join(REACT_DIST, "static")
 @router.get("/chat", response_class=HTMLResponse)
 async def chat_page():
     """Serve chat page."""
-    chat_path = "/home/sen/aeryn-core-agent/apps/web/templates/chat.html"
+    chat_path = _WEB_ROOT + "/apps/web/templates/chat.html"
     if os.path.exists(chat_path):
         with open(chat_path, encoding="utf-8") as f:
             return f.read()
@@ -25,7 +27,7 @@ async def chat_page():
 @router.get("/app", response_class=HTMLResponse)
 async def app_page():
     """Serve app shell (floating navbar + modal)."""
-    app_path = "/home/sen/aeryn-core-agent/apps/web/templates/app.html"
+    app_path = _WEB_ROOT + "/apps/web/templates/app.html"
     if os.path.exists(app_path):
         with open(app_path, encoding="utf-8") as f:
             return f.read()
@@ -35,7 +37,7 @@ async def app_page():
 @router.get("/", response_class=HTMLResponse)
 async def root_page():
     """Root → app shell (single entry point untuk Web UI)."""
-    app_path = "/home/sen/aeryn-core-agent/apps/web/templates/app.html"
+    app_path = _WEB_ROOT + "/apps/web/templates/app.html"
     if os.path.exists(app_path):
         with open(app_path, encoding="utf-8") as f:
             return f.read()
@@ -45,7 +47,7 @@ async def root_page():
 @router.get("/static/css/{path:path}")
 async def css_files(path: str):
     """Serve CSS files."""
-    css_file = os.path.join("/home/sen/aeryn-core-agent/apps/web/static/css", path)
+    css_file = os.path.join(_WEB_ROOT + "/apps/web/static/css", path)
     if os.path.exists(css_file):
         return FileResponse(css_file)
     return HTMLResponse("Not found", status_code=404)
@@ -54,7 +56,7 @@ async def css_files(path: str):
 @router.get("/static/js/{path:path}")
 async def js_files(path: str):
     """Serve JS files."""
-    js_file = os.path.join("/home/sen/aeryn-core-agent/apps/web/static/js", path)
+    js_file = os.path.join(_WEB_ROOT + "/apps/web/static/js", path)
     if os.path.exists(js_file):
         return FileResponse(js_file)
     return HTMLResponse("Not found", status_code=404)
@@ -63,7 +65,7 @@ async def js_files(path: str):
 @router.get("/static/vendor/{path:path}")
 async def vendor_files(path: str):
     """Serve vendor JS libraries (gsap, three, marked)."""
-    vendor_file = os.path.join("/home/sen/aeryn-core-agent/apps/web/static/vendor", path)
+    vendor_file = os.path.join(_WEB_ROOT + "/apps/web/static/vendor", path)
     if os.path.exists(vendor_file):
         return FileResponse(vendor_file)
     return HTMLResponse("Not found", status_code=404)

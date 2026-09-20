@@ -172,6 +172,17 @@ DEFAULT_POLICIES: Dict[str, ToolPolicy] = {
         risk_level=RiskLevel.READ_ONLY,
         requires_approval=False,
     ),
+    # ── G5: skill installer ──
+    "skill_add": ToolPolicy(
+        tool_name="skill_add",
+        risk_level=RiskLevel.MEDIUM,
+        requires_approval=False,
+    ),
+    "skill_list": ToolPolicy(
+        tool_name="skill_list",
+        risk_level=RiskLevel.READ_ONLY,
+        requires_approval=False,
+    ),
 }
 
 

@@ -20,6 +20,7 @@ REDIS_HOST = os.environ.get("AERYN_REDIS_HOST", "127.0.0.1")
 REDIS_PORT = int(os.environ.get("AERYN_REDIS_PORT", "6379"))
 QUEUE_KEY = os.environ.get("AERYN_QUEUE_KEY", "aeryn:jobs")
 DLQ_KEY = os.environ.get("AERYN_DLQ_KEY", "aeryn:jobs:dlq")
+SCHED_KEY = os.environ.get("AERYN_SCHED_KEY", "aeryn:jobs:scheduled")  # ZSET: score=remind_at epoch
 
 _conn = None
 
@@ -101,7 +102,48 @@ def stats() -> dict:
         "jobs": r.llen(QUEUE_KEY),
         "processing": r.llen("aeryn:jobs:processing"),
         "dlq": r.llen(DLQ_KEY),
+        "scheduled": int(r.zcard(SCHED_KEY)),
     }
+
+
+# ── Delayed queue (G2: reminder yang benar-benar menembak) ─────────────
+
+def schedule(job: dict, remind_at_epoch: float) -> str:
+    """Schedule a job for later execution (ZSET, score = epoch time).
+
+    Worker `poll_due()` memindahkan job yang waktunya tiba ke queue utama.
+    """
+    r = connect()
+    job_id = job.get("id") or f"job_{int(time.time() * 1000)}"
+    job = {**job, "id": job_id, "scheduled_at": time.time(), "remind_at": remind_at_epoch}
+    r.zadd(SCHED_KEY, {json.dumps(job): remind_at_epoch})
+    return job_id
+
+
+def poll_due(max_move: int = 10) -> int:
+    """Move due jobs (remind_at <= now) dari ZSET ke queue utama.
+
+    Returns jumlah job yang dipindah. Dipanggil worker loop tiap iterasi.
+    """
+    r = connect()
+    now = time.time()
+    due = r.zrangebyscore(SCHED_KEY, "-inf", now, start=0, num=max_move)
+    moved = 0
+    for item in due:
+        # Atomic: remove dari ZSET + push ke queue utama
+        if r.zrem(SCHED_KEY, item):
+            r.lpush(QUEUE_KEY, item)
+            moved += 1
+    return moved
+
+
+def due_count() -> int:
+    """Jumlah job yang waktunya sudah tiba (belum dipindah)."""
+    try:
+        r = connect()
+        return int(r.zcount(SCHED_KEY, "-inf", time.time()))
+    except Exception:
+        return 0
 
 
 # ── Worker loop (untuk daemon) ──────────────────────────────────────────

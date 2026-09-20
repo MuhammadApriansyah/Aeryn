@@ -72,6 +72,11 @@ def main():
                 import time
                 time.sleep(5)
                 continue
+            # G2: pindahkan job terjadwal yang waktunya tiba ke queue utama
+            try:
+                rq.poll_due()
+            except Exception as _e:
+                pass
             if not rq.work_once(handle_job):
                 import time
                 time.sleep(0.5)

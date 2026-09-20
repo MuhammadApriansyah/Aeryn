@@ -390,6 +390,34 @@ def cmd_goals(args):
         bar = "█" * (prog // 10) + "░" * (10 - prog // 10)
         print(f"  {color(g.get('title', '?')[:40], C.CYN):42s} {bar} {prog}%")
     print()
+def cmd_skill(args):
+    """Skill ecosystem: add <nama> / list."""
+    if not args or args[0] == "list":
+        try:
+            from aeryn_core.skills.skill_installer import skill_list
+            r = skill_list()
+            print(color(f"\n  ⚡ Ter-install ({len(r['installed'])})\n", C.B))
+            for s in r["installed"]:
+                print(f"  • {s}")
+            print(color(f"\n  📦 Katalog tersedia ({len(r['catalog'])})\n", C.B))
+            for s in r["catalog"]:
+                print(f"  • {s}  (aeryn skill add " + s + ")")
+            print()
+        except Exception as e:
+            print(color(f"  ⚠️ {e}", C.YLW))
+        return
+    if args[0] == "add" and len(args) > 1:
+        try:
+            from aeryn_core.skills.skill_installer import skill_add
+            r = skill_add(" ".join(args[1:]))
+            if r.get("ok"):
+                print(color(f"\n  ✅ Skill '{r['skill']}' ter-install ({r['source']})\n", C.GRN))
+            else:
+                print(color(f"\n  ❌ {r.get('error', 'gagal')}\n", C.RED))
+        except Exception as e:
+            print(color(f"  ⚠️ {e}", C.YLW))
+        return
+    print(color("  Usage: aeryn skill add <nama> | aeryn skill list", C.YLW))
 COMMANDS = {
     "interactive": cmd_interactive,
     "chat": cmd_chat,
@@ -405,8 +433,11 @@ COMMANDS = {
     "services": cmd_services,
     "welcome": cmd_welcome,
     "goals": cmd_goals,
+    "skill": cmd_skill,
     "watch": cmd_watch,
 }
+
+
 
 
 

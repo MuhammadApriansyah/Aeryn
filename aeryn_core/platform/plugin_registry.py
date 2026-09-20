@@ -244,3 +244,10 @@ def _register_builtin_tools(registry: PluginRegistry):
     except Exception as _pr_err:
         logger.warning(f"Profile router tools unavailable: {_pr_err}")
 
+    # ── G5: skill installer (ecosystem) ──
+    try:
+        from aeryn_core.skills import skill_installer as _si
+        _si.register(registry)
+    except Exception as _si_err:
+        logger.warning(f"Skill installer unavailable: {_si_err}")
+

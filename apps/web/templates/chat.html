@@ -29,9 +29,21 @@
     <main class="chat-main">
       <header class="chat-header">
         <div class="chat-title" id="chatTitle">New Conversation</div>
-        <div class="chat-status">
-          <span class="status-dot"></span>
-          <span id="chatStatusText">Online</span>
+        <div class="chat-header-actions">
+          <div class="chat-status">
+            <span class="status-dot"></span>
+            <span id="chatStatusText">Online</span>
+          </div>
+          <!-- G4: multi-user switch (ProfileRouter) -->
+          <select class="user-switch" id="userSwitch" title="Ganti user (isolasi memori)">
+            <option value="sen">Sen</option>
+            <option value="budi">Budi (test)</option>
+            <option value="guest">Guest</option>
+          </select>
+          <!-- G4: persona avatar -->
+          <div class="persona-avatar" id="personaAvatar" title="Aeryn">✦</div>
+          <!-- G4: theme toggle (instant — NO View Transitions API) -->
+          <button class="theme-toggle" id="themeToggle" title="Ganti tema (gelap/terang)">🌙</button>
         </div>
       </header>
 
@@ -103,6 +115,36 @@
     </div>
   </div>
 
+  <script>
+    // G4: theme toggle — INSTANT (localStorage, NO View Transitions API)
+    (function() {
+      const btn = document.getElementById('themeToggle');
+      const root = document.documentElement;
+      const saved = localStorage.getItem('aeryn-theme') || 'dark';
+      root.setAttribute('data-theme', saved);
+      btn.textContent = saved === 'dark' ? '🌙' : '☀️';
+      btn.addEventListener('click', function() {
+        const cur = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        const next = cur === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        localStorage.setItem('aeryn-theme', next);
+        btn.textContent = next === 'dark' ? '🌙' : '☀️';
+      });
+    })();
+    // G4: multi-user switch — set localStorage user_id (dipakai chat.js)
+    (function() {
+      const sel = document.getElementById('userSwitch');
+      const saved = localStorage.getItem('aeryn-user') || 'sen';
+      sel.value = saved;
+      sel.addEventListener('change', function() {
+        localStorage.setItem('aeryn-user', sel.value);
+        // Reset sesi chat agar isolasi jelas
+        localStorage.removeItem('aeryn-session');
+        const list = document.getElementById('sessionsList');
+        if (list) list.innerHTML = '';
+      });
+    })();
+  </script>
   <script src="/static/vendor/marked.min.js"></script>
   <script src="/static/js/markdown.js"></script>
   <script src="/static/js/chat.js"></script>

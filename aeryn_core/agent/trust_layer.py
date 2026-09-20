@@ -159,18 +159,23 @@ def handle_promises(user_message: str, user_id: str = "default",
                          "text": payload[:100]})
         except Exception as e:
             failed.append({"kind": "reminder", "error": str(e)[:200]})
-        # Enqueue ke redis worker (queue tahan restart)
+        # Schedule ke redis ZSET (G2: delayed — menembak saat waktunya tiba)
         try:
-            from aeryn_core.platform.redis_queue import push
-            jid = push({
+            from aeryn_core.platform.redis_queue import schedule
+            from datetime import datetime as _dt
+            try:
+                epoch = _dt.fromisoformat(remind_at).timestamp()
+            except Exception:
+                epoch = _dt.now().timestamp() + 3600
+            jid = schedule({
                 "type": "shell",
                 "command": (
                     f'termux-notification --title "⏰ Aeryn: {payload[:40]}" '
                     f'--content "{payload[:100]}" --priority high 2>/dev/null'
                 ),
                 "meta": {"remind_at": remind_at, "user_id": user_id, "fid": fid},
-            })
-            what.append({"kind": "queue_job", "job_id": jid})
+            }, epoch)
+            what.append({"kind": "queue_job", "job_id": jid, "remind_at": remind_at})
         except Exception as e:
             failed.append({"kind": "queue_job", "error": str(e)[:200]})
 
