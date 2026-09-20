@@ -19,7 +19,7 @@ HERMES_SCRIPTS = os.environ.get(
         os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
         "aeryn_core", "memory_library"))
 _PY = "python3"
-_TIMEOUT = 30
+_TIMEOUT = 180  # G3: vector lane aktif (proot embed miss ~60s) — 30s terlalu kecil
 
 
 def _run(script: str, *args: str) -> str:
