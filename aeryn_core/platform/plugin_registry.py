@@ -237,3 +237,10 @@ def _register_builtin_tools(registry: PluginRegistry):
     except Exception as _al_err:
         logger.warning(f"AlmaLinux worker tools unavailable: {_al_err}")
 
+    # ── FW6: multi-user profile routing ──
+    try:
+        from aeryn_core.platform import profile_router as _pr
+        _pr.register(registry)
+    except Exception as _pr_err:
+        logger.warning(f"Profile router tools unavailable: {_pr_err}")
+

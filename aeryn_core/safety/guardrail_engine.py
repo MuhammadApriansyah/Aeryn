@@ -146,6 +146,32 @@ DEFAULT_POLICIES: Dict[str, ToolPolicy] = {
         risk_level=RiskLevel.READ_ONLY,
         requires_approval=False,
     ),
+    # ── FW6: multi-user profile routing (admin, MEDIUM) ──
+    "profile_create": ToolPolicy(
+        tool_name="profile_create",
+        risk_level=RiskLevel.MEDIUM,
+        requires_approval=False,
+    ),
+    "profile_list": ToolPolicy(
+        tool_name="profile_list",
+        risk_level=RiskLevel.READ_ONLY,
+        requires_approval=False,
+    ),
+    "profile_bind": ToolPolicy(
+        tool_name="profile_bind",
+        risk_level=RiskLevel.MEDIUM,
+        requires_approval=False,
+    ),
+    "profile_resolve": ToolPolicy(
+        tool_name="profile_resolve",
+        risk_level=RiskLevel.READ_ONLY,
+        requires_approval=False,
+    ),
+    "profile_stats": ToolPolicy(
+        tool_name="profile_stats",
+        risk_level=RiskLevel.READ_ONLY,
+        requires_approval=False,
+    ),
 }
 
 
