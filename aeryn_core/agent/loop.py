@@ -144,6 +144,22 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                 
                 # === MEMORY WRITE: Save facts after conversation ===
                 self._save_facts(session_id, user_message, content, messages)
+
+                # === TRUST LAYER (T1): janji = aksi — dispatch + hasil jujur ===
+                try:
+                    from aeryn_core.agent.trust_layer import handle_promises, format_for_response
+                    _trust = handle_promises(user_message, user_id=user_id, session_id=session_id)
+                    if _trust.get("acted") or _trust.get("failed"):
+                        _trust_note = format_for_response(_trust)
+                        if _trust_note:
+                            content = content + "\n\n" + _trust_note
+                        # Jika semua aksi janji GAGAL → koreksi jawaban jujur
+                        if _trust.get("failed") and not _trust.get("acted"):
+                            content += "\n\n⚠️ Maaf, aku belum bisa nyimpen ini sekarang — coba lagi nanti ya."
+                except Exception as _trust_err:
+                    import logging
+                    logging.getLogger("aeryn.loop").warning("trust layer: %s", _trust_err)
+
                 
                 # === SESSION STATE: persist history (user-isolated) ===
                 persistent_history = history_messages + [
@@ -181,7 +197,7 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                 if isinstance(tool_args, str):
                     try:
                         tool_args = json.loads(tool_args)
-                    except (json.JSONDecodeError, ValueError):
+                    except:
                         tool_args = {}
                 
                 # === GUARDRAIL: detect approval requirement ===
@@ -403,7 +419,7 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                 if isinstance(tool_args, str):
                     try:
                         tool_args = json.loads(tool_args)
-                    except (json.JSONDecodeError, ValueError):
+                    except:
                         tool_args = {}
                 
                 yield json.dumps({"type": "tool_call", "tool": tool_name, "args": tool_args})

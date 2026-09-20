@@ -15,7 +15,7 @@
       "summary": "Webnovel platform = npm workspaces; apps/api Fastify v4+node:sqlite :3001, apps/web Vite+React :5173 proxy /api, both under PM2 ecosystem.config.js. Auth stdlib scrypt + sessions table. Core runs WITHOUT AI; AI optional author-side tool.",
       "path": "webnovel/webnovel-stack.md",
       "updated": "2026-08-24",
-      "access_count": 24
+      "access_count": 27
     },
     {
       "id": "webnovel-ux-stack",
@@ -89,7 +89,7 @@
       "summary": "Aeryn-Core V30-V32 (session 20260824_111023_6c0f07): schema dinamis V30.3 (hint path/URL dari goal), deteksi social vs knowledge query via heuristic bersih (V32), NOUS model paling natural untuk sapaan (4/5).",
       "path": "aeryn/aeryn-core-v30-plus.md",
       "updated": "2026-08-25",
-      "access_count": 41
+      "access_count": 47
     },
     {
       "id": "aeryn-v32-final-study-social-generator-hybrid-no",
@@ -105,7 +105,7 @@
       "summary": "aeryn v32 final study: social generator hybrid + nous primary + discord gateway split",
       "path": "aeryn/aeryn-v32-final-study-social-generator-hybrid-no.md",
       "updated": "2026-08-25",
-      "access_count": 38
+      "access_count": 44
     },
     {
       "id": "v33-planning-research",
@@ -138,7 +138,7 @@
       "summary": "v33 planning and research documented for aeryn fixes",
       "path": "aeryn/v33-planning-and-research-documented-for-aeryn-f.md",
       "updated": "2026-08-25",
-      "access_count": 19
+      "access_count": 22
     },
     {
       "id": "v33-executed-social-detection-sanitizer-client-c",

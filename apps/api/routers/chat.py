@@ -307,6 +307,43 @@ async def chat(req: RunRequest):
         tracer.finish_trace(trace.id)
         return {"status": "error", "error": str(e)}
 
+@router.get("/tools")
+async def list_tools_live():
+    """List registered tools LIVE dari plugin_registry (sumber yang sama dgn chat)."""
+    from aeryn_core.platform.plugin_registry import get_registry
+    registry = get_registry()
+    tools = registry.list_tools()
+    return {"count": len(tools), "tools": tools}
+
+
+@router.get("/skills")
+async def list_skills_live():
+    """List skills aktif dari crystallized DB (sumber yang sama dgn work console)."""
+    try:
+        from aeryn_core.utils.config import DATABASE_DIR
+        import sqlite3
+        db = os.path.join(DATABASE_DIR, "skill_crystallization.db")
+        if not os.path.exists(db):
+            return {"count": 0, "skills": []}
+        conn = sqlite3.connect(db)
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            "SELECT name, description, tool_definition FROM crystallized_skills "
+            "WHERE is_active=1 ORDER BY name"
+        ).fetchall()
+        conn.close()
+        skills = []
+        for r in rows:
+            skills.append({
+                "name": r["name"],
+                "description": r["description"],
+                "tool_def": r["tool_definition"],
+            })
+        return {"count": len(skills), "skills": skills}
+    except Exception as e:
+        return {"error": str(e)}
+
+
 @router.get("/search")
 async def search(q: str, limit: int = 10):
     hse = get_search_engine()

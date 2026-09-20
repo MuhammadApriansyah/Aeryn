@@ -87,32 +87,96 @@ def table(headers, rows):
     print(color(bot, C.GRY))
 
 def cmd_status(args):
-    """Show service status."""
-    h = api_get("/health")
-    if "error" in h:
-        print(color(f"  ❌ API unreachable: {h['error']}", C.RED))
-        return
-    env = api_get("/gateway/env")
-    print(color("\n  📊 Service Status\n", C.B))
-    print(f"  Status:   {color('● ' + h.get('status', '?'), C.GRN if h.get('status') == 'healthy' else C.RED)}")
-    print(f"  Memory:   {color(str(h.get('memory_mb', '?')) + ' MB', C.YLW)}")
-    print(f"  Version:  {color(h.get('version', '?'), C.CYN)}")
-    if "environment" in env:
-        print(f"  Env:      {color(env['environment'].get('type', '?'), C.BLU)}")
-        print(f"  DB:       {color(env['environment'].get('db', '?'), C.BLU)}")
-    print()
+    """Show service status (unified_status — SATU sumber kebenaran)."""
+    try:
+        from aeryn_core.utils.unified_status import get_full_status, format_cli
+        s = get_full_status()
+        # Tambah memory MB dari API kalau reachable
+        h = api_get("/health")
+        if "memory_mb" in h:
+            print(format_cli(s).replace(
+                f"Version:  v{s['version']}",
+                f"Version:  v{s['version']}  ·  Memory: {h['memory_mb']} MB"
+            ))
+        else:
+            print(format_cli(s))
+    except Exception as e:
+        print(color(f"  ⚠️ unified_status gagal: {e} — fallback API", C.YLW))
+        h = api_get("/health")
+        if "error" in h:
+            print(color(f"  ❌ API unreachable: {h['error']}", C.RED))
+            return
+        print(color("\n  📊 Service Status\n", C.B))
+        print(f"  Status: {h.get('status', '?')}")
 
 def cmd_tools(args):
-    """List registered tools."""
-    r = api_get("/plugins")
-    tools = r.get("tools", [])
-    print(color(f"\n  🔧 {len(tools)} Registered Tools\n", C.B))
-    for t in tools:
-        print(f"  {color(t['name'], C.CYN):20s} {t.get('description', '')}")
-        if t.get("tags"):
-            print(f"  {'':20s} {color(' '.join(f'#{tag}' for tag in t['tags']), C.GRY)}")
-    print()
+    """List registered tools (dari plugin_registry — sumber yang sama dgn chat)."""
+    try:
+        from aeryn_core.platform.plugin_registry import get_registry
+        tools = get_registry().list_tools()
+        print(color(f"\n  🔧 {len(tools)} Registered Tools\n", C.B))
+        for t in tools:
+            print(f"  {color(t['name'], C.CYN):20s} {t.get('description', '')[:70]}")
+            if t.get("tags"):
+                print(f"  {'':20s} {color(' '.join(f'#{tag}' for tag in t['tags'][:4]), C.GRY)}")
+        print()
+    except Exception as e:
+        print(color(f"  ⚠️ registry gagal: {e}", C.YLW))
 
+
+
+def cmd_services(args):
+    """Status semua service runit (api, worker, watchdog, redis, postgres)."""
+    try:
+        from aeryn_core.utils.unified_status import get_services
+        print(color("\n  ⚙️ Services\n", C.B))
+        for s in get_services():
+            icon = C.GRN + "●" if s["status"] == "up" else C.RED + "○"
+            print(f"  {icon} {s['name']}: {s['status']}")
+        print()
+    except Exception as e:
+        print(color(f"  ⚠️ {e}", C.YLW))
+
+
+def cmd_watch(args):
+    """Tail watchdog log (monitoring live)."""
+    import subprocess
+    home = os.environ.get("HOME", "")
+    log = os.path.join(home, "tmp", "aeryn-watchdog.log")
+    if not os.path.exists(log):
+        print(color("  ⚠️ Watchdog log belum ada: " + log, C.YLW))
+        return
+    try:
+        out = subprocess.run(["tail", "-20", log], capture_output=True, text=True, timeout=10)
+        print(color("\n  🐕 Watchdog (20 terakhir)\n", C.B))
+        for line in (out.stdout or "").strip().split("\n")[-20:]:
+            print(f"  {line}")
+        print()
+    except Exception as e:
+        print(color(f"  ⚠️ {e}", C.YLW))
+
+
+
+def cmd_welcome(args):
+    """Tur 3 langkah untuk pengguna awam — coba tanya, minta, cek hasil."""
+    print(color("\n  👋 Selamat datang di Aeryn!\n", C.B))
+    print("  Aku asisten AI yang hidup di HP ini. Aku bisa ngobrol,")
+    print("  ingat preferensi kamu, cek kondisi HP, dan bantu kerjaan.")
+    print()
+    print(color("  Tur 3 langkah (coba langsung):\n", C.YLW))
+    print(color("  1️⃣  Ngobrol biasa:", C.CYN))
+    print("       aeryn chat    → lalu ketik apa saja, mis: \"halo, kamu bisa apa?\"")
+    print()
+    print(color("  2️⃣  Minta aku nyatat/ingetin (aku simpan beneran):", C.CYN))
+    print("       aeryn chat    → \"catat ya, aku suka kopi susu gula aren\"")
+    print("       aeryn chat    → \"ingetin besok pagi buat minum air\"")
+    print()
+    print(color("  3️⃣  Cek kondisi & hasil:", C.CYN))
+    print("       aeryn status  → kesehatan sistem (5 services)")
+    print("       aeryn tools   → daftar kemampuanku")
+    print("       aeryn search redis → cari di memoriku")
+    print()
+    print(color("  Tips: ketik help untuk semua perintah. Mulai dari nomor 1 ya!\n", C.GRY))
 def cmd_divisions(args):
     """Show 5 cognitive divisions."""
     r = api_get("/divisions")
@@ -159,24 +223,38 @@ def cmd_adapt(args):
     print()
 
 def cmd_search(args):
-    """Search memory."""
+    """Search memory (memory library RAG — sumber yang sama dgn agent tools)."""
     query = " ".join(args)
     if not query:
         print(color("  Usage: aeryn search <query>", C.YLW))
         return
-    r = api_get(f"/search?q={urllib.parse.quote(query)}")
-    results = r.get("results", [])
-    print(color(f"\n  🔍 '{query}' — {len(results)} results\n", C.B))
-    for r in results[:10]:
-        print(f"  • {r.get('title', 'Untitled')}")
-    print()
+    try:
+        from aeryn_core.platform.internal_tools import tool_memory_search
+        r = tool_memory_search(query, limit=5)
+        n = r.get("ok") and r.get("output", "").count("###") or 0
+        print(color(f"\n  🔍 '{query}' — {n} results\n", C.B))
+        if r.get("ok"):
+            print("  " + r.get("output", "")[:1500].replace("\n", "\n  "))
+        else:
+            print(color(f"  {r.get('error', 'no results')}", C.GRY))
+        print()
+    except Exception as e:
+        print(color(f"  ⚠️ memory search gagal: {e}", C.YLW))
 
 def cmd_env(args):
-    """Show environment."""
-    r = api_get("/gateway/env")
-    print(color("\n  🌍 Environment\n", C.B))
-    print_json(r)
-    print()
+    """Show environment (unified_status — deteksi NYATA, bukan stale)."""
+    try:
+        from aeryn_core.utils.unified_status import detect_environment, get_version
+        env = detect_environment()
+        print(color("\n  🌍 Environment\n", C.B))
+        print(f"  Type:    {env['type']}")
+        print(f"  DB:      {env['db']}")
+        print(f"  Version: v{get_version()}")
+        print()
+    except Exception as e:
+        print(color(f"  ⚠️ {e}", C.YLW))
+        r = api_get("/gateway/env")
+        print_json(r)
 
 def cmd_run(args):
     """Run a single goal."""
@@ -226,7 +304,19 @@ def cmd_chat(args):
 def cmd_interactive(args):
     """Interactive command mode."""
     banner()
-    print(color("  Type 'help' for commands, 'quit' to exit.\n", C.GRY))
+    print(color("  Type 'help' for commands, 'quit' to exit.", C.GRY))
+
+    # TUI_PANEL_SHOWN — rich status panel (live dari unified_status)
+    try:
+        from aeryn_core.utils.unified_status import get_full_status
+        s = get_full_status()
+        s_icon = {"healthy": "●", "degraded": "◐", "down": "○"}.get(s["status"], "○")
+        print(color(f"  {s_icon} {s['status']} · v{s['version']} · {s['env']['type']} · {s['env']['db']}", C.GRY))
+        print(color(f"  🔧 {s['tools']} tools · ⚡ {s['skills']} skills · " +
+                    " ".join(("●" if x["status"] == "up" else "○") + x["name"].replace("aeryn-", "") for x in s["services"]), C.GRY))
+        print()
+    except Exception:
+        pass
     
     while True:
         try:
@@ -249,13 +339,16 @@ def cmd_interactive(args):
   Commands:
     chat              Interactive chat mode
     run <goal>        Run a single goal
-    status            Show service status
-    tools             List registered tools
+    status            Service + tools + skills (satu layar)
+    tools             List registered tools (live dari registry)
+    services          Status semua service runit
+    watch             Tail watchdog log (monitoring live)
+    welcome           Tur 3 langkah untuk pemula
     divisions         Show 5 cognitive divisions
     workflows         List workflows
     traces            View recent traces
     adapt             Trigger self-improvement
-    search <query>    Search memory
+    search <query>    Search memory (RAG real)
     env               Show environment info
     help              Show this help
     quit              Exit
@@ -284,6 +377,19 @@ def cmd_interactive(args):
         else:
             print(color(f"  Unknown: {cmd}. Type 'help'.", C.YLW))
 
+def cmd_goals(args):
+    """List niat (goals) Aeryn — aktif saja, urut prioritas."""
+    r = api_get("/goals")
+    goals = r.get("goals", [])
+    active = [g for g in goals if g.get("status", "active") != "completed"]
+    print(color(f"\n  🎯 Niat Aktif ({len(active)})\n", C.B))
+    if not active:
+        print(color("  (belum ada niat — aeryn run <goal> untuk mulai)", C.GRY))
+    for g in active[:10]:
+        prog = g.get("progress", 0)
+        bar = "█" * (prog // 10) + "░" * (10 - prog // 10)
+        print(f"  {color(g.get('title', '?')[:40], C.CYN):42s} {bar} {prog}%")
+    print()
 COMMANDS = {
     "interactive": cmd_interactive,
     "chat": cmd_chat,
@@ -296,7 +402,13 @@ COMMANDS = {
     "adapt": cmd_adapt,
     "search": cmd_search,
     "env": cmd_env,
+    "services": cmd_services,
+    "welcome": cmd_welcome,
+    "goals": cmd_goals,
+    "watch": cmd_watch,
 }
+
+
 
 def main():
     if len(sys.argv) < 2 or sys.argv[1] not in COMMANDS:
