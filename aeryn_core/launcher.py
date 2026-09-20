@@ -25,7 +25,7 @@ def detect_environment():
             comm = f.read().strip().lower()
         if "proot" in comm or "termux" in comm:
             return "proot"
-    except:
+    except OSError:
         pass
     if os.path.exists("/var/run/secrets/kubernetes.io/serviceaccount"):
         return "k8s"

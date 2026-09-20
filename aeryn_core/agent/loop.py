@@ -181,7 +181,7 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                 if isinstance(tool_args, str):
                     try:
                         tool_args = json.loads(tool_args)
-                    except:
+                    except (json.JSONDecodeError, ValueError):
                         tool_args = {}
                 
                 # === GUARDRAIL: detect approval requirement ===
@@ -403,7 +403,7 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                 if isinstance(tool_args, str):
                     try:
                         tool_args = json.loads(tool_args)
-                    except:
+                    except (json.JSONDecodeError, ValueError):
                         tool_args = {}
                 
                 yield json.dumps({"type": "tool_call", "tool": tool_name, "args": tool_args})

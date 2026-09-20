@@ -28,7 +28,7 @@ class EnvironmentDetector:
         try:
             libc = ctypes.CDLL(ctypes.util.find_library('c'), use_errno=True)
             return hasattr(libc, "unshare")
-        except:
+        except (OSError, TypeError):
             return False
     
     @staticmethod

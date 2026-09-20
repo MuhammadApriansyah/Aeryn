@@ -20,7 +20,7 @@ class ConfigFile:
         try:
             with open(self._path) as f:
                 return json.load(f)
-        except:
+        except (OSError, json.JSONDecodeError):
             return {}
     
     def save(self, config: Dict):
