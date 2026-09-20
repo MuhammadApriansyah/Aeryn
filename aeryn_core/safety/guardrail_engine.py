@@ -128,6 +128,24 @@ DEFAULT_POLICIES: Dict[str, ToolPolicy] = {
         risk_level=RiskLevel.READ_ONLY,
         requires_approval=False,
     ),
+    # ── FW2.2: AlmaLinux worker (delegated toolchain) ──
+    "almalinux_build": ToolPolicy(
+        tool_name="almalinux_build",
+        risk_level=RiskLevel.MEDIUM,
+        requires_approval=False,
+        forbidden_patterns=[";", "|", "&", "$", "`"],
+    ),
+    "almalinux_shell": ToolPolicy(
+        tool_name="almalinux_shell",
+        risk_level=RiskLevel.HIGH,
+        requires_approval=False,
+        forbidden_patterns=["rm -rf /", "mkfs.", "dd if=", "shutdown", "reboot"],
+    ),
+    "almalinux_status": ToolPolicy(
+        tool_name="almalinux_status",
+        risk_level=RiskLevel.READ_ONLY,
+        requires_approval=False,
+    ),
 }
 
 

@@ -230,3 +230,10 @@ def _register_builtin_tools(registry: PluginRegistry):
     except Exception as _fw1_err:
         logger.warning(f"FW1 internal tools unavailable: {_fw1_err}")
 
+    # ── FW2.2: AlmaLinux worker (delegated toolchain) ──
+    try:
+        from aeryn_core.platform import almalinux_tools as _al
+        _al.register(registry)
+    except Exception as _al_err:
+        logger.warning(f"AlmaLinux worker tools unavailable: {_al_err}")
+
