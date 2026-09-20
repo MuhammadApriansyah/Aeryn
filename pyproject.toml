@@ -1,8 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "aeryn-core-agent"
 version = "62.1"
-description = "Aeryn Personal AI Assistant AI Agent — Full-stack adaptive AI platform"
+description = "Aeryn Personal AI OS — self-reporting agent framework (Termux native + AlmaLinux worker)"
 requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "MIT"}
+
+[project.scripts]
+aeryn = "aeryn_core.cli:main"
+
+[project.optional-dependencies]
+api = ["fastapi>=0.109.0", "uvicorn>=0.27.0", "pydantic>=2.0.0"]
+ml = ["numpy>=1.22.0", "sentence-transformers>=2.2.0"]
+dev = ["pytest>=7.0.0", "ruff", "mypy"]
+
+[tool.setuptools.packages.find]
+include = ["aeryn_core*"]
+exclude = ["tests*", "apps*", "Personalisasi*", "aeryn_core._archive*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
