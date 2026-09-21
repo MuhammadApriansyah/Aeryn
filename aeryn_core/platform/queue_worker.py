@@ -36,7 +36,14 @@ def handle_job(job: dict) -> None:
     jtype = job.get("type", "unknown")
     print(f"[worker] job {job.get('id')} type={jtype}", flush=True)
 
-    if jtype == "chat":
+    if jtype == "reminder":
+        # RM2: deliver ke home_channel user (Discord/WA/local)
+        try:
+            from aeryn_core.platform.reminder_delivery import handle_reminder_job
+            handle_reminder_job(job)
+        except Exception as e:
+            print(f"[worker] reminder error: {e}", flush=True)
+    elif jtype == "chat":
         # Chat job: panggil endpoint chat Aeryn internal
         import urllib.request
         import urllib.error
