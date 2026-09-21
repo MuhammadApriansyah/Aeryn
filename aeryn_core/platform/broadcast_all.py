@@ -4,7 +4,7 @@
 import os, sys, json, asyncio, time, shutil
 from typing import Dict, Optional
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from aeryn_core.platform.realtime import get_emitter
 

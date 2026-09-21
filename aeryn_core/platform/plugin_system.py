@@ -17,7 +17,7 @@ import importlib.util
 from typing import Dict, List, Optional, Callable
 from datetime import datetime
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from aeryn_core.utils.config import PLUGINS_DIR
 

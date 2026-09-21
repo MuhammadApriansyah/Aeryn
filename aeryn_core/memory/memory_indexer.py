@@ -12,7 +12,7 @@ import time
 from typing import List, Dict
 from pathlib import Path
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from aeryn_core.memory.vault import AerynVault, LAYER_WIKI, LAYER_PROJECTS, LAYER_DAILY, SUBDIRS
 from aeryn_core.database.semantic_search import get_semantic_search

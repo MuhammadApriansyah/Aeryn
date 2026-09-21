@@ -20,7 +20,7 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 import sqlite3
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from aeryn_core.auth.rate_limiter import RateLimiter
 from aeryn_core.safety.safety_engine import get_safety_engine, sanitize_output

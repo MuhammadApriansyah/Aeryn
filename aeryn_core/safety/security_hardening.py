@@ -12,7 +12,7 @@ import os, sys, json, asyncio, re
 from typing import Dict, Optional
 from aeryn_core.utils.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 
 # ── 1. Path Traversal Mitigation ──────────────

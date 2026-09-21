@@ -17,7 +17,7 @@ from typing import Dict, List, Optional, Callable, Any
 from dataclasses import dataclass, field
 from datetime import datetime
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from aeryn_core.safety.guardrails import get_guardrails, GuardrailManager, ValidationResult
 

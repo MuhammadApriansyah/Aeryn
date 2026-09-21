@@ -23,7 +23,7 @@ import argparse
 from typing import Optional, List, Any
 from datetime import datetime
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 import strawberry
 from strawberry import Info

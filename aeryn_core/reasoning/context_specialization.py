@@ -16,7 +16,7 @@ import json
 from typing import List, Dict, Optional
 from dataclasses import dataclass, field
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from aeryn_core.utils.persona_engine import load_persona
 from aeryn_core.memory.social_memory import SocialMemory

@@ -16,7 +16,7 @@ import traceback
 from typing import Optional, List, Dict, Callable
 from datetime import datetime
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from aeryn_core.database.shared_db import get_shared_db
 

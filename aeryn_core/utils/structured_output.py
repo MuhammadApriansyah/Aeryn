@@ -17,7 +17,7 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime
 from pathlib import Path
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from aeryn_core.memory.vault import AerynVault, VaultEntry, LAYER_WIKI
 from aeryn_core.database.shared_db import get_shared_db

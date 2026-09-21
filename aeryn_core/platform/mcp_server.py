@@ -22,7 +22,7 @@ import asyncio
 import argparse
 from typing import Any, Dict, List, Optional
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 try:
     from mcp.server import Server
@@ -113,10 +113,16 @@ class AerynToolHandler:
     # ── Memory Tools ─────────────────────────────────────────────
     
     def memory_search(self, query: str, limit: int = 5) -> str:
-        """Search memories using hybrid search (keyword + semantic)."""
+        """Search memories (RAG internal — sumber sama dgn CLI + agent tools).
+
+        Sebelumnya pakai SemanticSearchEngine (FTS index DB kosong/stale → count=0);
+        sekarang pakai tool_memory_search agar MCP client dapat hasil yang sama
+        dengan `aeryn search` dan agent chat.
+        """
         try:
-            results = self.search.search(query, limit=limit)
-            return json.dumps({"ok": True, "results": results, "count": len(results)}, ensure_ascii=False)
+            from aeryn_core.platform.internal_tools import tool_memory_search
+            r = tool_memory_search(query, limit=limit)
+            return json.dumps(r, ensure_ascii=False)
         except Exception as e:
             return json.dumps({"ok": False, "error": str(e)})
     

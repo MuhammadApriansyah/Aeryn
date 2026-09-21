@@ -18,7 +18,7 @@ from typing import List, Dict, Optional, Tuple
 from datetime import datetime, timedelta
 from collections import Counter, defaultdict
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from aeryn_core.database.semantic_search import get_semantic_search
 from aeryn_core.memory.vault import AerynVault, LAYER_DAILY

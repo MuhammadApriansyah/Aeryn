@@ -13,7 +13,7 @@ import sys
 import json
 from typing import Dict, List, Optional
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 TOOL_MANIFEST = {
     "version": "39.73",

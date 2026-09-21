@@ -22,7 +22,7 @@ from typing import Dict, List, Optional
 from datetime import datetime
 from aeryn_core.utils.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 DB_PATH = os.path.join(DATABASE_DIR, "discord_bot.db")
 
