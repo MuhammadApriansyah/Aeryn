@@ -146,7 +146,13 @@ def skill_add(name: str) -> dict:
         registered = _register_to_db(name, head.split("\n")[0])
         return {"ok": True, "skill": name, "source": "local", "registered": registered, "path": local}
 
-    # 3) Marketplace
+    # 3) Marketplace (butuh DB — skip jika env tidak ada, jangan error cryptic)
+    if not os.environ.get("AERYN_DB") and not os.environ.get("NEON_DATABASE_URL"):
+        return {
+            "ok": False,
+            "error": f"skill '{name}' tidak ada di katalog bawaan — "
+                     f"katalog: {', '.join(sorted(BUILTIN_CATALOG.keys()))}",
+        }
     try:
         from aeryn_core.platform.plugin_marketplace import get_plugin_marketplace
         mp = get_plugin_marketplace()

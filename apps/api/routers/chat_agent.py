@@ -33,7 +33,13 @@ async def chat(req: ChatRequest):
 
     async with guard.semaphore:
         agent = AgentLoop()
-        response = await agent.run(req.session_id, req.message, user_id=req.user_id)
+        try:
+            response = await agent.run(req.session_id, req.message, user_id=req.user_id)
+        except RuntimeError as e:
+            # Temuan #2: provider LLM error (402/429) — pesan ramah, bukan 500 cryptic
+            raise HTTPException(status_code=503, detail=str(e))
+        except HTTPException:
+            raise
 
     return response
 
