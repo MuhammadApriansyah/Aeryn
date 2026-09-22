@@ -122,11 +122,49 @@ class MemoryRecall:
         except:
             return []
     
+    def search_facts(self, query: str, limit: int = 5) -> List[Dict[str, Any]]:
+        """Search PG fact_store (temuan PA-2) — bitemporal: hanya fact aktif
+        (valid_to kosong/NULL). Keyword ILIKE per kata query."""
+        try:
+            from aeryn_core.memory.fact_store import get_fact_store
+            fs = get_fact_store()
+            words = [w for w in query.split() if len(w) >= 3]
+            if not words:
+                return []
+            conds = " OR ".join(["fact ILIKE %s"] * len(words))
+            params = [f"%{w}%" for w in words]
+            rows = fs.db.fetchall(
+                f"SELECT entity, predicate, fact FROM facts "
+                f"WHERE ({conds}) AND valid_to IS NULL "
+                f"ORDER BY valid_from DESC LIMIT %s",
+                params + [limit],
+            )
+            out = []
+            for r in (rows or []):
+                # fetchall → List[Dict] (bukan tuple) — akses via nama kolom
+                fact_text = str(r.get("fact", ""))
+                try:
+                    import json as _json
+                    d = _json.loads(fact_text)
+                    if isinstance(d, dict) and d.get("text"):
+                        fact_text = d["text"]
+                except Exception:
+                    pass
+                out.append({
+                    "content": fact_text,
+                    "source": f"facts:{r.get('entity')}:{r.get('predicate')}",
+                    "score": 0.8,
+                })
+            return out
+        except Exception:
+            return []
+
     def recall(self, query: str, limit: int = 5) -> List[Dict[str, Any]]:
         """Recall relevant memories from all sources."""
         all_results = []
         
         # Search all memory sources
+        all_results.extend(self.search_facts(query, limit))  # temuan PA-2: PG facts
         all_results.extend(self.search_vault(query, limit))
         all_results.extend(self.search_semantic(query, limit))
         all_results.extend(self.search_dense(query, limit))

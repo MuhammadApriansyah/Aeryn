@@ -40,6 +40,20 @@ async def chat(req: ChatRequest):
             raise HTTPException(status_code=503, detail=str(e))
         except HTTPException:
             raise
+        except Exception as e:
+            # Temuan PA-1: 402/429 lewat urllib.error.HTTPError (bukan RuntimeError)
+            s = str(e)
+            if "402" in s or "Payment Required" in s:
+                raise HTTPException(
+                    status_code=503,
+                    detail="Kuota/kredit provider LLM habis — top-up dulu ya (pesan ramah, bukan 500 cryptic)",
+                )
+            if "429" in s or "Rate limit" in s or "Too Many Requests" in s:
+                raise HTTPException(
+                    status_code=503,
+                    detail="Rate limit provider LLM — coba lagi sebentar ya",
+                )
+            raise
 
     return response
 

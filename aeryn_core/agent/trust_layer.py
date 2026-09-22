@@ -134,6 +134,16 @@ def handle_promises(user_message: str, user_id: str = "default",
                 source=f"trust-layer:{user_id}",
                 confidence=1.0,
             )
+            # Temuan PA-2: index ke dense embedding agar query umum (sinonim)
+            # tetap menemukan fact ini (keyword ILIKE butuh match kata persis)
+            try:
+                from aeryn_core.memory.embedding import get_embedding_index
+                import hashlib as _hl
+                get_embedding_index().add(
+                    _hl.sha256(f"facts:{fid}".encode()).hexdigest(),
+                    payload, source="facts:user_note")
+            except Exception:
+                pass
             what.append({"kind": "note", "id": fid, "text": payload[:100]})
         except Exception as e:
             failed.append({"kind": "note", "error": str(e)[:200]})
