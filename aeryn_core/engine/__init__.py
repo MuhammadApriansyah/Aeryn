@@ -9,6 +9,13 @@ import subprocess
 from pathlib import Path
 from typing import List, Optional
 
+# GraphEngine (in-memory graph) — export agar `from aeryn_core.engine import
+# GraphEngine` di engine router resolve (V62.16).
+try:
+    from aeryn_core.engine.graph_engine import GraphEngine  # noqa: F401
+except ImportError:
+    GraphEngine = None  # noqa: F401
+
 def _find_library() -> Optional[Path]:
     """Find the aeryn_engine shared library."""
     base = Path(os.path.expanduser("~")) / "aeryn-core-agent" / "aeryn-engine"

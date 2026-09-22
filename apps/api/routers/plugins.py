@@ -69,6 +69,18 @@ async def publish_plugin(req: PublishPluginRequest, authorization: str = Header(
         return {"error": "Failed to publish plugin"}
     return {"status": "ok", "plugin": result}
 
+@router.get("/plugins/discover")
+async def discover_plugins_registry(q: str = "", limit: int = 5):
+    """Discover tools/plugins matching a query (plugin_registry — V62.16).
+
+    Diletakkan SEBELUM catch-all /plugins/{plugin_id} agar tidak ditimpa
+    (FastAPI first-match).
+    """
+    from aeryn_core.platform.plugin_registry import get_registry
+    reg = get_registry()
+    return {"query": q, "tools": reg.discover_tools(q, limit=limit)}
+
+
 @router.get("/plugins/{plugin_id}")
 async def get_plugin(plugin_id: str):
     """Get plugin details."""

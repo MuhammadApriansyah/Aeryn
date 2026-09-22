@@ -109,9 +109,12 @@ class AgentDaemon:
             return res.output if res.ok else res.error
         else:
             # Default: use LLM to respond (chat-style)
+            # ModeRouter tidak punya .chat — pakai router.llm (AerynLLMClient, async)
             from aeryn_core.utils.llm_client import get_mode_router
             router = get_mode_router()
-            resp = router.chat(goal)
+            resp = await router.llm.chat(
+                [{"role": "user", "content": goal}], session_id="daemon"
+            )
             return resp.get("content", "No response")
 
 

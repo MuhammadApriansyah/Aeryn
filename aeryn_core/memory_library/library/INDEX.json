@@ -15,7 +15,7 @@
       "summary": "Webnovel platform = npm workspaces; apps/api Fastify v4+node:sqlite :3001, apps/web Vite+React :5173 proxy /api, both under PM2 ecosystem.config.js. Auth stdlib scrypt + sessions table. Core runs WITHOUT AI; AI optional author-side tool.",
       "path": "webnovel/webnovel-stack.md",
       "updated": "2026-08-24",
-      "access_count": 34
+      "access_count": 35
     },
     {
       "id": "webnovel-ux-stack",
@@ -70,7 +70,7 @@
       "summary": "Aeryn = multi-agent persona (45 sub-agents, 5 divisions), applied universally not on-demand. Cognitive core = Python+Rust at ~/aeryn-core-agent. Persona SKILL.md lives in Downloads (NOT a Hermes skill).",
       "path": "aeryn/aeryn-core.md",
       "updated": "2026-08-24",
-      "access_count": 9
+      "access_count": 10
     },
     {
       "id": "aeryn-core-v30-plus",
@@ -89,7 +89,7 @@
       "summary": "Aeryn-Core V30-V32 (session 20260824_111023_6c0f07): schema dinamis V30.3 (hint path/URL dari goal), deteksi social vs knowledge query via heuristic bersih (V32), NOUS model paling natural untuk sapaan (4/5).",
       "path": "aeryn/aeryn-core-v30-plus.md",
       "updated": "2026-08-25",
-      "access_count": 61
+      "access_count": 63
     },
     {
       "id": "aeryn-v32-final-study-social-generator-hybrid-no",
@@ -138,7 +138,7 @@
       "summary": "v33 planning and research documented for aeryn fixes",
       "path": "aeryn/v33-planning-and-research-documented-for-aeryn-f.md",
       "updated": "2026-08-25",
-      "access_count": 35
+      "access_count": 37
     },
     {
       "id": "v33-executed-social-detection-sanitizer-client-c",
