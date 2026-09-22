@@ -96,12 +96,14 @@ async def mark_suggestion_read(suggestion_id: str):
 @router.post("/briefing/morning")
 async def morning_briefing(user_id: str = "default"):
     """Generate morning briefing."""
+    from aeryn_core.reasoning.proactive_v2 import get_daily_briefing
     briefing = get_daily_briefing()
     return briefing.generate_morning(user_id)
 
 @router.post("/briefing/evening")
 async def evening_briefing(user_id: str = "default"):
     """Generate evening briefing."""
+    from aeryn_core.reasoning.proactive_v2 import get_daily_briefing
     briefing = get_daily_briefing()
     return briefing.generate_evening(user_id)
 

@@ -41,11 +41,18 @@ REMINDER_PATTERNS = [
 ]
 TIME_PATTERNS = [
     (r"\bbesok\s+(pagi|siang|sore|malam)\b", "besok"),
+    (r"\bbesok\s+(?:jam|pukul)\s*(\d{1,2})", "besok_jam"),
     (r"\bbesok\b", "besok"),
     (r"\bnanti\b", "nanti"),
     (r"\b(\d+)\s*(menit|jam)\b", "relative"),
+    (r"\b(?:jam|pukul)\s*(\d{1,2})(?::(\d{2}))?\b", "jam_n"),
+    (r"\b(senin|selasa|rabu|kamis|jumat|jumat|sabtu|minggu)\s+depan\b", "weekday_depan"),
     (r"\b(iberapa|lusa)\b", "lusa"),
 ]
+
+# GAP2_MULTI: hari → nomor weekday (monday=0)
+WEEKDAY_MAP = {"senin": 0, "selasa": 1, "rabu": 2, "kamis": 3,
+               "jumat": 4, "sabtu": 5, "minggu": 6}
 
 
 def _detect_intent(message: str) -> dict:
@@ -53,16 +60,24 @@ def _detect_intent(message: str) -> dict:
     msg = (message or "").lower()
     is_note = any(re.search(p, msg) for p in NOTE_PATTERNS)
     is_reminder = any(re.search(p, msg) for p in REMINDER_PATTERNS)
-    time_hint = None
+    # GAP2_MULTI: kumpulkan SEMUA time matches (bukan cuma yang pertama) —
+    # "besok 7 lembur, lusa meeting jam 10, senin depan review" = 3 reminder.
+    time_hints = []
     for pat, kind in TIME_PATTERNS:
-        m = re.search(pat, msg)
-        if m:
-            time_hint = {"kind": kind, "match": m.group(0)}
-            break
+        for m in re.finditer(pat, msg):
+            hint = {"kind": kind, "match": m.group(0)}
+            groups = [g for g in m.groups() if g is not None]
+            if groups:
+                hint["groups"] = groups
+            if hint not in time_hints:
+                time_hints.append(hint)
+    if not time_hints:
+        time_hints = []
     return {
         "is_note": is_note,
         "is_reminder": is_reminder,
-        "time": time_hint,
+        "time": time_hints[0] if time_hints else None,
+        "times": time_hints,  # GAP2_MULTI: semua hints
     }
 
 
@@ -105,6 +120,30 @@ def _compute_remind_at(time_hint: dict) -> str:
             return (now + delta).isoformat()
     if kind == "lusa":
         return (now + timedelta(days=2)).replace(hour=7, minute=0).isoformat()
+    # GAP2_MULTI: 'jam 10' / 'pukul 10:30' → hari ini (atau besok jika lewat)
+    if kind == "jam_n":
+        g = time_hint.get("groups", [])
+        hour = int(g[0]) if g else 9
+        minute = int(g[1]) if len(g) > 1 else 0
+        target = now.replace(hour=hour, minute=minute, second=0)
+        if target <= now:
+            target += timedelta(days=1)
+        return target.isoformat()
+    # GAP2_MULTI: 'besok jam 7' → besok + jam spesifik
+    if kind == "besok_jam":
+        g = time_hint.get("groups", [])
+        hour = int(g[0]) if g else 7
+        target = (now + timedelta(days=1)).replace(hour=hour, minute=0, second=0)
+        return target.isoformat()
+    # GAP2_MULTI: 'senin depan' → weekday depan + jam 9 default
+    if kind == "weekday_depan":
+        g = time_hint.get("groups", [])
+        wd = WEEKDAY_MAP.get((g[0] if g else "senin").lower(), 0)
+        days_ahead = (wd - now.weekday()) % 7
+        if days_ahead == 0:
+            days_ahead = 7
+        return (now + timedelta(days=days_ahead)).replace(
+            hour=9, minute=0, second=0).isoformat()
     return (now + timedelta(hours=1)).isoformat()
 
 
@@ -150,44 +189,57 @@ def handle_promises(user_message: str, user_id: str = "default",
 
     # ── REMINDER: fact + redis queue job scheduled (NYATA) ──
     if intent["is_reminder"]:
-        remind_at = _compute_remind_at(intent["time"])
-        fid = None
-        try:
-            from aeryn_core.memory.fact_store import get_fact_store
-            fs = get_fact_store()
-            fid = fs.record(
-                entity="reminder",
-                predicate="user_reminder",
-                fact=json.dumps({
-                    "text": payload, "user_id": user_id,
-                    "remind_at": remind_at, "status": "scheduled",
-                }),
-                source=f"trust-layer:{user_id}",
-                confidence=1.0,
-            )
-            what.append({"kind": "reminder", "id": fid, "remind_at": remind_at,
-                         "text": payload[:100]})
-        except Exception as e:
-            failed.append({"kind": "reminder", "error": str(e)[:200]})
-        # Schedule ke redis ZSET (G2: delayed — menembak saat waktunya tiba)
-        try:
-            from aeryn_core.platform.redis_queue import schedule
-            from datetime import datetime as _dt
+        # GAP2_MULTI: loop SEMUA time_hints — tiap hint = 1 reminder terpisah
+        # (besok 7 lembur, lusa meeting jam 10, senin depan review = 3 entries).
+        all_times = intent.get("times") or ([intent["time"]] if intent["time"] else [])
+        seen_reminds = set()
+        for t_hint in all_times:
+            remind_at = _compute_remind_at(t_hint)
+            if remind_at in seen_reminds:
+                continue  # hint berbeda tapi waktu sama (besok + besok pagi)
+            seen_reminds.add(remind_at)
+            fid = None
             try:
-                epoch = _dt.fromisoformat(remind_at).timestamp()
-            except Exception:
-                epoch = _dt.now().timestamp() + 3600
-            jid = schedule({
-                "type": "shell",
-                "command": (
-                    f'termux-notification --title "⏰ Aeryn: {payload[:40]}" '
-                    f'--content "{payload[:100]}" --priority high 2>/dev/null'
-                ),
-                "meta": {"remind_at": remind_at, "user_id": user_id, "fid": fid},
-            }, epoch)
-            what.append({"kind": "queue_job", "job_id": jid, "remind_at": remind_at})
-        except Exception as e:
-            failed.append({"kind": "queue_job", "error": str(e)[:200]})
+                from aeryn_core.memory.fact_store import get_fact_store
+                fs = get_fact_store()
+                fid = fs.record(
+                    entity="reminder",
+                    predicate="user_reminder",
+                    fact=json.dumps({
+                        "text": payload, "user_id": user_id,
+                        "remind_at": remind_at, "status": "scheduled",
+                        "time_hint": t_hint.get("match", ""),
+                    }),
+                    source=f"trust-layer:{user_id}",
+                    confidence=1.0,
+                )
+                what.append({"kind": "reminder", "id": fid, "remind_at": remind_at,
+                             "text": payload[:100]})
+            except Exception as e:
+                failed.append({"kind": "reminder", "error": str(e)[:200]})
+                continue
+            # Schedule ke redis ZSET (G2: delayed — menembak saat waktunya tiba)
+            # GAP2_MULTI: juga kirim ke home_channel user (RM2 — lintas channel)
+            try:
+                from aeryn_core.platform.redis_queue import schedule
+                from datetime import datetime as _dt
+                try:
+                    epoch = _dt.fromisoformat(remind_at).timestamp()
+                except Exception:
+                    epoch = _dt.now().timestamp() + 3600
+                jid = schedule({
+                    "type": "shell",
+                    "command": (
+                        f'termux-notification --title "⏰ Aeryn: {payload[:40]}" '
+                        f'--content "{payload[:100]}" --priority high 2>/dev/null'
+                    ),
+                    "meta": {"remind_at": remind_at, "user_id": user_id,
+                             "fid": fid, "kind": "reminder"},
+                }, epoch)
+                what.append({"kind": "queue_job", "job_id": jid,
+                             "remind_at": remind_at})
+            except Exception as e:
+                failed.append({"kind": "queue_job", "error": str(e)[:200]})
 
     return {"acted": bool(what), "what": what, "failed": failed, "intent": intent}
 

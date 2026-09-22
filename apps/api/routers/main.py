@@ -118,12 +118,50 @@ async def request_logging_middleware(request, call_next):
     import time
     path = request.url.path
     t0 = time.time()
+    # GAP3_TRACE + GAP3B_SPAN: trace per request (observability — jejak nyata, bukan kosong)
+    _trace_id = None
+    _span_id = None
+    if not path.startswith(_SKIP_LOG_MARK):
+        try:
+            from aeryn_core.observability.tracer import get_tracer
+            _tr = get_tracer()
+            _trace_id = _tr.start_trace(
+                session_id=f"http:{path}", user_id="api").id
+            # GAP3B_SPAN: buat span request (start_trace tidak buat span otomatis)
+            _span_id = _tr.start_span(
+                "http_request", "request",
+                input={"method": request.method, "path": path},
+                trace_id=_trace_id).id
+        except Exception:
+            _trace_id = None
+            _span_id = None
     try:
         response = await call_next(request)
-    except Exception:
+    except Exception as _exc:
         response = None
+        if _trace_id:
+            try:
+                from aeryn_core.observability.tracer import get_tracer
+                _tr = get_tracer()
+                if _span_id:
+                    _tr.finish_span(_span_id, error=str(_exc)[:200])
+                _tr.finish_trace(_trace_id)
+            except Exception:
+                pass
         raise
     dur = int((time.time() - t0) * 1000)
+    if _trace_id:
+        try:
+            from aeryn_core.observability.tracer import get_tracer
+            _tr = get_tracer()
+            if _span_id:
+                _tr.finish_span(
+                    _span_id,
+                    output=f"{request.method} {path} "
+                           f"{response.status_code if response else 500} {dur}ms")
+            _tr.finish_trace(_trace_id)
+        except Exception:
+            pass
     if not path.startswith(_SKIP_LOG_MARK):
         try:
             status = response.status_code if response else 500
@@ -132,6 +170,7 @@ async def request_logging_middleware(request, call_next):
         except Exception:
             pass
     return response
+# GAP3_TRACE + GAP3B_SPAN: request path ter-instrument (trace+span per request)
 
 app.add_middleware(
     CORSMiddleware,
@@ -511,6 +550,22 @@ async def approve_checkpoint(wf_id: str, request: Request):
     return {"status": "approved", "workflow": wf.to_dict()}
 
 # --- Health Check ---
+@app.post("/briefing/morning-deliver")
+async def briefing_morning():
+    """GAP1: Ritual briefing pagi otomatis — jadwal+goal+catatan → kirim
+    Discord DM + termux-notification. Dipanggil cron 07:00 ATAU manual."""
+    from aeryn_core.platform.morning_briefing import deliver_briefing
+    r = deliver_briefing()
+    return {"ok": True, "sent": r["sent"], "briefing_len": len(r["briefing"])}
+
+
+@app.get("/briefing/preview")
+async def briefing_morning_preview():
+    """Preview briefing tanpa kirim (debug/cek)."""
+    from aeryn_core.platform.morning_briefing import build_briefing
+    return {"briefing": build_briefing()}
+
+
 @app.get("/health")
 async def health():
     """Health check endpoint."""

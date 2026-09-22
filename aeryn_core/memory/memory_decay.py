@@ -23,6 +23,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 DB_PATH = os.path.join(DATABASE_DIR, "memory_decay.db")
 
 
+# GAP4_FACTS: PG facts bitemporal decay (note>180d, reminder expired, heartbeat>30d)
 class MemoryDecayEngine:
     """Manages memory decay and cleanup."""
     
@@ -93,6 +94,9 @@ class MemoryDecayEngine:
         
         # Decay shared DB tasks
         results["tasks"] = self._decay_tasks(user_id)
+        
+        # GAP4_FACTS: decay PG facts bitemporal (user_note/reminder/heartbeat)
+        results["facts"] = self._decay_facts(user_id)
         
         # Log the run
         total_affected = sum(r.get("decayed", 0) for r in results.values())
@@ -202,6 +206,69 @@ class MemoryDecayEngine:
         except Exception as e:
             return {"decayed": 0, "error": str(e)}
     
+    def _decay_facts(self, user_id: str) -> Dict:
+        """GAP4_FACTS: decay PG facts bitemporal (yang belum tercakup).
+
+        Aturan PA (aman — hanya memudar, tidak hapus ingatan user):
+        - user_note > 180 hari → valid_to = now (keluar dari recall aktif)
+        - user_reminder scheduled + remind_at < now-7d → status='expired'
+        - autonomy_heartbeat > 30 hari → DELETE (noise runtime, bukan ingatan)
+        """
+        out = {"decayed": 0, "notes": 0, "reminders": 0, "heartbeats": 0,
+               "errors": []}
+        try:
+            from aeryn_core.database.neon_db import get_neon
+            db = get_neon()
+            now = datetime.now()
+            # 1) user_note > 180 hari → valid_to = now
+            try:
+                rows = db.fetchall(
+                    "SELECT id FROM facts WHERE predicate = 'user_note' "
+                    "AND tx_to IS NULL AND valid_from < %s",
+                    ((now - timedelta(days=180)).isoformat(),))
+                for r in rows or []:
+                    db.execute(
+                        "UPDATE facts SET valid_to = %s WHERE id = %s AND tx_to IS NULL",
+                        (now.isoformat(), r["id"]))
+                    out["notes"] += 1
+            except Exception as e:
+                out["errors"].append(f"notes: {str(e)[:120]}")
+            # 2) user_reminder expired
+            try:
+                rows = db.fetchall(
+                    "SELECT id, fact FROM facts WHERE predicate = 'user_reminder' "
+                    "AND tx_to IS NULL", None)
+                import json as _json
+                for r in rows or []:
+                    try:
+                        d = _json.loads(r["fact"])
+                        ra = d.get("remind_at", "")
+                        if ra:
+                            remind_dt = datetime.fromisoformat(ra)
+                            if remind_dt < now - timedelta(days=7):
+                                db.execute(
+                                    "UPDATE facts SET valid_to = %s, "
+                                    "fact = %s WHERE id = %s AND tx_to IS NULL",
+                                    (now.isoformat(), _json.dumps(
+                                        {**d, "status": "expired"}), r["id"]))
+                                out["reminders"] += 1
+                    except Exception:
+                        continue
+            except Exception as e:
+                out["errors"].append(f"reminders: {str(e)[:120]}")
+            # 3) autonomy_heartbeat > 30 hari → DELETE (noise)
+            try:
+                db.execute(
+                    "DELETE FROM facts WHERE predicate = 'autonomy_heartbeat' "
+                    "AND valid_from < %s",
+                    ((now - timedelta(days=30)).isoformat(),))
+            except Exception as e:
+                out["errors"].append(f"heartbeats: {str(e)[:120]}")
+            out["decayed"] = out["notes"] + out["reminders"]
+        except Exception as e:
+            out["errors"].append(str(e)[:200])
+        return out
+
     def _decay_tasks(self, user_id: str) -> Dict:
         """Decay completed/old tasks."""
         shared_db = os.path.join(DATABASE_DIR, "shared.db")
