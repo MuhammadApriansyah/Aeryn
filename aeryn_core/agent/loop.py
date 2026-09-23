@@ -62,6 +62,8 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
     
     async def run(self, session_id: str, user_message: str, user_id: str = "default") -> Dict[str, Any]:
         """Run agent loop for a user message (user-scoped session)."""
+        # REFLEXION_WIRED: reset failure tracking per request
+        self._failed_tools_last_round = []
         from aeryn_core.utils.llm_client import get_mode_router
         from aeryn_core.observability.tracing import (
             get_trace_collector, start_trace, ATTR_AGENT_NAME, ATTR_SESSION, ATTR_MODEL, ATTR_TOKENS_TOTAL, ATTR_TOOL_NAME
@@ -222,6 +224,12 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                 result = await self.tools.call(tool_name, tool_args)
                 
                 tool_status = "error" if result.get("status") == "error" else "ok"
+                # REFLEXION_WIRED: track tool failures → self-correcting retry
+                if tool_status == "error":
+                    self._failed_tools_last_round.append({
+                        "tool": tool_name,
+                        "error": str(result.get("error", ""))[:150],
+                    })
                 collector.end_span(tool_span, status=tool_status, attributes={
                     ATTR_TOOL_NAME: tool_name,
                     "gen_ai.latency_ms": round((time.time() - t_tool_start) * 1000, 2),
@@ -236,6 +244,39 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         # === MEMORY WRITE: Save even if max iterations ===
         self._save_facts(session_id, user_message, last_content, messages)
         
+        # === REFLEXION_WIRED: self-correcting retry (tool failures → critique) ===
+        if self._failed_tools_last_round:
+            fails = self._failed_tools_last_round[:5]
+            critique_prompt = (
+                "REFLEXION: Tool calls berikut GAGAL saat mengerjakan task:\n"
+                + "\n".join(f"- {f['tool']}: {f['error']}" for f in fails)
+                + f"\n\nTask asli: {user_message}\n\n"
+                + "Kritik trajectory-mu: mengapa gagal, dan bagaimana memperbaiki "
+                + "pendekatan (tanpa mengulang tool yang sama persis)? "
+                + "Berikan jawaban final terbaik dari evidence yang sudah ada."
+            )
+            try:
+                refl_messages = [
+                    {"role": "user", "content": user_message},
+                    {"role": "assistant", "content": last_content or "(progress)"},
+                    {"role": "user", "content": critique_prompt},
+                ]
+                refl = await self.llm.chat(refl_messages, session_id=session_id,
+                                           max_tokens=2000)
+                refl_content = refl.get("content") or ""
+                if refl_content and refl.get("provider", "") not in ("none", ""):
+                    return {
+                        "role": "assistant",
+                        "content": refl_content,
+                        "reasoning": [],
+                        "iterations": self.max_iterations,
+                        "memories_used": len(relevant_memories),
+                        "reflexion": {"failed_tools": fails, "retried": True},
+                    }
+            except Exception as _refl_err:
+                # Reflexion gagal — fallback ke respons standar (tidak menggagalkan)
+                pass
+
         return {
             "role": "assistant",
             "content": last_content + "\n\n(Max iterations reached)",
@@ -243,9 +284,6 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
             "iterations": self.max_iterations,
             "memories_used": len(relevant_memories),
         }
-        # === PASC-RESPONS: learning hook (V61.2 #3) — non-blocking, rate-limited ===
-        self._self_improve(session_id, user_message)
-        return result
     
     def _self_improve(self, session_id: str, user_message: str) -> int:
         """Pasca-respons learning hook (V61.2 #3). Non-blocking, rate-limited.

@@ -550,6 +550,46 @@ async def approve_checkpoint(wf_id: str, request: Request):
     return {"status": "approved", "workflow": wf.to_dict()}
 
 # --- Health Check ---
+# --- Cost Tracking (SUBAGENT-5: token + spend per session) ---
+@app.get("/cost")
+async def cost_summary():
+    """Token usage per session + estimasi biaya (ESTIMATE — bukan tagihan)."""
+    from aeryn_core.platform.cost_tracker import summary, estimate_spend
+    return {"usage": summary(), "spend": estimate_spend()}
+
+
+# --- A2A + Supervisor Endpoints (SUBAGENT-3/4: agent-to-agent + multi-agent) ---
+@app.get("/.well-known/agent.json")
+async def a2a_agent_card():
+    """A2A AgentCard — discovery standar (skills + tools + capabilities)."""
+    from aeryn_core.platform.a2a_card import build_agent_card
+    return build_agent_card(base_url="http://127.0.0.1:3010")
+
+
+@app.post("/a2a/tasks")
+async def a2a_tasks(request: Request):
+    """A2A task submission — {goal: "..."} → supervisor loop (decompose → fan-out → sintesis)."""
+    from aeryn_core.agent.supervisor import get_supervisor_loop
+    body = await request.json()
+    goal = body.get("goal", "").strip()
+    if not goal:
+        return {"error": "goal kosong"}
+    r = await get_supervisor_loop().run(goal)
+    return r.to_dict()
+
+
+@app.post("/a2a/subagents")
+async def a2a_subagents(request: Request):
+    """A2A subagent spawn — {tasks: [{name, task, role}]} → parallel fan-out."""
+    from aeryn_core.agent.subagent import get_subagent_orchestrator
+    body = await request.json()
+    tasks = body.get("tasks") or []
+    if not tasks:
+        return {"error": "tasks kosong"}
+    results = await get_subagent_orchestrator().run(tasks)
+    return {"results": [r.to_dict() for r in results]}
+
+
 # --- Ledger Endpoints (LEDGER3: partner eksekutor keuangan — Rust engine) ---
 @app.get("/ledger/balance")
 async def ledger_balance():
