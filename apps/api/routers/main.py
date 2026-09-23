@@ -578,6 +578,50 @@ async def a2a_tasks(request: Request):
     return r.to_dict()
 
 
+@app.post("/a2a/workflows")
+async def a2a_workflows(request: Request):
+    """Goal-derived workflow — {goal: "..."} → Aeryn desain workflow → eksekusi
+    sequential → evaluasi/adapt per langkah → hasil akhir (Aeryn_Identity.md §5)."""
+    from aeryn_core.agent.goal_workflow import get_goal_workflow
+    body = await request.json()
+    goal = body.get("goal", "").strip()
+    if not goal:
+        return {"error": "goal kosong"}
+    return await get_goal_workflow().run(goal)
+
+
+@app.post("/matter")
+async def matter(request: Request):
+    """'Tell Aeryn what matters' (Aeryn_Identity.md §16) — {text: "..."}:
+    hal penting dicatat sebagai goal + fact → muncul di briefing + goal pursuit."""
+    import json as _json
+    from datetime import datetime as _dt
+    body = await request.json()
+    text = body.get("text", "").strip()
+    if not text:
+        return {"error": "text kosong"}
+    what, failed = [], []
+    # 1) Catat sebagai goal (goal pursuit — dikejar otonom)
+    try:
+        from aeryn_core.agent.goal_store import get_goal_store
+        gid = get_goal_store().create(title=text[:80],
+                                      description=f"(matter, {_dt.now().strftime('%Y-%m-%d')})")
+        what.append({"kind": "goal", "id": gid})
+    except Exception as e:
+        failed.append({"kind": "goal", "error": str(e)[:150]})
+    # 2) Catat sebagai fact (bitemporal — memory)
+    try:
+        from aeryn_core.memory.fact_store import get_fact_store
+        get_fact_store().record(entity="matter", predicate="user_matter",
+                                fact=_json.dumps({"text": text[:200]}),
+                                source="matter", confidence=1.0)
+        what.append({"kind": "fact"})
+    except Exception as e:
+        failed.append({"kind": "fact", "error": str(e)[:150]})
+    return {"ok": not failed or bool(what), "what": what, "failed": failed,
+            "message": f"Dicatat sebagai hal penting: {text[:80]}"}
+
+
 @app.post("/a2a/subagents")
 async def a2a_subagents(request: Request):
     """A2A subagent spawn — {tasks: [{name, task, role}]} → parallel fan-out."""

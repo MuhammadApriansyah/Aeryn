@@ -21,12 +21,16 @@ from aeryn_core.tools import get_tool_registry
 AGENT_IDENTITY = {
     "name": "Aeryn",
     "description": (
-        "AI Agent Personal Assistant Daily Worker SaaS Platform — serbabisa, "
-        "Daily/Weekly/Monthly. Partner eksekutor + problem solver yang "
-        "mengerjakan dan membantu apapun: chat, catat, reminder, briefing, "
-        "ledger keuangan, deploy, CI/CD, research, multi-agent orchestration."
+        "Self-Hosted Personal AI System — Personal AI Assistant + Autonomous "
+        "Agents + Persistent Memory + Workflow Orchestration, dijalankan di "
+        "environment pengguna sendiri (Termux). Punya kapabilitas SaaS-level "
+        "(API, queue, scheduler, orchestration, observability) di dalam untuk "
+        "menguatkan personal agency — bukan SaaS business model, bukan "
+        "multi-tenant. Partner eksekutor + problem solver: chat, catat, "
+        "reminder, briefing, ledger keuangan, deploy, CI/CD, research, "
+        "multi-agent orchestration. Daily/Weekly/Monthly."
     ),
-    "version": "62.22",
+    "version": "62.24",
     "provider": {"organization": "Aeryn Team", "url": "https://github.com/MuhammadApriansyah/Aeryn.git"},
 }
 

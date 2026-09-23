@@ -1,8 +1,10 @@
 # Aeryn — Architecture: Layers & Terminology
 
-> Analisa keseluruhan Aeryn sebagai **AI Agent Personal Assistant Daily Worker
-> SaaS Platform** — serbabisa, Daily/Weekly/Monthly. Dokumen ini adalah peta
-> layer + terminologi resmi untuk roadmap pengembangan.
+> Analisa keseluruhan Aeryn sebagai **Self-Hosted Personal AI System** —
+> Personal AI Assistant + Autonomous Agents + Persistent Memory + Workflow
+> Orchestration, dengan **kapabilitas SaaS-level** di dalam (bukan SaaS
+> business model — lihat Aeryn_Identity.md, North Star). Dokumen ini adalah
+> peta layer + terminologi resmi untuk roadmap pengembangan.
 
 ## Peta Layer (10 Layer)
 
