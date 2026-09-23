@@ -119,16 +119,26 @@ def cosine(a: list, b: list) -> float:
 def embed(query: str) -> tuple:
     """Embed satu query. Returns (vector, method).
 
-    Cache: cek sqlite dulu — miss → proot embed (batch of 1).
+    Cache: cek sqlite dulu — miss → ORT LOKAL (RM5, ~10ms tanpa proot)
+    → fallback proot embed (batch of 1, 82s) bila ORT gagal.
     """
     h = _hash(query)
     conn = _conn()
     row = conn.execute("SELECT method, vector FROM embeddings WHERE text_hash=?", (h,)).fetchone()
     if row:
         return json.loads(row[1].decode()), row[0]
-    result = _proot_embed([query])
-    vec = result["vectors"][0]
-    method = result["method"]
+    # RM5: ORT lokal dulu (cepat, tanpa proot) — fallback proot bila gagal
+    vec = None
+    method = None
+    try:
+        from aeryn_core.memory_library.local_embedder import embed_local
+        vec, method = embed_local(query)
+    except Exception:
+        vec = None  # ORT gagal (model belum ada / init error) → proot
+    if vec is None:
+        result = _proot_embed([query])
+        vec = result["vectors"][0]
+        method = result["method"]
     conn.execute(
         "INSERT OR REPLACE INTO embeddings (text_hash, method, vector, created_at) VALUES (?,?,?,?)",
         (h, method, json.dumps(vec).encode(), __import__("time").time()),

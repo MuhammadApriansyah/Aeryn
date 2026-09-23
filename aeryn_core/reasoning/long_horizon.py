@@ -21,7 +21,7 @@ from datetime import datetime
 from enum import Enum
 from aeryn_core.utils.config import BASE_DIR, VAULT_DIR, DATABASE_DIR
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 DB_PATH = os.path.join(DATABASE_DIR, "long_horizon.db")
 
@@ -153,7 +153,7 @@ class LongHorizonPlanner:
         try:
             row = conn.execute("""
                 SELECT id, title, description, status, priority, progress, parent_id, result, error, created_at, completed_at
-                WHERE id = ?
+                FROM tasks WHERE id = ?
             """, (task_id,)).fetchone()
             
             if not row:

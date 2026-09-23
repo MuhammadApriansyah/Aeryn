@@ -86,6 +86,11 @@ async def lifespan(app: FastAPI):
     try:
         from aeryn_core.job_queue.scheduler import get_scheduler
         scheduler = get_scheduler(poll_interval=10)
+        # RM4_FIX_SUBPROCESS: native Rust scheduler = daemon TERPISAH via
+        # runit (aeryn-native-scheduler) — in-process thread memblokir
+        # uvicorn (GIL contention dari callback PG sync). Cron loop tetap di
+        # API (Python threading, terbukti stabil); decay harian pindah ke
+        # daemon native terpisah.
         scheduler.start()
         info("Cron scheduler started")
     except Exception as e:
@@ -550,6 +555,138 @@ async def approve_checkpoint(wf_id: str, request: Request):
     return {"status": "approved", "workflow": wf.to_dict()}
 
 # --- Health Check ---
+# --- Browser/Computer Interaction (RM10: HITL user-visible + headless read) ---
+@app.post("/browser/open")
+async def browser_open(request: Request):
+    """Buka URL di browser HP (termux-open-url — user melihat sendiri, HITL)."""
+    from aeryn_core.platform.browser_tools import tool_browser_open
+    body = await request.json()
+    return await asyncio.to_thread(tool_browser_open, body.get("url", ""))
+
+
+@app.get("/browser/read")
+async def browser_read(url: str, max_chars: int = 3000):
+    """Baca halaman web → teks ringkas (requests + robots.txt politeness)."""
+    from aeryn_core.platform.browser_tools import tool_browser_read
+    return await asyncio.to_thread(tool_browser_read, url, max_chars)
+
+
+@app.get("/browser/status")
+async def browser_status():
+    """Status environment HP (battery + service + RAM — self-monitoring)."""
+    from aeryn_core.platform.browser_tools import tool_computer_status
+    return await asyncio.to_thread(tool_computer_status)
+
+
+# --- Multimodal Input (RM9: voice STT + camera + vision — HITL sensor) ---
+@app.post("/multimodal/voice")
+async def multimodal_voice(timeout_s: int = 15):
+    """Voice → teks via termux-speech-to-text (mic HP — butuh izin + orang bicara)."""
+    from aeryn_core.platform.multimodal_tools import tool_voice_input
+    return await asyncio.to_thread(tool_voice_input, timeout_s)
+
+
+@app.post("/multimodal/capture")
+async def multimodal_capture():
+    """Foto via kamera HP (termux-api — butuh izin CAMERA)."""
+    from aeryn_core.platform.multimodal_tools import tool_image_capture
+    return await asyncio.to_thread(tool_image_capture)
+
+
+@app.post("/multimodal/describe")
+async def multimodal_describe(request: Request):
+    """Gambar → deskripsi via LM vision: {path, question?}."""
+    from aeryn_core.platform.multimodal_tools import tool_image_describe
+    body = await request.json()
+    path = body.get("path", "")
+    question = body.get("question", "")
+    return await asyncio.to_thread(tool_image_describe, path, question)
+
+
+# --- Experience Learning (RM8: reflexion → pitfalls → skill otomatis) ---
+@app.post("/learning/consolidate")
+async def learning_consolidate():
+    """Konsolidasi pengalaman: pattern frekuensi tinggi → skill baru (otomatis)."""
+    from aeryn_core.agent.experience_learning import consolidate_experience
+    return consolidate_experience("sen", min_frequency=3, max_crystallize=2)
+
+
+@app.get("/learning/status")
+async def learning_status():
+    """Status pattern terdeteksi (kandidat skill)."""
+    from aeryn_core.platform.skill_crystallization import get_skill_crystallizer
+    sc = get_skill_crystallizer()
+    patterns = sc.detector.get_frequent_patterns("sen", min_frequency=2)
+    return {"ok": True, "patterns": patterns[:10],
+            "count": len(patterns)}
+
+
+# --- Long-Horizon Planning (RM7: goal besar multi-hari — Autonomy, Continuity) ---
+@app.post("/horizon/plan")
+async def horizon_plan(request: Request):
+    """Goal besar → long-horizon task + decompose (subtasks, SQLite persist lintas sesi)."""
+    from aeryn_core.agent.long_horizon_runner import get_long_horizon_runner
+    body = await request.json()
+    goal = body.get("goal", "").strip()
+    if not goal:
+        return {"error": "goal kosong"}
+    return get_long_horizon_runner().create_long_task(goal)
+
+
+@app.post("/horizon/execute/{task_id}")
+async def horizon_execute(task_id: str, max_steps: int = 2):
+    """Eksekusi N langkah berikutnya — checkpoint per langkah (resume lintas sesi/hari)."""
+    from aeryn_core.agent.long_horizon_runner import get_long_horizon_runner
+    return await asyncio.to_thread(
+        get_long_horizon_runner().execute_next_steps, task_id, max_steps)
+
+
+@app.get("/horizon/status/{task_id}")
+async def horizon_status(task_id: str):
+    """Status task + subtasks + checkpoint terakhir (continuity)."""
+    from aeryn_core.agent.long_horizon_runner import get_long_horizon_runner
+    return get_long_horizon_runner().status(task_id)
+
+
+# --- Sensor Dunia (RM6: location/weather/calendar — Environment Interaction) ---
+@app.get("/sensor/weather")
+async def sensor_weather(lat: float = -6.2088, lon: float = 106.8456):
+    """Cuaca via open-meteo (tanpa API key). Default Jakarta, GPS bila diizinkan."""
+    from aeryn_core.platform.sensor_tools import tool_weather
+    return tool_weather(lat=lat, lon=lon)
+
+
+@app.get("/sensor/calendar")
+async def sensor_calendar(days_ahead: int = 2):
+    """Agenda N hari ke depan (ZSET + goals deadline)."""
+    from aeryn_core.platform.sensor_tools import tool_calendar_read
+    return tool_calendar_read(days_ahead=days_ahead)
+
+
+@app.get("/sensor/location")
+async def sensor_location():
+    """GPS via termux-api (butuh izin lokasi di Termux:API — HITL)."""
+    from aeryn_core.platform.sensor_tools import tool_location
+    return tool_location()
+
+
+# --- Scheduler Health (RM4: native Rust scheduler visibility) ---
+@app.get("/scheduler/health")
+async def scheduler_health():
+    """Status native scheduler daemon terpisah (RM4_STATE_FILE — dibaca dari
+    state file yang ditulis daemon: running, ticks, last daily, errors)."""
+    import json as _json
+    import os as _os
+    state = "/data/data/com.termux/files/home/aeryn-core-agent/Personalisasi/Database/native_scheduler.json"
+    if not _os.path.exists(state):
+        return {"running": False, "note": "native scheduler daemon belum jalan"}
+    try:
+        with open(state) as f:
+            return _json.load(f)
+    except Exception as e:
+        return {"running": False, "error": f"state read gagal: {str(e)[:120]}"}
+
+
 # --- Cost Tracking (SUBAGENT-5: token + spend per session) ---
 @app.get("/cost")
 async def cost_summary():

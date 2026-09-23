@@ -162,3 +162,65 @@ def register(registry) -> None:
         tags=["body", "battery", "device", "sensor"],
         category="body",
     )
+
+
+# ── RM6_SENSOR: tools sensor dunia (location/weather/calendar_read) ──
+def tool_weather(lat=None, lon=None):
+    """Cuaca sekarang (open-meteo) — lokasi dari GPS bila ada, default Jakarta."""
+    from aeryn_core.platform.sensor_tools import tool_weather as _tw, tool_location
+    if lat is None or lon is None:
+        loc = tool_location()
+        if loc.get("ok"):
+            lat, lon = loc["lat"], loc["lon"]
+    return _tw(lat=lat if lat is not None else -6.2088,
+               lon=lon if lon is not None else 106.8456)
+
+
+def tool_calendar_read(days_ahead=2):
+    """Agenda N hari ke depan (ZSET scheduled + goals deadline)."""
+    from aeryn_core.platform.sensor_tools import tool_calendar_read as _tc
+    return _tc(days_ahead=days_ahead)
+
+
+def tool_location():
+    """GPS via termux-api (butuh izin ACCESS_FINE_LOCATION di Termux:API)."""
+    from aeryn_core.platform.sensor_tools import tool_location as _tl
+    return _tl()
+
+
+# ── RM9_MULTIMODAL: voice STT + camera + vision (sensor HP, HITL) ──
+def tool_voice_input(timeout_s=15):
+    """Voice → teks via termux-speech-to-text (mic HP — butuh izin RECORD_AUDIO)."""
+    from aeryn_core.platform.multimodal_tools import tool_voice_input as _t
+    return _t(timeout_s=timeout_s)
+
+
+def tool_image_capture(path=""):
+    """Foto via kamera HP (termux-api — butuh izin CAMERA)."""
+    from aeryn_core.platform.multimodal_tools import tool_image_capture as _t
+    return _t(path=path)
+
+
+def tool_image_describe(path, question=""):
+    """Gambar → deskripsi via LM vision (provider fallback, error eksplisit)."""
+    from aeryn_core.platform.multimodal_tools import tool_image_describe as _t
+    return _t(path, question)
+
+
+# ── RM10_BROWSER: browser/computer interaction (HITL — user-visible) ──
+def tool_browser_open(url):
+    """Buka URL di browser HP (termux-open-url — user melihat sendiri)."""
+    from aeryn_core.platform.browser_tools import tool_browser_open as _t
+    return _t(url)
+
+
+def tool_browser_read(url, max_chars=3000):
+    """Baca halaman web → teks ringkas (requests + robots.txt politeness)."""
+    from aeryn_core.platform.browser_tools import tool_browser_read as _t
+    return _t(url, max_chars)
+
+
+def tool_computer_status():
+    """Status environment HP (battery + service + RAM — self-monitoring)."""
+    from aeryn_core.platform.browser_tools import tool_computer_status as _t
+    return _t()

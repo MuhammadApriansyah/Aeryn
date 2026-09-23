@@ -4,11 +4,13 @@ use std::collections::HashMap;
 use pyo3::prelude::*;
 
 mod ledger; // GAP Ledger: partner eksekutor keuangan (Rust native — pyo3)
+mod scheduler; // RM4: scheduler daemon (cron + decay digabung — Rust native)
 
 #[pymodule]
 fn aeryn_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<ledger::AccountingLedgerEngine>()?;
     m.add_class::<ledger::TransactionEntry>()?;
+    m.add_class::<scheduler::AerynScheduler>()?;
     Ok(())
 }
 

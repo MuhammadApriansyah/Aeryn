@@ -1,0 +1,11 @@
+#!/data/data/com.termux/files/usr/bin/sh
+# aeryn-native-scheduler (RM4) — daemon Rust native TERPISAH: decay harian
+# (bitemporal facts + vault) via AerynScheduler (pyo3) + cron tick internal.
+# In-process thread memblokir uvicorn (GIL contention) → jadi proses terpisah.
+export HOME=/data/data/com.termux/files/home
+export PREFIX=/data/data/com.termux/files/usr
+export PATH=$PREFIX/bin:$PATH
+export AERYN_DB=postgresql://sen@127.0.0.1:5432/aeryn
+export NEON_DATABASE_URL=postgresql://sen@127.0.0.1:5432/aeryn
+cd $HOME/aeryn-core-agent
+exec sh -c '$HOME/aeryn-venv/bin/python aeryn_core/platform/native_scheduler_daemon.py 2>&1 | stdbuf -oL tee -a $PREFIX/var/log/aeryn/aeryn-native-scheduler.log'
