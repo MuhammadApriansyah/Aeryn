@@ -161,6 +161,20 @@ def handle_promises(user_message: str, user_id: str = "default",
     what, failed = [], []
     payload = _extract_payload(user_message)
 
+    # ── LEDGER3_FINANCE: intent keuangan → tool_spending_log (NYATA) ──
+    if any(k in (user_message or "").lower() for k in
+           ("pengeluaran", "penghasilan", "gajian", "income ", "expense ")):
+        try:
+            from aeryn_core.platform.ledger_tools import tool_spending_log
+            r = tool_spending_log(user_message, user_id=user_id)
+            if r.get("ok"):
+                what.append({"kind": "finance", "fact": r["fact"],
+                             "text": r["message"][:100]})
+            else:
+                failed.append({"kind": "finance", "error": r.get("error", "")[:150]})
+        except Exception as e:
+            failed.append({"kind": "finance", "error": str(e)[:150]})
+
     # ── NOTE: simpan ke bitemporal facts (NYATA) ──
     if intent["is_note"]:
         try:

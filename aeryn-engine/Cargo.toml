@@ -1,12 +1,16 @@
 [package]
 name = "aeryn-engine"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 authors = ["Aeryn Team"]
 license = "MIT"
 
 [dependencies]
 sha2 = "0.10"
+
+[dependencies.pyo3]
+version = "0.23"
+features = ["extension-module"]
 
 [lib]
 name = "aeryn_engine"

@@ -89,6 +89,23 @@ def build_briefing() -> str:
             progress = g.get("progress", 0) if isinstance(g, dict) else 0
             lines.append(f"  • {title} ({progress}%)")
 
+    # LEDGER3: laporan keuangan bulan ini (partner eksekutor keuangan)
+    try:
+        from aeryn_core.platform.ledger_tools import tool_monthly_report
+        fr = tool_monthly_report()
+        if fr.get("ok") and fr.get("transactions", 0) > 0:
+            lines.append("")
+            lines.append(f"💰 Keuangan {fr['month']}: "
+                         f"masuk {fr['income']:.0f} / keluar {fr['expense']:.0f} "
+                         f"(saldo {fr['balance']:.0f})")
+            cats = fr.get("by_category") or {}
+            if cats:
+                top = sorted(cats.items(), key=lambda x: -x[1])[:3]
+                lines.append("  Kategori terbesar: " + ", ".join(
+                    f"{k} ({v:.0f})" for k, v in top))
+    except Exception:
+        pass
+
     note = _latest_note()
     if note:
         lines.append("")

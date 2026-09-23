@@ -550,6 +550,30 @@ async def approve_checkpoint(wf_id: str, request: Request):
     return {"status": "approved", "workflow": wf.to_dict()}
 
 # --- Health Check ---
+# --- Ledger Endpoints (LEDGER3: partner eksekutor keuangan — Rust engine) ---
+@app.get("/ledger/balance")
+async def ledger_balance():
+    """Saldo + total bulan ini + per kategori (AccountingLedgerEngine Rust)."""
+    from aeryn_core.platform.ledger_tools import tool_balance
+    return tool_balance()
+
+
+@app.post("/ledger/spend")
+async def ledger_spend(request: Request):
+    """Catat transaksi: {text: "pengeluaran 15k makan"} (natural language)."""
+    from aeryn_core.platform.ledger_tools import tool_spending_log
+    body = await request.json()
+    r = tool_spending_log(body.get("text", ""), user_id=body.get("user_id", "sen"))
+    return r
+
+
+@app.get("/ledger/report")
+async def ledger_report(month: str = ""):
+    """Laporan bulanan (income/expense/balance/by_category)."""
+    from aeryn_core.platform.ledger_tools import tool_monthly_report
+    return tool_monthly_report(month)
+
+
 @app.post("/briefing/morning-deliver")
 async def briefing_morning():
     """GAP1: Ritual briefing pagi otomatis — jadwal+goal+catatan → kirim
