@@ -87,11 +87,55 @@ Endpoint groups: `/v1/chat`, `/ledger/{balance,spend,report}`, `/briefing/{morni
 2. **Python** untuk: orchestration, driver I/O-bound, LLM/LM glue, ekosistem cepat
 3. **Hybrid** (Rust core + Python binding) untuk: engine yang perlu eksplorasi (ledger, cognitive, game)
 
-## Roadmap Pengembangan (dampak → rendah)
+## Arah Pengembangan & Roadmap — selaras Aeryn_Identity.md (North Star)
 
-1. ✅ **LEDGER Rust** (selesai v62.19) — engine utama → keuangan nyata
-2. **Scheduler daemon → Rust** — cron loop + decay harian digabung jadi satu daemon ringan
-3. **Tools sensor dunia** — location + weather + calendar_read → Daily Worker konteks
-4. **Embedding lokal di Termux** — eliminasi proot 82s (miniLM GGUF / onnxruntime)
-5. **Kembangkan modul SaaS** — billing + ci_cd + deploy jadi alur kerja nyata
-6. **Multi-user + marketplace** — skill sharing + ekosistem terbuka
+> Aturan keputusan (Aeryn_Identity.md §13): *"Does this strengthen Aeryn as a
+> Self-Hosted Personal AI System with autonomous capabilities, or does it push
+> Aeryn toward becoming a different product?"*
+> Tujuan (§3): bukan memaksimalkan jumlah fitur — tapi memaksimalkan
+> **intelligence, agency, continuity, autonomy untuk SATU user**.
+
+### Prinsip pengembangan (dari North Star)
+
+1. **Personal scope** — satu user (Sen) + environment-nya; bukan multi-tenant
+2. **Self-hosted & local-first** — Termux/Postgres/redis lokal; cloud = dependency, bukan identity
+3. **User ownership** — data + infrastruktur milik user
+4. **Autonomy user-governed** — permissions + approval gate di titik berisiko
+5. **Capability may expand indefinitely; product identity must remain coherent**
+
+### Roadmap capability growth (§15 — dampak terhadap agency satu user)
+
+| # | Pengembangan | Menguatkan (axis §13) | Status |
+|---|--------------|----------------------|--------|
+| 1 | ✅ LEDGER Rust — keuangan pribadi | Personal Intelligence, Agency | selesai v62.19 |
+| 2 | ✅ Subagent orchestration + supervisor + A2A + reflexion + cost | Autonomy, Agency, Learning | selesai v62.23 |
+| 3 | ✅ Goal-derived workflow + /matter | Workflow Orchestration, Continuity | selesai v62.24 |
+| 4 | **Scheduler daemon → Rust** — cron + decay digabung satu daemon ringan | Reliability, Self-Hosting, Autonomy | roadmap |
+| 5 | **Embedding lokal Termux** — eliminasi proot 82s (miniLM GGUF / onnxruntime) | Self-Hosting, Privacy, Reliability | roadmap (goal tercatat via /matter) |
+| 6 | **Tools sensor dunia** — location + weather + calendar_read | Environment Interaction, Personal Intelligence | roadmap |
+| 7 | **Long-horizon planning wired** — planner.py + long_horizon.py → supervisor (multi-hari) | Autonomy, Reasoning, Continuity | roadmap |
+| 8 | **Experience learning depth** — reflexion outcome → pitfalls + skill crystallization otomatis | Learning, Continuity | roadmap |
+| 9 | **Multimodal input** — voice STT + gambar via gateway | Environment Interaction | roadmap |
+| 10 | **Browser/computer interaction** — drive browser logged-in user (dengan permission) | Environment Interaction, Agency | roadmap |
+
+### Arah yang TIDAK ditempuh (§11 — What Aeryn Is NOT)
+
+Berikut BUKAN tujuan arsitektur Aeryn — tidak dikerjakan hanya karena umum
+di platform komersial:
+- ❌ SaaS sebagai business model (billing/langganan publik)
+- ❌ Multi-tenant sebagai kebutuhan utama (banyak user/organisasi)
+- ❌ Organization-centric / enterprise-first design
+- ❌ Centralized cloud infrastructure wajib
+- ❌ Marketplace-driven productization (menjual skill/agent ke pelanggan)
+- ❌ Memaksimalkan jumlah external customers
+
+Catatan: modul `billing/`, `plugin_marketplace/`, `auth/` multi-user yang ADA
+di kode dipertahankan sebagai **kapabilitas internal** (bisa dipakai bila
+situasi personal membutuhkan — mis. auth untuk secure remote access, §12) —
+tapi tidak menentukan arah pengembangan dan tidak diprioritaskan.
+
+### Hierarki North Star (§19 — saat ragu, pegang ini)
+
+```
+PERSONAL → AI SYSTEM → ASSISTANT → AGENCY → AGENTS → WORKFLOWS → TOOLS → ENVIRONMENT
+```
