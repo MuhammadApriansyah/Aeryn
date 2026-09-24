@@ -6,9 +6,16 @@ Aeryn is a **Personal AI OS** — a production-grade AI agent framework that liv
 
 ---
 
-## 🖥️ CLI & TUI (v62.26 — aksesibilitas ala Hermes)
+## 🖥️ CLI & TUI (v63 — meniru Hermes · skin gold & kawaii)
 
-**CLI** — 17 commands via `aeryn`:
+**v63 rewrite** — `console/aeryn_cli.py` (916 baris):
+- Banner ╔═╗ gold + hippo braille + summary · prompt ❯ · status bar
+- TUI `aeryn tui`: prompt_toolkit (arrow-up history + slash completion)
+- **35 slash commands / 5 kategori**: Session / Configuration / Info /
+  Tools & Skills / Exit — `/help` kategorikal + filter
+- Chat `/v1/chat` (agent loop penuh) + fallback
+
+**CLI subcommand** — via `aeryn`:
 
 ```bash
 aeryn status          # Service + tools + skills
