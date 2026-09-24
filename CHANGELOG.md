@@ -4,6 +4,42 @@ All notable changes to Aeryn will be documented in this file.
 
 ---
 
+## [63.0] — 2026-09-25
+
+### 🖥️ CLI/TUI v63 — REWRITE penuh meniru Hermes (dogfood-driven)
+
+Dogfood PTY menemukan: TUI lama input beku + tidak bisa dipakai interaktif,
+command sedikit & tidak rapih. Rewrite total `console/aeryn_cli.py` (916 baris):
+
+- **Visual ala Hermes** (skin default gold & kawaii):
+  banner ╔═╗ gold + braille hippo art + summary (tools/skills/niat/api),
+  prompt ❯ (#FFF8DC), input rule #CD7F32, response border ⚕ gold,
+  status bar satu baris (api · durasi · scheduler) ala _build_status_bar_text
+- **35 slash commands dalam 5 kategori** ala COMMANDS_BY_CATEGORY:
+  Session (12) / Configuration (8) / Info (7) / Tools & Skills (6) / Exit (2)
+  — /help kategorikal + filter query ala Hermes
+- **TUI prompt_toolkit** (seperti Hermes): fixed input area + patch_stdout +
+  InMemoryHistory (arrow-up) + slash completion menu (deskripsi tiap command)
+  + status bar bawah tiap turn
+- **Chat via /v1/chat** (agent loop penuh: trust + memory + tools) dengan
+  fallback /chat; response border Hermes-style
+- REPL fallback tanpa prompt_toolkit + subcommand CLI (help/chat/status/goals/matter)
+
+### 🐛 Fix chat 503 (root cause via reasoning store)
+- Gejala: /v1/chat 503 "Kuota/kredit habis" — misleading
+- Bukti reasoning store: gemini 404 → openrouter 402 → deepseek 402
+- Root cause: proses API lama (orphan) jalan dengan env/model stale —
+  gemini-3.5-flash-lite valid di venv test via /chat/completions OpenAI-compat
+- Fix: kill ALL orphan + sv restart bersih → chat normal
+  ("Hadir, siap lanjut bos.")
+
+### Uji (dogfood PTY — seperti user asli)
+- TUI: banner + /scheduler + chat nyata + /cost + status bar — semua jalan
+- REPL: /whoami /status /scheduler /cost /history /goals + chat — semua jalan
+- pytest: 620 passed
+
+---
+
 ## [62.26] — 2026-09-24
 
 ### 🎉 RM4-RM10 — Roadmap Capability Growth + CLI/TUI Upgrade (selaras Aeryn_Identity.md)
