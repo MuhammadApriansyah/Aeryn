@@ -32,6 +32,7 @@ import os
 import re
 import shutil
 import sys
+import threading
 import time
 import urllib.request
 from urllib.parse import quote as _urlquote
@@ -40,7 +41,7 @@ from datetime import datetime
 API = os.environ.get("AERYN_API", "http://127.0.0.1:3010")
 TIMEOUT = 10
 
-__version__ = "63"
+__version__ = "63.1"
 __release_date__ = "2026.9.24"
 
 # ── Skin Hermes (default — gold & kawaii) ──
@@ -272,6 +273,75 @@ def build_status_bar(session_start: "datetime | None" = None, goal_text: str = "
 
 import argparse
 from datetime import datetime
+
+# ── V63_1_UX: spinner (Hermes-style "agent sedang berpikir") ──
+_spinner_frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
+
+
+class _Spinner:
+    """Spinner 'Aeryn berpikir' — thread sederhana, stop() bersih."""
+
+    def __init__(self, text: str = "Aeryn berpikir"):
+        self.text = text
+        self._stop = threading.Event()
+        self._thread = None
+
+    def _spin(self):
+        i = 0
+        while not self._stop.is_set():
+            f = _spinner_frames[i % len(_spinner_frames)]
+            try:
+                sys.stdout.write(f"\r  {_fg(SKIN['ui_accent'])}{f}{RST} {DIM}{self.text}...{RST}")
+                sys.stdout.flush()
+            except Exception:
+                pass
+            i += 1
+            time.sleep(0.12)
+
+    def __enter__(self):
+        self._thread = threading.Thread(target=self._spin, daemon=True)
+        self._thread.start()
+        return self
+
+    def __exit__(self, *exc):
+        self._stop.set()
+        if self._thread:
+            self._thread.join(timeout=1)
+        try:
+            sys.stdout.write("\r" + " " * 40 + "\r")
+            sys.stdout.flush()
+        except Exception:
+            pass
+        return False
+
+
+def _suggest_command(name: str):
+    """V63_1_UX: typo tolerance — '/stat' → '/status', '/costr' → '/cost'."""
+    name_l = name.lower()
+    for cand in ALL_COMMANDS:
+        if cand.startswith(name_l):
+            return cand
+    for cand in ALL_COMMANDS:
+        if name_l in cand:
+            return cand
+    # edit distance <= 1 (typo satu karakter)
+    for cand in sorted(ALL_COMMANDS):
+        if abs(len(cand) - len(name_l)) > 1:
+            continue
+        diff = sum(1 for a, b in zip(cand, name_l) if a != b) + abs(len(cand) - len(name_l))
+        if diff <= 1:
+            return cand
+    # prefix 4+ char: /mater → /matter, /agend → /agenda (substring hilang 1 char di tengah)
+    if len(name_l) >= 4:
+        for cand in sorted(ALL_COMMANDS):
+            if cand.replace(name_l[3], "", 1) == name_l and len(cand) == len(name_l) + 1:
+                return cand
+            # /mater: cand=/matter — hapus satu char dari cand di posisi apapun = name_l?
+            for i in range(len(cand)):
+                if cand[:i] + cand[i+1:] == name_l:
+                    return cand
+    return None
+
 
 # ── Session state (REPL) ──
 _state = {
@@ -572,7 +642,11 @@ def cmd_profile(args):
 def cmd_help(args):
     query = " ".join(args).lower().strip()
     w = 55
-    print(f"\n{BOLD}+{'-' * w}+{RST}")
+    # V63_1_UX: quick-start — pemula langsung paham
+    print(f"\n  {BOLD}{_fg(SKIN['banner_accent'])}Cara pakai:{RST} tulis {BOLD}pesan biasa{RST} untuk chat, atau {BOLD}/command{RST}")
+    print(f"  {DIM}contoh chat: \"tolong ingetin besok jam 8 backup\"  ·  contoh command: /status{RST}")
+    print(f"  {DIM}Tab = menu command · ↑ = history · /quit = keluar{RST}\n")
+    print(f"{BOLD}+{'-' * w}+{RST}")
     print(f"{BOLD}|{'(^_^)? Available Commands':^{w}}|{RST}")
     print(f"{BOLD}+{'-' * w}+{RST}")
     for category, cmds in COMMANDS_BY_CATEGORY.items():
@@ -742,9 +816,10 @@ def _do_chat(message: str) -> None:
     _state["last_user_input"] = message
     _record("user", message)
     try:
-        r = _post("/v1/chat", {"message": message,
-                              "session_id": _state["session_id"],
-                              "user_id": _state["user_id"]}, timeout=180)
+        with _Spinner("Aeryn berpikir"):
+            r = _post("/v1/chat", {"message": message,
+                                  "session_id": _state["session_id"],
+                                  "user_id": _state["user_id"]}, timeout=180)
         out = r.get("content") or r.get("response") or ""
         if not out:
             _err("respons kosong (LM gagal?)")
@@ -774,6 +849,7 @@ def _do_chat(message: str) -> None:
 # ════════════════ Dispatch ════════════════
 
 def dispatch(line: str) -> None:
+    """V63_1_UX: typo tolerance + arg hint — ramah pengguna."""
     line = line.strip()
     if not line:
         return
@@ -782,12 +858,29 @@ def dispatch(line: str) -> None:
         name = "/" + (parts[0].lower() if parts else "")
         args = parts[1:]
         if name in ALL_COMMANDS:
-            handler = globals()[ALL_COMMANDS[name][3]]
+            cat, desc, hint, fn_name = ALL_COMMANDS[name]
+            # arg wajib kosong → tunjukkan format + contoh (bukan diam)
+            if hint.startswith("<") and not args:
+                print(f"  {_fg(SKIN['ui_warn'])}⚠ '{name}' butuh argumen{RST}")
+                print(f"  {DIM}format: {name} {hint}{RST}")
+                ex = {"<teks>": "belajar rust tiap malam",
+                      "<query>": "kenapa gateway restart",
+                      "<sub> <arg>": "plan belajar rust 30 hari"}.get(hint, hint)
+                if ex:
+                    print(f"  {DIM}contoh: {name} {ex}{RST}")
+                return
+            handler = globals()[fn_name]
             handler(args)
         else:
-            _dim(f"unknown {name} — /help untuk daftar")
+            sug = _suggest_command(name)
+            if sug:
+                print(f"  {_fg(SKIN['ui_warn'])}'{name}' tidak ada — maksud kamu {sug}?{RST}")
+                print(f"  {DIM}(ketik {sug} untuk jalankan){RST}")
+            else:
+                print(f"  {_fg(SKIN['ui_warn'])}'{name}' tidak ada{RST}")
+                _dim("ketik /help untuk semua command, atau tulis pesan biasa untuk chat")
     else:
-        _do_chat(line)
+        _do_chat(line)  # V63_1_UX_P2
 
 
 # ════════════════ REPL (non-TUI fallback — input() sederhana) ════════════════
@@ -795,6 +888,7 @@ def dispatch(line: str) -> None:
 def run_repl() -> int:
     banner()
     print(f"  {DIM}{WELCOME}{RST}")
+    print(f"  {DIM}contoh: \"ingetin besok jam 8 backup\" · /status · /matter belajar rust · /help{RST}")
     print(f"  {build_status_bar(_state['session_start'])}\n")
     while True:
         try:
@@ -838,12 +932,22 @@ def run_tui() -> int:
                                          display_meta=desc[:40])
 
     banner()
+    # V63_1_UX: welcome + contoh pemakaian (pemula friendly)
     print(f"  {DIM}{WELCOME}{RST}")
+    print(f"  {DIM}contoh: \"ingetin besok jam 8 backup\" · /status · /matter belajar rust · /help{RST}")
     print(f"  {build_status_bar(_state['session_start'])}\n")
+
+    from prompt_toolkit.formatted_text import HTML
+
+    def _bottom_toolbar():
+        # V63_1_UX: toolbar hint live ala Hermes (selalu terlihat)
+        return HTML('<style bg="#1a1a2e" fg="#FFD700"> ❯ chat </style>'
+                    '<style bg="#1a1a2e" fg="#C0C0C0">· / command · Tab menu · ↑ history · /help semua </style>')
 
     history = InMemoryHistory()
     session = PromptSession(history=history, completer=SlashCompleter(),
-                            complete_while_typing=True)
+                            complete_while_typing=True,
+                            bottom_toolbar=_bottom_toolbar)
 
     try:
         with patch_stdout(raw=True):

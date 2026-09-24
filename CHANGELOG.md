@@ -4,6 +4,28 @@ All notable changes to Aeryn will be documented in this file.
 
 ---
 
+## [63.1] — 2026-09-25
+
+### 💛 UX PASS — CLI/TUI ramah pengguna (dogfood PTY-driven)
+
+Dogfood user: "bingung pake nya". 5 perbaikan UX ala Hermes:
+
+- **Spinner "Aeryn berpikir..."** saat chat nunggu LLM (thread sederhana)
+- **Typo tolerance**: "/stat" → "maksud kamu /status?" · "/costr" → /cost ·
+  "/mater" → /matter (prefix + substring + edit-distance ≤1 + deletion)
+- **Arg hint ramah**: command butuh argumen tanpa arg → tampil format +
+  contoh langsung ("/matter belajar rust tiap malam")
+- **/help quick-start**: "Cara pakai" 3 baris di atas daftar — pemula
+  langsung paham (pesan biasa = chat, /command = slash)
+- **TUI bottom toolbar** (prompt_toolkit, ala Hermes statusbar):
+  "❯ chat · / command · Tab menu · ↑ history · /help semua" — selalu terlihat
+- **Welcome + contoh pemakaian** di TUI & REPL sebelum prompt pertama
+
+Bukti PTY: typo_suggest ✓ spinner ✓ welcome ✓ toolbar ✓ (render TTY)
+pytest: 620 passed
+
+---
+
 ## [63.0] — 2026-09-25
 
 ### 🖥️ CLI/TUI v63 — REWRITE penuh meniru Hermes (dogfood-driven)
