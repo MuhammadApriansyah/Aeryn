@@ -1,8 +1,11 @@
 #!/data/data/com.termux/files/home/aeryn-venv/bin/python
 """V61.3 — Aeryn CLI/TUI: aksesibilitas ala Hermes dari terminal.
 
+V62.26_CLI_TUI_UPGRADE
 CLI : aeryn status|goals|goal-add|chat|pursue|obs|services|watch
-TUI : aeryn tui   (dashboard terminal — rich live-refresh)
+        |ledger|sensor|matter|briefing|horizon|cost   (RM4-RM10)
+TUI : aeryn tui   (dashboard terminal — rich live-refresh + panel
+        keuangan/cuaca/scheduler/cost + slash commands)
 Semua via API Aeryn (127.0.0.1:3010) — konsisten dgn skill aeryn-control.
 """
 import json
@@ -205,6 +208,29 @@ def cmd_tui():
                 st = g.get("stats") or {}
                 if not isinstance(st, dict):
                     st = {}
+                # V62.26: panel baru (keuangan + cuaca + scheduler + cost)
+                try:
+                    led = _get("/ledger/balance")
+                    led_txt = (f"Rp {led.get('balance', 0):,.0f}")
+                except Exception:
+                    led_txt = "—"
+                try:
+                    wthr = _get("/sensor/weather")
+                    wthr_txt = (f"{wthr.get('temperature_c', '?')}°C "
+                                f"{wthr.get('condition', '')}")
+                except Exception:
+                    wthr_txt = "—"
+                try:
+                    sch = _get("/scheduler/health")
+                    sch_txt = (f"{'●' if sch.get('running') else '○'} "
+                               f"{sch.get('tick_count', 0)} ticks")
+                except Exception:
+                    sch_txt = "—"
+                try:
+                    cst = _get("/cost")
+                    cst_txt = f"${cst.get('spend', {}).get('estimate_usd', 0):.2f}"
+                except Exception:
+                    cst_txt = "—"
                 c.print(Columns([
                     Panel(f"[bold]{h.get('status')}[/]\n{h.get('memory_mb', 0)} MB",
                           title="api", border_style="green"),
@@ -212,6 +238,11 @@ def cmd_tui():
                           title="24h", border_style="blue"),
                     Panel(f"{st.get('active', 0)} aktif\n{st.get('completed', 0)} selesai",
                           title="goals", border_style="magenta"),
+                    Panel(f"[bold]{led_txt}[/]", title="keuangan",
+                          border_style="yellow"),
+                    Panel(wthr_txt, title="cuaca", border_style="cyan"),
+                    Panel(sch_txt, title="scheduler", border_style="green"),
+                    Panel(cst_txt, title="cost", border_style="red"),
                 ]))
                 line = "  ".join(
                     f"[green]{k}[/]" if (v or {}).get("status") == "healthy"
@@ -224,13 +255,181 @@ def cmd_tui():
                             f"({nxt.get('progress', 0)}%)")
             except Exception as e:
                 c.print(f"[red]api tak terjangkau: {e}[/]")
+            # V62.26: slash commands (Hermes-style) — input TUI interaktif
+            try:
+                import select
+                import termios
+                old_attrs = termios.tcgetattr(sys.stdin)
+                # non-blocking input check (5s refresh tetap jalan)
+                if select.select([sys.stdin], [], [], 0.1)[0]:
+                    line = sys.stdin.readline().strip()
+                    if line.startswith("/"):
+                        _tui_slash(c, line[1:])
+                    elif line:
+                        _tui_chat(c, line)
+            except (termios.error, ImportError):
+                pass  # bukan TTY — refresh saja
             time.sleep(5)
     except KeyboardInterrupt:
         c.print("\n[dim]sampai jumpa~[/]")
     return 0
 
 
+def _tui_chat(c, message: str) -> None:
+    """Chat via /v1/chat (agent loop penuh) — fallback /chat."""
+    try:
+        r = _post("/v1/chat", {"message": message, "session_id": "aeryn-tui",
+                               "user_id": "sen"})
+        out = r.get("content") or r.get("response") or ""
+        c.print(f"  [bold cyan]Aeryn[/] {out[:600]}")
+    except Exception:
+        try:
+            r = _post("/chat", {"goal": message, "session_id": "aeryn-tui"})
+            c.print(f"  [bold cyan]Aeryn[/] {r.get('response', '')[:600]}")
+        except Exception as e:
+            c.print(f"  [red]chat gagal: {e}[/]")
+
+
+def _tui_slash(c, cmd: str) -> None:
+    """Slash commands TUI (Hermes-style): /status /cost /ledger /sensor
+    /briefing /horizon /matter /help."""
+    parts = cmd.split()
+    name = parts[0].lower() if parts else "help"
+    try:
+        if name == "help":
+            c.print("[dim]  /chat <pesan> /status /cost /ledger /sensor "
+                    "/briefing /horizon <goal> /matter <teks> /help[/]")
+        elif name == "status":
+            h = _get("/health")
+            c.print(f"  ● {h.get('status')} · {h.get('memory_mb', 0)} MB")
+        elif name == "cost":
+            r = _get("/cost")
+            c.print(f"  💰 ${r.get('spend', {}).get('estimate_usd', 0):.4f} est")
+        elif name == "ledger":
+            r = _get("/ledger/balance")
+            c.print(f"  💵 Rp {r.get('balance', 0):,.0f}")
+        elif name == "sensor":
+            sub = parts[1] if len(parts) > 1 else "weather"
+            r = _get(f"/sensor/{sub}")
+            if sub == "weather":
+                c.print(f"  🌤️  {r.get('temperature_c', '?')}°C {r.get('condition', '')}")
+            else:
+                c.print(f"  📅 {r.get('count', '?')} upcoming")
+        elif name == "briefing":
+            r = _get("/briefing/preview")
+            c.print(f"  🌅 {str(r)[:400]}")
+        elif name == "horizon":
+            goal = " ".join(parts[1:])
+            if not goal:
+                c.print("  [dim]pakai: /horizon <goal>[/]")
+            else:
+                r = _post("/horizon/plan", {"goal": goal})
+                c.print(f"  🗺️  task {r.get('task_id')} "
+                        f"({r.get('steps', 0)} langkah)")
+        elif name == "matter":
+            text = " ".join(parts[1:])
+            if not text:
+                c.print("  [dim]pakai: /matter <teks>[/]")
+            else:
+                r = _post("/matter", {"text": text})
+                c.print(f"  ⭐ {str(r)[:200]}")
+        else:
+            c.print(f"  [yellow]unknown /{name} — /help[/]")
+    except Exception as e:
+        c.print(f"  [red]/{name} gagal: {e}[/]")
+
+
 # ─────────────────────────────────────────────────────────────
+
+def _post(path: str, data: dict):
+    """POST JSON ke API Aeryn."""
+    req = urllib.request.Request(API + path,
+                                 data=json.dumps(data).encode(),
+                                 method="POST",
+                                 headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=90) as r:
+        return json.loads(r.read())
+
+
+# ── V62.26: CLI commands baru (RM4-RM10) ──
+
+def cmd_ledger(args):
+    """Ledger: balance (default) / report."""
+    sub = args[0] if args else "balance"
+    if sub == "report":
+        r = _get("/ledger/report")
+        print(f"\n  Masuk : Rp {r.get('income', 0):,.0f}")
+        print(f"  Keluar: Rp {r.get('expense', 0):,.0f}")
+        print(f"  Saldo : Rp {r.get('balance', 0):,.0f}\n")
+    else:
+        r = _get("/ledger/balance")
+        print(f"\n  💵 Saldo: Rp {r.get('balance', 0):,.0f}\n")
+
+
+def cmd_sensor(args):
+    """Sensor: weather (default) / calendar / location."""
+    sub = args[0] if args else "weather"
+    r = _get(f"/sensor/{sub}")
+    if sub == "weather":
+        print(f"\n  🌤️  {r.get('temperature_c', '?')}°C · {r.get('condition', '')}"
+              f" · humidity {r.get('humidity', '?')}%\n")
+    elif sub == "calendar":
+        for it in (r.get("items") or [])[:10]:
+            print(f"  📅 {it.get('when', '?'):20s} {it.get('what', '?')[:50]}")
+        print()
+    else:
+        print(json.dumps(r, indent=2, ensure_ascii=False))
+
+
+def cmd_matter(args):
+    """Tell Aeryn what matters — goal + fact tercatat (proactive-goal)."""
+    text = " ".join(args)
+    if not text:
+        print("pakai: aeryn matter <teks>")
+        return 1
+    r = _post("/matter", {"text": text})
+    print(f"\n  ⭐ {json.dumps(r, ensure_ascii=False)[:300]}\n")
+    return 0
+
+
+def cmd_briefing(args):
+    """Briefing pagi (preview)."""
+    r = _get("/briefing/preview")
+    print("\n  🌅 BRIEFING\n")
+    print("  " + json.dumps(r, indent=2, ensure_ascii=False)[:1500].replace("\n", "\n  "))
+    print()
+
+
+def cmd_horizon(args):
+    """Long-horizon: plan <goal> / status <task_id> / execute <task_id>."""
+    if not args:
+        print("pakai: aeryn horizon plan|status|execute <arg>")
+        return 1
+    sub, rest = args[0], args[1:]
+    if sub == "plan":
+        goal = " ".join(rest)
+        if not goal:
+            print("pakai: aeryn horizon plan <goal>")
+            return 1
+        r = _post("/horizon/plan", {"goal": goal})
+        print(f"\n  🗺️  task {r.get('task_id')} · {r.get('steps', 0)} langkah\n")
+    elif sub == "status":
+        r = _get(f"/horizon/status/{rest[0]}")
+        print(json.dumps(r, indent=2, ensure_ascii=False)[:1200])
+    elif sub == "execute":
+        r = _post(f"/horizon/execute/{rest[0]}", {})
+        print(json.dumps(r, indent=2, ensure_ascii=False)[:1200])
+    else:
+        print(f"unknown horizon sub: {sub}")
+        return 1
+    return 0
+
+
+def cmd_cost(args):
+    """Cost tracking (dari spans nyata)."""
+    r = _get("/cost")
+    print(f"\n  💰 Cost estimate: ${r.get('spend', {}).get('estimate_usd', 0):.4f}\n")
+
 
 def main():
     args = sys.argv[1:]
@@ -269,6 +468,19 @@ def main():
         return cmd_watch(int(rest[0]) if rest and rest[0].isdigit() else 5)
     if cmd == "tui":
         return cmd_tui()
+    # V62.26: commands baru (RM4-RM10)
+    if cmd == "ledger":
+        return cmd_ledger(rest)
+    if cmd == "sensor":
+        return cmd_sensor(rest)
+    if cmd == "matter":
+        return cmd_matter(rest)
+    if cmd == "briefing":
+        return cmd_briefing(rest)
+    if cmd == "horizon":
+        return cmd_horizon(rest)
+    if cmd == "cost":
+        return cmd_cost(rest)
     print(f"perintah tak dikenal: {cmd} — pakai: aeryn help")
     return 1
 

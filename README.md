@@ -6,6 +6,41 @@ Aeryn is a **Personal AI OS** — a production-grade AI agent framework that liv
 
 ---
 
+## 🖥️ CLI & TUI (v62.26 — aksesibilitas ala Hermes)
+
+**CLI** — 17 commands via `aeryn`:
+
+```bash
+aeryn status          # Service + tools + skills
+aeryn goals           # Niat aktif (progress bar)
+aeryn goal-add <t>    # Tambah niat
+aeryn chat <pesan>    # Chat (agent loop penuh)
+aeryn pursue          # Kejar niat otonom
+aeryn ledger          # Saldo keuangan (Rust engine)
+aeryn sensor weather  # Cuaca (open-meteo)
+aeryn matter <teks>   # Tell Aeryn what matters (proactive-goal)
+aeryn briefing        # Briefing pagi
+aeryn horizon plan <goal>   # Long-horizon plan (multi-hari)
+aeryn cost            # Cost estimate (dari spans nyata)
+aeryn obs|services|watch|tui
+```
+
+**TUI** — `aeryn tui`: dashboard terminal (rich) dengan 7 panel live:
+`api · 24h · goals · keuangan · cuaca · scheduler · cost` + slash commands
+(`/chat /status /cost /ledger /sensor /briefing /horizon /matter /help`).
+
+## 🧠 Capability Set (Aeryn_Identity.md §15 — 15/15 terisi)
+
+Persistent Memory · Deep Reasoning · Long-Horizon Planning (RM7) ·
+Autonomous Agents · Dynamic Workflows · Tool Use · Scheduling (Rust native,
+RM4) · Event Triggers · Browser/Computer Interaction (RM10) · Multimodal
+Input (RM9) · Self-Monitoring · Self-Recovery · Experience Learning (RM8) ·
+Proactive Behavior · Code Execution
+
+Aeryn = **Self-Hosted Personal AI System** — kapabilitas SaaS-level di dalam
+(API, queue, scheduler, orchestration, observability), bukan SaaS business
+model (Aeryn_Identity.md §11).
+
 ## 🚀 Quick Start
 
 ```bash
