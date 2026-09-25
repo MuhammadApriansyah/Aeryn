@@ -1,0 +1,328 @@
+{
+  "question": "Antarmuka, aksesibilitas, struktur, dan workflow AI agent CLI/TUI terbaik (Claude Code, Codex, OpenCode, Aider, Hermes, Gemini) — pola apa yang harus di-clone untuk Aeryn agar ramah pengguna?",
+  "searched_at": "2026-09-25",
+  "providers": [
+    "web_search",
+    "web_extract"
+  ],
+  "unavailable_providers": [
+    "browser_use"
+  ],
+  "sources": [
+    {
+      "id": "s1",
+      "url": "https://code.claude.com/docs/en/interactive-mode",
+      "publisher": "Anthropic",
+      "source_type": "primary"
+    },
+    {
+      "id": "s2",
+      "url": "https://code.claude.com/docs/en/commands",
+      "publisher": "Anthropic",
+      "source_type": "primary"
+    },
+    {
+      "id": "s3",
+      "url": "https://nimbalyst.com/blog/codex-cli-tips-and-workflows/",
+      "publisher": "Nimbalyst",
+      "source_type": "secondary"
+    },
+    {
+      "id": "s4",
+      "url": "https://opencode.ai/docs/tui/",
+      "publisher": "opencode.ai",
+      "source_type": "primary"
+    },
+    {
+      "id": "s5",
+      "url": "https://github.com/opencode-ai/opencode",
+      "publisher": "opencode-ai",
+      "source_type": "primary"
+    },
+    {
+      "id": "s6",
+      "url": "https://aider.chat/",
+      "publisher": "Aider-AI",
+      "source_type": "primary"
+    },
+    {
+      "id": "s7",
+      "url": "https://news.ycombinator.com/item?id=46210594",
+      "publisher": "Hacker News",
+      "source_type": "secondary"
+    },
+    {
+      "id": "s8",
+      "url": "https://hermes-agent.nousresearch.com/docs",
+      "publisher": "Nous Research",
+      "source_type": "primary"
+    },
+    {
+      "id": "s9",
+      "url": "https://hermes-agent.nousresearch.com/docs/getting-started/quickstart",
+      "publisher": "Nous Research",
+      "source_type": "primary"
+    },
+    {
+      "id": "s10",
+      "url": "https://hermes-agent.nousresearch.com/docs/user-guide/tui",
+      "publisher": "Nous Research",
+      "source_type": "primary"
+    },
+    {
+      "id": "s11",
+      "url": "https://www.databricks.com/blog/human-in-the-loop",
+      "publisher": "Databricks",
+      "source_type": "secondary"
+    },
+    {
+      "id": "s12",
+      "url": "https://www.scalekit.com/blog/human-in-the-loop-tool-calling",
+      "publisher": "Scalekit",
+      "source_type": "secondary"
+    },
+    {
+      "id": "s13",
+      "url": "https://fuselabcreative.com/ui-design-for-ai-agents/",
+      "publisher": "Fuselab Creative",
+      "source_type": "secondary"
+    },
+    {
+      "id": "s14",
+      "url": "https://agentskills.io/specification",
+      "publisher": "agentskills.io",
+      "source_type": "primary"
+    },
+    {
+      "id": "s15",
+      "url": "https://cloud.google.com/blog/topics/developers-practitioners/gemini-cli-custom-slash-commands",
+      "publisher": "Google Cloud",
+      "source_type": "primary"
+    },
+    {
+      "id": "s16",
+      "url": "https://github.com/MuhammadApriansyah/Aeryn",
+      "publisher": "MuhammadApriansyah (Aeryn repo + dogfood PTY v63/v64)",
+      "source_type": "primary"
+    }
+  ],
+  "claims": [
+    {
+      "id": "c1",
+      "text": "Claude Code UX: 50+ slash commands + custom commands + hooks lifecycle (PreToolUse/PostToolUse/Notification/Stop) + /hooks menu interaktif + vim mode + transcript viewer Ctrl+O + queue messages (ketik saat agent jalan) + ! shell mode",
+      "kind": "sourced",
+      "confidence": "medium",
+      "source_ids": [
+        "s1",
+        "s2"
+      ],
+      "supporting_source_ids": [
+        "s1",
+        "s2"
+      ],
+      "contradicting_source_ids": [],
+      "independent_source_count": 2,
+      "conflict": false
+    },
+    {
+      "id": "c2",
+      "text": "Codex CLI: approval-mode 3 level (suggest default, auto-edit, full-auto) + sandbox workspace-write + approval sekali/untuk sesi + hooks + Python SDK",
+      "kind": "sourced",
+      "confidence": "low",
+      "source_ids": [
+        "s3"
+      ],
+      "supporting_source_ids": [
+        "s3"
+      ],
+      "contradicting_source_ids": [],
+      "independent_source_count": 1,
+      "conflict": false
+    },
+    {
+      "id": "c3",
+      "text": "OpenCode TUI: Bubble Tea (Elm architecture), tui.json konfigurasi keybinds/leader-key/cursor/attention (sound+notif), /connect /init /help, autoCompact, agents per-model config, mouse support",
+      "kind": "sourced",
+      "confidence": "medium",
+      "source_ids": [
+        "s4",
+        "s5"
+      ],
+      "supporting_source_ids": [
+        "s4",
+        "s5"
+      ],
+      "contradicting_source_ids": [],
+      "independent_source_count": 2,
+      "conflict": false
+    },
+    {
+      "id": "c4",
+      "text": "Aider: chat interface optimal untuk tanya-jawab sambil edit kode (pair programming), chat modes, git-native auto-commit",
+      "kind": "sourced",
+      "confidence": "medium",
+      "source_ids": [
+        "s6",
+        "s7"
+      ],
+      "supporting_source_ids": [
+        "s6",
+        "s7"
+      ],
+      "contradicting_source_ids": [],
+      "independent_source_count": 2,
+      "conflict": false
+    },
+    {
+      "id": "c5",
+      "text": "Hermes TUI (sumber utama clone): instant first frame (banner sebelum load), non-blocking input (queue sebelum siap), modal overlays (model/session/approval picker), collapsible banner 4 section, live session switcher (Ctrl+X), slash completion floating panel dengan deskripsi, /goal row di dock, alternate-screen no flicker, mouse drag select",
+      "kind": "sourced",
+      "confidence": "high",
+      "source_ids": [
+        "s10",
+        "s8",
+        "s9"
+      ],
+      "supporting_source_ids": [
+        "s10",
+        "s8",
+        "s9"
+      ],
+      "contradicting_source_ids": [],
+      "independent_source_count": 3,
+      "conflict": false
+    },
+    {
+      "id": "c6",
+      "text": "Hermes layering rule: base chat dulu baru layer (gateway/cron/skills/voice) — jika chat normal gagal, jangan tambah fitur",
+      "kind": "sourced",
+      "confidence": "low",
+      "source_ids": [
+        "s9"
+      ],
+      "supporting_source_ids": [
+        "s9"
+      ],
+      "contradicting_source_ids": [],
+      "independent_source_count": 1,
+      "conflict": false
+    },
+    {
+      "id": "c7",
+      "text": "HITL harus risk-based (bukan everywhere): approval hanya untuk high-impact/uncertain decisions; feedback manusia jadi operational data; explainability wajib (review yang tidak paham = performative)",
+      "kind": "sourced",
+      "confidence": "medium",
+      "source_ids": [
+        "s11",
+        "s12"
+      ],
+      "supporting_source_ids": [
+        "s11",
+        "s12"
+      ],
+      "contradicting_source_ids": [],
+      "independent_source_count": 2,
+      "conflict": false
+    },
+    {
+      "id": "c8",
+      "text": "3 approval patterns invocation-level: pause-resume interrupt, dynamic authorization check (policy eval saat invoke), scope-escalation request; approval timeout = fail-safe denied",
+      "kind": "sourced",
+      "confidence": "low",
+      "source_ids": [
+        "s12"
+      ],
+      "supporting_source_ids": [
+        "s12"
+      ],
+      "contradicting_source_ids": [],
+      "independent_source_count": 1,
+      "conflict": false
+    },
+    {
+      "id": "c9",
+      "text": "Agent UX pattern yang bekerja: plan-first approval (approve/modify/remove steps sebelum eksekusi), progressive delegation (approval history menentukan pace otonomi), escalation disajikan bukan sebagai failure",
+      "kind": "sourced",
+      "confidence": "low",
+      "source_ids": [
+        "s13"
+      ],
+      "supporting_source_ids": [
+        "s13"
+      ],
+      "contradicting_source_ids": [],
+      "independent_source_count": 1,
+      "conflict": false
+    },
+    {
+      "id": "c10",
+      "text": "Agent Skills open standard: SKILL.md + frontmatter (name/description), skills-ref validate, kompatibel lintas produk (Claude, Codex, Hermes)",
+      "kind": "sourced",
+      "confidence": "low",
+      "source_ids": [
+        "s14"
+      ],
+      "supporting_source_ids": [
+        "s14"
+      ],
+      "contradicting_source_ids": [],
+      "independent_source_count": 1,
+      "conflict": false
+    },
+    {
+      "id": "c11",
+      "text": "Gemini CLI: custom slash commands via .toml files, extensible foundation",
+      "kind": "sourced",
+      "confidence": "low",
+      "source_ids": [
+        "s15"
+      ],
+      "supporting_source_ids": [
+        "s15"
+      ],
+      "contradicting_source_ids": [],
+      "independent_source_count": 1,
+      "conflict": false
+    },
+    {
+      "id": "c12",
+      "text": "Aeryn (audit internal via repo + dogfood PTY): TUI pakai prompt_toolkit inline (bukan modal overlay/alternate-screen), tidak ada queue-non-blocking, tidak ada approval gate UI untuk aksi berbahaya, tidak ada /init onboarding, command flat-ish, tidak ada live session switcher, tidak ada hooks lifecycle",
+      "kind": "inference",
+      "confidence": "low",
+      "source_ids": [
+        "s16"
+      ],
+      "supporting_source_ids": [
+        "s16"
+      ],
+      "contradicting_source_ids": [],
+      "independent_source_count": 1,
+      "conflict": false
+    },
+    {
+      "id": "c13",
+      "text": "Aider chat-first optimal untuk tanya sambil edit (S6, S7); Hermes docs asli = sumber utama clone (S8, S9) — quickstart, TUI, learning loop",
+      "kind": "sourced",
+      "confidence": "medium",
+      "source_ids": [
+        "s6",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "supporting_source_ids": [
+        "s6",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "contradicting_source_ids": [],
+      "independent_source_count": 4,
+      "conflict": false
+    }
+  ],
+  "gaps": [
+    "Tidak ada benchmark kuantitatif rasa-pakai (semua deskriptif)",
+    "Aeryn sendiri belum punya telemetri UX (berapa langkah sampai nilai pertama)"
+  ]
+}
