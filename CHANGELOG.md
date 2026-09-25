@@ -4,6 +4,29 @@ All notable changes to Aeryn will be documented in this file.
 
 ---
 
+## [65.1] — 2026-09-25
+
+### 🏗️ FASE 2 — Struktur: /init onboarding + session switcher + hooks lifecycle
+
+Berdasarkan riset agent UX (Claude Code pattern):
+
+**F2-1 — /init onboarding**: analisis cwd (stack/struktur/entry) → generate
+AERYN.md — konteks yang dibaca agent di sesi berikutnya (ala Claude Code
+CLAUDE.md). Dogfood: AERYN.md 515 bytes tergenerate ✓
+
+**F2-2 — /sessions + /resume**: list 50 sesi (live ● / saved ○) +
+resume by ID dengan 5 pesan terakhir dimuat (ala Hermes /sessions).
+Dogfood: "✓ sesi aktif: hooks-test2" ✓
+
+**F2-3 — Hooks lifecycle**: pre_tool_use / post_tool_use / stop — audit
+trail otomatis ke facts saat chat (ala Claude Code hooks; config
+~/.aeryn/hooks.json, default semua aktif). Dogfood: 3 hook facts tercatat
+(hook_pre_tool_use + hook_post_tool_use + hook_stop) ✓
+
+pytest: 620 passed
+
+---
+
 ## [65.0] — 2026-09-25
 
 ### ⚡ FASE 1 — Interface: non-blocking input + interrupt + multi-line

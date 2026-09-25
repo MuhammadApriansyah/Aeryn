@@ -102,6 +102,10 @@ COMMANDS_BY_CATEGORY = {
         ("/traces", "Traces (OTel observability)", "[n]", "cmd_traces_cmd"),
         ("/matter", "Tell Aeryn what matters (proactive-goal)", "<teks>", "cmd_matter_cmd"),
         ("/voice", "Bicara — mic HP → teks → chat", "", "cmd_voice_cmd"),
+        ("/init", "Onboarding: generate AERYN.md dari repo", "", "cmd_init_cmd"),
+        ("/sessions", "List + switch sesi live", "", "cmd_sessions_cmd"),
+        ("/resume", "Lanjut sesi by ID", "<sub> <arg>", "cmd_resume_cmd"),
+        ("/hooks", "Hooks lifecycle (Pre/Post/Stop)", "", "cmd_hooks_cmd"),
     ],
     "Configuration": [
         ("/config", "Konfigurasi Aeryn (gateway/env)", "", "cmd_config"),
@@ -566,6 +570,144 @@ def cmd_traces_cmd(args):
                   f"· {t.get('session_id', '?')[:30]} · {t.get('spans', '?')} spans")
     except Exception as e:
         _err(f"traces gagal: {e}")
+
+
+def cmd_init_cmd(args):
+    """F2-1: onboarding — analisis cwd → generate AERYN.md (ala Claude Code)."""
+    cwd = os.getcwd()
+    print(f"\n  {_fg(SKIN['ui_accent'])}⚙ Onboarding — analisis {cwd}{RST}")
+
+    # deteksi stack
+    stack, test_cmd = "umum", "python -m pytest tests/"
+    files = os.listdir(cwd) if os.path.isdir(cwd) else []
+    if "package.json" in files:
+        stack = "Node.js/TypeScript"
+        test_cmd = "npm test"
+    elif "pyproject.toml" in files or "requirements.txt" in files:
+        stack = "Python"
+        test_cmd = "python -m pytest tests/"
+    elif "Cargo.toml" in files:
+        stack = "Rust"
+        test_cmd = "cargo test"
+    elif "go.mod" in files:
+        stack = "Go"
+        test_cmd = "go test ./..."
+    print(f"  ✓ stack: {stack}")
+
+    # struktur direktori (2 level)
+    dirs = sorted([d for d in files if os.path.isdir(os.path.join(cwd, d))
+                   and not d.startswith(".")][:10])
+    print(f"  ✓ direktori: {', '.join(dirs) if dirs else '(root files saja)'}")
+
+    # entry point (heuristik)
+    entry = "?"
+    for cand in ("main.py", "app.py", "index.js", "main.rs", "main.go",
+                 "manage.py", "server.py"):
+        if cand in files:
+            entry = cand
+            break
+    print(f"  ✓ entry: {entry}")
+
+    # generate AERYN.md (structure line via f-string asli)
+    structure_line = ", ".join(dirs) if dirs else "(flat)"
+    entry_line = entry if entry != "?" else "(deteksi otomatis saat pertama chat)"
+    md = f"""# Aeryn — Project Context (auto-generated /init)
+
+## Stack
+- **Language**: {stack}
+- **Test command**: `{test_cmd}`
+- **Entry point**: {entry_line}
+
+## Structure
+{structure_line}
+
+## Conventions
+- File naming: snake_case (Python) / camelCase (JS)
+- Test: pytest (flat structure, test_*.py)
+- Git: main branch, push origin/main
+
+## Untuk agent
+- Baca AERYN.md ini sebagai konteks setiap sesi dimulai
+- Jangan commit .env, venv, __pycache__, *.db
+- Run {test_cmd} sebelum selesai
+"""
+    path_md = os.path.join(cwd, "AERYN.md")
+    if os.path.exists(path_md):
+        print(f"  ⚠ AERYN.md sudah ada — timpa? (y/n)")
+        try:
+            ans = input("  > ").strip().lower()
+        except EOFError:
+            ans = "n"
+        if ans != "y":
+            _dim("(batal)")
+            return
+    with open(path_md, "w") as f:
+        f.write(md)
+    _ok(f"AERYN.md tergenerate ({len(md)} bytes)")
+    _dim("konteks ini dibaca agent di sesi berikutnya (ala Claude Code)")
+
+
+def cmd_sessions_cmd(args):
+    """F2-2: list sesi (live + saved) — ala Hermes /sessions."""
+    try:
+        r = _get("/v1/sessions?limit=10")
+        sessions = r.get("sessions") or []
+        print(f"\n  {_fg(SKIN['ui_accent'])}📂 Sesi ({len(sessions)}){RST}")
+        for s in sessions[:10]:
+            sid = s.get("session_id", "?")
+            title = (s.get("title") or "(tanpa judul)")[:40]
+            updated = (s.get("updated_at") or "")[:16].replace("T", " ")
+            marker = _fg(SKIN['ui_ok']) + "●" + RST if sid == _state["session_id"] \
+                     else _fg(SKIN['status_bar_dim']) + "○" + RST
+            print(f"  {marker} {sid:32s} {title:42s} {DIM}{updated}{RST}")
+        print(f"\n  {_dim_icon()}● live · ○ saved — /resume <id> untuk lanjut")
+    except Exception as e:
+        _err(f"sessions gagal: {e}")
+
+
+def _dim_icon():
+    return _fg(SKIN['status_bar_dim'])
+
+
+def cmd_resume_cmd(args):
+    """F2-2: lanjut sesi by ID — ala Hermes /resume."""
+    if not args:
+        _err("butuh argumen — format: /resume <session_id>")
+        return
+    sid = args[0]
+    try:
+        r = _get(f"/v1/sessions/{_urlquote(sid)}/history?limit=5")
+        hist = r.get("messages") or r.get("history") or []
+        _state["session_id"] = sid
+        print(f"  ✓ sesi aktif: {sid} ({len(hist)} pesan terakhir dimuat)")
+        for m in hist[-5:]:
+            role = m.get("role", "?")
+            content = (m.get("content") or "")[:80]
+            icon = "❯" if role == "user" else "⚕"
+            print(f"  {DIM}{icon} {content}{RST}")
+    except Exception as e:
+        _err(f"resume gagal: {str(e)[:100]}")
+
+
+def cmd_hooks_cmd(args):
+    """F2-3: hooks lifecycle — view + toggle (ala Claude Code /hooks)."""
+    hook_file = os.path.expanduser("~/.aeryn/hooks.json")
+    hooks = {}
+    try:
+        with open(hook_file) as f:
+            hooks = json.load(f)
+    except Exception:
+        pass
+    print(f"\n  {_fg(SKIN['ui_accent'])}🪝 Hooks Lifecycle{RST}")
+    for name, desc in (("pre_tool_use", "sebelum tool jalan (audit/blok)"),
+                       ("post_tool_use", "sesudah tool selesai (log hasil)"),
+                       ("stop", "saat turn selesai (ringkas)")):
+        enabled = hooks.get(name, {}).get("enabled", name == "pre_tool_use")
+        icon = _fg(SKIN['ui_ok']) + "✓" + RST if enabled \
+               else _fg(SKIN['status_bar_dim']) + "○" + RST
+        print(f"  {icon} {name:16s} {desc}")
+    print(f"\n  {DIM}config: {hook_file}{RST}")
+    print(f"  {DIM}hooks jalan otomatis saat chat — audit trail tercatat (facts){RST}")
 
 
 def cmd_voice_cmd(args):

@@ -116,6 +116,9 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         # === CONTEXT WINDOW: Trim if needed ===
         messages = self._trim_context(messages)
         
+        # F2-3: pre_tool_use hook — audit sebelum LLM request
+        self._run_hook("pre_tool_use", session_id,
+                       {"action": "chat", "msg_len": len(user_message)})
         tools_schema = self.tools.get_schemas()
         last_content = ""
         
@@ -364,8 +367,55 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         
         return system + trimmed
     
+    # ══ F2-3: hooks lifecycle (ala Claude Code) ══
+
+    def _load_hook_config(self) -> dict:
+        """Hook config dari ~/.aeryn/hooks.json (enabled per hook)."""
+        if getattr(self, "_hook_cfg", None) is not None:
+            return self._hook_cfg
+        try:
+            import json as _json
+            with open(os.path.expanduser("~/.aeryn/hooks.json")) as f:
+                self._hook_cfg = _json.load(f)
+        except Exception:
+            self._hook_cfg = {}
+        return self._hook_cfg
+
+    def _hook_enabled(self, name: str) -> bool:
+        cfg = self._load_hook_config()
+        # F2-3: default SEMUA hook aktif (pre/post/stop) — ala Claude Code
+        return cfg.get(name, {}).get("enabled", True)
+
+    def _run_hook(self, name: str, session_id: str, payload: dict) -> None:
+        """F2-3: jalankan hook — audit fact (non-blocking, log saja)."""
+        if not self._hook_enabled(name):
+            return
+        try:
+            from aeryn_core.memory.fact_store import get_fact_store
+            import json as _json
+            get_fact_store().record(
+                entity="hook",
+                predicate=f"hook_{name}",
+                fact=_json.dumps({"session_id": session_id, **payload}),
+                source="hooks",
+                confidence=1.0,
+            )
+        except Exception as e:
+            import logging
+            logging.getLogger("aeryn.hooks").debug("hook %s gagal: %s", name, e)
+
     def _save_facts(self, session_id: str, user_message: str, assistant_response: str, messages: List[Dict[str, Any]]):
         """Save facts from conversation."""
+        # F2-3: post_tool_use + stop hooks — audit sesudah respons
+        try:
+            import time as _t
+            self._run_hook("post_tool_use", session_id,
+                           {"resp_len": len(assistant_response or ""),
+                            "turns": len(messages)})
+            self._run_hook("stop", session_id,
+                           {"ts": _t.time(), "ok": True})
+        except Exception:
+            pass
         try:
             # Extract facts from assistant response
             facts = self.write.extract_facts(assistant_response)
