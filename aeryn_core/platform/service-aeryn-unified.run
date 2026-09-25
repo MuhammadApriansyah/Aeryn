@@ -1,0 +1,13 @@
+#!/data/data/com.termux/files/usr/bin/sh
+# aeryn — SERVICE TUNGGAL (v64): supervisor 5 komponen dalam 1 runsv.
+# Menggantikan: aeryn-api, aeryn-worker, aeryn-gateway, aeryn-watchdog,
+# aeryn-native-scheduler.
+export HOME=/data/data/com.termux/files/home
+export PREFIX=/data/data/com.termux/files/usr
+export PATH=$PREFIX/bin:$PATH
+export AERYN_DB=postgresql://sen@127.0.0.1:5432/aeryn
+export NEON_DATABASE_URL=postgresql://sen@127.0.0.1:5432/aeryn
+export PYTHONUNBUFFERED=1
+mkdir -p $PREFIX/var/log/aeryn $PREFIX/var/run
+cd $HOME/aeryn-core-agent
+exec $HOME/aeryn-venv/bin/python aeryn_core/platform/unified_service.py >> $PREFIX/var/log/aeryn/aeryn-unified.log 2>&1

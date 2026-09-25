@@ -4,6 +4,99 @@ All notable changes to Aeryn will be documented in this file.
 
 ---
 
+## [64.0] — 2026-09-25
+
+### ⚙️ SERVICE TUNGGAL — Konsolidasi 5 service runsv → 1 service ^[[38;2;255;248;220m❯ ^[[0m
+
+
+
+
+
+
+ 
+ ❯ chat · / command · Tab menu · ↑ history · /help semua                       
+                                                                                
+                           
+[1m[38;2;205;127;50m╔══════════════════════════════════════════════════════════════════════════════╗[0m
+[1m[38;2;205;127;50m║[0m [38;2;255;215;0m          Aeryn v63.1 (2026.9.24) - Self-Hosted Personal AI System          [0m [1m[38;2;205;127;50m║[0m
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⡀⠀⣀⣀⠀⢀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[0m  [38;2;255;248;220mTools: 0  Skills: 0  Niat: 0[0m
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⣿⣿⣇⠸⣿⣿⠇⣸⣿⣿⣷⣦⣄⡀⠀⠀⠀⠀⠀⠀[0m  [38;2;184;134;11m/help untuk commands · /matter <teks> untuk niat[0m
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⢀⣠⣴⣶⠿⠋⣩⡿⣿⡿⠻⣿⡇⢠⡄⢸⣿⠟⢿⣿⢿⣍⠙⠿⣶⣦⣄⡀⠀[0m  [38;2;255;191;0m127.0.0.1:3010[0m
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠉⠉⠁⠶⠟⠋⠀⠉⠀⢀⣈⣁⡈⢁⣈⣁⡀⠀⠉⠀⠙⠻⠶⠈⠉⠉⠀⠀[0m  
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⡿⠛⢁⡈⠛⢿⣿⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[0m  
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⣿⣦⣤⣈⠁⢠⣴⣿⠿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[0m  
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠻⢿⣿⣦⡉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[0m  
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠻⢿⣿⣦⡉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[0m  
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣴⠦⠈⠙⠿⣦⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[0m  
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣤⡈⠁⢤⣿⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[0m  
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠷⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[0m  
+[1m[38;2;205;127;50m╚══════════════════════════════════════════════════════════════════════════════╝[0m
+  [2mSelamat datang di Aeryn! Ketik pesan atau /help untuk commands.[0m
+  [2mcontoh: "ingetin besok jam 8 backup" · /status · /matter belajar rust · /help[0m
+  [38;2;143;188;143m● api[0m │ [38;2;192;192;192m⏱ 0m00s[0m │ [38;2;138;122;74m⚙ scheduler[0m
+
+^[[38;2;255;248;220m❯ ^[[0m
+
+  [2msampai jumpa~[0m
+
+Permintaan user: service runsv Aeryn terlalu banyak — disatukan.
+
+**Sebelum**: 5 service runit (aeryn-api, aeryn-worker, aeryn-gateway,
+aeryn-watchdog, aeryn-native-scheduler) = 5 runsv + 5 tee + 5 python
+≈ 92MB / 19 proses.
+
+**Sesudah**: 1 service ^[[38;2;255;248;220m❯ ^[[0m
+
+
+
+
+
+
+ 
+ ❯ chat · / command · Tab menu · ↑ history · /help semua                       
+                                                                                
+                           
+[1m[38;2;205;127;50m╔══════════════════════════════════════════════════════════════════════════════╗[0m
+[1m[38;2;205;127;50m║[0m [38;2;255;215;0m          Aeryn v63.1 (2026.9.24) - Self-Hosted Personal AI System          [0m [1m[38;2;205;127;50m║[0m
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⡀⠀⣀⣀⠀⢀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[0m  [38;2;255;248;220mTools: 0  Skills: 0  Niat: 0[0m
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⣿⣿⣇⠸⣿⣿⠇⣸⣿⣿⣷⣦⣄⡀⠀⠀⠀⠀⠀⠀[0m  [38;2;184;134;11m/help untuk commands · /matter <teks> untuk niat[0m
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⢀⣠⣴⣶⠿⠋⣩⡿⣿⡿⠻⣿⡇⢠⡄⢸⣿⠟⢿⣿⢿⣍⠙⠿⣶⣦⣄⡀⠀[0m  [38;2;255;191;0m127.0.0.1:3010[0m
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠉⠉⠁⠶⠟⠋⠀⠉⠀⢀⣈⣁⡈⢁⣈⣁⡀⠀⠉⠀⠙⠻⠶⠈⠉⠉⠀⠀[0m  
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⡿⠛⢁⡈⠛⢿⣿⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[0m  
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⣿⣦⣤⣈⠁⢠⣴⣿⠿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[0m  
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠻⢿⣿⣦⡉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[0m  
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠻⢿⣿⣦⡉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[0m  
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣴⠦⠈⠙⠿⣦⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[0m  
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣤⡈⠁⢤⣿⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[0m  
+[1m[38;2;205;127;50m║[0m [38;2;255;248;220m⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠷⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀[0m  
+[1m[38;2;205;127;50m╚══════════════════════════════════════════════════════════════════════════════╝[0m
+  [2mSelamat datang di Aeryn! Ketik pesan atau /help untuk commands.[0m
+  [2mcontoh: "ingetin besok jam 8 backup" · /status · /matter belajar rust · /help[0m
+  [38;2;143;188;143m● api[0m │ [38;2;192;192;192m⏱ 0m00s[0m │ [38;2;138;122;74m⚙ scheduler[0m
+
+^[[38;2;255;248;220m❯ ^[[0m
+
+  [2msampai jumpa~[0m = 1 runsv + 1 supervisor + 5 anak yang
+dikelola supervisor. Infra dasar (postgres, redis, sshd, ssh-agent, dbus)
+tetap terpisah.
+
+- **** — supervisor:
+  start semua komponen → monitor → anak mati → restart backoff naik
+  (2/5/10/20/30s, reset setelah stabil 60s)
+- **Single-flight restart** (v64.1 fix): anti thread-pileup yang membuat
+  spawn anak duplikat tiap poll cycle — ditemukan saat dogfood (restart #194)
+- **State file** : pid/alive/restarts
+  per komponen, dibaca monitoring eksternal
+- **Log per komponen tetap** ke file log lama (aeryn-api.log dst) —
+  pattern log file per service dipertahankan (tanpa WhatsApp)
+- **SIGTERM aman**: stop semua anak → tunggu → keluar (runit restart)
+
+Bukti: 5 komponen alive (api/worker/gateway/scheduler/watchdog) ✓
+chat nyata ✓ scheduler ticks ✓ restart-resilience (bunuh -9 → restart) ✓
+pytest: 620 passed
+
+---
+
 ## [63.1] — 2026-09-25
 
 ### 💛 UX PASS — CLI/TUI ramah pengguna (dogfood PTY-driven)
