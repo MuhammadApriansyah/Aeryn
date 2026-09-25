@@ -29,6 +29,7 @@ Idempoten via marker V63.
 
 import json
 import os
+import queue as _queue_mod
 import re
 import shutil
 import sys
@@ -188,13 +189,45 @@ def _get(path: str, timeout: float = TIMEOUT):
         return json.loads(r.read())
 
 
-def _post(path: str, data: dict, timeout: float = 120):
+class _Interrupted(Exception):
+    """F1: turn dihentikan user (Esc/Ctrl+C) — bukan error."""
+
+
+_socket_timeout = TimeoutError  # socket.timeout alias (3.10+)
+
+
+def _post(path: str, data: dict, timeout: float = 120, interrupt=None):
+    """F1: POST + interrupt support — polling loop short-timeout; saat
+    interrupt_event set → _Interrupted (kerja sejauh ini tetap tersimpan)."""
     req = urllib.request.Request(API + path,
                                  data=json.dumps(data).encode(),
                                  method="POST",
                                  headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        return json.loads(r.read())
+    if interrupt is None:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return json.loads(r.read())
+    # F1 PART 8 (FIX 429): request di SUB-THREAD — SEKALI kirim, timeout
+    # penuh. Interrupt = cek flag tiap 0.2s (bukan re-send! poll loop lama
+    # mengirim 100+ request duplikat → 429 rate limit).
+    _result = {}
+
+    def _do_req():
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                _result["data"] = json.loads(r.read())
+        except Exception as e:
+            _result["error"] = e
+
+    t = threading.Thread(target=_do_req, daemon=True)
+    t.start()
+    while t.is_alive():
+        if interrupt.is_set():
+            raise _Interrupted()  # result server diabaikan (kerja tersimpan)
+        time.sleep(0.2)
+    # sub-thread selesai (turn selesai secara normal)
+    if "error" in _result:
+        raise _result["error"]
+    return _result["data"]
 
 
 # ── Banner (Hermes-style: ╔═╗ gold + hippo + summary) ──
@@ -994,9 +1027,134 @@ def run_tui() -> int:
                     '<style bg="#1a1a2e" fg="#C0C0C0">· / command · Tab menu · ↑ history · /help semua </style>')
 
     history = InMemoryHistory()
+    # F1: multiline — Enter = submit, backslash+Enter / Ctrl+J / Alt+Enter = newline
+    # (multiline=True bikin Enter=newline — salah; pakai key_bindings custom)
+    from prompt_toolkit.key_binding import KeyBindings as _KB
+    _kb = _KB()
+
+    @_kb.add("enter")
+    def _enter_submit(event):
+        """Enter = submit (default), kecuali buffer berakhir dengan backslash."""
+        buf = event.current_buffer
+        if buf.text.endswith("\\"):
+            # backslash+Enter = newline (ala Hermes multi-line)
+            buf.text = buf.text[:-1] + "\n"
+            return
+        buf.validate_and_handle()
+
+    @_kb.add("c-j")  # Ctrl+J = newline
+    def _ctrl_j_newline(event):
+        event.current_buffer.insert_text("\n")
+
+    # F1: Ctrl+C = interrupt turn jalan (ala Hermes Esc) — TUI tetap hidup
+    _ctrl_presses = [0]
+
+    @_kb.add("c-c", eager=True)  # eager: menang sebelum internal abort
+    def _ctrl_c_interrupt(event):
+        _ctrl_presses[0] += 1
+        if interrupt_event.is_set() or (
+                chat_thread_ref[0] is not None and chat_thread_ref[0].is_alive()):
+            interrupt_event.set()
+            _dim("⏹ menghentikan... (kerja sejauh ini tersimpan)")
+            _ctrl_presses[0] = 0
+            return
+        # tidak ada turn jalan: Ctrl+C di prompt kosong 2x = keluar
+        if not event.current_buffer.text:
+            if _ctrl_presses[0] >= 2:
+                event.app.exit(exception=EOFError)
+                return
+            _dim("(Ctrl+C lagi untuk keluar)")
+        else:
+            event.current_buffer.reset()  # clear input (ala Hermes)
+        _ctrl_presses[0] = max(0, _ctrl_presses[0])
+
+    def _prompt_continuation(width, line_number, is_soft_wrap):
+        return " " * width  # baris lanjutan rata (indent)
     session = PromptSession(history=history, completer=SlashCompleter(),
                             complete_while_typing=True,
-                            bottom_toolbar=_bottom_toolbar)
+                            bottom_toolbar=_bottom_toolbar,
+                            multiline=True,
+                            key_bindings=_kb,
+                            prompt_continuation=_prompt_continuation)
+
+    # ══ F1: non-blocking + queue + interrupt (ala Hermes TUI) ══
+    msg_queue = _queue_mod.Queue()          # pesan yang diketik saat agent jalan
+    interrupt_event = threading.Event()      # Esc → stop turn sekarang
+    chat_thread = [None]                     # thread chat aktif
+    chat_thread_ref = chat_thread            # F1: ref untuk Ctrl+C binding
+
+    def _chat_worker(message: str):
+        """F1: chat di background thread — interruptable via interrupt_event."""
+        try:
+            with _Spinner("Aeryn berpikir"):
+                r = _post("/v1/chat", {"message": message,
+                                       "session_id": _state["session_id"],
+                                       "user_id": _state["user_id"]},
+                          timeout=180, interrupt=interrupt_event)
+            if interrupt_event.is_set():
+                _dim("⏹ dihentikan — kerja sejauh ini tersimpan")
+                interrupt_event.clear()
+                return
+            out = (r.get("content") or r.get("response") or "").strip()
+            if not out:
+                _err("respons kosong (LM gagal?)")
+                return
+            _record("assistant", out)
+            print(f"  {_fg(SKIN['input_rule'])}─" * 3
+                  + f"{RST} {_fg(SKIN['response_border'])}⚕ Aeryn{RST}")
+            print("  " + out.replace("\n", "\n  "))
+        except Exception as e:
+            if interrupt_event.is_set():
+                _dim("⏹ dihentikan — kerja sejauh ini tersimpan")
+                interrupt_event.clear()
+            else:
+                _err(f"chat gagal: {str(e)[:100]}")
+        finally:
+            chat_thread[0] = None
+            # status bar setelah turn
+            print_formatted_text(
+                f"{DIM}{build_status_bar(_state['session_start'])}{RST}")
+            # F1: antrean terkirim OTOMATIS (ala Hermes — tanpa user input)
+            if not msg_queue.empty():
+                nxt = msg_queue.get()
+                _dim(f"▶ kirim antrean: {nxt[:50]}")
+                chat_thread[0] = threading.Thread(
+                    target=_chat_worker, args=(nxt,), daemon=True)
+                chat_thread[0].start()
+
+    def _submit(line: str):
+        """F1: submit input — kalau agent jalan → antre (non-blocking)."""
+        if chat_thread[0] is not None and chat_thread[0].is_alive():
+            if line.startswith("/"):
+                dispatch(line)  # slash read-only jalan langsung
+            else:
+                msg_queue.put(line)
+                _record("user", line)
+                _dim(f"⏳ antre ({msg_queue.qsize()}) — terkirim setelah turn ini")
+        else:
+            if line.startswith("/"):
+                dispatch(line)
+            else:
+                _record("user", line)
+                chat_thread[0] = threading.Thread(
+                    target=_chat_worker, args=(line,), daemon=True)
+                chat_thread[0].start()
+
+    def _drain_queue():
+        """F1: kirim antrean berikutnya kalau chat selesai."""
+        if chat_thread[0] is None and not msg_queue.empty():
+            nxt = msg_queue.get()
+            _dim(f"▶ kirim antrean: {nxt[:50]}")
+            chat_thread[0] = threading.Thread(
+                target=_chat_worker, args=(nxt,), daemon=True)
+            chat_thread[0].start()
+
+    # F1: SIGINT ignore — Ctrl+C ditangani murni via key binding c-c
+    # (prompt_toolkit raises KeyboardInterrupt dari SIGINT sebelum binding
+    # kalau tidak di-ignore)
+    import signal as _signal
+    _old_sigint = _signal.getsignal(_signal.SIGINT)
+    _signal.signal(_signal.SIGINT, _signal.SIG_IGN)
 
     try:
         with patch_stdout(raw=True):
@@ -1005,18 +1163,27 @@ def run_tui() -> int:
                     line = session.prompt(
                         f"{_fg(SKIN['prompt'])}{PROMPT_SYMBOL} {RST}").strip()
                 except KeyboardInterrupt:
+                    # fallback: kalau tetap masuk sini (binding kalah),
+                    # perlakukan sebagai interrupt — TUI tetap hidup
+                    if chat_thread[0] is not None and chat_thread[0].is_alive():
+                        interrupt_event.set()
+                        _dim("⏹ menghentikan...")
                     continue
                 except EOFError:
                     break
                 if not line:
+                    _drain_queue()  # Enter kosong → kirim antrean berikutnya
                     continue
                 if line in ("/quit", "/exit"):
+                    if chat_thread[0] is not None and chat_thread[0].is_alive():
+                        interrupt_event.set()
                     break
-                dispatch(line)
-                # status bar bawah (Hermes-style: setelah tiap turn)
-                print_formatted_text(f"{DIM}{build_status_bar(_state['session_start'])}{RST}")
+                _submit(line)
+                _drain_queue()
     except KeyboardInterrupt:
         pass
+    finally:
+        _signal.signal(_signal.SIGINT, _old_sigint)
     print(f"\n  {DIM}sampai jumpa~{RST}")
     return 0
 

@@ -4,6 +4,34 @@ All notable changes to Aeryn will be documented in this file.
 
 ---
 
+## [65.0] — 2026-09-25
+
+### ⚡ FASE 1 — Interface: non-blocking input + interrupt + multi-line
+
+Berdasarkan riset agent UX (16 sumber, docs/research/): kloning Hermes TUI
+behavior — rasa pakai agent modern.
+
+**F1-1 — Queue non-blocking**: ketik saat agent jalan → antre → terkirim
+OTOMATIS setelah turn (chat di background thread, prompt tetap aktif).
+Dogfood PTY: submit saat jalan + antre + kirim otomatis + balasan ✓
+
+**F1-2 — Ctrl+C interrupt mid-turn**: turn dihentikan ("⏹ dihentikan —
+kerja sejauh ini tersimpan"), TUI tetap hidup; Ctrl+C 2x di prompt kosong =
+keluar (ala Hermes). Key binding eager + SIGINT ignore.
+Dogfood PTY: interrupt ✓ TUI hidup ✓
+
+**F1-3 — Multi-line input**: backslash+Enter / Ctrl+J = newline,
+Enter = submit (multiline ala Hermes docs).
+Dogfood PTY: balasan dua baris utuh ✓
+
+**Fix besar saat dogfood**: poll loop lama re-send request tiap 0.5s →
+100+ request duplikat → 429 rate limit. Diganti sub-thread request (SEKALI
+kirim, interrupt = cek flag, bukan re-send) — 429 hilang ✓
+
+pytest: 620 passed
+
+---
+
 ## [64.2] — 2026-09-25
 
 ### 💛 10 item bug/optimasi/pengembangan — full-autonomous + dogfood tiap item
