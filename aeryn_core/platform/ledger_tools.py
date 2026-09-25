@@ -42,7 +42,7 @@ def tool_spending_log(text: str, user_id: str = "sen") -> dict:
 
     # Parse angka: 15000, 15k, 15.000, 3jt, 1.5jt
     amount = None
-    m = re.search(r"(\d+(?:[.,]\d+)?)\s*(jt|juta|k|ribu)?", msg)
+    m = re.search(r"(\d+(?:[.,]\d+)?)\s*(jt|juta|k|ribu|rb)?", msg)
     if m:
         num = float(m.group(1).replace(",", "").replace(".", "")) if m.group(1) and "." in m.group(1) and len(m.group(1).split(".")[-1]) == 3 else None
         if num is None:
@@ -50,21 +50,30 @@ def tool_spending_log(text: str, user_id: str = "sen") -> dict:
         suffix = m.group(2)
         if suffix in ("jt", "juta"):
             amount = num * 1_000_000
-        elif suffix in ("k", "ribu"):
+        elif suffix in ("k", "ribu", "rb"):
             amount = num * 1_000
         else:
             amount = num
     if amount is None or amount <= 0:
         return {"ok": False, "error": "jumlah tidak dikenali — sebutkan angka (mis. 'pengeluaran 15k makan')"}
 
-    # Parse deskripsi: setelah angka
+    # Parse deskripsi: setelah angka ATAU sebelum angka (B3)
     desc_m = re.search(r"\d+(?:[.,]\d+)?\s*(?:jt|juta|k|ribu)?\s+(.+)", msg)
-    desc = (desc_m.group(1).strip()[:80] if desc_m else "transaksi")
+    if desc_m:
+        desc = desc_m.group(1).strip()[:80]
+    else:
+        # B3: angka di akhir → deskripsi = teks SEBELUM angka,
+        # buang kata intent/kerja + angka + suffix
+        before = re.split(r"\d+(?:[.,]\d+)?\s*(?:jt|juta|k|ribu)?", msg)[0]
+        before = re.sub(r"^(pengeluaran|penghasilan|beli|bayar|jajan|belanja|catat|log|top\s?up|topup)\s+", "", before).strip()
+        desc = before[:80] if before else "transaksi"
 
     # Kategori sederhana (keyword)
     cat = "lainnya"
     cat_map = {
         "makan": "makan", "minum": "minuman", "kopi": "minuman",
+        "bakso": "makan", "mie": "makan", "nasi": "makan", "ayam": "makan",
+        "warung": "makan", "resto": "makan", "sate": "makan",
         "transport": "transportasi", "ojek": "transportasi", "bensin": "transportasi",
         "belanja": "belanja", "pulsa": "pulsa", "listrik": "tagihan",
         "sewa": "tempat tinggal", "gaji": "penghasilan", "bonus": "penghasilan",

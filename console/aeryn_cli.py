@@ -100,6 +100,7 @@ COMMANDS_BY_CATEGORY = {
         ("/workflows", "Workflows (goal-derived)", "", "cmd_workflows_cmd"),
         ("/traces", "Traces (OTel observability)", "[n]", "cmd_traces_cmd"),
         ("/matter", "Tell Aeryn what matters (proactive-goal)", "<teks>", "cmd_matter_cmd"),
+        ("/voice", "Bicara — mic HP → teks → chat", "", "cmd_voice_cmd"),
     ],
     "Configuration": [
         ("/config", "Konfigurasi Aeryn (gateway/env)", "", "cmd_config"),
@@ -213,17 +214,34 @@ def build_banner() -> str:
     # Hippo art + tools/skills (Hermes layout: art kiri, info kanan)
     try:
         h = _get("/health", timeout=3)
-        n_tools = h.get("tools", 0)
-        n_skills = h.get("skills", 0)
     except Exception:
-        n_tools, n_skills = 0, 0
+        h = {}
+    # B4: /health tak punya field tools/skills — baca dari sumber benar
+    n_skills = 0
+    n_tools = 0
+    try:
+        s = _get("/skills", timeout=3)
+        n_skills = len(s.get("skills", s if isinstance(s, list) else []))
+    except Exception:
+        pass
+    try:
+        t = _get("/v1/agent-card", timeout=3)
+        n_tools = len(t.get("tools", []) or t.get("capabilities", []) or [])
+    except Exception:
+        pass
+    if not n_tools:
+        try:
+            o = _get("/openapi.json", timeout=3)
+            n_tools = len(o.get("paths", {}))
+        except Exception:
+            pass
     try:
         g = _get("/v1/agents/goals?status=active", timeout=3)
         n_goals = (g.get("stats") or {}).get("active", 0)
     except Exception:
         n_goals = 0
     info_lines = [
-        f"{_fg(SKIN['banner_text'])}Tools: {n_tools}  Skills: {n_skills}  Niat: {n_goals}{RST}",
+        f"{_fg(SKIN['banner_text'])}Endpoints: {n_tools}  Skills: {n_skills}  Niat: {n_goals}{RST}",
         f"{_fg(SKIN['banner_dim'])}/help untuk commands · /matter <teks> untuk niat{RST}",
     ]
     n_art = len(HIPPO_ART)
@@ -515,6 +533,37 @@ def cmd_traces_cmd(args):
                   f"· {t.get('session_id', '?')[:30]} · {t.get('spans', '?')} spans")
     except Exception as e:
         _err(f"traces gagal: {e}")
+
+
+def cmd_voice_cmd(args):
+    """D2: voice input — mic HP → STT → chat (render sama alur chat)."""
+    try:
+        import subprocess
+        _dim("🎙 mendengar... (bicara sekarang)")
+        r = subprocess.run(["termux-speech-to-text"], capture_output=True, timeout=30)
+        if r.returncode != 0:
+            _err(f"STT gagal (rc={r.returncode}) — cek izin mic Termux:API")
+            return
+        text = (r.stdout.decode() or "").strip()
+        if not text or text == "}":
+            _err("tidak ada suara terdeteksi — coba lagi")
+            return
+        _ok(f"🎙 “{text[:120]}”")
+        try:
+            r2 = _post("/v1/chat", {"message": text,
+                                    "session_id": _state["session_id"],
+                                    "user_id": _state.get("user_id", "sen")})
+            content = (r2.get("content") or "").strip()
+            if content:
+                print(f"{_fg(SKIN['agent_border'])}  ⚕ {content}{RST}")
+            else:
+                _dim("(balasan kosong)")
+        except Exception as e:
+            _err(f"chat gagal: {str(e)[:100]}")
+    except FileNotFoundError:
+        _err("termux-api tidak terpasang — pkg install termux-api")
+    except subprocess.TimeoutExpired:
+        _err("STT timeout — coba lagi")
 
 
 def cmd_matter_cmd(args):

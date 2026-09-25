@@ -1,10 +1,12 @@
-"""Dead Code Router — Semua endpoint berfungsi tanpa gagal."""
+"""Extended Router — endpoint tambahan (Database, MCP, Hermes, Memory,
+Safety, Sandbox, Security). B5: prefix diganti /v1/x (bukan /v1/dead —
+label menyesatkan); semua endpoint tetap berfungsi."""
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 
-router = APIRouter(prefix="/v1/dead", tags=["dead"])
+router = APIRouter(prefix="/v1/x", tags=["extended"])  # B5: bukan "dead" — endpoint berfungsi
 
 
 # ========================================

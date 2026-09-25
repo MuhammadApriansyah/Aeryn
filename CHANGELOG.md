@@ -4,6 +4,52 @@ All notable changes to Aeryn will be documented in this file.
 
 ---
 
+## [64.2] — 2026-09-25
+
+### 💛 10 item bug/optimasi/pengembangan — full-autonomous + dogfood tiap item
+
+Semua temuan dari laporan penggunaan potensi maksimal → dikerjakan berurutan
+dengan dogfood (uji sebagai user nyata) per item:
+
+**BUG (stabilisasi)**:
+- **B1 — Fact store wiring**: fakta pribadi dari chat ("catet ya: motorku
+  honda beat") → `personal_fact` di trust layer + embedding index →
+  tersimpan PERMANEN. Dogfood: sesi baru → Aeryn ingat lintas sesi ✓
+- **B2 — Reminder dedup**: dedup by resolved-time + substring — "besok
+  jam 8 backup" = 1 reminder (dulu 3 bell). Multi-hari tetap 3. Bonus bug
+  tersembunyi: 'besok 7' (tanpa kata jam) tidak terdeteksi → fixed.
+  Dogfood: chat → 1 fakta scheduled ✓
+- **B3 — Ledger description**: "beli kopi hitam 15k" → "kopi hitam"
+  (bukan "transaksi" generik) + suffix rb + cat_map makanan.
+  Dogfood: 3 kasus betul (minuman/makan/transportasi) ✓
+- **B4 — Banner stats**: baca dari /skills + /agent-card + openapi
+  (dulu /health field salah → 0). Label jujur: "Endpoints".
+  Dogfood: "Endpoints: 654 Skills: 23 Niat: 0" ✓
+- **B5 — Openapi bersih**: extended_router prefix /v1/dead → /v1/x
+  (endpoint tetap jalan, 54 paths). Dogfood: dead=0, /v1/x jalan ✓
+
+**OPTIMASI**:
+- **O1 — Model routing per-kecepatan**: light/heavy heuristic + 404-model
+  retry (anti fallback salah sasaran). Dogfood: ringan 2.5s / berat 5.6s ✓
+  (catatan: 5x speedup butuh key non-thinking — hanya gemini-3.5 valid)
+- **O2 — Context trimming agresif**: history -16 pesan + system cap 6000
+  char. Dogfood 8-turn: 2.0s→1.5s growth -22% (dulu 8s→91s = +1037%) ✓
+
+**PENGEMBANGAN**:
+- **D1 — Proactive briefing 07:00**: deliver_briefing wired ke daily tick —
+  jadwal+goal+catatan → Discord DM + notification otomatis.
+  Dogfood: log "briefing pagi: sent=['discord:3f074f21', ...]" ✓
+- **D2 — /voice**: mic HP → termux-speech-to-text → chat.
+  Dogfood: "🎙 mendengar..." → error rapih saat tanpa suara; STT rc=0 ✓
+  (izin RECORD_AUDIO di-allow)
+- **D3 — Skill crystallization otomatis**: consolidate_experience wired ke
+  daily tick — pattern 3x+ → skill baru harian.
+  Dogfood: log "skill crystallized: ['auto_search_web_9654']" ✓
+
+pytest: 620 passed
+
+---
+
 ## [64.0] — 2026-09-25
 
 ### ⚙️ SERVICE TUNGGAL — Konsolidasi 5 service runsv → 1 service ^[[38;2;255;248;220m❯ ^[[0m

@@ -76,7 +76,9 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         # === SESSION STATE: load persistent history (user-isolated) ===
         persisted = session_store.load_session(user_id, session_id)
         if persisted:
-            history_messages = persisted.messages
+            # O2: trim history SEBELUM dipakai (16 pesan = 8 turn) —
+            # jangan muat semua (sesi panjang = latency meledak)
+            history_messages = persisted.messages[-16:]
         else:
             history_messages = []
         
@@ -101,6 +103,10 @@ Current time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         system_content = _get_persona() + "\n\n" + division_prompt
         if memory_context:
             system_content += "\n\n" + memory_context
+        # O2: system prompt hard-cap 6000 char (persona+division+memory
+        # bisa sangat besar → token cost + latency tiap turn)
+        if len(system_content) > 6000:
+            system_content = system_content[:6000]
         
         # Load history from session (persistent + user-isolated)
         messages = [{"role": "system", "content": system_content}]

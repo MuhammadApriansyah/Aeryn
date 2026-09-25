@@ -35,13 +35,21 @@ NOTE_PATTERNS = [
     r"\bcatat\b", r"\bcatatin\b", r"\bcatat ya\b", r"\bingat\b(?!in)", r"\bremember\b",
     r"\bjangan lupa\s+(bahwa\s+)?aku\b", r"\bnote\b", r"\bpreferensi\b",
 ]
+# B1: fakta pribadi — statement identitas/user ("aku punya X", "laptopku Y")
+PERSONAL_FACT_PATTERNS = [
+    r"\baku\s+(punya|pakai|pake|suka|benci|tinggal|kerja|belajar|lagi\s+belajar)\b",
+    r"\b(namaku|panggil(?:an)?ku)\b",
+    r"\b(laptopku|hpku|mobilmu|mobilk|mobilmu|rumahku|motorku|kipasku|kursiku)\b",
+    r"\b(my|our)\s+(name|laptop|phone|home|job|car)\s+(is|are)\b",
+    r"\bi\s+(have|use|like|hate|live|work|study)\b",
+]
 REMINDER_PATTERNS = [
     r"\bingetin\b", r"\bingatin\b", r"\bremind(?:er)?\b", r"\bjangan lupa\b",
     r"\bdelete\b.*\bnggak jadi\b",  # negative lookahead handled below
 ]
 TIME_PATTERNS = [
     (r"\bbesok\s+(pagi|siang|sore|malam)\b", "besok"),
-    (r"\bbesok\s+(?:jam|pukul)\s*(\d{1,2})", "besok_jam"),
+    (r"\bbesok\s+(?:jam\s+|pukul\s+)?(\d{1,2})(?::(\d{2}))?", "besok_jam"),
     (r"\bbesok\b", "besok"),
     (r"\bnanti\b", "nanti"),
     (r"\b(\d+)\s*(menit|jam)\b", "relative"),
@@ -73,9 +81,42 @@ def _detect_intent(message: str) -> dict:
                 time_hints.append(hint)
     if not time_hints:
         time_hints = []
+    else:
+        # B2 DEDUP v3: dedup hint yang resolve ke WAKTU SAMA.
+        # "besok jam 8 backup" → besok(7:00), besok_jam(8:00), jam_n(8:00 besok)
+        #   → 1 reminder jam 8 (spesifik menang), bukan 3 bell.
+        # "besok 7 lembur, lusa meeting jam 10, senin depan review" →
+        #   3 waktu BERBEDA → tetap 3 reminder (multi-hari utuh).
+        specific_kinds = ("besok_jam", "jam_n", "relative")
+        specific = [h for h in time_hints if h["kind"] in specific_kinds]
+        if specific:
+            # hint spesifik menang; buang generik yang subset-nya tercakup
+            generic = [h for h in time_hints if h["kind"] not in specific_kinds]
+            generic = [h for h in generic if h["kind"] in ("weekday_depan",)]
+            # dedup antar-spesifik by match (jam_n "jam 8" duplikat besok_jam
+            # "besok jam 8" — resolved sama; buang jam_n yang match substring)
+            kept = []
+            for h in specific:
+                if h["kind"] == "jam_n" and any(
+                        h["match"] in k["match"] for k in kept):
+                    continue  # "jam 8" ⊂ "besok jam 8" — sudah tercakup
+                kept.append(h)
+            time_hints = kept + generic
+        else:
+            # semua generik: dedup by match + substring
+            # ("besok pagi" ⊃ "besok" — satu hint saja)
+            kept_g = []
+            for h in time_hints:
+                if any(h["match"] in k["match"] or k["match"] in h["match"]
+                       for k in kept_g):
+                    continue
+                kept_g.append(h)
+            time_hints = kept_g
+    is_personal = any(re.search(p, msg) for p in PERSONAL_FACT_PATTERNS)
     return {
         "is_note": is_note,
         "is_reminder": is_reminder,
+        "is_personal_fact": is_personal,
         "time": time_hints[0] if time_hints else None,
         "times": time_hints,  # GAP2_MULTI: semua hints
     }
@@ -155,7 +196,8 @@ def handle_promises(user_message: str, user_id: str = "default",
         {acted: bool, what: [...], failed: [...], intent: {...}}
     """
     intent = _detect_intent(user_message)
-    if not (intent["is_note"] or intent["is_reminder"]):
+    if not (intent["is_note"] or intent["is_reminder"]
+            or intent.get("is_personal_fact")):
         return {"acted": False, "what": [], "failed": [], "intent": intent}
 
     what, failed = [], []
@@ -174,6 +216,32 @@ def handle_promises(user_message: str, user_id: str = "default",
                 failed.append({"kind": "finance", "error": r.get("error", "")[:150]})
         except Exception as e:
             failed.append({"kind": "finance", "error": str(e)[:150]})
+
+    # ── B1: PERSONAL FACT — statement pribadi user → fact store permanen ──
+    if intent.get("is_personal_fact") and not intent["is_note"]:
+        try:
+            from aeryn_core.memory.fact_store import get_fact_store
+            fs = get_fact_store()
+            fid = fs.record(
+                entity=user_id or "sen",
+                predicate="personal_fact",
+                fact=json.dumps({"text": payload, "user_id": user_id}),
+                source=f"trust-layer:{user_id}",
+                confidence=1.0,
+            )
+            # index embedding agar recall semantic menemukannya
+            try:
+                from aeryn_core.memory.embedding import get_embedding_index
+                import hashlib as _hl
+                get_embedding_index().add(
+                    _hl.sha256(f"facts:{fid}".encode()).hexdigest(),
+                    payload, source="facts:personal")
+            except Exception:
+                pass
+            what.append({"kind": "personal_fact", "id": fid,
+                         "text": payload[:100]})
+        except Exception as e:
+            failed.append({"kind": "personal_fact", "error": str(e)[:200]})
 
     # ── NOTE: simpan ke bitemporal facts (NYATA) ──
     if intent["is_note"]:

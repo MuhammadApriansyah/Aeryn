@@ -58,6 +58,25 @@ class NativeScheduler:
         # 2) DAILY TICK — decay harian (bitemporal facts + vault)
         if report.get("daily"):
             self.last_daily = time.time()
+            # D1: briefing pagi otomatis (07:00) — decay + deliver
+            try:
+                import datetime as _dt
+                import time as _t
+                if _dt.datetime.now().hour >= 7:
+                    from aeryn_core.platform.morning_briefing import deliver_briefing
+                    r = deliver_briefing()
+                    print(f"[scheduler] briefing pagi: sent={r['sent']}", flush=True)
+            except Exception as e:
+                self.errors.append(f"briefing daily: {str(e)[:120]}")
+            # D3: konsolidasi pengalaman — pattern frekuensi tinggi → skill
+            try:
+                from aeryn_core.agent.experience_learning import consolidate_experience
+                r2 = consolidate_experience(user_id="sen")
+                if r2.get("crystallized"):
+                    print(f"[scheduler] skill crystallized: "
+                          f"{[c.get('skill') for c in r2['crystallized']]}", flush=True)
+            except Exception as e:
+                self.errors.append(f"consolidate daily: {str(e)[:120]}")
             try:
                 from aeryn_core.memory.memory_decay import get_memory_decay_engine
                 d = get_memory_decay_engine()

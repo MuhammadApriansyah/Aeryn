@@ -39,7 +39,7 @@ os.makedirs(_DB_DIR, exist_ok=True)
 _PROVIDERS = {
     "gemini": {
         "base_url": os.environ.get("GEMINI_BASE_URL", "https://generativelanguage.googleapis.com/v1beta"),
-        "models": ["gemini-3.5-flash-lite", "gemini-2.0-flash"],
+        "models": ["gemini-3.5-flash-lite", "gemini-flash-lite-latest"],
         "api_key_env": "GEMINI_API_KEY",
     },
     "openrouter": {"base_url": "https://openrouter.ai/api/v1", "models": ["auto"], "api_key_env": "OPENROUTER_API_KEY"},
@@ -231,16 +231,59 @@ class AerynLLMClient:
         except Exception as e:
             yield json.dumps({"error": str(e)})
 
+    # O1: kata tugas-berat → model thinking penuh; selain itu model ringan
+    _HEAVY_KEYWORDS = (
+        "analisis", "analyze", "refactor", "jelaskan secara", "explain in detail",
+        "research", "riset", "bandingkan", "compare", "debug", "kode", "code",
+        "implementasi", "implement", "arsitektur", "architecture", "strategi",
+        "rencana", "plan", "tuliskan", "write a", "buatkan", "generate",
+    )
+
+    @classmethod
+    def _is_light_request(cls, messages, tools) -> bool:
+        """O1 routing: pesan ringan (pendek, tanpa tools, bukan tugas berat)."""
+        if tools:
+            return False  # tool-use butuh model thinking penuh
+        user_msg = next((m.get("content", "") for m in reversed(messages)
+                         if m.get("role") == "user"), "")
+        if len(user_msg) > 400:
+            return False
+        low = user_msg.lower()
+        return not any(k in low for k in cls._HEAVY_KEYWORDS)
+
     async def _request(self, p, key, messages, model, temperature, max_tokens, tools):
         url = f"{p['base_url']}/chat/completions"
-        use_model = model or p["models"][0]
+        if model:
+            use_model = model
+        elif self._is_light_request(messages, tools) and len(p["models"]) > 1:
+            use_model = p["models"][1]  # O1: model ringan (non-thinking)
+        else:
+            use_model = p["models"][0]
         body = {"model": use_model, "messages": messages, "temperature": temperature, "max_tokens": max_tokens}
         if tools: body["tools"] = tools
         req = urllib.request.Request(url, data=json.dumps(body).encode(),
             headers={"Content-Type": "application/json", "Authorization": f"Bearer {key}"}, method="POST")
         loop = asyncio.get_event_loop()
-        resp = await loop.run_in_executor(None, lambda: urllib.request.urlopen(req, timeout=60))
-        data = json.loads(resp.read().decode())
+        try:
+            resp = await loop.run_in_executor(None, lambda: urllib.request.urlopen(req, timeout=60))
+            data = json.loads(resp.read().decode())
+        except urllib.error.HTTPError as e:
+            # O1 v2: model 404 (light model tidak valid utk key ini) →
+            # RETRY model utama di provider yang sama — bukan lempar ke
+            # provider lain (fallback chain salah sasaran / 402 kuota)
+            detail = e.read().decode(errors="replace")[:300] if e.fp else ""
+            if e.code == 404 and use_model != p["models"][0] and not model:
+                body["model"] = p["models"][0]
+                req2 = urllib.request.Request(url, data=json.dumps(body).encode(),
+                    headers={"Content-Type": "application/json",
+                             "Authorization": f"Bearer {key}"}, method="POST")
+                resp = await loop.run_in_executor(
+                    None, lambda: urllib.request.urlopen(req2, timeout=60))
+                data = json.loads(resp.read().decode())
+            else:
+                raise RuntimeError(f"{p['api_key_env']}: HTTP {e.code}: {detail}")
+        if isinstance(data, list) and data and "error" in data[0]:
+            raise RuntimeError(f"{p['api_key_env']}: {str(data[0]['error'])[:200]}")
         choice = data["choices"][0]
         result = {
             "content": choice["message"].get("content", ""),
