@@ -4,6 +4,29 @@ All notable changes to Aeryn will be documented in this file.
 
 ---
 
+## [65.3] — 2026-09-26
+
+### 🖥️ FIX VISUAL — ANSI escape tampil mentah (dari screenshot Termux Sen)
+
+Dogfood screenshot (`Screenshot_2026-09-26-05-28-07-951_com.termux-edit.jpg`):
+teks `^[[38;2;255;248;220m❯` tampil MENTAH di layar + prompt terpotong.
+
+**Akar (2 lapis)**:
+1. `patch_stdout(raw=True)` — prompt_toolkit meneruskan ANSI dari print()
+   sebagai raw bytes → literal di layar
+2. `session.prompt(f"...{_fg(...)}")` — ANSI string di prompt di-escape
+   dobel oleh PT → `^[[38;2;...m❯` mentah
+
+**Fix**:
+- `patch_stdout(raw=False)` — PT meng-parse ANSI dari print() → warna benar
+- prompt pakai `ANSIEscapeParser` (PT ANSI formatted text) — tidak ada
+  dobel-escape; warna prompt via `_ansi256()` hex→256
+
+Bukti PTY: caret `^[[` = 0 (dulu banyak) — ANSI ter-parse bersih ✓
+pytest: 620 passed
+
+---
+
 ## [65.2] — 2026-09-25
 
 ### 🛡️ FASE 3 — Governance & Skills: plan-first approval + progressive delegation + SKILL.md standard

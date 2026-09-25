@@ -195,6 +195,16 @@ def _get(path: str, timeout: float = TIMEOUT):
         return json.loads(r.read())
 
 
+def _ansi256(hex_color: str) -> int:
+    """Hex → ANSI 256 color code (untuk PT formatted text)."""
+    try:
+        h = hex_color.lstrip("#")
+        r, g, b = int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
+        return 16 + (36 * (r // 51)) + (6 * (g // 51)) + (b // 51)
+    except Exception:
+        return 245  # abu-abu
+
+
 class _Interrupted(Exception):
     """F1: turn dihentikan user (Esc/Ctrl+C) — bukan error."""
 
@@ -1491,11 +1501,12 @@ def run_tui() -> int:
     _signal.signal(_signal.SIGINT, _signal.SIG_IGN)
 
     try:
-        with patch_stdout(raw=True):
+        with patch_stdout(raw=False):
             while True:
                 try:
+                    from prompt_toolkit.formatted_text import ANSI as _PTANSI
                     line = session.prompt(
-                        f"{_fg(SKIN['prompt'])}{PROMPT_SYMBOL} {RST}").strip()
+                        _PTANSI(f"\x1b[{_ansi256(SKIN['prompt'])}m{PROMPT_SYMBOL} \x1b[0m")).strip()
                 except KeyboardInterrupt:
                     # fallback: kalau tetap masuk sini (binding kalah),
                     # perlakukan sebagai interrupt — TUI tetap hidup
