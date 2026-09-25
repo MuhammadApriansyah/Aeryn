@@ -76,6 +76,18 @@ DEFAULT_POLICIES: Dict[str, ToolPolicy] = {
         ],
         human_description="Menjalankan perintah shell. Bisa merusak sistem.",
     ),
+    # F3-1: tool runtime pakai nama "terminal" — policy sama dengan bash
+    "terminal": ToolPolicy(
+        tool_name="terminal",
+        risk_level=RiskLevel.CRITICAL,
+        requires_approval=True,
+        forbidden_patterns=[
+            "rm -rf /", "mkfs.", "dd if=", "> /dev/sd", "shutdown",
+            "reboot", "format c:", ":(){:|:&};:", "chmod -R 777 /",
+            "curl", "wget", "ssh", "scp", "sudo", "su -",
+        ],
+        human_description="Menjalankan perintah shell via terminal. Bisa merusak sistem.",
+    ),
     "file_read": ToolPolicy(
         tool_name="file_read",
         risk_level=RiskLevel.READ_ONLY,
@@ -381,6 +393,32 @@ class GuardrailEngine:
     def get_policy(self, tool_name: str) -> Optional[ToolPolicy]:
         return self.policies.get(tool_name)
 
+    def get_approval_streak(self, tool_name: str) -> int:
+        """F3-2: approve beruntun terakhir untuk tool ini (dari approvals.db).
+
+        Progressive delegation (Fuselab): streak tinggi = aksi rutin →
+        auto-approve dengan notification (bukan gate tiap kali).
+        """
+        try:
+            import sqlite3 as _sq
+            import os as _os
+            _home = _os.environ.get("HOME", _os.path.expanduser("~"))
+            db = _sq.connect(_home + "/aeryn-core-agent/Personalisasi/Database/approvals.db")
+            rows = db.execute(
+                "SELECT status FROM approvals WHERE tool_name = ? "
+                "ORDER BY created_at DESC LIMIT 10", (tool_name,)
+            ).fetchall()
+            db.close()
+            streak = 0
+            for (status,) in rows:
+                if status == "approved":
+                    streak += 1
+                elif status == "rejected":
+                    break  # beruntun putus di reject terakhir
+            return streak
+        except Exception:
+            return 0
+
     def check_tool(self, tool_name: str, args: Dict[str, Any]) -> None:
         """
         LAPIS 2+3: Runtime validation. Called BEFORE the tool body executes.
@@ -409,6 +447,16 @@ class GuardrailEngine:
             if tool_name in self._blocked_until and time.time() < self._blocked_until[tool_name]:
                 raise GuardrailViolation(tool_name, "Tool temporarily blocked after rejection (30s cooldown)", args)
 
+            # F3-2 PROGRESSIVE DELEGATION (Fuselab): approve streak >= 5 +
+            # aksi rutin (risk LOW/MEDIUM) → auto-approve + notification,
+            # bukan gate tiap kali. CRITICAL/HIGH/IRREVERSIBLE selalu gate.
+            risky = policy.risk_level in (RiskLevel.CRITICAL, RiskLevel.HIGH)
+            if not risky:
+                streak = self.get_approval_streak(tool_name)
+                if streak >= 5:
+                    print(f"[guardrail] auto-approve (streak {streak}x): "
+                          f"{tool_name}", flush=True)
+                    return  # jalan langsung (auto-approved)
             approval = self._build_approval_request(tool_name, args, policy)
             self.approval_store.create(approval)
             raise ApprovalRequired(approval)

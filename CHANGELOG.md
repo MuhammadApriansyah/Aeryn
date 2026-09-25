@@ -4,6 +4,41 @@ All notable changes to Aeryn will be documented in this file.
 
 ---
 
+## [65.2] — 2026-09-25
+
+### 🛡️ FASE 3 — Governance & Skills: plan-first approval + progressive delegation + SKILL.md standard
+
+Berdasarkan riset agent UX (Fuselab plan-first + progressive delegation,
+agentskills.io open standard, Codex approval modes):
+
+**F3-1 — Plan-first approval UI**: aksi berbahaya → plan tampil
+(CRITICAL + scope + biaya + ⚠ IRREVERSIBLE) → decide y/m/n.
+- Chat: response requires_approval → plan + instruksi `/approve <id> y|m|n`
+  (non-blocking — thread-safe, bukan input() di background)
+- /approvals: approve/reject inline (nomor + y/n)
+- Policy baru: tool "terminal" (sama dengan bash — shell exec; dulu
+  deny-by-default → chat tool gagal diam)
+- Fix: approval_id field (schema ApprovalDecision) + 1006 pending legacy
+  dibersihkan (keep 5)
+Dogfood: plan muncul ✓ approve inline ✓ approve via /approve ✓
+
+**F3-2 — Progressive delegation** (Fuselab): approval streak >= 5 + risk
+LOW/MEDIUM → auto-approve + notification (bukan gate tiap kali);
+CRITICAL/HIGH/IRREVERSIBLE selalu gate. get_approval_streak dari
+approvals.db. Fix: HOME env fallback.
+Dogfood: streak 5 → auto-approved ✓ terminal tetap gate ✓
+
+**F3-3 — Skills SKILL.md open standard** (agentskills.io): skill =
+~/.aeryn/skills/<name>/SKILL.md (frontmatter name/description) — kompatibel
+Claude Code/Codex/Hermes. /skills list + validate; skill jalan sebagai
+slash command (/<name> → baca SKILL.md → agent eksekusi prosedur).
+Seed: backup-daily. Dogfood: /backup-daily → "📚 skill: backup-daily" →
+agent eksekusi ✓
+
+pytest: 620 passed
+
+---
+
 ## [65.1] — 2026-09-25
 
 ### 🏗️ FASE 2 — Struktur: /init onboarding + session switcher + hooks lifecycle

@@ -106,6 +106,8 @@ COMMANDS_BY_CATEGORY = {
         ("/sessions", "List + switch sesi live", "", "cmd_sessions_cmd"),
         ("/resume", "Lanjut sesi by ID", "<sub> <arg>", "cmd_resume_cmd"),
         ("/hooks", "Hooks lifecycle (Pre/Post/Stop)", "", "cmd_hooks_cmd"),
+        ("/approve", "Keputusan approval: id + y|m|n", "<id> <y|m|n>", "cmd_approve_cmd"),
+        ("/skills", "Skills SKILL.md (agentskills.io)", "", "cmd_skills_cmd"),
     ],
     "Configuration": [
         ("/config", "Konfigurasi Aeryn (gateway/env)", "", "cmd_config"),
@@ -689,6 +691,90 @@ def cmd_resume_cmd(args):
         _err(f"resume gagal: {str(e)[:100]}")
 
 
+def _skills_dir() -> str:
+    return os.path.expanduser("~/.aeryn/skills")
+
+
+def _load_skill_md(name: str) -> dict:
+    """F3-3: baca SKILL.md (frontmatter + body) — agentskills.io standard."""
+    path_md = os.path.join(_skills_dir(), name, "SKILL.md")
+    try:
+        with open(path_md) as f:
+            raw = f.read()
+    except Exception:
+        return {"ok": False, "error": f"skill '{name}' tidak ada"}
+    # parse frontmatter YAML sederhana (name/description)
+    meta, body = {}, raw
+    if raw.startswith("---"):
+        try:
+            fm, body = raw[3:].split("---", 1)
+            for line in fm.strip().split("\n"):
+                if ":" in line:
+                    k, v = line.split(":", 1)
+                    meta[k.strip()] = v.strip()
+        except Exception:
+            pass
+    return {"ok": True, "name": meta.get("name", name),
+            "description": meta.get("description", ""),
+            "body": body.strip()}
+
+
+def cmd_skills_cmd(args):
+    """F3-3: list + validate skills (SKILL.md standard — agentskills.io)."""
+    sdir = _skills_dir()
+    skills = []
+    if os.path.isdir(sdir):
+        for name in sorted(os.listdir(sdir)):
+            if not os.path.isdir(os.path.join(sdir, name)):
+                continue
+            r = _load_skill_md(name)
+            if r.get("ok"):
+                skills.append(r)
+    print(f"\n  {_fg(SKIN['ui_accent'])}📚 Skills ({len(skills)}) — SKILL.md standard{RST}")
+    if not skills:
+        _dim("kosong — buat ~/.aeryn/skills/<name>/SKILL.md")
+        _dim("format: frontmatter name/description (kompatibel agentskills.io, "
+             "Claude Code, Codex, Hermes)")
+    for s in skills:
+        desc = (s.get("description") or "")[:60]
+        print(f"  {_fg(SKIN['ui_ok'])}✓{RST} /{s['name']:20s} {desc}")
+    print(f"\n  {DIM}jalankan: /<name> — agent eksekusi prosedurnya{RST}")
+
+
+def cmd_approve_cmd(args):
+    """F3-1: keputusan approval non-blocking — /approve <id> y|m|n."""
+    if len(args) < 2:
+        _err("format: /approve <id> <y|m|n>")
+        return
+    aid, ans = args[0], args[1].lower()
+    decision = {"y": "approve", "m": "approve", "n": "reject"}.get(ans)
+    if not decision:
+        _err("pilihan: y (approve) / m (modifikasi) / n (tolak)")
+        return
+    body = {"approval_id": aid, "decision": decision,
+            "decided_by": _state.get("user_id", "sen")}
+    if ans == "m":
+        try:
+            parsed = json.loads(" ".join(args[2:])) if len(args) > 2 else {}
+            body["edited_args"] = parsed
+        except Exception:
+            _err("args JSON tidak valid")
+            return
+    try:
+        r = _post("/v1/approvals/decide", body)
+        if decision == "approve":
+            _ok(f"✓ approved: {aid[:12]}")
+            _state["approve_streak"] = _state.get("approve_streak", 0) + 1
+            if _state["approve_streak"] >= 5:
+                _dim(f"⚡ {_state['approve_streak']} approve beruntun — "
+                     f"aksi rutin bisa auto-exec (progressive delegation)")
+        else:
+            _dim(f"✗ ditolak: {aid[:12]} (cooldown 30s)")
+            _state["approve_streak"] = 0
+    except Exception as e:
+        _err(f"decide gagal: {str(e)[:100]}")
+
+
 def cmd_hooks_cmd(args):
     """F2-3: hooks lifecycle — view + toggle (ala Claude Code /hooks)."""
     hook_file = os.path.expanduser("~/.aeryn/hooks.json")
@@ -771,16 +857,42 @@ def cmd_model(args):
 
 
 def cmd_approvals(args):
+    """F3-1: approval queue + aksi interaktif (approve/reject inline)."""
     try:
         r = _get("/v1/approvals/pending")
         pending = r.get("pending", [])
         print(f"\n  {BOLD}{_fg(SKIN['ui_accent'])}Approval Queue ({len(pending)}){RST}")
         if not pending:
             _dim("kosong — semua approved")
+            return
         for p in pending[:10]:
             print(f"  {_fg(SKIN['ui_warn'])}[{p.get('risk_level')}] {p.get('tool_name')}{RST} "
                   f"{DIM}id={p.get('id', '?')[:12]}{RST}")
         print()
+        # aksi inline: pilih nomor + y/n (ala Hermes dialog)
+        try:
+            sel = input("  approve/tolak? (nomor + y/n, kosong=skip): ").strip()
+        except (EOFError, KeyboardInterrupt):
+            sel = ""
+        if not sel:
+            return
+        parts = sel.split()
+        try:
+            idx = int(parts[0]) - 1
+            ans = parts[1].lower() if len(parts) > 1 else "y"
+        except (ValueError, IndexError):
+            _err("format: <nomor> <y|n>")
+            return
+        if 0 <= idx < len(pending):
+            p = pending[idx]
+            decision = "approve" if ans in ("y", "ya", "yes") else "reject"
+            _post("/v1/approvals/decide",
+                  {"approval_id": p.get("id"), "decision": decision,
+                   "decided_by": _state.get("user_id", "sen")})
+            if decision == "approve":
+                _ok(f"✓ approved: {p.get('tool_name')}")
+            else:
+                _dim(f"✗ ditolak: {p.get('tool_name')} (cooldown 30s)")
     except Exception as e:
         _err(f"approvals gagal: {e}")
 
@@ -1036,6 +1148,65 @@ def cmd_quit(args):
 
 # ════════════════ Chat (agent loop penuh) ════════════════
 
+def _render_approval_plan(appr: dict) -> None:
+    """F3-1: tampilkan plan approval (risk/scope/cost) — ala Fuselab plan-first."""
+    risk = appr.get("risk_level", "?")
+    risk_color = SKIN['ui_error'] if risk in ("critical", "high", "irreversible") \
+        else SKIN['ui_warn']
+    print(f"\n  {_fg(SKIN['ui_accent'])}📋 Plan Butuh Persetujuan{RST}")
+    print(f"  {_fg(risk_color)}[{risk.upper()}]{RST} tool: {appr.get('tool_name', '?')}")
+    print(f"  {DIM}scope : {appr.get('affected_scope', '?')}{RST}")
+    print(f"  {DIM}biaya : {appr.get('estimated_cost', '?')}{RST}")
+    if appr.get("irreversible"):
+        print(f"  {_fg(SKIN['ui_error'])}⚠ IRREVERSIBLE — tidak bisa di-undo{RST}")
+    expl = appr.get("explanation", "")
+    if expl:
+        print(f"  {DIM}{expl[:150]}{RST}")
+    print(f"  {DIM}id: {appr.get('id', '?')}{RST}")
+
+
+def _approval_decide(appr: dict) -> str:
+    """F3-1: prompt y/m/n → decide (approve/modify/reject). Return status."""
+    aid = appr.get("id", "")
+    while True:
+        try:
+            ans = input(f"  {_fg(SKIN['ui_warn'])}approve? (y=ya / m=modifikasi / n=tolak){RST} ").strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            ans = "n"
+        if ans in ("y", "ya", "yes"):
+            _post("/v1/approvals/decide",
+                  {"approval_id": aid, "decision": "approve", "decided_by": _state.get("user_id", "sen")})
+            _ok("✓ approved — aksi jalan")
+            # F3-2: catat approve → auto-exec counter
+            _state["approve_streak"] = _state.get("approve_streak", 0) + 1
+            if _state["approve_streak"] >= 5:
+                _dim(f"⚡ {_state['approve_streak']} approve beruntun — "
+                     f"aksi rutin tool ini bisa auto-exec (progressive delegation)")
+            return "approved"
+        if ans in ("m", "modify"):
+            try:
+                new_args = input("  args baru (JSON): ").strip()
+            except (EOFError, KeyboardInterrupt):
+                new_args = ""
+            try:
+                parsed = json.loads(new_args) if new_args else {}
+            except Exception:
+                _err("JSON tidak valid — batal")
+                return "rejected"
+            _post("/v1/approvals/decide",
+                  {"approval_id": aid, "decision": "approve", "decided_by": _state.get("user_id", "sen"),
+                   "edited_args": parsed})
+            _ok("✓ approved dengan modifikasi")
+            return "approved"
+        if ans in ("n", "no", "tolak"):
+            _post("/v1/approvals/decide",
+                  {"approval_id": aid, "decision": "reject", "decided_by": _state.get("user_id", "sen")})
+            _dim("✗ ditolak — tool ini cooldown 30s")
+            _state["approve_streak"] = 0
+            return "rejected"
+        _dim("jawab y / m / n")
+
+
 def _do_chat(message: str) -> None:
     _state["last_user_input"] = message
     _record("user", message)
@@ -1044,6 +1215,12 @@ def _do_chat(message: str) -> None:
             r = _post("/v1/chat", {"message": message,
                                   "session_id": _state["session_id"],
                                   "user_id": _state["user_id"]}, timeout=180)
+        # F3-1: requires_approval → tampilkan plan + prompt decide (HITL)
+        if r.get("requires_approval"):
+            appr = r.get("approval") or {}
+            _render_approval_plan(appr)
+            _approval_decide(appr)
+            return
         out = r.get("content") or r.get("response") or ""
         if not out:
             _err("respons kosong (LM gagal?)")
@@ -1096,6 +1273,14 @@ def dispatch(line: str) -> None:
             handler = globals()[fn_name]
             handler(args)
         else:
+            # F3-3: skill sebagai slash command — /<name> → baca SKILL.md
+            skill_name = name[1:]
+            skill = _load_skill_md(skill_name)
+            if skill.get("ok"):
+                _dim(f"📚 skill: {skill['name']} — eksekusi prosedur...")
+                prompt = f"Ikuti skill ini:\n\n{skill['body'][:3000]}"
+                _do_chat(prompt)
+                return
             sug = _suggest_command(name)
             if sug:
                 print(f"  {_fg(SKIN['ui_warn'])}'{name}' tidak ada — maksud kamu {sug}?{RST}")
@@ -1236,6 +1421,13 @@ def run_tui() -> int:
             if interrupt_event.is_set():
                 _dim("⏹ dihentikan — kerja sejauh ini tersimpan")
                 interrupt_event.clear()
+                return
+            # F3-1: requires_approval → tampil plan + instruksi decide
+            # (non-blocking — decide via /approve <id> y|m|n di prompt)
+            if r.get("requires_approval"):
+                appr = r.get("approval") or {}
+                _render_approval_plan(appr)
+                _dim(f"jawab di prompt: /approve {appr.get('id', '')} y|m|n")
                 return
             out = (r.get("content") or r.get("response") or "").strip()
             if not out:
